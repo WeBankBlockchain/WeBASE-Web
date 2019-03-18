@@ -38,7 +38,7 @@ nginx安装请参考附录
 代码可以放在/data/app/page下面
 执行命令：
 
-    git clone http:xx/webase-web.git
+    git clone https://github.com/WeBankFinTech/webase-web.git
 
 在代码库中doc文件下有nginx配置文件，直接可以拿来替换安装的nginx的配置文件nginx.conf；
 然后修改nginx.conf；
