@@ -1,0 +1,185 @@
+/*
+ * Copyright 2014-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+<template>
+    <div>
+        <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'"></v-content-head>
+        <div class="block-wrapper">
+            <div class="search-part">
+                <div style="float: right;padding-right: 40px">
+                    <el-input placeholder="请输入内容" v-model="searchKey.value" class="input-with-select">
+                        <el-select v-model="searchKey.key" slot="prepend" placeholder="请选择" style="width: 110px; background: #fff" clearable>
+                            <el-option label="块高" value="blockNumber"></el-option>
+                            <el-option label="区块哈希" value="pkHash"></el-option>
+                        </el-select>
+                        <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                    </el-input>
+                </div>
+            </div>
+            <div class="search-table">
+                <el-table :data="blockData" class="block-table-content" v-loading="loading">
+                    <el-table-column prop="blockNumber" label="块高" width="80" align="center">
+                        <template slot-scope="scope">
+                            <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="transCount" label="交易" width="50" align="center"></el-table-column>
+                    <el-table-column prop="pkHash" label="区块哈希" :show-overflow-tooltip="true" align="center">
+                    </el-table-column>
+                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center"></el-table-column>
+                </el-table>
+                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import contentHead from "@/components/contentHead";
+import { getBlockPage } from "@/util/api";
+import router from "@/router";
+import errcode from "@/util/errcode";
+export default {
+    name: "blockInfo",
+    components: {
+        "v-content-head": contentHead
+    },
+    data: function() {
+        return {
+            blockData: [],
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+            loading: false,
+            searchKey: {
+                key: "pkHash",
+                value: ""
+            }
+        };
+    },
+    mounted: function() {
+        this.getBlockList();
+    },
+    methods: {
+        search: function() {
+            if (
+                this.searchKey.key == "pkHash" &&
+                this.searchKey.value.length != 66 &&
+                this.searchKey.value
+            ) {
+                this.$message({
+                    message: "搜索区块哈希不支持模糊查询",
+                    type: "error",
+                    duration: 2000
+                });
+            } else {
+                this.getBlockList();
+            }
+        },
+        getBlockList: function() {
+            this.loading = true;
+            let networkId = localStorage.getItem("networkId");
+            let reqData = {
+                    networkId: networkId,
+                    pageNumber: this.currentPage,
+                    pageSize: this.pageSize
+                },
+                reqQuery = {};
+            reqQuery[this.searchKey.key] = this.searchKey.value;
+            getBlockPage(reqData, reqQuery)
+                .then(res => {
+                    this.loading = false;
+                    if (res.data.code === 0) {
+                        this.blockData = res.data.data;
+                        this.total = res.data.totalCount;
+                    } else {
+                        this.$message({
+                            message: errcode.errCode[res.data.code].cn,
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        message: "系统错误！",
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        handleSizeChange: function(val) {
+            this.pageSize = val;
+            this.currentPage = 1;
+            this.getBlockList();
+        },
+        handleCurrentChange: function(val) {
+            this.currentPage = val;
+            this.getBlockList();
+        },
+        link: function(val) {
+            router.push({
+                path: "/transactionInfo",
+                query: {
+                    blockNumber: val
+                }
+            });
+        }
+    }
+};
+</script>
+<style scoped>
+.block-wrapper {
+    margin: 30px 0 0 31px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px 0 #dfe2e9;
+    border-radius: 10px;
+}
+.search-part {
+    padding: 30px 0px;
+    overflow: hidden;
+    margin: 0;
+}
+.input-with-select>>>.el-input__inner {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: 1px solid #eaedf3;
+    box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
+}
+.input-with-select>>>.el-input--suffix > .el-input__inner {
+    box-shadow: none;
+}
+.input-with-select>>>.el-input-group__prepend {
+    border-left-color: #fff;
+}
+.input-with-select>>>.el-input-group__append {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
+}
+.input-with-select>>>.el-button {
+    border: 1px solid #2956a3;
+    border-radius: inherit;
+    background: #2956a3;
+    color: #fff;
+}
+.block-table-content {
+    width: 100%;
+    padding: 0px 40px 16px 41px;
+    font-size: 12px;
+}
+</style>
