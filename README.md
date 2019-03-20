@@ -40,16 +40,43 @@ nginx安装请参考附录
 
     git clone https://github.com/WeBankFinTech/webase-web.git
 
-在代码库中doc文件下有nginx配置文件，直接可以拿来替换安装的nginx的配置文件nginx.conf；
+在代码库中docs文件下有nginx配置文件，直接可以拿来替换安装的nginx的配置文件nginx.conf；
 然后修改nginx.conf；
 
-(1)、修改前端服务的ip地址和端口。
+进入nginx配置文件（这里nginx安装在/usr/local下面，如果这里没找到，可以到/etc下寻找）
+```
+    cd /usr/local/nginx/conf
+```
 
-(2)、修改前端文件的路径,直接指向已拉取代码的dist目录。
+1、 修改web服务端口
+```
+    sed -i "s/3002/${your_server_port}/g" nginx.conf
+```
+例如：
+```
+    sed -i "s/3002/8080/g" nginx.conf   你修改的服务端口是8080
+```
 
-(3)、修改后端服务的ip和端口，注意'/api'不要修改。
+2、 修改服务ip
+```
+`sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
+```
+例如： 
+```
+    sed -i "s/ 10.0.0.1 /192.168.0.1/g" nginx.conf
+```
+你修改的服务ip是192.168.0.1,也可以修改成域名
+3、 修改静态文件路径
+```
+    sed -i "s/\ /data\/webase-web \/dist /${your_file_route}/g" nginx.conf
+```
 
+4、 修改mgr服务ip和端口
+```
+sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
+````
 
+服务器已有nginx可按照以下修改，
 ```Nginx
 
     upstream node_mgr_server{
