@@ -43,14 +43,14 @@
                             </template>
                         </template>
                     </el-table-column>
-                    <el-table-column label="状态" v-if="showNodeActive">
+                    <!-- <el-table-column label="状态" v-if="showNodeActive">
                         <template slot-scope="scope">
                             <span>
                                 <i :style="{'color': textColor(scope.row['nodeActive'])}" class="wbs-icon-radio font-6"></i>
                                 {{nodesStatus(scope.row['nodeActive'])}}
                             </span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                 </el-table>
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
@@ -74,7 +74,6 @@ import nodesDialog from "./components/nodesDialog";
 import { getNodeList, addnodes } from "@/util/api";
 import { date } from "@/util/util";
 import errcode from "@/util/errcode";
-let transaction_switch = process.env.SEND_TRANSACTION_SWITCH;
 export default {
     name: "group",
     components: {
@@ -84,7 +83,6 @@ export default {
     },
     data: function() {
         return {
-            showNodeActive: transaction_switch,
             nodeName: "",
             nodes: [],
             nodeData: [],
