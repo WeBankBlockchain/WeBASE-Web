@@ -53,13 +53,13 @@ nginx安装请参考附录
 ```Nginx
 
     upstream node_mgr_server{
-        server 10.0.0.1:8083; //步骤三 节点管理服务地址及端口
+        server 10.0.0.1:8083; #步骤三 节点管理服务地址及端口
     }
     server {
-        listen       3002 default_server;   //步骤一 前端端口
-        server_name  10.0.0.1;         //步骤一 前端地址，可配置为域名
+        listen       3002 default_server;   #步骤一 前端端口
+        server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
         location / {
-                root    /data/webase-web/dist;   //步骤二 前端文件路径
+                root    /data/webase-web/dist;   #步骤二 前端文件路径
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }
