@@ -13,20 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-let api = process.env.API_PATH;
-/*handle*/
-let handle = process.env.HANDLE_PATH;
 /*mgr*/
-let mgr = process.env.MGR_PATH;
+let mgr = process.env.API_PATH;
 /*contract*/
-let contract = process.env.CONTRACT_PATH;
 export default {
-    PROXY: `${api}/bcosproxy/interface`,
-
-    SEND_TRANSATION: `${handle}/fisco-bcos-front/trans/handle`,
-
     ORG_LIST: `${mgr}/webase-node-mgr`,
-
-    FRONT_PROXY: `${handle}/fisco-bcos-front`
-
 }
