@@ -12,7 +12,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-const env = config.build[process.env.env_config + 'Env']
+const env = config.build.env
 
 const webpackConfig = merge(baseWebpackConfig, {
     mode: 'production',
