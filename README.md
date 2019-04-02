@@ -35,7 +35,7 @@ nginx安装请参考附录
 
 ### 2.2 拉取代码
 
-代码可以放在/data/app/page下面
+代码可以放在/data下面
 执行命令：
 
     git clone https://github.com/WeBankFinTech/webase-web.git
@@ -43,12 +43,12 @@ nginx安装请参考附录
 在代码库中docs文件下有nginx配置文件，直接可以拿来替换安装的nginx的配置文件nginx.conf；
 然后修改nginx.conf；
 
-进入nginx配置文件（这里nginx安装在/usr/local下面，如果这里没找到，可以到/etc下寻找）
+进入nginx配置文件（这里nginx安装在/usr/local下面，如果这里没找到，可以到/etc下寻找,如有权限问题，请加上sudo）
 ```
     cd /usr/local/nginx/conf
 ```
 
-1、 修改web服务端口
+1、 修改web服务端口（端口需要开通策略且不能被占用）
 ```
     sed -i "s/3002/${your_server_port}/g" nginx.conf
 ```
@@ -59,14 +59,15 @@ nginx安装请参考附录
 
 2、 修改服务ip
 ```
-`sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
+    sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
     sed -i "s/ 10.0.0.1 /192.168.0.1/g" nginx.conf
 ```
 你修改的服务ip是192.168.0.1,也可以修改成域名
-3、 修改静态文件路径
+
+3、 修改静态文件路径(文件需要有权限访问)
 ```
     sed -i "s/\ /data\/webase-web \/dist /${your_file_route}/g" nginx.conf
 ```
@@ -83,10 +84,10 @@ sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
         server 10.0.0.1:8083; //步骤三 节点管理服务地址及端口
     }
     server {
-        listen       3002 default_server;   //步骤一 前端端口
+        listen       3002 default_server;   //步骤一 前端端口（端口需要开通策略且不能被占用）
         server_name  10.0.0.1;         //步骤一 前端地址，可配置为域名
         location / {
-                root    /data/webase-web/dist;   //步骤二 前端文件路径
+                root    /data/webase-web/dist;   //步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }
@@ -108,7 +109,14 @@ sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 (1)、启动nginx。
 启动命令：
 
-	/usr/local/sbin/nginx    (nginx下载在/usr/local目录下)
+	/usr/local/nginx/sbin/nginx    (nginx下载在/usr/local目录下)
+
+检查nginx是否启动成功
+
+```
+    ps -ef | grep nginx
+```
+观察进程是否起来
 
 启动报错重点排查：日志路径是否正确（error.log和access.log）,nginx有没有添加用户权限。
 
@@ -154,3 +162,26 @@ nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可
 
 	nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
 	nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
+
+##### 3.1.3.6常用nginx命令
+
+启动：
+
+```
+    /usr/local/nginx/sbin/nginx
+```
+停止：
+
+```
+    /usr/local/nginx/sbin/nginx -s stop
+```
+重启
+```
+    /usr/local/nginx/sbin/nginx -s reload
+```
+
+##### 3.1.3.7 nginx日志
+
+nginx日志一般在nginx安装目录下，例如：/usr/local/nginx/log
+
+有access.log和error.log两个日志
