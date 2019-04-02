@@ -81,13 +81,20 @@ sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 ```Nginx
 
     upstream node_mgr_server{
-        server 10.0.0.1:8083; //步骤三 节点管理服务地址及端口
+        server 10.0.0.1:8083; #步骤三 节点管理服务地址及端口
     }
     server {
+<<<<<<< HEAD
         listen       3002 default_server;   //步骤一 前端端口（端口需要开通策略且不能被占用）
         server_name  10.0.0.1;         //步骤一 前端地址，可配置为域名
         location / {
                 root    /data/webase-web/dist;   //步骤二 前端文件路径(文件需要有权限访问)
+=======
+        listen       3002 default_server;   #步骤一 前端端口
+        server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
+        location / {
+                root    /data/webase-web/dist;   #步骤二 前端文件路径
+>>>>>>> 0468d4a5f8e6a55a66348ed1aa9e3de895be44e4
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }
@@ -162,6 +169,7 @@ nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可
 
 	nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
 	nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
+<<<<<<< HEAD
 
 ##### 3.1.3.6常用nginx命令
 
@@ -185,3 +193,5 @@ nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可
 nginx日志一般在nginx安装目录下，例如：/usr/local/nginx/log
 
 有access.log和error.log两个日志
+=======
+>>>>>>> 0468d4a5f8e6a55a66348ed1aa9e3de895be44e4
