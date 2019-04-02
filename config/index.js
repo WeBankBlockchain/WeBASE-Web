@@ -45,8 +45,7 @@ module.exports = {
     },
 
     build: {
-        wesignEnv: require('./wesign.env'), // 新增
-        prodEnv: require('./prod.env'), // 新增
+        env: require('./prod.env'), // 新增
 
         // Template for index.html
         index: path.resolve(__dirname, '../dist/index.html'),

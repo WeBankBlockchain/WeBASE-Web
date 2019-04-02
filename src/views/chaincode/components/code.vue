@@ -30,7 +30,7 @@
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <span class="contract-code-done" v-if="status === 2 && tswitch" @click="send">
+                <span class="contract-code-done" v-if="status === 2" @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -108,7 +108,6 @@ import {
 } from "@/util/api";
 import transaction from "../dialog/sendTransaction";
 import changeUser from "../dialog/changeUser";
-let transaction_switch = process.env.SEND_TRANSACTION_SWITCH;
 
 export default {
     name: "codes",
@@ -139,7 +138,6 @@ export default {
             errorMessage: "",
             successInfo: "",
             abiFileShow: false,
-            tswitch: transaction_switch,
             bytecodeBin: "",
             aceEditor: null,
             themePath: "ace/theme/chrome",

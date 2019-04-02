@@ -157,15 +157,6 @@ export function networkList() {
     })
 }
 
-export function addNetwork(data) {
-    data.Module = 'network';
-    data.Operation = 'new_network';
-    return post({
-        url: url.PROXY,
-        method: 'post',
-        data: data
-    })
-}
 /**Modify contract */
 export function editChain(data) {
     return put({
