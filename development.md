@@ -17,7 +17,7 @@ nodejs下载地址：https://nodejs.org/en/download/
 
 > 执行命令：
 
-    git clone http:xx/webase-web.git
+    git clone https://github.com/WeBankFinTech/webase-web.git
 
 将代码放在你的工作目录，例如：D：\project
 
