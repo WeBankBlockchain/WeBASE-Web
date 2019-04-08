@@ -22,6 +22,7 @@ const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
 const group = resolve => require(['@/views/group/group'], resolve);
+const hostDetail = resolve => require(['@/views/group/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/rivateKeyManagement'], resolve);
 const errorLogExport = resolve => require(['@/views/errorLogExport/errorLogExport'], resolve);
@@ -29,6 +30,7 @@ const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve)
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
+const helpDoc = resolve => require(['@/components/helpDoc'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -39,6 +41,15 @@ const routes = [
         path: '/login',
         name: 'login',
         component: resolve => require(['@/views/login/login'], resolve),
+    },
+    {
+        path: '/helpDoc',
+        component: main,
+        name: '帮助文档',
+        menuShow: false,
+        children: [
+            { path: '/helpDoc', component: helpDoc, name: '帮助文档', menuShow: true, meta: { requireAuth: true } },
+        ]
     },
     {
         path: '/main',
@@ -73,7 +84,8 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
-            { path: '/group', component: group, name: '节点管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/group', component: group, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/hostDetail', component: hostDetail, name: '节点详情', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -131,6 +143,7 @@ const routes = [
             { path: '/accountInfo', component: accountInfo, name: '帐号管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
+    
 ]
 const router = new Router({
     routes

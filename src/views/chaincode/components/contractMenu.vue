@@ -38,8 +38,14 @@
                 <i class="wbs-icon-delete contract-menu-handle" @click="deleteContract(item)" v-if="item.contractStatus != 2 && item.contractStatus != 0"></i>
             </li>
             <el-tooltip content="下一页" placement="top" v-if="(allTotal - total) > pageSize">
-                <el-button size="mini" @click="load">...</el-button>
+                <div class="text-center" style="margin-top:2px;margin-bottom: 10px;">
+                    <el-button size="mini" @click="load">
+                        点击查看更多
+                        <i class="el-icon-download"></i>
+                    </el-button>
+                </div>
             </el-tooltip>
+            <div class="text-center font-color-9da2ab font-12" style="padding: 5px 0" v-else>暂无更多</div>
         </ul>
         <v-dialog v-if="dialogShow" :dialogShow="dialogShow" @close="closeModel($event)" @success="submitModel($event)"></v-dialog>
         <v-addChainCode v-if="addDialogShow" :addDialog="addDialogShow" @close="closeModel($event)" @change="addChange($event)"></v-addChainCode>
@@ -93,7 +99,7 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             };
-            getContractList(reqData, {})
+            getContractList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.total = 0;

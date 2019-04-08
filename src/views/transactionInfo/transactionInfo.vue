@@ -15,33 +15,47 @@
  */
 <template>
     <div class="bg-f7f7f7">
-        <v-content-head :headTitle="'交易信息'" :icon="true" :route="'home'"></v-content-head>
-        <div class="block-wrapper">
+        <v-content-head :headTitle="'交易信息'" :icon="true"></v-content-head>
+        <div class="module-wrapper">
             <div class="search-part">
+                <div class="search-part-left-bg">
+                    <span>共</span>
+                    <span>{{numberFormat(total, 0, ".", ",")}}</span>
+                    <span>条</span>
+                </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入内容" v-model="searchKey.value" class="input-with-select">
-                        <el-select v-model="searchKey.key" slot="prepend" placeholder="请选择" style="width: 110px; background: #fff" clearable>
-                            <el-option label="块高" value="blockNumber"></el-option>
-                            <el-option label="交易哈希" value="transactionHash"></el-option>
-                        </el-select>
+                    <el-input placeholder="请输入交易哈希或块高" v-model="searchKey.value" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
-                <el-table :data="transactionList" class="block-table-content" :row-key="getRowKeys" :expand-row-keys="expands" v-loading="loading">
+                <el-table  :data="transactionList" class="block-table-content" :row-key="getRowKeys" :expand-row-keys="expands" v-loading="loading" @row-click="clickTable" ref="refTable">
                     <el-table-column type="expand" align="center">
                         <template slot-scope="scope">
                             <v-transaction-detail :transHash="scope.row.transHash"></v-transaction-detail>
                         </template>
                     </el-table-column>
                     <el-table-column prop="transHash" label="交易哈希" align="center" :show-overflow-tooltip="true">
+                        <template slot-scope="scope">
+                            <span>
+                                <i class="wbs-icon-copy font-12 copy-key" @click="copyPubilcKey(scope.row['transHash'])" title="复制哈希"></i>
+                                {{scope.row['transHash']}}
+                            </span>
+                        </template>
                     </el-table-column>
                     <el-table-column prop="blockNumber" label="块高" width="260" align="center" :show-overflow-tooltip="true">
+                        <template slot-scope="scope">
+                            <span>{{scope.row['blockNumber']}}</span>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center"></el-table-column>
+                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center">
+                        <template slot-scope="scope">
+                            <span>{{scope.row['blockTimestamp']}}</span>
+                        </template>
+                    </el-table-column>
                 </el-table>
-                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
         </div>
@@ -53,6 +67,7 @@ import transactionDetail from "@/components/transactionDetail";
 import { getTransactionList } from "@/util/api";
 import router from "@/router";
 import errcode from "@/util/errcode";
+import { numberFormat } from "@/util/util";
 
 export default {
     name: "transaction",
@@ -65,13 +80,14 @@ export default {
             transactionList: [],
             expands: [],
             searchKey: {
-                key: "transactionHash",
+                key: "",
                 value: ""
             },
             currentPage: 1,
             pageSize: 10,
             total: 0,
             loading: false,
+            numberFormat: numberFormat,
             getRowKeys: function(row) {
                 return row.transHash;
             }
@@ -86,19 +102,22 @@ export default {
     },
     methods: {
         search: function() {
-            if(this.searchKey.key == 'transactionHash' && this.searchKey.value.length != 66 && this.searchKey.value){
+            if (
+                this.searchKey.key == "transactionHash" &&
+                this.searchKey.value.length != 66 &&
+                this.searchKey.value
+            ) {
                 this.$message({
-                    message: '搜索交易哈希不支持模糊查询',
+                    message: "搜索交易哈希不支持模糊查询",
                     type: "error",
                     duration: 2000
                 });
-            }else{
+            } else {
                 this.getTransaction();
             }
-            
         },
         getTransaction: function() {
-            this.expands = []
+            this.expands = [];
             this.loading = true;
             let networkId = localStorage.getItem("networkId");
             let reqData = {
@@ -107,20 +126,22 @@ export default {
                     pageSize: this.pageSize
                 },
                 reqQuery = {};
-                if(this.searchKey.value){
-                    reqQuery[this.searchKey.key] = this.searchKey.value;
+            if (this.searchKey.value) {
+                if (this.searchKey.value.length === 66) {
+                    reqQuery.transactionHash = this.searchKey.value;
+                } else {
+                    reqQuery.blockNumber = this.searchKey.value;
                 }
+            }
             getTransactionList(reqData, reqQuery)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.transactionList = res.data.data;
                         this.total = res.data.totalCount;
-                        if (this.transactionList.length) {
-                            this.expands.push(
-                                this.transactionList[0].transHash
-                            );
-                        }
+                        // if (this.transactionList.length) {
+                        //     this.expands.push(this.transactionList[0].transHash);
+                        // }
                     } else {
                         this.$message({
                             message: errcode.errCode[res.data.code].cn,
@@ -142,29 +163,69 @@ export default {
         handleCurrentChange: function(val) {
             this.currentPage = val;
             this.getTransaction();
-        }
+        },
+        clickTable: function(row, $event, column) {
+            let nodeName = $event.target.nodeName;
+            if ($event.target.nodeName === "I") {
+                return
+            }
+            this.$refs.refTable.toggleRowExpansion(row);
+        },
+        clearText: function() {
+            this.getTransaction();
+        },
+        copyPubilcKey(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
+        },
     }
 };
 </script>
 <style scoped>
 .block-table-content {
     width: 100%;
-    padding: 0px 40px 16px 41px;
+    padding-bottom: 16px;
     font-size: 12px;
-}
-.block-wrapper {
-    margin: 30px 0 0 31px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px 0 #dfe2e9;
-    border-radius: 10px;
 }
 .block-table-content>>>.el-table__expanded-cell {
     padding: 12px 6px;
+}
+.block-table-content>>>.el-icon-arrow-right:before {
+    content: "\e60e";
+}
+.block-table-content>>>.el-table__expand-icon > .el-icon {
+    font-size: 14px;
+}
+.block-table-content>>>.el-table__row {
+    cursor: pointer;
 }
 .search-part {
     padding: 30px 0px;
     overflow: hidden;
     margin: 0;
+}
+.search-part::after {
+    display: block;
+    content: "";
+    clear: both;
+}
+.input-with-select {
+    width: 610px;
 }
 .input-with-select>>>.el-input__inner {
     border-top-left-radius: 20px;
@@ -178,9 +239,9 @@ export default {
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
 .input-with-select>>>.el-button {
-    border: 1px solid #2956a3;
+    border: 1px solid #20d4d9;
     border-radius: inherit;
-    background: #2956a3;
+    background: #20d4d9;
     color: #fff;
 }
 .input-with-select>>>.el-input__inner {
@@ -199,15 +260,6 @@ export default {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
-}
-.input-with-select>>>.el-button {
-    border: 1px solid #2956a3;
-    border-radius: inherit;
-    background: #2956a3;
-    color: #fff;
-}
-.search-part-right {
-    float: right;
 }
 </style>
 
