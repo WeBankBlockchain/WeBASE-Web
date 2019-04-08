@@ -14,17 +14,32 @@
  * limitations under the License.
  */
 <template>
-    <div>
-        <el-select v-model="userName" placeholder="请选择用户" @change="changeId">
-            <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
-        </el-select>
-        <div v-if='inputs.length' v-for='(item,index) in inputs' :key='item.name' style="padding: 10px 0;">
-            <span style="display:inline-block;width:80px;">{{item.type}}</span>
-            <el-input v-model="parameter[index]" style="width: 250px;"></el-input>
-        </div>
-        <div style="text-align:right">
-            <el-button type="primary" @click="submit">确定</el-button>
+    <div class="chang-wrapper">
+        <table class="opt-wrapper">
+            <tr>
+                <td>用户：</td>
+                <td>
+                    <el-select v-model="userName" placeholder="请选择用户" @change="changeId" style="width: 240px">
+                        <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
+                    </el-select>    
+                </td>
+            </tr>
+            <tr v-if='inputs.length'>
+                <td style="vertical-align: top;">参数：</td>
+                <td>
+                    <div v-for='(item,index) in inputs' :key='item.name'>
+                        <el-input v-model="parameter[index]" style="width: 240px;margin-bottom:10px;">
+                            <template slot="prepend">
+                                <span>{{item.type}}</span>
+                            </template>
+                        </el-input>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="text-right send-btn">
             <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="submit">确定</el-button>
         </div>
     </div>
 </template>
@@ -114,4 +129,28 @@ export default {
     }
 };
 </script>
+<style scoped>
+.chang-wrapper {
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+.chang-wrapper /deep/ .el-input__inner {
+    height: 32px;
+    line-height: 32px;
+}
+.chang-wrapper /deep/ .el-input__icon {
+    line-height: 32px;
+}
+.opt-wrapper tr td {
+    padding-top: 0;
+    padding-bottom: 10px;
+}
+.send-btn {
+    
+}
+.send-btn /deep/ .el-button {
+    padding: 9px 16px;
+}
+</style>
 

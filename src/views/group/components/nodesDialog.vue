@@ -16,18 +16,18 @@
 <template>
     <div>
         <el-form :model="nodesForm" :rules="rules" ref="nodesForm" label-width="108px" class="demo-ruleForm">
-            <el-form-item label="节点IP" prop="nodeIp" style="width: 300px;">
+            <el-form-item label="节点IP" prop="nodeIp" style="width: 330px;">
                 <el-input v-model="nodesForm.nodeIp" placeholder="请输入IP" :disabled="nodesForm['disabled']"></el-input>
             </el-form-item>
-            <el-form-item label="前置服务端口" prop="frontPort" style="width: 300px;" v-if="nodesForm['dShow']">
+            <el-form-item label="前置服务端口" prop="frontPort" style="width: 330px;" v-if="nodesForm['dShow']">
                 <el-input v-model="nodesForm.frontPort" placeholder="请输入前置服务端口" :disabled="nodesForm['disabled']"></el-input>
             </el-form-item>
-            <el-form-item label="所属机构" prop="org" v-if="nodesForm['dShow']">
+            <!-- <el-form-item label="所属机构" prop="org" v-if="nodesForm['dShow']">
                 <el-radio-group v-model="nodesForm.org">
                     <el-radio label="1">本机构</el-radio>
                     <el-radio label="2">其它机构</el-radio>
                 </el-radio-group>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         <div class="dialog-footer">
             <el-button @click="modelClose">取 消</el-button>

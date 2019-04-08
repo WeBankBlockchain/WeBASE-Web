@@ -15,8 +15,9 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'节点管理'" v-if="!visibleDetail"></v-content-head>
-        <div class="module-wrapper" v-if="!visibleDetail">
+        <!-- <v-content-head :headTitle="'节点管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
+        <v-content-head :headTitle="'节点管理'"></v-content-head>
+        <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
                     <el-button type="primary" class="search-part-left-btn" @click="createNodes">新增节点</el-button>
@@ -43,33 +44,27 @@
                             </template>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column label="状态" v-if="showNodeActive">
+                    <el-table-column label="状态">
                         <template slot-scope="scope">
                             <span>
                                 <i :style="{'color': textColor(scope.row['nodeActive'])}" class="wbs-icon-radio font-6"></i>
                                 {{nodesStatus(scope.row['nodeActive'])}}
                             </span>
                         </template>
-                    </el-table-column> -->
+                    </el-table-column>
                 </el-table>
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <el-dialog :visible.sync="nodesDialogVisible" :title="nodesDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper">
+                <el-dialog :visible.sync="nodesDialogVisible" :title="nodesDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper" v-if="nodesDialogVisible">
                     <v-nodesDialog :nodesDialogOptions="nodesDialogOptions" @success="success" @close="close"></v-nodesDialog>
                 </el-dialog>
             </div>
         </div>
-        <v-content-head :headTitle="`${nodeIp}`" v-if="visibleDetail" :icon="true" @goBack="goBack"></v-content-head>
-        <div v-if="visibleDetail">
-            <v-hostDetail :nodeIp="nodeIp" :nodeId="nodeId"></v-hostDetail>
-        </div>
-
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
-import hostDetail from "./components/hostDetail";
 import nodesDialog from "./components/nodesDialog";
 import { getNodeList, addnodes } from "@/util/api";
 import { date } from "@/util/util";
@@ -78,8 +73,12 @@ export default {
     name: "group",
     components: {
         "v-content-head": contentHead,
-        "v-nodesDialog": nodesDialog,
-        "v-hostDetail": hostDetail
+        "v-nodesDialog": nodesDialog
+    },
+    watch: {
+        $route: function() {
+            this.urlQuery = this.$root.$route.query;
+        }
     },
     data: function() {
         return {
@@ -124,9 +123,7 @@ export default {
                     name: "rpc端口"
                 }
             ],
-            visibleDetail: false,
-            nodeIp: "",
-            nodeId: ""
+            urlQuery: this.$root.$route.query
         };
     },
     mounted: function() {
@@ -239,12 +236,7 @@ export default {
         },
         showDetail(item) {
             if(item.nodeType===2) return;
-            this.nodeIp = item.nodeIp;
-            this.nodeId = item.nodeId;
-            this.visibleDetail = true;
-        },
-        goBack(val) {
-            this.visibleDetail = val;
+            this.$router.push({ path: 'hostDetail', query: { 'nodeIp': item.nodeIp, 'nodeId': item.nodeId}});
         }
     }
 };
@@ -308,9 +300,9 @@ export default {
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
 .input-with-select>>>.el-button {
-    border: 1px solid #2956a3;
+    border: 1px solid #20D4D9;
     border-radius: inherit;
-    background: #2956a3;
+    background: #20D4D9;
     color: #fff;
 }
 </style>

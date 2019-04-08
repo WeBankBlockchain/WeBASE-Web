@@ -16,31 +16,46 @@
 <template>
     <div>
         <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'"></v-content-head>
-        <div class="block-wrapper">
+        <div class="module-wrapper">
             <div class="search-part">
-                <div style="float: right;padding-right: 40px">
-                    <el-input placeholder="请输入内容" v-model="searchKey.value" class="input-with-select">
-                        <el-select v-model="searchKey.key" slot="prepend" placeholder="请选择" style="width: 110px; background: #fff" clearable>
-                            <el-option label="块高" value="blockNumber"></el-option>
-                            <el-option label="区块哈希" value="pkHash"></el-option>
-                        </el-select>
+                <div class="search-part-left-bg">
+                    <span>共</span>
+                    <span>{{numberFormat(total, 0, ".", ",")}}</span>
+                    <span>条</span>
+                </div>
+                <div class="search-part-right">
+                    <el-input placeholder="请输入区块哈希或块高" v-model="searchKey.value" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
-                <el-table :data="blockData" class="block-table-content" v-loading="loading">
+                <el-table :data="blockData" class="block-table-content" v-loading="loading" @row-click="clickTable" ref="refTable">
                     <el-table-column prop="blockNumber" label="块高" width="80" align="center">
                         <template slot-scope="scope">
                             <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="transCount" label="交易" width="50" align="center"></el-table-column>
-                    <el-table-column prop="pkHash" label="区块哈希" :show-overflow-tooltip="true" align="center">
+                    <el-table-column prop="transCount" label="交易" width="50" align="center">
+                        <template slot-scope="scope">
+                            <span class="">{{scope.row['transCount']}}</span>
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center"></el-table-column>
+                    <el-table-column prop="pkHash" label="区块哈希" :show-overflow-tooltip="true" align="center">
+                        <template slot-scope="scope">
+                            <span class="">
+                                <i class="wbs-icon-copy font-12 copy-key" @click="copyPubilcKey(scope.row['pkHash'])" title="复制哈希"></i>
+                                {{scope.row['pkHash']}}
+                            </span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center">
+                        <template slot-scope="scope">
+                            <span class="">{{scope.row['blockTimestamp']}}</span>
+                        </template>
+                    </el-table-column>
                 </el-table>
-                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
         </div>
@@ -52,6 +67,7 @@ import contentHead from "@/components/contentHead";
 import { getBlockPage } from "@/util/api";
 import router from "@/router";
 import errcode from "@/util/errcode";
+import { numberFormat } from "@/util/util";
 export default {
     name: "blockInfo",
     components: {
@@ -64,8 +80,9 @@ export default {
             pageSize: 10,
             total: 0,
             loading: false,
+            numberFormat: numberFormat,
             searchKey: {
-                key: "pkHash",
+                key: "",
                 value: ""
             }
         };
@@ -98,7 +115,13 @@ export default {
                     pageSize: this.pageSize
                 },
                 reqQuery = {};
-            reqQuery[this.searchKey.key] = this.searchKey.value;
+            if(this.searchKey.value){
+                if(this.searchKey.value.length===66){
+                    reqQuery.pkHash = this.searchKey.value;
+                }else {
+                    reqQuery.blockNumber = this.searchKey.value;
+                }
+            }
             getBlockPage(reqData, reqQuery)
                 .then(res => {
                     this.loading = false;
@@ -138,21 +161,48 @@ export default {
                     blockNumber: val
                 }
             });
-        }
+        },
+        clickTable: function(row, $event, column) {
+            let nodeName = event.target.nodeName;
+            if ($event.target.nodeName === "I") {
+                return
+            }
+            this.link(row.blockNumber)
+        },
+        
+        clearText: function(){
+            this.getBlockList()
+        },
+        copyPubilcKey(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
+        },
     }
 };
 </script>
 <style scoped>
-.block-wrapper {
-    margin: 30px 0 0 31px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px 0 #dfe2e9;
-    border-radius: 10px;
-}
 .search-part {
     padding: 30px 0px;
     overflow: hidden;
     margin: 0;
+}
+.input-with-select {
+    width: 610px;
 }
 .input-with-select>>>.el-input__inner {
     border-top-left-radius: 20px;
@@ -172,14 +222,17 @@ export default {
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
 .input-with-select>>>.el-button {
-    border: 1px solid #2956a3;
+    border: 1px solid #20d4d9;
     border-radius: inherit;
-    background: #2956a3;
+    background: #20d4d9;
     color: #fff;
 }
 .block-table-content {
     width: 100%;
-    padding: 0px 40px 16px 41px;
+    padding-bottom: 16px;
     font-size: 12px;
+}
+.block-table-content /deep/ .el-table__row {
+    cursor: pointer;
 }
 </style>

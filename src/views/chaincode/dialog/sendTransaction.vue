@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div style="text-align:left">
+    <div class="send-wrapper">
         <div class="send-item">
             <span class="send-item-title">合约名称:</span>
             <span>{{data.contractName}}</span>
@@ -25,36 +25,37 @@
         </div>
         <div class="send-item">
             <span class="send-item-title">用户:</span>
-            <el-select v-model="transation.userName" placeholder="请选择用户" @change="changeId">
+            <el-select v-model="transation.userName" placeholder="请选择用户" @change="changeId" style="width:240px">
                 <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
             </el-select>
         </div>
         <div class="send-item">
             <span class="send-item-title">方法:</span>
-            <el-select v-model="transation.funcType" placeholder="方法类型" @change="changeType($event)">
+            <el-select v-model="transation.funcType" placeholder="方法类型" @change="changeType($event)" style="width:110px">
                 <el-option label="function" :value="'function'"></el-option>
-                <!-- <el-option label="constructor" :value="'constructor'"></el-option> -->
             </el-select>
-            <el-select v-model="transation.funcName" placeholder="方法名" v-show="funcList.length > 0" @change="changeFunc">
+            <el-select v-model="transation.funcName" placeholder="方法名" v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
                 <el-option :label="item.name" :key="item.name" :value="item.name" v-for="item in funcList"></el-option>
             </el-select>
         </div>
-        <div class="send-item" v-show="pramasData.length">
-            <span class="send-item-title">参数:</span>
-            <div class="send-item-params">
-                <div v-for="(item,index) in pramasData">
-                    <span class="send-item-title">{{item.type}}</span>
-                    <el-input v-model="transation.funcValue[index]" style="width: 200px;"></el-input>
+        <div class="send-item" v-show="pramasData.length" style="line-height: 25px;">
+            <span class="send-item-title" style="position: relative;top: 5px;">参数:</span>
+                <ul  style="position: relative;top: -25px;">
+                    <li v-for="(item,index) in pramasData" style="margin-left:63px;">
+                    <el-input v-model="transation.funcValue[index]" style="width: 240px;">
+                        <template slot="prepend">
+                            <span class="">{{item.type}}</span>
+                        </template>
+                    </el-input>
                     <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，例如：'arry1,arry2'" placement="top-start">
-                        <i class="el-icon-info"></i>
+                        <i class="el-icon-info" style="position: relative;top: 8px;"></i>
                     </el-tooltip>
-                </div>
-            </div>
-
+                    </li>
+                </ul>
         </div>
-        <div style="text-align:right">
-            <el-button type="primary" @click="submit('transation')" :disabled='buttonClick'>确定</el-button>
+        <div class="text-right send-btn">
             <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="submit('transation')" :disabled='buttonClick'>确定</el-button>
         </div>
     </div>
 </template>
@@ -245,17 +246,28 @@ export default {
 </script>
 
 <style scoped>
+.send-wrapper {
+    padding-left: 30px;
+}
 .send-item {
-    padding-left: 60px;
-    line-height: 60px;
+    line-height: 40px;
 }
 .send-item-title {
     display: inline-block;
-    width: 80px;
+    width: 60px;
+    text-align: right;
 }
 .send-item-params {
     display: inline-block;
-    width: 400px;
-    vertical-align: top;
+}
+.send-item /deep/.el-input__inner {
+    height: 32px;
+    line-height: 32px;
+}
+.send-btn {
+
+}
+.send-btn /deep/ .el-button {
+    padding: 9px 16px;
 }
 </style>
