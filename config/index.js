@@ -12,7 +12,8 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/mgr':{
-                target:'http://10.0.0.1/',
+                // target:'http://10.0.0.1/',
+                // target: 'http://127.0.0.1:8081',
                 changeOrigin:true,
                 pathRewrite:{
                     '^/mgr':''
