@@ -64,7 +64,7 @@ export default {
             getblockHash(data).then(res => {
                 if (res.data.code === 0) {
                     this.transactionList = res.data.data.transactions;
-                    this.expands.push(this.transactionList[0].hash);
+                    // this.expands.push(this.transactionList[0].hash);
                 }
             });
         }
