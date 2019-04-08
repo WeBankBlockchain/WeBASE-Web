@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 <template>
-    <div style="padding-left: 30px;">
-    <div :id="chartId" style="min-width: 250px; height: 350px; margin: 0 auto;"></div>
+    <div style="padding-left: 30px;padding-bottom: 2px; marin-bottom:12px;">
+        <div :id="chartId" style=" height: 200px; margin: 0 auto;"></div>
     </div>
 </template>
 
@@ -86,8 +86,8 @@ export default {
                 grid: {
                     left: 43,
                     right: 33,
-                    top: 5,
-                    bottom: 60
+                    top: 7,
+                    bottom: 40
                 },
                 series: [
                     {
@@ -101,8 +101,7 @@ export default {
                                 }
                             }
                         },
-                        smooth: true,
-                        symbol: "none",
+                        symbolSize: 5,
                         data: this.chartTransactionDataArr
                     }
                 ],

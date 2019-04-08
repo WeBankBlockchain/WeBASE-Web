@@ -46,8 +46,7 @@
             <div class="contract-info" v-show="successHide" :style="{height:infoHeight + 'px'}">
                 <div class="move" @mousedown="dragDetailWeight($event)" @mouseup="resizeCode"></div>
                 <div class="contract-info-title">
-                    <span>输出信息</span>
-                    <i class="el-icon-refresh float-right" @click="refreshMessage"></i>
+                    <i class="wbs-icon-clear float-right" @click="refreshMessage" title="清除"></i>
                 </div>
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
@@ -78,10 +77,10 @@
                 </div>
             </div>
         </div>
-        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="700px" :before-close="sendClose" v-if="dialogVisible">
+        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <v-transaction @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiFile'></v-transaction>
         </el-dialog>
-        <el-dialog title="选择用户" :visible.sync="dialogUser" width="600px" v-if="dialogUser">
+        <el-dialog title="选择用户" :visible.sync="dialogUser" width="400px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
     </div>
@@ -364,6 +363,7 @@ export default {
             this.errorInfo = "";
             this.compileinfo = "";
             this.abiFile = "";
+            this.contractAddress = "";
         },
         deploying: function() {
             this.dialogUser = true;
@@ -555,7 +555,7 @@ export default {
 }
 .contract-info {
     position: relative;
-    padding-top: 50px;
+    padding-top: 20px;
     text-align: left;
     border-top: 1px solid #ddd;
     box-sizing: border-box;
@@ -578,14 +578,7 @@ export default {
     padding-right: 20px;
 }
 .contract-info-title {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    padding: 12px 0;
-    z-index: 11;
-    background-color: #e8e8e8;
-    box-sizing: border-box;
+    padding-right: 20px;
 }
 .move {
     position: absolute;
@@ -598,7 +591,6 @@ export default {
 }
 .contract-info-title i {
     padding-left: 8px;
-    padding-right: 4px;
     font-size: 10px;
     color: #aeb1b5;
     cursor: pointer;
@@ -660,5 +652,8 @@ export default {
 }
 .titleActive {
     padding-left: 40px;
+}
+.send-dialog /deep/ .el-dialog--center .el-dialog__body{
+    padding: 5px 25px 20px;
 }
 </style>

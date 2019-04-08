@@ -95,11 +95,11 @@ export function getOrgList(data, list) {
     })
 }
 /**Contract list */
-export function getContractList(data, list) {
-    const params = reviseParam(data, list);
+export function getContractList(data) {
     return get({
-        url: `${url.ORG_LIST}/contract/contractList/${params.str}`,
-        method: 'get'
+        url: `${url.ORG_LIST}/contract/contractList`,
+        method: 'post',
+        data: data
     })
 }
 /**Add node */
@@ -156,7 +156,6 @@ export function networkList() {
         method: 'get'
     })
 }
-
 /**Modify contract */
 export function editChain(data) {
     return put({
@@ -199,7 +198,7 @@ export function sendTransation(data) {
     })
 }
 /** Transaction receipt based on transaction hash*/
-export function getTransactionReceipt(data,list) {
+export function getTransactionReceipt(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/web3/transactionReceipt/${params.str}`,
@@ -208,7 +207,7 @@ export function getTransactionReceipt(data,list) {
     })
 }
 /** Get transaction information based on transaction hash*/
-export function hashTransactionInfo(data,list) {
+export function hashTransactionInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/web3/transaction/${params.str}`,
@@ -343,7 +342,7 @@ export function unusualContractList(data, list) {
     })
 }
 /** bytecode*/
-export function getByteCode(data,list) {
+export function getByteCode(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/web3/code/${params.str}`,
@@ -353,7 +352,7 @@ export function getByteCode(data,list) {
 }
 
 /** Query block details based on block height*/
-export function getBlockDetail(data,list) { 
+export function getBlockDetail(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/web3/blockByNumber/${params.str}`,
@@ -370,7 +369,7 @@ export function deleteNodes(data) {
     })
 }
 /**  Collection node metric*/
-export function metricInfo(data, list){
+export function metricInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/performance/ratio/${params.str}`,
@@ -379,10 +378,19 @@ export function metricInfo(data, list){
     })
 }
 /** Machine configuration information*/
-export function nodesHostInfo(data, list){
+export function nodesHostInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/performance/config/${params.str}`,
         method: 'get'
+    })
+}
+
+export function nodesHealth(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/chain/mointorInfo/${params.str}`,
+        method: 'get',
+        params: params.querys
     })
 }

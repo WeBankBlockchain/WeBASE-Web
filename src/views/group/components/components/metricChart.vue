@@ -43,6 +43,7 @@ export default {
     },
     watch: {
         reload: function() {
+            console.log('metric')
             this.getChartData();
         }
     },
