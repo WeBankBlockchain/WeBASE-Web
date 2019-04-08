@@ -47,7 +47,7 @@
             </div>
 
             <div class="chart" ref="chart">
-                <v-chart ref="linechart" :id="'transId'" v-if="chartStatistics.show" :chartStatistics="chartStatistics" v-bind:reload="reloadNum"></v-chart>
+                <v-chart ref="linechart" :id="'transId'" v-if="chartStatistics.show" :chartStatistics="chartStatistics" v-bind:reload="reloadNum"   v-loading="loading"></v-chart>
             </div>
         </div>
     </div>
@@ -70,6 +70,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             networkId: localStorage.getItem("networkId"),
             headSubTitle: "用户交易",
             reloadNum: 1,
@@ -137,6 +138,7 @@ export default {
     },
     methods: {
         getMonitorTransactionInfo() {
+            this.loading = true
             let reqData = {
                     networkId: this.networkId
                 },
@@ -151,6 +153,7 @@ export default {
             }
             monitorTransactionInfo(reqData, reqQurey)
                 .then(res => {
+                    this.loading = false;
                     if (res.data.code == 0) {
                         let transInfoList = res.data.data.transInfoList;
                         var len = transInfoList.length;

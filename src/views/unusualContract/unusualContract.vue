@@ -19,7 +19,7 @@
         <div class="module-wrapper auto-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
-                    <el-input placeholder="请输入合约地址" v-model="contractAddress" class="input-with-select">
+                    <el-input placeholder="请输入合约地址" v-model="contractAddress" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -181,6 +181,9 @@ export default {
         handleCurrentChange: function(val) {
             this.currentPage = val;
             this.getUnusualContractList();
+        },
+        clearText: function(){
+            this.getUnusualContractList()
         }
     }
 };
@@ -203,9 +206,9 @@ export default {
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
 .input-with-select>>>.el-button {
-    border: 1px solid #2956a3;
+    border: 1px solid #20D4D9;
     border-radius: inherit;
-    background: #2956a3;
+    background: #20D4D9;
     color: #fff;
 }
 
