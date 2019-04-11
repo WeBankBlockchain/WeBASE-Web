@@ -69,12 +69,12 @@ nginx安装请参考附录
 
 3、 修改静态文件路径(文件需要有权限访问)
 ```
-    sed -i "s/\ /data\/webase-web \/dist /${your_file_route}/g" nginx.conf
+    sed -i "s/\/data\/webase-web\/dist /${your_file_route}/g" nginx.conf
 ```
 
 4、 修改mgr服务ip和端口
 ```
-sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
+sed -i "s/10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 ````
 
 服务器已有nginx可按照以下修改，
@@ -84,10 +84,10 @@ sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
         server 10.0.0.1:8083; #步骤三 节点管理服务地址及端口
     }
     server {
-        listen       3002 default_server;   //步骤一 前端端口（端口需要开通策略且不能被占用）
-        server_name  10.0.0.1;         //步骤一 前端地址，可配置为域名
+        listen       3002 default_server;   #步骤一 前端端口（端口需要开通策略且不能被占用）
+        server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
         location / {
-                root    /data/webase-web/dist;   //步骤二 前端文件路径(文件需要有权限访问)
+                root    /data/webase-web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }
