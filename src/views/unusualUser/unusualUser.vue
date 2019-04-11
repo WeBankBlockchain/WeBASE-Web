@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="search-table" style="height: 76%">
-                <el-table :data="hashData" tooltip-effect="light" height="100%" style="overflow-y: auto" v-loading="loading">
+                <el-table :data="hashData" class="unUser-table-content"  tooltip-effect="light" height="100%" style="overflow-y: auto" v-loading="loading">
                     <el-table-column type="expand">
                         <template slot-scope="props">
                             <div class="expand-item">
@@ -243,5 +243,8 @@ export default {
 .expand-item-span > span {
     color: #515356;
     margin-left: 47px;
+}
+.unUser-table-content>>>.el-icon-arrow-right:before {
+    content: "\e60e";
 }
 </style>
