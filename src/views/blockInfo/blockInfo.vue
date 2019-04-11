@@ -164,7 +164,7 @@ export default {
         },
         clickTable: function(row, $event, column) {
             let nodeName = event.target.nodeName;
-            if ($event.target.nodeName === "I") {
+            if (nodeName === "I") {
                 return
             }
             this.link(row.blockNumber)
