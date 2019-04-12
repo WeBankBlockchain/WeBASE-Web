@@ -95,11 +95,11 @@ export function getOrgList(data, list) {
     })
 }
 /**Contract list */
-export function getContractList(data) {
+export function getContractList(data, list) {
+    const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/contract/contractList`,
-        method: 'post',
-        data: data
+        url: `${url.ORG_LIST}/contract/contractList/${params.str}`,
+        method: 'get',
     })
 }
 /**Add node */

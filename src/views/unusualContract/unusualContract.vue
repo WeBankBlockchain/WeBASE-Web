@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="search-table" style="height: 76%">
-                <el-table :data="hashData" tooltip-effect="light" height="100%" v-loading="loading">
+                <el-table :data="hashData" class="unContract-table-content" @row-click="clickTable" ref="refTable"  tooltip-effect="light" height="100%" v-loading="loading">
                     <el-table-column type="expand">
                         <template slot-scope="props">
                             <ul class="expand-item-ul">
@@ -184,7 +184,14 @@ export default {
         },
         clearText: function(){
             this.getUnusualContractList()
-        }
+        },
+        clickTable: function(row, $event, column) {
+            let nodeName = event.target.nodeName;
+            if (nodeName === "I") {
+                return
+            }
+            this.$refs.refTable.toggleRowExpansion(row);
+        },
     }
 };
 </script>
@@ -244,5 +251,11 @@ export default {
 .expand-item-span > span {
     color: #515356;
     margin-left: 47px;
+}
+.unContract-table-content>>>.el-icon-arrow-right:before {
+    content: "\e60e";
+}
+.unContract-table-content>>> td{
+    cursor: pointer;
 }
 </style>

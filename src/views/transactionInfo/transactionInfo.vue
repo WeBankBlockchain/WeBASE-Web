@@ -165,8 +165,8 @@ export default {
             this.getTransaction();
         },
         clickTable: function(row, $event, column) {
-            let nodeName = $event.target.nodeName;
-            if ($event.target.nodeName === "I") {
+            let nodeName = event.target.nodeName;
+            if (nodeName === "I") {
                 return
             }
             this.$refs.refTable.toggleRowExpansion(row);
