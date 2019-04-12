@@ -15,7 +15,7 @@
  */
 <template>
     <div style="padding: 0">
-        <el-tabs type="border-card" @tab-click="handleClick">
+        <el-tabs type="border-card" @tab-click="handleClick" class="Tx-table-content">
             <el-tab-pane label="input">
                 <div>
                     <div class="item">
@@ -722,6 +722,7 @@ export default {
     border-radius: 4px;
     font-size: 12px;
 }
+
 </style>
 
 
