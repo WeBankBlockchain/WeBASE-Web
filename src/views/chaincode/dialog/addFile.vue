@@ -6,7 +6,7 @@
                     <el-form-item label="合约名称" prop="contractName" >
                         <el-input v-model="fileFrom.contractName" style="width: 210px;"></el-input>
                     </el-form-item>
-                    <el-form-item label="合约名称" >
+                    <el-form-item label="文件目录" >
                         <el-select v-model="fileFrom.contractType" placeholder="请选择">
                             <el-option
                             v-for="item in options"
@@ -89,6 +89,7 @@ export default {
                         contractAbi: "",
                         contractBin: "",
                         contractAddress: "",
+                        contractVersion: "",
                         contractNo: (new Date()).getTime()
                     }
                     this.$emit("success",data)
