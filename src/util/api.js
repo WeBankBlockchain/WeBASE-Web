@@ -48,14 +48,14 @@ export function resetPassword(data) {
 /**daily transaction data */
 export function getChartData(data) {
     return get({
-        url: `${url.ORG_LIST}/network/transDaily/${data}`,
+        url: `${url.ORG_LIST}/group/transDaily/${data}`,
         method: 'get'
     })
 }
 /**Chain overview */
 export function getNetworkStatistics(data) {
     return get({
-        url: `${url.ORG_LIST}/network/general/${data}`,
+        url: `${url.ORG_LIST}/group/general/${data}`,
         method: 'get'
     })
 }
@@ -95,11 +95,11 @@ export function getOrgList(data, list) {
     })
 }
 /**Contract list */
-export function getContractList(data, list) {
-    const params = reviseParam(data, list);
+export function getContractList(data) {
     return get({
-        url: `${url.ORG_LIST}/contract/contractList/${params.str}`,
-        method: 'get'
+        url: `${url.ORG_LIST}/contract/contractList`,
+        method: 'post',
+        data: data
     })
 }
 /**Add node */
@@ -156,7 +156,6 @@ export function networkList() {
         method: 'get'
     })
 }
-
 /**Modify contract */
 export function editChain(data) {
     return put({
@@ -199,19 +198,19 @@ export function sendTransation(data) {
     })
 }
 /** Transaction receipt based on transaction hash*/
-export function getTransactionReceipt(data,list) {
+export function getTransactionReceipt(data, list) {
     const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/web3/transactionReceipt/${params.str}`,
+        url: `${url.ORG_LIST}/transaction/transactionReceipt/${params.str}`,
         method: 'get',
         params: params.querys
     })
 }
 /** Get transaction information based on transaction hash*/
-export function hashTransactionInfo(data,list) {
+export function hashTransactionInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/web3/transaction/${params.str}`,
+        url: `${url.ORG_LIST}/transaction/transInfo/${params.str}`,
         method: 'get',
         params: params.querys
     })
@@ -307,7 +306,7 @@ export function monitorUserList(data, list) {
 }
 /**
  * 监管用户接口列表
- * @param networkId
+ * @param groupId
  * @param ?userName
  * */
 export function monitorUserInterfaceList(data, list) {
@@ -320,7 +319,7 @@ export function monitorUserInterfaceList(data, list) {
 }
 /**
  * 监管异常用户信息列表
- * @param networkId
+ * @param groupId
  * @param pageNumber
  * @param pageSize
  * @param ?userName
@@ -343,7 +342,7 @@ export function unusualContractList(data, list) {
     })
 }
 /** bytecode*/
-export function getByteCode(data,list) {
+export function getByteCode(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/web3/code/${params.str}`,
@@ -353,10 +352,10 @@ export function getByteCode(data,list) {
 }
 
 /** Query block details based on block height*/
-export function getBlockDetail(data,list) { 
+export function getBlockDetail(data, list) {
     const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/web3/blockByNumber/${params.str}`,
+        url: `${url.ORG_LIST}/block/blockByNumber/${params.str}`,
         method: 'get',
         params: params.querys
     })
@@ -370,7 +369,7 @@ export function deleteNodes(data) {
     })
 }
 /**  Collection node metric*/
-export function metricInfo(data, list){
+export function metricInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/performance/ratio/${params.str}`,
@@ -379,10 +378,69 @@ export function metricInfo(data, list){
     })
 }
 /** Machine configuration information*/
-export function nodesHostInfo(data, list){
+export function nodesHostInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/performance/config/${params.str}`,
         method: 'get'
+    })
+}
+
+export function nodesHealth(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/chain/mointorInfo/${params.str}`,
+        method: 'get',
+        params: params.querys
+    })
+}
+
+export function addFront(data) {
+    return get({
+        url: `${url.ORG_LIST}/front/new`,
+        method: 'post',
+        data: data
+    })
+}
+export function getGroups() {
+    return get({
+        url: `${url.ORG_LIST}/group/all`,
+        method: 'get',
+    })
+}
+export function getFronts(data) {
+    return get({
+        url: `${url.ORG_LIST}/front/find`,
+        method: 'get',
+        params: data
+    })
+}
+export function deleteFront(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/front/${data}`,
+        method: 'delete'
+    })
+}
+
+export function addFunctionAbi(data) {
+    return post({
+        url: `${url.ORG_LIST}/method/add`,
+        method: 'post',
+        data: data
+    })
+}
+export function getFunctionAbi(data,list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/method/findById/${params.str}`,
+        method: 'get',
+    })
+}
+export function getAbi(data,list) {
+    debugger
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/contract/findByPartOfBytecodeBin/${params.str}`,
+        method: 'get',
     })
 }
