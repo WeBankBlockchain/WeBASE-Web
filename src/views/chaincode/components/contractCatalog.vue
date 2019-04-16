@@ -16,7 +16,7 @@
         </div>
         <div class="contract-menu-content">
             <ul>
-                <li v-for='item in contratcArry'>
+                <li v-for='item in contratcArry' :key="item.contractId">
                     <div v-if='item.contractType == "file"' class="contract-file">
                         <i class="wbs-icon-file" @click='select(item)'></i>
                         <span @click='select(item)' :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
@@ -29,7 +29,7 @@
                         <i class="wbs-icon-delete contract-delete" @click='deleteFolder(item)'></i>
                         <br>
                         <ul v-if="item.folderActive" style="padding-left: 20px;">
-                            <li class="contract-file" v-for='list in item.child'>
+                            <li class="contract-file" v-for='list in item.child' :key="list.contractId">
                                 <i class="wbs-icon-file" @click='select(list)'></i>
                                 <span @click='select(list)' :class="{'colorActive': list.contractActive}">{{list.contractName}}</span>
                                 <i class="wbs-icon-delete contract-delete" @click="deleteFile(list)"></i>
@@ -136,6 +136,7 @@ export default {
                 contractAbi: "",
                 contractBin: "",
                 contractAddress: "",
+                contractVersion: "",
                 contractNo: (new Date()).getTime()
             }
             this.contractList.unshift(data)

@@ -79,7 +79,7 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
-                <div v-for="item in eventLog" v-if="eventSHow">
+                <div v-for="item in eventLog" v-if="eventSHow" :key='item.address'>
                     <div class="item">
                         <span class="label">Address :</span>
                         <span>{{item.address}}</span>
@@ -91,7 +91,7 @@
                     <div class="item">
                         <span class="label">Topics :</span>
                         <div style="display: inline-block;width:800px;">
-                            <div v-for="(val,index) in item.topics ">[{{index}}] {{val}}</div>
+                            <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
                         </div>
                     </div>
                     <div class="item">
@@ -261,12 +261,12 @@ export default {
                 })
             },
         getDeloyAbi: function(input){
-            debugger
-            let data = {
+            if(input && input != "0x"){
+                let data = {
                     groupId: localStorage.getItem("groupId"),
-                    data: input.substring(2)
+                    partOfBytecodeBin: input.substring(2)
                 }
-            getAbi(data,{}).then(res => {
+            getAbi(data).then(res => {
                 if(res.data.code == 0){
                     this.decodeDeloy(res.data.data)
                 }else{
@@ -281,6 +281,7 @@ export default {
                         message: "系统错误!"
                     });
                 })
+            }   
         },
         getUser: function() {
             let reqData = {
@@ -350,60 +351,6 @@ export default {
                 this.eventDataShow = true;
             }
         },
-        // getBin: function(adr, blockHeight, callback) {
-        //     let data = {
-        //         groupId: localStorage.getItem("groupId"),
-        //         address: adr,
-        //         blockNumber: blockHeight
-        //     };
-        //     getByteCode(data, {})
-        //         .then(response => {
-        //             if (response.data.code === 0) {
-        //                 this.bin = response.data.data.code;
-        //                 callback();
-        //             } else {
-        //                 this.$message({
-        //                     type: "error",
-        //                     message: errcode.errCode[response.data.code].cn
-        //                 });
-        //                 return;
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.$message({
-        //                 type: "error",
-        //                 message: "系统错误!"
-        //             });
-        //             return;
-        //         });
-        // },
-        // getEventBin: function(adr, blockHeight, callback, list, index) {
-        //     let data = {
-        //         groupId: localStorage.getItem("groupId"),
-        //         address: adr,
-        //         blockNumber: blockHeight
-        //     };
-        //     getByteCode(data, {})
-        //         .then(response => {
-        //             if (response.data.code === 0) {
-        //                 this.bin = response.data.data.code;
-        //                 callback(response.data.data.code, list, index);
-        //             } else {
-        //                 this.$message({
-        //                     type: "error",
-        //                     message: errcode.errCode[response.data.code].cn
-        //                 });
-        //                 return;
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.$message({
-        //                 type: "error",
-        //                 message: "系统错误!"
-        //             });
-        //             return;
-        //         });
-        // },
         decodeAbi: function(val, list) {
             this.inputButtonShow = true;
             let input = this.transactionData.input;

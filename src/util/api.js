@@ -436,11 +436,11 @@ export function getFunctionAbi(data,list) {
         method: 'get',
     })
 }
-export function getAbi(data,list) {
-    debugger
-    const params = reviseParam(data, list);
-    return get({
-        url: `${url.ORG_LIST}/contract/findByPartOfBytecodeBin/${params.str}`,
-        method: 'get',
+export function getAbi(data) {
+    // const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/contract/findByPartOfBytecodeBin`,
+        method: 'post',
+        data: data
     })
 }

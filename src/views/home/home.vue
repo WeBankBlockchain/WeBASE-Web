@@ -69,7 +69,7 @@
                             <span class="overview-more cursor-pointer" @click="goRouter('blocks')">更多</span>
                         </p>
                         <div class="overview-item-base" v-loading="loadingBlock">
-                            <div class="block-item font-color-2e384d" v-for="item in blockData">
+                            <div class="block-item font-color-2e384d" v-for="item in blockData" :key='item.blockNumber'>
                                 <div class="block-amount">
                                     <span>
                                         <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">块高 {{item.blockNumber}}</router-link>
@@ -102,7 +102,7 @@
                             <span class="overview-more cursor-pointer" @click="goRouter('transactions')">更多</span>
                         </p>
                         <div class="overview-item-base" v-loading="loadingTransaction">
-                            <div class="block-item font-color-2e384d" v-for="item in transactionList">
+                            <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
                                 <div class="block-amount">
                                     <p class="trans-hash" :title="`${item.transHash}`">
                                         <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">{{item.transHash}}</router-link>
