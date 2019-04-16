@@ -36,15 +36,29 @@
                         </template>
                     </el-table-column>
                     <el-table-column  prop="createTime" label="创建时间"  show-overflow-tooltip width="150" align="center"></el-table-column>
+                    <el-table-column
+                        fixed="right"
+                        label="操作"
+                        width="100">
+                        <template slot-scope="scope">
+                            <el-button @click="send(scope.row)" type="text" size="small">发送交易</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
+                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                </el-pagination>
             </div>
         </div>
         <v-editor :show='editorShow' :data='editorData' v-if='editorShow' @close='close'></v-editor>
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
+        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+            <send-transation @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
+        </el-dialog>
     </div>
 </template>
 <script>
 import contentHead from "@/components/contentHead";
+import sendTransation from "./dialog/sendTransaction"
 import editor from "./dialog/editor"
 import abiDialog from "./dialog/abiDialog"
 import {getContractList} from "@/util/api"
@@ -53,10 +67,11 @@ export default {
     components: {
         "v-contentHead": contentHead,
         "v-editor": editor,
-        "abi-dialog": abiDialog
+        "abi-dialog": abiDialog,
+        "send-transation": sendTransation
     },
     data: function(){
-        return {
+        return { 
             contractList: [],
             loading: false,
             currentPage: 1,
@@ -68,6 +83,12 @@ export default {
             contractData: "",
             contractName: "",
             contractAddress: "",
+            version: "",
+            data: null,
+            dialogVisible: false,
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
         }
     },
     mounted: function(){
@@ -84,7 +105,8 @@ export default {
             }
             getContractList(data).then(res => {
                 if(res.data.code == 0){
-                    this.contractList = res.data.data || []
+                    this.contractList = res.data.data || [];
+                    this.total = res.data.totalCount || 0;
                 }
             })
         },
@@ -133,6 +155,30 @@ export default {
                 this.contractName = "";
                 this.contractAddress = ""
             }
+            this.getContracts();
+        },
+        send: function(val){
+            this.data = val;
+            this.abiData = val.contractAbi;
+            this.version = val.contractVersion;
+            this.dialogVisible = true
+        },
+        sendClose: function(){
+            this.dialogVisible = false
+        },
+        handleClose: function(){
+            this.dialogVisible = false
+        },
+        sendSuccess: function(){
+            this.dialogVisible = false
+        },
+        handleSizeChange: function(val) {
+            this.pageSize = val;
+            this.currentPage = 1;
+            this.getContracts();
+        },
+        handleCurrentChange: function(val) {
+            this.currentPage = val;
             this.getContracts();
         },
     }
