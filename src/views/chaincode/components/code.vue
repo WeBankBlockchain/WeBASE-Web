@@ -36,7 +36,7 @@
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <span class="contract-code-done" v-if="status == 2"  @click="send">
+                <span class="contract-code-done" v-if="contractAddress"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -498,7 +498,7 @@ export default {
                         this.data.contractAbi == this.abiFile;
                         this.data.contractBin = this.bin;
                         this.data.contractSource = Base64.encode(this.content);
-                        this.$set(this.data,'contractAddress',this.contractAddress)
+                        this.data.contractAddress = this.contractAddress
                         Bus.$emit("compile",this.data)
                     } else {
                         this.status = 3;
