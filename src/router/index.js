@@ -21,14 +21,17 @@ const main = resolve => require(['@/views/index/main'], resolve);
 const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
-const group = resolve => require(['@/views/group/group'], resolve);
+const front = resolve => require(['@/views/front/front'], resolve);
+const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
+const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
 const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/rivateKeyManagement'], resolve);
 const errorLogExport = resolve => require(['@/views/errorLogExport/errorLogExport'], resolve);
 const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve); transactionCharts
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
+const helpDoc = resolve => require(['@/components/helpDoc'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -41,9 +44,23 @@ const routes = [
         component: resolve => require(['@/views/login/login'], resolve),
     },
     {
+        path: '/blank',
+        name: 'blank',
+        component: resolve => require(['@/views/blank/blank'], resolve),
+    },
+    {
+        path: '/helpDoc',
+        component: main,
+        name: '帮助文档',
+        menuShow: false,
+        children: [
+            { path: '/helpDoc', component: helpDoc, name: '帮助文档', menuShow: true, meta: { requireAuth: true } },
+        ]
+    },
+    {
         path: '/main',
         name: 'main',
-        redirect: '/home',
+        // redirect: '/home',
         leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-gailan sidebar-icon',
@@ -68,23 +85,25 @@ const routes = [
     {
         path: '/',
         component: main,
-        name: '节点管理',
+        name: '前置管理',
         leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
-            { path: '/group', component: group, name: '节点管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/front', component: front, name: '前置管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/hostDetail', component: hostDetail, name: '节点详情', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
         path: '/',
         component: main,
         name: '合约管理',
-        leaf: true,
+        // leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
-            { path: '/contract', component: contract, name: '合约管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
+            { path: '/oldContract', component: oldContract, name: '历史合约', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -98,16 +117,16 @@ const routes = [
             { path: '/rivateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
-    {
-        path: '/',
-        component: main,
-        name: '系统监控',
-        menuShow: true,
-        iconCls: 'wbs-icon-monitor sidebar-icon',
-        children: [
-            { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     component: main,
+    //     name: '系统监控',
+    //     menuShow: true,
+    //     iconCls: 'wbs-icon-monitor sidebar-icon',
+    //     children: [
+    //         { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } }
+    //     ]
+    // },
     {
         path: '/',
         component: main,
@@ -131,6 +150,7 @@ const routes = [
             { path: '/accountInfo', component: accountInfo, name: '帐号管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
+    
 ]
 const router = new Router({
     routes

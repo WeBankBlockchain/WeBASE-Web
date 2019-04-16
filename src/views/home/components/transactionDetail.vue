@@ -163,7 +163,7 @@ export default {
         },
         getContacts: function(callback) {
             let reqdata = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 pageSize: 1,
                 pageNumber: 1000
             };

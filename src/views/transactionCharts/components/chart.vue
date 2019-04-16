@@ -56,9 +56,8 @@ export default {
     watch: {
         reload: {
             handler(item) {
-                echarts
-                    .init(document.getElementById(this.chartId))
-                    .showLoading();
+                
+                // echarts.init(document.getElementById(this.chartId)).showLoading();
                 this.chartShow();
             }
         }
@@ -79,9 +78,9 @@ export default {
     methods: {
         chartShow: function() {
             this.chart = echarts.init(document.getElementById(this.chartId));
-            setTimeout(() => {
-                this.chart.hideLoading();
-            }, 600);
+            // setTimeout(() => {
+            //     this.chart.hideLoading();
+            // }, 600);
             let dayNum = this.chartStatistics.data.length;
             let showInterval = 0;
             if(0 <= dayNum && dayNum<28){
@@ -150,8 +149,7 @@ export default {
                                 }
                             }
                         },
-                        smooth: true,
-                        symbol: "none",
+                        symbolSize: 5,
                         data: this.chartStatistics.transactionDataArr
                     }
                 ],

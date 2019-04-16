@@ -13,24 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
 <template>
     <div class="contract-code" :class="{changeActive:changeWidth }" v-loading="loading">
         <div class="contract-code-head">
-            <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">{{contractName + '.sol'}}</span>
+            <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">
+                <span>{{contractName + '.sol'}}</span>
+                <el-tooltip class="item" effect="dark" content="未保存,按Ctrl+s保存合约内容" placement="top-start">
+                    <span v-show='saveShow' style="display:inline-block;width: 8px;height: 8px;border-radius:50%;background-color: #f00"></span>
+                </el-tooltip>
+                </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" @click="save" v-if="status !== 2">
+                <!-- <span class="contract-code-done" @click="save" v-if="status !== 2">
                     <i class="wbs-icon-baocun font-16"></i>
                     <span>保存</span>
-                </span>
-                <span class="contract-code-done" @click="compile" v-if="status !== 2">
+                </span> -->
+                <span class="contract-code-done" @click="compile">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="abiFile && status != 2">
+                <span class="contract-code-done" @click="deploying" v-if="abiFile">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <span class="contract-code-done" v-if="status === 2" @click="send">
+                <span class="contract-code-done" v-if="status == 2"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -46,8 +52,7 @@
             <div class="contract-info" v-show="successHide" :style="{height:infoHeight + 'px'}">
                 <div class="move" @mousedown="dragDetailWeight($event)" @mouseup="resizeCode"></div>
                 <div class="contract-info-title">
-                    <span>输出信息</span>
-                    <i class="el-icon-refresh float-right" @click="refreshMessage"></i>
+                    <i class="wbs-icon-clear float-right" @click="refreshMessage" title="清除"></i>
                 </div>
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
@@ -78,10 +83,10 @@
                 </div>
             </div>
         </div>
-        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="700px" :before-close="sendClose" v-if="dialogVisible">
-            <v-transaction @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiFile'></v-transaction>
+        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+            <v-transaction @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version'></v-transaction>
         </el-dialog>
-        <el-dialog title="选择用户" :visible.sync="dialogUser" width="600px" v-if="dialogUser">
+        <el-dialog title="选择用户" :visible.sync="dialogUser" width="420px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
     </div>
@@ -100,18 +105,20 @@ let Base64 = require("js-base64").Base64;
 let wrapper = require("solc/wrapper");
 let solc = wrapper(window.Module);
 import constant from "@/util/constant";
+import Bus from '@/bus'
 import {
     addChaincode,
     getDeployStatus,
     setCompile,
-    editChain
+    editChain,
+    addFunctionAbi
 } from "@/util/api";
 import transaction from "../dialog/sendTransaction";
 import changeUser from "../dialog/changeUser";
 
 export default {
     name: "codes",
-    props: ["data", "show", "changeStyle"],
+    props: ["show", "changeStyle"],
     components: {
         "v-transaction": transaction,
         "v-user": changeUser
@@ -141,14 +148,17 @@ export default {
             bytecodeBin: "",
             aceEditor: null,
             themePath: "ace/theme/chrome",
-            modePath: "ace/mode/solidity"
+            modePath: "ace/mode/solidity",
+            data: null,
+            codeShow: false,
+            version: "",
+            saveShow: false,
         };
     },
     mounted: function() {
         this.initEditor();
-    },
-    watch: {
-        data: function(val) {
+        Bus.$on('select',data => {
+            this.codeShow = true;
             this.refreshMessage();
             this.code = "";
             this.status = null;
@@ -158,16 +168,29 @@ export default {
             this.contractName = "";
             this.content = "";
             this.bin = "";
-            this.code = Base64.decode(val.contractSource);
+            this.data = data;
+            this.code = Base64.decode(data.contractSource);
             this.content = this.code;
             this.aceEditor.setValue(this.content);
-            this.status = val.contractStatus;
-            this.abiFile = val.contractAbi;
-            this.contractAddress = val.contractAddress;
-            this.errorMessage = val.description || "";
-            this.contractName = val.contractName;
-            this.bin = val.contractBin;
-            this.bytecodeBin = val.bytecodeBin;
+            this.status = data.contractStatus;
+            this.abiFile = data.contractAbi;
+            this.contractAddress = data.contractAddress;
+            this.errorMessage = data.description || "";
+            this.contractName = data.contractName;
+            this.bin = data.contractBin;
+            this.bytecodeBin = data.bytecodeBin;
+            console.log(data)
+        })
+    },
+    watch: {
+        content: function(val){
+            // debugger
+            let data = Base64.decode(this.data.contractSource);
+            if(data != val){
+                this.saveShow = true
+            }else{
+                this.saveShow = false
+            }
         },
         successHide: function(val) {
             if (val) {
@@ -192,15 +215,13 @@ export default {
                 return false;
             }
         },
-        codeShow() {
-            return this.show;
-        },
         tipShow() {
             return !this.show;
         }
     },
     methods: {
         initEditor: function() {
+            let _this = this
             this.aceEditor = ace.edit(this.$refs.ace, {
                 fontSize: 14,
                 fontFamily: "Consolas,Monaco,monospace",
@@ -217,10 +238,23 @@ export default {
                 autoScrollEditorIntoView: true,
                 copyWithEmptySelection: true
             });
+            this.aceEditor.commands.addCommand({
+                name: 'myCommand',
+                bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+                exec: function(editor) {
+                    _this.saveCode()
+                },
+            });
             let editor = this.aceEditor.alignCursors();
             this.aceEditor.getSession().setUseWrapMode(true);
             this.aceEditor.getSession().on("change", this.changeAce);
+            this.aceEditor.getSession().on("focus", this.blurAce);
             this.aceEditor.resize();
+        },
+        saveCode: function(){
+            this.data.contractSource = Base64.encode(this.content)
+            this.saveShow = false
+            Bus.$emit("compile",this.data)
         },
         resizeCode: function() {
             this.aceEditor.setOptions({
@@ -251,19 +285,15 @@ export default {
         },
         changeAce: function() {
             this.content = this.aceEditor.getSession().getValue();
+            this.contractList = JSON.parse(localStorage.getItem("contractLists")) || [];
+            this.contractList.forEach(value => {
+                if(value.contractNo == this.data.contractNo){
+                    value.contractSource = Base64.encode(this.content)
+                }
+            })
+            localStorage.setItem("contractLists",JSON.stringify(this.contractList))
         },
-        save: function() {
-            if (this.content && this.status === 0) {
-                this.addContract();
-            } else if (this.content) {
-                this.editContract();
-            } else {
-                this.$message({
-                    message: "合约内容为空！",
-                    type: "warning"
-                });
-            }
-        },
+        
         findImports: function(path) {
             this.contractList = JSON.parse(
                 localStorage.getItem("contractList")
@@ -350,6 +380,11 @@ export default {
                     this.abiFile = JSON.stringify(this.abiFile);
                     this.bin = arry[0].evm.deployedBytecode.object;
                     this.bytecodeBin = arry[0].evm.bytecode.object;
+                    this.data.contractAbi = this.abiFile;
+                    this.data.contractBin = this.bin;
+                    this.data.contractSource = Base64.encode(this.content);
+                    this.$set(this.data,'bytecodeBin',this.bytecodeBin)
+                    Bus.$emit("compile",this.data)
                 } else {
                     this.errorInfo = "合约编译失败！";
                     this.compileShow = true;
@@ -364,6 +399,7 @@ export default {
             this.errorInfo = "";
             this.compileinfo = "";
             this.abiFile = "";
+            this.contractAddress = "";
         },
         deploying: function() {
             this.dialogUser = true;
@@ -371,32 +407,87 @@ export default {
         userClose: function() {
             this.dialogUser = false;
         },
+        setMethod: function(){
+            let web3 = new Web3(Web3.givenProvider);
+            let arry = [];
+            if(this.abiFile){
+                let list = JSON.parse(this.abiFile);
+                list.forEach(value => {
+                    if(value.name && value.type =='function'){
+                        let data = {}
+                        let methodId = web3.eth.abi.encodeFunctionSignature({
+                            name: value.name,
+                            type: value.type,
+                            inputs: value.inputs
+                        });
+                        data.methodId = methodId;
+                        data.abiInfo = JSON.stringify(value);
+                        data.methodType = value.type
+                        arry.push(data)
+                    }else if(value.name && value.type =='event'){
+                        let data = {}
+                        let methodId = web3.eth.abi.encodeEventSignature({
+                            name: value.name,
+                            type: value.type,
+                            inputs: value.inputs
+                        });
+                        data.methodId = methodId;
+                        data.abiInfo = JSON.stringify(value);
+                        data.methodType = value.type
+                        arry.push(data)
+                    }
+                })
+                if(arry.length){
+                   this.addAbiMethod(arry) 
+                }
+            }    
+        },
+        addAbiMethod: function(list){
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                methodList: list
+            }
+            addFunctionAbi(data).then(res => {
+                if(res.data.code === 0 ){
+                    console.log("method 保存成功！")
+                }else{
+                    message(errorcode[res.data.code].cn,'error')
+                }
+            }).catch(err => {
+                 message(constant.ERROR,'error');
+            })
+        },
         deployContract(val) {
             this.loading = true;
             let reqData = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 contractBin: this.bin,
                 bytecodeBin: this.bytecodeBin,
                 contractAbi: this.abiFile,
                 contractSource: Base64.encode(this.content),
-                userId: val.userId
+                userId: val.userId,
+                contractVersion: val.version,
+                contractName: this.contractName
             };
-            if (!this.data.contractId) {
-                reqData.contractName = this.contractName;
-                reqData.contractVersion = this.data.contractVersion;
-            } else {
-                reqData.contractId = this.data.contractId;
-            }
+            this.version = val.version
+            // if (!this.data.contractId) {
+            //     reqData.contractName = this.contractName;
+            //     reqData.contractVersion = this.data.contractVersion;
+            // } else {
+            //     reqData.contractId = this.data.contractId;
+            // }
             if (val.params.length) {
                 reqData.constructorParams = val.params;
             }
+            this.setMethod()
             getDeployStatus(reqData)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.abiFileShow = true;
-                        this.$emit("deploy", res.data.data.contractId);
-                        this.status = res.data.data.contractStatus;
+                        // this.$emit("deploy", res.data.data.contractId);
+                        this.status = 2;
+                        this.contractAddress = res.data.data.contractAddress
                         this.successInfo = "< 部署成功！";
                         this.abiFile = res.data.data.contractAbi;
                         this.bin = res.data.data.contractBin;
@@ -404,6 +495,11 @@ export default {
                             message: "合约部署成功！",
                             type: "success"
                         });
+                        this.data.contractAbi == this.abiFile;
+                        this.data.contractBin = this.bin;
+                        this.data.contractSource = Base64.encode(this.content);
+                        this.$set(this.data,'contractAddress',this.contractAddress)
+                        Bus.$emit("compile",this.data)
                     } else {
                         this.status = 3;
                         this.$message({
@@ -421,79 +517,79 @@ export default {
                     });
                 });
         },
-        addContract: function() {
-            this.loading = true;
-            let reqData = {
-                networkId: localStorage.getItem("networkId"),
-                contractName: this.contractName,
-                contractBin: this.bin,
-                bytecodeBin: this.bytecodeBin,
-                contractVersion: this.data.contractVersion,
-                contractSource: Base64.encode(this.content)
-            };
-            if (this.abiFile) {
-                reqData.contractAbi = this.abiFile;
-            }
-            addChaincode(reqData)
-                .then(res => {
-                    this.loading = false;
-                    if (res.data.code === 0) {
-                        this.status = res.data.data.contractStatus;
-                        this.abiFile = res.data.data.contractAbi || "";
-                        this.contractAddress = res.data.data.contractAddress || "";
-                        this.$message({
-                            message: "合约保存成功！",
-                            type: "success"
-                        });
-                        this.$emit("add", res.data.data);
-                    } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error"
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.loading = false;
-                    this.$message({
-                        message: "系统错误",
-                        type: "error"
-                    });
-                });
-        },
-        editContract: function() {
-            let reqData = {
-                networkId: localStorage.getItem("networkId"),
-                contractId: this.data.contractId,
-                contractBin: this.bin,
-                bytecodeBin: this.bytecodeBin,
-                contractSource: Base64.encode(this.content)
-            };
-            if (this.abiFile) {
-                reqData.contractAbi = this.abiFile;
-            }
-            editChain(reqData)
-                .then(res => {
-                    if (res.data.code === 0) {
-                        this.$message({
-                            message: "合约保存成功！",
-                            type: "success"
-                        });
-                        this.$emit("add", res.data.data);
-                    } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error"
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: "系统错误",
-                        type: "error"
-                    });
-                });
-        },
+        // addContract: function() {
+        //     this.loading = true;
+        //     let reqData = {
+        //         groupId: localStorage.getItem("groupId"),
+        //         contractName: this.contractName,
+        //         contractBin: this.bin,
+        //         bytecodeBin: this.bytecodeBin,
+        //         contractVersion: this.data.contractVersion,
+        //         contractSource: Base64.encode(this.content)
+        //     };
+        //     if (this.abiFile) {
+        //         reqData.contractAbi = this.abiFile;
+        //     }
+        //     addChaincode(reqData)
+        //         .then(res => {
+        //             this.loading = false;
+        //             if (res.data.code === 0) {
+        //                 this.status = res.data.data.contractStatus;
+        //                 this.abiFile = res.data.data.contractAbi || "";
+        //                 this.contractAddress = res.data.data.contractAddress || "";
+        //                 this.$message({
+        //                     message: "合约保存成功！",
+        //                     type: "success"
+        //                 });
+        //                 this.$emit("add", res.data.data);
+        //             } else {
+        //                 this.$message({
+        //                     message: errcode.errCode[res.data.code].cn,
+        //                     type: "error"
+        //                 });
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.loading = false;
+        //             this.$message({
+        //                 message: "系统错误",
+        //                 type: "error"
+        //             });
+        //         });
+        // },
+        // editContract: function() {
+        //     let reqData = {
+        //         groupId: localStorage.getItem("groupId"),
+        //         contractId: this.data.contractId,
+        //         contractBin: this.bin,
+        //         bytecodeBin: this.bytecodeBin,
+        //         contractSource: Base64.encode(this.content)
+        //     };
+        //     if (this.abiFile) {
+        //         reqData.contractAbi = this.abiFile;
+        //     }
+        //     editChain(reqData)
+        //         .then(res => {
+        //             if (res.data.code === 0) {
+        //                 this.$message({
+        //                     message: "合约保存成功！",
+        //                     type: "success"
+        //                 });
+        //                 this.$emit("add", res.data.data);
+        //             } else {
+        //                 this.$message({
+        //                     message: errcode.errCode[res.data.code].cn,
+        //                     type: "error"
+        //                 });
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.$message({
+        //                 message: "系统错误",
+        //                 type: "error"
+        //             });
+        //         });
+        // },
         foldInfo: function(val) {
             this.successHide = val;
         },
@@ -555,7 +651,7 @@ export default {
 }
 .contract-info {
     position: relative;
-    padding-top: 50px;
+    padding-top: 20px;
     text-align: left;
     border-top: 1px solid #ddd;
     box-sizing: border-box;
@@ -578,14 +674,7 @@ export default {
     padding-right: 20px;
 }
 .contract-info-title {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    padding: 12px 0;
-    z-index: 11;
-    background-color: #e8e8e8;
-    box-sizing: border-box;
+    padding-right: 20px;
 }
 .move {
     position: absolute;
@@ -598,7 +687,6 @@ export default {
 }
 .contract-info-title i {
     padding-left: 8px;
-    padding-right: 4px;
     font-size: 10px;
     color: #aeb1b5;
     cursor: pointer;
@@ -660,5 +748,8 @@ export default {
 }
 .titleActive {
     padding-left: 40px;
+}
+.send-dialog /deep/ .el-dialog--center .el-dialog__body{
+    padding: 5px 25px 20px;
 }
 </style>

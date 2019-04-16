@@ -123,7 +123,7 @@ export default {
         getUserInfoData() {
             this.loading = true;
             let reqData = {
-                    networkId: localStorage.getItem("networkId"),
+                    groupId: localStorage.getItem("groupId"),
                     pageNumber: this.currentPage,
                     pageSize: this.pageSize
                 },
