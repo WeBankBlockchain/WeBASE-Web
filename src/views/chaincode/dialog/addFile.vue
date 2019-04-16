@@ -89,6 +89,7 @@ export default {
                         contractAbi: "",
                         contractBin: "",
                         contractAddress: "",
+                        contractVersion: "",
                         contractNo: (new Date()).getTime()
                     }
                     this.$emit("success",data)

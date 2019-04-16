@@ -161,6 +161,7 @@ export default {
             this.codeShow = true;
             this.refreshMessage();
             this.code = "";
+            this.version = "";
             this.status = null;
             this.abiFile = "";
             this.contractAddress = "";
@@ -178,7 +179,8 @@ export default {
             this.errorMessage = data.description || "";
             this.contractName = data.contractName;
             this.bin = data.contractBin;
-            this.bytecodeBin = data.bytecodeBin;
+            this.bytecodeBin = data.bytecodeBin || "";
+            this.version = data.contractVersion;
             console.log(data)
         })
     },
@@ -498,7 +500,8 @@ export default {
                         this.data.contractAbi == this.abiFile;
                         this.data.contractBin = this.bin;
                         this.data.contractSource = Base64.encode(this.content);
-                        this.data.contractAddress = this.contractAddress
+                        this.data.contractAddress = this.contractAddress;
+                        this.data.contractVersion = this.version;
                         Bus.$emit("compile",this.data)
                     } else {
                         this.status = 3;
