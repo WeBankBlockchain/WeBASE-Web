@@ -14,17 +14,39 @@
  * limitations under the License.
  */
 <template>
-    <div>
-        <el-select v-model="userName" placeholder="请选择用户" @change="changeId">
-            <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
-        </el-select>
-        <div v-if='inputs.length' v-for='(item,index) in inputs' :key='item.name' style="padding: 10px 0;">
-            <span style="display:inline-block;width:80px;">{{item.type}}</span>
-            <el-input v-model="parameter[index]" style="width: 250px;"></el-input>
-        </div>
-        <div style="text-align:right">
-            <el-button type="primary" @click="submit">确定</el-button>
+    <div class="chang-wrapper">
+        <table class="opt-wrapper">
+            <tr>
+                <td>版本号：</td>
+                <td>
+                    <el-input v-model="version" @blur='versionBlur' maxlength='18' style="width: 240px"></el-input>
+                    <span style="color: #f00" v-show="versionShow">{{errorInfo}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>用户：</td>
+                <td>
+                    <el-select v-model="userName" placeholder="请选择用户" @change="changeId" style="width: 240px">
+                        <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
+                    </el-select>    
+                </td>
+            </tr>
+            <tr v-if='inputs.length'>
+                <td style="vertical-align: top;">参数：</td>
+                <td>
+                    <div v-for='(item,index) in inputs' :key='item.name'>
+                        <el-input v-model="parameter[index]" style="width: 240px;margin-bottom:10px;">
+                            <template slot="prepend">
+                                <span>{{item.type}}</span>
+                            </template>
+                        </el-input>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <div class="text-right send-btn">
             <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="submit">确定</el-button>
         </div>
     </div>
 </template>
@@ -41,7 +63,10 @@ export default {
             userId: null,
             inputs: [],
             parameter: [],
-            abifile: JSON.parse(this.abi)
+            abifile: JSON.parse(this.abi),
+            version: "",
+            versionShow: false,
+            errorInfo: ""
         };
     },
     mounted: function() {
@@ -70,18 +95,42 @@ export default {
         close: function() {
             this.$emit("close");
         },
+        versionBlur: function(){
+            let pattern = /^[A-Za-z0-9]+$/
+            if(!this.version){
+                this.versionShow = true;
+                this.errorInfo = '请输入版本号！'
+            }else if(!pattern.test(this.version)){
+                this.versionShow = true;
+                this.errorInfo = '请输入正确的版本号！'
+            }else{
+                this.versionShow = false;
+                this.errorInfo = ''
+            }
+        },
         submit: function() {
-            let data = {
-                userId: this.userId,
-                params: this.parameter
-            };
-
-            this.$emit("change", data);
-            this.$emit("close");
+            let pattern = /^[A-Za-z0-9]+$/
+            if(!this.version){
+                this.versionShow = true;
+                this.errorInfo = '请输入版本号！'
+            }else if(!pattern.test(this.version)){
+                this.versionShow = true;
+                this.errorInfo = '请输入正确的版本号！'
+            }else{
+                this.versionShow = false;
+                this.errorInfo = ''
+                let data = {
+                    userId: this.userId,
+                    params: this.parameter,
+                    version: this.version
+                };
+                this.$emit("change", data);
+                this.$emit("close");
+            }
         },
         getUserData: function() {
             let reqData = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
                 pageSize: 1000
             };
@@ -114,4 +163,28 @@ export default {
     }
 };
 </script>
+<style scoped>
+.chang-wrapper {
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+.chang-wrapper /deep/ .el-input__inner {
+    height: 32px;
+    line-height: 32px;
+}
+.chang-wrapper /deep/ .el-input__icon {
+    line-height: 32px;
+}
+.opt-wrapper tr td {
+    padding-top: 0;
+    padding-bottom: 10px;
+}
+.send-btn {
+    
+}
+.send-btn /deep/ .el-button {
+    padding: 9px 16px;
+}
+</style>
 

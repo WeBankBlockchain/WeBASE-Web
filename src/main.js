@@ -22,6 +22,7 @@ import store from './store'
 import ElementUI from 'element-ui'
 import axios from 'axios'
 import {getCookie,setCookie,delCookie} from './util/util'
+import JsonViewer from "vue-json-viewer"
 import errcode from './util/errcode'
 import VueClipboard from 'vue-clipboard2'
 import 'element-ui/lib/theme-chalk/index.css'
@@ -38,6 +39,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.timeout = 60 * 1000;
 Vue.use(router);
 Vue.use(VueClipboard)
+Vue.use(JsonViewer)
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

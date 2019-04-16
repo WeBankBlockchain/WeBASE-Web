@@ -42,18 +42,21 @@
         <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
             <router-view class="bg-f7f7f7"></router-view>
         </div>
+        <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
     </div>
 </template>
 
 <script>
 import sidebar from "./sidebar";
-import { resetPassword, addnodes } from "@/util/api";
+import setFront from "./dialog/setFront"
+import { resetPassword, addnodes, getGroups } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 export default {
     name: "mains",
     components: {
-        "v-menu": sidebar
+        "v-menu": sidebar,
+        "set-front": setFront
     },
     data: function() {
         // if (sessionStorage.getItem("reload") == 1) {
@@ -80,10 +83,11 @@ export default {
             }
         };
         return {
+            frontShow: false,
             menuShow: true,
             menuHide: false,
             loading: false,
-            accountStatus: sessionStorage.getItem("accountStatus"),
+            accountStatus: 0,
             account: localStorage.getItem("user"),
             rulePasswordForm: {
                 oldPass: "",
@@ -144,7 +148,7 @@ export default {
         }
     },
     mounted(){
-        this.accountStatus = sessionStorage.getItem("accountStatus");
+        this.getGroupList();
     },
     methods: {
         change: function(val) {
@@ -195,6 +199,44 @@ export default {
                         message: "密码修改失败"
                     });
                 });
+        },
+        getGroupList: function(){
+            getGroups().then(res => {
+                if(res.data.code === 0){
+                    if(res.data.data && res.data.data.length){
+                        if(!localStorage.getItem("groupId")){
+                            localStorage.setItem("groupId",res.data.data[0].groupId)
+                        }
+                        if(!localStorage.getItem("groupName")){
+                            localStorage.setItem("groupName",res.data.data[0].groupName);
+                        }
+                        this.accountStatus = sessionStorage.getItem("accountStatus");
+                        if(this.$route.path && this.$route.path !== "/main"){
+                            router.push(this.$route.path)
+                        }else if(this.$route.path == "/main"){
+                            router.push("/home")
+                        }else{
+                            router.push("/home")
+                        }
+                    }else{
+                        this.frontShow = true
+                    }
+                }else{
+                     this.$message({
+                        type: "error",
+                        message: this.errcode.errCode[res.data.code].cn || '查询群组失败'
+                    });
+                }
+            }).catch(err => {
+                this.$message({
+                        type: "error",
+                        message: "密码修改失败"
+                    });
+            })
+        },
+        closeFront: function(){
+            this.frontShow = false;
+            this.getGroupList()
         }
     }
 };
