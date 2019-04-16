@@ -32,6 +32,7 @@ export function date(date) {
     return Y + "-" + M + "-" + D + " " + h + ":" + m + ":" + s
 }
 export function getDate(val) {
+    val = Number(val)
     let date = new Date(val)
     let Y = date.getFullYear();
     let M = date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1);
