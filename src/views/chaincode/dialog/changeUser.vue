@@ -17,9 +17,9 @@
     <div class="chang-wrapper">
         <table class="opt-wrapper">
             <tr>
-                <td>版本号：</td>
+                <td>合约版本号：</td>
                 <td>
-                    <el-input v-model="version" @blur='versionBlur' maxlength='18' style="width: 240px"></el-input>
+                    <el-input v-model="version" placeholder="请输入数字或字母" @blur='versionBlur' maxlength='18' style="width: 240px"></el-input>
                     <span style="color: #f00" v-show="versionShow">{{errorInfo}}</span>
                 </td>
             </tr>
@@ -102,7 +102,7 @@ export default {
                 this.errorInfo = '请输入版本号！'
             }else if(!pattern.test(this.version)){
                 this.versionShow = true;
-                this.errorInfo = '请输入正确的版本号！'
+                this.errorInfo = '请输入数字或字母！'
             }else{
                 this.versionShow = false;
                 this.errorInfo = ''
@@ -115,7 +115,7 @@ export default {
                 this.errorInfo = '请输入版本号！'
             }else if(!pattern.test(this.version)){
                 this.versionShow = true;
-                this.errorInfo = '请输入正确的版本号！'
+                this.errorInfo = '请输入数字或字母！'
             }else{
                 this.versionShow = false;
                 this.errorInfo = ''

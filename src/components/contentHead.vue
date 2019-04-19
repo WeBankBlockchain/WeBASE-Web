@@ -27,7 +27,7 @@
             <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
             <!-- <span style="margin-left:10px"></span> -->
             <span class="network-name">群组: {{groupName || 'network1'}}</span>
-            <span @click="checkNetwork" class="select-network">切换网络
+            <span @click="checkNetwork" class="select-network">切换群组
                 <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
             </span>
             <span style="padding-right:10px"></span>

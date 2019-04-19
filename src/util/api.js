@@ -119,9 +119,9 @@ export function addgroup(data) {
     })
 }
 /**add contract */
-export function addChaincode(data) {
+export function saveChaincode(data) {
     return post({
-        url: `${url.ORG_LIST}/contract/contractInfo`,
+        url: `${url.ORG_LIST}/contract/save`,
         method: 'post',
         data: data
     })
@@ -143,9 +143,10 @@ export function getDeployStatus(data) {
     })
 }
 /**Delete contract */
-export function deleteCode(data) {
+export function deleteCode(data,list) {
+    const params = reviseParam(data, list);
     return deleted({
-        url: `${url.ORG_LIST}/contract/${data}`,
+        url: `${url.ORG_LIST}/contract/${params.str}`,
         method: 'delete'
     })
 }

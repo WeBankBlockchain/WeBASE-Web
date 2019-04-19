@@ -427,10 +427,10 @@ export default {
                     router.push("transactionInfo");
                     break;
                 case "nodeCount":
-                    router.push({ path: "group", query: { from: "home" } });
+                    router.push({ path: "front", query: { from: "home" } });
                     break;
                 case "contractCount":
-                    router.push({ path: "contract", query: { from: "home" } });
+                    router.push({ path: "oldContract", query: { from: "home" } });
                     break;
             }
         },
