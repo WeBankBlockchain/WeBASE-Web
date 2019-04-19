@@ -19,15 +19,17 @@
         <div class="contract-code-head">
             <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">
                 <span>{{contractName + '.sol'}}</span>
-                <el-tooltip class="item" effect="dark" content="未保存,按Ctrl+s保存合约内容" placement="top-start">
+                <!-- <el-tooltip class="item" effect="dark" content="未保存,按Ctrl+s保存合约内容" placement="top-start">
                     <span v-show='saveShow' style="display:inline-block;width: 8px;height: 8px;border-radius:50%;background-color: #f00"></span>
-                </el-tooltip>
+                </el-tooltip> -->
                 </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <!-- <span class="contract-code-done" @click="save" v-if="status !== 2">
-                    <i class="wbs-icon-baocun font-16"></i>
-                    <span>保存</span>
-                </span> -->
+                <span class="contract-code-done" @click="saveCode" v-if="!contractAddress">
+                    <el-tooltip class="item" effect="dark" content="按Ctrl+s保存合约内容" placement="top-start">
+                        <i class="wbs-icon-baocun font-16"></i>
+                    </el-tooltip>
+                        <span>保存</span>
+                </span>
                 <span class="contract-code-done" @click="compile">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
@@ -86,7 +88,7 @@
         <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <v-transaction @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version'></v-transaction>
         </el-dialog>
-        <el-dialog title="选择用户" :visible.sync="dialogUser" width="420px" v-if="dialogUser" center class="send-dialog">
+        <el-dialog title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
     </div>
@@ -181,8 +183,24 @@ export default {
             this.bin = data.contractBin;
             this.bytecodeBin = data.bytecodeBin || "";
             this.version = data.contractVersion;
-            console.log(data)
         })
+    },
+    beforeDestroy: function(){
+        let data = Base64.encode(this.content);
+        if(this.data.contractSource != data){
+            this.$confirm('合约文件未保存，是否离开页面?', '提示', {
+                confirmButtonText: '点击保存',
+                cancelButtonText: '直接离开',
+                type: 'warning'
+                }).then(() => {
+                this.saveCode()   
+                this.$message({
+                    type: 'success',
+                    message: '保存成功!'
+                });
+                }).catch(() => {       
+            });
+        }
     },
     watch: {
         content: function(val){
@@ -255,7 +273,6 @@ export default {
         },
         saveCode: function(){
             this.data.contractSource = Base64.encode(this.content)
-            this.saveShow = false
             Bus.$emit("compile",this.data)
         },
         resizeCode: function() {
@@ -287,13 +304,13 @@ export default {
         },
         changeAce: function() {
             this.content = this.aceEditor.getSession().getValue();
-            this.contractList = JSON.parse(localStorage.getItem("contractLists")) || [];
-            this.contractList.forEach(value => {
-                if(value.contractNo == this.data.contractNo){
-                    value.contractSource = Base64.encode(this.content)
-                }
-            })
-            localStorage.setItem("contractLists",JSON.stringify(this.contractList))
+            // this.contractList = JSON.parse(localStorage.getItem("contractLists")) || [];
+            // this.contractList.forEach(value => {
+            //     if(value.contractNo == this.data.contractNo){
+            //         value.contractSource = Base64.encode(this.content)
+            //     }
+            // })
+            // localStorage.setItem("contractLists",JSON.stringify(this.contractList))
         },
         
         findImports: function(path) {
@@ -301,24 +318,64 @@ export default {
                 localStorage.getItem("contractList")
             );
             let arry = path.split("/");
-            let newpath = arry[arry.length - 1];
-            let num = 0;
-            for (let i = 0; i < this.contractList.length; i++) {
-                if (newpath == this.contractList[i].contractName + ".sol") {
-                    return {
-                        contents: Base64.decode(
-                            this.contractList[i].contractSource
-                        )
-                    };
-                } else {
-                    num++;
+            if(arry.length > 1){
+                let importArry = []
+                this.contractList.forEach(value => {
+                    if(value.contractPath == arry[0]){
+                        importArry.push(value)
+                    }
+                })
+                if(importArry.length){
+                    importArry.forEach(value => {
+                        if(value.contractName + ".sol" == arry[1]){
+                            return {
+                                contents: Base64.decode(value.contractSource)
+                            };
+                        }
+                    })
                 }
-            }
-            if (num == this.contractList.length) {
-                return { error: "File not found" };
+            }else{
+                let newpath = arry[0];
+                let newArry = []
+                this.contractList.forEach(value => {
+                    if(value.contractPath == this.data.contractPath){
+                        newArry.push(value)
+                    }
+                })
+                if(newArry.length > 1){
+                    let len = 0
+                    newArry.forEach(value => {
+                        if(value.contractName + ".sol" == newpath){
+                            len++
+                            return {
+                                contents: Base64.decode(value.contractSource)
+                            };
+                        }
+                    })
+                    if(!len){
+                        for (let i = 0; i < this.contractList.length; i++) {
+                            if (newpath == this.contractList[i].contractName + ".sol") {
+                                return {
+                                    contents: Base64.decode(this.contractList[i].contractSource)
+                                };
+                            } else {
+                                num++;
+                            }
+                        }
+                    }
+                }else{
+                    for (let i = 0; i < this.contractList.length; i++) {
+                        if (newpath == this.contractList[i].contractName + ".sol") {
+                            return {
+                                contents: Base64.decode(this.contractList[i].contractSource)
+                            };
+                        } 
+                    }
+                }
             }
         },
         compile: function() {
+            this.loading = true;
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
                 this.compileinfo = this.compileinfo + constant.COMPILE_INFO[i];
@@ -355,6 +412,7 @@ export default {
                 this.errorInfo = "合约编译失败！";
                 this.errorMessage = error;
                 this.compileShow = true;
+                this.loading = false;
             }
             if (output && JSON.stringify(output.contracts) != "{}") {
                 this.status = 1;
@@ -366,6 +424,7 @@ export default {
             } else {
                 this.errorMessage = output.errors[0];
                 this.errorInfo = "合约编译失败！";
+                this.loading = false;
             }
         },
         changeOutput: function(obj) {
@@ -386,14 +445,17 @@ export default {
                     this.data.contractBin = this.bin;
                     this.data.contractSource = Base64.encode(this.content);
                     this.$set(this.data,'bytecodeBin',this.bytecodeBin)
+                    this.loading = false;
                     Bus.$emit("compile",this.data)
                 } else {
                     this.errorInfo = "合约编译失败！";
                     this.compileShow = true;
+                    this.loading = false;
                 }
             } else {
                 this.errorInfo = "合约编译失败！";
                 this.compileShow = true;
+                this.loading = false;
             }
         },
         refreshMessage: function() {
@@ -468,8 +530,9 @@ export default {
                 contractAbi: this.abiFile,
                 contractSource: Base64.encode(this.content),
                 userId: val.userId,
-                contractVersion: val.version,
-                contractName: this.contractName
+                contractName: this.contractName,
+                contractId: this.data.contractId,
+                contractVersion: val.version
             };
             this.version = val.version
             // if (!this.data.contractId) {
@@ -502,7 +565,7 @@ export default {
                         this.data.contractSource = Base64.encode(this.content);
                         this.data.contractAddress = this.contractAddress;
                         this.data.contractVersion = this.version;
-                        Bus.$emit("compile",this.data)
+                        Bus.$emit("deploy",this.data)
                     } else {
                         this.status = 3;
                         this.$message({

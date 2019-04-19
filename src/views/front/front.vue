@@ -16,14 +16,14 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="'节点管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
-        <v-content-head :headTitle="'前置管理'"></v-content-head>
+        <v-content-head :headTitle="'节点管理'"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-button type="primary" class="search-part-left-btn" @click="createFront">新增前置</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点</el-button>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入前置名称" v-model="frontId" class="input-with-select">
+                    <el-input placeholder="请输入节点ip" v-model="frontId" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -34,7 +34,7 @@
                         <template slot-scope="scope">
                             <span v-if='head.enName != "frontIp"'>{{scope.row[head.enName]}}</span>
                             <span v-else>
-                                <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
+                                <router-link :to="{'path': 'nodesMetric', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
                             </span>
                         </template>
                     </el-table-column>
@@ -95,7 +95,7 @@ export default {
                 },
                 {
                     enName: "frontIp",
-                    name: "前置ip"
+                    name: "ip"
                 },
                 {
                     enName: "frontPort",

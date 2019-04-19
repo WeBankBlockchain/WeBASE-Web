@@ -27,6 +27,8 @@ const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
 const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/rivateKeyManagement'], resolve);
 const errorLogExport = resolve => require(['@/views/errorLogExport/errorLogExport'], resolve);
+const hostMetric = resolve => require(['@/views/hostMetric'], resolve);
+const nodesMetric = resolve => require(['@/views/nodesMetric'], resolve);
 const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve); transactionCharts
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
@@ -85,12 +87,12 @@ const routes = [
     {
         path: '/',
         component: main,
-        name: '前置管理',
+        name: '节点管理',
         leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
-            { path: '/front', component: front, name: '前置管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/front', component: front, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/hostDetail', component: hostDetail, name: '节点详情', menuShow: true, meta: { requireAuth: true } }
         ]
     },
@@ -103,7 +105,7 @@ const routes = [
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
             { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
-            { path: '/oldContract', component: oldContract, name: '历史合约', menuShow: true, meta: { requireAuth: true } }
+            { path: '/oldContract', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -117,16 +119,18 @@ const routes = [
             { path: '/rivateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
-    // {
-    //     path: '/',
-    //     component: main,
-    //     name: '系统监控',
-    //     menuShow: true,
-    //     iconCls: 'wbs-icon-monitor sidebar-icon',
-    //     children: [
-    //         { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } }
-    //     ]
-    // },
+    {
+        path: '/',
+        component: main,
+        name: '系统监控',
+        menuShow: true,
+        iconCls: 'wbs-icon-monitor sidebar-icon',
+        children: [
+            // { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } },
+            { path: '/nodesMetric', component: nodesMetric, name: '节点指标', menuShow: true, meta: { requireAuth: false } },
+            { path: '/hostMetric', component: hostMetric, name: '主机指标', menuShow: true, meta: { requireAuth: false } },
+        ]
+    },
     {
         path: '/',
         component: main,
