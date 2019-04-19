@@ -95,8 +95,8 @@ let errCode = {
 
 
     "202000": {
-        en: "invalid node info",
-        cn: '无效的节点信息'
+        en: "invalid front id",
+        cn: '无效的节点id'
     },
     "202001": {
         en: "database exception",
@@ -111,16 +111,16 @@ let errCode = {
         cn: '组织信息不存在'
     },
     "202004": {
-        en: "node already exists",
+        en: "front already exists",
         cn: '节点已经存在'
     },
     "202005": {
-        en: "network id cannot be empty",
-        cn: '网络编号不能为空'
+        en: "group id cannot be empty",
+        cn: '群组编号不能为空'
     },
     "202006": {
-        en: "invalid network id",
-        cn: '无效的网络编号'
+        en: "invalid group id",
+        cn: '无效的群组编号'
     },
     "202007": {
         en: "organization id cannot be empty",
@@ -187,8 +187,8 @@ let errCode = {
         cn: '不能删除已部署的合约'
     },
     "202023": {
-        en: "node ip cannot be empty",
-        cn: '节点编号不能为空'
+        en: "contract has not deploy",
+        cn: '合约不能被部署'
     },
     "202024": {
         en: "node p2p port cannot be empty",

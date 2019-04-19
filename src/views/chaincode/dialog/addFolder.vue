@@ -59,7 +59,7 @@ export default {
                 if (valid) {
                     let num = 0
                     this.folderList.forEach(value => {
-                        if(value.folderName == this.folderName){
+                        if(value.folderName == this.folderFrom.folderName){
                             num ++
                             this.$message({
                                 message: '新建文件夹与已存在的文件夹名称相同',
@@ -72,6 +72,7 @@ export default {
                                 folderName: this.folderFrom.folderName,
                                 folderId: (new Date()).getTime(),
                                 folderActive: false,
+                                groupId: localStorage.getItem("groupId")
                             }
                         this.folderList.push(data)
                         localStorage.setItem('folderList',JSON.stringify(this.folderList))

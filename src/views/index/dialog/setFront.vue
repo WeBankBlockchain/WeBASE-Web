@@ -1,13 +1,16 @@
 <template>
     <div>
-        <el-dialog title="节点前置配置" :visible.sync="dialogVisible"  class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
+        <el-dialog title="节点配置" :visible.sync="dialogVisible" :before-close="modelClose"  class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
             <div>
                 <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="ip" prop="ip" style="width:330px">
                         <el-input v-model="frontFrom.ip"></el-input>
                     </el-form-item>
-                    <el-form-item label="端口" prop="port" style="width:330px">
+                    <el-form-item label="前置端口" prop="port" style="width:330px">
                         <el-input v-model="frontFrom.port"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属机构" prop="company" style="width:330px">
+                        <el-input v-model="frontFrom.company"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
@@ -29,7 +32,8 @@ export default {
             closeVisible: this.showClose || false,
             frontFrom: {
                 ip: "",
-                port: ""
+                port: "",
+                company: "",
             },
             rules: {
                 ip: [
@@ -61,6 +65,24 @@ export default {
                         message: "端口不符合规则",
                         trigger: "blur"
                     }
+                ],
+                company: [
+                    {
+                        required: true,
+                        message: "请输入机构名称",
+                        trigger: "blur"
+                    },
+                    {
+                        min: 1,
+                        max: 12,
+                        message: "长度在 1 到 12 位",
+                        trigger: "blur"
+                    },
+                    {
+                        pattern: /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_]){1,20}$/,
+                        message: "机构名称请输入中文、英文和数字",
+                        trigger: "blur"
+                    }
                 ]
             }
         }
@@ -78,7 +100,8 @@ export default {
         setFront: function(){
             let reqData = {
                 frontIp: this.frontFrom.ip,
-                frontPort: this.frontFrom.port
+                frontPort: this.frontFrom.port,
+		agency: this.frontFrom.company
             }
             addFront(reqData).then(res => {
                 if(res.data.code === 0){
