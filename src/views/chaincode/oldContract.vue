@@ -1,6 +1,6 @@
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'历史合约'"></v-contentHead>
+        <v-contentHead :headTitle="'合约列表'"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
@@ -16,7 +16,7 @@
                             <span style="color: #194ea0;cursor:pointer" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  prop="contractVersion" label="合约版本"  show-overflow-tooltip width="120" align="center"></el-table-column>
+                    <!-- <el-table-column  prop="contractVersion" label="合约版本"  show-overflow-tooltip width="120" align="center"></el-table-column> -->
                     <el-table-column  prop="contractAddress" label="合约地址"  show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" title="复制合约地址"></i>
@@ -41,7 +41,7 @@
                         label="操作"
                         width="100">
                         <template slot-scope="scope">
-                            <el-button @click="send(scope.row)" type="text" size="small">发送交易</el-button>
+                            <el-button :disabled="!scope.row.contractAddress" :class="{'grayColor': !scope.row.contractAddress}" @click="send(scope.row)" type="text" size="small">发送交易</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -62,6 +62,7 @@ import sendTransation from "./dialog/sendTransaction"
 import editor from "./dialog/editor"
 import abiDialog from "./dialog/abiDialog"
 import {getContractList} from "@/util/api"
+import router from '@/router'
 export default {
     name: "oldContract",
     components: {
@@ -130,8 +131,14 @@ export default {
             }
         },
         open: function(val){
-            this.editorShow = true;
-            this.editorData = val.contractSource
+            router.push({
+                path: "/contract",
+                query: {
+                    contractId: val.contractId
+                }
+            })
+            // this.editorShow = true;
+            // this.editorData = val.contractSource
         },
         close: function(){
             this.editorShow = false
@@ -201,6 +208,9 @@ export default {
     border-radius: inherit;
     background: #20D4D9;
     color: #fff;
+}
+.grayColor{
+    color: #666 !important
 }
 </style>
 

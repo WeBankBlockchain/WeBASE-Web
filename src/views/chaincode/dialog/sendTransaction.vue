@@ -19,10 +19,10 @@
             <span class="send-item-title">合约名称:</span>
             <span>{{data.contractName}}</span>
         </div>
-        <div class="send-item">
+        <!-- <div class="send-item">
             <span class="send-item-title">合约版本:</span>
             <span>{{contractVersion}}</span>
-        </div>
+        </div> -->
         <div class="send-item">
             <span class="send-item-title">用户:</span>
             <el-select v-model="transation.userName" placeholder="请选择用户" @change="changeId" style="width:240px">
@@ -197,7 +197,8 @@ export default {
                 version: this.contractVersion,
                 funcName: this.transation.funcName,
                 funcParam: this.transation.funcValue,
-                abiInfo: this.abiList
+                abiInfo: this.abiList,
+                contractId: this.data.contractId
             };
             sendTransation(data)
                 .then(res => {
@@ -225,12 +226,14 @@ export default {
                                 type: "success",
                                 message: "发送交易成功!"
                             });
+                            this.$emit("success", false);
                         }
                     } else {
                         this.$message({
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
+                        this.close();
                     }
                 })
                 .catch(err => {

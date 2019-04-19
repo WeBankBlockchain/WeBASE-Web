@@ -57,7 +57,7 @@ nginx安装请参考附录
 
 2、 修改服务ip
 ```
-`sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
+ sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
