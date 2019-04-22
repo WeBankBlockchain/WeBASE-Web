@@ -46,11 +46,6 @@ const routes = [
         component: resolve => require(['@/views/login/login'], resolve),
     },
     {
-        path: '/blank',
-        name: 'blank',
-        component: resolve => require(['@/views/blank/blank'], resolve),
-    },
-    {
         path: '/helpDoc',
         component: main,
         name: '帮助文档',
@@ -127,8 +122,8 @@ const routes = [
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
             // { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } },
-            { path: '/nodesMetric', component: nodesMetric, name: '节点指标', menuShow: true, meta: { requireAuth: false } },
-            { path: '/hostMetric', component: hostMetric, name: '主机指标', menuShow: true, meta: { requireAuth: false } },
+            { path: '/nodesMetric', component: nodesMetric, name: '节点监控', menuShow: true, meta: { requireAuth: false } },
+            { path: '/hostMetric', component: hostMetric, name: '主机监控', menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {

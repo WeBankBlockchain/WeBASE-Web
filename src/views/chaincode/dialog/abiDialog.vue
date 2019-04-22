@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog title="新建文件" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="600px">
+        <el-dialog title="abi详情" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="600px">
             <div >
                 <json-viewer
                     :value="blcokContent"

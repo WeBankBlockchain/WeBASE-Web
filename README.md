@@ -57,7 +57,7 @@ nginx安装请参考附录
 
 2、 修改服务ip
 ```
- sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
+    sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
@@ -152,3 +152,11 @@ nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可
 
 	nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
 	nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
+
+##### 3.1.3.6 nginx几个常见命令
+```shell
+/usr/local/nginx/sbin/nginx -s reload            # 重新载入配置文件
+/usr/local/nginx/sbin/nginx -s reopen            # 重启 Nginx
+/usr/local/nginx/sbin/nginx -s stop              # 停止 Nginx
+ps -ef | grep nginx                              # 查看nginx进程
+```

@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'"></v-content-head>
+        <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
@@ -91,6 +91,9 @@ export default {
         this.getBlockList();
     },
     methods: {
+        changGroup(val){
+            this.getBlockList()
+        },
         search: function() {
             if (
                 this.searchKey.key == "pkHash" &&

@@ -15,7 +15,7 @@
  */
 <template>
     <div class="over-view-wrapper">
-        <v-content-head :headTitle="'数据概览'"></v-content-head>
+        <v-content-head :headTitle="'数据概览'" @changGroup="changGroup"></v-content-head>
         <div style="margin-bottom:12px;">
             <el-row>
                 <el-col :xs='24' :sm="24" :md="11" :lg="10" :xl="8" v-loading="loadingNumber">
@@ -254,6 +254,18 @@ export default {
     },
     destroyed() {},
     methods: {
+        changGroup(val){
+            this.groupId = val
+            this.getNetworkDetails();
+            this.getNodeTable();
+            this.getBlockList();
+            this.getTransaction();
+            this.$nextTick(function() {
+                this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+                this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+                this.getChart();
+            });
+        },
         linkRouter: function(val){
             router.push({
                 path: "/blockInfo",
