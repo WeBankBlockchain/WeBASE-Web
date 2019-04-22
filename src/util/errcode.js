@@ -139,8 +139,8 @@ let errCode = {
         cn: '没有该组织和网络的关联信息'
     },
     "202011": {
-        en: "did not find the current organization",
-        cn: '未找到本组织信息'
+        en: "abiInfo cannot be empty",
+        cn: 'abi不能为空'
     },
     "202012": {
         en: "user id cannot be empty",
