@@ -26,10 +26,14 @@
         <div class="content-head-network">
             <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
             <!-- <span style="margin-left:10px"></span> -->
-            <span class="network-name">群组: {{groupName || 'network1'}}</span>
-            <span @click="checkNetwork" class="select-network">切换群组
-                <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
+            <span class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || 'network1'}}
+                <ul v-if='dialogShow'>
+                    <li v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
+                </ul>
             </span>
+            <!-- <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
+            <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
+            <!-- </span> -->
             <span style="padding-right:10px"></span>
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
@@ -45,7 +49,7 @@
         <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
-         <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close'></v-dialog>
+         <!-- <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close' @changGroupSucess="changGroupSucess"></v-dialog> -->
 
     </div>
 </template>
@@ -55,7 +59,7 @@ import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
 import helpDoc from "./helpDoc";
 import router from "@/router";
-import { loginOut } from "@/util/api";
+import { loginOut ,getGroups } from "@/util/api";
 import { delCookie } from '@/util/util'
 export default {
     name: "conetnt-head",
@@ -79,7 +83,8 @@ export default {
             path: "",
             headIcon: this.icon || false,
             way: this.route || "",
-            changePasswordDialogVisible: false
+            changePasswordDialogVisible: false,
+            groupList: []
         };
     },
     mounted: function() {
@@ -89,9 +94,35 @@ export default {
         if (localStorage.getItem("user")) {
             this.accountName = localStorage.getItem("user");
         }
+        this.getGroupList()
     },
     methods: {
-        checkNetwork: function() {
+        getGroupList: function() {
+            getGroups().then(res => {
+                if (res.data.code === 0) {
+                    // this.options = res.data.data;
+                    if(res.data.data.length){
+                        // this.value = res.data.data[0].groupId;
+                        this.groupList = res.data.data || []
+                        // this.groupId = res.data.data[0].groupId;
+                    }
+                }else{
+                    this.$message({
+                            message: errcode.errCode[res.data.code].cn,
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                this.$message({
+                        message: "系统错误！",
+                        type: "error",
+                        duration: 2000
+                    });
+            })
+            ;
+        },
+        checkGroup: function() {
             if (this.dialogShow) {
                 this.dialogShow = false;
             } else {
@@ -100,16 +131,26 @@ export default {
 
             this.path = this.$route.path;
         },
-        changeNetwork: function() {
-            this.groupName = localStorage.getItem("groupName");
-            this.dialogShow = false;
+        changeGroup: function(val){
+            this.groupName = val.groupName
+            localStorage.setItem("groupName",val.groupName);
+            localStorage.setItem("groupId",val.groupId);
+            this.$emit('changGroup', val.groupId);
+            this.dialogShow = true;
         },
-        close: function() {
-            this.dialogShow = false;
-        },
+        // changGroupSucess(val){
+            
+        // },
+        // changeNetwork: function() {
+        //     this.groupName = localStorage.getItem("groupName");
+        //     this.dialogShow = false;
+        // },
+        // close: function() {
+        //     this.dialogShow = false;
+        // },
         skip: function() {
             if (this.route) {
-                router.push(this.way);
+                this.$router.push(this.way);
             } else {
                 this.$router.go(-1);
             }
@@ -119,9 +160,9 @@ export default {
             loginOut()
                 .then()
                 .catch();
-            delCookie('JSESSIONID')
-            delCookie('NODE_MGR_ACCOUNT_C')
-            router.push("/login");
+            delCookie("JSESSIONID");
+            delCookie("NODE_MGR_ACCOUNT_C");
+            this.$router.push("/login");
         },
         changePassword: function() {
             this.changePasswordDialogVisible = true;
@@ -138,7 +179,6 @@ export default {
     background-color: #181f2e;
     text-align: left;
     line-height: 54px;
-    overflow: hidden;
     position: relative;
 }
 .content-head-wrapper::after {
@@ -168,7 +208,7 @@ export default {
     text-decoration: none;
     font-size: 12px;
     cursor: pointer;
-    color: #cfd7db
+    color: #cfd7db;
 }
 .sign-out-wrapper {
     text-align: center;
@@ -192,7 +232,7 @@ export default {
     color: #2d5f9e;
     cursor: default;
 }
-.content-head-network a:nth-child(1){
+.content-head-network a:nth-child(1) {
     text-decoration: none;
     outline: none;
     color: #cfd7db;
@@ -200,7 +240,26 @@ export default {
     border-right: 1px solid #657d95;
     margin-right: 15px;
 }
-a{
-    
+.contant-head-name{
+    position: relative;
+    cursor: pointer;
+}
+.contant-head-name ul{
+    position: absolute;
+    width: 150%;
+    left: -10px;
+    top: 35px;
+    background-color: #fff;
+    color: #666;
+    text-align: center;
+    z-index: 9999999;
+    box-shadow: 1px 4px 4px;
+}
+.contant-head-name ul li{
+    width: 100%;
+    padding: 0 10px;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
 }
 </style>

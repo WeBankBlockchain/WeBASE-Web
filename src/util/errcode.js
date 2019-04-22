@@ -171,8 +171,8 @@ let errCode = {
         cn: '无效的入参信息'
     },
     "202019": {
-        en: "did not find node info",
-        cn: '未找到节点信息'
+        en: "contract name cannot be repeated",
+        cn: '合同名称不能重复'
     },
     "202020": {
         en: "current organization already exist",
@@ -331,6 +331,10 @@ let errCode = {
         en: "access denied",
         cn: "没有权限"
     },
+    "402000": {
+        en: "param exception",
+        cn: "缺少参数"
+    }
 }
 export default {
     errCode

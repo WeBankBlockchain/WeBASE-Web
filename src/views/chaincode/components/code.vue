@@ -30,11 +30,11 @@
                     </el-tooltip>
                         <span>保存</span>
                 </span>
-                <span class="contract-code-done" @click="compile">
+                <span class="contract-code-done" @click="compile" v-if="!contractAddress">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="abiFile">
+                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
@@ -86,11 +86,12 @@
             </div>
         </div>
         <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-            <v-transaction @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version'></v-transaction>
+            <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version'></v-transaction>
         </el-dialog>
         <el-dialog title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' @close='editorClose'></v-editor>
     </div>
 </template>
 
@@ -107,6 +108,7 @@ let Base64 = require("js-base64").Base64;
 let wrapper = require("solc/wrapper");
 let solc = wrapper(window.Module);
 import constant from "@/util/constant";
+import editor from "../dialog/editor"
 import Bus from '@/bus'
 import {
     addChaincode,
@@ -123,7 +125,8 @@ export default {
     props: ["show", "changeStyle"],
     components: {
         "v-transaction": transaction,
-        "v-user": changeUser
+        "v-user": changeUser,
+        "v-editor": editor
     },
     data: function() {
         return {
@@ -155,6 +158,8 @@ export default {
             codeShow: false,
             version: "",
             saveShow: false,
+            editorShow: false,
+            editorData: null
         };
     },
     mounted: function() {
@@ -184,23 +189,6 @@ export default {
             this.bytecodeBin = data.bytecodeBin || "";
             this.version = data.contractVersion;
         })
-    },
-    beforeDestroy: function(){
-        let data = Base64.encode(this.content);
-        if(this.data.contractSource != data){
-            this.$confirm('合约文件未保存，是否离开页面?', '提示', {
-                confirmButtonText: '点击保存',
-                cancelButtonText: '直接离开',
-                type: 'warning'
-                }).then(() => {
-                this.saveCode()   
-                this.$message({
-                    type: 'success',
-                    message: '保存成功!'
-                });
-                }).catch(() => {       
-            });
-        }
     },
     watch: {
         content: function(val){
@@ -262,14 +250,22 @@ export default {
                 name: 'myCommand',
                 bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
                 exec: function(editor) {
-                    _this.saveCode()
+                    if(_this.data.contractStatus != 2){
+                        _this.saveCode()
+                    }
                 },
             });
             let editor = this.aceEditor.alignCursors();
             this.aceEditor.getSession().setUseWrapMode(true);
             this.aceEditor.getSession().on("change", this.changeAce);
-            this.aceEditor.getSession().on("focus", this.blurAce);
+            this.aceEditor.on("blur", this.blurAce);
             this.aceEditor.resize();
+        },
+        blurAce: function(){
+            let data = Base64.encode(this.content);
+            if(this.data.contractSource != data && this.data.contractStatus != 2){
+                this.saveCode()   
+            }
         },
         saveCode: function(){
             this.data.contractSource = Base64.encode(this.content)
@@ -299,18 +295,16 @@ export default {
                 minLines: 9
             });
         },
-        sendSuccess: function() {
+        sendSuccess: function(val) {
             this.dialogVisible = false;
+            this.editorShow = true;
+            this.editorData = val;
+        },
+        editorClose: function(){
+            this.editorShow = false;
         },
         changeAce: function() {
             this.content = this.aceEditor.getSession().getValue();
-            // this.contractList = JSON.parse(localStorage.getItem("contractLists")) || [];
-            // this.contractList.forEach(value => {
-            //     if(value.contractNo == this.data.contractNo){
-            //         value.contractSource = Base64.encode(this.content)
-            //     }
-            // })
-            // localStorage.setItem("contractLists",JSON.stringify(this.contractList))
         },
         
         findImports: function(path) {
@@ -318,24 +312,30 @@ export default {
                 localStorage.getItem("contractList")
             );
             let arry = path.split("/");
+            let newpath = arry[arry.length - 1];
+            let num = 0;
             if(arry.length > 1){
+                let newPath = arry[0]
+                let oldPath = arry[arry.length - 1]
                 let importArry = []
                 this.contractList.forEach(value => {
-                    if(value.contractPath == arry[0]){
+                    if(value.contractPath == newPath){
                         importArry.push(value)
                     }
                 })
                 if(importArry.length){
-                    importArry.forEach(value => {
-                        if(value.contractName + ".sol" == arry[1]){
+                    for(let i = 0; i < importArry.length; i++){
+                        if(oldPath == importArry[i].contractName + ".sol"){
                             return {
-                                contents: Base64.decode(value.contractSource)
+                                contents: Base64.decode(
+                                    importArry[i].contractSource
+                                )
                             };
                         }
-                    })
+                    }
                 }
             }else{
-                let newpath = arry[0];
+                let newpath = arry[arry.length - 1];
                 let newArry = []
                 this.contractList.forEach(value => {
                     if(value.contractPath == this.data.contractPath){
@@ -343,25 +343,28 @@ export default {
                     }
                 })
                 if(newArry.length > 1){
-                    let len = 0
-                    newArry.forEach(value => {
-                        if(value.contractName + ".sol" == newpath){
-                            len++
+                    for(let i = 0; i < newArry.length; i++){
+                        if(newpath == newArry[i].contractName + ".sol"){
+                            debugger
                             return {
-                                contents: Base64.decode(value.contractSource)
+                                contents: Base64.decode(
+                                    newArry[i].contractSource
+                                )
                             };
                         }
-                    })
-                    if(!len){
-                        for (let i = 0; i < this.contractList.length; i++) {
-                            if (newpath == this.contractList[i].contractName + ".sol") {
-                                return {
-                                    contents: Base64.decode(this.contractList[i].contractSource)
-                                };
-                            } else {
-                                num++;
-                            }
+                    }
+                    for (let i = 0; i < this.contractList.length; i++) {
+                        if (newpath == this.contractList[i].contractName + ".sol") {
+                            debugger
+                            return {
+                                contents: Base64.decode(this.contractList[i].contractSource)
+                            };
+                        } else {
+                            num++;
                         }
+                    }
+                    if(num){
+                        return { error: "File not found" };
                     }
                 }else{
                     for (let i = 0; i < this.contractList.length; i++) {
@@ -402,30 +405,27 @@ export default {
                 content: this.content
             };
             try {
-                output = JSON.parse(
-                    solc.compileStandard(
-                        JSON.stringify(input),
-                        this.findImports
-                    )
-                );
+                output = JSON.parse(solc.compileStandard(JSON.stringify(input),this.findImports));
             } catch (error) {
                 this.errorInfo = "合约编译失败！";
                 this.errorMessage = error;
                 this.compileShow = true;
                 this.loading = false;
             }
-            if (output && JSON.stringify(output.contracts) != "{}") {
-                this.status = 1;
-                if (output.contracts[this.contractName + ".sol"]) {
-                    this.changeOutput(
-                        output.contracts[this.contractName + ".sol"]
-                    );
+            setTimeout(() => {
+                if (output && JSON.stringify(output.contracts) != "{}") {
+                    this.status = 1;
+                    if (output.contracts[this.contractName + ".sol"]) {
+                        this.changeOutput(
+                            output.contracts[this.contractName + ".sol"]
+                        );
+                    }
+                } else {
+                    this.errorMessage = output.errors[0];
+                    this.errorInfo = "合约编译失败！";
+                    this.loading = false;
                 }
-            } else {
-                this.errorMessage = output.errors[0];
-                this.errorInfo = "合约编译失败！";
-                this.loading = false;
-            }
+            },500)   
         },
         changeOutput: function(obj) {
             let arry = [];
@@ -532,7 +532,8 @@ export default {
                 userId: val.userId,
                 contractName: this.contractName,
                 contractId: this.data.contractId,
-                contractVersion: val.version
+                // contractVersion: val.version
+                contractPath: this.data.contractPath
             };
             this.version = val.version
             // if (!this.data.contractId) {

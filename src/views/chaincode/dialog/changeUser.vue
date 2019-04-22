@@ -16,13 +16,13 @@
 <template>
     <div class="chang-wrapper">
         <table class="opt-wrapper">
-            <tr>
+            <!-- <tr>
                 <td>合约版本号：</td>
                 <td>
                     <el-input v-model="version" placeholder="请输入数字或字母" @blur='versionBlur' maxlength='18' style="width: 240px"></el-input>
                     <span style="color: #f00" v-show="versionShow">{{errorInfo}}</span>
                 </td>
-            </tr>
+            </tr> -->
             <tr>
                 <td>用户：</td>
                 <td>
@@ -95,38 +95,38 @@ export default {
         close: function() {
             this.$emit("close");
         },
-        versionBlur: function(){
-            let pattern = /^[A-Za-z0-9]+$/
-            if(!this.version){
-                this.versionShow = true;
-                this.errorInfo = '请输入版本号！'
-            }else if(!pattern.test(this.version)){
-                this.versionShow = true;
-                this.errorInfo = '请输入数字或字母！'
-            }else{
-                this.versionShow = false;
-                this.errorInfo = ''
-            }
-        },
+        // versionBlur: function(){
+        //     let pattern = /^[A-Za-z0-9]+$/
+        //     if(!this.version){
+        //         this.versionShow = true;
+        //         this.errorInfo = '请输入版本号！'
+        //     }else if(!pattern.test(this.version)){
+        //         this.versionShow = true;
+        //         this.errorInfo = '请输入数字或字母！'
+        //     }else{
+        //         this.versionShow = false;
+        //         this.errorInfo = ''
+        //     }
+        // },
         submit: function() {
-            let pattern = /^[A-Za-z0-9]+$/
-            if(!this.version){
-                this.versionShow = true;
-                this.errorInfo = '请输入版本号！'
-            }else if(!pattern.test(this.version)){
-                this.versionShow = true;
-                this.errorInfo = '请输入数字或字母！'
-            }else{
+            // let pattern = /^[A-Za-z0-9]+$/
+            // if(!this.version){
+            //     this.versionShow = true;
+            //     this.errorInfo = '请输入版本号！'
+            // }else if(!pattern.test(this.version)){
+            //     this.versionShow = true;
+            //     this.errorInfo = '请输入数字或字母！'
+            // }else{
                 this.versionShow = false;
                 this.errorInfo = ''
                 let data = {
                     userId: this.userId,
                     params: this.parameter,
-                    version: this.version
+                    // version: this.version
                 };
                 this.$emit("change", data);
                 this.$emit("close");
-            }
+            // }
         },
         getUserData: function() {
             let reqData = {

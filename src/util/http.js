@@ -30,15 +30,15 @@ axiosIns.defaults.validateStatus = function () {
 axiosIns.interceptors.response.use(
     response => {
         if(response.data && response.data.code === 302000) {
-            this.$message({
-                type: "error",
-                message: "µÇÂ¼×´Ì¬Ê§Ð§£¬ÇëÖØÐÂµÇÂ¼£¡"
-            });
             router.push({
                 path: '/login',
                 query: {redirect: router.currentRoute.fullPath}
             })
         }
+        // this.$message({
+        //     type: "error",
+        //     message: "ç™»å½•çŠ¶æ€å¤±æ•ˆï¼Œè¯·é‡æ–°ç™»å½•ï¼"
+        // });
         return response;
     },
     error => {

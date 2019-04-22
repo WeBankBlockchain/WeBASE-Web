@@ -206,21 +206,8 @@ export default {
                     this.close();
                     if (res.data.code === 0) {
                         if (res.data.data) {
-                            let resData = JSON.stringify(
-                                res.data.data,
-                                null,
-                                4
-                            );
-                            this.$alert(
-                                `<p style='word-wrap: break-word;word-break:break-all;max-height:200px;overflow:auto'>
-                               ${resData}</p>`,
-                                "交易结果",
-                                {
-                                    confirmButtonText: "确定",
-                                    dangerouslyUseHTMLString: true
-                                }
-                            );
-                            this.$emit("success", false);
+                            let resData = res.data.data
+                            this.$emit("success", resData);
                         } else {
                             this.$message({
                                 type: "success",

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统监控'" :headSubTitle="'节点指标'"></v-content-head>
+        <v-content-head :headTitle="'系统监控'" :headSubTitle="'节点监控'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-nodes-list">
                 <div class="serch-nodes">
@@ -106,6 +106,9 @@ export default {
         this.getFrontTable();
     },
     methods: {
+        changGroup(){
+            this.getFrontTable()
+        },
         changeNodes() {
             this.confirmParam();
         },
