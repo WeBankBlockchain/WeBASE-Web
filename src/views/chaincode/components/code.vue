@@ -34,7 +34,7 @@
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile">
+                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile && bin">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
