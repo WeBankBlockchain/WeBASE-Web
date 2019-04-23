@@ -101,7 +101,7 @@ export default {
             let reqData = {
                 frontIp: this.frontFrom.ip,
                 frontPort: this.frontFrom.port,
-		agency: this.frontFrom.company
+                agency: this.frontFrom.company
             }
             addFront(reqData).then(res => {
                 if(res.data.code === 0){

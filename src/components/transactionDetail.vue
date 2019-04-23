@@ -79,7 +79,7 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
-                <div v-for="item in eventLog" v-if="eventSHow" :key='item.address'>
+                <div v-for="item in eventLog" v-if="eventSHow">
                     <div class="item">
                         <span class="label">Address :</span>
                         <span>{{item.address}}</span>
@@ -396,17 +396,27 @@ export default {
         //decodeEvent
         decodeEventClick: function() {
             for (let i = 0; i < this.eventLog.length; i++) {
-                getAbiFunction(this.eventLog[i].topics[0]).then(res => {
+                let data = {
+                    groupId: localStorage.getItem("groupId"),
+                    data: this.eventLog[i].topics[0]
+                }
+                getFunctionAbi(data).then(res => {
                     if(res.data.code == 0 && res.data.data){
                         this.eventLog[i] = this.decodeEvent(res.data.data,this.eventLog[i])
                         setTimeout(() => {
                             this.eventSHow = true;
                         },200)
                     }else if(res.data.code !== 0){
-                    message(errorcode[res.data.code].cn,'error')
+                    this.$message({
+                            type: "error",
+                            message: errcode.errCode[res.data.code].cn
+                        });
                 }
                 }).catch(err => {
-                    message(constant.ERROR,'error');
+                    this.$message({
+                        type: "error",
+                        message: "系统错误！"
+                    });
                 })
             }
         },
@@ -498,7 +508,6 @@ export default {
         },
         //deloy-contract-transaction-decode
         decodeDeloy: function(items) {
-            debugger
             if (items) {
                 let input = JSON.parse(items.contractAbi);
                 this.funcData = items.contractName;

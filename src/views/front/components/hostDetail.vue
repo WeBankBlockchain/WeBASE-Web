@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="`${nodesQuery.nodeIp}`" :icon="true"></v-content-head>
+        <v-content-head :headTitle="`${nodesQuery.nodeIp}`" :icon="true" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="more-search-table">
                 <div class="search-item">
@@ -59,7 +59,7 @@
                     <el-row v-show="tab==='chainInfo'">
                         <template v-for="item in nodesHealthData">
                             <el-col :xs='24' :sm="24" :md="24" :lg="12" :xl="12">
-                                <v-nodes-chart :chartOption="item" :reload="nodesReloadNum" v-loading="loading"></v-nodes-chart>
+                                <v-metric-chart :chartOption="item" :reload="nodesReloadNum" v-loading="loading" :metricName="'nodes'"></v-metric-chart>
                             </el-col>
                         </template>
                     </el-row>
@@ -71,16 +71,14 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import metricChart from "./components/metricChart";
-import nodesChart from "./components/nodesChart";
+import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth } from "@/util/api";
 import { format, numberFormat } from "@/util/util.js";
 export default {
     name: "hostDetail",
     components: {
         "v-content-head": contentHead,
-        "v-metric-chart": metricChart,
-        "v-nodes-chart": nodesChart
+        "v-metric-chart": metricChart
     },
     watch: {
         nodeIp: function() {
@@ -113,7 +111,8 @@ export default {
                 beginDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date(new Date().toLocaleDateString()).getTime(),'HH:mm:ss')}`,
                 endDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date().getTime(),'HH:mm:ss')}`,
                 contrastBeginDate: "",
-                contrastEndDate: ""
+                contrastEndDate: "",
+                groupId: localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '1'
             },
             chartTypeList: [
                 {
@@ -143,6 +142,14 @@ export default {
         this.getChartData();
     },
     methods: {
+        changGroup(val){
+            this.chartParam.groupId = val
+            if(this.tab=='chainInfo') {
+                this.getHealthData()
+            }else{
+                this.getChartData()
+            }
+        },
         getChartData() {
             if(this.reloadNum===1){
                 this.loadingInit = true
@@ -253,7 +260,7 @@ export default {
                             } else if (item.metricType === "pbftView") {
                                 item.metricName = "pbftView";
                             }else if (item.metricType === 'pendingCount'){
-                                item.metricName = "待交易数量";
+                                item.metricName = "待打包的交易数";
                             }
                             item.data.contrastDataList.timestampList = timestampList;
                             item.data.lineDataList.timestampList = timestampList;
@@ -340,6 +347,7 @@ export default {
             this.chartParam.contrastBeginDate = this.contrastBeginDate;
             this.chartParam.contrastEndDate = this.contrastEndDate;
             this.chartParam.gap = this.timeGranularity;
+            this.chartParam.groupId = localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '1';
         }
     }
 };

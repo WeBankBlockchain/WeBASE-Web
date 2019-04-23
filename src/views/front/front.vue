@@ -16,7 +16,7 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="'节点管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
-        <v-content-head :headTitle="'节点管理'"></v-content-head>
+        <v-content-head :headTitle="'节点管理'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
@@ -34,7 +34,7 @@
                         <template slot-scope="scope">
                             <span v-if='head.enName != "frontIp"'>{{scope.row[head.enName]}}</span>
                             <span v-else>
-                                <router-link :to="{'path': 'nodesMetric', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
+                                <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
                             </span>
                         </template>
                     </el-table-column>
@@ -57,7 +57,6 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import nodesDialog from "./components/nodesDialog";
 import { getFronts, addnodes,deleteFront } from "@/util/api";
 import { date } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -117,6 +116,9 @@ export default {
         this.getFrontTable();
     },
     methods: {
+        changGroup(){
+            this.getFrontTable();   
+        },
         search: function() {
             this.getFrontTable();
         },

@@ -7,7 +7,7 @@
                         <el-input v-model="fileFrom.contractName" style="width: 210px;"></el-input>
                     </el-form-item>
                     <el-form-item label="文件目录" >
-                        <el-select v-model="fileFrom.contractType" placeholder="请选择">
+                        <el-select v-model="fileFrom.contractType" :disabled='disabled' placeholder="请选择">
                             <el-option
                             v-for="item in options"
                             :key="item.folderName"
@@ -28,7 +28,7 @@
 <script>
 export default {
     name: "addFile",
-    props: ['fileshow','data'],
+    props: ['fileshow','data','id'],
     data: function(){
         return {
             dialogVisible: this.fileshow,
@@ -36,6 +36,8 @@ export default {
                 contractName: "",
                 contractType: ""
             },
+            disabled: false,
+            folderId: this.id,
             rules: {
                contractName: [
                     {
@@ -45,8 +47,8 @@ export default {
                     },
                     {
                         min: 1,
-                        max: 12,
-                        message: "长度在 1 到 12 个字符",
+                        max: 32,
+                        message: "长度在 1 到 32 个字符",
                         trigger: "blur"
                     },
                     {
@@ -64,6 +66,7 @@ export default {
     },
     methods: {
         changeOptions: function(){
+            this.disabled = false
             this.options = [{
                 folderName: "/",
                 folderId: 1,
@@ -77,6 +80,14 @@ export default {
                 }
             }
             this.fileFrom.contractType = this.options[0].folderName
+            if(this.folderId){
+                this.options.forEach(value => {
+                    if(value.folderId == this.folderId){
+                        this.fileFrom.contractType = value.folderName;
+                        this.disabled = true
+                    }
+                })
+            }
         },
         submit: function(formName){
             this.$refs[formName].validate(valid => {

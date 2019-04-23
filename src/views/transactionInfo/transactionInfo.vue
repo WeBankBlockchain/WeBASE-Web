@@ -15,7 +15,7 @@
  */
 <template>
     <div class="bg-f7f7f7">
-        <v-content-head :headTitle="'交易信息'" :icon="true"></v-content-head>
+        <v-content-head :headTitle="'交易信息'" :icon="true" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
@@ -101,6 +101,9 @@ export default {
         this.getTransaction();
     },
     methods: {
+        changGroup(){
+            this.getTransaction();
+        },
         search: function() {
             if (
                 this.searchKey.key == "transactionHash" &&
