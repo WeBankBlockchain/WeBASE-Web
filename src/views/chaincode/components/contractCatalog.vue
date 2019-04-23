@@ -38,7 +38,7 @@
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
                         <i :class="item.folderIcon" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
                         <i class="wbs-icon-folder" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
-                        <span :id='item.folderId' v-if="!item.renameShow">{{item.contractName}}</span>
+                        <span :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <!-- <el-input v-model="contractName" autofocus='autofocus'  @blur="changeName(item)" v-if="item.renameShow"></el-input> -->
                         <i class="wbs-icon-delete contract-delete" v-if="!item.renameShow" @click='deleteFolder(item)'></i>
                         <br>
@@ -526,6 +526,14 @@ export default {
             return result
         },
         open: function(val){
+            this.contractArry.forEach(value => {
+                this.$set(value,'contractActive',false)
+                if(value.contractType == 'folder'){
+                    value.child.forEach(item => {
+                        this.$set(item,'contractActive',false)
+                    })
+                }
+            })
             if(val.folderActive){
                 this.$set(val,'folderActive',false)
                 this.$set(val,'folderIcon','el-icon-caret-right')
@@ -533,6 +541,7 @@ export default {
                 this.$set(val,'folderActive',true)
                 this.$set(val,'folderIcon','el-icon-caret-bottom')
             }
+            this.$set(val,'contractActive',true)
         },
         select: function(val){
             let num = 0;
@@ -540,6 +549,7 @@ export default {
                 if(value.contractId == val.contractId){
                     this.$set(value,'contractActive',true)
                 }else if(value.contractType == 'folder'){
+                    this.$set(value,'contractActive',false)
                     value.child.forEach(item => {
                         if(item.contractId == val.contractId){
                             this.$set(item,'contractActive',true)
