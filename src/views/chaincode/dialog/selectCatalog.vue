@@ -7,7 +7,7 @@
                         <el-select v-model="folderFrom.folderName" placeholder="请选择" class="block-network">
                             <el-option
                             v-for="item in options"
-                            :key="item.folderId"
+                            :key="item.folderName"
                             :label="item.folderName"
                             :value="item.folderName">
                             </el-option>
@@ -56,7 +56,9 @@ export default {
             if(localStorage.getItem("folderList")){
                 let arry = JSON.parse(localStorage.getItem("folderList"));
                 for(let i = 0; i < arry.length; i++){
-                    this.options.push(arry[i])
+                    if(arry[i].groupId == localStorage.getItem("groupId")){
+                        this.options.push(arry[i])
+                    }
                 }
             }
             this.folderFrom.folderName = this.options[0].folderName

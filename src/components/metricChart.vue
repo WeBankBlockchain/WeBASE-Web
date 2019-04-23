@@ -52,7 +52,8 @@ export default {
     data() {
         return {
             chartId: this.chartOption.metricType,
-            chart: ""
+            chart: "",
+            showContrast: false
         };
     },
     beforeDestroy: function() {
@@ -68,23 +69,34 @@ export default {
             this.chart = echarts.init(document.getElementById(this.chartId));
             let xList = [],
                 yList = [],
-                yContrastList= [],
+                yContrastList = [],
                 yContrastTitle = "";
-            xList = this.chartOption.data.lineDataList.timestampList.map(item => {
-                return format(new Date(item).getTime(), "HH:mm:ss");
-            });
+            xList = this.chartOption.data.lineDataList.timestampList.map(
+                item => {
+                    return format(new Date(item).getTime(), "HH:mm:ss");
+                }
+            );
             yList = this.chartOption.data.lineDataList.valueList.map(item => {
                 return item;
             });
-            yContrastList = this.chartOption.data.contrastDataList.valueList.map(item => {
-                return item
-            })
-            if(this.chartOption.data.contrastDataList.valueList.length > 0){
-                yContrastTitle = "对比日数据"
+            yContrastList = this.chartOption.data.contrastDataList.valueList.map(
+                item => {
+                    return item;
+                }
+            );
+            if (this.chartOption.data.contrastDataList.valueList.length > 0) {
+                yContrastTitle = "对比日数据";
+                this.showContrast = true;
+            }else {
+                this.showContrast = false
             }
             let option = {
                 title: {
-                    text: this.metricName ==='nodes'? `${this.chartOption.metricName}` : `${this.chartOption.metricName}${this.chartOption.metricUint}(${this.chartOption.metricU})`,
+                    text:
+                        this.metricName === "nodes"
+                            ? `${this.chartOption.metricName}`
+                            : `${this.chartOption.metricName}${this.chartOption
+                                  .metricUint}(${this.chartOption.metricU})`,
                     textStyle: {
                         color: "#1e53a4",
                         fontStyle: "normal",
@@ -108,9 +120,11 @@ export default {
                     data: ["显示日数据", yContrastTitle],
                     y: 20
                 },
-                dataZoom: [{
-                    type:'inside',
-                }],
+                dataZoom: [
+                    {
+                        type: "inside"
+                    }
+                ],
                 grid: {
                     left: 33,
                     right: 33,
@@ -118,14 +132,17 @@ export default {
                     containLabel: true
                 },
                 toolbox: {
-                    right: '30',
-                    top: '16',
+                    right: "30",
+                    top: "16",
                     feature: {
                         dataZoom: {
-                            yAxisIndex: 'none'
+                            yAxisIndex: "none"
                         },
                         restore: {},
-                        magicType: {show: true, type: ['stack', 'tiled']}
+                        magicType: { 
+                            show: this.showContrast ? true : false, 
+                            type: ["stack", "tiled"] 
+                        }
                     }
                 },
                 xAxis: {
@@ -135,7 +152,7 @@ export default {
                     axisLabel: {
                         interval: "auto",
                         formatter: function(value, index) {
-                            return value.substr(0,5)
+                            return value.substr(0, 5);
                         }
                     },
                     splitLine: {
@@ -162,7 +179,7 @@ export default {
                             color: "rgba(0,14,31,0.62)"
                         }
                     },
-                    scale: this.metricName==='nodes'? true : false
+                    scale: this.metricName === "nodes" ? true : false
                 },
                 series: [
                     {
@@ -182,18 +199,22 @@ export default {
             this.chart.setOption(option, true);
             setTimeout(() => {
                 window.onresize = () => {
-                    
-                    if(this.metricName === 'nodes'){
-                        echarts.init(document.getElementById("pbftView")).resize();
-                        echarts.init(document.getElementById("blockHeight")).resize();
-                    }else {
+                    if (this.metricName === "nodes") {
+                        echarts
+                            .init(document.getElementById("pbftView"))
+                            .resize();
+                        echarts
+                            .init(document.getElementById("blockHeight"))
+                            .resize();
+                    } else {
                         echarts.init(document.getElementById("cpu")).resize();
-                        echarts.init(document.getElementById("memory")).resize();
+                        echarts
+                            .init(document.getElementById("memory"))
+                            .resize();
                         echarts.init(document.getElementById("disk")).resize();
                         echarts.init(document.getElementById("txbps")).resize();
                         echarts.init(document.getElementById("rxbps")).resize();
                     }
-                    
                 };
             }, 200);
         }
@@ -202,10 +223,10 @@ export default {
 </script>
 
 <style scoped>
-    .noData {
-        position: absolute;
-        display: inline-block;
-        top: 50%;
-        left: 46%;
-    }
+.noData {
+    position: absolute;
+    display: inline-block;
+    top: 50%;
+    left: 46%;
+}
 </style>

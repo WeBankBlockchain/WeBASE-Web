@@ -15,7 +15,7 @@
  */
 <template>
     <div style="height:100%">
-        <content-head :headTitle="'交易审计'" :headSubTitle="'异常用户'"></content-head>
+        <content-head :headTitle="'交易审计'" :headSubTitle="'异常用户'" @changGroup="changGroup"></content-head>
         <div class="module-wrapper auto-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
@@ -30,7 +30,7 @@
                         <template slot-scope="props">
                             <div class="expand-item">
                                 <ul class="expand-item-ul">
-                                    <li v-for="item in props.row['hashs']">
+                                    <li v-for="item in props.row['hashs']" :key='item.hash'>
                                     <div @click="showItem(item)"  class="expand-item-div">
                                         <i :class="item.show?'el-icon-arrow-down':'el-icon-arrow-up'"></i>
                                         <span class="expand-item-span">TxHash：
@@ -123,6 +123,9 @@ export default {
         this.getUnusualUserList();
     },
     methods: {
+        changGroup(){
+            this.getUnusualUserList()
+        },
         getUnusualUserList() {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
@@ -243,5 +246,8 @@ export default {
 .expand-item-span > span {
     color: #515356;
     margin-left: 47px;
+}
+.search-table >>> .el-icon-arrow-right:before {
+    content: "\e60e";
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'合约列表'"></v-contentHead>
+        <v-contentHead :headTitle="'合约列表'" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
@@ -49,11 +49,12 @@
                 </el-pagination>
             </div>
         </div>
-        <v-editor :show='editorShow' :data='editorData' v-if='editorShow' @close='close'></v-editor>
+        <!-- <v-editor :show='editorShow' :data='editorData' v-if='editorShow' @close='close'></v-editor> -->
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-            <send-transation @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
+            <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' @close='editorClose'></v-editor>
     </div>
 </template>
 <script>
@@ -96,13 +97,17 @@ export default {
         this.getContracts()
     },
     methods: {
+        changGroup: function(){
+            this.getContracts()
+        },
         getContracts: function(){
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize,
                 contractName: this.contractName,
-                contractAddress: this.contractAddress
+                contractAddress: this.contractAddress,
+                contractStatus: 2
             }
             getContractList(data).then(res => {
                 if(res.data.code == 0){
@@ -140,8 +145,8 @@ export default {
             // this.editorShow = true;
             // this.editorData = val.contractSource
         },
-        close: function(){
-            this.editorShow = false
+        editorClose: function(){
+            this.editorShow = false;
         },
         openAbi: function(val){
             this.abiData = val.contractAbi;
@@ -176,8 +181,10 @@ export default {
         handleClose: function(){
             this.dialogVisible = false
         },
-        sendSuccess: function(){
-            this.dialogVisible = false
+        sendSuccess: function(val){
+            this.dialogVisible = false;
+            this.editorShow = true;
+            this.editorData = val;
         },
         handleSizeChange: function(val) {
             this.pageSize = val;
