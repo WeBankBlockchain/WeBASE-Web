@@ -355,13 +355,7 @@ export default {
             this.inputButtonShow = true;
             let input = this.transactionData.input;
             this.transactionTo = this.transactionData.to;
-            if (this.userList.length) {
-                this.userList.forEach(value => {
-                    if (value.address == this.transactionData.from) {
-                        this.transactionData.user = value.userName;
-                    }
-                });
-            }
+            
             if (this.transactionTo) {
                 this.decodefun(input, this.transactionTo);
             } else {
@@ -462,6 +456,13 @@ export default {
         //transactionDecode
         decodefun: function(input,abiData) {
             let web3 = new Web3(Web3.givenProvider);
+            if (this.userList.length) {
+                this.userList.forEach(value => {
+                    if (value.address == this.transactionData.from) {
+                        this.transactionData.user = value.userName;
+                    }
+                });
+            }
             this.methodId = input.substring(0, 10);
             // this.methodId = data;
             let inputDatas = "0x" + input.substring(10);
@@ -508,6 +509,13 @@ export default {
         },
         //deloy-contract-transaction-decode
         decodeDeloy: function(items) {
+            if (this.userList.length) {
+                this.userList.forEach(value => {
+                    if (value.address == this.transactionData.from) {
+                        this.transactionData.user = value.userName;
+                    }
+                });
+            }
             if (items) {
                 let input = JSON.parse(items.contractAbi);
                 this.funcData = items.contractName;

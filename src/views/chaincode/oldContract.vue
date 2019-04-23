@@ -16,7 +16,7 @@
                             <span style="color: #194ea0;cursor:pointer" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column  prop="contractVersion" label="合约版本"  show-overflow-tooltip width="120" align="center"></el-table-column> -->
+                    <el-table-column  prop="contractPath" label="合约目录"  show-overflow-tooltip width="120" align="center"></el-table-column>
                     <el-table-column  prop="contractAddress" label="合约地址"  show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" title="复制合约地址"></i>
