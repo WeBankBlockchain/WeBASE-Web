@@ -334,6 +334,16 @@ let errCode = {
     "402000": {
         en: "param exception",
         cn: "缺少参数"
+    },
+
+
+    "422": {
+        en: "param error",
+        cn: "参数错误"
+    },
+    "500": {
+        en: "system exception",
+        cn: '系统异常'
     }
 }
 export default {
