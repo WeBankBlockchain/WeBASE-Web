@@ -617,7 +617,6 @@ export default {
                     }); 
         },
         deleteFolder: function(val){
-            debugger
             let list = val.child;
             let num = 0;
             for(let i = 0; i < list.length; i++){
