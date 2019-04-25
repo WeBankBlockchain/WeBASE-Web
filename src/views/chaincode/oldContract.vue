@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 <template>
     <div class="rivate-key-management-wrapper">
         <v-contentHead :headTitle="'合约列表'" @changGroup="changGroup"></v-contentHead>
@@ -16,7 +31,7 @@
                             <span style="color: #194ea0;cursor:pointer" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  prop="contractPath" label="合约目录"  show-overflow-tooltip width="120" align="center"></el-table-column>
+                    <el-table-column  prop="contractPath" label="合约目录"  show-overflow-tooltip  width="120" align="center"></el-table-column>
                     <el-table-column  prop="contractAddress" label="合约地址"  show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" title="复制合约地址"></i>
