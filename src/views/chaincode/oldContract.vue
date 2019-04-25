@@ -79,6 +79,7 @@ import editor from "./dialog/editor"
 import abiDialog from "./dialog/abiDialog"
 import {getContractList} from "@/util/api"
 import router from '@/router'
+import errcode from "@/util/errcode";
 export default {
     name: "oldContract",
     components: {

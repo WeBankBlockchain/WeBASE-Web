@@ -38,6 +38,7 @@
 </template>
 <script>
 import {addFront} from "@/util/api"
+import errcode from "@/util/errcode";
 export default {
     name: "setFront",
     props: ["show",'showClose'],

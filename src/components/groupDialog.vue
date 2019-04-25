@@ -31,6 +31,7 @@
 </template>
 <script>
 import { getGroups } from "@/util/api";
+import errcode from "@/util/errcode";
 export default {
     name: "groupDialog",
     props: ["show"],
