@@ -209,7 +209,6 @@ export default {
     },
     watch: {
         content: function(val){
-            // debugger
             let data = Base64.decode(this.data.contractSource);
             if(data != val){
                 this.saveShow = true
@@ -364,7 +363,6 @@ export default {
                 if(newArry.length > 1){
                     for(let i = 0; i < newArry.length; i++){
                         if(newpath == newArry[i].contractName + ".sol"){
-                            debugger
                             return {
                                 contents: Base64.decode(
                                     newArry[i].contractSource
@@ -374,7 +372,6 @@ export default {
                     }
                     for (let i = 0; i < this.contractList.length; i++) {
                         if (newpath == this.contractList[i].contractName + ".sol") {
-                            debugger
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
