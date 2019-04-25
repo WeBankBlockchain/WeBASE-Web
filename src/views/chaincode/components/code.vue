@@ -162,6 +162,10 @@ export default {
             editorData: null
         };
     },
+    beforeDestroy: function(){
+        Bus.$off("select")
+        Bus.$off("noData")
+    },
     mounted: function() {
         this.initEditor();
         Bus.$on('select',data => {
@@ -188,6 +192,19 @@ export default {
             this.bin = data.contractBin;
             this.bytecodeBin = data.bytecodeBin || "";
             this.version = data.contractVersion;
+        })
+        Bus.$on("noData",data => {
+            this.codeShow = false;
+            this.refreshMessage();
+            this.code = "";
+            this.version = "";
+            this.status = null;
+            this.abiFile = "";
+            this.contractAddress = "";
+            this.errorMessage = "";
+            this.contractName = "";
+            this.content = "";
+            this.bin = "";
         })
     },
     watch: {
@@ -333,6 +350,8 @@ export default {
                             };
                         }
                     }
+                }else{
+                    return { error: "File not found" };
                 }
             }else{
                 let newpath = arry[arry.length - 1];

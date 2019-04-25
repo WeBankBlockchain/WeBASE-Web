@@ -53,20 +53,20 @@ let errCode = {
         cn: 'abi内容不能为空'
     },
     "201007": {
-        en: "contractSource cannot be empty",
-        cn: '合约源码不能为空'
+        en: "contractBin cannot be empty",
+        cn: '合约bin不能为空'
     },
     "201008": {
-        en: "contract has been deployed",
-        cn: '链上存在该合约'
+        en: "contract's current version has been deployed",
+        cn: '合同的当前版本已部署'
     },
     "201009": {
         en: "contract is not deployed",
         cn: '合约未部署'
     },
     "201010": {
-        en: "adding abi error",
-        cn: 'abi添加错误'
+        en: "save abi error",
+        cn: '保存abi失败'
     },
     "201011": {
         en: "contract's parameter is error",
@@ -77,8 +77,8 @@ let errCode = {
         cn: '请求块高大于最新块高'
     },
     "201013": {
-        en: "contract compile error",
-        cn: '合约编译错误'
+        en: "get abi from chain error",
+        cn: '从链上获取abi失败'
     },
     "201014": {
         en: "contract deploy error",
@@ -91,6 +91,30 @@ let errCode = {
     "201016": {
         en: "file is not exist",
         cn: '文件不存在'
+    },
+    "201017": {
+        en: "failed to get node config",
+        cn: '获取节点配置失败'
+    },
+    "201018": {
+        en: "blockNumber and pbftView unchanged",
+        cn: '块号和pbftview不变'
+    },
+    "201019": {
+        en: "request function is error",
+        cn: '请求函数错误'
+    },
+    "201020": {
+        en: "transaction query from chain failed",
+        cn: '链中的事务查询失败'
+    },
+    "201021": {
+        en: "transaction send to chain failed",
+        cn: '事务发送到链失败'
+    },
+    "201022": {
+        en: "node request failed",
+        cn: '节点请求失败'
     },
 
 

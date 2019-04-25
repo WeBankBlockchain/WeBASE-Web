@@ -27,7 +27,7 @@
                 <td>用户：</td>
                 <td>
                     <el-select v-model="userName" placeholder="请选择用户" @change="changeId" style="width: 240px">
-                        <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
+                        <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='item in userList'></el-option>
                     </el-select>    
                 </td>
             </tr>
@@ -40,6 +40,9 @@
                                 <span>{{item.type}}</span>
                             </template>
                         </el-input>
+                        <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
+                            <i class="el-icon-info" style="position: relative;top: 8px;"></i>
+                        </el-tooltip>
                     </div>
                 </td>
             </tr>
@@ -95,38 +98,15 @@ export default {
         close: function() {
             this.$emit("close");
         },
-        // versionBlur: function(){
-        //     let pattern = /^[A-Za-z0-9]+$/
-        //     if(!this.version){
-        //         this.versionShow = true;
-        //         this.errorInfo = '请输入版本号！'
-        //     }else if(!pattern.test(this.version)){
-        //         this.versionShow = true;
-        //         this.errorInfo = '请输入数字或字母！'
-        //     }else{
-        //         this.versionShow = false;
-        //         this.errorInfo = ''
-        //     }
-        // },
         submit: function() {
-            // let pattern = /^[A-Za-z0-9]+$/
-            // if(!this.version){
-            //     this.versionShow = true;
-            //     this.errorInfo = '请输入版本号！'
-            // }else if(!pattern.test(this.version)){
-            //     this.versionShow = true;
-            //     this.errorInfo = '请输入数字或字母！'
-            // }else{
                 this.versionShow = false;
                 this.errorInfo = ''
                 let data = {
                     userId: this.userId,
                     params: this.parameter,
-                    // version: this.version
                 };
                 this.$emit("change", data);
                 this.$emit("close");
-            // }
         },
         getUserData: function() {
             let reqData = {

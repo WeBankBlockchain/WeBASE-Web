@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014-2019 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 <template>
     <div class="contract-menu" style="position: relative;height: 100% ;" @contextmenu.prevent="handle($event)" @click.self='checkNull'>
         <div class="contract-menu-header" >
@@ -178,7 +193,6 @@ export default {
                     if(value.contractId == this.ID && value.contractStatus != 2){
                         this.$set(value,'renameShow',true)
                         this.contractName = value.contractName;
-                        // this.$refs.input.focus()
                     }else if(value.contractType == 'folder' && value.folderId !== this.ID){
                         value.child.forEach(item => {
                             if(item.contractId == this.ID && item.contractStatus != 2){
@@ -372,8 +386,10 @@ export default {
             this.contractArry = result;
             if(this.contractList.length && !val){
                 this.select(this.contractList[0])
-            }else if(val){
+            }else if(val && this.contractList.length){
                 this.select(val)
+            }else{
+                Bus.$emit("noData",true)
             }
         },
         saveContract: function(data){
@@ -520,6 +536,12 @@ export default {
                             renameShow: false,
                             inputShow: false
                         }
+                    this.contractArry.forEach(item => {
+                        if(item.contractType =='folder' && item.folderId == value.folderId){
+                            data.folderIcon = item.folderIcon;
+                            data.folderActive = item.folderActive;
+                        }
+                    })
                     result.push(data);
                 }   
             })
