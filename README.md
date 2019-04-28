@@ -120,7 +120,7 @@ sed -i "s/10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 
 启动报错重点排查：日志路径是否正确（error.log和access.log）,nginx有没有添加用户权限。
 
-(2)、打开页面，页面url是nginx配置的ip和端口。
+(2)、打开页面，页面url是nginx配置的前端ip和端口。
 例如:上面配置文件的url为   http://10.0.0.1:3002
 
 (3)、打开页面后，请找运维提供帐号和密码登录。
