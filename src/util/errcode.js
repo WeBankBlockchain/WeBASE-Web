@@ -127,8 +127,8 @@ let errCode = {
         cn: '数据库异常'
     },
     "202002": {
-        en: "organization already exists",
-        cn: '组织已经存在'
+        en: "not fount any front",
+        cn: '找不到任何前置信息'
     },
     "202003": {
         en: "organization not exists",
@@ -323,12 +323,12 @@ let errCode = {
         cn: "公钥长度为130，公钥地址长度为42"
     },
     "202051": {
-        en: "invalid node ip",
-        cn: "IP或者端口错误"
+        en: "un know this host",
+        cn: "找不到该host"
     },
     "202052": {
-        en: "did not find current node info",
-        cn: "找不到当前节点信息"
+        en: "un know this port",
+        cn: "找不到该端口"
     },
     "202053": {
         en: "system user has not been initialized yet",

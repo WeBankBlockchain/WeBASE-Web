@@ -75,7 +75,7 @@ nginx安装请参考附录
 sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 ````
 
-服务器已有nginx可按照以下修改，
+按照上面的步骤执行后，可以直接跳过这一步骤，直接启动nginx。若服务器已有nginx可按照以下修改，增加一条server
 ```Nginx
 
     upstream node_mgr_server{

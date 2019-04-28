@@ -314,6 +314,7 @@ export default {
         sendSuccess: function(val) {
             this.dialogVisible = false;
             this.editorShow = true;
+            this.editorData = null;
             this.editorData = val;
         },
         editorClose: function(){
