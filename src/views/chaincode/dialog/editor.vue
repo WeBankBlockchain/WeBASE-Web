@@ -21,7 +21,7 @@
                     :value="transationData"
                     :expand-depth='5'
                     copyable
-                    sort></json-viewer>
+                    ></json-viewer>
                 </div>
         </el-dialog>
     </div>
@@ -34,7 +34,7 @@ export default {
         return {
             editorShow: true,
             aceEditor: null,
-            transationData: this.data || "", 
+            transationData: this.data || null, 
             modePath: 'ace/mode/solidity',
             editorDialog: this.show || false,
         }

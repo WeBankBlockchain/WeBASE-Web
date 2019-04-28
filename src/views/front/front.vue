@@ -20,17 +20,18 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点前置</el-button>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入节点ip" v-model="frontId" class="input-with-select">
+                    <el-input placeholder="请输入前置编号" v-model="searchData" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
+                <h3>前置列表</h3>
                 <el-table :data="frontData" class="search-table-content" v-loading="loading">
-                    <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <span v-if='head.enName != "frontIp"'>{{scope.row[head.enName]}}</span>
                             <span v-else>
@@ -46,6 +47,21 @@
                 </el-table>
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
+                <h3 style="padding-top:20px;">节点列表</h3>
+                <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
+                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="" :width='head.width'>
+                    <template slot-scope="scope">
+                        <template>
+                            <span v-if="head.enName ==='nodeActive'">
+                                <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
+                            </span>
+                            <span v-else>{{scope.row[head.enName]}}</span>
+                        </template>
+                    </template>
+                </el-table-column>
+            </el-table>
+             <el-pagination class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
+                </el-pagination>
                 <!-- <el-dialog :visible.sync="nodesDialogVisible" :title="nodesDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper" v-if="nodesDialogVisible">
                     <v-nodesDialog :nodesDialogOptions="nodesDialogOptions" @success="success" @close="close"></v-nodesDialog>
                 </el-dialog> -->
@@ -57,7 +73,7 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import { getFronts, addnodes,deleteFront } from "@/util/api";
+import { getFronts, addnodes,deleteFront,getNodeList } from "@/util/api";
 import { date } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
@@ -80,14 +96,17 @@ export default {
             frontData: [],
             currentPage: 1,
             pageSize: 10,
+            nodecurrentPage: 1,
+            nodepageSize: 10,
             total: 0,
+            nodetotal: 0,
             loading: false,
             nodesLoading: false,
             nodesDialogVisible: false,
             nodesDialogTitle: "",
             nodesDialogOptions: {},
             frontId: null,
-            nodeHead: [
+            frontHead: [
                 {
                     enName: "frontId",
                     name: "前置编号"
@@ -109,20 +128,52 @@ export default {
                     name: "修改时间"
                 }
             ],
+            nodeHead: [
+                {
+                    enName: "nodeId",
+                    name: "节点Id",
+                    width: ""
+                },
+                {
+                    enName: "blockNumber",
+                    name: "块高",
+                    width: 180
+                },
+                {
+                    enName: "pbftView",
+                    name: "pbftView",
+                    width: 180
+                },
+                {
+                    enName: "nodeActive",
+                    name: "状态",
+                    width: 150
+                }
+            ],
+            nodeData: [],
             urlQuery: this.$root.$route.query
         };
     },
     mounted: function() {
         this.getFrontTable();
+        this.getNodeTable();
     },
     methods: {
         changGroup(){
             this.getFrontTable();   
         },
         search: function() {
-            this.getFrontTable();
+            // let pattern = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+            // if(pattern.test(this.searchData)){
+            //     this.getFrontTable();
+            // }else{
+
+            // }
+            this.getFrontTable()
+            
         },
         getFrontTable: function() {
+            this.frontId = this.searchData
             let reqData = {
                 frontId: this.frontId
             }
@@ -158,6 +209,15 @@ export default {
         handleCurrentChange: function(val) {
             this.currentPage = val;
             this.getFrontTable()
+        },
+        nodeSizeChange: function(){
+            this.nodepageSize = val;
+            this.nodecurrentPage = 1;
+            this.getNodeTable();
+        },
+        nodeCurrentChange: function(){
+            this.nodecurrentPage = val;
+            this.getNodeTable()
         },
         textColor: function(val) {
             let colorString = "";
@@ -220,7 +280,45 @@ export default {
                     duration: 2000
                 });
             })
-        }
+        },
+        getNodeTable: function() {
+            this.loadingNodes = true;
+            let groupId = localStorage.getItem("groupId");
+            let reqData = {
+                    groupId: groupId,
+                    pageNumber: this.nodecurrentPage,
+                    pageSize: this.nodepageSize
+                },
+                reqQuery = {};
+            getNodeList(reqData, reqQuery)
+                .then(res => {
+                    this.loadingNodes = false;
+                    if (res.data.code === 0) {
+                        this.nodetotal = res.data.totalCount;
+                        this.nodeData = res.data.data || [];
+                        this.nodeData.forEach((value, index) => {
+                            if (value.status === 0) {
+                                value.value = "运行";
+                            } else if (value.status === 1) {
+                                value.value = "停止";
+                            }
+                        });
+                    } else {
+                        this.$message({
+                            message: errcode.errCode[res.data.code].cn,
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: "查询失败！",
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
     }
 };
 </script>
