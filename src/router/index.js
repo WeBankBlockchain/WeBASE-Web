@@ -110,16 +110,16 @@ const routes = [
             { path: '/rivateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
-    {
-        path: '/',
-        component: main,
-        name: '系统监控',
-        menuShow: true,
-        iconCls: 'wbs-icon-monitor sidebar-icon',
-        children: [
-            { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } }
-        ]
-    },
+    // {
+    //     path: '/',
+    //     component: main,
+    //     name: '系统监控',
+    //     menuShow: true,
+    //     iconCls: 'wbs-icon-monitor sidebar-icon',
+    //     children: [
+    //         { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } }
+    //     ]
+    // },
     {
         path: '/',
         component: main,
