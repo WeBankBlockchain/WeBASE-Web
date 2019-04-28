@@ -42,9 +42,9 @@
             <span class="send-item-title" style="position: relative;top: 5px;">参数:</span>
                 <ul  style="position: relative;top: -25px;">
                     <li v-for="(item,index) in pramasData" style="margin-left:63px;">
-                    <el-input v-model="transation.funcValue[index]" style="width: 240px;">
+                    <el-input v-model="transation.funcValue[index]" style="width: 240px;" :placeholder="item.type">
                         <template slot="prepend">
-                            <span class="">{{item.type}}</span>
+                            <span class="">{{item.name}}</span>
                         </template>
                     </el-input>
                     <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，例如：'arry1,arry2'" placement="top-start">
@@ -206,7 +206,7 @@ export default {
                     this.close();
                     if (res.data.code === 0) {
                         if (res.data.data) {
-                            let resData = res.data.data
+                            let resData = res.data.data ;
                             this.$emit("success", resData);
                         } else {
                             this.$message({

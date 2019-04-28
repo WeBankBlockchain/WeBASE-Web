@@ -245,6 +245,7 @@ export default {
                     data: id.substring(0, 10)
                 }
                 getFunctionAbi(data,{}).then(res => {
+                    
                     if(res.data.code == 0){
                         this.decodefun(id,res.data.data)
                     }else{
@@ -509,7 +510,7 @@ export default {
         },
         //deloy-contract-transaction-decode
         decodeDeloy: function(items) {
-            if (this.userList.length) {
+             if (this.userList.length) {
                 this.userList.forEach(value => {
                     if (value.address == this.transactionData.from) {
                         this.transactionData.user = value.userName;

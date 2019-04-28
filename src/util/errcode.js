@@ -53,20 +53,20 @@ let errCode = {
         cn: 'abi内容不能为空'
     },
     "201007": {
-        en: "contractSource cannot be empty",
-        cn: '合约源码不能为空'
+        en: "contractBin cannot be empty",
+        cn: '合约bin不能为空'
     },
     "201008": {
-        en: "contract has been deployed",
-        cn: '链上存在该合约'
+        en: "contract's current version has been deployed",
+        cn: '合同的当前版本已部署'
     },
     "201009": {
         en: "contract is not deployed",
         cn: '合约未部署'
     },
     "201010": {
-        en: "adding abi error",
-        cn: 'abi添加错误'
+        en: "save abi error",
+        cn: '保存abi失败'
     },
     "201011": {
         en: "contract's parameter is error",
@@ -77,8 +77,8 @@ let errCode = {
         cn: '请求块高大于最新块高'
     },
     "201013": {
-        en: "contract compile error",
-        cn: '合约编译错误'
+        en: "get abi from chain error",
+        cn: '从链上获取abi失败'
     },
     "201014": {
         en: "contract deploy error",
@@ -92,6 +92,30 @@ let errCode = {
         en: "file is not exist",
         cn: '文件不存在'
     },
+    "201017": {
+        en: "failed to get node config",
+        cn: '获取节点配置失败'
+    },
+    "201018": {
+        en: "blockNumber and pbftView unchanged",
+        cn: '块号和pbftview不变'
+    },
+    "201019": {
+        en: "request function is error",
+        cn: '请求函数错误'
+    },
+    "201020": {
+        en: "transaction query from chain failed",
+        cn: '链中的事务查询失败'
+    },
+    "201021": {
+        en: "transaction send to chain failed",
+        cn: '事务发送到链失败'
+    },
+    "201022": {
+        en: "node request failed",
+        cn: '节点请求失败'
+    },
 
 
     "202000": {
@@ -103,12 +127,12 @@ let errCode = {
         cn: '数据库异常'
     },
     "202002": {
-        en: "organization already exists",
-        cn: '组织已经存在'
+        en: "not fount any front",
+        cn: '找不到任何前置信息'
     },
     "202003": {
-        en: "organization not exists",
-        cn: '组织信息不存在'
+        en: "not support this ip",
+        cn: '不支持该ip'
     },
     "202004": {
         en: "front already exists",
@@ -299,12 +323,12 @@ let errCode = {
         cn: "公钥长度为130，公钥地址长度为42"
     },
     "202051": {
-        en: "invalid node ip",
-        cn: "IP或者端口错误"
+        en: "un know this host",
+        cn: "找不到该host"
     },
     "202052": {
-        en: "did not find current node info",
-        cn: "找不到当前节点信息"
+        en: "un know this port",
+        cn: "找不到该端口"
     },
     "202053": {
         en: "system user has not been initialized yet",

@@ -162,6 +162,10 @@ export default {
             editorData: null
         };
     },
+    beforeDestroy: function(){
+        Bus.$off("select")
+        Bus.$off("noData")
+    },
     mounted: function() {
         this.initEditor();
         Bus.$on('select',data => {
@@ -189,10 +193,22 @@ export default {
             this.bytecodeBin = data.bytecodeBin || "";
             this.version = data.contractVersion;
         })
+        Bus.$on("noData",data => {
+            this.codeShow = false;
+            this.refreshMessage();
+            this.code = "";
+            this.version = "";
+            this.status = null;
+            this.abiFile = "";
+            this.contractAddress = "";
+            this.errorMessage = "";
+            this.contractName = "";
+            this.content = "";
+            this.bin = "";
+        })
     },
     watch: {
         content: function(val){
-            // debugger
             let data = Base64.decode(this.data.contractSource);
             if(data != val){
                 this.saveShow = true
@@ -298,6 +314,7 @@ export default {
         sendSuccess: function(val) {
             this.dialogVisible = false;
             this.editorShow = true;
+            this.editorData = null;
             this.editorData = val;
         },
         editorClose: function(){
@@ -333,6 +350,8 @@ export default {
                             };
                         }
                     }
+                }else{
+                    return { error: "File not found" };
                 }
             }else{
                 let newpath = arry[arry.length - 1];
@@ -345,7 +364,6 @@ export default {
                 if(newArry.length > 1){
                     for(let i = 0; i < newArry.length; i++){
                         if(newpath == newArry[i].contractName + ".sol"){
-                            debugger
                             return {
                                 contents: Base64.decode(
                                     newArry[i].contractSource
@@ -355,7 +373,6 @@ export default {
                     }
                     for (let i = 0; i < this.contractList.length; i++) {
                         if (newpath == this.contractList[i].contractName + ".sol") {
-                            debugger
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
