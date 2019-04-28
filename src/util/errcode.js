@@ -131,8 +131,8 @@ let errCode = {
         cn: '找不到任何前置信息'
     },
     "202003": {
-        en: "organization not exists",
-        cn: '组织信息不存在'
+        en: "not support this ip",
+        cn: '不支持该ip'
     },
     "202004": {
         en: "front already exists",
