@@ -341,7 +341,7 @@ export default {
             let reqData = {
                     groupId: groupId,
                     pageNumber: 1,
-                    pageSize: 4
+                    pageSize: 200
                 },
                 reqQuery = {};
             getNodeList(reqData, reqQuery)
