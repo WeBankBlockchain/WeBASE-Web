@@ -18,18 +18,18 @@
         <!-- <v-content-head :headTitle="'节点管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
         <v-content-head :headTitle="'节点管理'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
-            <div class="search-part">
+            <h3 style="padding: 20px 0 0 40px;">前置列表</h3>
+            <div class="search-part" style="padding-top: 20px;">
                 <div class="search-part-left">
                     <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点前置</el-button>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入前置编号" v-model="searchData" class="input-with-select">
+                    <el-input placeholder="请输入前置编号" v-model="frontId" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
-                <h3>前置列表</h3>
                 <el-table :data="frontData" class="search-table-content" v-loading="loading">
                     <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
@@ -47,7 +47,11 @@
                 </el-table>
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <h3 style="padding-top:20px;">节点列表</h3>
+            </div>
+        </div>
+        <div class="module-wrapper" style="margin-top: 10px;">
+            <div class="search-table">
+                <h3 style="padding: 20px 0 8px 0;">节点列表</h3>
                 <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
                 <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="" :width='head.width'>
                     <template slot-scope="scope">
@@ -106,6 +110,7 @@ export default {
             nodesDialogTitle: "",
             nodesDialogOptions: {},
             frontId: null,
+            loadingNodes: false,
             frontHead: [
                 {
                     enName: "frontId",
@@ -173,7 +178,6 @@ export default {
             
         },
         getFrontTable: function() {
-            this.frontId = this.searchData
             let reqData = {
                 frontId: this.frontId
             }
@@ -210,12 +214,12 @@ export default {
             this.currentPage = val;
             this.getFrontTable()
         },
-        nodeSizeChange: function(){
+        nodeSizeChange: function(val){
             this.nodepageSize = val;
             this.nodecurrentPage = 1;
             this.getNodeTable();
         },
-        nodeCurrentChange: function(){
+        nodeCurrentChange: function(val){
             this.nodecurrentPage = val;
             this.getNodeTable()
         },
