@@ -125,7 +125,7 @@ export default {
                     enName: "frontPort",
                     name: "前置端口"
                 },
-                 {
+                {
                     enName: "agency",
                     name: "所属机构"
                 },
