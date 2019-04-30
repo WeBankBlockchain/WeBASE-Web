@@ -109,7 +109,7 @@ export default {
             colNum: 12,
             tab: "hostInfo",
             chartParam: {
-                gap: 1,
+                gap: 60,
                 beginDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date(new Date().toLocaleDateString()).getTime(),'HH:mm:ss')}`,
                 endDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date().getTime(),'HH:mm:ss')}`,
                 contrastBeginDate: "",
