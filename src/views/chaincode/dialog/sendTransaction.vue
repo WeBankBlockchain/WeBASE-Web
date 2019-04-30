@@ -35,7 +35,7 @@
                 <el-option label="function" :value="'function'"></el-option>
             </el-select>
             <el-select v-model="transation.funcName" placeholder="方法名" v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
-                <el-option :label="item.name" :key="item.name" :value="item.name" v-for="item in funcList"></el-option>
+                <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
             </el-select>
         </div>
         <div class="send-item" v-show="pramasData.length" style="line-height: 25px;">
@@ -47,7 +47,7 @@
                             <span class="">{{item.name}}</span>
                         </template>
                     </el-input>
-                    <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，例如：'arry1,arry2'" placement="top-start">
+                    <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
                         <i class="el-icon-info" style="position: relative;top: 8px;"></i>
                     </el-tooltip>
                     </li>
@@ -97,8 +97,9 @@ export default {
         changeType: function(val) {
             this.funcList = [];
             if (val && val === "function") {
-                this.abiList.forEach(value => {
+                this.abiList.forEach((value,index) => {
                     if (value.type === val) {
+                        value.funcId = index
                         this.funcList.push(value);
                     }
                 });
@@ -109,14 +110,16 @@ export default {
                     }
                 });
             } else {
-                this.abiList.forEach(value => {
+                this.abiList.forEach((value,index) => {
                     if (value.type === "function") {
+                        value.funcId = index
                         this.funcList.push(value);
                     }
                 });
+                console.log(this.funcList)
             }
             if (this.funcList.length) {
-                this.transation.funcName = this.funcList[0].name;
+                this.transation.funcName = this.funcList[0].funcId;
             }
         },
         changeId: function() {
@@ -137,7 +140,7 @@ export default {
         },
         changeFunc: function() {
             this.funcList.forEach(value => {
-                if (value.name === this.transation.funcName) {
+                if (value.funcId === this.transation.funcName) {
                     this.pramasData = value.inputs;
                 }
             });

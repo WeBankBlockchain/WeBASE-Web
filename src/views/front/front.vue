@@ -45,7 +45,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination v-show='total > 10' class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
         </div>
@@ -53,7 +53,7 @@
             <div class="search-table">
                 <h3 style="padding: 20px 0 8px 0;">节点列表</h3>
                 <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
-                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="" :width='head.width'>
+                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width='head.width'>
                     <template slot-scope="scope">
                         <template>
                             <span v-if="head.enName ==='nodeActive'">
@@ -64,7 +64,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-             <el-pagination class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
+             <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
                 </el-pagination>
                 <!-- <el-dialog :visible.sync="nodesDialogVisible" :title="nodesDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper" v-if="nodesDialogVisible">
                     <v-nodesDialog :nodesDialogOptions="nodesDialogOptions" @success="success" @close="close"></v-nodesDialog>
@@ -81,6 +81,7 @@ import { getFronts, addnodes,deleteFront,getNodeList } from "@/util/api";
 import { date } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
+import Bus from "@/bus"
 export default {
     name: "node",
     components: {
@@ -166,16 +167,10 @@ export default {
     methods: {
         changGroup(){
             this.getFrontTable();   
+            this.getNodeTable();
         },
         search: function() {
-            // let pattern = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-            // if(pattern.test(this.searchData)){
-            //     this.getFrontTable();
-            // }else{
-
-            // }
-            this.getFrontTable()
-            
+            this.getFrontTable()   
         },
         getFrontTable: function() {
             let reqData = {
@@ -187,6 +182,7 @@ export default {
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loading = false;
+                        this.getNodeTable()
                     } else {
                         this.loading = false;
                         this.$message({
@@ -260,6 +256,7 @@ export default {
         },
         close(val) {
             this.frontShow = false;
+            Bus.$emit("addFront")
             this.getFrontTable()
         },
         showDetail(item) {
@@ -267,23 +264,29 @@ export default {
             this.$router.push({ path: 'hostDetail', query: { 'nodeIp': item.nodeIp, 'nodeId': item.nodeId}});
         },
         deletedFront: function(val){
-            deleteFront(val.frontId).then(res => {
-                if(res.data.code ===0){
-                    this.getFrontTable()
-                }else{
-                    this.$message({
-                        message: errcode.errCode[res.data.code].cn,
-                        type: "error",
-                        duration: 2000
-                    });
-                }
-            }).catch(err => {
-                this.$message({
-                    message: "系统错误",
-                    type: "error",
-                    duration: 2000
-                });
-            })
+            this.$confirm('确认删除？')
+                .then(_ => {
+                    deleteFront(val.frontId).then(res => {
+                        if(res.data.code ===0){
+                            Bus.$emit("deleteFront")
+                            this.getFrontTable()
+                        }else{
+                            this.$message({
+                                message: errcode.errCode[res.data.code].cn,
+                                type: "error",
+                                duration: 2000
+                            });
+                        }
+                    }).catch(err => {
+                        this.$message({
+                            message: "系统错误",
+                            type: "error",
+                            duration: 2000
+                        });
+                    })
+                }).catch(_=> {
+
+                })
         },
         getNodeTable: function() {
             this.loadingNodes = true;
@@ -308,6 +311,7 @@ export default {
                             }
                         });
                     } else {
+                        this.nodeData = []
                         this.$message({
                             message: errcode.errCode[res.data.code].cn,
                             type: "error",
@@ -316,6 +320,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    this.nodeData = []
                     this.$message({
                         message: "查询失败！",
                         type: "error",
