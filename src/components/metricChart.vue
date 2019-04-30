@@ -79,11 +79,21 @@ export default {
             yList = this.chartOption.data.lineDataList.valueList.map(item => {
                 return item;
             });
+            for (let i = 0; i < yList.length; i++) {
+                if(yList[i] === null) {
+                    yList[i] = 0
+                }
+            }
             yContrastList = this.chartOption.data.contrastDataList.valueList.map(
                 item => {
                     return item;
                 }
             );
+            for (let i = 0; i < yList.length; i++) {
+                if(yContrastList[i] === null) {
+                    yContrastList[i] = 0
+                }
+            }
             if (this.chartOption.data.contrastDataList.valueList.length > 0) {
                 yContrastTitle = "对比日数据";
                 this.showContrast = true;
