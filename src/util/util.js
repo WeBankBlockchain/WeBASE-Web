@@ -20,6 +20,14 @@ let changeDate = function (date) {
     let D = newData.getDate() > 9 ? newData.getDate() : "0" + newData.getDate();
     return Y + "-" + M + "-" + D
 };
+export function formatData () {
+    let newData = new Date();
+    let Y = newData.getFullYear();
+    let M = newData.getMonth() + 1 > 9 ? newData.getMonth() + 1 : "0" + (newData.getMonth() + 1);
+    let D = newData.getDate() > 9 ? newData.getDate() : "0" + newData.getDate();
+    let newdata = Y + "/" + M + "/" + D;
+    return newdata
+};
 
 export function date(date) {
     let newData = new Date(date.getTime());

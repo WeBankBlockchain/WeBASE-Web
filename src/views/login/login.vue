@@ -133,6 +133,8 @@ export default {
             login(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        localStorage.setItem("groupName","");
+                        localStorage.setItem("groupId","");
                         localStorage.setItem("folderList","")
                         localStorage.setItem("user", res.data.data.account);
                         localStorage.setItem("root", res.data.data.roleName);
