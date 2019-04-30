@@ -168,12 +168,12 @@ export default {
                     value: 0,
                     color: "#ffa897"
                 },
-                {
-                    label: "交易数量",
-                    name: "transactionCount",
-                    value: 0,
-                    color: "#89c3f8"
-                }
+                // {
+                //     label: "交易数量",
+                //     name: "transactionCount",
+                //     value: 0,
+                //     color: "#89c3f8"
+                // }
             ],
             networkDetails: null,
             chartStatistics: {
