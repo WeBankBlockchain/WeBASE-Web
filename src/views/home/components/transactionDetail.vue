@@ -167,7 +167,7 @@ export default {
                 pageSize: 1,
                 pageNumber: 1000
             };
-            getContractList(reqdata, {})
+            getContractList(reqdata)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.contractList = res.data.data || [];
