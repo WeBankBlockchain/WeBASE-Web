@@ -455,9 +455,12 @@ export default {
                         let result = [];
                         let obj = {};
                         for(let i =0; i<this.folderList.length; i++){
-                            if(!obj[this.folderList[i].folderName]){
+                            if(!obj[this.folderList[i].folderName] && this.folderList[i].groupId == localStorage.getItem("groupId")){
                                 result.push(this.folderList[i]);
                                 obj[this.folderList[i].folderName] = true;
+                                obj[this.folderList[i].groupId] = true
+                            }else if(this.folderList[i].groupId != localStorage.getItem("groupId")){
+                                result.push(this.folderList[i]);
                             }
                         }
                         this.folderList = result   
@@ -720,6 +723,10 @@ export default {
     background-color: #fff;
     z-index: 9999;
     box-shadow: 1px 1px 1px ;
+}
+.contract-menu-content{
+    overflow: auto;
+    height: calc(100% - 50px);
 }
 .contract-menu-content>>>.el-input__inner{
     width: 100px;
