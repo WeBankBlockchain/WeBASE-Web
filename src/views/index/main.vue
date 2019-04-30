@@ -222,6 +222,7 @@ export default {
                         this.frontShow = true
                     }
                 }else{
+                    this.frontShow = true
                      this.$message({
                         type: "error",
                         message: this.errcode.errCode[res.data.code].cn || '查询群组失败'
@@ -230,7 +231,7 @@ export default {
             }).catch(err => {
                 this.$message({
                         type: "error",
-                        message: "密码修改失败"
+                        message: "系统错误"
                     });
             })
         },

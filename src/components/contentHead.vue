@@ -26,7 +26,7 @@
         <div class="content-head-network">
             <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
             <!-- <span style="margin-left:10px"></span> -->
-            <span class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || 'network1'}}
+            <span class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}
                 <ul v-if='dialogShow'>
                     <li v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
                 </ul>
@@ -61,6 +61,7 @@ import helpDoc from "./helpDoc";
 import router from "@/router";
 import { loginOut ,getGroups } from "@/util/api";
 import { delCookie } from '@/util/util'
+import Bus from "@/bus"
 export default {
     name: "conetnt-head",
     props: ["headTitle", "icon", "route", "headSubTitle"],
@@ -87,6 +88,9 @@ export default {
             groupList: []
         };
     },
+    beforeDestroy: function(){
+        Bus.$off("deleteFront")
+    },
     mounted: function() {
         if (localStorage.getItem("groupName")) {
             this.groupName = localStorage.getItem("groupName");
@@ -94,19 +98,42 @@ export default {
         if (localStorage.getItem("user")) {
             this.accountName = localStorage.getItem("user");
         }
-        this.getGroupList()
+        this.getGroupList();
+        Bus.$on("deleteFront", () => {
+            this.groupName = "";
+            this.getGroupList('delete');
+        })
+        Bus.$on("addFront", () => {
+            this.getGroupList();
+        })
     },
     methods: {
-        getGroupList: function() {
+        getGroupList: function(type) {
             getGroups().then(res => {
                 if (res.data.code === 0) {
-                    // this.options = res.data.data;
-                    if(res.data.data.length){
-                        // this.value = res.data.data[0].groupId;
+                    if(res.data.data && res.data.data.length){
+                        // this.dialogShow = true;
                         this.groupList = res.data.data || []
-                        // this.groupId = res.data.data[0].groupId;
+                    }else{
+                        this.groupList = [];
+                        localStorage.setItem("groupName","")
+                        localStorage.setItem("groupId","")
+                    }
+                    if(type && res.data.data && res.data.data.length){
+                        this.groupName = res.data.data[0].groupName;
+                        localStorage.setItem("groupName",res.data.data[0].groupName)
+                        localStorage.setItem("groupId",res.data.data[0].groupId)
+                    }else if(res.data.data && res.data.data.length && !localStorage.getItem("groupName")){
+                        this.groupName = res.data.data[0].groupName;
+                        localStorage.setItem("groupName",res.data.data[0].groupName)
+                        localStorage.setItem("groupId",res.data.data[0].groupId)
+                    }else if(res.data.data && res.data.data.length && localStorage.getItem("groupName")){
+                        this.groupName = localStorage.getItem("groupName");
                     }
                 }else{
+                    this.groupList = [];
+                    localStorage.setItem("groupName","")
+                    localStorage.setItem("groupId","")
                     this.$message({
                             message: errcode.errCode[res.data.code].cn,
                             type: "error",
@@ -114,6 +141,9 @@ export default {
                         });
                 }
             }).catch(err => {
+                this.groupList = [];
+                localStorage.setItem("groupName","")
+                localStorage.setItem("groupId","")
                 this.$message({
                         message: "系统错误！",
                         type: "error",

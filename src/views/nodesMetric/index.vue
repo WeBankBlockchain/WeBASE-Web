@@ -128,7 +128,10 @@ export default {
             this.confirmParam();
         },
         getFrontTable() {
-            getFronts({})
+            let data = {
+                groupId: localStorage.getItem("groupId")
+            }
+            getFronts(data)
                 .then(res => {
                     if (res.data.code === 0) {
                         if (res.data.totalCount != 0) {

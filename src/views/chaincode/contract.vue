@@ -122,7 +122,7 @@ export default {
 .code-menu-wrapper {
     float: left;
     position: relative;
-    height: calc(100% - 56px);
+    height: calc(100% - 57px);
     font-size: 12px;
     box-sizing: border-box;
 }
@@ -152,12 +152,12 @@ export default {
 }
 .code-detail-wrapper {
     float: left;
-    height: calc(100% - 56px);
+    height: calc(100% - 57px);
     font-size: 12px;
 }
 .code-detail-reset-wrapper {
     float: left;
-    height: calc(100% - 56px);
+    height: calc(100% - 57px);
     font-size: 12px;
 }
 .menu-drag {
