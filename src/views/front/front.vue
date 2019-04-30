@@ -125,6 +125,10 @@ export default {
                     enName: "frontPort",
                     name: "前置端口"
                 },
+                 {
+                    enName: "agency",
+                    name: "所属机构"
+                },
                 {
                     enName: "createTime",
                     name: "创建时间"
