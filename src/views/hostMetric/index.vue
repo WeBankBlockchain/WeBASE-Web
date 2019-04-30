@@ -69,7 +69,7 @@
 import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth, getFronts } from "@/util/api";
-import { format, numberFormat } from "@/util/util.js";
+import { format, numberFormat,formatData } from "@/util/util.js";
 export default {
     name: "hostMetric",
     components: {
@@ -90,7 +90,7 @@ export default {
             currentDate: format(new Date().getTime(), "yyyy-MM-dd"),
             contrastDate: null,
             startEndTime: [
-                new Date(new Date().toLocaleDateString()),
+                new Date(formatData()),
                 new Date()
             ],
             timeGranularity: 60,
@@ -105,7 +105,7 @@ export default {
                     new Date().getTime(),
                     "yyyy-MM-dd"
                 )}T${format(
-                    new Date(new Date().toLocaleDateString()).getTime(),
+                    new Date(formatData()).getTime(),
                     "HH:mm:ss"
                 )}`,
                 endDate: `${format(
@@ -175,7 +175,7 @@ export default {
         },
         changeCurrentDate($event) {
             this.startEndTime = [
-                new Date(new Date().toLocaleDateString()),
+                new Date(formatData()),
                 new Date()
             ];
         },

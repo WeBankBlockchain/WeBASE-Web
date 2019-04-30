@@ -90,8 +90,8 @@ export default {
                     },
                     {
                         min: 1,
-                        max: 12,
-                        message: "长度在 1 到 12 位",
+                        max: 16,
+                        message: "长度在 1 到 16 位",
                         trigger: "blur"
                     },
                     {

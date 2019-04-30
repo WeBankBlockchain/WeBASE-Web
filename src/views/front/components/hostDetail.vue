@@ -73,7 +73,7 @@
 import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth } from "@/util/api";
-import { format, numberFormat } from "@/util/util.js";
+import { format, numberFormat,formatData } from "@/util/util.js";
 export default {
     name: "hostDetail",
     components: {
@@ -95,7 +95,7 @@ export default {
             sureing: false,
             currentDate: format(new Date().getTime(),'yyyy-MM-dd'),
             contrastDate: null,
-            startEndTime: [new Date(new Date().toLocaleDateString()), new Date()],
+            startEndTime: [new Date(formatData()), new Date()],
             beginDate: "",
             endDate: "",
             contrastBeginDate: "",
@@ -108,7 +108,7 @@ export default {
             tab: "hostInfo",
             chartParam: {
                 gap: 60,
-                beginDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date(new Date().toLocaleDateString()).getTime(),'HH:mm:ss')}`,
+                beginDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date(formatData()).getTime(),'HH:mm:ss')}`,
                 endDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date().getTime(),'HH:mm:ss')}`,
                 contrastBeginDate: "",
                 contrastEndDate: "",
@@ -282,7 +282,7 @@ export default {
                 });
         },
         changeCurrentDate($event) {
-            this.startEndTime = [new Date(new Date().toLocaleDateString()), new Date()];
+            this.startEndTime = [new Date(formatData()), new Date()];
         },
         changeContrastDate($event) {},
         confirmParam(val) {
