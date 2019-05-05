@@ -354,7 +354,7 @@ export default {
                             if (value.status === 0) {
                                 value.value = "运行";
                             } else if (value.status === 1) {
-                                value.value = "停止";
+                                value.value = "异常";
                             }
                         });
                     } else {
@@ -487,7 +487,7 @@ export default {
                     transString = "运行";
                     break;
                 case 2:
-                    transString = "停止";
+                    transString = "异常";
                     break;
             }
             return transString;

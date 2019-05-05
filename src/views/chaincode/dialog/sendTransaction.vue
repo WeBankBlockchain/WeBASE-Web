@@ -47,10 +47,11 @@
                             <span class="">{{item.name}}</span>
                         </template>
                     </el-input>
-                    <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
+                    <!-- <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
                         <i class="el-icon-info" style="position: relative;top: 8px;"></i>
-                    </el-tooltip>
+                    </el-tooltip> -->
                     </li>
+                     <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
                 </ul>
         </div>
         <div class="text-right send-btn">

@@ -24,7 +24,7 @@
                 </td>
             </tr> -->
             <tr>
-                <td>用户：</td>
+                <td style="width: 40px;">用户：</td>
                 <td>
                     <el-select v-model="userName" placeholder="请选择用户" @change="changeId" style="width: 240px">
                         <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='item in userList'></el-option>
@@ -40,10 +40,16 @@
                                 <span>{{item.type}}</span>
                             </template>
                         </el-input>
-                        <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
+                        <!-- <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
                             <i class="el-icon-info" style="position: relative;top: 8px;"></i>
-                        </el-tooltip>
+                        </el-tooltip> -->
                     </div>
+                </td>
+            </tr>
+            <tr v-if='inputs.length'>
+                <td></td>
+                <td>
+                    <p style="padding: 0px 0 0 0px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
                 </td>
             </tr>
         </table>
