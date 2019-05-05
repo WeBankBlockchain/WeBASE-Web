@@ -193,12 +193,18 @@ export default {
                     this.transation.funcValue[i] = data;
                 }
             }
+            let functionName = "";
+            this.funcList.forEach(value => {
+                if(value.funcId == this.transation.funcName){
+                    functionName = value.name
+                }
+            })
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 userId: this.userId,
                 contractName: this.data.contractName,
                 version: this.contractVersion,
-                funcName: this.transation.funcName,
+                funcName: functionName || "",
                 funcParam: this.transation.funcValue,
                 abiInfo: this.abiList,
                 contractId: this.data.contractId

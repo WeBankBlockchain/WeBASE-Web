@@ -100,6 +100,7 @@ export default {
             }else {
                 this.showContrast = false
             }
+            let _this = this;
             let option = {
                 title: {
                     text:
@@ -124,6 +125,49 @@ export default {
                         label: {
                             backgroundColor: "#505765"
                         }
+                    },
+                    formatter: function(data) {
+                        let str = ''
+                        if(data.length === 2 ){
+                            if(data[0]['data'] && data[1]['data']){
+                                str = `
+                                <span>${data[0]['name']}</span><br/>
+                                <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
+                                <span>${data[1]['seriesName']}:${data[1]['data']}</span>
+                                `
+                            }else if(data[0]['data']===0&&data[1]['data']!=0){
+                                str = `
+                                <span>${data[0]['name']}</span><br/>
+                                <span>${data[0]['seriesName']}:未采集到数据</span><br/>
+                                <span>${data[1]['seriesName']}:${data[1]['data']}</span><br/>
+                                `
+                            }else if(data[0]['data']!=0&&data[1]['data']===0){
+                                str = `
+                                <span>${data[0]['name']}</span><br/>
+                                <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
+                                <span>${data[1]['seriesName']}:未采集到数据</span><br/>
+                                `
+                            }else {
+                                str = `
+                                <span>${data[0]['name']}</span><br/>
+                                <span>未采集到数据</span><br/>
+                                `
+                            }
+                        }else if(data.length === 1) {
+                            if(data[0]['data']){
+
+                                str = `
+                                <span>${data[0]['name']}</span><br/>
+                                <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
+                                `
+                            }else {
+                                str = `
+                                <span>${data[0]['name']}</span><br/>
+                                <span>${data[0]['seriesName']}:未采集到数据</span><br/>
+                                `
+                            }
+                        }
+                        return str
                     }
                 },
                 legend: {
@@ -227,6 +271,12 @@ export default {
                     }
                 };
             }, 200);
+        },
+        formatNodesMetric(val){
+            let num ;
+            if(val === 0) {
+                return str = '未获取到数据'
+            }
         }
     }
 };
