@@ -453,17 +453,18 @@ export default {
                             }
                         })
                         let result = [];
+                        let arrry = []
                         let obj = {};
                         for(let i =0; i<this.folderList.length; i++){
                             if(!obj[this.folderList[i].folderName] && this.folderList[i].groupId == localStorage.getItem("groupId")){
                                 result.push(this.folderList[i]);
                                 obj[this.folderList[i].folderName] = true;
-                                obj[this.folderList[i].groupId] = true
+                                // obj[this.folderList[i].groupId] = true
                             }else if(this.folderList[i].groupId != localStorage.getItem("groupId")){
-                                result.push(this.folderList[i]);
+                                arrry.push(this.folderList[i]);
                             }
                         }
-                        this.folderList = result   
+                        this.folderList = result.concat(arrry) 
                         localStorage.setItem("folderList",JSON.stringify(this.folderList))
                         this.contractList.forEach(value => {
                             this.$set(value,"contractType",'file')
