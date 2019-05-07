@@ -169,9 +169,9 @@ export default {
                 }
             });
         },
-        clickTable: function(row, $event, column) {
-            let nodeName = event.target.nodeName;
-            if ($event.target.nodeName === "I") {
+        clickTable: function(row, column, $event) {
+            let nodeName = $event.target.nodeName;
+            if (nodeName === "I") {
                 return
             }
             this.link(row.blockNumber)
