@@ -19,10 +19,13 @@
             <span class="send-item-title">合约名称:</span>
             <span>{{data.contractName}}</span>
         </div>
-        <!-- <div class="send-item">
-            <span class="send-item-title">合约版本:</span>
-            <span>{{contractVersion}}</span>
-        </div> -->
+        <div class="send-item">
+            <span class="send-item-title">合约地址:</span>
+            <el-input v-model="contractAddress" style="width: 240px;" placeholder="请输入合约地址"></el-input>
+            <el-tooltip class="item" effect="dark" content="选填项，导入已部署的合约地址。" placement="top-start">
+                <i class="el-icon-info"></i>
+            </el-tooltip>
+        </div>
         <div class="send-item">
             <span class="send-item-title">用户:</span>
             <el-select v-model="transation.userName" placeholder="请选择用户" @change="changeId" style="width:240px">
@@ -47,12 +50,13 @@
                             <span class="">{{item.name}}</span>
                         </template>
                     </el-input>
-                    <!-- <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
+                    <!-- <el-tooltip class="item" effect="dark" content="" placement="top-start">
                         <i class="el-icon-info" style="position: relative;top: 8px;"></i>
                     </el-tooltip> -->
                     </li>
-                     <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
+                    <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
                 </ul>
+                
         </div>
         <div class="text-right send-btn">
             <el-button @click="close">取消</el-button>
@@ -66,7 +70,7 @@ import errcode from "@/util/errcode";
 
 export default {
     name: "sendTransation",
-    props: ["data", "dialogClose", "abi",'version'],
+    props: ["data", "dialogClose", "abi",'version','address'],
     data: function() {
         return {
             transation: {
@@ -81,7 +85,8 @@ export default {
             pramasData: [],
             funcList: [],
             buttonClick: false,
-            contractVersion: this.version
+            contractVersion: this.version,
+            contractAddress: ""
         };
     },
     mounted: function() {
@@ -117,7 +122,6 @@ export default {
                         this.funcList.push(value);
                     }
                 });
-                console.log(this.funcList)
             }
             if (this.funcList.length) {
                 this.transation.funcName = this.funcList[0].funcId;
@@ -202,14 +206,17 @@ export default {
             })
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                userId: this.userId,
+                user: this.userId,
                 contractName: this.data.contractName,
-                version: this.contractVersion,
+                // version: this.contractVersion,
                 funcName: functionName || "",
                 funcParam: this.transation.funcValue,
-                abiInfo: this.abiList,
-                contractId: this.data.contractId
+                // abiInfo: this.abiList,
+                contractId: this.data.contractId,
             };
+            if(this.contractAddress){
+                data.contractAddress = this.contractAddress
+            }
             sendTransation(data)
                 .then(res => {
                     this.buttonClick = false;
@@ -217,7 +224,17 @@ export default {
                     if (res.data.code === 0) {
                         if (res.data.data) {
                             let resData = res.data.data ;
-                            this.$emit("success", resData);
+                            let successData = {
+                                resData: resData,
+                                input: {
+                                    name: functionName,
+                                    inputs: this.pramasData
+                                }
+                            }
+                            if(this.contractAddress && !this.data.contractAddress){
+                                successData.contractAddress = this.contractAddress
+                            }
+                            this.$emit("success", successData);
                         } else {
                             this.$message({
                                 type: "success",
