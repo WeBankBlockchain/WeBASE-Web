@@ -492,11 +492,16 @@ export default {
                         if(list){
                             this.getContractArry(list);
                         }else if(this.$route.query.contractId){
+                            let num = 0
                             this.contractList.forEach(value => {
                                 if(value.contractId == this.$route.query.contractId){
                                     this.getContractArry(value);
+                                    num++
                                 }
                             })
+                            if(!num){
+                                this.getContractArry()
+                            }
                         }else{
                             this.getContractArry()
                         }

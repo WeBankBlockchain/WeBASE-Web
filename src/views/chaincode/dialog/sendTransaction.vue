@@ -21,7 +21,7 @@
         </div>
         <div class="send-item">
             <span class="send-item-title">合约地址:</span>
-            <el-input v-model="contractAddress" style="width: 240px;" placeholder="请输入合约地址"></el-input>
+            <el-input v-model.trim="contractAddress" style="width: 240px;" placeholder="请输入合约地址"></el-input>
             <el-tooltip class="item" effect="dark" content="选填项，导入已部署的合约地址。" placement="top-start">
                 <i class="el-icon-info"></i>
             </el-tooltip>
@@ -86,7 +86,7 @@ export default {
             funcList: [],
             buttonClick: false,
             contractVersion: this.version,
-            contractAddress: ""
+            contractAddress: this.data.contractAddress || ""
         };
     },
     mounted: function() {
