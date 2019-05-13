@@ -134,6 +134,19 @@ export default {
             })
             this.select(data)
         })
+        Bus.$on("send",data => {
+            this.contractArry.forEach(value => {
+                    if(value.contractId == data.contractId){
+                        this.$set(value,'contractAddress',data.contractAddress)
+                    }else if(value.contractType == 'folder'){
+                        value.child.forEach(list => {
+                            if(list.contractId == data.contractId){
+                                this.$set(list,'contractAddress',data.contractAddress)
+                            }
+                        })
+                    }
+                })
+        })
     },
     directives: {
         focus: {
@@ -275,7 +288,6 @@ export default {
             this.fileshow = true
         },
         addFiles: function(){
-            console.log(this.ID)
             this.fileshow = true;
             this.folderId = this.ID;
             this.ID = "";
@@ -408,7 +420,13 @@ export default {
             }
             saveChaincode(reqData).then(res => {
                 if(res.data.code === 0){
-                    this.getContracts(res.data.data)
+                    this.getContracts(res.data.data);
+                    if(data.contractId){
+                        this.$message({
+                            type: "success",
+                            message: '合约保存成功！'
+                        });
+                    }
                 }else {
                     this.$message({
                         type: "error",
@@ -417,7 +435,6 @@ export default {
                 }
             })
             .catch(err => {
-                console.log(err)
                 // this.loading = false;
                 this.$message({
                     type: "error",
@@ -451,7 +468,7 @@ export default {
                                 }
                                 this.folderList.push(item)
                             }
-                        })
+                        });
                         let result = [];
                         let arrry = []
                         let obj = {};
@@ -464,7 +481,7 @@ export default {
                                 arrry.push(this.folderList[i]);
                             }
                         }
-                        this.folderList = result.concat(arrry) 
+                        this.folderList = result.concat(arrry);
                         localStorage.setItem("folderList",JSON.stringify(this.folderList))
                         this.contractList.forEach(value => {
                             this.$set(value,"contractType",'file')
