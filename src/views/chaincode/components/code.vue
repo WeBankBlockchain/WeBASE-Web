@@ -13,24 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+ 
 <template>
     <div class="contract-code" :class="{changeActive:changeWidth }" v-loading="loading">
         <div class="contract-code-head">
-            <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">{{contractName + '.sol'}}</span>
-            <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" @click="save" v-if="status !== 2">
-                    <i class="wbs-icon-baocun font-16"></i>
-                    <span>保存</span>
+            <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">
+                <span>{{contractName + '.sol'}}</span>
+                <!-- <el-tooltip class="item" effect="dark" content="未保存,按Ctrl+s保存合约内容" placement="top-start">
+                    <span v-show='saveShow' style="display:inline-block;width: 8px;height: 8px;border-radius:50%;background-color: #f00"></span>
+                </el-tooltip> -->
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="status !== 2">
+            <span class="contract-code-handle" v-show="codeShow">
+                <span class="contract-code-done" v-if="!contractAddress">
+                    <el-tooltip class="item" effect="dark" content="按Ctrl+s保存合约内容" placement="top-start">
+                        <i class="wbs-icon-baocun font-16"></i>
+                    </el-tooltip>
+                        <span>保存</span>
+                </span>
+                <span class="contract-code-done" @click="compile" v-if="!contractAddress">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="abiFile && status != 2">
+                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile && bin">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <span class="contract-code-done" v-if="status === 2" @click="send">
+                <!-- <span class="contract-code-done" v-if="abiFile"  @click="upLoadAdr">
+                    <el-tooltip class="item" effect="dark" content="加载已部署的合约" placement="top-start">
+                        <i class="wbs-icon-daoru font-16"></i>
+                    </el-tooltip>
+                    <span>加载</span>
+                </span> -->
+                <span class="contract-code-done" v-if="abiFile"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -46,8 +60,7 @@
             <div class="contract-info" v-show="successHide" :style="{height:infoHeight + 'px'}">
                 <div class="move" @mousedown="dragDetailWeight($event)" @mouseup="resizeCode"></div>
                 <div class="contract-info-title">
-                    <span>输出信息</span>
-                    <i class="el-icon-refresh float-right" @click="refreshMessage"></i>
+                    <i class="wbs-icon-clear float-right" @click="refreshMessage" title="清除"></i>
                 </div>
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
@@ -78,12 +91,14 @@
                 </div>
             </div>
         </div>
-        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="700px" :before-close="sendClose" v-if="dialogVisible">
-            <v-transaction @success="sendSuccess" @close="handleClose" ref="send" :data="data" :abi='abiFile'></v-transaction>
+        <el-dialog v-dialogDrag title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+            <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version' :address='uploadAddress'></v-transaction>
         </el-dialog>
-        <el-dialog title="选择用户" :visible.sync="dialogUser" width="600px" v-if="dialogUser">
+        <el-dialog v-dialogDrag title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' @close='editorClose'></v-editor>
+        <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
     </div>
 </template>
 
@@ -97,24 +112,28 @@ require("ace-mode-solidity/build/remix-ide/mode-solidity");
 let Mode = require("ace-mode-solidity/build/remix-ide/mode-solidity").Mode;
 import errcode from "@/util/errcode";
 let Base64 = require("js-base64").Base64;
-let wrapper = require("solc/wrapper");
-let solc = wrapper(window.Module);
 import constant from "@/util/constant";
+import editor from "../dialog/editor"
+import uploadFileAdr from "../dialog/uploadFileAdr"
+import Bus from '@/bus'
 import {
     addChaincode,
     getDeployStatus,
     setCompile,
-    editChain
+    editChain,
+    addFunctionAbi
 } from "@/util/api";
 import transaction from "../dialog/sendTransaction";
 import changeUser from "../dialog/changeUser";
 
 export default {
     name: "codes",
-    props: ["data", "show", "changeStyle"],
+    props: ["show", "changeStyle"],
     components: {
         "v-transaction": transaction,
-        "v-user": changeUser
+        "v-user": changeUser,
+        "v-editor": editor,
+        "v-upload": uploadFileAdr
     },
     data: function() {
         return {
@@ -141,16 +160,29 @@ export default {
             bytecodeBin: "",
             aceEditor: null,
             themePath: "ace/theme/chrome",
-            modePath: "ace/mode/solidity"
+            modePath: "ace/mode/solidity",
+            data: null,
+            codeShow: false,
+            version: "",
+            saveShow: false,
+            editorShow: false,
+            editorData: null,
+            editorInput: null,
+            uploadFileAdrShow: false,
+            uploadAddress: "",
         };
+    },
+    beforeDestroy: function(){
+        Bus.$off("select")
+        Bus.$off("noData")
     },
     mounted: function() {
         this.initEditor();
-    },
-    watch: {
-        data: function(val) {
+        Bus.$on('select',data => {
+            this.codeShow = true;
             this.refreshMessage();
             this.code = "";
+            this.version = "";
             this.status = null;
             this.abiFile = "";
             this.contractAddress = "";
@@ -158,16 +190,41 @@ export default {
             this.contractName = "";
             this.content = "";
             this.bin = "";
-            this.code = Base64.decode(val.contractSource);
+            this.data = data;
+            this.code = Base64.decode(data.contractSource);
             this.content = this.code;
             this.aceEditor.setValue(this.content);
-            this.status = val.contractStatus;
-            this.abiFile = val.contractAbi;
-            this.contractAddress = val.contractAddress;
-            this.errorMessage = val.description || "";
-            this.contractName = val.contractName;
-            this.bin = val.contractBin;
-            this.bytecodeBin = val.bytecodeBin;
+            this.status = data.contractStatus;
+            this.abiFile = data.contractAbi;
+            this.contractAddress = data.contractAddress;
+            this.errorMessage = data.description || "";
+            this.contractName = data.contractName;
+            this.bin = data.contractBin;
+            this.bytecodeBin = data.bytecodeBin || "";
+            this.version = data.contractVersion;
+        })
+        Bus.$on("noData",data => {
+            this.codeShow = false;
+            this.refreshMessage();
+            this.code = "";
+            this.version = "";
+            this.status = null;
+            this.abiFile = "";
+            this.contractAddress = "";
+            this.errorMessage = "";
+            this.contractName = "";
+            this.content = "";
+            this.bin = "";
+        })
+    },
+    watch: {
+        content: function(val){
+            let data = Base64.decode(this.data.contractSource);
+            if(data != val){
+                this.saveShow = true
+            }else{
+                this.saveShow = false
+            }
         },
         successHide: function(val) {
             if (val) {
@@ -192,15 +249,13 @@ export default {
                 return false;
             }
         },
-        codeShow() {
-            return this.show;
-        },
         tipShow() {
             return !this.show;
         }
     },
     methods: {
         initEditor: function() {
+            let _this = this
             this.aceEditor = ace.edit(this.$refs.ace, {
                 fontSize: 14,
                 fontFamily: "Consolas,Monaco,monospace",
@@ -217,10 +272,30 @@ export default {
                 autoScrollEditorIntoView: true,
                 copyWithEmptySelection: true
             });
+            this.aceEditor.commands.addCommand({
+                name: 'myCommand',
+                bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
+                exec: function(editor) {
+                    if(_this.data.contractStatus != 2){
+                        _this.saveCode()
+                    }
+                },
+            });
             let editor = this.aceEditor.alignCursors();
             this.aceEditor.getSession().setUseWrapMode(true);
             this.aceEditor.getSession().on("change", this.changeAce);
+            this.aceEditor.on("blur", this.blurAce);
             this.aceEditor.resize();
+        },
+        blurAce: function(){
+            let data = Base64.encode(this.content);
+            if(this.data.contractSource != data && this.data.contractStatus != 2){
+                this.saveCode()   
+            }
+        },
+        saveCode: function(){
+            this.data.contractSource = Base64.encode(this.content);
+            Bus.$emit("compile",this.data)
         },
         resizeCode: function() {
             this.aceEditor.setOptions({
@@ -246,24 +321,37 @@ export default {
                 minLines: 9
             });
         },
-        sendSuccess: function() {
+        upLoadAdr: function(){
+            this.uploadFileAdrShow = true
+        },
+        uploadClose: function(){
+            this.uploadFileAdrShow = false
+        },
+        uploadSuccess: function(val){
+            this.dialogVisible = true;
+            this.uploadAddress = val
+        },
+        sendSuccess: function(val) {
+            this.uploadAddress = "";
             this.dialogVisible = false;
+            this.editorShow = true;
+            this.editorData = null;
+            this.editorData = val.resData;
+            this.editorInput = val.input;
+            if(val && val.contractAddress){
+                this.contractAddress = val.contractAddress;
+                this.data.contractAddress = val.contractAddress;
+                Bus.$emit("send",this.data)
+            }
+            
+        },
+        editorClose: function(){
+            this.editorShow = false;
         },
         changeAce: function() {
             this.content = this.aceEditor.getSession().getValue();
         },
-        save: function() {
-            if (this.content && this.status === 0) {
-                this.addContract();
-            } else if (this.content) {
-                this.editContract();
-            } else {
-                this.$message({
-                    message: "合约内容为空！",
-                    type: "warning"
-                });
-            }
-        },
+        
         findImports: function(path) {
             this.contractList = JSON.parse(
                 localStorage.getItem("contractList")
@@ -271,22 +359,73 @@ export default {
             let arry = path.split("/");
             let newpath = arry[arry.length - 1];
             let num = 0;
-            for (let i = 0; i < this.contractList.length; i++) {
-                if (newpath == this.contractList[i].contractName + ".sol") {
-                    return {
-                        contents: Base64.decode(
-                            this.contractList[i].contractSource
-                        )
-                    };
-                } else {
-                    num++;
+            if(arry.length > 1){
+                let newPath = arry[0]
+                let oldPath = arry[arry.length - 1]
+                let importArry = []
+                this.contractList.forEach(value => {
+                    if(value.contractPath == newPath){
+                        importArry.push(value)
+                    }
+                })
+                if(importArry.length){
+                    for(let i = 0; i < importArry.length; i++){
+                        if(oldPath == importArry[i].contractName + ".sol"){
+                            return {
+                                contents: Base64.decode(
+                                    importArry[i].contractSource
+                                )
+                            };
+                        }
+                    }
+                }else{
+                    return { error: "File not found" };
                 }
-            }
-            if (num == this.contractList.length) {
-                return { error: "File not found" };
+            }else{
+                let newpath = arry[arry.length - 1];
+                let newArry = []
+                this.contractList.forEach(value => {
+                    if(value.contractPath == this.data.contractPath){
+                        newArry.push(value)
+                    }
+                })
+                if(newArry.length > 1){
+                    for(let i = 0; i < newArry.length; i++){
+                        if(newpath == newArry[i].contractName + ".sol"){
+                            return {
+                                contents: Base64.decode(
+                                    newArry[i].contractSource
+                                )
+                            };
+                        }
+                    }
+                    for (let i = 0; i < this.contractList.length; i++) {
+                        if (newpath == this.contractList[i].contractName + ".sol") {
+                            return {
+                                contents: Base64.decode(this.contractList[i].contractSource)
+                            };
+                        } else {
+                            num++;
+                        }
+                    }
+                    if(num){
+                        return { error: "File not found" };
+                    }
+                }else{
+                    for (let i = 0; i < this.contractList.length; i++) {
+                        if (newpath == this.contractList[i].contractName + ".sol") {
+                            return {
+                                contents: Base64.decode(this.contractList[i].contractSource)
+                            };
+                        } 
+                    }
+                }
             }
         },
         compile: function() {
+            let wrapper = require("solc/wrapper");
+            let solc = wrapper(window.Module);
+            this.loading = true;
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
                 this.compileinfo = this.compileinfo + constant.COMPILE_INFO[i];
@@ -313,28 +452,27 @@ export default {
                 content: this.content
             };
             try {
-                output = JSON.parse(
-                    solc.compileStandard(
-                        JSON.stringify(input),
-                        this.findImports
-                    )
-                );
+                output = JSON.parse(solc.compileStandard(JSON.stringify(input),this.findImports));
             } catch (error) {
                 this.errorInfo = "合约编译失败！";
                 this.errorMessage = error;
                 this.compileShow = true;
+                this.loading = false;
             }
-            if (output && JSON.stringify(output.contracts) != "{}") {
-                this.status = 1;
-                if (output.contracts[this.contractName + ".sol"]) {
-                    this.changeOutput(
-                        output.contracts[this.contractName + ".sol"]
-                    );
+            setTimeout(() => {
+                if (output && JSON.stringify(output.contracts) != "{}") {
+                    this.status = 1;
+                    if (output.contracts[this.contractName + ".sol"]) {
+                        this.changeOutput(
+                            output.contracts[this.contractName + ".sol"]
+                        );
+                    }
+                } else {
+                    this.errorMessage = output.errors[0];
+                    this.errorInfo = "合约编译失败！";
+                    this.loading = false;
                 }
-            } else {
-                this.errorMessage = output.errors[0];
-                this.errorInfo = "合约编译失败！";
-            }
+            },500)   
         },
         changeOutput: function(obj) {
             let arry = [];
@@ -350,13 +488,21 @@ export default {
                     this.abiFile = JSON.stringify(this.abiFile);
                     this.bin = arry[0].evm.deployedBytecode.object;
                     this.bytecodeBin = arry[0].evm.bytecode.object;
+                    this.data.contractAbi = this.abiFile;
+                    this.data.contractBin = this.bin;
+                    this.data.contractSource = Base64.encode(this.content);
+                    this.$set(this.data,'bytecodeBin',this.bytecodeBin)
+                    this.loading = false;
+                    Bus.$emit("compile",this.data)
                 } else {
                     this.errorInfo = "合约编译失败！";
                     this.compileShow = true;
+                    this.loading = false;
                 }
             } else {
                 this.errorInfo = "合约编译失败！";
                 this.compileShow = true;
+                this.loading = false;
             }
         },
         refreshMessage: function() {
@@ -364,6 +510,7 @@ export default {
             this.errorInfo = "";
             this.compileinfo = "";
             this.abiFile = "";
+            this.contractAddress = "";
         },
         deploying: function() {
             this.dialogUser = true;
@@ -371,32 +518,89 @@ export default {
         userClose: function() {
             this.dialogUser = false;
         },
+        setMethod: function(){
+            let web3 = new Web3(Web3.givenProvider);
+            let arry = [];
+            if(this.abiFile){
+                let list = JSON.parse(this.abiFile);
+                list.forEach(value => {
+                    if(value.name && value.type =='function'){
+                        let data = {}
+                        let methodId = web3.eth.abi.encodeFunctionSignature({
+                            name: value.name,
+                            type: value.type,
+                            inputs: value.inputs
+                        });
+                        data.methodId = methodId;
+                        data.abiInfo = JSON.stringify(value);
+                        data.methodType = value.type
+                        arry.push(data)
+                    }else if(value.name && value.type =='event'){
+                        let data = {}
+                        let methodId = web3.eth.abi.encodeEventSignature({
+                            name: value.name,
+                            type: value.type,
+                            inputs: value.inputs
+                        });
+                        data.methodId = methodId;
+                        data.abiInfo = JSON.stringify(value);
+                        data.methodType = value.type
+                        arry.push(data)
+                    }
+                })
+                if(arry.length){
+                   this.addAbiMethod(arry) 
+                }
+            }    
+        },
+        addAbiMethod: function(list){
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                methodList: list
+            }
+            addFunctionAbi(data).then(res => {
+                if(res.data.code === 0 ){
+                    console.log("method 保存成功！")
+                }else{
+                    message(errorcode[res.data.code].cn,'error')
+                }
+            }).catch(err => {
+                 message(constant.ERROR,'error');
+            })
+        },
         deployContract(val) {
             this.loading = true;
             let reqData = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 contractBin: this.bin,
                 bytecodeBin: this.bytecodeBin,
                 contractAbi: this.abiFile,
                 contractSource: Base64.encode(this.content),
-                userId: val.userId
+                user: val.userId,
+                contractName: this.contractName,
+                contractId: this.data.contractId,
+                // contractVersion: val.version
+                contractPath: this.data.contractPath
             };
-            if (!this.data.contractId) {
-                reqData.contractName = this.contractName;
-                reqData.contractVersion = this.data.contractVersion;
-            } else {
-                reqData.contractId = this.data.contractId;
-            }
+            this.version = val.version
+            // if (!this.data.contractId) {
+            //     reqData.contractName = this.contractName;
+            //     reqData.contractVersion = this.data.contractVersion;
+            // } else {
+            //     reqData.contractId = this.data.contractId;
+            // }
             if (val.params.length) {
                 reqData.constructorParams = val.params;
             }
+            this.setMethod()
             getDeployStatus(reqData)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.abiFileShow = true;
-                        this.$emit("deploy", res.data.data.contractId);
-                        this.status = res.data.data.contractStatus;
+                        // this.$emit("deploy", res.data.data.contractId);
+                        this.status = 2;
+                        this.contractAddress = res.data.data.contractAddress
                         this.successInfo = "< 部署成功！";
                         this.abiFile = res.data.data.contractAbi;
                         this.bin = res.data.data.contractBin;
@@ -404,6 +608,12 @@ export default {
                             message: "合约部署成功！",
                             type: "success"
                         });
+                        this.data.contractAbi == this.abiFile;
+                        this.data.contractBin = this.bin;
+                        this.data.contractSource = Base64.encode(this.content);
+                        this.data.contractAddress = this.contractAddress;
+                        this.data.contractVersion = this.version;
+                        Bus.$emit("deploy",this.data)
                     } else {
                         this.status = 3;
                         this.$message({
@@ -421,79 +631,79 @@ export default {
                     });
                 });
         },
-        addContract: function() {
-            this.loading = true;
-            let reqData = {
-                networkId: localStorage.getItem("networkId"),
-                contractName: this.contractName,
-                contractBin: this.bin,
-                bytecodeBin: this.bytecodeBin,
-                contractVersion: this.data.contractVersion,
-                contractSource: Base64.encode(this.content)
-            };
-            if (this.abiFile) {
-                reqData.contractAbi = this.abiFile;
-            }
-            addChaincode(reqData)
-                .then(res => {
-                    this.loading = false;
-                    if (res.data.code === 0) {
-                        this.status = res.data.data.contractStatus;
-                        this.abiFile = res.data.data.contractAbi || "";
-                        this.contractAddress = res.data.data.contractAddress || "";
-                        this.$message({
-                            message: "合约保存成功！",
-                            type: "success"
-                        });
-                        this.$emit("add", res.data.data);
-                    } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error"
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.loading = false;
-                    this.$message({
-                        message: "系统错误",
-                        type: "error"
-                    });
-                });
-        },
-        editContract: function() {
-            let reqData = {
-                networkId: localStorage.getItem("networkId"),
-                contractId: this.data.contractId,
-                contractBin: this.bin,
-                bytecodeBin: this.bytecodeBin,
-                contractSource: Base64.encode(this.content)
-            };
-            if (this.abiFile) {
-                reqData.contractAbi = this.abiFile;
-            }
-            editChain(reqData)
-                .then(res => {
-                    if (res.data.code === 0) {
-                        this.$message({
-                            message: "合约保存成功！",
-                            type: "success"
-                        });
-                        this.$emit("add", res.data.data);
-                    } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error"
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: "系统错误",
-                        type: "error"
-                    });
-                });
-        },
+        // addContract: function() {
+        //     this.loading = true;
+        //     let reqData = {
+        //         groupId: localStorage.getItem("groupId"),
+        //         contractName: this.contractName,
+        //         contractBin: this.bin,
+        //         bytecodeBin: this.bytecodeBin,
+        //         contractVersion: this.data.contractVersion,
+        //         contractSource: Base64.encode(this.content)
+        //     };
+        //     if (this.abiFile) {
+        //         reqData.contractAbi = this.abiFile;
+        //     }
+        //     addChaincode(reqData)
+        //         .then(res => {
+        //             this.loading = false;
+        //             if (res.data.code === 0) {
+        //                 this.status = res.data.data.contractStatus;
+        //                 this.abiFile = res.data.data.contractAbi || "";
+        //                 this.contractAddress = res.data.data.contractAddress || "";
+        //                 this.$message({
+        //                     message: "合约保存成功！",
+        //                     type: "success"
+        //                 });
+        //                 this.$emit("add", res.data.data);
+        //             } else {
+        //                 this.$message({
+        //                     message: errcode.errCode[res.data.code].cn,
+        //                     type: "error"
+        //                 });
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.loading = false;
+        //             this.$message({
+        //                 message: "系统错误",
+        //                 type: "error"
+        //             });
+        //         });
+        // },
+        // editContract: function() {
+        //     let reqData = {
+        //         groupId: localStorage.getItem("groupId"),
+        //         contractId: this.data.contractId,
+        //         contractBin: this.bin,
+        //         bytecodeBin: this.bytecodeBin,
+        //         contractSource: Base64.encode(this.content)
+        //     };
+        //     if (this.abiFile) {
+        //         reqData.contractAbi = this.abiFile;
+        //     }
+        //     editChain(reqData)
+        //         .then(res => {
+        //             if (res.data.code === 0) {
+        //                 this.$message({
+        //                     message: "合约保存成功！",
+        //                     type: "success"
+        //                 });
+        //                 this.$emit("add", res.data.data);
+        //             } else {
+        //                 this.$message({
+        //                     message: errcode.errCode[res.data.code].cn,
+        //                     type: "error"
+        //                 });
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.$message({
+        //                 message: "系统错误",
+        //                 type: "error"
+        //             });
+        //         });
+        // },
         foldInfo: function(val) {
             this.successHide = val;
         },
@@ -555,7 +765,7 @@ export default {
 }
 .contract-info {
     position: relative;
-    padding-top: 50px;
+    padding-top: 20px;
     text-align: left;
     border-top: 1px solid #ddd;
     box-sizing: border-box;
@@ -578,14 +788,7 @@ export default {
     padding-right: 20px;
 }
 .contract-info-title {
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    padding: 12px 0;
-    z-index: 11;
-    background-color: #e8e8e8;
-    box-sizing: border-box;
+    padding-right: 20px;
 }
 .move {
     position: absolute;
@@ -598,7 +801,6 @@ export default {
 }
 .contract-info-title i {
     padding-left: 8px;
-    padding-right: 4px;
     font-size: 10px;
     color: #aeb1b5;
     cursor: pointer;
@@ -660,5 +862,8 @@ export default {
 }
 .titleActive {
     padding-left: 40px;
+}
+.send-dialog /deep/ .el-dialog--center .el-dialog__body{
+    padding: 5px 25px 20px;
 }
 </style>

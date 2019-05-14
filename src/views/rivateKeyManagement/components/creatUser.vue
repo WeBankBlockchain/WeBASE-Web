@@ -80,7 +80,7 @@ export default {
                     }
                 ]
             },
-            networkId: localStorage.getItem("networkId")
+            groupId: localStorage.getItem("groupId")
         };
     },
     methods: {
@@ -136,7 +136,7 @@ export default {
         },
         addUser: function() {
             let reqData = {
-                networkId: this.networkId,
+                groupId: this.groupId,
                 userName: this.userForm.name,
                 description: this.userForm.explain || ""
             };
@@ -171,7 +171,7 @@ export default {
             let reqData = {
                 userName: this.userForm.name,
                 publicKey: this.userForm.publicKey,
-                networkId: this.networkId,
+                groupId: this.groupId,
                 description: this.userForm.explain || ""
             };
             bindUser(reqData)

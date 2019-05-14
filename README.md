@@ -6,21 +6,19 @@
 
 ## 1、功能
 
-1. 区块链概览，可以查看区块链信息。
+本代码仅支持fisco-bcos 2.0以上版本，支持群组和群组切换
 
-2. 区块概览，可以查看区块信息和交易信息，交易信息支持input解码和event解码。
+1. 区块链概览，可以查看区块链信息。点击左上角交易信息和区块信息界面，可以跳转到区块或交易信息列表页，交易信息支持input解码和event解码。
 
-3. 节点管理，可以新增本机构节点和查看链上所有节点。
+2. 前置管理，可以新增前置，新增前置成功后，可以拉取改链的所有群组和节点。点击ip可以查看该前置所在服务器状态相关信息。
 
-4. 合约管理，可以查看链上所有合约，新增，编译和部署合约。支持合约在线编辑。已部署的合约不能编辑，且可以发交易。能够查看合约编辑后的abi和bin，部署合约的地址。
+4. 合约管理，合约IDE支持本地编写，编译合约。部署合约后该合约会被保存，在历史合约中，可以查看该合约。
 
 5. 私钥管理，管理所有可以发交易的帐号，公钥用户是其他机构的帐号，无法在本机构发交易，可以通过手动绑定和自动同步获取。私钥用户为本机构发交易的用户。
 
-6. 系统监控，查看节点所在服务器状态和查询错误日志。
+6. 联盟治理，主要监控整条链所有机构所有用户发送交易行为，查看是否有异常用户和异常合约。
 
-7. 联盟治理，主要监控整条链所有机构所有用户发送交易行为，查看是否有异常用户和异常合约。
-
-8. 帐号管理，只有admin帐号才能查看此功能，可以新增帐号（登录此系统帐号），修改密码等等。
+7. 帐号管理，只有admin帐号才能查看此功能，可以新增帐号（登录此系统帐号），修改密码等等。
 
 
 ## 2、部署
@@ -59,7 +57,7 @@ nginx安装请参考附录
 
 2、 修改服务ip
 ```
-    sed -i "s/10.0.0.1/${your_server_ip}/g" nginx.conf
+    sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
@@ -67,9 +65,9 @@ nginx安装请参考附录
 ```
 你修改的服务ip是192.168.0.1,也可以修改成域名
 
-3、 修改静态文件路径(文件需要有权限访问)
+3、 修改静态文件路径
 ```
-    sed -i "s/\/data\/webase-web\/dist /${your_file_route}/g" nginx.conf
+    sed -i "s/\/data\/webase-web\/dist/${your_file_route}/g" nginx.conf
 ```
 
 4、 修改mgr服务ip和端口
@@ -77,7 +75,7 @@ nginx安装请参考附录
 sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 ````
 
-服务器已有nginx可按照以下修改，
+按照上面的步骤执行后，可以直接跳过这一步骤，直接启动nginx。若服务器已有nginx可按照以下修改，增加一条server
 ```Nginx
 
     upstream node_mgr_server{
@@ -120,10 +118,10 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 
 启动报错重点排查：日志路径是否正确（error.log和access.log）,nginx有没有添加用户权限。
 
-(2)、打开页面，页面url是nginx配置的ip和端口。
+(2)、打开页面，页面url是nginx配置的前端ip和端口。
 例如:上面配置文件的url为   http://10.0.0.1:3002
 
-(3)、打开页面后，请找运维提供帐号和密码登录。
+(3)、打开页面后，请找运维提供帐号和密码登录(默认账号密码：admin/Abcd1234)。
 
 
 ## 3、附录
@@ -137,7 +135,7 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可）
 或者使用命令：
 
-	wget http://nginx.org/download/nginx-1.10.2.tar.gz  (版本号可换)
+	wget http://nginx.org/download/nginx-1.9.9.tar.gz  (版本号可换)
 将下载的包移动到/usr/local/下
 #### 3.1.3 安装nginx
 ##### 3.1.3.1解压
@@ -163,25 +161,10 @@ nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可
 	nginx: the configuration file /usr/local/nginx/conf/nginx.conf syntax is ok
 	nginx: configuration file /usr/local/nginx/conf/nginx.conf test is successful
 
-##### 3.1.3.6常用nginx命令
-
-启动：
-
+##### 3.1.3.6 nginx几个常见命令
+```shell
+/usr/local/nginx/sbin/nginx -s reload            # 重新载入配置文件
+/usr/local/nginx/sbin/nginx -s reopen            # 重启 Nginx
+/usr/local/nginx/sbin/nginx -s stop              # 停止 Nginx
+ps -ef | grep nginx                              # 查看nginx进程
 ```
-    /usr/local/nginx/sbin/nginx
-```
-停止：
-
-```
-    /usr/local/nginx/sbin/nginx -s stop
-```
-重启
-```
-    /usr/local/nginx/sbin/nginx -s reload
-```
-
-##### 3.1.3.7 nginx日志
-
-nginx日志一般在nginx安装目录下，例如：/usr/local/nginx/log
-
-有access.log和error.log两个日志
