@@ -170,8 +170,8 @@ export default {
             });
         },
         clickTable: function(row, $event, column) {
-            let nodeName = $event.target.nodeName;
-            if (nodeName === "I") {
+            let nodeName = event.target.nodeName;
+            if ($event.target.nodeName === "I") {
                 return
             }
             this.link(row.blockNumber)

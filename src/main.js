@@ -32,7 +32,6 @@ import '@/assets/icon/iconfont.js'
 import '@/assets/icon/iconfont_webaas.css'
 /*public css moudle */
 import '@/assets/css/common.css'
-import '@/util/directives.js';
 Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';

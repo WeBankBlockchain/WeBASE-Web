@@ -24,7 +24,7 @@
                 </el-tooltip> -->
                 </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" v-if="!contractAddress">
+                <span class="contract-code-done" @click="saveCode" v-if="!contractAddress">
                     <el-tooltip class="item" effect="dark" content="按Ctrl+s保存合约内容" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
@@ -38,13 +38,7 @@
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <!-- <span class="contract-code-done" v-if="abiFile"  @click="upLoadAdr">
-                    <el-tooltip class="item" effect="dark" content="加载已部署的合约" placement="top-start">
-                        <i class="wbs-icon-daoru font-16"></i>
-                    </el-tooltip>
-                    <span>加载</span>
-                </span> -->
-                <span class="contract-code-done" v-if="abiFile"  @click="send">
+                <span class="contract-code-done" v-if="contractAddress"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -91,14 +85,13 @@
                 </div>
             </div>
         </div>
-        <el-dialog v-dialogDrag title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-            <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version' :address='uploadAddress'></v-transaction>
+        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+            <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version'></v-transaction>
         </el-dialog>
-        <el-dialog v-dialogDrag title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
+        <el-dialog title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' @close='editorClose'></v-editor>
-        <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' @close='editorClose'></v-editor>
     </div>
 </template>
 
@@ -112,9 +105,10 @@ require("ace-mode-solidity/build/remix-ide/mode-solidity");
 let Mode = require("ace-mode-solidity/build/remix-ide/mode-solidity").Mode;
 import errcode from "@/util/errcode";
 let Base64 = require("js-base64").Base64;
+let wrapper = require("solc/wrapper");
+let solc = wrapper(window.Module);
 import constant from "@/util/constant";
 import editor from "../dialog/editor"
-import uploadFileAdr from "../dialog/uploadFileAdr"
 import Bus from '@/bus'
 import {
     addChaincode,
@@ -132,8 +126,7 @@ export default {
     components: {
         "v-transaction": transaction,
         "v-user": changeUser,
-        "v-editor": editor,
-        "v-upload": uploadFileAdr
+        "v-editor": editor
     },
     data: function() {
         return {
@@ -166,10 +159,7 @@ export default {
             version: "",
             saveShow: false,
             editorShow: false,
-            editorData: null,
-            editorInput: null,
-            uploadFileAdrShow: false,
-            uploadAddress: "",
+            editorData: null
         };
     },
     beforeDestroy: function(){
@@ -294,7 +284,7 @@ export default {
             }
         },
         saveCode: function(){
-            this.data.contractSource = Base64.encode(this.content);
+            this.data.contractSource = Base64.encode(this.content)
             Bus.$emit("compile",this.data)
         },
         resizeCode: function() {
@@ -321,29 +311,11 @@ export default {
                 minLines: 9
             });
         },
-        upLoadAdr: function(){
-            this.uploadFileAdrShow = true
-        },
-        uploadClose: function(){
-            this.uploadFileAdrShow = false
-        },
-        uploadSuccess: function(val){
-            this.dialogVisible = true;
-            this.uploadAddress = val
-        },
         sendSuccess: function(val) {
-            this.uploadAddress = "";
             this.dialogVisible = false;
             this.editorShow = true;
             this.editorData = null;
-            this.editorData = val.resData;
-            this.editorInput = val.input;
-            if(val && val.contractAddress){
-                this.contractAddress = val.contractAddress;
-                this.data.contractAddress = val.contractAddress;
-                Bus.$emit("send",this.data)
-            }
-            
+            this.editorData = val;
         },
         editorClose: function(){
             this.editorShow = false;
@@ -423,8 +395,6 @@ export default {
             }
         },
         compile: function() {
-            let wrapper = require("solc/wrapper");
-            let solc = wrapper(window.Module);
             this.loading = true;
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
@@ -576,7 +546,7 @@ export default {
                 bytecodeBin: this.bytecodeBin,
                 contractAbi: this.abiFile,
                 contractSource: Base64.encode(this.content),
-                user: val.userId,
+                userId: val.userId,
                 contractName: this.contractName,
                 contractId: this.data.contractId,
                 // contractVersion: val.version
