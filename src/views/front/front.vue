@@ -23,11 +23,11 @@
                 <div class="search-part-left">
                     <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点前置</el-button>
                 </div>
-                <div class="search-part-right">
+                <!-- <div class="search-part-right">
                     <el-input placeholder="请输入前置编号" v-model="frontId" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
-                </div>
+                </div> -->
             </div>
             <div class="search-table">
                 <el-table :data="frontData" class="search-table-content" v-loading="loading">
