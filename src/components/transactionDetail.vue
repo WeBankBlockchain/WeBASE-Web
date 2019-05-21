@@ -356,8 +356,8 @@ export default {
         getContacts: function(callback) {
             let reqdata = {
                 networkId: localStorage.getItem("networkId"),
-                pageSize: 1,
-                pageNumber: 1000
+                pageSize: 1000,
+                pageNumber: 1
             };
             getContractList(reqdata)
                 .then(res => {
