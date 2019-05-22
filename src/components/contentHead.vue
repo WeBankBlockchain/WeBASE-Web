@@ -17,18 +17,24 @@
     <div class="content-head-wrapper">
         <div class="content-head-title">
             <span class="content-head-icon" v-if="icon" @click="skip">
-                <i class="el-icon-back"></i>
+                <i class="wbs-icon-back"></i>
             </span>
             <span :class="{ 'font-color-9da2ab': headSubTitle}">{{title}}</span>
             <span v-show="headSubTitle" class="font-color-9da2ab">/</span>
             <span>{{headSubTitle}}</span>
         </div>
         <div class="content-head-network">
-            <!-- <span class="network-name">区块链网络: {{networkName || 'network1'}}</span> -->
-            <!-- <span @click="checkNetwork" class="select-network">切换网络
-                <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
+            <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
+            <!-- <span style="margin-left:10px"></span> -->
+            <span class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}
+                <ul v-if='dialogShow'>
+                    <li v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
+                </ul>
             </span>
-            <v-dialog v-if="dialogShow" :network-dialog="dialogShow" :route="path" @success="changeNetwork" @close="close"></v-dialog> -->
+            <!-- <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
+            <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
+            <!-- </span> -->
+            <span style="padding-right:10px"></span>
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
                     <span class="change-password" @click="changePassword">修改密码</span>
@@ -43,52 +49,110 @@
         <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
+         <!-- <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close' @changGroupSucess="changGroupSucess"></v-dialog> -->
 
     </div>
 </template>
 
 <script>
-import dialog from "./networkDialog";
+import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
+import helpDoc from "./helpDoc";
 import router from "@/router";
-import { loginOut } from "@/util/api";
+import { loginOut ,getGroups } from "@/util/api";
 import { delCookie } from '@/util/util'
+import Bus from "@/bus"
 export default {
     name: "conetnt-head",
     props: ["headTitle", "icon", "route", "headSubTitle"],
     components: {
         "v-dialog": dialog,
-        changePasswordDialog
+        changePasswordDialog,
+        helpDoc
     },
     watch: {
-        headTitle: function(val){
+        headTitle: function(val) {
             this.title = val;
         }
     },
     data: function() {
-        
         return {
             title: this.headTitle,
-            networkName: "-",
+            groupName: "-",
             accountName: "-",
             dialogShow: false,
             path: "",
             headIcon: this.icon || false,
             way: this.route || "",
             changePasswordDialogVisible: false,
-            
+            groupList: []
         };
     },
+    beforeDestroy: function(){
+        Bus.$off("deleteFront")
+    },
     mounted: function() {
-        if (localStorage.getItem("networkName")) {
-            this.networkName = localStorage.getItem("networkName");
+        if (localStorage.getItem("groupName")) {
+            this.groupName = localStorage.getItem("groupName");
         }
         if (localStorage.getItem("user")) {
             this.accountName = localStorage.getItem("user");
         }
+        this.getGroupList();
+        Bus.$on("deleteFront", () => {
+            this.groupName = "";
+            this.getGroupList('delete');
+        })
+        Bus.$on("addFront", () => {
+            this.getGroupList();
+        })
     },
     methods: {
-        checkNetwork: function() {
+        getGroupList: function(type) {
+            getGroups().then(res => {
+                if (res.data.code === 0) {
+                    if(res.data.data && res.data.data.length){
+                        // this.dialogShow = true;
+                        this.groupList = res.data.data || []
+                    }else{
+                        this.groupList = [];
+                        localStorage.setItem("groupName","")
+                        localStorage.setItem("groupId","")
+                    }
+                    if(type && res.data.data && res.data.data.length){
+                        this.groupName = res.data.data[0].groupName;
+                        localStorage.setItem("groupName",res.data.data[0].groupName)
+                        localStorage.setItem("groupId",res.data.data[0].groupId)
+                    }else if(res.data.data && res.data.data.length && !localStorage.getItem("groupName")){
+                        this.groupName = res.data.data[0].groupName;
+                        localStorage.setItem("groupName",res.data.data[0].groupName)
+                        localStorage.setItem("groupId",res.data.data[0].groupId)
+                    }else if(res.data.data && res.data.data.length && localStorage.getItem("groupName")){
+                        this.groupName = localStorage.getItem("groupName");
+                    }
+                }else{
+                    this.groupList = [];
+                    localStorage.setItem("groupName","")
+                    localStorage.setItem("groupId","")
+                    this.$message({
+                            message: errcode.errCode[res.data.code].cn,
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                this.groupList = [];
+                localStorage.setItem("groupName","")
+                localStorage.setItem("groupId","")
+                this.$message({
+                        message: "系统错误！",
+                        type: "error",
+                        duration: 2000
+                    });
+            })
+            ;
+        },
+        checkGroup: function() {
             if (this.dialogShow) {
                 this.dialogShow = false;
             } else {
@@ -97,46 +161,54 @@ export default {
 
             this.path = this.$route.path;
         },
-        changeNetwork: function() {
-            this.networkName = localStorage.getItem("networkName");
-            this.dialogShow = false;
+        changeGroup: function(val){
+            this.groupName = val.groupName
+            localStorage.setItem("groupName",val.groupName);
+            localStorage.setItem("groupId",val.groupId);
+            this.$emit('changGroup', val.groupId);
+            this.dialogShow = true;
         },
-        close: function() {
-            this.dialogShow = false;
-        },
+        // changGroupSucess(val){
+            
+        // },
+        // changeNetwork: function() {
+        //     this.groupName = localStorage.getItem("groupName");
+        //     this.dialogShow = false;
+        // },
+        // close: function() {
+        //     this.dialogShow = false;
+        // },
         skip: function() {
-            if(this.route){
-                router.push(this.way);
-            }else {
-                this.$emit('goBack', false)
-            }  
+            if (this.route) {
+                this.$router.push(this.way);
+            } else {
+                this.$router.go(-1);
+            }
         },
         signOut: function() {
             localStorage.removeItem("user");
             loginOut()
                 .then()
                 .catch();
-            delCookie('JSESSIONID')
-            delCookie('NODE_MGR_ACCOUNT_C')
-            router.push("/login");
+            delCookie("JSESSIONID");
+            delCookie("NODE_MGR_ACCOUNT_C");
+            this.$router.push("/login");
         },
         changePassword: function() {
             this.changePasswordDialogVisible = true;
         },
-        success: function(val){
-            this.changePasswordDialogVisible = false
+        success: function(val) {
+            this.changePasswordDialogVisible = false;
         }
     }
 };
 </script>
 <style scoped>
 .content-head-wrapper {
-    width: calc(100% - 1px);
-    background-color: #fff;
+    width: calc(100%);
+    background-color: #181f2e;
     text-align: left;
     line-height: 54px;
-    overflow: hidden;
-    margin-left: 1px;
     position: relative;
 }
 .content-head-wrapper::after {
@@ -145,14 +217,15 @@ export default {
     clear: both;
 }
 .content-head-icon {
-    color: #2d5f9e;
+    color: #fff;
     font-weight: bold;
+    cursor: pointer;
 }
 .content-head-title {
     margin-left: 40px;
     display: inline-block;
     font-size: 16px;
-    color: #36393d;
+    color: #fff;
     font-weight: bold;
 }
 .content-head-network {
@@ -165,6 +238,7 @@ export default {
     text-decoration: none;
     font-size: 12px;
     cursor: pointer;
+    color: #cfd7db;
 }
 .sign-out-wrapper {
     text-align: center;
@@ -187,5 +261,35 @@ export default {
 .select-network {
     color: #2d5f9e;
     cursor: default;
+}
+.content-head-network a:nth-child(1) {
+    text-decoration: none;
+    outline: none;
+    color: #cfd7db;
+    padding-right: 15px;
+    border-right: 1px solid #657d95;
+    margin-right: 15px;
+}
+.contant-head-name{
+    position: relative;
+    cursor: pointer;
+}
+.contant-head-name ul{
+    position: absolute;
+    width: 150%;
+    left: -10px;
+    top: 35px;
+    background-color: #fff;
+    color: #666;
+    text-align: center;
+    z-index: 9999999;
+    box-shadow: 1px 4px 4px;
+}
+.contant-head-name ul li{
+    width: 100%;
+    padding: 0 10px;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
 }
 </style>

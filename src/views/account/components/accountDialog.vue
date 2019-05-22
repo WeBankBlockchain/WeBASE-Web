@@ -169,10 +169,10 @@ export default {
             });
         },
         getRoleList: function() {
-            let networkId = localStorage.getItem("networkId");
+            let groupId = localStorage.getItem("groupId");
             let reqQuery = {};
             reqQuery = {
-                networkId: networkId,
+                groupId: groupId,
                 pageNumber: "",
                 pageSize: "",
                 roleId: "",

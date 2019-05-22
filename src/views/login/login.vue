@@ -117,7 +117,7 @@ export default {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.logining = true;
-                    this.userLogin(this.getNetworkList);
+                    this.userLogin();
                 } else {
                     return false;
                 }
@@ -133,6 +133,9 @@ export default {
             login(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        localStorage.setItem("groupName","");
+                        localStorage.setItem("groupId","");
+                        localStorage.setItem("folderList","")
                         localStorage.setItem("user", res.data.data.account);
                         localStorage.setItem("root", res.data.data.roleName);
                         sessionStorage.setItem(
@@ -140,8 +143,7 @@ export default {
                             res.data.data.accountStatus
                         );
                         sessionStorage.setItem("reload", 1);
-                        let acct = res
-                        callback(acct);
+                        router.push("/main")
                     } else {
                         this.msgError = true;
                         this.loginForm.password = "";
@@ -154,38 +156,6 @@ export default {
                     this.logining = false;
                 });
         },
-        getNetworkList: function(acct) {
-            networkList({})
-                .then(res => {
-                    if (res.data.code === 0) {
-                        localStorage.setItem(
-                            "networkId",
-                            res.data.data[0].networkId
-                        );
-                        localStorage.setItem(
-                            "networkName",
-                            res.data.data[0].networkName
-                        );
-                        router.push({
-                            path: "/main",
-                            query: {
-                                root: acct.data.data.roleName
-                            }
-                        });
-                    } else {
-                        this.$message({
-                            message: "获取网络失败！",
-                            type: "error"
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: "获取网络失败！",
-                        type: "error"
-                    });
-                });
-        }
     }
 };
 </script>
