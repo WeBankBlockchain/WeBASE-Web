@@ -15,35 +15,35 @@
  */
 <template>
     <div style="height: 100%;">
-        <div style="height: 100%;background-color: #fff" class="sidebar-content">
+        <div style="height: 100%;background-color: #0c1220" class="sidebar-content">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
-                    <i class="wbs-icon-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 10px;"></i>
+                    <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
                 </span>
             </div>
             <div class="mini-sidebar-contract-icon" v-if="!menuShowC" style="padding-bottom:40px">
-                <i class="wbs-icon-qianwang font-color-aeb1b5" @click="hideMune(false)" style="font-size: 10px;"></i>
+                <i class="el-icon-caret-right font-color-aeb1b5" @click="hideMune(false)" style="font-size: 18px;"></i>
             </div>
-            <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" active-text-color="#2d5f9e" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
+            <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" active-text-color="#37eef2" active-background-color="#1e293e" background-color="#0c1220" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
                 <template v-for="(item,index) in routesList" v-if="item.menuShow">
                     <el-submenu v-if="!item.leaf" :index="`${index}`" ref="ele" class="">
                         <template slot="title">
                             <div :style="{'padding-left':  menuShowC ? '13px':''}">
-                                <i :class="item.iconCls" :style="{'color': activeIndex == index ? '#2956a3':''}"></i>
-                                <span :class="{'font-color-2956a3': activeIndex == index}">{{item.name}}</span>
+                                <i :class="item.iconCls" :style="{'color': activeIndex == index ? '#37eef2':''}"></i>
+                                <span :class="{'font-color-37eef2': activeIndex == index}">{{item.name}}</span>
                             </div>
                         </template>
 
-                        <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{'border-left':term.path == activeRoute ? '3px solid #2956a3': '',
+                        <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
                                     'padding-left':term.path == activeRoute ? '55px': '58px',
-                                    'background-color':term.path == activeRoute ? '#f7faff': '',}">
+                                    'background-color':term.path == activeRoute ? '#1e293e': '#0c1220',}">
                             <span>{{term.name}}</span>
                         </el-menu-item>
                     </el-submenu>
-                    <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path" :style="{'border-left':item.children[0].path == activeRoute ? '3px solid #2956a3': '',
+                    <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path" :style="{'border-left':item.children[0].path == activeRoute ? '3px solid #37eef2': '',
                                 'padding-left':item.children[0].path == activeRoute ? '30px': '33px',
-                                'background-color':item.children[0].path == activeRoute ? '#f7faff': '',}">
+                                'background-color':item.children[0].path == activeRoute ? '#1e293e': '#0c1220',}">
                         <i :class="item.iconCls"></i>
                         <span slot="title">{{item.children[0].name}}</span>
                     </el-menu-item>
@@ -137,7 +137,7 @@ export default {
 .el-menu-vertical-demo>>>.el-submenu__title {
     padding-left: 33px;
 }
-.el-menu-vertical-demo>>>.el-menu-item-group > ul > .el-menu-item {
+.el-menu-item-group > ul > .el-menu-item {
     font-size: 14px;
     color: #9da2ab;
     text-align: left;
@@ -145,12 +145,15 @@ export default {
     height: 46px;
     line-height: 46px;
 }
+.el-menu-vertical-demo>>> .el-icon-arrow-down:before {
+    content: "\e60b"
+}
 .sidebar-content>>>.el-menu--collapse {
     width: 56px;
 }
 .sidebar-content>>>.el-menu--collapse .is-active .el-tooltip {
     padding-left: 17px !important;
-    background-color: #f7faff;
+    background-color: #1e293e;
 }
 .mini-sidebar-contract-icon {
     position: relative;

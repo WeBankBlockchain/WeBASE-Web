@@ -55,7 +55,7 @@ export default {
 
 <style>
 #app {
-    min-width: 800px;
+    /* min-width: 800px; */
     height: 100%;
     margin: 0;
     padding: 0;
