@@ -251,9 +251,9 @@ export default {
     color: #515356;
     margin-left: 47px;
 }
-.unUser-table-content>>>.el-icon-arrow-right:before {
-    content: "\e60e";
-}
+/* .unUser-table-content>>>.el-icon-arrow-right:before {
+    content: "\e65c";
+} */
 .unUser-table-content>>> td{
     cursor: pointer;
 }
