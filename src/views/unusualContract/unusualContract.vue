@@ -252,9 +252,9 @@ export default {
     color: #515356;
     margin-left: 47px;
 }
-.unContract-table-content>>>.el-icon-arrow-right:before {
-    content: "\e60e";
-}
+/* .unContract-table-content>>>.el-icon-arrow-right:before {
+    content: "\e65c";
+} */
 .unContract-table-content>>> td{
     cursor: pointer;
 }

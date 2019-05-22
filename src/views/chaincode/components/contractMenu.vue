@@ -16,11 +16,11 @@
 <template>
     <div class="contract-menu">
         <div class="contract-menu-header">
-            <span class="contract-icon" @click="editContract">
+            <span class="contract-icon" @click="editContract" v-if='!disabled'>
                 <i class="wbs-icon-xinjian"></i>
                 <span>新建</span>
             </span>
-            <span class="contract-icon" @click="newContract">
+            <span class="contract-icon" @click="newContract" v-if='!disabled'>
                 <i class="wbs-icon-shangchuan"></i>
                 <span>上传</span>
             </span>
@@ -76,7 +76,8 @@ export default {
             pageSize: 15,
             currentPage: 1,
             total: 0,
-            allTotal: 0
+            allTotal: 0,
+            disabled: false
         };
     },
     beforeCreate: function() {
@@ -87,6 +88,11 @@ export default {
         this.$nextTick(function() {
             this.getContractList();
         });
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
     },
     methods: {
         load: function() {
