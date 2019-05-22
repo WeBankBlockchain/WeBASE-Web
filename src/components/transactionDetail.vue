@@ -393,7 +393,7 @@ export default {
                 this.decodefun(input, this.transactionTo);
             } else {
                 this.methodId = input.substring(0, 10);
-                this.decodeDeloy(this.bin);
+                this.decodeDeloy(input,this.bin);
             }
         },
         getAdderss: function() {
@@ -455,11 +455,14 @@ export default {
             let web3 = new Web3(Web3.givenProvider);
             let abi = "";
             let list = data;
-            item = item.substring(2);
+            if(item.length > 2 && item.substring(0,2) == '0x'){
+                item = item.substring(2);
+                item = item.substring(0,item.length-68)
+            }
             for (let i = 0; i < this.eventLog.length; i++) {
                 let num = 0;
                 this.contractList.forEach(val => {
-                    if (val.contractBin === item) {
+                    if (val.contractBin && val.contractBin.substring(0,(val.contractBin.length-68)) === item) {
                         if (val.contractAbi) {
                             list.abi = JSON.parse(val.contractAbi);
                         } else {
@@ -539,17 +542,28 @@ export default {
             let inputDatas = "0x" + input.substring(10);
             let abi = "";
             let abiData = {};
-            this.bin = this.bin.substring(2);
+            if(this.bin.length > 2 && this.bin.substring(0,2) == '0x'){
+                this.bin = this.bin.substring(2);
+                this.bin = this.bin.substring(0,this.bin.length-68)
+            }
             let num = 0;
             if (this.contractList.length) {
-                this.contractList.forEach(value => {
-                    if (value.contractBin === this.bin) {
-                        abi = value.contractAbi;
+                for(let i = 0; i < this.contractList.length; i++){
+                    if(this.contractList[i].contractBin && this.contractList[i].contractBin.substring(0,this.contractList[i].contractBin.length-68) == this.bin){
+                        abi = this.contractList[i].contractAbi;
                         this.buttonSHow = true;
-                    } else {
-                        num++;
+                    }else{
+                        num++
                     }
-                });
+                }
+                // this.contractList.forEach(value => {
+                //     if (value.contractBin.substring(0,(value.contractBin.length-68)) === this.bin) {
+                //         abi = value.contractAbi;
+                //         this.buttonSHow = true;
+                //     } else {
+                //         num++;
+                //     }
+                // });
                 if (num == this.contractList.length) {
                     this.showDecode = true;
                     this.inputButtonShow = false;
@@ -617,15 +631,20 @@ export default {
             }
         },
         //deloy-contract-transaction-decode
-        decodeDeloy: function(val) {
+        decodeDeloy: function(list,val) {
+            let web3 = new Web3(Web3.givenProvider);
             let abi = "";
             let contractName = "";
             let input = {};
             let num = 0;
-            val = val.substring(2);
+            let mewList = list.substring(val.length)
+            if(val.length > 2 && val.substring(0,2) == '0x'){
+                val = val.substring(2);
+                val = val.substring(0,val.length-68)
+            }
             if (this.contractList.length) {
                 this.contractList.forEach(value => {
-                    if (value.contractBin === val) {
+                    if (value.contractBin && value.contractBin.substring(0,(value.contractBin.length-68) )=== val) {
                         abi = value.contractAbi;
                         contractName = value.contractName;
                         this.buttonSHow = true;
@@ -641,12 +660,12 @@ export default {
             if (abi) {
                 input = JSON.parse(abi);
                 if (input.length > 0) {
+                    this.funcData = contractName;
                     input.forEach(value => {
                         if (
                             value.type === "constructor" ||
                             value.name === contractName
                         ) {
-                            this.funcData = contractName;
                             value.inputs.forEach((item, index) => {
                                 if (item && item.type && item.name) {
                                     this.abiType[index] =
@@ -659,12 +678,54 @@ export default {
                                     this.abiType[index] = item;
                                 }
                             });
-                        } else {
-                            this.showDecode = true;
-                            this.inputButtonShow = false;
+                            if (value.inputs.length) {
+                                this.decodeData = web3.eth.abi.decodeParameters(
+                                    value.inputs,
+                                    mewList
+                                );
+                                if (JSON.stringify(this.decodeData) != "{}") {
+                                for (const key in this.decodeData) {
+                                    value.inputs.forEach((val, index) => {
+                                        if (val && val.name && val.type) {
+                                            if (key === val.name) {
+                                                this.inputData[index] = {};
+                                                this.inputData[index].name =
+                                                    val.name;
+                                                this.inputData[index].type =
+                                                    val.type;
+                                                this.inputData[
+                                                    index
+                                                ].data = this.decodeData[key];
+                                            }
+                                        } else if (val) {
+                                            if (index == key) {
+                                                this.inputData[index] = {};
+                                                this.inputData[
+                                                    index
+                                                ].type = val;
+                                                this.inputData[
+                                                    index
+                                                ].data = this.decodeData[key];
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                            }  
                         }
+                        // } else {
+                        //     this.showDecode = true;
+                        //     this.inputButtonShow = false;
+                        // }
                     });
+                    // if(!this.funcData){
+                    //     this.showDecode = true;
+                    //     this.inputButtonShow = false;
+                    // }
                 }
+            }else{
+                this.showDecode = true;
+                this.inputButtonShow = false;
             }
         }
     }

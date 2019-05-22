@@ -20,7 +20,7 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-button type="primary" class="search-part-left-btn" @click="createNodes">新增节点</el-button>
+                    <el-button type="primary" class="search-part-left-btn" :disabled="disabled" @click="createNodes">新增节点</el-button>
                 </div>
                 <div class="search-part-right">
                     <el-input placeholder="请输入节点名称" v-model="nodeName" class="input-with-select">
@@ -123,11 +123,17 @@ export default {
                     name: "rpc端口"
                 }
             ],
-            urlQuery: this.$root.$route.query
+            urlQuery: this.$root.$route.query,
+            disabled: false
         };
     },
     mounted: function() {
         this.getNodeTable();
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
     },
     methods: {
         search: function() {

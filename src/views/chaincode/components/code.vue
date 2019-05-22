@@ -18,19 +18,23 @@
         <div class="contract-code-head">
             <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">{{contractName + '.sol'}}</span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" @click="save" v-if="status !== 2">
+                <span class="contract-code-done" @click="save" v-if="status !== 2 && !disabled">
                     <i class="wbs-icon-baocun font-16"></i>
                     <span>保存</span>
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="status !== 2">
+                <span class="contract-code-done contract-code-nodone" v-if="status !== 2 && disabled">
+                    <i class="wbs-icon-baocun font-16"></i>
+                    <span>保存</span>
+                </span>
+                <span class="contract-code-done" @click="compile" v-if="status !== 2 && !disabled">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="abiFile && status != 2">
+                <span class="contract-code-done" @click="deploying" v-if="abiFile && status != 2 && !disabled">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <span class="contract-code-done" v-if="status === 2" @click="send">
+                <span class="contract-code-done" v-if="status === 2 && !disabled" @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -140,11 +144,17 @@ export default {
             bytecodeBin: "",
             aceEditor: null,
             themePath: "ace/theme/chrome",
-            modePath: "ace/mode/solidity"
+            modePath: "ace/mode/solidity",
+            disabled: false
         };
     },
     mounted: function() {
         this.initEditor();
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
     },
     watch: {
         data: function(val) {
@@ -530,6 +540,9 @@ export default {
     display: inline-block;
     margin-right: 10px;
     cursor: pointer;
+}
+.contract-code-nodone{
+    cursor:none
 }
 .contract-code-done i {
     vertical-align: middle;
