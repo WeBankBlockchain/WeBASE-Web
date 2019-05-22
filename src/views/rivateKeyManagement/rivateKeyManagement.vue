@@ -19,7 +19,7 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">新增用户</el-button>
+                    <el-button type="primary" class="search-part-left-btn" :disabled="disabled" @click="$store.dispatch('switch_creat_user_dialog')">新增用户</el-button>
                 </div>
                 <div class="search-part-right">
                     <el-input placeholder="请输入用户名或公钥地址" v-model="userName" class="input-with-select">
@@ -46,7 +46,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
-                                <el-button type="text" size="small" @click="modifyDescription(scope.row)">修改</el-button>
+                                <el-button :disabled="disabled" type="text" size="small" @click="modifyDescription(scope.row)">修改</el-button>
                             </template>
                         </template>
 
@@ -84,6 +84,7 @@ export default {
             pageSize: 10,
             total: 0,
             loading: false,
+            disabled: false,
             rivateKeyList: [],
             rivateKeyHead: [
                 {
@@ -118,6 +119,12 @@ export default {
     },
     mounted() {
         this.getUserInfoData();
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
+        
     },
     methods: {
         getUserInfoData() {

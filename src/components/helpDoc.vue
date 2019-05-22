@@ -35,7 +35,7 @@
                 <p>
                     <span>在地址栏输入：http://{ngnixIp}:{nginxPort},然后按回车。如：htttp://localhost/8080</span>
                 </p>
-                <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.001.png" width="554" height="367"  alt="" :class="{'active':isChoose}" @click="imgScc" />
+                <img :src="loginImg" width="554" height="367"  alt="" :class="{'active':isChoose}" @click="imgScc" />
                     <p>
                         <span>（图2.2-1）</span>
                     </p>
@@ -52,7 +52,7 @@
                 <p>
                     <span>初次登录，或者被管理员修改密码后的首次登录，都需要修改登录密码</span>
                 </p>
-                <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.002.png" width="554" height="372" alt=""/>
+                <img :src="firstUpdatapassword" width="554" height="372" alt=""/>
                     <p>
                         <span>（图2.3.1-1）</span>
                     </p>
@@ -60,7 +60,7 @@
             <div>
                 <span class="help-doc-second-title">2.3.2 后续修改密码</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.003.png" width="554" height="175" alt=""/>
+                    <img :src="secondUpdatePassword" width="554" height="175" alt=""/>
                 </p>
                 <p>
                     <span>（图2.3.2-1）</span>
@@ -72,7 +72,7 @@
             <div>
                 <span class="help-doc-second-title">2.4 登出</span>
                 <p>
-                    <img src="/static/image/sa073bb3d-1768-4e40-8ed6-d128178ab766.004.png" width="554" height="206" alt=""/>
+                    <img :src="secondUpdatePassword" width="554" height="206" alt=""/>
                 </p>
                 <p>
                     <span>登出的步骤为：点击右上角的用户名，如“admin”->选择“退出”</span>
@@ -85,7 +85,7 @@
             <div>
                 <span  class="help-doc-second-title">3.1 新增节点</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.005.png" width="554" height="153"/>
+                    <img :src="addNodeImg" width="554" height="153"/>
                 </p>
                 <p>
                     <span>（图3.1-1）</span>
@@ -109,7 +109,7 @@
             <div>
                 <span class="help-doc-second-title">3.2 节点查询</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.007.png" width="554" height="204" alt=""/>
+                    <img :src="getNodeImg" width="554" height="204" alt=""/>
                 </p>
                 <p>
                     <span>（图3.2-1）</span>
@@ -124,7 +124,7 @@
             <div>
                 <span class="help-doc-second-title">4.1 区块信息查询</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.008.png" width="554" height="138" alt=""/>
+                    <img :src="blockInfoImg" width="554" height="138" alt=""/>
                 </p>
                 <p>
                     <span>（图4.1-1）</span>
@@ -139,7 +139,7 @@
             <div >
                 <span class="help-doc-second-title">4.2 交易信息查询</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.009.png" width="554" height="337" alt=""/>
+                    <img :src="transationImg" width="554" height="337" alt=""/>
                 </p>
                 <p>
                     <span>（图4.2-1）</span>
@@ -157,13 +157,13 @@
             <div>
                 <span class="help-doc-second-title">5.1 新建合约</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.010.png" width="554" height="273" alt=""/>
+                    <img :src="addContractImg1" width="554" height="273" alt=""/>
                 </p>
                 <p>
                     <span>（图5.1-1）</span>
                 </p>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.011.png" width="554" height="223" alt=""/>
+                    <img :src="addContractImg2" width="554" height="223" alt=""/>
                 </p>
                 <p>
                     <span>（图5.1-2）</span>
@@ -176,13 +176,13 @@
             <div>
                 <span class="help-doc-second-title">5.2 上传合约</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.012.png" width="554" height="186" alt=""/>
+                    <img :src="uploadContractImg1" width="554" height="186" alt=""/>
                 </p>
                 <p>
                     <span>（图5.2-1）</span>
                 </p>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.013.png" width="554" height="191" alt=""/>
+                    <img :src="uploadContractImg2" width="554" height="191" alt=""/>
                 </p>
                 <p>
                     <span>（图5.2-2）</span>
@@ -195,19 +195,19 @@
             <div>
                 <span class="help-doc-second-title">5.3 合约的编译和部署</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.014.png" width="554" height="285" alt=""/>
+                    <img :src="compileContractImg1" width="554" height="285" alt=""/>
                 </p>
                 <p>
                     <span>（图5.3-1）</span>
                 </p>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.015.png" width="554" height="163" alt=""/>
+                    <img :src="compileContractImg2" width="554" height="163" alt=""/>
                 </p>
                 <p>
                     <span>（图5.3-2）</span>
                 </p>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.016.png" width="554" height="94" alt=""/>
+                    <img :src="deployContractImg" width="554" height="94" alt=""/>
                 </p>
                 <p>
                     <span>（图5.3-3）</span>
@@ -220,7 +220,7 @@
             <div>
                 <span class="help-doc-second-title">5.4 发送交易</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.017.png" width="554" height="257" alt=""/>
+                    <img :src="sendTransationImg" width="554" height="257" alt=""/>
                 </p>
                 <p>
                     <span>（图5.4-1）</span>
@@ -236,7 +236,7 @@
             <div>
                 <span class="help-doc-second-title">6.1新建公(私)钥用户</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.018.png" width="554" height="228" alt=""/>
+                    <img :src="addUserImg" width="554" height="228" alt=""/>
                 </p>
                 <p>
                     <span>（图6.1-1）</span>
@@ -249,7 +249,7 @@
             <div>
                 <span class="help-doc-second-title">6.2 公(私)钥用户查询</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.019.png" width="554" height="229" alt=""/>
+                    <img :src="searchUserImg" width="554" height="229" alt=""/>
                 </p>
                 <p>
                     <span>（图6.2-1）</span>
@@ -264,7 +264,7 @@
             <div>
                 <span class="help-doc-second-title">7.1 节点错误日志查看</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.020.png" width="554" height="220" alt=""/>
+                    <img :src="systemMonitoringImg" width="554" height="220" alt=""/>
                 </p>
                 <p>
                     <span>（图7.1-1）</span>
@@ -283,7 +283,7 @@
             <div>
                 <span class="help-doc-second-title">8.1 查看用户交易信息</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.021.png" width="554" height="278" alt=""/>
+                    <img :src="getUserTransationImg" width="554" height="278" alt=""/>
                 </p>
                 <p>
                     <span>（图8.1-1）</span>
@@ -299,7 +299,7 @@
             <div>
                 <span class="help-doc-second-title">8.2 查看异常用户</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.022.png" width="554" height="250" alt=""/>
+                    <img :src="getUnusualUserImg" width="554" height="250" alt=""/>
                 </p>
                 <p>
                     <span>（图8.2-1）</span>
@@ -318,7 +318,7 @@
             <div>
                 <span class="help-doc-second-title">8.3 查看异常合约</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.023.png" width="554" height="261" alt=""/>
+                    <img :src="getUnusualContractImg" width="554" height="261" alt=""/>
                 </p>
                 <p>
                     <span>（图8.3-1）</span>
@@ -337,7 +337,7 @@
             <div>
                 <span class="help-doc-second-title">9.1 新建帐号</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.024.png" width="554" height="236" alt=""/>
+                    <img :src="addAccoutImg" width="554" height="236" alt=""/>
                 </p>
                 <p>
                     <span>（图9.1-1）</span>
@@ -350,7 +350,7 @@
             <div>
                 <span class="help-doc-second-title">9.2 删除帐号</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.025.png" width="554" height="230" alt=""/>
+                    <img :src="deleteAccoutImg" width="554" height="230" alt=""/>
                 </p>
                 <p>
                     <span>（图9.2-1）</span>
@@ -363,7 +363,7 @@
             <div>
                 <span class="help-doc-second-title">9.3 修改其他帐号密码</span>
                 <p>
-                    <img src="/static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.026.png" width="554" height="214" alt=""/>
+                    <img :src="loginOtherImg" width="554" height="214" alt=""/>
                 </p>
                 <p>
                     <span>（图9.3-1）</span>
@@ -382,6 +382,32 @@
 
 <script>
 import contentHead from "./contentHead";
+import login_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.001.png"
+import firstUpdatapassword_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.002.png"
+import secondUpdatePassword_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.003.png"
+// import logoutImg from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.004.png"
+import addNode_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.005.png"
+import getNode_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.007.png"
+import blockInfo_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.008.png"
+import transation_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.009.png"
+import addContract_img1 from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.010.png"
+import addContract_img2 from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.011.png"
+import uploadContract_img1 from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.012.png"
+import uploadContract_img2 from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.013.png"
+import compileContract_img1 from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.014.png"
+import compileContract_img2 from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.015.png"
+import deployContract_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.016.png"
+import sendTransation_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.017.png"
+import addUser_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.018.png"
+import searchUser_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.019.png"
+import systemMonitoring_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.020.png"
+import getUserTransation_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.021.png"
+import getUnusualUser_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.022.png"
+import getUnusualContract_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.023.png"
+import addAccout_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.024.png"
+import deleteAccout_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.025.png"
+import loginOther_img from "@/../static/image/a073bb3d-1768-4e40-8ed6-d128178ab766.026.png"
+
 export default {
     name: "helpDoc",
     components: {
@@ -389,7 +415,32 @@ export default {
     },
     data() {
         return {
-             isChoose:false
+            isChoose:false,
+            loginImg: login_img,
+            firstUpdatapassword: firstUpdatapassword_img,
+            secondUpdatePassword: secondUpdatePassword_img,
+            // logoutImg: logoutImg,
+            addNodeImg: addNode_img,
+            getNodeImg: getNode_img,
+            blockInfoImg: blockInfo_img,
+            transationImg: transation_img,
+            addContractImg1: addContract_img1,
+            addContractImg2: addContract_img2,
+            uploadContractImg1: uploadContract_img1,
+            uploadContractImg2: uploadContract_img2,
+            compileContractImg1: compileContract_img1,
+            compileContractImg2: compileContract_img2,
+            deployContractImg: deployContract_img,
+            sendTransationImg: sendTransation_img,
+            addUserImg: addUser_img,
+            searchUserImg: searchUser_img,
+            systemMonitoringImg: systemMonitoring_img,
+            getUserTransationImg: getUserTransation_img,
+            getUnusualUserImg: getUnusualUser_img,
+            getUnusualContractImg: getUnusualContract_img,
+            addAccoutImg: addAccout_img,
+            deleteAccoutImg: deleteAccout_img,
+            loginOtherImg: loginOther_img
         };
     },
     methods:{
