@@ -262,7 +262,7 @@ export default {
             this.content = this.aceEditor.getSession().getValue();
         },
         save: function() {
-            if (this.content && this.status === 0) {
+            if (this.content && !this.data.contractId) {
                 this.addContract();
             } else if (this.content) {
                 this.editContract();
