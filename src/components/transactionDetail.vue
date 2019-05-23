@@ -556,14 +556,6 @@ export default {
                         num++
                     }
                 }
-                // this.contractList.forEach(value => {
-                //     if (value.contractBin.substring(0,(value.contractBin.length-68)) === this.bin) {
-                //         abi = value.contractAbi;
-                //         this.buttonSHow = true;
-                //     } else {
-                //         num++;
-                //     }
-                // });
                 if (num == this.contractList.length) {
                     this.showDecode = true;
                     this.inputButtonShow = false;
@@ -637,22 +629,25 @@ export default {
             let contractName = "";
             let input = {};
             let num = 0;
-            let mewList = list.substring(val.length)
+            let newList = null
             if(val.length > 2 && val.substring(0,2) == '0x'){
                 val = val.substring(2);
                 val = val.substring(0,val.length-68)
             }
             if (this.contractList.length) {
-                this.contractList.forEach(value => {
-                    if (value.contractBin && value.contractBin.substring(0,(value.contractBin.length-68) )=== val) {
-                        abi = value.contractAbi;
-                        contractName = value.contractName;
+                for(let i = 0; i < this.contractList.length; i++){
+                    if (this.contractList[i].contractBin && this.contractList[i].contractBin.substring(0,(this.contractList[i].contractBin.length-68) )=== val) {
+                        console.log(this.contractList[i].bytecodeBin,2)
+                        newList = list.substring(2);
+                        newList = newList.substring(this.contractList[i].bytecodeBin.length);
+                        console.log(newList,3)
+                        abi = this.contractList[i].contractAbi;
+                        contractName = this.contractList[i].contractName;
                         this.buttonSHow = true;
-                    } else {
-                        num++;
+                        break;
                     }
-                });
-                if (num == this.contractList.length) {
+                }
+                if (!abi) {
                     this.showDecode = true;
                     this.inputButtonShow = false;
                 }
@@ -679,10 +674,14 @@ export default {
                                 }
                             });
                             if (value.inputs.length) {
-                                this.decodeData = web3.eth.abi.decodeParameters(
-                                    value.inputs,
-                                    mewList
-                                );
+                                try {
+                                    this.decodeData = web3.eth.abi.decodeParameters(
+                                        value.inputs,
+                                        newList
+                                    );
+                                }catch (error){
+                                    console.log(error)
+                                }
                                 if (JSON.stringify(this.decodeData) != "{}") {
                                 for (const key in this.decodeData) {
                                     value.inputs.forEach((val, index) => {
