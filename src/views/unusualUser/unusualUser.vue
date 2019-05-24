@@ -128,8 +128,8 @@ export default {
             let networkId = localStorage.getItem("networkId");
             let reqData = {
                     networkId: networkId,
-                    pageNumber: 1,
-                    pageSize: 10
+                    pageNumber: this.currentPage,
+                    pageSize: this.pageSize
                 },
                 reqQuery = {};
             reqQuery = {
