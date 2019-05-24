@@ -56,36 +56,42 @@ nginx安装请参考附录
 ```
     sed -i "s/3002/8080/g" nginx.conf   你修改的服务端口是8080
 ```
-
-2、 修改服务ip
+2、 修改mgr服务ip和端口
 ```
-    sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
+sed -i "s/10.10.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
+````
+
+3、 修改web服务监听ip
+```
+    sed -i "s/10.10.0.1/${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
-    sed -i "s/ 10.0.0.1 /192.168.0.1/g" nginx.conf
+    sed -i "s/10.10.0.1/192.168.0.1/g" nginx.conf
 ```
 你修改的服务ip是192.168.0.1,也可以修改成域名
 
-3、 修改静态文件路径(文件需要有权限访问)
+4、 修改静态文件路径(文件需要有权限访问)
 ```
-    sed -i "s/\/data\/webase-web\/dist /${your_file_route}/g" nginx.conf
+    sed -i "s:/data/webase-web/dist:${your_file_path}:g" nginx.conf
+```
+例如：
+
+```
+    sed -i "s:/data/webase-web/dist:/data/app/webase/code/webase-web/dist:g" nginx.conf
 ```
 
-4、 修改mgr服务ip和端口
-```
-sed -i "s/10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
-````
+
 
 服务器已有nginx可按照以下修改，
 ```Nginx
 
     upstream node_mgr_server{
-        server 10.0.0.1:8083; #步骤三 节点管理服务地址及端口
+        server 10.10.0.1:8083; #步骤三 节点管理服务地址及端口
     }
     server {
         listen       3002 default_server;   #步骤一 前端端口（端口需要开通策略且不能被占用）
-        server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
+        server_name  10.10.0.1;         #步骤一 前端地址，可配置为域名
         location / {
                 root    /data/webase-web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
@@ -137,7 +143,7 @@ sed -i "s/10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 nginx下载地址：https://nginx.org/download/（下载最新稳定版本即可）
 或者使用命令：
 
-	wget http://nginx.org/download/nginx-1.10.2.tar.gz  (版本号可换)
+	wget http://nginx.org/download/nginx-1.9.9.tar.gz  (版本号可换)
 将下载的包移动到/usr/local/下
 #### 3.1.3 安装nginx
 ##### 3.1.3.1解压
