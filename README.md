@@ -54,10 +54,14 @@ nginx安装请参考附录
 ```
     sed -i "s/3002/8080/g" nginx.conf   你修改的服务端口是8080
 ```
-
-2、 修改服务ip
+2、 修改mgr服务ip和端口
 ```
-    sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
+sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
+````
+
+3、 修改前端web服务监听的ip
+```
+    sed -i "s/10.0.0.1/${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
@@ -65,15 +69,12 @@ nginx安装请参考附录
 ```
 你修改的服务ip是192.168.0.1,也可以修改成域名
 
-3、 修改静态文件路径
+4、 修改静态文件路径
 ```
     sed -i "s/\/data\/webase-web\/dist/${your_file_route}/g" nginx.conf
 ```
 
-4、 修改mgr服务ip和端口
-```
-sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
-````
+
 
 按照上面的步骤执行后，可以直接跳过这一步骤，直接启动nginx。若服务器已有nginx可按照以下修改，增加一条server
 ```Nginx
@@ -107,7 +108,7 @@ sed -i "s/ 10.0.0.1:8083 /${your_mgrServer_ipPort}/g" nginx.conf
 (1)、启动nginx。
 启动命令：
 
-	/usr/local/sbin/nginx    (nginx下载在/usr/local目录下)
+	/usr/local/nginx/sbin/nginx    (nginx下载在/usr/local目录下)
 
 启动报错重点排查：日志路径是否正确（error.log和access.log）,nginx有没有添加用户权限。
 
