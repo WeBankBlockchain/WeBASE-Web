@@ -33,6 +33,7 @@ import '@/assets/icon/iconfont_webaas.css'
 /*public css moudle */
 import '@/assets/css/common.css'
 import '@/util/directives.js';
+import Clickoutside from 'element-ui/src/utils/clickoutside'
 Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -44,6 +45,7 @@ Vue.use(JsonViewer)
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 Vue.use(ElementUI);
+Vue.use(Clickoutside)
 import promise from 'es6-promise';
 //compatible Promise
 promise.polyfill();

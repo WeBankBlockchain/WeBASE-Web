@@ -20,18 +20,18 @@
         <div class="module-wrapper">
             <h3 style="padding: 20px 0 0 40px;">前置列表</h3>
             <div class="search-part" style="padding-top: 20px;">
-                <div class="search-part-left">
+                <div class="search-part-left" v-if='!disabled'>
                     <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点前置</el-button>
                 </div>
-                <div class="search-part-right">
+                <!-- <div class="search-part-right">
                     <el-input placeholder="请输入前置编号" v-model="frontId" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
-                </div>
+                </div> -->
             </div>
             <div class="search-table">
                 <el-table :data="frontData" class="search-table-content" v-loading="loading">
-                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip >
                         <template slot-scope="scope">
                             <span v-if='head.enName != "frontIp"'>{{scope.row[head.enName]}}</span>
                             <span v-else>
@@ -41,7 +41,7 @@
                     </el-table-column>
                     <el-table-column  fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-button @click="deletedFront(scope.row)" type="text" size="small">删除</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">删除</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -53,7 +53,7 @@
             <div class="search-table">
                 <h3 style="padding: 20px 0 8px 0;">节点列表</h3>
                 <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
-                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width='head.width'>
+                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip  :width='head.width'>
                     <template slot-scope="scope">
                         <template>
                             <span v-if="head.enName ==='nodeActive'">
@@ -161,10 +161,16 @@ export default {
                 }
             ],
             nodeData: [],
-            urlQuery: this.$root.$route.query
+            urlQuery: this.$root.$route.query,
+            disabled: false
         };
     },
     mounted: function() {
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
         this.getFrontTable();
         this.getNodeTable();
     },
@@ -368,12 +374,12 @@ export default {
     padding: 8px 0;
     font-size: 12px;
 }
-.search-table-content>>>th {
+/* .search-table-content>>>th {
     color: #8598b0;
 }
 .search-table-content>>>td {
     color: #737a86;
-}
+} */
 .search-table-detail {
     width: 91%;
     float: right;
@@ -398,5 +404,8 @@ export default {
     border-radius: inherit;
     background: #20D4D9;
     color: #fff;
+}
+.grayColor{
+    color: #666 !important
 }
 </style>

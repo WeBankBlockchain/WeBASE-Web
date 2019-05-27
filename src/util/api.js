@@ -19,13 +19,15 @@ import { reviseParam } from './util'
 import qs from 'qs'
 
 //login
-export function login(data) {
+export function login(data,code,token) {
     return post({
-        url: `${url.ORG_LIST}/account/login`,
+        url: `${url.ORG_LIST}/account/login?checkCode=${code}`,
+        // url: `${url.ORG_LIST}/account/login`,
         method: 'post',
         data: qs.stringify(data),
         headers: {
-            'Content-Type': "application/x-www-form-urlencoded"
+            'Content-Type': "application/x-www-form-urlencoded",
+            'token': token
         }
     })
 }
@@ -443,5 +445,12 @@ export function getAbi(data) {
         url: `${url.ORG_LIST}/contract/findByPartOfBytecodeBin`,
         method: 'post',
         data: data
+    })
+}
+
+export function getPictureCheckCode() {
+    return get({
+        url: `${url.ORG_LIST}/account/pictureCheckCode`,
+        method: 'get',
     })
 }
