@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /*mgr*/
-let mgr = process.env.API_PATH;
-/*contract*/
+let mgr = process.env.MGR_PATH;
 export default {
     ORG_LIST: `${mgr}/webase-node-mgr`,
 }
