@@ -44,7 +44,7 @@
                     </el-tooltip>
                     <span>加载</span>
                 </span> -->
-                <span class="contract-code-done" v-if="abiFile"  @click="send">
+                <span class="contract-code-done" v-if="abiFile && bin"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
