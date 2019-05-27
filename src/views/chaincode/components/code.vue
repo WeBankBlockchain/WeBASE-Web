@@ -24,17 +24,17 @@
                 </el-tooltip> -->
                 </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" v-if="!contractAddress">
+                <span class="contract-code-done"  v-if="!contractAddress && !disabled">
                     <el-tooltip class="item" effect="dark" content="按Ctrl+s保存合约内容" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
                         <span>保存</span>
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="!contractAddress">
+                <span class="contract-code-done" @click="compile" v-if="!contractAddress && !disabled">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>编译</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile && bin">
+                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile && bin && !disabled">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
@@ -44,7 +44,7 @@
                     </el-tooltip>
                     <span>加载</span>
                 </span> -->
-                <span class="contract-code-done" v-if="abiFile"  @click="send">
+                <span class="contract-code-done" v-if="abiFile && bin && !disabled"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -170,6 +170,7 @@ export default {
             editorInput: null,
             uploadFileAdrShow: false,
             uploadAddress: "",
+            disabled: false
         };
     },
     beforeDestroy: function(){
@@ -177,6 +178,11 @@ export default {
         Bus.$off("noData")
     },
     mounted: function() {
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
         this.initEditor();
         Bus.$on('select',data => {
             this.codeShow = true;

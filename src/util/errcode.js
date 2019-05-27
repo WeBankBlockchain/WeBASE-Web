@@ -147,16 +147,16 @@ let errCode = {
         cn: '无效的群组编号'
     },
     "202007": {
-        en: "organization id cannot be empty",
-        cn: '组织编号不能为空'
+        en: "checkCode is null",
+        cn: '验证码为空'
     },
     "202008": {
-        en: "invalid organization id",
-        cn: '无效的组织编号'
+        en: "invalid checkCode",
+        cn: '无效的验证码'
     },
     "202009": {
-        en: "network_organization_mapping already exists",
-        cn: '已有该网络和组织的关联'
+        en: "save front fail",
+        cn: '保存节点错误'
     },
     "202010": {
         en: "network_organization_mapping not exist",
@@ -251,8 +251,8 @@ let errCode = {
         cn: '无效的角色编号'
     },
     "202033": {
-        en: "invalid attr",
-        cn: '无效的attr值'
+        en: "invalid contract address",
+        cn: '无效的地址'
     },
     "202034": {
         en: "login fail",

@@ -25,10 +25,10 @@
                 </div>
             </div>
             <div class="search-table">
-                <el-table :data="contractList" tooltip-effect="light" v-loading="loading">
+                <el-table :data="contractList" tooltip-effect="dark" v-loading="loading">
                     <el-table-column  prop="contractName" label="合约名称"  show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
-                            <span style="color: #194ea0;cursor:pointer" @click='open(scope.row)'>{{scope.row.contractName}}</span>
+                            <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column  prop="contractPath" label="合约目录"  show-overflow-tooltip  width="120" align="center"></el-table-column>
@@ -56,7 +56,7 @@
                         label="操作"
                         width="100">
                         <template slot-scope="scope">
-                            <el-button :disabled="!scope.row.contractAddress" :class="{'grayColor': !scope.row.contractAddress}" @click="send(scope.row)" type="text" size="small">发送交易</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">发送交易</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -107,9 +107,15 @@ export default {
             currentPage: 1,
             pageSize: 10,
             total: 0,
+            disabled: false
         }
     },
     mounted: function(){
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
         this.getContracts()
     },
     methods: {
