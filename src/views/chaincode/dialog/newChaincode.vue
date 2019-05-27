@@ -146,9 +146,9 @@ export default {
             }
         },
         addChaincode: function() {
-            let networkId = localStorage.getItem("networkId");
+            let groupId = localStorage.getItem("groupId");
             let reqData = {
-                networkId: networkId,
+                groupId: groupId,
                 contractName: this.filename,
                 contractVersion: this.ruleForm.version,
                 contractSource: this.fileString

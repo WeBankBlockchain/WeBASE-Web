@@ -15,6 +15,8 @@
  */
 <template>
     <div class="contract-content">
+        <!-- <v-content-head :headTitle="'合约管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
+        <v-content-head :headTitle="'合约IDE'" style="font-size: 14px;"  @changGroup="changGroup"></v-content-head>
         <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
             <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide"></v-menu>
             <div class="move" @mousedown="dragDetailWeight($event)"></div>
@@ -26,14 +28,20 @@
 </template>
 
 <script>
-import menu from "./components/contractMenu";
+import menu from "./components/contractCatalog";
 import codes from "./components/code";
-
+import contentHead from "@/components/contentHead";
 export default {
     name: "contract",
     components: {
         "v-menu": menu,
-        "v-code": codes
+        "v-code": codes,
+        "v-content-head": contentHead
+    },
+    watch: {
+        $route: function() {
+            this.urlQuery = this.$root.$route.query;
+        }
     },
     data: function() {
         return {
@@ -42,7 +50,8 @@ export default {
             menuHide: true,
             changeWidth: false,
             contractHide: false,
-            menuWidth: 240
+            menuWidth: 240,
+            urlQuery: this.$root.$route.query
         };
     },
     computed: {
@@ -65,6 +74,9 @@ export default {
     },
     mounted: function() {},
     methods: {
+        changGroup: function(){
+            this.$refs.menu.getContracts()
+        },
         dragDetailWeight: function(e) {
             let startX = e.clientX,
                 menuWidth = this.menuWidth;
@@ -110,7 +122,7 @@ export default {
 .code-menu-wrapper {
     float: left;
     position: relative;
-    height: 100%;
+    height: calc(100% - 57px);
     font-size: 12px;
     box-sizing: border-box;
 }
@@ -140,12 +152,12 @@ export default {
 }
 .code-detail-wrapper {
     float: left;
-    height: 100%;
+    height: calc(100% - 57px);
     font-size: 12px;
 }
 .code-detail-reset-wrapper {
     float: left;
-    height: 100%;
+    height: calc(100% - 57px);
     font-size: 12px;
 }
 .menu-drag {

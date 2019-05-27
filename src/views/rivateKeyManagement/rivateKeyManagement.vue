@@ -15,7 +15,7 @@
  */
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'用户查看'"></v-contentHead>
+        <v-contentHead :headTitle="'用户查看'" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
@@ -120,10 +120,13 @@ export default {
         this.getUserInfoData();
     },
     methods: {
+        changGroup(){
+            this.getUserInfoData()
+        },
         getUserInfoData() {
             this.loading = true;
             let reqData = {
-                    networkId: localStorage.getItem("networkId"),
+                    groupId: localStorage.getItem("groupId"),
                     pageNumber: this.currentPage,
                     pageSize: this.pageSize
                 },

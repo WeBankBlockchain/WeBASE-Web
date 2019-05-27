@@ -14,17 +14,48 @@
  * limitations under the License.
  */
 <template>
-    <div>
-        <el-select v-model="userName" placeholder="请选择用户" @change="changeId">
-            <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
-        </el-select>
-        <div v-if='inputs.length' v-for='(item,index) in inputs' :key='item.name' style="padding: 10px 0;">
-            <span style="display:inline-block;width:80px;">{{item.type}}</span>
-            <el-input v-model="parameter[index]" style="width: 250px;"></el-input>
-        </div>
-        <div style="text-align:right">
-            <el-button type="primary" @click="submit">确定</el-button>
+    <div class="chang-wrapper">
+        <table class="opt-wrapper">
+            <!-- <tr>
+                <td>合约版本号：</td>
+                <td>
+                    <el-input v-model="version" placeholder="请输入数字或字母" @blur='versionBlur' maxlength='18' style="width: 240px"></el-input>
+                    <span style="color: #f00" v-show="versionShow">{{errorInfo}}</span>
+                </td>
+            </tr> -->
+            <tr>
+                <td style="width: 40px;">用户：</td>
+                <td>
+                    <el-select v-model="userName" placeholder="请选择用户" @change="changeId" style="width: 240px">
+                        <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='item in userList'></el-option>
+                    </el-select>    
+                </td>
+            </tr>
+            <tr v-if='inputs.length'>
+                <td style="vertical-align: top;">参数：</td>
+                <td>
+                    <div v-for='(item,index) in inputs' :key='item.name'>
+                        <el-input v-model="parameter[index]" style="width: 240px;margin-bottom:10px;">
+                            <template slot="prepend">
+                                <span>{{item.type}}</span>
+                            </template>
+                        </el-input>
+                        <!-- <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
+                            <i class="el-icon-info" style="position: relative;top: 8px;"></i>
+                        </el-tooltip> -->
+                    </div>
+                </td>
+            </tr>
+            <tr v-if='inputs.length'>
+                <td></td>
+                <td>
+                    <p style="padding: 0px 0 0 0px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
+                </td>
+            </tr>
+        </table>
+        <div class="text-right send-btn">
             <el-button @click="close">取消</el-button>
+            <el-button type="primary" @click="submit">确定</el-button>
         </div>
     </div>
 </template>
@@ -41,7 +72,10 @@ export default {
             userId: null,
             inputs: [],
             parameter: [],
-            abifile: JSON.parse(this.abi)
+            abifile: JSON.parse(this.abi),
+            version: "",
+            versionShow: false,
+            errorInfo: ""
         };
     },
     mounted: function() {
@@ -71,17 +105,18 @@ export default {
             this.$emit("close");
         },
         submit: function() {
-            let data = {
-                userId: this.userId,
-                params: this.parameter
-            };
-
-            this.$emit("change", data);
-            this.$emit("close");
+                this.versionShow = false;
+                this.errorInfo = ''
+                let data = {
+                    userId: this.userId,
+                    params: this.parameter,
+                };
+                this.$emit("change", data);
+                this.$emit("close");
         },
         getUserData: function() {
             let reqData = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
                 pageSize: 1000
             };
@@ -114,4 +149,28 @@ export default {
     }
 };
 </script>
+<style scoped>
+.chang-wrapper {
+    padding-left: 20px;
+    margin-top: 15px;
+}
+
+.chang-wrapper /deep/ .el-input__inner {
+    height: 32px;
+    line-height: 32px;
+}
+.chang-wrapper /deep/ .el-input__icon {
+    line-height: 32px;
+}
+.opt-wrapper tr td {
+    padding-top: 0;
+    padding-bottom: 10px;
+}
+.send-btn {
+    
+}
+.send-btn /deep/ .el-button {
+    padding: 9px 16px;
+}
+</style>
 
