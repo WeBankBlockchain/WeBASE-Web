@@ -46,3 +46,8 @@ Vue.directive('dialogDrag', {
         }  
     }
 })
+// Vue.directive("contextmenu",{
+//     bind(el, binding, vnode, oldVnode) {
+//         const dialogHeaderEl = el.querySelector('.el-popover');
+//     }
+// })

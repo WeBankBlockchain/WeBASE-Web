@@ -26,18 +26,21 @@
         <div class="content-head-network">
             <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
             <!-- <span style="margin-left:10px"></span> -->
-            <span class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}
-                <ul v-if='dialogShow'>
-                    <li v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
-                </ul>
-            </span>
-            <!-- <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
+            
+                <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
+                    <ul class="group-item">
+                        <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
+                    </ul>
+                    <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}</span>
+                </el-popover>
+            
+            <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
             <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
             <!-- </span> -->
             <span style="padding-right:10px"></span>
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
-                    <span class="change-password" @click="changePassword">修改密码</span>
+                    <span class="change-password" @click="changePassword">修改密码</span><br>
                     <span class="sign-out" @click="signOut">退出</span>
                 </div>
                 <a class="browse-user" slot="reference">
@@ -76,7 +79,7 @@ export default {
         }
     },
     data: function() {
-        return {
+        return { 
             title: this.headTitle,
             groupName: "-",
             accountName: "-",
@@ -241,6 +244,7 @@ export default {
     color: #cfd7db;
 }
 .sign-out-wrapper {
+    line-height: 32px;
     text-align: center;
 }
 .sign-out {
@@ -248,7 +252,7 @@ export default {
     color: #ed5454;
 }
 .change-password {
-    color: #2d5f9e;
+    color: #0DB1C1;
     cursor: pointer;
 }
 .network-name {
@@ -291,5 +295,15 @@ export default {
     height: 32px;
     line-height: 32px;
     cursor: pointer;
+}
+.group-item{
+    line-height: 32px;
+    text-align: center;
+}
+.group-item-list{
+    cursor: pointer;
+}
+.group-item-list:hover{
+    color: #0DB1C1
 }
 </style>
