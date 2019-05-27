@@ -143,11 +143,14 @@ export default {
                         symbolSize: 1,
                         itemStyle: {
                             normal: {
-                                color: "#2878ff",
+                                color: "#0DB1C1",
                                 lineStyle: {
-                                    color: "#2878ff"
+                                    color: "#0DB1C1"
                                 }
                             }
+                        },
+                        areaStyle: {
+                            color: 'rgba(13, 177, 193,0.3)'
                         },
                         symbolSize: 5,
                         data: this.chartStatistics.transactionDataArr

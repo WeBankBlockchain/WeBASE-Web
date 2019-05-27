@@ -14,55 +14,65 @@
  * limitations under the License.
  */
 <template>
-    <div class="contract-menu" style="position: relative;height: 100% ;" @contextmenu.prevent="handle($event)" @click.self='checkNull'>
+    <div class="contract-menu" style="position: relative;height: 100% ;">
         <div class="contract-menu-header" >
-            <el-tooltip class="item" effect="dark" content="新建文件夹" placement="top-start">
+            <el-tooltip class="item" effect="dark" v-if="!disabled" content="新建文件夹" placement="top-start">
                 <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="新建文件" placement="top-start">
+            <el-tooltip class="item" effect="dark" content="新建文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-Addfile icon contract-icon" @click='addFile'></i>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="上传文件" placement="top-start">
+            <el-tooltip class="item" effect="dark" content="上传文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
                     <input type="file" id="file" ref='file' name="chaincodes" class="uploads"  @change="upload($event)"/>
                 </i>
             </el-tooltip>
             
         </div>
-        <div class="contract-menu-handle" v-if='handleModel'  :style="{'top': clentY,'left': clentX}">
-            <ul v-if="contractFile">
-                <li class="contract-menu-handle-list" @click="rename">重命名</li>
-            </ul>
-            <ul v-if="contractFolder">
-                <li class="contract-menu-handle-list" @click="addFiles">新建文件</li>
-                <!-- <li class="contract-menu-handle-list" @click="rename">重命名</li> -->
-            </ul>
-        </div>
+        
         <div class="contract-menu-content">
             <ul>
                 <li v-for='item in contractArry' :key="item.contractId" >
                     <div v-if='item.contractType == "file"' class="contract-file" :id='item.contractId'>
                         <i class="wbs-icon-file" @click='select(item)' v-if='!item.renameShow' :id='item.contractId'></i>
-                        <span @click='select(item)' :id='item.contractId' v-if='!item.renameShow'  :class="{'colorActive': item.contractActive}" >{{item.contractName}}</span>
+                        <span @contextmenu.prevent="handle($event,item)"  @click='select(item)' :id='item.contractId' v-if='!item.renameShow'  :class="{'colorActive': item.contractActive}" >{{item.contractName}}</span>
                         <el-input v-model="contractName" v-focus="true" autofocus='autofocus' maxlength="32"  @blur="changeName(item)" v-if="item.renameShow"></el-input>
-                        <i class="wbs-icon-delete contract-delete" v-if='!item.renameShow && !item.contractAddress'   @click="deleteFile(item)"></i>
-                        <!-- <div class="contract-file-handle" v-if="item.renameShow">
-                            <span @click='rename(item)'>重命名</span>
-                        </div> -->
+                        <!-- <i class="wbs-icon-delete contract-delete" v-if='!item.renameShow && !item.contractAddress'   @click="deleteFile(item)"></i> -->
+                        <div class="contract-menu-handle" v-if='!disabled &&item.handleModel'  :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
+                            <ul v-if="contractFile">
+                                <li class="contract-menu-handle-list" @click="rename">重命名</li>
+                                 <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">删除</li>
+                            </ul>
+                            <!-- <ul v-if="contractFolder">
+                                <li class="contract-menu-handle-list" @click="addFiles">新建文件</li>
+                            </ul> -->
+                        </div>
                     </div>
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
                         <i :class="item.folderIcon" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
-                        <i class="wbs-icon-folder" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
-                        <span :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
+                        <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
+                        <span @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <!-- <el-input v-model="contractName" autofocus='autofocus'  @blur="changeName(item)" v-if="item.renameShow"></el-input> -->
-                        <i class="wbs-icon-delete contract-delete" v-if="!item.renameShow" @click='deleteFolder(item)'></i>
+                        <!-- <i class="wbs-icon-delete contract-delete" v-if="!item.renameShow" @click='deleteFolder(item)'></i> -->
+                        <div class="contract-menu-handle" v-if='!disabled && item.handleModel'  :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
+                            <ul>
+                                <li class="contract-menu-handle-list" @click="addFiles">新建文件</li>
+                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>删除</li>
+                            </ul>
+                        </div>
                         <br>
                         <ul v-if="item.folderActive" style="padding-left: 20px;">
                             <li class="contract-file" v-for='list in item.child' :key="list.contractId">
                                 <i class="wbs-icon-file" v-if='!list.renameShow' @click='select(list)'></i>
-                                <span @click='select(list)' :id='list.contractId' v-if='!list.renameShow' :class="{'colorActive': list.contractActive}">{{list.contractName}}</span>
+                                <span @click='select(list)' @contextmenu.prevent="handle($event,list)" :id='list.contractId' v-if='!list.renameShow' :class="{'colorActive': list.contractActive}">{{list.contractName}}</span>
                                 <el-input v-model="contractName" autofocus='autofocus' maxlength="32"  @blur="changeName(list)" v-if="list.renameShow"></el-input>
-                                <i class="wbs-icon-delete contract-delete" v-if='!list.contractAddress && !list.renameShow' @click="deleteFile(list)"></i>
+                                <!-- <i class="wbs-icon-delete contract-delete" v-if='!list.contractAddress && !list.renameShow' @click="deleteFile(list)"></i> -->
+                                <div class="contract-menu-handle" v-if='!disabled &&list.handleModel'  :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
+                                    <ul v-if="contractFile">
+                                        <li class="contract-menu-handle-list" @click="rename">重命名</li>
+                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">删除</li>
+                                    </ul>
+                                </div>
                             </li>
                         </ul>
                     </div>
@@ -81,13 +91,16 @@ import selectCatalog from "../dialog/selectCatalog"
 import {getContractList,saveChaincode,deleteCode} from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
+import Clickoutside  from 'element-ui/src/utils/clickoutside'
+// console.log(Clickoutside)
 export default {
     name: "contractCatalog",
     components: {
         "add-folder": addFolder,
         "add-file": addFile,
-        "select-catalog": selectCatalog
+        "select-catalog": selectCatalog,
     },
+    // directives: { clickoutside  },
     data: function(){
         return {
             foldershow: false,
@@ -108,6 +121,7 @@ export default {
             ID: "",
             handleModel: false,
             folderId: null,
+            disabled: false,
         }
     },
     beforeDestroy: function(){
@@ -116,6 +130,11 @@ export default {
         Bus.$off("open")
     },
     mounted: function(){
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
         this.$nextTick(function() {
             this.getContracts()
         })
@@ -149,6 +168,7 @@ export default {
         })
     },
     directives: {
+        Clickoutside,
         focus: {
             update: function (el, {value}) {
                 if (value) {
@@ -158,19 +178,32 @@ export default {
         }
     },
     methods: {
-        checkNull: function(){
+        // handleClickOutside: function(){
+        //     this.checkNull();
+        // },
+        checkNull: function(list){
+            this.contractArry.forEach(value => {
+                value.handleModel = false;
+                if(value.contractType == 'folder'){
+                    value.child.forEach(list => {
+                        list.handleModel = false;
+                    })
+                }
+            })
             this.ID = "";
             this.contractFile = false;
             this.contractFolder = false;
             this.handleModel = false;
         },
-        handle: function(e){
+        handle: function(e,list){
+            this.checkNull();
+            list.handleModel = true
             if(e.clientX > 201){
                 this.clentX = e.clientX - 200 + 'px';
             }else{
                 this.clentX = e.clientX + 'px';
             }
-            this.clentY = e.clientY - 50 + 'px';
+            this.clentY = 20 + 'px';
             this.ID = e.target.id;
             let item = {};
             if(this.ID){
@@ -202,6 +235,14 @@ export default {
             }
         },
         rename: function(val){
+                this.contractArry.forEach(value => {
+                    value.handleModel = false;
+                    if(value.contractType == 'folder'){
+                        value.child.forEach(list => {
+                            list.handleModel = false;
+                        })
+                    }
+                })
                 this.contractArry.forEach(value => {
                     if(value.contractId == this.ID && value.contractStatus != 2){
                         this.$set(value,'renameShow',true)
@@ -382,11 +423,13 @@ export default {
             let newFileList = [];
             list = this.contractList || []
             list.forEach(value => {
+                this.$set(value,'handleModel',false)
                 if(value.contractPath == "/"){
                     newFileList.push(value)
                 }
             })
             folderArry.forEach(value => {
+                this.$set(value,'handleModel',false)
                 value.child = [];
                 list.forEach((item,index) => {
                     if(item.contractPath == value.contractName){
@@ -472,7 +515,7 @@ export default {
                         let result = [];
                         let arrry = []
                         let obj = {};
-                        for(let i =0; i<this.folderList.length; i++){
+                        for(let i =0; i < this.folderList.length; i++){
                             if(!obj[this.folderList[i].folderName] && this.folderList[i].groupId == localStorage.getItem("groupId")){
                                 result.push(this.folderList[i]);
                                 obj[this.folderList[i].folderName] = true;
@@ -492,16 +535,16 @@ export default {
                         if(list){
                             this.getContractArry(list);
                         }else if(this.$route.query.contractId){
-                            let num = 0
+                            let num = 0;
                             this.contractList.forEach(value => {
                                 if(value.contractId == this.$route.query.contractId){
-                                    this.getContractArry(value);
                                     num++
+                                    this.getContractArry(value);
+                                }
+                                if(!num){
+                                   this.getContractArry() 
                                 }
                             })
-                            if(!num){
-                                this.getContractArry()
-                            }
                         }else{
                             this.getContractArry()
                         }
@@ -709,6 +752,7 @@ export default {
     padding-left: 25px;
 }
 .contract-folder{
+    position: relative;
     padding-left: 5px;
 }
 .contract-folder i{
@@ -759,7 +803,9 @@ export default {
 }
 .contract-menu-handle {
     position: absolute;
+    font-size: 0;
     width: 100px;
+    /* top: 0; */
     cursor: pointer;
     font-size: 12px;
     text-align: center;
@@ -769,6 +815,7 @@ export default {
     z-index: 9999;
 }
 .contract-menu-handle li{
+    font-size: 12px;
     height: 30px;
     line-height: 30px;
     padding-left: 8px;
