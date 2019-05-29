@@ -685,7 +685,7 @@ export default {
                         });
                     }); 
         },
-        deleteFolder: function(){
+        deleteFolder: function(val){
             this.$confirm('确认删除？')
                 .then(_ => {
                    this.deleteFolderData(val)
