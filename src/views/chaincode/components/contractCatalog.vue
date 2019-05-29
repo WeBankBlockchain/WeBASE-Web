@@ -685,7 +685,14 @@ export default {
                         });
                     }); 
         },
-        deleteFolder: function(val){
+        deleteFolder: function(){
+            this.$confirm('确认删除？')
+                .then(_ => {
+                   this.deleteFolderData(val)
+            })
+            .catch(_ => {});
+        },
+        deleteFolderData: function(val){
             let list = val.child;
             let num = 0;
             for(let i = 0; i < list.length; i++){
