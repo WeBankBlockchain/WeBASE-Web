@@ -295,7 +295,7 @@ export default {
         },
         saveCode: function(){
             this.data.contractSource = Base64.encode(this.content);
-            Bus.$emit("compile",this.data)
+            Bus.$emit("save",this.data)
         },
         resizeCode: function() {
             this.aceEditor.setOptions({
@@ -631,79 +631,6 @@ export default {
                     });
                 });
         },
-        // addContract: function() {
-        //     this.loading = true;
-        //     let reqData = {
-        //         groupId: localStorage.getItem("groupId"),
-        //         contractName: this.contractName,
-        //         contractBin: this.bin,
-        //         bytecodeBin: this.bytecodeBin,
-        //         contractVersion: this.data.contractVersion,
-        //         contractSource: Base64.encode(this.content)
-        //     };
-        //     if (this.abiFile) {
-        //         reqData.contractAbi = this.abiFile;
-        //     }
-        //     addChaincode(reqData)
-        //         .then(res => {
-        //             this.loading = false;
-        //             if (res.data.code === 0) {
-        //                 this.status = res.data.data.contractStatus;
-        //                 this.abiFile = res.data.data.contractAbi || "";
-        //                 this.contractAddress = res.data.data.contractAddress || "";
-        //                 this.$message({
-        //                     message: "合约保存成功！",
-        //                     type: "success"
-        //                 });
-        //                 this.$emit("add", res.data.data);
-        //             } else {
-        //                 this.$message({
-        //                     message: errcode.errCode[res.data.code].cn,
-        //                     type: "error"
-        //                 });
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.loading = false;
-        //             this.$message({
-        //                 message: "系统错误",
-        //                 type: "error"
-        //             });
-        //         });
-        // },
-        // editContract: function() {
-        //     let reqData = {
-        //         groupId: localStorage.getItem("groupId"),
-        //         contractId: this.data.contractId,
-        //         contractBin: this.bin,
-        //         bytecodeBin: this.bytecodeBin,
-        //         contractSource: Base64.encode(this.content)
-        //     };
-        //     if (this.abiFile) {
-        //         reqData.contractAbi = this.abiFile;
-        //     }
-        //     editChain(reqData)
-        //         .then(res => {
-        //             if (res.data.code === 0) {
-        //                 this.$message({
-        //                     message: "合约保存成功！",
-        //                     type: "success"
-        //                 });
-        //                 this.$emit("add", res.data.data);
-        //             } else {
-        //                 this.$message({
-        //                     message: errcode.errCode[res.data.code].cn,
-        //                     type: "error"
-        //                 });
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.$message({
-        //                 message: "系统错误",
-        //                 type: "error"
-        //             });
-        //         });
-        // },
         foldInfo: function(val) {
             this.successHide = val;
         },
