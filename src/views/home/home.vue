@@ -108,9 +108,9 @@
                                         <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">{{item.transHash}}</router-link>
                                     </p>
                                     <p class="trans-address">
-                                        <span>{{item.transFrom}}</span>
+                                        <span :title='item.transFrom'>{{item.transFrom}}</span>
                                         <img :src="sRight" alt="箭头">
-                                        <span>{{item.transTo}}</span>
+                                        <span :title='item.transTo'>{{item.transTo}}</span>
                                     </p>
                                     
                                 </div>

@@ -114,6 +114,8 @@ export default {
         Bus.$off("compile")
         Bus.$off("deploy")
         Bus.$off("open")
+        Bus.$off("save")
+        Bus.$off("send")
     },
     mounted: function(){
         this.$nextTick(function() {
@@ -121,6 +123,9 @@ export default {
         })
         Bus.$on("compile",data => {
             this.saveContract(data,'合约编译成功！')
+        })
+        Bus.$on("save",data => {
+            this.saveContract(data)
         })
         Bus.$on("deploy",data => {
             this.getContracts(data);
