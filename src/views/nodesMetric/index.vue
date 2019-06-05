@@ -70,6 +70,7 @@ import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth, getFronts } from "@/util/api";
 import { format, numberFormat,formatData } from "@/util/util.js";
+import errcode from "@/util/errcode";
 export default {
     name: "nodesMetric",
     components: {
@@ -217,6 +218,11 @@ export default {
                                     item.metricName = "pbftView";
                                 } else if (item.metricType === "pendingCount") {
                                     item.metricName = "待打包的交易数";
+                                }
+                                if(this.chartParam.contrastBeginDate){
+                                    item.data.contrastDataList.contractDataShow = true
+                                }else{
+                                    item.data.contrastDataList.contractDataShow = false
                                 }
                                 item.data.contrastDataList.timestampList = timestampList;
                                 item.data.lineDataList.timestampList = timestampList;
