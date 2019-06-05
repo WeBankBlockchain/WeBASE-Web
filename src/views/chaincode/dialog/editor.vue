@@ -16,6 +16,7 @@
 <template>
     <div>
         <el-dialog v-dialogDrag  :title="'交易内容'" :visible.sync="editorDialog" @close="modelClose" width="650px">
+            <div v-if='!transationData'>无数据</div>
             <div v-if='transationData && !transationData.logs'>
                 <json-viewer
                     :value="transationData"
