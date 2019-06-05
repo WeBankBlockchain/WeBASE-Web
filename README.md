@@ -31,7 +31,7 @@
 
 nginx安装请参考附录
 
-### 2.2 拉取代码
+### 2.2 拉取代码并执行命令
 
 代码可以放在/data/app/page下面
 执行命令：
@@ -73,20 +73,24 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 ```
     sed -i "s/\/data\/webase-web\/dist/${your_file_route}/g" nginx.conf
 ```
+```
+执行完以上四步且无报错，跳过2.3，直接执行步骤2.4，启动nginx。
 
+### 2.3 修改nginx配置
 
+`注意：完整执行步骤2.2之后忽略此步骤`
 
-按照上面的步骤执行后，可以直接跳过这一步骤，直接启动nginx。若服务器已有nginx可按照以下修改，增加一条server
+若服务器已有nginx可按照以下修改，增加一条server
 ```Nginx
 
     upstream node_mgr_server{
         server 10.0.0.1:8083; #步骤三 节点管理服务地址及端口
     }
     server {
-        listen       3002 default_server;   #步骤一 前端端口
+        listen       3002 default_server;   #步骤一 前端端口（端口需要开通策略且不能被占用）
         server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
         location / {
-                root    /data/webase-web/dist;   #步骤二 前端文件路径
+                root    /data/webase-web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }
