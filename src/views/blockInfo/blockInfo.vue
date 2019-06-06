@@ -169,7 +169,7 @@ export default {
                 }
             });
         },
-        clickTable: function(row, $event, column) {
+        clickTable: function(row, column, $event) {
             let nodeName = $event.target.nodeName;
             if (nodeName === "I") {
                 return
