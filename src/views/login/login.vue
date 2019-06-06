@@ -44,7 +44,7 @@
                         </el-form-item>
                         <el-form-item label="验证码" prop="vercode">
                             <div style="width: 100%;">
-                                <el-input style="width: 240px;" v-model="loginForm.vercode" placeholder="请输入验证码">
+                                <el-input style="width: 240px;" v-model="loginForm.vercode" placeholder="请输入验证码" @keyup.enter.native="submit('loginForm')">
                                 </el-input>
                                 <span class="codeUrlImg">
                                     <img style="width: 100%;height: 100%" :src="codeUrl" alt="" @click="changeCode()">
