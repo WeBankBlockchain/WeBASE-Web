@@ -31,10 +31,14 @@ axiosIns.interceptors.response.use(
     response => {
         if(response.data && response.data.code === 302000) {
             router.push({
-                path: '/',
+                path: '/login',
                 query: {redirect: router.currentRoute.fullPath}
             })
         }
+        // this.$message({
+        //     type: "error",
+        //     message: "登录状态失效，请重新登录！"
+        // });
         return response;
     },
     error => {

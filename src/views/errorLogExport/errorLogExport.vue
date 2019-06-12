@@ -148,8 +148,8 @@ export default {
         },
         getNodeData(callback) {
             this.loading = true;
-            let networkId = localStorage.getItem("networkId");
-            let reqString = `${networkId}/1/100`;
+            let groupId = localStorage.getItem("groupId");
+            let reqString = `${groupId}/1/100`;
             getErrorNodeList(reqString)
                 .then(res => {
                     if (res.data.code === 0) {
@@ -179,7 +179,7 @@ export default {
         getErrorLog() {
             this.loading = true;
             let reqData = {
-                    networkId: localStorage.getItem("networkId"),
+                    groupId: localStorage.getItem("groupId"),
                     nodeId: this.nodeId,
                     pageNumber: this.currentPage,
                     pageSize: this.pageSize

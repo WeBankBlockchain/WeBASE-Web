@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'交易审计'" :headSubTitle="headSubTitle"></v-content-head>
+        <v-content-head :headTitle="'交易审计'" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="more-search-table search-min-width">
                 <div class="text-left">
@@ -71,7 +71,7 @@ export default {
     data() {
         return {
             loading: false,
-            networkId: localStorage.getItem("networkId"),
+            groupId: localStorage.getItem("groupId"),
             headSubTitle: "用户交易",
             reloadNum: 1,
             chartStatistics: {
@@ -137,10 +137,20 @@ export default {
         });
     },
     methods: {
+        changGroup(val){
+            this.groupId = val
+            this.userName = ""
+            this.$nextTick(() => {
+                this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+                this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+                this.getMonitorTransactionInfo();
+                this.getMonitorUserList();
+            });
+        },
         getMonitorTransactionInfo() {
             this.loading = true
             let reqData = {
-                    networkId: this.networkId
+                    groupId: this.groupId
                 },
                 reqQurey = {};
             reqQurey = {
@@ -243,7 +253,7 @@ export default {
         },
         getMonitorUserList() {
             let reqData = {
-                networkId: this.networkId
+                groupId: this.groupId
             };
             monitorUserList(reqData, {})
                 .then(res => {
@@ -267,7 +277,7 @@ export default {
         },
         getMonitorUserInterfaceList(val) {
             let reqData = {
-                    networkId: this.networkId
+                    groupId: this.groupId
                 },
                 reqQurey = {};
             reqQurey = {

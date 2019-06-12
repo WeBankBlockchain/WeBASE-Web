@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'"></v-content-head>
+        <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
@@ -91,6 +91,9 @@ export default {
         this.getBlockList();
     },
     methods: {
+        changGroup(val){
+            this.getBlockList()
+        },
         search: function() {
             if (
                 this.searchKey.key == "pkHash" &&
@@ -108,13 +111,17 @@ export default {
         },
         getBlockList: function() {
             this.loading = true;
-            let networkId = localStorage.getItem("networkId");
+            let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    networkId: networkId,
+                    groupId: groupId,
                     pageNumber: this.currentPage,
                     pageSize: this.pageSize
                 },
                 reqQuery = {};
+            if (this.$route.query.blockNumber) {
+                this.searchKey.key = "blockNumber";
+                this.searchKey.value = this.$route.query.blockNumber;
+            }
             if(this.searchKey.value){
                 if(this.searchKey.value.length===66){
                     reqQuery.pkHash = this.searchKey.value;
@@ -163,8 +170,8 @@ export default {
             });
         },
         clickTable: function(row, $event, column) {
-            let nodeName = event.target.nodeName;
-            if ($event.target.nodeName === "I") {
+            let nodeName = $event.target.nodeName;
+            if (nodeName === "I") {
                 return
             }
             this.link(row.blockNumber)

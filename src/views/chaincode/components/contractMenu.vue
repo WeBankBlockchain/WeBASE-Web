@@ -95,7 +95,7 @@ export default {
         },
         getContractList: function(val) {
             let reqData = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             };

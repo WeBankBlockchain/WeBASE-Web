@@ -15,7 +15,7 @@
  */
 <template>
     <div style="padding-left: 30px;padding-bottom: 2px; marin-bottom:12px;">
-        <div :id="chartId" style=" height: 200px; margin: 0 auto;"></div>
+        <div :id="chartId" style=" height: 190px; margin: 0 auto;"></div>
     </div>
 </template>
 
@@ -95,11 +95,14 @@ export default {
                         symbolSize: 1,
                         itemStyle: {
                             normal: {
-                                color: "#2878ff",
+                                color: "#0db1c1",
                                 lineStyle: {
-                                    color: "#2878ff"
+                                    color: "#0db1c1"
                                 }
                             }
+                        },
+                        areaStyle: {
+                            color: 'rgba(13, 177, 193,0.3)'
                         },
                         symbolSize: 5,
                         data: this.chartTransactionDataArr
