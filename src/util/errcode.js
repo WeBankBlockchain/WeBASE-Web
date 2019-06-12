@@ -160,7 +160,7 @@ let errCode = {
     },
     "202010": {
         en: "network_organization_mapping not exist",
-        cn: '没有该组织和网络的关联信息'
+        cn: '节点前置调用失败'
     },
     "202011": {
         en: "abiInfo cannot be empty",
