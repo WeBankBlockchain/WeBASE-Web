@@ -15,10 +15,10 @@
  */
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'用户查看'"></v-contentHead>
+        <v-contentHead :headTitle="'用户查看'" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
-                <div class="search-part-left">
+                <div class="search-part-left" v-if="!disabled">
                     <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">新增用户</el-button>
                 </div>
                 <div class="search-part-right">
@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="search-table">
-                <el-table :data="rivateKeyList" tooltip-effect="light" v-loading="loading">
+                <el-table :data="rivateKeyList" tooltip-effect="dark" v-loading="loading">
                     <el-table-column v-for="head in rivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width="tdWidth[head.enName] || ''" align="center">
                         <template slot-scope="scope">
                             <template v-if="head.enName!='operate'">
@@ -38,7 +38,7 @@
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName ==='userId'">
-                                    <el-tooltip :content="scope.row['hasPk'] == 1 ? '私钥':'公钥'" placement="top">
+                                    <el-tooltip :content="scope.row['hasPk'] == 1 ? '私钥':'公钥'" placement="top" effect="dark">
                                         <i class="wbs-icon-key-b font-12" :style="{'color': scope.row['hasPk'] == 1 ? '#FFC31F':'#4F9DFF'}"></i>
                                     </el-tooltip>
                                     {{scope.row[head.enName]}}
@@ -46,7 +46,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
-                                <el-button type="text" size="small" @click="modifyDescription(scope.row)">修改</el-button>
+                                <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">修改</el-button>
                             </template>
                         </template>
 
@@ -113,17 +113,26 @@ export default {
             ],
             tdWidth: {
                 publicKey: 450
-            }
+            },
+            disabled: false
         };
     },
     mounted() {
+        if(localStorage.getItem("root") === "admin"){
+            this.disabled = false
+        }else{
+            this.disabled = true
+        }
         this.getUserInfoData();
     },
     methods: {
+        changGroup(){
+            this.getUserInfoData()
+        },
         getUserInfoData() {
             this.loading = true;
             let reqData = {
-                    networkId: localStorage.getItem("networkId"),
+                    groupId: localStorage.getItem("groupId"),
                     pageNumber: this.currentPage,
                     pageSize: this.pageSize
                 },

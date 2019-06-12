@@ -16,12 +16,17 @@
 <template>
     <div class="key-dialog">
         <div class="text-center">
-            <span class="wbs-icon-radio radio-key riv-key" :style="{'color': rivKey ? '#4b8fe5':''}" @click="changeKey('RIV')">
+            <el-radio-group v-model="timeGranularity" @change='changeKey'>
+                <el-radio :label="'RIV'">私钥用户</el-radio>
+                <el-radio :label="'PUB'">公钥用户</el-radio>
+                <!-- <el-radio :label="1">5秒钟</el-radio> -->
+            </el-radio-group>
+            <!-- <span class="wbs-icon-radio radio-key riv-key" :style="{'color': rivKey ? '#4b8fe5':''}" @click="changeKey('RIV')">
                 <span class="base-span-key" :style="{'color': rivKey ? '#2956a3':''}">私钥用户</span>
             </span>
             <span class="wbs-icon-radio radio-key pub-key" :style="{'color': pubKey ? '#4b8fe5':''}" @click="changeKey('PUB')">
                 <span class="base-span-key" :style="{'color': pubKey ? '#2956a3':''}">公钥用户</span>
-            </span>
+            </span> -->
         </div>
         <div class="divide-line"></div>
         <el-form :model="userForm" :rules="rules" ref="userForm" label-width="100px" class="demo-ruleForm">
@@ -58,6 +63,7 @@ export default {
                 explain: "",
                 publicKey: ""
             },
+            timeGranularity: "RIV",
             rules: {
                 name: [
                     {
@@ -80,11 +86,12 @@ export default {
                     }
                 ]
             },
-            networkId: localStorage.getItem("networkId")
+            groupId: localStorage.getItem("groupId")
         };
     },
     methods: {
-        changeKey: function(type) {
+        changeKey: function() {
+            let type = this.timeGranularity
             this.userForm = {
                 name: "",
                 explain: "",
@@ -136,7 +143,7 @@ export default {
         },
         addUser: function() {
             let reqData = {
-                networkId: this.networkId,
+                groupId: this.groupId,
                 userName: this.userForm.name,
                 description: this.userForm.explain || ""
             };
@@ -171,7 +178,7 @@ export default {
             let reqData = {
                 userName: this.userForm.name,
                 publicKey: this.userForm.publicKey,
-                networkId: this.networkId,
+                groupId: this.groupId,
                 description: this.userForm.explain || ""
             };
             bindUser(reqData)

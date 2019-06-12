@@ -20,14 +20,14 @@
                 <div>
                     <div class="item">
                         <span class="label">Block Height:</span>
-                        <span>{{transactionData.blockNumber}}</span>
+                        <span>{{transactionData.blockNumber || ""}}</span>
                     </div>
                     <div class="item">
                         <span class="label">From:</span>
                         <span class="input-data-from">
                             <span>{{transactionData.from}}</span>
                             <span v-show="transactionData && transactionData.user">=></span>
-                            <span @click='link(transactionData.user)' class="link">{{transactionData.user}}</span>
+                            <span @click='link(transactionData.user)' class="link">{{transactionData.user || ""}}</span>
                         </span>
                     </div>
                     <div class="item">
@@ -41,12 +41,12 @@
                     </div>
                     <div class="item">
                         <span class="label">Timestamp:</span>
-                        <span>{{createTime}}</span>
+                        <span>{{createTime || ""}}</span>
                     </div>
                     <div class="item" style="font-size: 0">
                         <span class="label">Input:</span>
                         <div class="detail-input-content">
-                            <span v-if="showDecode" class="input-data">{{transactionData.input}}</span><br v-if="showDecode">
+                            <span v-if="showDecode" class="input-data">{{transactionData.input || ""}}</span><br v-if="showDecode">
                             <div v-if="!showDecode" class="input-data">
                                 <div class="input-label">
                                     <span class="label">function</span>
@@ -63,7 +63,7 @@
                                         <el-table-column prop="type" label="type" align="left"></el-table-column>
                                         <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                             <template slot-scope="scope">
-                                                <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
                                                 <span>{{scope.row.data}}</span>
                                             </template>
                                         </el-table-column>
@@ -91,7 +91,7 @@
                     <div class="item">
                         <span class="label">Topics :</span>
                         <div style="display: inline-block;width:800px;">
-                            <div v-for="(val,index) in item.topics ">[{{index}}] {{val}}</div>
+                            <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
                         </div>
                     </div>
                     <div class="item">
@@ -102,7 +102,7 @@
                                 <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
                                 <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                     <template slot-scope="scope">
-                                        <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                        <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
                                         <span>{{scope.row.data}}</span>
                                     </template>
                                 </el-table-column>
@@ -126,7 +126,9 @@ import {
     getTransactionReceipt,
     hashTransactionInfo,
     getBlockDetail,
-    getUserList
+    getUserList,
+    getFunctionAbi,
+    getAbi
 } from "@/util/api";
 import { getDate, isNumber } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -165,7 +167,8 @@ export default {
         };
     },
     mounted: function() {
-        this.getContacts(this.getHashTransactionInfo);
+        // this.getContacts(this.getHashTransactionInfo);
+        this.getHashTransactionInfo();
         this.getUser();
     },
     destroyed: function() {
@@ -201,7 +204,7 @@ export default {
         },
         getHashTransactionInfo() {
             let reqdata = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 transHash: this.transHash
             };
             hashTransactionInfo(reqdata, {})
@@ -211,6 +214,11 @@ export default {
                         if (res.data.data) {
                             this.getCreatTime(res.data.data.blockNumber);
                             this.getAdderss();
+                            if(res.data.data.to && res.data.data.to !="0x0000000000000000000000000000000000000000"){
+                                this.getMethod(res.data.data.input)
+                            }else{
+                                this.getDeloyAbi(res.data.data.input);
+                            }
                         } else {
                             this.$message({
                                 type: "error",
@@ -231,9 +239,54 @@ export default {
                     });
                 });
         },
+        getMethod: function(id){
+                let data = {
+                    groupId: localStorage.getItem("groupId"),
+                    data: id.substring(0, 10)
+                }
+                getFunctionAbi(data,{}).then(res => {
+                    
+                    if(res.data.code == 0){
+                        this.decodefun(id,res.data.data)
+                    }else{
+                    this.$message({
+                            type: "error",
+                            message: errcode.errCode[response.data.code].cn
+                        });
+                    }
+                }).catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: "系统错误!"
+                    });
+                })
+            },
+        getDeloyAbi: function(input){
+            if(input && input != "0x"){
+                let data = {
+                    groupId: localStorage.getItem("groupId"),
+                    partOfBytecodeBin: input.substring(2)
+                }
+            getAbi(data).then(res => {
+                if(res.data.code == 0){
+                    this.decodeDeloy(res.data.data)
+                }else{
+                    this.$message({
+                            type: "error",
+                            message: errcode.errCode[response.data.code].cn
+                        });
+                    }
+                }).catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: "系统错误!"
+                    });
+                })
+            }   
+        },
         getUser: function() {
             let reqData = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
                 pageSize: 1000
             };
@@ -257,7 +310,7 @@ export default {
         },
         getCreatTime: function(number) {
             let data = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 blockNumber: number
             };
             getBlockDetail(data)
@@ -299,96 +352,11 @@ export default {
                 this.eventDataShow = true;
             }
         },
-        getBin: function(adr, blockHeight, callback) {
-            let data = {
-                networkId: localStorage.getItem("networkId"),
-                address: adr,
-                blockNumber: blockHeight
-            };
-            getByteCode(data, {})
-                .then(response => {
-                    if (response.data.code === 0) {
-                        this.bin = response.data.data.code;
-                        callback();
-                    } else {
-                        this.$message({
-                            type: "error",
-                            message: errcode.errCode[response.data.code].cn
-                        });
-                        return;
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: "系统错误!"
-                    });
-                    return;
-                });
-        },
-        getEventBin: function(adr, blockHeight, callback, list, index) {
-            let data = {
-                networkId: localStorage.getItem("networkId"),
-                address: adr,
-                blockNumber: blockHeight
-            };
-            getByteCode(data, {})
-                .then(response => {
-                    if (response.data.code === 0) {
-                        this.bin = response.data.data.code;
-                        callback(response.data.data.code, list, index);
-                    } else {
-                        this.$message({
-                            type: "error",
-                            message: errcode.errCode[response.data.code].cn
-                        });
-                        return;
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: "系统错误!"
-                    });
-                    return;
-                });
-        },
-        getContacts: function(callback) {
-            let reqdata = {
-                networkId: localStorage.getItem("networkId"),
-                pageSize: 1,
-                pageNumber: 1000
-            };
-            getContractList(reqdata, {})
-                .then(res => {
-                    if (res.data.code === 0) {
-                        this.contractList = res.data.data || [];
-                        callback();
-                    } else {
-                        this.$message({
-                            type: "error",
-                            message: errcode.errCode[res.data.code].cn
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: "系统错误!"
-                    });
-                });
-        },
         decodeAbi: function(val, list) {
             this.inputButtonShow = true;
             let input = this.transactionData.input;
             this.transactionTo = this.transactionData.to;
-            if (this.userList.length) {
-                this.userList.forEach(value => {
-                    if (value.address == this.transactionData.from) {
-                        this.transactionData.user = value.userName;
-                    }
-                });
-            }
+            
             if (this.transactionTo) {
                 this.decodefun(input, this.transactionTo);
             } else {
@@ -398,7 +366,7 @@ export default {
         },
         getAdderss: function() {
             let data = {
-                networkId: localStorage.getItem("networkId"),
+                groupId: localStorage.getItem("groupId"),
                 transHash: this.transHash
             };
 
@@ -406,19 +374,6 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.eventLog = res.data.data.logs;
-                        if (this.transactionData.to) {
-                            this.getBin(
-                                this.transactionData.to,
-                                res.data.data.blockNumber,
-                                this.decodeAbi
-                            );
-                        } else {
-                            this.getBin(
-                                res.data.data.contractAddress,
-                                res.data.data.blockNumber,
-                                this.decodeAbi
-                            );
-                        }
                     } else {
                         this.$message({
                             type: "error",
@@ -435,236 +390,156 @@ export default {
         },
         //decodeEvent
         decodeEventClick: function() {
-            if (this.eventLog.length) {
-                this.eventSHow = true;
-                for (let i = 0; i < this.eventLog.length; i++) {
-                    this.getEventBin(
-                        this.eventLog[i].address,
-                        this.eventLog[i].blockNumber,
-                        this.decodeEvent,
-                        this.eventLog[i],
-                        i
-                    );
+            for (let i = 0; i < this.eventLog.length; i++) {
+                let data = {
+                    groupId: localStorage.getItem("groupId"),
+                    data: this.eventLog[i].topics[0]
                 }
-            } else {
-                this.eventSHow = false;
+                getFunctionAbi(data).then(res => {
+                    if(res.data.code == 0 && res.data.data){
+                        this.eventLog[i] = this.decodeEvent(res.data.data,this.eventLog[i])
+                        setTimeout(() => {
+                            this.eventSHow = true;
+                        },200)
+                    }else if(res.data.code !== 0){
+                    this.$message({
+                            type: "error",
+                            message: errcode.errCode[res.data.code].cn
+                        });
+                }
+                }).catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: "系统错误！"
+                    });
+                })
             }
         },
         //decodeEventLog
-        decodeEvent: function(item, data, index) {
+        decodeEvent: function(eventData, data) {
             let web3 = new Web3(Web3.givenProvider);
             let abi = "";
+            eventData.abiInfo = JSON.parse(eventData.abiInfo)
             let list = data;
-            item = item.substring(2);
-            for (let i = 0; i < this.eventLog.length; i++) {
-                let num = 0;
-                this.contractList.forEach(val => {
-                    if (val.contractBin === item) {
-                        if (val.contractAbi) {
-                            list.abi = JSON.parse(val.contractAbi);
-                        } else {
-                            list.abi = [];
-                        }
-                    } else {
-                        num++;
-                    }
-                });
+                list.eventTitle = '还原'
                 list.eventDataShow = true;
                 list.eventButtonShow = true;
-                if (num == this.contractList.length) {
-                    list.eventDataShow = false;
-                    list.eventButtonShow = false;
+                list.eventName = eventData.abiInfo.name + "(";
+                for (let i = 0; i < eventData.abiInfo.inputs.length; i++) {
+                    if (i == eventData.abiInfo.inputs.length - 1) {
+                        list.eventName =  list.eventName + eventData.abiInfo.inputs[i].type +" " + eventData.abiInfo.inputs[i].name;
+                    }else{
+                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";
+                    }   
                 }
-            }
-            if (list.abi && list.abi.length) {
-                list.abi.forEach(value => {
-                    if (value.type == "event") {
-                        list.eventName = value.name + "(";
-                        for (let i = 0; i < value.inputs.length; i++) {
-                            if (i == value.inputs.length - 1) {
-                                list.eventName =
-                                    list.eventName +
-                                    value.inputs[i].type +
-                                    " " +
-                                    value.inputs[i].name;
-                            } else {
-                                list.eventName =
-                                    list.eventName +
-                                    value.inputs[i].type +
-                                    " " +
-                                    value.inputs[i].name +
-                                    ",";
-                            }
-                        }
-                        list.eventName = list.eventName + ")";
-                        let eventData = web3.eth.abi.decodeLog(
-                            value.inputs,
-                            list.data,
-                            list.topics
-                        );
-                        list.outData = {};
-                        list.eventLgData = [];
-                        for (const key in eventData) {
-                            if (+key || +key == 0) {
-                                list.outData[key] = eventData[key];
-                            }
-                        }
-                        if (
-                            value.inputs.length &&
-                            JSON.stringify(list.outData) != "{}"
-                        ) {
-                            for (const key in list.outData) {
-                                value.inputs.forEach((items, index) => {
-                                    if (index == key) {
-                                        list.eventLgData[index] = {};
-                                        list.eventLgData[index].name =
-                                            items.name;
-                                        list.eventLgData[index].data =
-                                            list.outData[key];
-                                    }
-                                });
-                            }
-                        }
+                list.eventName = list.eventName + ")";
+                let eventResult = web3.eth.abi.decodeLog(eventData.abiInfo.inputs,list.data,list.topics);
+                list.outData = {};
+                list.eventLgData = [];
+                for (const key in eventResult) {
+                    if (+key || +key == 0) {
+                        list.outData[key] = eventResult[key];
                     }
-                });
-            }
-            this.$set(this.eventLog, index, list);
-        },
-
-        //transactionDecode
-        decodefun: function(input, adr) {
-            let web3 = new Web3(Web3.givenProvider);
-            let data = input.substring(0, 10);
-            this.methodId = data;
-            let inputDatas = "0x" + input.substring(10);
-            let abi = "";
-            let abiData = {};
-            this.bin = this.bin.substring(2);
-            let num = 0;
-            if (this.contractList.length) {
-                this.contractList.forEach(value => {
-                    if (value.contractBin === this.bin) {
-                        abi = value.contractAbi;
-                        this.buttonSHow = true;
-                    } else {
-                        num++;
-                    }
-                });
-                if (num == this.contractList.length) {
-                    this.showDecode = true;
-                    this.inputButtonShow = false;
                 }
-            }
-            if (abi) {
-                abiData = JSON.parse(abi);
-                abiData.forEach(value => {
-                    value.encode = web3.eth.abi.encodeFunctionSignature({
-                        name: value.name,
-                        type: value.type,
-                        inputs: value.inputs
-                    });
-                });
-                abiData.forEach(value => {
-                    if (value.encode === data) {
-                        value.inputs.forEach((val, index) => {
-                            if (val && val.type && val.name) {
-                                this.abiType[index] = val.type + " " + val.name;
-                            } else if (val && val.name) {
-                                this.abiType[index] = val.name;
-                            } else if (val && val.type) {
-                                this.abiType[index] = val.type;
-                            } else if (val) {
-                                this.abiType[index] = val;
+                if (eventData.abiInfo.inputs.length && JSON.stringify(list.outData) != "{}") {
+                    for (const key in list.outData) {
+                        eventData.abiInfo.inputs.forEach((items, index) => {
+                            if (index == key) {
+                                list.eventLgData[index] = {};
+                                list.eventLgData[index].name = items.name;
+                                list.eventLgData[index].data = list.outData[key];
                             }
                         });
-                        this.funcData = value.name;
-                        if (value.inputs.length) {
-                            this.decodeData = web3.eth.abi.decodeParameters(
-                                value.inputs,
-                                inputDatas
-                            );
-                            if (JSON.stringify(this.decodeData) != "{}") {
-                                for (const key in this.decodeData) {
-                                    value.inputs.forEach((val, index) => {
-                                        if (val && val.name && val.type) {
-                                            if (key === val.name) {
-                                                this.inputData[index] = {};
-                                                this.inputData[index].name =
-                                                    val.name;
-                                                this.inputData[index].type =
-                                                    val.type;
-                                                this.inputData[
-                                                    index
-                                                ].data = this.decodeData[key];
-                                            }
-                                        } else if (val) {
-                                            if (index == key) {
-                                                this.inputData[index] = {};
-                                                this.inputData[
-                                                    index
-                                                ].type = val;
-                                                this.inputData[
-                                                    index
-                                                ].data = this.decodeData[key];
-                                            }
-                                        }
-                                    });
-                                }
-                            }
-                        }
+                    }
+                }
+            return list
+        },
+        //transactionDecode
+        decodefun: function(input,abiData) {
+            let web3 = new Web3(Web3.givenProvider);
+            if (this.userList.length) {
+                this.userList.forEach(value => {
+                    if (value.address == this.transactionData.from) {
+                        this.transactionData.user = value.userName;
                     }
                 });
+            }
+            this.methodId = input.substring(0, 10);
+            // this.methodId = data;
+            let inputDatas = "0x" + input.substring(10);
+            if(abiData){
+                abiData.abiInfo = JSON.parse(abiData.abiInfo)
+                abiData.abiInfo.inputs.forEach((val, index) => {
+                    if (val && val.type && val.name) {
+                        this.abiType[index] = val.type + " " + val.name;
+                    } else if (val && val.name) {
+                        this.abiType[index] = val.name;
+                    } else if (val && val.type) {
+                        this.abiType[index] = val.type;
+                    } else if (val) {
+                        this.abiType[index] = val;
+                    }
+                });
+                this.funcData = abiData.abiInfo.name;
+                if (abiData.abiInfo.inputs.length) {
+                    this.decodeData = web3.eth.abi.decodeParameters( abiData.abiInfo.inputs,inputDatas);
+                    if (JSON.stringify(this.decodeData) != "{}") {
+                        for (const key in this.decodeData) {
+                            abiData.abiInfo.inputs.forEach((val, index) => {
+                                if (val && val.name && val.type) {
+                                    if (key === val.name) {
+                                        this.inputData[index] = {};
+                                        this.inputData[index].name = val.name;
+                                        this.inputData[index].type = val.type;
+                                        this.inputData[index].data = this.decodeData[key];
+                                    }
+                                } else if (val) {
+                                    if (index == key) {
+                                        this.inputData[index] = {};
+                                        this.inputData[index].type = val;
+                                        this.inputData[index].data = this.decodeData[key];
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+                this.showDecode = false;
+                this.buttonTitle = "还原";
             }
         },
         //deloy-contract-transaction-decode
-        decodeDeloy: function(val) {
-            let abi = "";
-            let contractName = "";
-            let input = {};
-            let num = 0;
-            val = val.substring(2);
-            if (this.contractList.length) {
-                this.contractList.forEach(value => {
-                    if (value.contractBin === val) {
-                        abi = value.contractAbi;
-                        contractName = value.contractName;
-                        this.buttonSHow = true;
-                    } else {
-                        num++;
+        decodeDeloy: function(items) {
+             if (this.userList.length) {
+                this.userList.forEach(value => {
+                    if (value.address == this.transactionData.from) {
+                        this.transactionData.user = value.userName;
                     }
                 });
-                if (num == this.contractList.length) {
-                    this.showDecode = true;
-                    this.inputButtonShow = false;
-                }
             }
-            if (abi) {
-                input = JSON.parse(abi);
-                if (input.length > 0) {
-                    input.forEach(value => {
-                        if (
-                            value.type === "constructor" ||
-                            value.name === contractName
-                        ) {
-                            this.funcData = contractName;
-                            value.inputs.forEach((item, index) => {
-                                if (item && item.type && item.name) {
-                                    this.abiType[index] =
-                                        item.type + " " + item.name;
-                                } else if (item && item.name) {
-                                    this.abiType[index] = item.name;
-                                } else if (item && item.type) {
-                                    this.abiType[index] = item.type;
-                                } else if (item) {
-                                    this.abiType[index] = item;
-                                }
-                            });
-                        } else {
-                            this.showDecode = true;
-                            this.inputButtonShow = false;
-                        }
-                    });
-                }
+            if (items) {
+                let input = JSON.parse(items.contractAbi);
+                this.funcData = items.contractName;
+                input.forEach(value => {
+                    if(value.type == "constructor"){
+                        value.inputs.forEach((item,index) => {
+                            if (item && item.type && item.name) {
+                                this.abiType[index] = item.type + " " + item.name;
+                            } else if (item && item.name) {
+                                this.abiType[index] = item.name;
+                            } else if (item && item.type) {
+                                this.abiType[index] = item.type;
+                            } else if (item) {
+                                this.abiType[index] = item;
+                            }
+                        })
+                    }
+                })
+                this.showDecode = false;
+                this.buttonTitle = "还原";
+            }else{
+                this.buttonSHow = false;
+                this.showDecode = false;
             }
         }
     }

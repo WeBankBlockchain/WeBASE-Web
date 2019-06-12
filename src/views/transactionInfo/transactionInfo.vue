@@ -15,7 +15,7 @@
  */
 <template>
     <div class="bg-f7f7f7">
-        <v-content-head :headTitle="'交易信息'" :icon="true"></v-content-head>
+        <v-content-head :headTitle="'交易信息'" :icon="true" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
@@ -101,6 +101,9 @@ export default {
         this.getTransaction();
     },
     methods: {
+        changGroup(){
+            this.getTransaction();
+        },
         search: function() {
             if (
                 this.searchKey.key == "transactionHash" &&
@@ -119,9 +122,9 @@ export default {
         getTransaction: function() {
             this.expands = [];
             this.loading = true;
-            let networkId = localStorage.getItem("networkId");
+            let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    networkId: networkId,
+                    groupId: groupId,
                     pageNumber: this.currentPage,
                     pageSize: this.pageSize
                 },

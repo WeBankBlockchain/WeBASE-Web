@@ -21,11 +21,14 @@ const main = resolve => require(['@/views/index/main'], resolve);
 const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
-const group = resolve => require(['@/views/group/group'], resolve);
-const hostDetail = resolve => require(['@/views/group/components/hostDetail'], resolve);
+const front = resolve => require(['@/views/front/front'], resolve);
+const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
+const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
 const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/rivateKeyManagement'], resolve);
 const errorLogExport = resolve => require(['@/views/errorLogExport/errorLogExport'], resolve);
+const hostMetric = resolve => require(['@/views/hostMetric'], resolve);
+const nodesMetric = resolve => require(['@/views/nodesMetric'], resolve);
 const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve); transactionCharts
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
@@ -54,7 +57,7 @@ const routes = [
     {
         path: '/main',
         name: 'main',
-        redirect: '/home',
+        // redirect: '/home',
         leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-gailan sidebar-icon',
@@ -84,7 +87,7 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
-            { path: '/group', component: group, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/front', component: front, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/hostDetail', component: hostDetail, name: '节点详情', menuShow: true, meta: { requireAuth: true } }
         ]
     },
@@ -92,11 +95,12 @@ const routes = [
         path: '/',
         component: main,
         name: '合约管理',
-        leaf: true,
+        // leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
-            { path: '/contract', component: contract, name: '合约管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
+            { path: '/oldContract', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -117,7 +121,9 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
-            { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } }
+            // { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } },
+            { path: '/nodesMetric', component: nodesMetric, name: '节点监控', menuShow: true, meta: { requireAuth: false } },
+            { path: '/hostMetric', component: hostMetric, name: '主机监控', menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {
