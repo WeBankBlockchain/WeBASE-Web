@@ -12,6 +12,7 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/mgr':{
+               
                 target:'http://10.10.10.1/',
                 changeOrigin:true,
                 pathRewrite:{

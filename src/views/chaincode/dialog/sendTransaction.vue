@@ -145,9 +145,11 @@ export default {
             }
         },
         changeFunc: function() {
+            this.constant = false;
             this.funcList.forEach(value => {
                 if (value.funcId === this.transation.funcName) {
                     this.pramasData = value.inputs;
+                    this.constant = value.constant
                 }
             });
         },
@@ -237,10 +239,17 @@ export default {
                             }
                             this.$emit("success", successData);
                         } else {
-                            this.$message({
-                                type: "success",
-                                message: "发送交易成功!"
-                            });
+                            if(this.constant){
+                                this.$message({
+                                    type: "success",
+                                    message: "查询成功!"
+                                });
+                            }else{
+                                this.$message({
+                                    type: "success",
+                                    message: "发送交易成功!"
+                                });
+                            }
                             this.$emit("success", false);
                         }
                     } else {
