@@ -167,9 +167,9 @@ export default {
             this.currentPage = val;
             this.getTransaction();
         },
-        clickTable: function(row, $event, column) {
+        clickTable: function(row,  column,$event) {
             let nodeName = $event.target.nodeName;
-            if ($event.target.nodeName === "I") {
+            if (nodeName === "I") {
                 return
             }
             this.$refs.refTable.toggleRowExpansion(row);
