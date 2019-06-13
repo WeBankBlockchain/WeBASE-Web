@@ -79,7 +79,7 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
-                <div v-for="item in eventLog" v-if="eventSHow">
+                <div v-for="(item,num) in eventLog" v-if="eventSHow">
                     <div class="item">
                         <span class="label">Address :</span>
                         <span>{{item.address}}</span>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="item" v-show='item.eventButtonShow'>
                         <span class="label"></span>
-                        <el-button @click="decode" type="primary">{{eventTitle}}</el-button>
+                        <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
                     </div>
                 </div>
             </el-tab-pane>
@@ -177,7 +177,7 @@ export default {
     methods: {
         link: function(val) {
             router.push({
-                path: "/rivateKeyManagement",
+                path: "/privateKeyManagement",
                 query: {
                     userName: val
                 }
@@ -453,6 +453,18 @@ export default {
                     }
                 }
             return list
+        },
+        decodeButtonEvent: function(num){
+            // debugger
+            if(this.eventLog[num].eventDataShow){
+                this.$set(this.eventLog[num],'eventDataShow',false);
+                this.$set(this.eventLog[num],'eventTitle','解码')
+                this.$set(this.eventLog,num,this.eventLog[num])
+            }else{
+                this.$set(this.eventLog[num],'eventDataShow',true);
+                this.$set(this.eventLog[num],'eventTitle','还原');
+                this.$set(this.eventLog,num,this.eventLog[num])
+            }
         },
         //transactionDecode
         decodefun: function(input,abiData) {
