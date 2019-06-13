@@ -26,8 +26,8 @@
             <tr>
                 <td style="width: 40px;">用户：</td>
                 <td>
-                    <el-select v-model="userName" placeholder="请选择用户" @change="changeId" style="width: 240px">
-                        <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='item in userList'></el-option>
+                    <el-select v-model="userName" placeholder="请选择用户"  style="width: 240px">
+                        <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
                     </el-select>    
                 </td>
             </tr>
@@ -92,15 +92,15 @@ export default {
                 });
             }
         },
-        changeId: function() {
-            if (this.userName) {
-                this.userList.forEach(value => {
-                    if (this.userName === value.userName) {
-                        this.userId = value.userId;
-                    }
-                });
-            }
-        },
+        // changeId: function() {
+        //     if (this.userName) {
+        //         this.userList.forEach(value => {
+        //             if (this.userName === value.userName) {
+        //                 this.userId = value.userId;
+        //             }
+        //         });
+        //     }
+        // },
         close: function() {
             this.$emit("close");
         },
@@ -108,7 +108,7 @@ export default {
                 this.versionShow = false;
                 this.errorInfo = ''
                 let data = {
-                    userId: this.userId,
+                    userId: this.userName,
                     params: this.parameter,
                 };
                 this.$emit("change", data);
@@ -129,8 +129,8 @@ export default {
                             }
                         });
                         if (this.userList.length) {
-                            this.userName = this.userList[0].userName;
-                            this.userId = this.userList[0].userId;
+                            this.userName = this.userList[0].address;
+                            // this.userId = this.userList[0].userId;
                         }
                     } else {
                         this.$message({

@@ -499,7 +499,8 @@ export default {
                     this.data.contractSource = Base64.encode(this.content);
                     this.$set(this.data,'bytecodeBin',this.bytecodeBin)
                     this.loading = false;
-                    Bus.$emit("compile",this.data)
+                    Bus.$emit("compile",this.data);
+                    this.setMethod()
                 } else {
                     this.errorInfo = "合约编译失败！";
                     this.compileShow = true;
@@ -598,7 +599,6 @@ export default {
             if (val.params.length) {
                 reqData.constructorParams = val.params;
             }
-            this.setMethod()
             getDeployStatus(reqData)
                 .then(res => {
                     this.loading = false;
