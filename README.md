@@ -73,7 +73,7 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 ```
     sed -i "s/\/data\/webase-web\/dist/${your_file_route}/g" nginx.conf
 ```
-```
+
 
 执行完以上四步且无报错，跳过2.3，直接执行步骤2.4，启动nginx。
 
