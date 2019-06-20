@@ -29,7 +29,7 @@ const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/riv
 const errorLogExport = resolve => require(['@/views/errorLogExport/errorLogExport'], resolve);
 const hostMetric = resolve => require(['@/views/hostMetric'], resolve);
 const nodesMetric = resolve => require(['@/views/nodesMetric'], resolve);
-const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve); transactionCharts
+const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve);
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
