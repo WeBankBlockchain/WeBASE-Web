@@ -152,7 +152,6 @@ export default {
                         areaStyle: {
                             color: 'rgba(13, 177, 193,0.3)'
                         },
-                        symbolSize: 5,
                         data: this.chartStatistics.transactionDataArr
                     }
                 ],
