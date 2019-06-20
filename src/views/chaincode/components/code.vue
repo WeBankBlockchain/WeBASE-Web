@@ -614,7 +614,7 @@ export default {
                             message: "合约部署成功！",
                             type: "success"
                         });
-                        this.data.contractAbi == this.abiFile;
+                        this.data.contractAbi = this.abiFile;
                         this.data.contractBin = this.bin;
                         this.data.contractSource = Base64.encode(this.content);
                         this.data.contractAddress = this.contractAddress;
