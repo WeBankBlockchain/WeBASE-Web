@@ -56,16 +56,16 @@ nginx安装请参考附录
 ```
 2、 修改mgr服务ip和端口
 ```
-sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
+sed -i "s/127.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 ````
 
 3、 修改前端web服务监听的ip
 ```
-    sed -i "s/10.0.0.1/${your_server_ip}/g" nginx.conf
+    sed -i "s/127.0.0.1/${your_server_ip}/g" nginx.conf
 ```
 例如： 
 ```
-    sed -i "s/ 10.0.0.1 /192.168.0.1/g" nginx.conf
+    sed -i "s/127.0.0.1/192.168.0.1/g" nginx.conf
 ```
 你修改的服务ip是192.168.0.1,也可以修改成域名
 
@@ -86,11 +86,11 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 ```Nginx
 
     upstream node_mgr_server{
-        server 10.0.0.1:8083; #步骤三 节点管理服务地址及端口
+        server 127.0.0.1:8083; #步骤三 节点管理服务地址及端口
     }
     server {
         listen       3002 default_server;   #步骤一 前端端口（端口需要开通策略且不能被占用）
-        server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
+        server_name  127.0.0.1;         #步骤一 前端地址，可配置为域名
         location / {
                 root    /data/WeBASE-Web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
@@ -126,7 +126,7 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 启动报错重点排查：日志路径是否正确（error.log和access.log）,nginx有没有添加用户权限。
 
 (2)、打开页面，页面url是nginx配置的前端ip和端口。
-例如:上面配置文件的url为   http://10.0.0.1:3002
+例如:上面配置文件的url为   http://127.0.0.1:3002
 
 (3)、打开页面后，请找运维提供帐号和密码登录(默认账号密码：admin/Abcd1234)。
 
