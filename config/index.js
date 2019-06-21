@@ -12,7 +12,8 @@ module.exports = {
         assetsPublicPath: '/',
         proxyTable: {
             '/mgr':{
-                target:'http://10.0.0.1/',
+                
+                target:'http://10.10.10.1/',
                 changeOrigin:true,
                 pathRewrite:{
                     '^/mgr':''
@@ -53,7 +54,7 @@ module.exports = {
         // Paths
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
-        assetsPublicPath: '/',
+        assetsPublicPath: './',
 
         /**
          * Source Maps

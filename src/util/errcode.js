@@ -159,8 +159,8 @@ let errCode = {
         cn: '保存节点错误'
     },
     "202010": {
-        en: "network_organization_mapping not exist",
-        cn: '没有该组织和网络的关联信息'
+        en: "request front fail",
+        cn: '请求前置失败'
     },
     "202011": {
         en: "abiInfo cannot be empty",
@@ -357,7 +357,7 @@ let errCode = {
     },
     "402000": {
         en: "param exception",
-        cn: "缺少参数"
+        cn: "参数错误"
     },
 
 
