@@ -1,4 +1,4 @@
-# webase前端部署文档
+# WeBASE-Web部署文档
 
 本项目是fisco-bcos应用平台项目，使用框架`vue-cli`。
 
@@ -36,7 +36,7 @@ nginx安装请参考附录
 代码可以放在/data/app/page下面
 执行命令：
 
-    git clone https://github.com/WeBankFinTech/webase-web.git
+    git clone https://github.com/WeBankFinTech/WeBASE-Web.git
 
 在代码库中docs文件下有nginx配置文件，直接可以拿来替换安装的nginx的配置文件nginx.conf；
 然后修改nginx.conf；
@@ -71,10 +71,12 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 
 4、 修改静态文件路径
 ```
-    sed -i "s/\/data\/webase-web\/dist/${your_file_route}/g" nginx.conf
+    sed -i "s/\/data\/WeBASE-Web\/dist/${your_file_route}/g" nginx.conf
 ```
-```
+
+
 执行完以上四步且无报错，跳过2.3，直接执行步骤2.4，启动nginx。
+
 
 ### 2.3 修改nginx配置
 
@@ -90,7 +92,7 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
         listen       3002 default_server;   #步骤一 前端端口（端口需要开通策略且不能被占用）
         server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
         location / {
-                root    /data/webase-web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
+                root    /data/WeBASE-Web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }
