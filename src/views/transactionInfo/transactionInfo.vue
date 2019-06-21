@@ -116,6 +116,7 @@ export default {
                     duration: 2000
                 });
             } else {
+                this.currentPage = 1
                 this.getTransaction();
             }
         },
@@ -167,9 +168,9 @@ export default {
             this.currentPage = val;
             this.getTransaction();
         },
-        clickTable: function(row, $event, column) {
+        clickTable: function(row,  column,$event) {
             let nodeName = $event.target.nodeName;
-            if ($event.target.nodeName === "I") {
+            if (nodeName === "I") {
                 return
             }
             this.$refs.refTable.toggleRowExpansion(row);
