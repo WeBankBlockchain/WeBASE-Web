@@ -139,6 +139,9 @@ export default {
             this.getContracts()
         })
         Bus.$on("compile",data => {
+            this.saveContract(data,'合约编译成功！')
+        })
+        Bus.$on("save",data => {
             this.saveContract(data)
         })
         Bus.$on("deploy",data => {
@@ -447,7 +450,7 @@ export default {
                 Bus.$emit("noData",true)
             }
         },
-        saveContract: function(data){
+        saveContract: function(data,title){
             console.log(data)
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
@@ -467,7 +470,7 @@ export default {
                     if(data.contractId){
                         this.$message({
                             type: "success",
-                            message: '合约保存成功！'
+                            message: title || '合约保存成功！'
                         });
                     }
                 }else {
