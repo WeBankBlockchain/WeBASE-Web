@@ -1,4 +1,4 @@
-# webase开发文档
+# WeBASE-Web开发文档
 
 本代码仅支持fisco-bcos 2.0以上版本，支持群组和群组切换。
 
@@ -19,13 +19,13 @@ nodejs下载地址：https://nodejs.org/en/download/
 
 > 执行命令：
 
-    git clone https://github.com/WeBankFinTech/webase-web.git
+    git clone https://github.com/WeBankFinTech/WeBASE-Web.git
 
 将代码放在你的工作目录，例如：D：\project
 
 > 切换到项目目录：
 
-    cd D:\project\webase-web
+    cd D:\project\WeBASE-Web
 
 > 使用命令：
 
@@ -89,11 +89,11 @@ nodejs下载地址：https://nodejs.org/en/download/
 
 > axios请求地址：
 
-    overview请求url： /webase-web/network/general/1
+    overview请求url： /WeBASE-Web/network/general/1
 
 > mock.js地址：
 
-    Mock.mock('/webase-web/network/general/1',function (req,res) {     //url和上面axios相同
+    Mock.mock('/WeBASE-Web/network/general/1',function (req,res) {     //url和上面axios相同
         return {
             "code":0,
             "message":"success",
