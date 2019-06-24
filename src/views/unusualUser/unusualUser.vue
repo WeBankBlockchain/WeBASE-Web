@@ -247,7 +247,4 @@ export default {
     color: #515356;
     margin-left: 47px;
 }
-.search-table >>> .el-icon-arrow-right:before {
-    content: "\e60e";
-}
 </style>
