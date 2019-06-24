@@ -106,6 +106,7 @@ export default {
                     duration: 2000
                 });
             } else {
+                this.currentPage = 1
                 this.getBlockList();
             }
         },
@@ -169,7 +170,7 @@ export default {
                 }
             });
         },
-        clickTable: function(row, $event, column) {
+        clickTable: function(row, column, $event) {
             let nodeName = $event.target.nodeName;
             if (nodeName === "I") {
                 return

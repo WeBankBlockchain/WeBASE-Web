@@ -1,4 +1,4 @@
-# webase前端部署文档
+# WeBASE-Web部署文档
 
 本项目是fisco-bcos应用平台项目，使用框架`vue-cli`。
 
@@ -31,22 +31,22 @@
 
 nginx安装请参考附录
 
-### 2.2 拉取代码
+### 2.2 拉取代码并执行命令
 
-代码可以放在/data下面
+代码可以放在/data/app/page下面
 执行命令：
 
-    git clone https://github.com/WeBankFinTech/webase-web.git
+    git clone https://github.com/WeBankFinTech/WeBASE-Web.git
 
 在代码库中docs文件下有nginx配置文件，直接可以拿来替换安装的nginx的配置文件nginx.conf；
 然后修改nginx.conf；
 
-进入nginx配置文件（这里nginx安装在/usr/local下面，如果这里没找到，可以到/etc下寻找,如有权限问题，请加上sudo）
+进入nginx配置文件（这里nginx安装在/usr/local下面，如果这里没找到，可以到/etc下寻找）
 ```
     cd /usr/local/nginx/conf
 ```
 
-1、 修改web服务端口（端口需要开通策略且不能被占用）
+1、 修改web服务端口
 ```
     sed -i "s/3002/${your_server_port}/g" nginx.conf
 ```
@@ -54,28 +54,35 @@ nginx安装请参考附录
 ```
     sed -i "s/3002/8080/g" nginx.conf   你修改的服务端口是8080
 ```
-
-2、 修改服务ip
-```
-    sed -i "s/ 10.0.0.1 /${your_server_ip}/g" nginx.conf
-```
-例如： 
-```
-    sed -i "s/10.0.0.1/192.168.0.1/g" nginx.conf
-```
-你修改的服务ip是192.168.0.1,也可以修改成域名
-
-3、 修改静态文件路径
-```
-    sed -i "s/\/data\/webase-web\/dist/${your_file_route}/g" nginx.conf
-```
-
-4、 修改mgr服务ip和端口
+2、 修改mgr服务ip和端口
 ```
 sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
 ````
 
-按照上面的步骤执行后，可以直接跳过这一步骤，直接启动nginx。若服务器已有nginx可按照以下修改，增加一条server
+3、 修改前端web服务监听的ip
+```
+    sed -i "s/10.0.0.1/${your_server_ip}/g" nginx.conf
+```
+例如： 
+```
+    sed -i "s/ 10.0.0.1 /192.168.0.1/g" nginx.conf
+```
+你修改的服务ip是192.168.0.1,也可以修改成域名
+
+4、 修改静态文件路径
+```
+    sed -i "s/\/data\/WeBASE-Web\/dist/${your_file_route}/g" nginx.conf
+```
+
+
+执行完以上四步且无报错，跳过2.3，直接执行步骤2.4，启动nginx。
+
+
+### 2.3 修改nginx配置
+
+`注意：完整执行步骤2.2之后忽略此步骤`
+
+若服务器已有nginx可按照以下修改，增加一条server
 ```Nginx
 
     upstream node_mgr_server{
@@ -85,7 +92,7 @@ sed -i "s/10.0.0.1:8083/${your_mgrServer_ipPort}/g" nginx.conf
         listen       3002 default_server;   #步骤一 前端端口（端口需要开通策略且不能被占用）
         server_name  10.0.0.1;         #步骤一 前端地址，可配置为域名
         location / {
-                root    /data/webase-web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
+                root    /data/WeBASE-Web/dist;   #步骤二 前端文件路径(文件需要有权限访问)
                 index  index.html index.htm;
                 try_files $uri $uri/ /index.html =404;
                 }

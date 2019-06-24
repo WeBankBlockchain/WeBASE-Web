@@ -206,6 +206,11 @@ export default {
                                 item.metricUint = "带宽";
                                 item.metricU = "KB/s";
                             }
+                            if(this.chartParam.contrastBeginDate){
+                                item.data.contrastDataList.contractDataShow = true
+                            }else{
+                                item.data.contrastDataList.contractDataShow = false
+                            }
                             item.data.contrastDataList.timestampList = timestampList;
                             item.data.lineDataList.timestampList = timestampList;
                         });
