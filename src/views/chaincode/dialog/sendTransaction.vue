@@ -28,8 +28,8 @@
         </div>
         <div class="send-item">
             <span class="send-item-title">用户:</span>
-            <el-select v-model="transation.userName" placeholder="请选择用户" @change="changeId" style="width:240px">
-                <el-option :label="item.userName" :value="item.userName" :key="item.userId" v-for='(item,index) in userList'></el-option>
+            <el-select v-model="transation.userName" placeholder="请选择用户"  style="width:240px">
+                <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'></el-option>
             </el-select>
         </div>
         <div class="send-item">
@@ -86,7 +86,8 @@ export default {
             funcList: [],
             buttonClick: false,
             contractVersion: this.version,
-            contractAddress: this.data.contractAddress || ""
+            contractAddress: this.data.contractAddress || "",
+            constant: false,
         };
     },
     mounted: function() {
@@ -127,15 +128,15 @@ export default {
                 this.transation.funcName = this.funcList[0].funcId;
             }
         },
-        changeId: function() {
-            if (this.transation.userName) {
-                this.userList.forEach(value => {
-                    if (this.transation.userName === value.userName) {
-                        this.userId = value.userId;
-                    }
-                });
-            }
-        },
+        // changeId: function() {
+        //     if (this.transation.userName) {
+        //         this.userList.forEach(value => {
+        //             if (this.transation.userName === value.userName) {
+        //                 this.userId = value.userId;
+        //             }
+        //         });
+        //     }
+        // },
         formatAbi: function() {
             let abi = this.abi;
             if (abi) {
@@ -144,9 +145,11 @@ export default {
             }
         },
         changeFunc: function() {
+            this.constant = false;
             this.funcList.forEach(value => {
                 if (value.funcId === this.transation.funcName) {
                     this.pramasData = value.inputs;
+                    this.constant = value.constant
                 }
             });
         },
@@ -165,8 +168,8 @@ export default {
                             }
                         });
                         if (this.userList.length) {
-                            this.transation.userName = this.userList[0].userName;
-                            this.userId = this.userList[0].userId;
+                            this.transation.userName = this.userList[0].address;
+                            // this.userId = this.userList[0].userId;
                         }
                         this.changeFunc();
                     } else {
@@ -206,7 +209,7 @@ export default {
             })
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                user: this.userId,
+                user: this.transation.userName,
                 contractName: this.data.contractName,
                 // version: this.contractVersion,
                 funcName: functionName || "",
@@ -236,10 +239,17 @@ export default {
                             }
                             this.$emit("success", successData);
                         } else {
-                            this.$message({
-                                type: "success",
-                                message: "发送交易成功!"
-                            });
+                            if(this.constant){
+                                this.$message({
+                                    type: "success",
+                                    message: "查询成功!"
+                                });
+                            }else{
+                                this.$message({
+                                    type: "success",
+                                    message: "发送交易成功!"
+                                });
+                            }
                             this.$emit("success", false);
                         }
                     } else {
