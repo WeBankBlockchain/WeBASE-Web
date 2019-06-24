@@ -16,7 +16,8 @@
 <template>
     <div style="position: relative">
         <div :id="chartId" style="height: 350px; margin: 0 auto;"></div>
-        <div class="noData" v-if="chartOption.data.lineDataList.valueList.length === 0">暂无数据</div>
+        <div class="noData" style="color: #c23531" v-if="chartOption.data.lineDataList.valueList.length === 0">暂无数据</div>
+        <div class="noData" style="color: #2f4554" v-if="chartOption.data.contrastDataList.valueList.length === 0 && chartOption.data.contrastDataList.contractDataShow">暂无数据</div>
     </div>
 </template>
 
