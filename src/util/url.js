@@ -17,6 +17,6 @@
 /*mgr*/
 let mgr = process.env.MGR_PATH;
 export default {
-    ORG_LIST: `${mgr}/webase-node-mgr`,
+    ORG_LIST: `${mgr}/WeBASE-Node-Manager`,
     // codeUrl: `${mgr}/webase-node-mgr`
 }
