@@ -1,8 +1,8 @@
-# WeBASE-Web管理平台
+# Web管理平台
 
 ## 简介
 
-本项目是fisco-bcos应用平台项目，使用框架`vue-cli`。
+本项目是区块链中间件平台web管理平台，使用框架`vue-cli`，支持fisco-bcos 2.0版本及以上。
 
 兼容浏览器IE9及以上，360浏览器兼容版（IE9内核），360浏览器极速版，chrome浏览器。
 
