@@ -115,11 +115,12 @@ export default {
         },
         signOut: function() {
             localStorage.removeItem("user");
+            localStorage.removeItem("token")
             loginOut()
                 .then()
                 .catch();
-            delCookie('JSESSIONID')
-            delCookie('NODE_MGR_ACCOUNT_C')
+            // delCookie('JSESSIONID')
+            // delCookie('NODE_MGR_ACCOUNT_C')
             router.push("/login");
         },
         changePassword: function() {

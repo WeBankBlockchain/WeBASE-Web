@@ -124,8 +124,8 @@ export default {
             });
         },
         userLogin: function(callback) {
-            delCookie('JSESSIONID')
-            delCookie('NODE_MGR_ACCOUNT_C')
+            // delCookie('JSESSIONID')
+            // delCookie('NODE_MGR_ACCOUNT_C')
             let reqData = {
                 account: this.loginForm.user,
                 accountPwd: sha256(this.loginForm.password)
@@ -135,6 +135,7 @@ export default {
                     if (res.data.code === 0) {
                         localStorage.setItem("user", res.data.data.account);
                         localStorage.setItem("root", res.data.data.roleName);
+                        localStorage.setItem("token",res.data.data.token)
                         sessionStorage.setItem(
                             "accountStatus",
                             res.data.data.accountStatus
