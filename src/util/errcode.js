@@ -322,6 +322,14 @@ let errCode = {
         en: "not support transaction",
         cn: "不支持发交易"
     },
+    "202060": {
+        en: "invalid token",
+        cn: "无效的token"
+    },
+    "202061": {
+        en: "token expire",
+        cn: "token失效，请重新登录"
+    },
 
     "302000": {
         en: "user not logged in",
