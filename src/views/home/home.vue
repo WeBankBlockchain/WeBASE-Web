@@ -129,6 +129,7 @@ import {
 import { changWeek, numberFormat } from "@/util/util";
 import router from "@/router";
 import errcode from "@/util/errcode";
+import { Message } from "element-ui"
 
 export default {
     name: "home",
@@ -259,6 +260,7 @@ export default {
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
+                        Message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -266,6 +268,7 @@ export default {
                         type: "error",
                         message: "系统错误！"
                     });
+                    Message.closeAll();
                 });
         },
         getChart: function() {
@@ -291,6 +294,7 @@ export default {
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
+                        Message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -298,6 +302,7 @@ export default {
                         type: "error",
                         message: "系统错误！"
                     });
+                    Message.closeAll();
                 });
         },
         getNodeTable: function() {
@@ -329,6 +334,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
+                        Message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -337,6 +343,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
+                    Message.closeAll();
                 });
         },
         getBlockList: function() {
@@ -359,6 +366,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
+                        Message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -367,6 +375,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
+                    Message.closeAll();
                 });
         },
         getTransaction: function() {
@@ -389,10 +398,12 @@ export default {
                             type: "error",
                             duration: 2000
                         });
+                        Message.closeAll();
                     }
                 })
                 .catch(err => {
                     this.$message.error("系统错误");
+                    Message.closeAll();
                 });
         },
         goDetailRouter(item) {

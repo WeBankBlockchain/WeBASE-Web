@@ -15,6 +15,7 @@
  */
 import Axios from 'axios'
 import router from '../router'
+
 let axiosIns = Axios.create({
     timeout: 30 * 1000
 });
@@ -33,6 +34,11 @@ axiosIns.interceptors.response.use(
             router.push({
                 path: '/',
                 query: {redirect: router.currentRoute.fullPath}
+            })
+        }
+        if(response.data && (response.data.code === 202061 || response.data.code === 202060)){
+            router.push({
+                path: "/login"
             })
         }
         return response;
