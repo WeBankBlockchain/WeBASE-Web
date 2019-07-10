@@ -505,6 +505,7 @@ export default {
                     this.$set(this.data, "bytecodeBin", this.bytecodeBin);
                     this.loading = false;
                     Bus.$emit("compile", this.data);
+                    this.setMethod();
                 } else {
                     this.$message({
                         type: "error",
