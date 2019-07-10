@@ -107,7 +107,7 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-lock sidebar-icon',
         children: [
-            { path: '/rivateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     // {
