@@ -174,7 +174,7 @@ export default {
     methods: {
         link: function(val) {
             router.push({
-                path: "/rivateKeyManagement",
+                path: "/privateKeyManagement",
                 query: {
                     userName: val
                 }
