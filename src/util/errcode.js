@@ -324,11 +324,11 @@ let errCode = {
     },
     "202060": {
         en: "invalid token",
-        cn: "无效的token"
+        cn: "登录失效，请重新登录"
     },
     "202061": {
         en: "token expire",
-        cn: "token失效，请重新登录"
+        cn: "登录失效，请重新登录"
     },
 
     "302000": {
