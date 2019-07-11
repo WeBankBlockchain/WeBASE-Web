@@ -60,7 +60,7 @@
             <div class="contract-info" v-show="successHide" :style="{height:infoHeight + 'px'}">
                 <div class="move" @mousedown="dragDetailWeight($event)" @mouseup="resizeCode"></div>
                 <div class="contract-info-title">
-                    <i class="wbs-icon-clear float-right" @click="refreshMessage" title="清除"></i>
+                    <!-- <i class="wbs-icon-clear float-right" @click="refreshMessage" title="清除"></i> -->
                 </div>
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
@@ -176,6 +176,15 @@ export default {
     beforeDestroy: function(){
         Bus.$off("select")
         Bus.$off("noData")
+    },
+    beforeMount() {
+        var head = document.head;
+        var script = document.createElement("script");
+        script.src = "./static/js/soljson-v0.4.25+commit.59dbf8f1.js";
+        script.setAttribute('id', 'soljson');
+        if (!document.getElementById('soljson')) {
+            head.append(script)
+        }
     },
     mounted: function() {
         if(localStorage.getItem("root") === "admin"){
@@ -481,27 +490,27 @@ export default {
             },500)   
         },
         changeOutput: function(obj) {
-            let arry = [];
-            let data = null;
             if (JSON.stringify(obj) !== "{}") {
-                for (const key in obj) {
-                    arry.push(obj[key]);
-                }
-                if (arry.length) {
+                if (obj.hasOwnProperty(this.contractName)) {
+                    let compiledMap = obj[this.contractName]
                     this.abiFileShow = true;
                     this.successInfo = "< 编译成功！";
-                    this.abiFile = arry[0].abi;
+                    this.abiFile = compiledMap.abi;
                     this.abiFile = JSON.stringify(this.abiFile);
-                    this.bin = arry[0].evm.deployedBytecode.object;
-                    this.bytecodeBin = arry[0].evm.bytecode.object;
+                    this.bin = compiledMap.evm.deployedBytecode.object;
+                    this.bytecodeBin = compiledMap.evm.bytecode.object;
                     this.data.contractAbi = this.abiFile;
                     this.data.contractBin = this.bin;
                     this.data.contractSource = Base64.encode(this.content);
-                    this.$set(this.data,'bytecodeBin',this.bytecodeBin)
+                    this.$set(this.data, "bytecodeBin", this.bytecodeBin);
                     this.loading = false;
-                    Bus.$emit("compile",this.data);
-                    this.setMethod()
+                    Bus.$emit("compile", this.data);
+                    this.setMethod();
                 } else {
+                    this.$message({
+                        type: "error",
+                        message: '合约名和文件名要保持一致'
+                    })
                     this.errorInfo = "合约编译失败！";
                     this.compileShow = true;
                     this.loading = false;
