@@ -164,19 +164,4 @@ router.onError((error) => {
     }
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.meta.requireAuth) {
-        if (getCookie('NODE_MGR_ACCOUNT_C')) {
-            next();
-        } else {
-            next({
-                path: '/login'
-            });
-            
-        }
-    } else {
-        next();
-    }
-});
-
 export default router

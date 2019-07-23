@@ -128,6 +128,7 @@ export default {
         Bus.$off("compile")
         Bus.$off("deploy")
         Bus.$off("open")
+        Bus.$off("save")
     },
     mounted: function(){
         if(localStorage.getItem("root") === "admin"){
@@ -481,11 +482,11 @@ export default {
                 }
             })
             .catch(err => {
-                // this.loading = false;
                 this.$message({
                     type: "error",
                     message: "系统错误！"
                 });
+                this.$message.closeAll()
             });
         },
         getContracts: function(list){

@@ -19,7 +19,7 @@ import { reviseParam } from './util'
 import qs from 'qs'
 
 //login
-export function login(data,code,token) {
+export function login(data, code, token) {
     return post({
         url: `${url.ORG_LIST}/account/login?checkCode=${code}`,
         // url: `${url.ORG_LIST}/account/login`,
@@ -35,7 +35,10 @@ export function login(data,code,token) {
 export function loginOut() {
     return get({
         url: `${url.ORG_LIST}/account/logout`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 //init change passWord
@@ -43,7 +46,10 @@ export function resetPassword(data) {
     return put({
         url: `${url.ORG_LIST}/account/passwordUpdate`,
         method: 'put',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -51,14 +57,20 @@ export function resetPassword(data) {
 export function getChartData(data) {
     return get({
         url: `${url.ORG_LIST}/group/transDaily/${data}`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Chain overview */
 export function getNetworkStatistics(data) {
     return get({
         url: `${url.ORG_LIST}/group/general/${data}`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Block list */
@@ -67,7 +79,10 @@ export function getBlockPage(data, list) {
     return get({
         url: `${url.ORG_LIST}/block/blockList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Node list */
@@ -76,14 +91,20 @@ export function getNodeList(data, list) {
     return get({
         url: `${url.ORG_LIST}/node/nodeList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Error log query node*/
 export function getErrorNodeList(data) {
     return get({
         url: `${url.ORG_LIST}/node/nodeList/${data}`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -93,7 +114,10 @@ export function getOrgList(data, list) {
     return get({
         url: `${url.ORG_LIST}/organization/organizationList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Contract list */
@@ -101,7 +125,10 @@ export function getContractList(data) {
     return get({
         url: `${url.ORG_LIST}/contract/contractList`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Add node */
@@ -109,7 +136,10 @@ export function addnodes(data) {
     return post({
         url: `${url.ORG_LIST}/node/nodeInfo`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Increase organization */
@@ -117,7 +147,10 @@ export function addgroup(data) {
     return post({
         url: `${url.ORG_LIST}/organization/organizationInfo`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**add contract */
@@ -125,7 +158,10 @@ export function saveChaincode(data) {
     return post({
         url: `${url.ORG_LIST}/contract/save`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Compile contract */
@@ -133,7 +169,10 @@ export function setCompile(data) {
     return post({
         url: `${url.ORG_LIST}/contract/compile`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Deployment contract */
@@ -141,22 +180,31 @@ export function getDeployStatus(data) {
     return post({
         url: `${url.ORG_LIST}/contract/deploy`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Delete contract */
-export function deleteCode(data,list) {
+export function deleteCode(data, list) {
     const params = reviseParam(data, list);
     return deleted({
         url: `${url.ORG_LIST}/contract/${params.str}`,
-        method: 'delete'
+        method: 'delete',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Blockchain list */
 export function networkList() {
     return get({
         url: `${url.ORG_LIST}/network/all`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Modify contract */
@@ -164,7 +212,10 @@ export function editChain(data) {
     return put({
         url: `${url.ORG_LIST}/contract/contractInfo`,
         method: 'put',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Public key or private key user list */
@@ -173,7 +224,10 @@ export function getUserList(data, list) {
     return get({
         url: `${url.ORG_LIST}/user/userList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**add users */
@@ -181,7 +235,10 @@ export function getAddUser(data) {
     return post({
         url: `${url.ORG_LIST}/user/userInfo`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Modify user description */
@@ -189,7 +246,10 @@ export function getUserDescription(data) {
     return put({
         url: `${url.ORG_LIST}/user/userInfo`,
         method: 'put',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Send transaction */
@@ -197,7 +257,10 @@ export function sendTransation(data) {
     return post({
         url: `${url.ORG_LIST}/contract/transaction`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Transaction receipt based on transaction hash*/
@@ -206,7 +269,10 @@ export function getTransactionReceipt(data, list) {
     return get({
         url: `${url.ORG_LIST}/transaction/transactionReceipt/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Get transaction information based on transaction hash*/
@@ -215,7 +281,10 @@ export function hashTransactionInfo(data, list) {
     return get({
         url: `${url.ORG_LIST}/transaction/transInfo/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -224,7 +293,10 @@ export function creatAccountInfo(data) {
     return post({
         url: `${url.ORG_LIST}/account/accountInfo`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**Change account information*/
@@ -232,14 +304,20 @@ export function modifyAccountInfo(data) {
     return put({
         url: `${url.ORG_LIST}/account/accountInfo`,
         method: 'put',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** deleteAccount*/
 export function deleteAccountInfo(data) {
     return deleted({
         url: `${url.ORG_LIST}/account/${data}`,
-        method: 'delete'
+        method: 'delete',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Query role list*/
@@ -248,7 +326,10 @@ export function roleList(data, list) {
     return get({
         url: `${url.ORG_LIST}/role/roleList${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -258,7 +339,10 @@ export function accountList(data, list) {
     return get({
         url: `${url.ORG_LIST}/account/accountList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Query error log list*/
@@ -267,7 +351,10 @@ export function errorLogList(data, list) {
     return get({
         url: `${url.ORG_LIST}/nodeLog/nodeLogList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Bind user*/
@@ -275,7 +362,10 @@ export function bindUser(data) {
     return post({
         url: `${url.ORG_LIST}/user/bind`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -285,7 +375,10 @@ export function monitorTransactionInfo(data, list) {
     return get({
         url: `${url.ORG_LIST}/monitor/transList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -295,7 +388,10 @@ export function getTransactionList(data, list) {
     return get({
         url: `${url.ORG_LIST}/transaction/transList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Supervised user list*/
@@ -304,7 +400,10 @@ export function monitorUserList(data, list) {
     return get({
         url: `${url.ORG_LIST}/monitor/userList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**
@@ -317,7 +416,10 @@ export function monitorUserInterfaceList(data, list) {
     return get({
         url: `${url.ORG_LIST}/monitor/interfaceList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**
@@ -332,7 +434,10 @@ export function unusualUserList(data, list) {
     return get({
         url: `${url.ORG_LIST}/monitor/unusualUserList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Regulatory abnormal contract information*/
@@ -341,7 +446,10 @@ export function unusualContractList(data, list) {
     return get({
         url: `${url.ORG_LIST}/monitor/unusualContractList/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** bytecode*/
@@ -350,7 +458,10 @@ export function getByteCode(data, list) {
     return get({
         url: `${url.ORG_LIST}/web3/code/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -360,7 +471,10 @@ export function getBlockDetail(data, list) {
     return get({
         url: `${url.ORG_LIST}/block/blockByNumber/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -368,7 +482,10 @@ export function getBlockDetail(data, list) {
 export function deleteNodes(data) {
     return deleted({
         url: `${url.ORG_LIST}/node/nodeInfo/${data}`,
-        method: 'delete'
+        method: 'delete',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /**  Collection node metric*/
@@ -377,7 +494,10 @@ export function metricInfo(data, list) {
     return get({
         url: `${url.ORG_LIST}/performance/ratio/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 /** Machine configuration information*/
@@ -385,7 +505,10 @@ export function nodesHostInfo(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/performance/config/${params.str}`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -394,7 +517,10 @@ export function nodesHealth(data, list) {
     return get({
         url: `${url.ORG_LIST}/chain/mointorInfo/${params.str}`,
         method: 'get',
-        params: params.querys
+        params: params.querys,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -402,26 +528,38 @@ export function addFront(data) {
     return get({
         url: `${url.ORG_LIST}/front/new`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 export function getGroups() {
     return get({
         url: `${url.ORG_LIST}/group/all`,
         method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 export function getFronts(data) {
     return get({
         url: `${url.ORG_LIST}/front/find`,
         method: 'get',
-        params: data
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 export function deleteFront(data) {
     return deleted({
         url: `${url.ORG_LIST}/front/${data}`,
-        method: 'delete'
+        method: 'delete',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
@@ -429,14 +567,20 @@ export function addFunctionAbi(data) {
     return post({
         url: `${url.ORG_LIST}/method/add`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
-export function getFunctionAbi(data,list) {
+export function getFunctionAbi(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/method/findById/${params.str}`,
         method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 export function getAbi(data) {
@@ -444,13 +588,16 @@ export function getAbi(data) {
     return post({
         url: `${url.ORG_LIST}/contract/findByPartOfBytecodeBin`,
         method: 'post',
-        data: data
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 
 export function getPictureCheckCode() {
     return get({
         url: `${url.ORG_LIST}/account/pictureCheckCode`,
-        method: 'get',
+        method: 'get'
     })
 }
