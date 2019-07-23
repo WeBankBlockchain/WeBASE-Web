@@ -184,6 +184,7 @@ export default {
             this.getNodeTable();
         },
         search: function() {
+            this.currentPage = 1
             this.getFrontTable()   
         },
         getFrontTable: function() {
