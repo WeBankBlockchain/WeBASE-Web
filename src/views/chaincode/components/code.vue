@@ -19,13 +19,13 @@
         <div class="contract-code-head">
             <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">
                 <span>{{contractName + '.sol'}}</span>
-                </span>
+            </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done"  v-if="!contractAddress && !disabled">
+                <span class="contract-code-done" v-if="!contractAddress && !disabled">
                     <el-tooltip class="item" effect="dark" content="按Ctrl+s保存合约内容" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
-                        <span>保存</span>
+                    <span>保存</span>
                 </span>
                 <span class="contract-code-done" @click="compile" v-if="!contractAddress && !disabled">
                     <i class="wbs-icon-bianyi font-16"></i>
@@ -35,7 +35,7 @@
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <span class="contract-code-done" v-if="abiFile && bin && !disabled"  @click="send">
+                <span class="contract-code-done" v-if="abiFile && bin && !disabled" @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
                 </span>
@@ -50,8 +50,10 @@
             </div>
             <div class="contract-info" v-show="successHide" :style="{height:infoHeight + 'px'}">
                 <div class="move" @mousedown="dragDetailWeight($event)" @mouseup="resizeCode"></div>
-                <div class="contract-info-title">
-                    <!-- <i class="wbs-icon-clear float-right" @click="refreshMessage" title="清除"></i> -->
+                <div class="contract-info-title" @mouseover="mouseHover=!mouseHover" @mouseout="mouseHover=!mouseHover" v-show="abiFile||contractAddress">
+                    <i :class="[showCompileText?'el-icon-caret-bottom':'el-icon-caret-top']" @click="collapse">
+
+                    </i>
                 </div>
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
@@ -132,7 +134,7 @@ export default {
         "v-editor": editor,
         "v-upload": uploadFileAdr
     },
-    data: function() {
+    data: function () {
         return {
             successHide: true,
             loading: false,
@@ -171,10 +173,12 @@ export default {
             showAbi: true,
             showBin: true,
             complieAbiTextHeight: false,
-            complieBinTextHeight: false
+            complieBinTextHeight: false,
+            mouseHover: false,
+            showCompileText: true
         };
     },
-    beforeDestroy: function(){
+    beforeDestroy: function () {
         Bus.$off("select")
         Bus.$off("noData")
     },
@@ -187,14 +191,14 @@ export default {
             head.append(script)
         }
     },
-    mounted: function() {
-        if(localStorage.getItem("root") === "admin"){
+    mounted: function () {
+        if (localStorage.getItem("root") === "admin") {
             this.disabled = false
-        }else{
+        } else {
             this.disabled = true
         }
         this.initEditor();
-        Bus.$on('select',data => {
+        Bus.$on('select', data => {
             this.codeShow = true;
             this.refreshMessage();
             this.code = "";
@@ -224,18 +228,18 @@ export default {
             this.$refs['showBinText'].style.overflow = 'hidden'
             if (data.contractAbi) {
                 this.$nextTick(() => {
-                    if(this.$refs['showAbiText'].offsetHeight >= 72){
+                    if (this.$refs['showAbiText'].offsetHeight >= 72) {
                         this.complieAbiTextHeight = true
                     }
-                    if(this.$refs['showBinText'].offsetHeight >= 72){
+                    if (this.$refs['showBinText'].offsetHeight >= 72) {
                         this.complieBinTextHeight = true
                     }
-                    
+
                 })
             }
-            
+
         })
-        Bus.$on("noData",data => {
+        Bus.$on("noData", data => {
             this.codeShow = false;
             this.refreshMessage();
             this.code = "";
@@ -250,15 +254,15 @@ export default {
         })
     },
     watch: {
-        content: function(val){
+        content: function (val) {
             let data = Base64.decode(this.data.contractSource);
-            if(data != val){
+            if (data != val) {
                 this.saveShow = true
-            }else{
+            } else {
                 this.saveShow = false
             }
         },
-        successHide: function(val) {
+        successHide: function (val) {
             if (val) {
                 this.infoHeight = 250;
             } else {
@@ -267,7 +271,7 @@ export default {
         }
     },
     computed: {
-        codeHight: function() {
+        codeHight: function () {
             if (this.infoHeight) {
                 return `calc(100% - ${this.infoHeight}px)`;
             } else {
@@ -286,7 +290,7 @@ export default {
         }
     },
     methods: {
-        initEditor: function() {
+        initEditor: function () {
             let _this = this
             this.aceEditor = ace.edit(this.$refs.ace, {
                 fontSize: 14,
@@ -306,9 +310,9 @@ export default {
             });
             this.aceEditor.commands.addCommand({
                 name: 'myCommand',
-                bindKey: {win: 'Ctrl-S', mac: 'Command-S'},
-                exec: function(editor) {
-                    if(_this.data.contractStatus != 2){
+                bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
+                exec: function (editor) {
+                    if (_this.data.contractStatus != 2) {
                         _this.saveCode()
                     }
                 },
@@ -319,24 +323,24 @@ export default {
             this.aceEditor.on("blur", this.blurAce);
             this.aceEditor.resize();
         },
-        blurAce: function(){
+        blurAce: function () {
             let data = Base64.encode(this.content);
-            if(this.data.contractSource != data && this.data.contractStatus != 2){
-                this.saveCode()   
+            if (this.data.contractSource != data && this.data.contractStatus != 2) {
+                this.saveCode()
             }
         },
-        saveCode: function(){
+        saveCode: function () {
             this.data.contractSource = Base64.encode(this.content);
-            Bus.$emit("save",this.data)
+            Bus.$emit("save", this.data)
         },
-        resizeCode: function() {
+        resizeCode: function () {
             this.aceEditor.setOptions({
                 maxLines:
                     Math.ceil(this.$refs.codeContent.offsetHeight / 17) - 1
             });
             this.aceEditor.resize();
         },
-        dragDetailWeight: function(e) {
+        dragDetailWeight: function (e) {
             let startY = e.clientY,
                 infoHeight = this.infoHeight;
             document.onmousemove = e => {
@@ -353,56 +357,56 @@ export default {
                 minLines: 9
             });
         },
-        upLoadAdr: function(){
+        upLoadAdr: function () {
             this.uploadFileAdrShow = true
         },
-        uploadClose: function(){
+        uploadClose: function () {
             this.uploadFileAdrShow = false
         },
-        uploadSuccess: function(val){
+        uploadSuccess: function (val) {
             this.dialogVisible = true;
             this.uploadAddress = val
         },
-        sendSuccess: function(val) {
+        sendSuccess: function (val) {
             this.uploadAddress = "";
             this.dialogVisible = false;
             this.editorShow = true;
             this.editorData = null;
             this.editorData = val.resData;
             this.editorInput = val.input;
-            if(val && val.contractAddress){
+            if (val && val.contractAddress) {
                 this.contractAddress = val.contractAddress;
                 this.data.contractAddress = val.contractAddress;
-                Bus.$emit("send",this.data)
+                Bus.$emit("send", this.data)
             }
-            
+
         },
-        editorClose: function(){
+        editorClose: function () {
             this.editorShow = false;
         },
-        changeAce: function() {
+        changeAce: function () {
             this.content = this.aceEditor.getSession().getValue();
         },
-        
-        findImports: function(path) {
+
+        findImports: function (path) {
             this.contractList = JSON.parse(
                 localStorage.getItem("contractList")
             );
             let arry = path.split("/");
             let newpath = arry[arry.length - 1];
             let num = 0;
-            if(arry.length > 1){
+            if (arry.length > 1) {
                 let newPath = arry[0]
                 let oldPath = arry[arry.length - 1]
                 let importArry = []
                 this.contractList.forEach(value => {
-                    if(value.contractPath == newPath){
+                    if (value.contractPath == newPath) {
                         importArry.push(value)
                     }
                 })
-                if(importArry.length){
-                    for(let i = 0; i < importArry.length; i++){
-                        if(oldPath == importArry[i].contractName + ".sol"){
+                if (importArry.length) {
+                    for (let i = 0; i < importArry.length; i++) {
+                        if (oldPath == importArry[i].contractName + ".sol") {
                             return {
                                 contents: Base64.decode(
                                     importArry[i].contractSource
@@ -410,20 +414,20 @@ export default {
                             };
                         }
                     }
-                }else{
+                } else {
                     return { error: "File not found" };
                 }
-            }else{
+            } else {
                 let newpath = arry[arry.length - 1];
                 let newArry = []
                 this.contractList.forEach(value => {
-                    if(value.contractPath == this.data.contractPath){
+                    if (value.contractPath == this.data.contractPath) {
                         newArry.push(value)
                     }
                 })
-                if(newArry.length > 1){
-                    for(let i = 0; i < newArry.length; i++){
-                        if(newpath == newArry[i].contractName + ".sol"){
+                if (newArry.length > 1) {
+                    for (let i = 0; i < newArry.length; i++) {
+                        if (newpath == newArry[i].contractName + ".sol") {
                             return {
                                 contents: Base64.decode(
                                     newArry[i].contractSource
@@ -440,21 +444,21 @@ export default {
                             num++;
                         }
                     }
-                    if(num){
+                    if (num) {
                         return { error: "File not found" };
                     }
-                }else{
+                } else {
                     for (let i = 0; i < this.contractList.length; i++) {
                         if (newpath == this.contractList[i].contractName + ".sol") {
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
-                        } 
+                        }
                     }
                 }
             }
         },
-        compile: function() {
+        compile: function () {
             let wrapper = require("solc/wrapper");
             let solc = wrapper(window.Module);
             this.loading = true;
@@ -484,7 +488,7 @@ export default {
                 content: this.content
             };
             try {
-                output = JSON.parse(solc.compileStandard(JSON.stringify(input),this.findImports));
+                output = JSON.parse(solc.compileStandard(JSON.stringify(input), this.findImports));
             } catch (error) {
                 this.errorInfo = "合约编译失败！";
                 this.errorMessage = error;
@@ -504,9 +508,9 @@ export default {
                     this.errorInfo = "合约编译失败！";
                     this.loading = false;
                 }
-            },500)   
+            }, 500)
         },
-        changeOutput: function(obj) {
+        changeOutput: function (obj) {
             if (JSON.stringify(obj) !== "{}") {
                 if (obj.hasOwnProperty(this.contractName)) {
                     let compiledMap = obj[this.contractName]
@@ -538,26 +542,26 @@ export default {
                 this.loading = false;
             }
         },
-        refreshMessage: function() {
+        refreshMessage: function () {
             this.abiFileShow = false;
             this.errorInfo = "";
             this.compileinfo = "";
             this.abiFile = "";
             this.contractAddress = "";
         },
-        deploying: function() {
+        deploying: function () {
             this.dialogUser = true;
         },
-        userClose: function() {
+        userClose: function () {
             this.dialogUser = false;
         },
-        setMethod: function(){
+        setMethod: function () {
             let web3 = new Web3(Web3.givenProvider);
             let arry = [];
-            if(this.abiFile){
+            if (this.abiFile) {
                 let list = JSON.parse(this.abiFile);
                 list.forEach(value => {
-                    if(value.name && value.type =='function'){
+                    if (value.name && value.type == 'function') {
                         let data = {}
                         let methodId = web3.eth.abi.encodeFunctionSignature({
                             name: value.name,
@@ -568,7 +572,7 @@ export default {
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)
-                    }else if(value.name && value.type =='event'){
+                    } else if (value.name && value.type == 'event') {
                         let data = {}
                         let methodId = web3.eth.abi.encodeEventSignature({
                             name: value.name,
@@ -581,24 +585,24 @@ export default {
                         arry.push(data)
                     }
                 })
-                if(arry.length){
-                   this.addAbiMethod(arry) 
+                if (arry.length) {
+                    this.addAbiMethod(arry)
                 }
-            }    
+            }
         },
-        addAbiMethod: function(list){
+        addAbiMethod: function (list) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 methodList: list
             }
             addFunctionAbi(data).then(res => {
-                if(res.data.code === 0 ){
+                if (res.data.code === 0) {
                     console.log("method 保存成功！")
-                }else{
-                    message(errorcode[res.data.code].cn,'error')
+                } else {
+                    message(errorcode[res.data.code].cn, 'error')
                 }
             }).catch(err => {
-                 message(constant.ERROR,'error');
+                message(constant.ERROR, 'error');
             })
         },
         deployContract(val) {
@@ -637,7 +641,7 @@ export default {
                         this.data.contractSource = Base64.encode(this.content);
                         this.data.contractAddress = this.contractAddress;
                         this.data.contractVersion = this.version;
-                        Bus.$emit("deploy",this.data)
+                        Bus.$emit("deploy", this.data)
                     } else {
                         this.status = 3;
                         this.$message({
@@ -655,33 +659,52 @@ export default {
                     });
                 });
         },
-        foldInfo: function(val) {
+        foldInfo: function (val) {
             this.successHide = val;
         },
-        send: function() {
+        send: function () {
             this.dialogVisible = true;
         },
-        handleClose: function() {
+        handleClose: function () {
             this.dialogVisible = false;
         },
-        sendClose: function() {
+        sendClose: function () {
             this.$refs.send.close();
         },
-        showAbiText(){
+        showAbiText() {
             this.showAbi = !this.showAbi
-            if(this.$refs['showAbiText'].style.overflow ==='visible') {
+            if (this.$refs['showAbiText'].style.overflow === 'visible') {
                 this.$refs['showAbiText'].style.overflow = 'hidden'
-            }else if(this.$refs['showAbiText'].style.overflow === '' || this.$refs['showAbiText'].style.overflow === 'hidden'){
+            } else if (this.$refs['showAbiText'].style.overflow === '' || this.$refs['showAbiText'].style.overflow === 'hidden') {
                 this.$refs['showAbiText'].style.overflow = 'visible'
             }
         },
-        showBinText(){
+        showBinText() {
             this.showBin = !this.showBin
-            if(this.$refs['showBinText'].style.overflow ==='visible') {
+            if (this.$refs['showBinText'].style.overflow === 'visible') {
                 this.$refs['showBinText'].style.overflow = 'hidden'
-            }else if(this.$refs['showBinText'].style.overflow === '' || this.$refs['showBinText'].style.overflow === 'hidden'){
+            } else if (this.$refs['showBinText'].style.overflow === '' || this.$refs['showBinText'].style.overflow === 'hidden') {
                 this.$refs['showBinText'].style.overflow = 'visible'
             }
+        },
+        showHover() {
+
+        },
+        hiddenHover() {
+            // console.log('yinchu ')
+        },
+        collapse() {
+            this.showCompileText = !this.showCompileText
+            if (this.showCompileText) {
+                this.infoHeight = 250
+
+            } else if (!this.showCompileText) {
+                this.infoHeight = 50
+            }
+            this.$nextTick(() => {
+                this.resizeCode()
+            })
+
         }
 
     }
@@ -756,7 +779,7 @@ export default {
     padding-right: 20px;
 }
 .contract-info-title {
-    padding-right: 20px;
+    text-align: center;
 }
 .move {
     position: absolute;
@@ -798,10 +821,10 @@ export default {
     text-rendering: geometricPrecision;
     font-feature-settings: "liga" 0;
     font-variant-ligatures: none;
-    font: 14px/normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
+    font: 14px / normal "Monaco", "Menlo", "Ubuntu Mono", "Consolas",
         "source-code-pro", monospace !important;
 }
-.ace-editor>>>.ace_print-margin {
+.ace-editor >>> .ace_print-margin {
     display: none;
     text-rendering: geometricPrecision;
 }
@@ -831,7 +854,7 @@ export default {
 .titleActive {
     padding-left: 40px;
 }
-.send-dialog /deep/ .el-dialog--center .el-dialog__body{
+.send-dialog /deep/ .el-dialog--center .el-dialog__body {
     padding: 5px 25px 20px;
 }
 .showText {

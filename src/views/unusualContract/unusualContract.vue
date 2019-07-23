@@ -174,6 +174,7 @@ export default {
             this.$set(val, "show", !val.show);
         },
         search() {
+            this.currentPage = 1
             this.getUnusualContractList();
         },
         handleSizeChange: function(val) {
