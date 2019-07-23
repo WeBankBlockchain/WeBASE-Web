@@ -29,7 +29,10 @@
         <div class="send-item" v-show="!constant">
             <span class="send-item-title">用户:</span>
             <el-select v-model="transation.userName" placeholder="请选择用户" style="width:240px">
-                <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'></el-option>
+                <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
+                    <span>{{item.userName}}</span>
+                    <span class="font-12">{{splitString(item.publicKey)}}...</span>
+                </el-option>
             </el-select>
         </div>
         <div class="send-item">
@@ -143,6 +146,9 @@ export default {
                     this.constant = value.constant
                 }
             });
+            this.funcList.sort(function (a, b) {
+                return (a.name + '').localeCompare(b.name + '')
+            })
         },
         getUserData: function () {
             let reqData = {
@@ -259,6 +265,10 @@ export default {
                         message: "发送交易失败！"
                     });
                 });
+        },
+        splitString(val) {
+            var str = val;
+            return str.substring(0, 8)
         }
     }
 };
