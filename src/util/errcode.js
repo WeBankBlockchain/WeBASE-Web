@@ -323,16 +323,16 @@ let errCode = {
         cn: "公钥长度为130，公钥地址长度为42"
     },
     "202051": {
-        en: "un know this host",
-        cn: "找不到该host"
+        en: "un know this host/port",
+        cn: "找不到IP或端口 "
     },
     "202052": {
-        en: "un know this port",
-        cn: "找不到该端口"
+        en: "Invalid token",
+        cn: "无效的token"
     },
     "202053": {
-        en: "system user has not been initialized yet",
-        cn: "系统用户尚未初始化"
+        en: "Token has expired",
+        cn: "token已经失效"
     },
     "202054": {
         en: "contract had not deploy",

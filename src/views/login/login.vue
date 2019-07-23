@@ -61,7 +61,7 @@
     </div>
 </template>
 <script>
-import { login, networkList, haveNode,getPictureCheckCode} from "@/util/api";
+import { login, networkList, haveNode, getPictureCheckCode } from "@/util/api";
 import url from "@/util/url"
 import router from "@/router";
 import bg from "@/../static/image/banner.png";
@@ -71,7 +71,7 @@ import errcode from "@/util/errcode";
 const sha256 = require("js-sha256").sha256;
 export default {
     name: "login",
-    data: function() {
+    data: function () {
         return {
             bgLogin: bg,
             logoPng: logo,
@@ -122,11 +122,11 @@ export default {
             }
         };
     },
-    mounted: function(){
+    mounted: function () {
         this.changeCode()
     },
     methods: {
-        submit: function(formName) {
+        submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.logining = true;
@@ -136,33 +136,33 @@ export default {
                 }
             });
         },
-        changeCode: function(){
+        changeCode: function () {
             this.codeUrl = "";
             this.authToken = ""
             getPictureCheckCode().then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.codeUrl = `data:image/png;base64,${res.data.data.base64Image}`
                     this.authToken = res.data.data.token
                 } else {
                     this.codeUrl = "";
                     this.authToken = ""
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
+                    this.$message({
+                        message: errcode.errCode[res.data.code].cn,
+                        type: "error",
+                        duration: 2000
+                    });
+                }
             }).catch(err => {
                 this.codeUrl = "";
                 this.authToken = ""
                 this.$message({
-                            message: '系统错误！',
-                            type: "error",
-                            duration: 2000
-                        });
+                    message: '系统错误！',
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
-        userLogin: function(callback) {
+        userLogin: function (callback) {
             delCookie('JSESSIONID')
             delCookie('NODE_MGR_ACCOUNT_C')
             let reqData = {
@@ -170,18 +170,16 @@ export default {
                 accountPwd: sha256(this.loginForm.password)
             };
             let checkCode = this.loginForm.vercode
-            login(reqData,checkCode,this.authToken)
+            login(reqData, checkCode, this.authToken)
                 .then(res => {
                     if (res.data.code === 0) {
-                        localStorage.setItem("groupName","");
-                        localStorage.setItem("groupId","");
-                        localStorage.setItem("folderList","")
+                        localStorage.setItem("groupName", "");
+                        localStorage.setItem("groupId", "");
+                        localStorage.setItem("folderList", "")
                         localStorage.setItem("user", res.data.data.account);
                         localStorage.setItem("root", res.data.data.roleName);
-                        sessionStorage.setItem(
-                            "accountStatus",
-                            res.data.data.accountStatus
-                        );
+                        localStorage.setItem("token", res.data.data.token);
+                        sessionStorage.setItem("accountStatus", res.data.data.accountStatus);
                         sessionStorage.setItem("reload", 1);
                         router.push("/main")
                     } else {
@@ -227,15 +225,15 @@ export default {
     text-align: center;
     box-sizing: border-box;
 }
-.logo-content{
+.logo-content {
     position: absolute;
     width: 100%;
     top: 90px;
     left: 0;
     text-align: center;
     font-size: 12px;
-    color:#979faa;
-    letter-spacing:0.02px;
+    color: #979faa;
+    letter-spacing: 0.02px;
 }
 .msg-wrapper {
     min-height: 20px;
@@ -245,7 +243,7 @@ export default {
 .msg-error {
     color: #e4393c;
 }
-.codeUrlImg{
+.codeUrlImg {
     display: inline-block;
     height: 38px;
     width: 60px;
@@ -291,15 +289,16 @@ export default {
     font-size: 14px;
 }
 .icon {
-   width: 142px; height: 142px;
-   /* vertical-align: -0.15em; */
-   fill: currentColor;
-   overflow: hidden;
+    width: 142px;
+    height: 142px;
+    /* vertical-align: -0.15em; */
+    fill: currentColor;
+    overflow: hidden;
 }
-.el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before{
-    content: ""
+.el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
+    content: "";
 }
-.login-form .el-form-item__label{
+.login-form .el-form-item__label {
     display: block;
     line-height: 32px;
     float: none;

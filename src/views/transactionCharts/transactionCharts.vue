@@ -240,6 +240,7 @@ export default {
                             type: "error",
                             message: this.errcode.errCode[res.data.code].cn
                         });
+                        
                     }
                 })
                 .catch(err => {
@@ -249,6 +250,7 @@ export default {
                             this.errcode.errCode[err.data.code].cn ||
                             "获取监管用户列表失败！"
                     });
+                    this.$message.closeAll()
                 });
         },
         getMonitorUserList() {
@@ -264,6 +266,7 @@ export default {
                             type: "error",
                             message: this.errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -273,6 +276,7 @@ export default {
                             this.errcode.errCode[err.data.code].cn ||
                             "获取监管用户列表失败！"
                     });
+                    this.$message.closeAll()
                 });
         },
         getMonitorUserInterfaceList(val) {
@@ -301,6 +305,7 @@ export default {
                             this.errcode.errCode[err.data.code].cn ||
                             "获取监管用户列表失败！"
                     });
+                    this.$message.closeAll()
                 });
         },
         changeUserName(val) {
