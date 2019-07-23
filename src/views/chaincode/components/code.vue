@@ -19,9 +19,6 @@
         <div class="contract-code-head">
             <span class="contract-code-title" v-show="codeShow" :class="{titleActive:changeWidth }">
                 <span>{{contractName + '.sol'}}</span>
-                <!-- <el-tooltip class="item" effect="dark" content="未保存,按Ctrl+s保存合约内容" placement="top-start">
-                    <span v-show='saveShow' style="display:inline-block;width: 8px;height: 8px;border-radius:50%;background-color: #f00"></span>
-                </el-tooltip> -->
                 </span>
             <span class="contract-code-handle" v-show="codeShow">
                 <span class="contract-code-done"  v-if="!contractAddress && !disabled">
@@ -38,12 +35,6 @@
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>部署</span>
                 </span>
-                <!-- <span class="contract-code-done" v-if="abiFile"  @click="upLoadAdr">
-                    <el-tooltip class="item" effect="dark" content="加载已部署的合约" placement="top-start">
-                        <i class="wbs-icon-daoru font-16"></i>
-                    </el-tooltip>
-                    <span>加载</span>
-                </span> -->
                 <span class="contract-code-done" v-if="abiFile && bin && !disabled"  @click="send">
                     <i class="wbs-icon-send font-16"></i>
                     <span>发交易</span>
@@ -82,11 +73,17 @@
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">abi</span>
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{abiFile}}</span>
+                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" class="showText" ref="showAbiText">
+                            {{abiFile}}
+                        </span>
+                        <i :class="[ showAbi ? 'el-icon-arrow-down': 'el-icon-arrow-up'] " v-if="complieAbiTextHeight" @click="showAbiText"></i>
                     </div>
                     <div class="contract-info-list" style="border-bottom: 1px solid #e8e8e8" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">bin</span>
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{bin}}</span>
+                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" class="showText" ref="showBinText">
+                            {{bin}}
+                        </span>
+                        <i :class="[ showBin ? 'el-icon-arrow-down': 'el-icon-arrow-up'] " v-if="complieBinTextHeight" @click="showBinText"></i>
                     </div>
                 </div>
             </div>
@@ -170,7 +167,11 @@ export default {
             editorInput: null,
             uploadFileAdrShow: false,
             uploadAddress: "",
-            disabled: false
+            disabled: false,
+            showAbi: true,
+            showBin: true,
+            complieAbiTextHeight: false,
+            complieBinTextHeight: false
         };
     },
     beforeDestroy: function(){
@@ -217,6 +218,22 @@ export default {
             this.bin = data.contractBin;
             this.bytecodeBin = data.bytecodeBin || "";
             this.version = data.contractVersion;
+            this.complieAbiTextHeight = false;
+            this.complieBinTextHeight = false;
+            this.$refs['showAbiText'].style.overflow = 'hidden'
+            this.$refs['showBinText'].style.overflow = 'hidden'
+            if (data.contractAbi) {
+                this.$nextTick(() => {
+                    if(this.$refs['showAbiText'].offsetHeight >= 72){
+                        this.complieAbiTextHeight = true
+                    }
+                    if(this.$refs['showBinText'].offsetHeight >= 72){
+                        this.complieBinTextHeight = true
+                    }
+                    
+                })
+            }
+            
         })
         Bus.$on("noData",data => {
             this.codeShow = false;
@@ -595,16 +612,9 @@ export default {
                 user: val.userId,
                 contractName: this.contractName,
                 contractId: this.data.contractId,
-                // contractVersion: val.version
                 contractPath: this.data.contractPath
             };
             this.version = val.version
-            // if (!this.data.contractId) {
-            //     reqData.contractName = this.contractName;
-            //     reqData.contractVersion = this.data.contractVersion;
-            // } else {
-            //     reqData.contractId = this.data.contractId;
-            // }
             if (val.params.length) {
                 reqData.constructorParams = val.params;
             }
@@ -613,7 +623,6 @@ export default {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.abiFileShow = true;
-                        // this.$emit("deploy", res.data.data.contractId);
                         this.status = 2;
                         this.contractAddress = res.data.data.contractAddress
                         this.successInfo = "< 部署成功！";
@@ -646,79 +655,6 @@ export default {
                     });
                 });
         },
-        // addContract: function() {
-        //     this.loading = true;
-        //     let reqData = {
-        //         groupId: localStorage.getItem("groupId"),
-        //         contractName: this.contractName,
-        //         contractBin: this.bin,
-        //         bytecodeBin: this.bytecodeBin,
-        //         contractVersion: this.data.contractVersion,
-        //         contractSource: Base64.encode(this.content)
-        //     };
-        //     if (this.abiFile) {
-        //         reqData.contractAbi = this.abiFile;
-        //     }
-        //     addChaincode(reqData)
-        //         .then(res => {
-        //             this.loading = false;
-        //             if (res.data.code === 0) {
-        //                 this.status = res.data.data.contractStatus;
-        //                 this.abiFile = res.data.data.contractAbi || "";
-        //                 this.contractAddress = res.data.data.contractAddress || "";
-        //                 this.$message({
-        //                     message: "合约保存成功！",
-        //                     type: "success"
-        //                 });
-        //                 this.$emit("add", res.data.data);
-        //             } else {
-        //                 this.$message({
-        //                     message: errcode.errCode[res.data.code].cn,
-        //                     type: "error"
-        //                 });
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.loading = false;
-        //             this.$message({
-        //                 message: "系统错误",
-        //                 type: "error"
-        //             });
-        //         });
-        // },
-        // editContract: function() {
-        //     let reqData = {
-        //         groupId: localStorage.getItem("groupId"),
-        //         contractId: this.data.contractId,
-        //         contractBin: this.bin,
-        //         bytecodeBin: this.bytecodeBin,
-        //         contractSource: Base64.encode(this.content)
-        //     };
-        //     if (this.abiFile) {
-        //         reqData.contractAbi = this.abiFile;
-        //     }
-        //     editChain(reqData)
-        //         .then(res => {
-        //             if (res.data.code === 0) {
-        //                 this.$message({
-        //                     message: "合约保存成功！",
-        //                     type: "success"
-        //                 });
-        //                 this.$emit("add", res.data.data);
-        //             } else {
-        //                 this.$message({
-        //                     message: errcode.errCode[res.data.code].cn,
-        //                     type: "error"
-        //                 });
-        //             }
-        //         })
-        //         .catch(err => {
-        //             this.$message({
-        //                 message: "系统错误",
-        //                 type: "error"
-        //             });
-        //         });
-        // },
         foldInfo: function(val) {
             this.successHide = val;
         },
@@ -730,7 +666,24 @@ export default {
         },
         sendClose: function() {
             this.$refs.send.close();
+        },
+        showAbiText(){
+            this.showAbi = !this.showAbi
+            if(this.$refs['showAbiText'].style.overflow ==='visible') {
+                this.$refs['showAbiText'].style.overflow = 'hidden'
+            }else if(this.$refs['showAbiText'].style.overflow === '' || this.$refs['showAbiText'].style.overflow === 'hidden'){
+                this.$refs['showAbiText'].style.overflow = 'visible'
+            }
+        },
+        showBinText(){
+            this.showBin = !this.showBin
+            if(this.$refs['showBinText'].style.overflow ==='visible') {
+                this.$refs['showBinText'].style.overflow = 'hidden'
+            }else if(this.$refs['showBinText'].style.overflow === '' || this.$refs['showBinText'].style.overflow === 'hidden'){
+                this.$refs['showBinText'].style.overflow = 'visible'
+            }
         }
+
     }
 };
 </script>
@@ -880,5 +833,12 @@ export default {
 }
 .send-dialog /deep/ .el-dialog--center .el-dialog__body{
     padding: 5px 25px 20px;
+}
+.showText {
+    display: inline-block;
+    width: calc(100% - 120px);
+    word-wrap: break-word;
+    max-height: 73px;
+    overflow: hidden;
 }
 </style>

@@ -143,10 +143,8 @@ export default {
                     if (res.data.code === 0) {
                         this.transactionList = res.data.data;
                         this.total = res.data.totalCount;
-                        // if (this.transactionList.length) {
-                        //     this.expands.push(this.transactionList[0].transHash);
-                        // }
                     } else {
+                        console.log(this.$message,errcode.errCode[res.data.code].cn)
                         this.$message({
                             message: errcode.errCode[res.data.code].cn,
                             type: "error",
@@ -157,6 +155,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message.error("系统错误");
+                    this.$message.closeAll()
                 });
         },
         handleSizeChange: function(val) {

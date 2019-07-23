@@ -198,6 +198,7 @@ export default {
                         type: "error",
                         message: "密码修改失败"
                     });
+                    this.$message.closeAll()
                 });
         },
         getGroupList: function(){
@@ -229,10 +230,12 @@ export default {
                     });
                 }
             }).catch(err => {
+                
                 this.$message({
                         type: "error",
                         message: "系统错误"
                     });
+                this.$message.closeAll()
             })
         },
         closeFront: function(){
