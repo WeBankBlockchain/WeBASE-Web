@@ -152,6 +152,7 @@ import router from "@/router";
 import errcode from "@/util/errcode";
 import sRight from "@/../static/image/s-right.png";
 import artboard from "@/../static/image/artboard.png"
+var fs= require('path')
 export default {
     name: "home",
     components: {
@@ -238,6 +239,7 @@ export default {
         };
     },
     mounted: function () {
+        console.log('fa:',fs)
         this.groupId = localStorage.getItem("groupId");
         this.getNetworkDetails();
         this.getNodeTable();

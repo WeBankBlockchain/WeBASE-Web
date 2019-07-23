@@ -160,6 +160,7 @@ export default {
                 });
         },
         search() {
+            this.currentPage = 1;
             this.getUserInfoData();
         },
         handleSizeChange: function(val) {
