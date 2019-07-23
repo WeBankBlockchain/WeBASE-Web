@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <el-dialog title="节点配置" :visible.sync="dialogVisible" :before-close="modelClose"  class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
+        <el-dialog title="节点前置配置" :visible.sync="dialogVisible" :before-close="modelClose"  class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
             <div>
                 <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="ip" prop="ip" style="width:330px">
