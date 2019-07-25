@@ -197,7 +197,6 @@ export default {
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loading = false;
-                        this.getNodeTable()
                     } else {
                         this.loading = false;
                         this.$message({
