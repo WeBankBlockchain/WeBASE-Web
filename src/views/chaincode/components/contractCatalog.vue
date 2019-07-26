@@ -16,11 +16,11 @@
 <template>
     <div class="contract-menu" style="position: relative;height: 100% ;">
         <div class="contract-menu-header" >
-            <el-tooltip class="item" effect="dark" v-if="!disabled" content="新建文件夹" placement="top-start">
-                <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
-            </el-tooltip>
             <el-tooltip class="item" effect="dark" content="新建文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-Addfile icon contract-icon" @click='addFile'></i>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" v-if="!disabled" content="新建文件夹" placement="top-start">
+                <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="上传文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
