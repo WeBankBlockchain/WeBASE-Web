@@ -194,6 +194,7 @@ export default {
         }
     },
     mounted: function () {
+        this.editorHeight = document.body.offsetHeight * 0.75
         if (this.transationData.output == "0x") {
             this.inputButtonShow = false
         } else {
@@ -205,7 +206,7 @@ export default {
         if (this.typesArray && this.transationData.output != "0x") {
             this.decodefun()
         }
-        this.editorHeight = document.body.offsetHeight * 0.75
+        
     },
     methods: {
         decodeOutput: function () {
@@ -303,7 +304,7 @@ export default {
                 }
             }
             list.eventName = list.eventName + ")";
-            let eventResult = web3.eth.abi.decodeLog(eventData.abiInfo.inputs, list.data, list.topics);
+            let eventResult = web3.eth.abi.decodeLog(eventData.abiInfo.inputs, list.data, list.topics.slice(1));
             list.outData = {};
             list.eventLgData = [];
             for (const key in eventResult) {
