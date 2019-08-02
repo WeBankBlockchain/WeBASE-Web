@@ -16,11 +16,11 @@
 <template>
     <div class="contract-menu" style="position: relative;height: 100% ;">
         <div class="contract-menu-header" >
-            <el-tooltip class="item" effect="dark" v-if="!disabled" content="新建文件夹" placement="top-start">
-                <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
-            </el-tooltip>
             <el-tooltip class="item" effect="dark" content="新建文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-Addfile icon contract-icon" @click='addFile'></i>
+            </el-tooltip>
+            <el-tooltip class="item" effect="dark" v-if="!disabled" content="新建文件夹" placement="top-start">
+                <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="上传文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
@@ -128,6 +128,7 @@ export default {
         Bus.$off("compile")
         Bus.$off("deploy")
         Bus.$off("open")
+        Bus.$off("save")
     },
     mounted: function(){
         if(localStorage.getItem("root") === "admin"){
@@ -481,11 +482,11 @@ export default {
                 }
             })
             .catch(err => {
-                // this.loading = false;
                 this.$message({
                     type: "error",
                     message: "系统错误！"
                 });
+                this.$message.closeAll()
             });
         },
         getContracts: function(list){
