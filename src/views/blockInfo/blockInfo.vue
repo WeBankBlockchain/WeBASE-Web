@@ -137,8 +137,9 @@ export default {
                         this.blockData = res.data.data;
                         this.total = res.data.totalCount;
                     } else {
+                        console.log(this.$message.closeAll())
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
+                            message: this.errcode.errCode[res.data.code].cn,
                             type: "error",
                             duration: 2000
                         });
@@ -151,6 +152,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
+                    this.$message.closeAll()
                 });
         },
         handleSizeChange: function(val) {

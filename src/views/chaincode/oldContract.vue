@@ -26,35 +26,32 @@
             </div>
             <div class="search-table">
                 <el-table :data="contractList" tooltip-effect="dark" v-loading="loading">
-                    <el-table-column  prop="contractName" label="合约名称"  show-overflow-tooltip width="120" align="center">
+                    <el-table-column prop="contractName" label="合约名称" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
                             <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  prop="contractPath" label="合约目录"  show-overflow-tooltip  width="120" align="center"></el-table-column>
-                    <el-table-column  prop="contractAddress" label="合约地址"  show-overflow-tooltip align="center">
+                    <el-table-column prop="contractPath" label="合约目录" show-overflow-tooltip width="120" align="center"></el-table-column>
+                    <el-table-column prop="contractAddress" label="合约地址" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" title="复制合约地址"></i>
                             <span>{{scope.row.contractAddress}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  prop="contractAbi" label="合约abi"  show-overflow-tooltip  align="center">
+                    <el-table-column prop="contractAbi" label="合约abi" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAbi)" title="复制合约abi"></i>
                             <span class="link" @click='openAbi(scope.row)'>{{scope.row.contractAbi}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  prop="contractBin" label="合约bin"  show-overflow-tooltip  align="center">
+                    <el-table-column prop="contractBin" label="合约bin" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractBin)" title="复制合约bin"></i>
                             <span>{{scope.row.contractBin}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  prop="createTime" label="创建时间"  show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column
-                        fixed="right"
-                        label="操作"
-                        width="100">
+                    <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip width="150" align="center"></el-table-column>
+                    <el-table-column fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">发送交易</el-button>
                         </template>
@@ -77,7 +74,7 @@ import contentHead from "@/components/contentHead";
 import sendTransation from "./dialog/sendTransaction"
 import editor from "./dialog/editor"
 import abiDialog from "./dialog/abiDialog"
-import {getContractList} from "@/util/api"
+import { getContractList } from "@/util/api"
 import router from '@/router'
 import errcode from "@/util/errcode";
 export default {
@@ -88,8 +85,8 @@ export default {
         "abi-dialog": abiDialog,
         "send-transation": sendTransation
     },
-    data: function(){
-        return { 
+    data: function () {
+        return {
             contractList: [],
             loading: false,
             currentPage: 1,
@@ -108,19 +105,19 @@ export default {
             disabled: false
         }
     },
-    mounted: function(){
-        if(localStorage.getItem("root") === "admin"){
+    mounted: function () {
+        if (localStorage.getItem("root") === "admin") {
             this.disabled = false
-        }else{
+        } else {
             this.disabled = true
         }
         this.getContracts()
     },
     methods: {
-        changGroup: function(){
+        changGroup: function () {
             this.getContracts()
         },
-        getContracts: function(){
+        getContracts: function () {
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: this.currentPage,
@@ -130,13 +127,21 @@ export default {
                 contractStatus: 2
             }
             getContractList(data).then(res => {
-                if(res.data.code == 0){
+                if (res.data.code == 0) {
                     this.contractList = res.data.data || [];
                     this.total = res.data.totalCount || 0;
+                } else {
+                    
+                    this.$message({
+                        message: this.errcode.errCode[res.data.code].cn,
+                        type: "error",
+                        duration: 2000
+                    });
+                    console.log(this.$message.closeAll())
                 }
             })
         },
-        copyPubilcKey: function(val){
+        copyPubilcKey: function (val) {
             if (!val) {
                 this.$message({
                     type: "fail",
@@ -155,7 +160,7 @@ export default {
                 });
             }
         },
-        open: function(val){
+        open: function (val) {
             router.push({
                 path: "/contract",
                 query: {
@@ -165,53 +170,54 @@ export default {
             // this.editorShow = true;
             // this.editorData = val.contractSource
         },
-        editorClose: function(){
+        editorClose: function () {
             this.editorShow = false;
         },
-        openAbi: function(val){
+        openAbi: function (val) {
             this.abiData = val.contractAbi;
             this.abiDialogShow = true
         },
-        abiClose: function(){
+        abiClose: function () {
             this.abiDialogShow = false;
             this.abiData = null
         },
-        search: function(){
-            if(this.contractData && this.contractData.length && this.contractData.length < 20){
+        search: function () {
+            if (this.contractData && this.contractData.length && this.contractData.length < 20) {
                 this.contractName = this.contractData;
                 this.contractAddress = ""
-            }else if(this.contractData && this.contractData.length && (this.contractData.length > 20 || this.contractData.length == 20)){
+            } else if (this.contractData && this.contractData.length && (this.contractData.length > 20 || this.contractData.length == 20)) {
                 this.contractName = "";
                 this.contractAddress = this.contractData;
-            }else{
+            } else {
                 this.contractName = "";
                 this.contractAddress = ""
             }
+            this.currentPage = 1
             this.getContracts();
         },
-        send: function(val){
+        send: function (val) {
             this.data = val;
             this.abiData = val.contractAbi;
             this.version = val.contractVersion;
             this.dialogVisible = true
         },
-        sendClose: function(){
+        sendClose: function () {
             this.dialogVisible = false
         },
-        handleClose: function(){
+        handleClose: function () {
             this.dialogVisible = false
         },
-        sendSuccess: function(val){
+        sendSuccess: function (val) {
             this.dialogVisible = false;
             this.editorShow = true;
             this.editorData = val;
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getContracts();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getContracts();
         },
@@ -231,13 +237,13 @@ export default {
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
 .input-with-select >>> .el-button {
-    border: 1px solid #20D4D9;
+    border: 1px solid #20d4d9;
     border-radius: inherit;
-    background: #20D4D9;
+    background: #20d4d9;
     color: #fff;
 }
-.grayColor{
-    color: #666 !important
+.grayColor {
+    color: #666 !important;
 }
 </style>
 
