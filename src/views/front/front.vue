@@ -59,6 +59,10 @@
                             <span v-if="head.enName ==='nodeActive'">
                                 <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
                             </span>
+                            <span v-else-if="head.enName === 'nodeId'">
+                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                                {{scope.row[head.enName]}}
+                            </span>
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </template>
@@ -180,6 +184,7 @@ export default {
             this.getNodeTable();
         },
         search: function() {
+            this.currentPage = 1
             this.getFrontTable()   
         },
         getFrontTable: function() {
@@ -192,7 +197,6 @@ export default {
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loading = false;
-                        this.getNodeTable()
                     } else {
                         this.loading = false;
                         this.$message({
@@ -200,15 +204,18 @@ export default {
                             type: "error",
                             duration: 2000
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
+                    console.log(err)
                     this.loading = false;
                     this.$message({
                         message: "查询失败！",
                         type: "error",
                         duration: 2000
                     });
+                    this.$message.closeAll()
                 });
         },
         handleSizeChange: function(val) {
@@ -337,6 +344,25 @@ export default {
                         duration: 2000
                     });
                 });
+        },
+        copyNodeIdKey: function(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
         },
     }
 };
