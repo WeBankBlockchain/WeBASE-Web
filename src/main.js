@@ -34,6 +34,8 @@ import '@/assets/icon/iconfont_webaas.css'
 import '@/assets/css/common.css'
 import '@/util/directives.js';
 import Clickoutside from 'element-ui/src/utils/clickoutside'
+import filters from './util/filter.js'
+
 Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
