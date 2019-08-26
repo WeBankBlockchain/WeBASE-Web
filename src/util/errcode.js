@@ -116,8 +116,18 @@ let errCode = {
         en: "node request failed",
         cn: '节点请求失败'
     },
-
-
+    "201102": {
+        en: "tableName cannot be empty",
+        cn: '表名为空'
+    },
+    "201205": {
+        en: "permission denied, set system config value fail",
+        cn: '没有权限'
+    },
+    "201206": {
+        en: "unsupport for this system config key",
+        cn: '不支持该系统配置'
+    },
     "202000": {
         en: "invalid front id",
         cn: '无效的节点id'
@@ -359,8 +369,78 @@ let errCode = {
         en: "param exception",
         cn: "参数错误"
     },
-
-
+    "-50000": {
+        en: "Permission denied",
+        cn: "没有权限"
+    },
+    "-50001": {
+        en: "Table name already exist",
+        cn: "表名已经存在"
+    },
+    "-50100": {
+        en: "Unknow function call",
+        cn: "未知函数调用"
+    },
+    "-50101": {
+        en: "Table does not exist",
+        cn: "表不存在"
+    },
+    "-51000": {
+        en: "Table name and address already exist",
+        cn: "表名和地址已经存在"
+    }, 
+    "-51001": {
+        en: "Table name and address does not exist",
+        cn: "表名和地址不存在"
+    },
+    "-51100": {
+        en: "Invalid node ID",
+        cn: "无效的节点ID"
+    },
+    "-51101": {
+        en: "The last sealer cannot be removed",
+        cn: "最后一个封口机无法移除"
+    },
+    "-51102": {
+        en: "The node is not reachable",
+        cn: "节点无法访问"
+    },
+    "-51103": {
+        en: "The node is not a group peer",
+        cn: "节点不是组对等体"
+    },
+    "-51104": {
+        en: "The node is already in the sealer list",
+        cn: "节点已经在封口程序列表中"
+    },
+    "-51105": {
+        en: "The node is already in the observer list",
+        cn: "节点已经在观察者列表中"
+    },
+    "-51200": {
+        en: "Contract name and version already exist",
+        cn: "合同名称和版本已存在"
+    },
+    "-51201": {
+        en: "Version string length exceeds the maximum limit",
+        cn: "版本字符串长度超过最大限制"
+    },
+    "-51300": {
+        en: "Invalid configuration entry",
+        cn: "配置条目无效"
+    },
+    "-51500": {
+        en: "Contract name and version already exist",
+        cn: "合同名称和版本已存在"
+    },
+    "-51501": {
+        en: "Condition parse error",
+        cn: "条件解析错误"
+    },
+    "-51502": {
+        en: "Condition operation undefined",
+        cn: "条件操作未定义"
+    },
     "422": {
         en: "param error",
         cn: "参数错误"

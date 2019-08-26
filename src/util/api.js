@@ -601,3 +601,104 @@ export function getPictureCheckCode() {
         method: 'get'
     })
 }
+
+// permission post
+export function postPermission(data) {
+    return post({
+        url: `${url.ORG_LIST}/permission`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// permission delete
+export function deletePermission(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/permission`,
+        method: 'delete',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// permission get
+export function getPermission(data) {
+    return get({
+        url: `${url.ORG_LIST}/permission`,
+        method: 'get',
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// consensus node id
+export function consensusNodeId(data) {
+    return post({
+        url: `${url.ORG_LIST}/precompiled/consensus`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// consensus node id list 
+export function getConsensusNodeId(data) {
+    return get({
+        url: `${url.ORG_LIST}/precompiled/consensus/list`,
+        method: 'get',
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// sys config 
+export function querySysConfig(data) {
+    return post({
+        url: `${url.ORG_LIST}/sys/config`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// sys config list
+export function querySysConfigList(data) {
+    return get({
+        url: `${url.ORG_LIST}/sys/config/list`,
+        method: 'get',
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// cns list
+export function queryCnsList(data) {
+    return get({
+        url: `${url.ORG_LIST}/precompiled/cns/list`,
+        method: 'get',
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+// CRUD service
+export function queryCrudService(data) {
+    return post({
+        url: `${url.ORG_LIST}/precompiled/crud`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
