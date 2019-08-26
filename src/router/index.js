@@ -34,6 +34,11 @@ const transactionCharts = resolve => require(['@/views/transactionCharts/transac
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
 const helpDoc = resolve => require(['@/components/helpDoc'], resolve);
+const authorManagement = resolve => require(['@/views/authorManagement'], resolve);
+const nodeManagement = resolve => require(['@/views/nodeManagement'], resolve);
+const configManagement = resolve => require(['@/views/configManagement'], resolve);
+const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
+const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -112,6 +117,20 @@ const routes = [
         iconCls: 'wbs-icon-lock sidebar-icon',
         children: [
             { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
+        ]
+    },
+    {
+        path: '/',
+        component: main,
+        name: '系统管理',
+        menuShow: true,
+        iconCls: 'wbs-icon-lock sidebar-icon',
+        children: [
+            { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/nodeManagement', component: nodeManagement, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUDService', menuShow: true, meta: { requireAuth: true } },
         ]
     },
     {
