@@ -165,8 +165,6 @@ let errCode = {
         en: "crud sql fail",
         zh: '增删改查失败'
     },
-
-    
     "202000": {
         en: "invalid front id",
         cn: '无效的节点id'
