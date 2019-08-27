@@ -40,7 +40,7 @@
                         <div class="input-label">
                             <span class="label">data:</span>
                             <el-table :data="inputData" v-if="inputData.length" style="display:inline-block;width:350px">
-                                <el-table-column prop="name" label="name" align="left" v-if="inputData[0].name"></el-table-column>
+                                <el-table-column prop="name" label="name" align="left"></el-table-column>
                                 <el-table-column prop="type" label="type" align="left"></el-table-column>
                                 <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                     <template slot-scope="scope">
@@ -169,9 +169,10 @@
 <script>
 import { getFunctionAbi } from "@/util/api"
 import errcode from "@/util/errcode";
+import { debuglog } from 'util';
 export default {
     name: 'editor',
-    props: ['data', 'show', 'input'],
+    props: ['data', 'show', 'input', 'editorOutput'],
     data: function () {
         return {
             editorShow: true,
@@ -187,7 +188,7 @@ export default {
             inputData: [],
             decodeData: "",
             showDecode: true,
-            buttonTitle: "还原",
+            buttonTitle: "解码",
             typesArray: this.input,
             inputButtonShow: true,
             editorHeight: ''
@@ -206,7 +207,7 @@ export default {
         if (this.typesArray && this.transationData.output != "0x") {
             this.decodefun()
         }
-        
+
     },
     methods: {
         decodeOutput: function () {
@@ -234,25 +235,45 @@ export default {
                 });
                 this.funcData = this.typesArray.name;
                 if (this.typesArray.inputs.length) {
-                    this.decodeData = web3.eth.abi.decodeParameters(this.typesArray.inputs, this.transationData.output);
+
+                    this.decodeData = web3.eth.abi.decodeParameters(this.editorOutput, this.transationData.output);
                     if (JSON.stringify(this.decodeData) != "{}") {
                         for (const key in this.decodeData) {
-                            this.typesArray.inputs.forEach((val, index) => {
-                                if (val && val.name && val.type) {
-                                    if (key === val.name) {
-                                        this.inputData[index] = {};
-                                        this.inputData[index].name = val.name;
-                                        this.inputData[index].type = val.type;
-                                        this.inputData[index].data = this.decodeData[key];
-                                    }
-                                } else if (val) {
-                                    if (index == key) {
-                                        this.inputData[index] = {};
-                                        this.inputData[index].type = val;
-                                        this.inputData[index].data = this.decodeData[key];
-                                    }
-                                }
-                            });
+                            for (let index = 0; index < this.editorOutput.length; index++) {
+                                this.inputData[index] = {};
+                                this.inputData[index].name = this.editorOutput[index].name;
+                                this.inputData[index].type = this.editorOutput[index].type;
+                                this.inputData[index].data = this.decodeData[index];
+                                
+                            }
+                            // this.editorOutput.forEach((val, index) => {
+                            //     this.inputData[index] = {};
+                            //     this.inputData[index].name = val.name;
+                            //     this.inputData[index].type = val.type;
+                            //     console.log('========',this.decodeData[key].toString())
+                            //     this.inputData[index].data = this.decodeData[key].toString();
+                            //     if (val && val.name && val.type) {
+                            //         if (key === val.name) {
+                            //             this.inputData[index] = {};
+                            //             this.inputData[index].name = val.name;
+                            //             this.inputData[index].type = val.type;
+                            //             this.inputData[index].data = this.decodeData[key];
+                            //         }
+                            //     }else if (val && val.type) {
+                            //         if (index == key) {
+                            //             this.inputData[index] = {};
+                            //             this.inputData[index].name = val.name;
+                            //             this.inputData[index].type = val.type;
+                            //             this.inputData[index].data = this.decodeData[key];
+                            //         }
+                            //     }else if (val) {
+                            //         if (index == key) {
+                            //             this.inputData[index] = {};
+                            //             this.inputData[index].type = val;
+                            //             this.inputData[index].data = this.decodeData[key];
+                            //         }
+                            //     }
+                            // });
                         }
                     }
                 }
