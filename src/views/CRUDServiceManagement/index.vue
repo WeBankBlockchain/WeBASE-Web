@@ -2,16 +2,16 @@
     <div>
         <v-content-head :headTitle="'系统管理'" :headSubTitle="'CRUDService'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
-            <span class="instructions bg-efefef">CRUDService说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。</span>
-            <p class="font-color-ed5454">
+            <span class="instructions bg-efefef">
+                CRUDService说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。</br>
                 Tips: 如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。
-            </p>
+            </span>
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item label="管理员账号" prop="adminRivateKey" class="item-form">
                     <el-select v-model="sqlForm.adminRivateKey" placeholder="请选择" class="select-32">
                         <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                             <span>{{item.userName}}</span>
-                            <span class="font-12 text-float-right">{{item.publicKey | splitString}}...</span>
+                            <span class="font-12 text-float-right">{{item.address | splitString}}...</span>
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -22,35 +22,24 @@
                     <el-button size="small" type="primary" @click="runSql('sqlForm')" :disabled="disabled" class="run-btn" :loading="loading">执行</el-button>
                 </el-form-item>
             </el-form>
+            <!-- <div class="editor-top">
+                <div class="editor-wrapper" ref="ace"></div>
+            </div> -->
             <template v-if="typeof(runSqlResult)==='string'">
-                <p ><span>执行结果：</span>{{runSqlResult}}</p>
+                <p><span>执行结果：</span>{{runSqlResult}}</p>
             </template>
             <template v-else>
                 <p><span>执行结果：</span></p>
                 <json-viewer :value="runSqlResult" :expand-depth='5' copyable></json-viewer>
             </template>
-            
-
-            
-            <!-- <table class="sql-ruslt">
-                <thead>
-                    <tr class="sql-ruslt-th">
-                        <th v-for="head in runSqlResultHead">{{head.name}}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="sql-ruslt-td" v-for="item in runSqlResultList">
-                        <td v-for="head in runSqlResultHead">
-                            <span>{{item[head.enName]}}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table> -->
         </div>
     </div>
 </template>
 
 <script>
+// import ace from "ace-builds";
+// import "ace-builds/webpack-resolver";
+// import "ace-builds/src-noconflict/ext-language_tools";
 import contentHead from "@/components/contentHead";
 import { getUserList, queryCrudService } from "@/util/api";
 export default {
@@ -68,58 +57,6 @@ export default {
             disabled: false,
             loading: false,
             adminRivateKeyList: [],
-            runSqlResultHead: [
-                {
-                    enName: 'Field',
-                    name: 'Field'
-                },
-                {
-                    enName: 'Type',
-                    name: 'Type'
-                },
-                {
-                    enName: 'Null',
-                    name: 'Null'
-                },
-                {
-                    enName: 'Key',
-                    name: 'Key'
-                },
-                {
-                    enName: 'Default',
-                    name: 'Default'
-                },
-                {
-                    enName: 'Extra',
-                    name: 'Extra'
-                },
-            ],
-            runSqlResultList: [
-                {
-                    Field: 'Host',
-                    Type: 'char(60)',
-                    Null: 'NO',
-                    Key: 'PRI',
-                    Default: '',
-                    Extra: ''
-                },
-                {
-                    Field: 'Host',
-                    Type: 'char(60)',
-                    Null: 'NO',
-                    Key: 'PRI',
-                    Default: '',
-                    Extra: ''
-                },
-                {
-                    Field: 'Host',
-                    Type: 'char(60)',
-                    Null: 'NO',
-                    Key: 'PRI',
-                    Default: '',
-                    Extra: ''
-                }
-            ],
             runSqlResult: "",
             sqlForm: {
                 adminRivateKey: '',
@@ -153,6 +90,7 @@ export default {
         } else {
             this.disabled = true
         }
+        // this.initEditor()
         this.getUserData()
     },
 
@@ -162,6 +100,19 @@ export default {
                 adminRivateKey: '',
                 sqlText: ''
             }
+        },
+        initEditor() {
+            this.aceEditor = ace.edit(this.$refs.ace);
+            this.aceEditor.setTheme("ace/theme/chrome");
+            this.aceEditor.getSession().setMode("ace/mode/sql");
+            this.aceEditor.setOptions({
+                enableBasicAutocompletion: true,
+                enableSnippets: true,
+                enableLiveAutocompletion: true,
+                wrap: true
+            });
+            this.aceEditor.setShowPrintMargin(false)
+        
         },
         getUserData() {
             let reqData = {
@@ -275,6 +226,10 @@ export default {
     border-radius: 10px;
     display: inline-block;
 }
-
-
+.editor-top {
+    height: 200px;
+}
+.editor-wrapper {
+    height: 100%;
+}
 </style>
