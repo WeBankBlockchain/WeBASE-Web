@@ -96,7 +96,7 @@
         <el-dialog v-dialogDrag title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
     </div>
 </template>
@@ -167,6 +167,7 @@ export default {
             editorShow: false,
             editorData: null,
             editorInput: null,
+            editorOutput: null,
             uploadFileAdrShow: false,
             uploadAddress: "",
             disabled: false,
@@ -374,6 +375,7 @@ export default {
             this.editorData = null;
             this.editorData = val.resData;
             this.editorInput = val.input;
+            this.editorOutput = val.data.outputs;
             if (val && val.contractAddress) {
                 this.contractAddress = val.contractAddress;
                 this.data.contractAddress = val.contractAddress;
