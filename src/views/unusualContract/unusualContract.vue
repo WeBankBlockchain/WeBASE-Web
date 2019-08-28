@@ -30,7 +30,7 @@
                         <template slot-scope="props">
                             <ul class="expand-item-ul">
                                 <li v-for="item in props.row['hashs']" :key='item.hash'>
-                                    <div @click="showItem(item)"  class="expand-item-div">
+                                    <div @click="showItem(item)" class="expand-item-div">
                                         <i :class="item.show?'el-icon-arrow-down':'el-icon-arrow-up'"></i>
                                         <span class="expand-item-span">TxHash：
                                             <span>{{item.hash}}</span>
@@ -51,8 +51,11 @@
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
+            <div class="notify-cation" v-if="noticeVisibility">
+                <div style="text-align: right;"><i class="el-icon-close" @click="closeNotice"></i></div>
+                <p>异常过多，已经停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。</p>
+            </div>
         </div>
-
     </div>
 </template>
 
@@ -69,6 +72,7 @@ export default {
     data() {
         return {
             loading: false,
+            noticeVisibility: false,
             currentPage: 1,
             pageSize: 10,
             total: 0,
@@ -91,9 +95,7 @@ export default {
                     name: "hash"
                 }
             ],
-            unusualContractList: [
-                
-            ]
+            unusualContractList: []
         };
     },
     computed: {
@@ -119,23 +121,37 @@ export default {
                 item.hashs = hashArr;
             });
             return arr;
+        },
+        totalCounts() {
+            var total = this.total;
+            if (total >= 20) {
+                this.noticeVisibility = true;
+                setTimeout(() => {
+                    this.noticeVisibility = false
+                }, 7000);
+            } else {
+                this.noticeVisibility = false
+            }
         }
     },
     mounted() {
         this.getUnusualContractList();
     },
     methods: {
-        changGroup(){
+        changGroup() {
             this.getUnusualContractList()
+        },
+        closeNotice() {
+            this.noticeVisibility = false;
         },
         getUnusualContractList() {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    groupId: groupId,
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                groupId: groupId,
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {};
             reqQuery = {
                 contractAddress: this.contractAddress
@@ -158,7 +174,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.errcode.errCode[err.data.code].cn ||"查询异常合约失败！",
+                        message: this.errcode.errCode[err.data.code].cn || "查询异常合约失败！",
                         type: "error",
                         duration: 2000
                     });
@@ -177,16 +193,16 @@ export default {
             this.currentPage = 1
             this.getUnusualContractList();
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getUnusualContractList();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getUnusualContractList();
         },
-        clearText: function(){
+        clearText: function () {
             this.getUnusualContractList()
         }
     }
@@ -198,29 +214,29 @@ export default {
     float: right;
     width: 464px;
 }
-.input-with-select>>>.el-input__inner {
+.input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: 1px solid #eaedf3;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-input-group__append {
+.input-with-select >>> .el-input-group__append {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-button {
-    border: 1px solid #20D4D9;
+.input-with-select >>> .el-button {
+    border: 1px solid #20d4d9;
     border-radius: inherit;
-    background: #20D4D9;
+    background: #20d4d9;
     color: #fff;
 }
 
-.search-table>>>.el-table__expanded-cell[class*="cell"] {
+.search-table >>> .el-table__expanded-cell[class*="cell"] {
     padding-left: 20px;
     padding-top: 0;
 }
-.search-table>>> .el-table__body-wrapper {
+.search-table >>> .el-table__body-wrapper {
     overflow-y: auto;
 }
 .expand-item-div {
@@ -248,5 +264,22 @@ export default {
 .expand-item-span > span {
     color: #515356;
     margin-left: 47px;
+}
+.notify-cation {
+    margin: 0 auto;
+    width: 300px;
+    position: relative;
+    bottom: 50%;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    padding: 14px 24px 14px 13px;
+    border: 1px solid #ebeef5;
+    border-radius: 8px;
+    z-index: 1000;
+    padding-left: 30px;
+    background: #fff;
+}
+.notify-cation > div {
+    text-align: right;
+    cursor: pointer;
 }
 </style>
