@@ -2,17 +2,18 @@
     <div>
         <v-content-head :headTitle="'系统管理'" :headSubTitle="'权限管理'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
-            <span class="instructions bg-efefef">管理权限说明：权限控制是基于外部账户(tx.origin)的访问机制，对包括合约部署，表的创建，表的写操作（插入、更新和删除）进行权限控制，表的读操作不受权限控制。
-                （ <a target="_blank" href="https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html">具体可见文档：[权限控制]</a> ）</span>
-            <p class="font-color-ed5454">
+            <span class="instructions bg-efefef">
+                管理权限说明：权限控制是基于外部账户(tx.origin)的访问机制，对包括合约部署，表的创建，表的写操作（插入、更新和删除）进行权限控制，表的读操作不受权限控制。
+                （ <a target="_blank" href="https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html">具体可见文档：[权限控制]</a> ）
+                </br>
                 Tips: 添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。
-            </p>
+            </span>
             <el-form :model="permissionForm" :rules="rules" ref="permissionForm" class="demo-ruleForm">
                 <el-form-item label="管理员账号" prop="adminRivateKeyAddress" class="item-form">
                     <el-select v-model="permissionForm.adminRivateKeyAddress" placeholder="请选择" class="select-32">
                         <el-option v-for="item in rivateKeyAddressList" :key="item.address" :label="item.userName" :value="item.address">
                             <span>{{item.userName}}</span>
-                            <span class="font-12">{{item.publicKey | splitString}}...</span>
+                            <span class="font-12">{{item.address | splitString}}...</span>
                         </el-option>
                     </el-select>
                 </el-form-item>
@@ -29,7 +30,7 @@
                     <el-select v-model.trim="permissionForm.otherRivateKey" placeholder="请输入帐号" class="select-32" filterable >
                         <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                             <span>{{item.userName}}</span>
-                            <span class="font-12">{{item.publicKey | splitString}}...</span>
+                            <span class="font-12">{{item.address | splitString}}...</span>
                         </el-option>
                     </el-select>
                     <!-- <el-input v-model.trim="permissionForm.otherRivateKey" placeholder="请输入帐号" class="select-32"></el-input> -->
@@ -426,7 +427,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(this.adminRivateKeyList.length) this.permissionForm.otherRivateKey = this.adminRivateKeyList[0]['address']
+                        if(this.adminRivateKeyList.length) this.permissionForm.otherRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             type: "error",
@@ -476,7 +477,7 @@ export default {
     margin-left: 6px;
 }
 .instructions {
-    margin-bottom: 16px;
+    margin-bottom: 30px;
     padding: 2px 5px;
     color: #2e384d;
     border-radius: 10px;
