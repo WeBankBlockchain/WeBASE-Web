@@ -5,7 +5,7 @@
                 <el-select v-model="modifyForm.adminRivateKey" placeholder="请选择">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.name" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.publicKey | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -18,7 +18,7 @@
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="close">取消</el-button>
-            <el-button type="primary" @click="submit('modifyForm')">确定</el-button>
+            <el-button type="primary" :loading="loading" @click="submit('modifyForm')">确定</el-button>
         </div>
     </div>
 </template>
@@ -39,6 +39,7 @@ export default {
 
     data() {
         return {
+            loading: false,
             adminRivateKeyList: [],
             nodeTypeList: [
                 {
@@ -108,6 +109,7 @@ export default {
 
         },
         queryConsensusNodeId() {
+            this.loading = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 nodeType: this.modifyForm.nodeType,
@@ -116,6 +118,7 @@ export default {
             }
             consensusNodeId(reqData)
                 .then(res => {
+                    this.loading = false;
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
