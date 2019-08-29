@@ -130,7 +130,7 @@ const routes = [
             { path: '/nodeManagement', component: nodeManagement, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUDService', menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } },
         ]
     },
     {
