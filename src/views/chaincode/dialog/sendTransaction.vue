@@ -31,7 +31,7 @@
             <el-select v-model="transation.userName" placeholder="请选择用户" style="width:240px">
                 <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
                     <span>{{item.userName}}</span>
-                    <span class="font-12">{{splitString(item.publicKey)}}...</span>
+                    <span class="font-12">{{splitString(item.address)}}...</span>
                 </el-option>
             </el-select>
         </div>
