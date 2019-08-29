@@ -22,28 +22,40 @@
                     <el-button size="small" type="primary" @click="modifyConfig('configForm')" class="add-btn" :disabled="disabled">修改</el-button>
                 </el-form-item>
             </el-form>
-            
-            <el-table :data="configList" tooltip-effect="dark" v-loading="loading"  class="search-table-content">
+
+            <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
                 <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span>{{scope.row[head.enName]}}</span>
+                        <template v-if="head.enName!='operate'">
+                            
+                            <span>{{scope.row[head.enName]}}</span>
+                        </template>
+                        <template v-else>
+                            <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">修改</el-button>
+                        </template>
                     </template>
                 </el-table-column>
             </el-table>
             <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
+
         </div>
+        <el-dialog title="修改配置值" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+            <system-config @close="close" @modifySuccess="modifySuccess" :configKey="configkey"></system-config>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
+import systemConfig from "./components/systemConfig";
 import { getUserList, querySysConfig, querySysConfigList } from "@/util/api";
 export default {
     name: 'ConfigManagement',
 
     components: {
         "v-content-head": contentHead,
+        systemConfig
     },
 
     props: {
@@ -56,11 +68,13 @@ export default {
             total: 0,
             disabled: false,
             loading: false,
+            modifyDialogVisible: false,
             configForm: {
                 adminRivateKey: '',
                 configKey: '',
                 configValue: '',
             },
+            configkey: '',
             adminRivateKeyList: [],
             configList: [],
             configHead: [
@@ -71,6 +85,10 @@ export default {
                 {
                     enName: "configValue",
                     name: "配置值"
+                },
+                {
+                    enName: "operate",
+                    name: "操作"
                 }
             ],
             configKeyList: [],
@@ -118,7 +136,7 @@ export default {
             this.getUserData()
             this.getSysConfigList()
         },
-        getSysConfigList(){
+        getSysConfigList() {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: this.currentPage,
@@ -209,6 +227,17 @@ export default {
                         message: "系统错误！"
                     });
                 });
+        },
+        modifyItemConfig(item) {
+            this.configkey = item.configKey;
+            this.modifyDialogVisible = true;
+        },
+        close() {
+            this.modifyDialogVisible = false
+        },
+        modifySuccess() {
+            this.modifyDialogVisible = false
+            this.getSysConfigList()
         },
         handleSizeChange(val) {
             this.pageSize = val;

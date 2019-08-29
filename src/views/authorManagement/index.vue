@@ -58,7 +58,7 @@
             </el-pagination>
         </div>
 
-        <el-dialog :title="authorType | permissionName" :visible.sync="authDialogVisible" width="20%" v-if="authDialogVisible" center>
+        <el-dialog :title="authorType | permissionName" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
             <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :authorType="authorType" :tableName="tableName"></authorization-rivateKey>
         </el-dialog>
     </div>
@@ -210,6 +210,7 @@ export default {
 
     methods: {
         changGroup() {
+            this.adminRivateKeyList = [];
             this.getUserData()
             this.queryGetPermission()
         },
