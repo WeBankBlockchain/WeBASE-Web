@@ -36,6 +36,7 @@ import '@/util/directives.js';
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import filters from './util/filter.js'
 
+import ace from 'ace-builds'
 Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
@@ -44,6 +45,7 @@ axios.defaults.timeout = 60 * 1000;
 Vue.use(router);
 Vue.use(VueClipboard)
 Vue.use(JsonViewer)
+Vue.use(ace)
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

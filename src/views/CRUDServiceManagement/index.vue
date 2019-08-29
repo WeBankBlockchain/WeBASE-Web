@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'CRUDService'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="'系统管理'" :headSubTitle="'CRUD'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <span class="instructions bg-efefef">
                 CRUDService说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。</br>
@@ -15,16 +15,17 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="SQL" prop="sqlText" class="item-form">
-                    <el-input v-model="sqlForm.sqlText" placeholder="请输入你要执行的CRUD SQL语句" type="textarea" :autosize="{ minRows: 4}" style="min-width: 500px;"></el-input>
+                <el-form-item>
+                    <div class="editor-top">
+                        <div class="editor-wrapper" ref="ace"></div>
+                    </div>
                 </el-form-item>
+
                 <el-form-item>
                     <el-button size="small" type="primary" @click="runSql('sqlForm')" :disabled="disabled" class="run-btn" :loading="loading">执行</el-button>
                 </el-form-item>
             </el-form>
-            <!-- <div class="editor-top">
-                <div class="editor-wrapper" ref="ace"></div>
-            </div> -->
+
             <template v-if="typeof(runSqlResult)==='string'">
                 <p><span>执行结果：</span>{{runSqlResult}}</p>
             </template>
@@ -37,9 +38,12 @@
 </template>
 
 <script>
-// import ace from "ace-builds";
+import ace from "ace-builds";
 // import "ace-builds/webpack-resolver";
-// import "ace-builds/src-noconflict/ext-language_tools";
+import "ace-builds/src-noconflict/ext-language_tools";
+import "ace-builds/src-noconflict/theme-monokai";
+import "ace-builds/src-noconflict/theme-chrome";
+import "ace-builds/src-noconflict/mode-sql";
 import contentHead from "@/components/contentHead";
 import { getUserList, queryCrudService } from "@/util/api";
 export default {
@@ -59,8 +63,7 @@ export default {
             adminRivateKeyList: [],
             runSqlResult: "",
             sqlForm: {
-                adminRivateKey: '',
-                sqlText: ''
+                adminRivateKey: ''
             },
             rules: {
                 adminRivateKey: [
@@ -69,15 +72,11 @@ export default {
                         message: "请选择管理员",
                         trigger: "blur"
                     }
-                ],
-                sqlText: [
-                    {
-                        required: true,
-                        message: "请输入SQL",
-                        trigger: "blur"
-                    }
                 ]
-            }
+            },
+            aceEditor: null,
+            // themePath: "ace/theme/chrome",
+            // modePath: "ace/mode/sql",
         }
     },
 
@@ -90,16 +89,18 @@ export default {
         } else {
             this.disabled = true
         }
-        // this.initEditor()
+        this.initEditor()
         this.getUserData()
     },
 
     methods: {
         changGroup() {
+            this.getUserData()
             this.sqlForm = {
-                adminRivateKey: '',
-                sqlText: ''
+                adminRivateKey: ''
             }
+            this.aceEditor.setValue('')
+            this.runSqlResult = ""
         },
         initEditor() {
             this.aceEditor = ace.edit(this.$refs.ace);
@@ -112,7 +113,9 @@ export default {
                 wrap: true
             });
             this.aceEditor.setShowPrintMargin(false)
-        
+        },
+        changeSql() {
+
         },
         getUserData() {
             let reqData = {
@@ -153,17 +156,33 @@ export default {
             });
         },
         getSqlList() {
+            if (!this.aceEditor.getValue().trim()) {
+                this.$message({
+                    type: 'info',
+                    message: '请输入sql'
+                })
+                return
+            }
+            var sqlContent = this.aceEditor.getValue().trim();
+            var sqlType = sqlContent.split(' ')[0].toLowerCase();
+
             this.loading = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 fromAddress: this.sqlForm.adminRivateKey,
-                sql: this.sqlForm.sqlText.trim()
+                sql: sqlContent
             }
             queryCrudService(reqData)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.runSqlResult = res.data.data;
+                        // if(sqlType==='select'|| sqlType ==='desc'){
+                        //     this.runSqlResult = res.data.data;
+                        // }else {
+                        //     this.runSqlResult = res.data.msg
+                        // }
+
                     } else {
                         this.$message({
                             type: "error",
@@ -228,8 +247,13 @@ export default {
 }
 .editor-top {
     height: 200px;
+    width: 550px;
+    margin-left: 15px;
+    margin-top: 5px;
+    border: 1px solid #f2f2f2;
 }
 .editor-wrapper {
     height: 100%;
+    width: 100%;
 }
 </style>
