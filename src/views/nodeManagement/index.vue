@@ -196,7 +196,7 @@ export default {
 }
 .instructions {
     margin-bottom: 30px;
-    padding: 2px 5px;
+    padding: 10px 10px;
     color: #2e384d;
     border-radius: 10px;
     display: inline-block;

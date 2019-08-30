@@ -9,14 +9,14 @@
                 Tips: 添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。
             </span>
             <el-form :model="permissionForm" :rules="rules" ref="permissionForm" class="demo-ruleForm">
-                <el-form-item label="管理员账号" prop="adminRivateKeyAddress" class="item-form">
+                <!-- <el-form-item label="管理员账号" prop="adminRivateKeyAddress" class="item-form">
                     <el-select v-model="permissionForm.adminRivateKeyAddress" placeholder="请选择" class="select-32">
                         <el-option v-for="item in rivateKeyAddressList" :key="item.address" :label="item.userName" :value="item.address">
                             <span>{{item.userName}}</span>
                             <span class="font-12">{{item.address | splitString}}...</span>
                         </el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item label="权限类型" prop="authorType" class="item-form">
                     <el-select v-model="permissionForm.authorType" placeholder="请选择" class="select-32" @change="selectAuthorType">
                         <el-option v-for="item in authorList" :key="item.type" :label="item.name" :value="item.type">
@@ -26,27 +26,28 @@
                 <el-form-item label="表名" prop="tableName" class="item-form"  v-if="permissionForm.authorType==='userTable'">
                     <el-input v-model.trim="permissionForm.tableName" class="select-32" v-if="permissionForm.authorType==='userTable'"></el-input>
                 </el-form-item>
-                <el-form-item label="外部账号地址" prop="otherRivateKey" class="item-form">
+                <!-- <el-form-item label="外部账号地址" prop="otherRivateKey" class="item-form">
                     <el-select v-model.trim="permissionForm.otherRivateKey" placeholder="请输入帐号" class="select-32" filterable >
                         <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                             <span>{{item.userName}}</span>
                             <span class="font-12">{{item.address | splitString}}...</span>
                         </el-option>
                     </el-select>
-                    <!-- <el-input v-model.trim="permissionForm.otherRivateKey" placeholder="请输入帐号" class="select-32"></el-input> -->
+                </el-form-item> -->
+                <el-form-item v-if="permissionForm.authorType==='userTable'">
+                    <el-button size="small" type="primary" :disabled="disabled" class="add-btn" @click="searchTable">查询</el-button>
                 </el-form-item>
                 <el-form-item>
                     <el-button size="small" type="primary" :disabled="disabled" class="add-btn" @click="addAuthor">添加</el-button>
                 </el-form-item>
-                <el-form-item v-if="permissionForm.authorType==='userTable'">
-                    <el-button size="small" type="primary" :disabled="disabled" class="add-btn" @click="searchTable">查询</el-button>
-                </el-form-item>
+                
             </el-form>
             <el-table :data="preRivateKeyList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
                 <el-table-column v-for="head in preRivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <template v-if="head.enName!='operate'">
-                            <span>{{scope.row[head.enName]}}</span>
+                            <span v-if="head.enName==='address'"><i class="wbs-icon-copy font-12 copy-key" @click="copyAddress(scope.row['address'])" title="复制地址"></i>{{scope.row[head.enName]}}</span>
+                            <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                         <template v-else>
                             <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteUser(scope.row)">删除</el-button>
@@ -58,8 +59,8 @@
             </el-pagination>
         </div>
 
-        <el-dialog :title="authorType | permissionName" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
-            <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :authorType="authorType" :tableName="tableName"></authorization-rivateKey>
+        <el-dialog :title="titieText" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
+            <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :btnType="btnType" :deleteParam="deleteParam"></authorization-rivateKey>
         </el-dialog>
     </div>
 </template>
@@ -164,7 +165,10 @@ export default {
             loading: false,
             currentPage: 1,
             pageSize: 10,
-            total: 0
+            total: 0,
+            titieText: '',
+            btnType: '',
+            deleteParam: {}
         }
     },
     computed: {
@@ -210,7 +214,13 @@ export default {
 
     methods: {
         changGroup() {
-            this.adminRivateKeyList = [];
+            this.adminRivateKeyList = []
+            this.permissionForm = {
+                adminRivateKeyAddress: "",
+                authorType: "permission",
+                tableName: "",
+                otherRivateKey: ""
+            }
             this.getUserData()
             this.queryGetPermission()
         },
@@ -223,27 +233,32 @@ export default {
 
         },
         authorizeSuccess() {
+            this.authDialogVisible = false;
             this.queryGetPermission()
         },
         searchTable() {
             this.queryGetPermission()
         },
         addAuthor() {
-            this.$refs['permissionForm'].validate(valid => {
-                if (valid) {
-                    this.$confirm("确认提交？", {
-                        center: true
-                    })
-                        .then(_ => {
-                            this.sureAddAuthor()
-                        })
-                        .catch(_ => {
+            this.btnType = 'addBtn';
+            this.titieText = '添加权限';
+            this.authDialogVisible = true;
+            // this.$refs['permissionForm'].validate(valid => {
+            //     if (valid) {
+                    
+            //         this.$confirm("确认提交？", {
+            //             center: true
+            //         })
+            //             .then(_ => {
+            //                 this.sureAddAuthor()
+            //             })
+            //             .catch(_ => {
 
-                        });
-                } else {
-                    return false;
-                }
-            });
+            //             });
+            //     } else {
+            //         return false;
+            //     }
+            // });
         },
         sureAddAuthor() {
             let reqData = {
@@ -285,21 +300,25 @@ export default {
             this.queryGetPermission();
         },
         deleteUser(param) {
-            this.$refs['permissionForm'].validate(valid => {
-                if (valid) {
-                    this.$confirm("确认删除？", {
-                        center: true
-                    })
-                        .then(() => {
-                            this.sureDeleteUser()
-                        })
-                        .catch(() => {
+            this.btnType = 'deleteBtn';
+            this.titieText = '删除权限';
+            this.authDialogVisible = true;
+            this.deleteParam = Object.assign({},param,{authorType: this.permissionForm.authorType, tableName: this.permissionForm.tableName});
+            // this.$refs['permissionForm'].validate(valid => {
+            //     if (valid) {
+            //         this.$confirm("确认删除？", {
+            //             center: true
+            //         })
+            //             .then(() => {
+            //                 this.sureDeleteUser()
+            //             })
+            //             .catch(() => {
 
-                        });
-                } else {
-                    return false;
-                }
-            });
+            //             });
+            //     } else {
+            //         return false;
+            //     }
+            // });
 
         },
         sureDeleteUser(param) {
@@ -442,7 +461,26 @@ export default {
                         message: "系统错误！"
                     });
                 });
-        }
+        },
+        copyAddress(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
+        },
     }
 }
 </script>
@@ -479,7 +517,7 @@ export default {
 }
 .instructions {
     margin-bottom: 30px;
-    padding: 2px 5px;
+    padding: 10px 10px;
     color: #2e384d;
     border-radius: 10px;
     display: inline-block;
