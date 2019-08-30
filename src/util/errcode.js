@@ -116,7 +116,7 @@ let errCode = {
         en: "node request failed",
         cn: '节点请求失败'
     },
-    "201100": {
+    "201200": {
         en: "Params not fit",
         cn: '参数不合适'
     },
@@ -258,7 +258,7 @@ let errCode = {
         en: "crud sql fail",
         cn: '增删改查失败'
     },
-    "2012228": {
+    "201228": {
         en: "table not exists",
         cn: '表不存在'
     },
@@ -575,6 +575,10 @@ let errCode = {
     "-51502": {
         en: "Condition operation undefined",
         cn: "条件操作未定义"
+    },
+    "-51503": {
+        en: "Please provide field 'in field list",
+        cn: "请在字段列表中提供字段。"
     },
     "422": {
         en: "param error",

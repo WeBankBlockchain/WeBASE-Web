@@ -51,7 +51,10 @@
         </div>
         <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
-                <h3 style="padding: 20px 0 8px 0;">节点列表</h3>
+                <h3 style="padding: 20px 0 8px 0;">
+                    节点列表
+                    <router-link to="/nodeManagement" class="font-color-2956a3">节点管理</router-link>
+                </h3>
                 <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
                 <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip  :width='head.width'>
                     <template slot-scope="scope">

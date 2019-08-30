@@ -1,6 +1,9 @@
 <template>
     <div>
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
+            <el-form-item label="配置名称"  style="width: 320px;">
+                <span>{{configKey}}</span>
+            </el-form-item>
             <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" placeholder="请选择">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.name" :value="item.address">
