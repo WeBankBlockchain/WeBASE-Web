@@ -635,6 +635,17 @@ export function getPermission(data) {
         }
     })
 }
+// permission  full get
+export function getPermissionFull(data) {
+    return get({
+        url: `${url.ORG_LIST}/permission/full`,
+        method: 'get',
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 // consensus node id
 export function consensusNodeId(data) {
     return post({
@@ -702,3 +713,4 @@ export function queryCrudService(data) {
         }
     })
 }
+
