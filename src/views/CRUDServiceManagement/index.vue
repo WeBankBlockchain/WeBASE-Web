@@ -6,6 +6,7 @@
                 CRUDService说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。</br>
                 Tips: 如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。
             </span>
+            
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item label="管理员账号" prop="adminRivateKey" class="item-form">
                     <el-select v-model="sqlForm.adminRivateKey" placeholder="请选择" class="select-32">
@@ -27,11 +28,16 @@
             </el-form>
 
             <template v-if="typeof(runSqlResult)==='string'">
-                <p><span>执行结果：</span>{{runSqlResult}}</p>
+                <div>
+                    <p><span v-if="runSqlResult">执行结果：</span>{{runSqlResult}}</p>
+                </div>
+
             </template>
             <template v-else>
-                <p><span>执行结果：</span></p>
-                <json-viewer :value="runSqlResult" :expand-depth='5' copyable></json-viewer>
+                <div>
+                    <p><span v-if="runSqlResult">执行结果：</span></p>
+                    <json-viewer :value="runSqlResult" :expand-depth='5' copyable></json-viewer>
+                </div>
             </template>
         </div>
     </div>
@@ -204,10 +210,10 @@ export default {
 
 <style scoped>
 .demo-ruleForm {
-    display: flex;
+    /* display: flex;
     display: -webkit-flex;
     display: -ms-flexbox;
-    display: -moz-flex;
+    display: -moz-flex; */
 }
 .item-form {
     display: flex;
@@ -240,7 +246,7 @@ export default {
 }
 .instructions {
     margin-bottom: 16px;
-    padding: 2px 5px;
+    padding: 10px 10px;
     color: #2e384d;
     border-radius: 10px;
     display: inline-block;
