@@ -24,7 +24,7 @@
             <span>{{headSubTitle}}</span>
         </div>
         <div class="content-head-network">
-            <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
+            <!-- <router-link target="_blank" to="/helpDoc">帮助文档</router-link> -->
             <!-- <span style="margin-left:10px"></span> -->
 
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">

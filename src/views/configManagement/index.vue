@@ -3,7 +3,7 @@
         <v-content-head :headTitle="'系统管理'" :headSubTitle="'配置管理'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <span class="instructions bg-efefef">系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。</span>
-            <el-form :model="configForm" :rules="rules" ref="configForm" class="demo-ruleForm">
+            <!-- <el-form :model="configForm" :rules="rules" ref="configForm" class="demo-ruleForm">
                 <el-form-item label="管理员账号" prop="adminRivateKey" class="item-form">
                     <el-select v-model="configForm.adminRivateKey" placeholder="请选择" class="select-32">
                         <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
@@ -21,7 +21,7 @@
                 <el-form-item>
                     <el-button size="small" type="primary" @click="modifyConfig('configForm')" class="add-btn" :disabled="disabled">修改</el-button>
                 </el-form-item>
-            </el-form>
+            </el-form> -->
 
             <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
                 <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
@@ -273,8 +273,8 @@ export default {
     margin-left: 10px;
 }
 .instructions {
-    margin-bottom: 16px;
-    padding: 2px 5px;
+    margin-bottom: 30px;
+    padding: 10px 10px;
     color: #2e384d;
     border-radius: 10px;
     display: inline-block;
