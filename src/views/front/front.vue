@@ -31,15 +31,19 @@
             </div>
             <div class="search-table">
                 <el-table :data="frontData" class="search-table-content" v-loading="loading">
-                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip >
+                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip>
                         <template slot-scope="scope">
-                            <span v-if='head.enName != "frontIp"'>{{scope.row[head.enName]}}</span>
-                            <span v-else>
+                            <span v-if='head.enName === "frontIp"'>
                                 <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
                             </span>
+                            <span v-else-if="head.enName === 'nodeId'">
+                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                                {{scope.row[head.enName]}}
+                            </span>
+                            <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column  fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" label="操作" width="100">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">删除</el-button>
                         </template>
@@ -53,30 +57,40 @@
             <div class="search-table">
                 <h3 style="padding: 20px 0 8px 0;">
                     节点列表
-                    <router-link to="/nodeManagement" class="font-color-2956a3">节点管理</router-link>
+                    <el-tooltip effect="dark" :content="`节点管理说明：可以通过节点管理设置节点类型。包括：1、根据节点NodeID设置对应节点为共识节点。2、 根据节点NodeID设置对应节点为观察节点。3、根据节点NodeID设置对应节点为游离节点。`" placement="top-start">
+                        <i class="el-icon-info contract-icon font-15"></i>
+                    </el-tooltip>
                 </h3>
-                <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
-                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip  :width='head.width'>
-                    <template slot-scope="scope">
-                        <template>
-                            <span v-if="head.enName ==='nodeActive'">
-                                <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
-                            </span>
-                            <span v-else-if="head.enName === 'nodeId'">
-                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else>{{scope.row[head.enName]}}</span>
+                <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
+                    <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
+                        <template slot-scope="scope">
+                            <template v-if="head.enName!='operate'">
+                                <span v-if="head.enName ==='nodeActive'">
+                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
+                                </span>
+                                <span v-else-if="head.enName === 'nodeId'">
+                                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                                    {{scope.row[head.enName]}}
+                                </span>
+                                <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row[head.enName])}}</span>
+                                <span v-else>{{scope.row[head.enName]}}</span>
+                            </template>
+                            <template v-else>
+                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">修改</el-button>
+                            </template>
                         </template>
-                    </template>
-                </el-table-column>
-            </el-table>
-             <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
+
+                    </el-table-column>
+                </el-table>
+                <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
                 </el-pagination>
                 <!-- <el-dialog :visible.sync="nodesDialogVisible" :title="nodesDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper" v-if="nodesDialogVisible">
                     <v-nodesDialog :nodesDialogOptions="nodesDialogOptions" @success="success" @close="close"></v-nodesDialog>
                 </el-dialog> -->
-                <v-setFront :show='frontShow' v-if='frontShow' :showClose ='true' @close='close'></v-setFront>
+                <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
+                <el-dialog title="修改节点类型" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+                    <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
+                </el-dialog>
             </div>
         </div>
     </div>
@@ -84,7 +98,8 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import { getFronts, addnodes,deleteFront,getNodeList } from "@/util/api";
+import modifyNodeType from "./components/modifyNodeType";
+import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId } from "@/util/api";
 import { date } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
@@ -93,14 +108,15 @@ export default {
     name: "node",
     components: {
         "v-content-head": contentHead,
-        "v-setFront": setFront
+        "v-setFront": setFront,
+        modifyNodeType
     },
     watch: {
-        $route: function() {
+        $route() {
             this.urlQuery = this.$root.$route.query;
         }
     },
-    data: function() {
+    data() {
         return {
             frontShow: false,
             nodeName: "",
@@ -133,6 +149,10 @@ export default {
                     name: "前置端口"
                 },
                 {
+                    enName: "nodeId",
+                    name: "节点id"
+                },
+                {
                     enName: "agency",
                     name: "所属机构"
                 },
@@ -152,6 +172,11 @@ export default {
                     width: ""
                 },
                 {
+                    enName: "nodeType",
+                    name: "节点类型",
+                    width: 180
+                },
+                {
                     enName: "blockNumber",
                     name: "块高",
                     width: 180
@@ -165,32 +190,39 @@ export default {
                     enName: "nodeActive",
                     name: "状态",
                     width: 150
+                },
+                {
+                    enName: "operate",
+                    name: "操作",
+                    width: 150
                 }
             ],
             nodeData: [],
             urlQuery: this.$root.$route.query,
-            disabled: false
+            disabled: false,
+            modifyNode: '',
+            modifyDialogVisible: false
         };
     },
-    mounted: function() {
-        if(localStorage.getItem("root") === "admin"){
+    mounted() {
+        if (localStorage.getItem("root") === "admin") {
             this.disabled = false
-        }else{
+        } else {
             this.disabled = true
         }
         this.getFrontTable();
         this.getNodeTable();
     },
     methods: {
-        changGroup(){
-            this.getFrontTable();   
+        changGroup() {
+            this.getFrontTable();
             this.getNodeTable();
         },
-        search: function() {
+        search() {
             this.currentPage = 1
-            this.getFrontTable()   
+            this.getFrontTable()
         },
-        getFrontTable: function() {
+        getFrontTable() {
             let reqData = {
                 frontId: this.frontId
             }
@@ -211,7 +243,6 @@ export default {
                     }
                 })
                 .catch(err => {
-                    console.log(err)
                     this.loading = false;
                     this.$message({
                         message: "查询失败！",
@@ -221,25 +252,25 @@ export default {
                     this.$message.closeAll()
                 });
         },
-        handleSizeChange: function(val) {
+        handleSizeChange(val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getFrontTable()
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange(val) {
             this.currentPage = val;
             this.getFrontTable()
         },
-        nodeSizeChange: function(val){
+        nodeSizeChange(val) {
             this.nodepageSize = val;
             this.nodecurrentPage = 1;
             this.getNodeTable();
         },
-        nodeCurrentChange: function(val){
+        nodeCurrentChange(val) {
             this.nodecurrentPage = val;
             this.getNodeTable()
         },
-        textColor: function(val) {
+        textColor(val) {
             let colorString = "";
             switch (val) {
                 case 1:
@@ -251,7 +282,7 @@ export default {
             }
             return colorString;
         },
-        nodesStatus: function(val) {
+        nodesStatus(val) {
             let transString = "";
             switch (val) {
                 case 1:
@@ -263,7 +294,22 @@ export default {
             }
             return transString;
         },
-        createFront: function() {
+        nodeText(key) {
+            var str = '';
+            switch (key) {
+                case 'sealer':
+                    str = '共识';
+                    break;
+                case 'observer':
+                    str = '观察';
+                    break;
+                case 'remove':
+                    str = '游离';
+                    break;
+            }
+            return str;
+        },
+        createFront() {
             this.frontShow = true;
         },
         deleteNodes(val, type) {
@@ -280,17 +326,17 @@ export default {
             this.getFrontTable()
         },
         showDetail(item) {
-            if(item.nodeType===2) return;
-            this.$router.push({ path: 'hostDetail', query: { 'nodeIp': item.nodeIp, 'nodeId': item.nodeId}});
+            if (item.nodeType === 2) return;
+            this.$router.push({ path: 'hostDetail', query: { 'nodeIp': item.nodeIp, 'nodeId': item.nodeId } });
         },
-        deletedFront: function(val){
+        deletedFront(val) {
             this.$confirm('确认删除？')
                 .then(_ => {
                     deleteFront(val.frontId).then(res => {
-                        if(res.data.code ===0){
+                        if (res.data.code === 0) {
                             Bus.$emit("deleteFront")
                             this.getFrontTable()
-                        }else{
+                        } else {
                             this.$message({
                                 message: errcode.errCode[res.data.code].cn,
                                 type: "error",
@@ -304,51 +350,44 @@ export default {
                             duration: 2000
                         });
                     })
-                }).catch(_=> {
+                }).catch(_ => {
 
                 })
         },
-        getNodeTable: function() {
+        getNodeTable() {
             this.loadingNodes = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 100
+            },
+                reqQuery = {},
+
+                reqParam = {
                     groupId: groupId,
-                    pageNumber: this.nodecurrentPage,
-                    pageSize: this.nodepageSize
-                },
-                reqQuery = {};
-            getNodeList(reqData, reqQuery)
-                .then(res => {
+                    pageNumber: 1,
+                    pageSize: 100
+                };
+            this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
+                .then(this.$axios.spread((acct, perms) => {
                     this.loadingNodes = false;
-                    if (res.data.code === 0) {
-                        this.nodetotal = res.data.totalCount;
-                        this.nodeData = res.data.data || [];
-                        this.nodeData.forEach((value, index) => {
-                            if (value.status === 0) {
-                                value.value = "运行";
-                            } else if (value.status === 1) {
-                                value.value = "异常";
+                    var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data ;
+                    this.nodeData = [];
+                    nodesAuthorList.forEach(item => {
+                        nodesStatusList.forEach(it => {
+                            if (item.nodeId === it.nodeId) {
+                                this.nodeData.push(Object.assign({}, item, it))
                             }
-                        });
-                    } else {
-                        this.nodeData = []
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.nodeData = []
-                    this.$message({
-                        message: "查询失败！",
-                        type: "error",
-                        duration: 2000
-                    });
-                });
+                        })
+                    })
+                }))
         },
-        copyNodeIdKey: function(val) {
+        modifyNodeType(param) {
+            this.modifyNode = param.nodeId
+            this.modifyDialogVisible = true;
+        },
+        copyNodeIdKey(val) {
             if (!val) {
                 this.$message({
                     type: "fail",
@@ -367,6 +406,13 @@ export default {
                 });
             }
         },
+        nodeModifySuccess() {
+            this.modifyDialogVisible = false
+            this.getNodeTable()
+        },
+        nodeModifyClose() {
+            this.modifyDialogVisible = false
+        }
     }
 };
 </script>
@@ -398,8 +444,8 @@ export default {
 .search-table-content {
     width: 100%;
 }
-.search-table-content>>>td,
-.search-table-content>>>th {
+.search-table-content >>> td,
+.search-table-content >>> th {
     padding: 8px 0;
     font-size: 12px;
 }
@@ -413,28 +459,28 @@ export default {
     width: 91%;
     float: right;
 }
-.search-table-detail>>>td,
-.search-table-detail>>>th {
+.search-table-detail >>> td,
+.search-table-detail >>> th {
     color: #737a86;
 }
-.input-with-select>>>.el-input__inner {
+.input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: 1px solid #eaedf3;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-input-group__append {
+.input-with-select >>> .el-input-group__append {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-button {
-    border: 1px solid #20D4D9;
+.input-with-select >>> .el-button {
+    border: 1px solid #20d4d9;
     border-radius: inherit;
-    background: #20D4D9;
+    background: #20d4d9;
     color: #fff;
 }
-.grayColor{
-    color: #666 !important
+.grayColor {
+    color: #666 !important;
 }
 </style>

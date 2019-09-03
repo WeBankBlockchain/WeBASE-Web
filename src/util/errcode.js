@@ -542,7 +542,7 @@ let errCode = {
     },
     "-51103": {
         en: "The node is not a group peer",
-        cn: "节点不是组对等体"
+        cn: "节点不是群组成员"
     },
     "-51104": {
         en: "The node is already in the sealer list",
