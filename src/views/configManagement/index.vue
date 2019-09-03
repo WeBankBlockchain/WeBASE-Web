@@ -18,6 +18,15 @@
                         </template>
                         <template v-else>
                             <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">修改</el-button>
+                            <el-tooltip effect="dark" placement="top-start">
+                                <span slot="content">
+                                    不建议随意修改tx_count_limit和tx_gas_limit，如下情况可修改这些参数：</br>
+                                    机器网络或CPU等硬件性能有限：调小tx_count_limit，或降低业务压力；
+                                    </br>
+                                    业务逻辑太复杂，执行区块时gas不足：调大tx_gas_limit。
+                                </span>
+                                <i class="el-icon-info contract-icon font-12"></i>
+                            </el-tooltip>
                         </template>
                     </template>
                 </el-table-column>

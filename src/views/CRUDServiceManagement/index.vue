@@ -157,7 +157,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(this.adminRivateKeyList.length) this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['userName'];
+                        if(this.adminRivateKeyList.length) this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             type: "error",
