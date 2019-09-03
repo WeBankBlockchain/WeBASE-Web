@@ -22,11 +22,12 @@
             <span :class="{ 'font-color-9da2ab': headSubTitle}">{{title}}</span>
             <span v-show="headSubTitle" class="font-color-9da2ab">/</span>
             <span>{{headSubTitle}}</span>
+            <el-tooltip effect="dark" :content="headTooltip" placement="bottom-start" v-if="headTooltip">
+                <i class="el-icon-info contract-icon font-15" ></i>
+            </el-tooltip>
+            <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
         <div class="content-head-network">
-            <!-- <router-link target="_blank" to="/helpDoc">帮助文档</router-link> -->
-            <!-- <span style="margin-left:10px"></span> -->
-
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
                 <ul class="group-item">
                     <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
@@ -60,18 +61,35 @@
 <script>
 import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
-import helpDoc from "./helpDoc";
 import router from "@/router";
 import { loginOut, getGroups } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
 export default {
     name: "conetnt-head",
-    props: ["headTitle", "icon", "route", "headSubTitle"],
+    props: {
+        headTitle: {
+            type: String
+        },
+        icon: {
+            type: Boolean
+        },
+        route: {
+            type: String
+        },
+        headSubTitle: {
+            type: String
+        },
+        headTooltip: {
+            type: String
+        },
+        headHref: {
+            type: Object
+        }
+    },
     components: {
         "v-dialog": dialog,
-        changePasswordDialog,
-        helpDoc
+        changePasswordDialog
     },
     watch: {
         headTitle: function (val) {

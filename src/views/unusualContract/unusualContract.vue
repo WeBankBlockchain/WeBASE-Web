@@ -18,6 +18,11 @@
         <content-head :headTitle="'交易审计'" :headSubTitle="'异常合约'" @changGroup="changGroup"></content-head>
         <div class="module-wrapper auto-wrapper">
             <div class="search-part">
+                <div class="search-part-left">
+                    <el-tooltip effect="dark" content="异常过多(大于等于20)，会停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。" placement="top-start">
+                        <i class="el-icon-info contract-icon font-15">Tips</i>
+                    </el-tooltip>
+                </div>
                 <div class="search-part-right">
                     <el-input placeholder="请输入合约地址" v-model="contractAddress" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
@@ -213,6 +218,11 @@ export default {
 .search-part-right {
     float: right;
     width: 464px;
+}
+.search-part-left {
+    float: left;
+    height: 40px;
+    line-height: 40px;
 }
 .input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;

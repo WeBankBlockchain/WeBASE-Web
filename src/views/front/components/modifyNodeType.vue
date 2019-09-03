@@ -1,19 +1,19 @@
 <template>
     <div>
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
-            <el-form-item label="配置名称"  style="width: 320px;">
-                <span>{{configKey}}</span>
-            </el-form-item>
             <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" placeholder="请选择">
-                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.name" :value="item.address">
+                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="配置值" prop="configValue" style="width: 320px;">
-                <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? '范围从100000到2147483647' : ''"></el-input>
+            <el-form-item label="节点类型" prop="adminRivateKey" style="width: 320px;">
+                <el-select v-model="modifyForm.nodeType" placeholder="请选择">
+                    <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
+                    </el-option>
+                </el-select>
             </el-form-item>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
@@ -24,15 +24,15 @@
 </template>
 
 <script>
-import { getUserList, querySysConfig } from "@/util/api";
+import { getUserList, consensusNodeId } from "@/util/api";
 export default {
-    name: 'SystemConfig',
+    name: 'ModifyNodeType',
 
     components: {
     },
 
     props: {
-        configKey: {
+        modifyNode: {
             type: String
         }
     },
@@ -41,9 +41,23 @@ export default {
         return {
             loading: false,
             adminRivateKeyList: [],
+            nodeTypeList: [
+                {
+                    type: 'observer',
+                    name: '观察'
+                },
+                {
+                    type: 'sealer',
+                    name: '共识'
+                },
+                {
+                    type: 'remove',
+                    name: '游离'
+                },
+            ],
             modifyForm: {
                 adminRivateKey: '',
-                configValue: ''
+                nodeType: ''
             },
             rules: {
                 adminRivateKey: [
@@ -53,15 +67,11 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                configValue: [
+                nodeType: [
                     {
                         required: true,
-                        message: "请输入配置值",
+                        message: "请选择节点类型",
                         trigger: "blur"
-                    },
-                    {
-                        type: 'number',
-                        message: '配置值必须为数字'
                     }
                 ]
             }
@@ -86,31 +96,35 @@ export default {
 
     methods: {
         close() {
-            this.$emit("close");
+            this.$emit("nodeModifyClose");
         },
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.queryquerySysConfig()
+                    this.queryConsensusNodeId()
                 } else {
                     return false;
                 }
             });
 
         },
-        queryquerySysConfig() {
+        queryConsensusNodeId() {
             this.loading = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
-                configKey: this.configKey,
-                configValue: this.modifyForm.configValue,
+                nodeType: this.modifyForm.nodeType,
+                nodeId: this.modifyNode,
                 fromAddress: this.modifyForm.adminRivateKey,
             }
-            querySysConfig(reqData)
+            consensusNodeId(reqData)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
-                        this.$emit('modifySuccess')
+                        this.$message({
+                            type: 'success',
+                            message: '授权成功'
+                        })
+                        this.$emit('nodeModifySuccess')
                     } else {
                         this.$message({
                             type: "error",
@@ -119,7 +133,6 @@ export default {
                     }
                 })
                 .catch(err => {
-                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: "系统错误！"
