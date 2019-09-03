@@ -1,12 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'CRUD'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="'系统管理'" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="`CRUD说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。Tips：如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。`"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
-            <span class="instructions bg-efefef">
-                CRUDService说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。</br>
-                Tips: 如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。
-            </span>
-            
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item label="管理员账号" prop="adminRivateKey" class="item-form">
                     <el-select v-model="sqlForm.adminRivateKey" placeholder="请选择" class="select-32">
@@ -17,9 +12,32 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item>
-                    <div class="editor-top">
-                        <div class="editor-wrapper" ref="ace"></div>
+                    <div style="display:flex">
+
+                        <div class="editor-top">
+                            <div class="editor-wrapper" ref="ace">
+
+                            </div>
+                        </div>
+                        <el-tooltip effect="dark" placement="top-start" style="padding-top:4px;">
+                            <div slot="content">
+                                例如：</br>创建表：
+                                <i class="wbs-icon-copy font-12" @click="copySql('create table t_demo(name varchar, item_id varchar, item_name varchar, primary key(name))')" title="复制">create table t_demo(name varchar, item_id varchar, item_name varchar, primary key(name))</i> 
+                                </br>插入表记录： 
+                                <i class="wbs-icon-copy font-12" @click="copySql('insert into t_demo (name, item_id, item_name) values (fruit, 1, apple1)')" title="复制">insert into t_demo (name, item_id, item_name) values (fruit, 1, apple1)</i> 
+                                </br>查询表记录：
+                                <i class="wbs-icon-copy font-12" @click="copySql('select * from t_demo where name = fruit')" title="复制">select * from t_demo where name = fruit</i> 
+                                </br>更新表记录：
+                                <i class="wbs-icon-copy font-12" @click="copySql('update t_demo set item_name = orange where name = fruit and item_id = 1')" title="复制">update t_demo set item_name = orange where name = fruit and item_id = 1</i> 
+                                </br>删除表记录：
+                                <i class="wbs-icon-copy font-12" @click="copySql('delete from t_demo where name = fruit and item_id = 1')" title="复制">delete from t_demo where name = fruit and item_id = 1</i> 
+                                </br>显示表详情：
+                                <i class="wbs-icon-copy font-12" @click="copySql('desc t_demo')" title="复制">desc t_demo</i> 
+                            </div>
+                            <i class="el-icon-info contract-icon font-15">Example</i>
+                        </el-tooltip>
                     </div>
+
                 </el-form-item>
 
                 <el-form-item>
@@ -83,6 +101,7 @@ export default {
             aceEditor: null,
             // themePath: "ace/theme/chrome",
             // modePath: "ace/mode/sql",
+            sqlExample: ""
         }
     },
 
@@ -138,6 +157,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
+                        if(this.adminRivateKeyList.length) this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['userName'];
                     } else {
                         this.$message({
                             type: "error",
@@ -203,7 +223,26 @@ export default {
                         message: "系统错误！"
                     });
                 });
-        }
+        },
+        copySql(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
+        },
     }
 }
 </script>

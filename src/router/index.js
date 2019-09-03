@@ -96,7 +96,8 @@ const routes = [
         children: [
             { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } },
-            
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -118,10 +119,8 @@ const routes = [
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
             { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/nodeManagement', component: nodeManagement, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/cnsManagement', component: cnsManagement, name: 'CNS管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } }
+            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } }
+            
         ]
     },
     {

@@ -1,13 +1,13 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'权限管理'" @changGroup="changGroup"></v-content-head>
+        <v-content-head 
+            :headTitle="'系统管理'" 
+            :headSubTitle="'权限管理'" 
+            @changGroup="changGroup" 
+            :headTooltip="`管理权限说明：权限控制是基于外部账户(tx.origin)的访问机制，对包括合约部署，表的创建，表的写操作（插入、更新和删除）进行权限控制，表的读操作不受权限控制。`"
+            :headHref="headHref">
+            </v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
-            <span class="instructions bg-efefef">
-                管理权限说明：权限控制是基于外部账户(tx.origin)的访问机制，对包括合约部署，表的创建，表的写操作（插入、更新和删除）进行权限控制，表的读操作不受权限控制。
-                （ <a target="_blank" href="https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html">具体可见文档：[权限控制]</a> ）
-                </br>
-                Tips: 添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。
-            </span>
             <el-form :model="permissionForm" :rules="rules" ref="permissionForm" class="demo-ruleForm">
                 <!-- <el-form-item label="管理员账号" prop="adminRivateKeyAddress" class="item-form">
                     <el-select v-model="permissionForm.adminRivateKeyAddress" placeholder="请选择" class="select-32">
@@ -23,7 +23,7 @@
                         </el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="表名" prop="tableName" class="item-form"  v-if="permissionForm.authorType==='userTable'">
+                <el-form-item label="表名" prop="tableName" class="item-form" v-if="permissionForm.authorType==='userTable'">
                     <el-input v-model.trim="permissionForm.tableName" class="select-32" v-if="permissionForm.authorType==='userTable'"></el-input>
                 </el-form-item>
                 <!-- <el-form-item label="外部账号地址" prop="otherRivateKey" class="item-form">
@@ -39,14 +39,22 @@
                 </el-form-item>
                 <el-form-item>
                     <el-button size="small" type="primary" :disabled="disabled" class="add-btn" @click="addAuthor">添加</el-button>
+                    <el-tooltip effect="dark" content="Tips: 添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                
             </el-form>
-            <el-table :data="preRivateKeyList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
+            <el-table :data="authorRivateKeyList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
                 <el-table-column v-for="head in preRivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <template v-if="head.enName!='operate'">
                             <span v-if="head.enName==='address'"><i class="wbs-icon-copy font-12 copy-key" @click="copyAddress(scope.row['address'])" title="复制地址"></i>{{scope.row[head.enName]}}</span>
+                            <span v-else-if="head.enName==='userName'">
+                                <span v-if="scope.row[head.enName]">
+                                    {{scope.row[head.enName]}}
+                                </span>
+                                <span v-else>---</span>
+                            </span>
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                         <template v-else>
@@ -115,7 +123,7 @@ export default {
             authorList: [
                 {
                     type: 'permission',
-                    name: '管理权限'
+                    name: '链管理权限'
                 },
                 {
                     type: 'userTable',
@@ -148,6 +156,10 @@ export default {
                     name: "账号地址"
                 },
                 {
+                    enName: "userName",
+                    name: "账号名称"
+                },
+                {
                     enName: "operate",
                     name: "操作"
                 }
@@ -168,30 +180,24 @@ export default {
             total: 0,
             titieText: '',
             btnType: '',
-            deleteParam: {}
+            deleteParam: {},
+            headHref: {
+                href: "https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html",
+                content: "具体可见文档：[权限控制]"
+            }
         }
     },
     computed: {
-        rivateKeyAddressList() {
+        authorRivateKeyList() {
             let arr = [];
-            if (this.preRivateKeyList.length) {
-                this.adminRivateKeyList.forEach(item => {
-                    this.preRivateKeyList.forEach(it => {
-                        if (it.address === item.address) {
-                            arr.push(item)
-                        }
-                    })
+            this.preRivateKeyList.forEach(item => {
+                this.adminRivateKeyList.forEach(it => {
+                    if(item.address === it.address){
+                        item.userName = it.userName
+                    }
                 })
-                if (arr.length) {
-                    this.permissionForm.adminRivateKeyAddress = arr[0].address
-                } else {
-                    this.permissionForm.adminRivateKeyAddress = "";
-                }
-            }else {
-                arr = this.adminRivateKeyList
-            }
-
-
+            });
+            arr = this.preRivateKeyList;
             return arr
         }
     },
@@ -240,25 +246,18 @@ export default {
             this.queryGetPermission()
         },
         addAuthor() {
-            this.btnType = 'addBtn';
-            this.titieText = '添加权限';
-            this.authDialogVisible = true;
-            // this.$refs['permissionForm'].validate(valid => {
-            //     if (valid) {
-                    
-            //         this.$confirm("确认提交？", {
-            //             center: true
-            //         })
-            //             .then(_ => {
-            //                 this.sureAddAuthor()
-            //             })
-            //             .catch(_ => {
+            this.$confirm("添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。", 'Tips', {
+                center: true,
+                type: 'warning',
+            })
+                .then(_ => {
+                    this.btnType = 'addBtn';
+                    this.titieText = '添加权限';
+                    this.authDialogVisible = true;
+                })
+                .catch(_ => {
 
-            //             });
-            //     } else {
-            //         return false;
-            //     }
-            // });
+                });
         },
         sureAddAuthor() {
             let reqData = {
@@ -281,6 +280,7 @@ export default {
                             type: "error",
                             message: this.errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -288,6 +288,7 @@ export default {
                         type: "error",
                         message: "系统错误！"
                     });
+                    this.$message.closeAll()
                 });
         },
         handleSizeChange(val) {
@@ -303,23 +304,7 @@ export default {
             this.btnType = 'deleteBtn';
             this.titieText = '删除权限';
             this.authDialogVisible = true;
-            this.deleteParam = Object.assign({},param,{authorType: this.permissionForm.authorType, tableName: this.permissionForm.tableName});
-            // this.$refs['permissionForm'].validate(valid => {
-            //     if (valid) {
-            //         this.$confirm("确认删除？", {
-            //             center: true
-            //         })
-            //             .then(() => {
-            //                 this.sureDeleteUser()
-            //             })
-            //             .catch(() => {
-
-            //             });
-            //     } else {
-            //         return false;
-            //     }
-            // });
-
+            this.deleteParam = Object.assign({}, param, { authorType: this.permissionForm.authorType, tableName: this.permissionForm.tableName });
         },
         sureDeleteUser(param) {
             let reqData = {
@@ -354,36 +339,6 @@ export default {
 
         },
         selectAuthorType(val) {
-            // this.rules = {
-            //     adminRivateKeyAddress: [
-            //         {
-            //             required: true,
-            //             message: "请选择管理员账号",
-            //             trigger: "blur"
-            //         }
-            //     ],
-            //     authorType: [
-            //         {
-            //             required: true,
-            //             message: "请选择权限类型",
-            //             trigger: "blur"
-            //         }
-            //     ],
-            //     otherRivateKey: [
-            //         {
-            //             required: true,
-            //             message: "请输入外部账号地址",
-            //             trigger: "blur"
-            //         }
-            //     ],
-            //     tableName: [
-            //         {
-            //             required: true,
-            //             message: "请输入表名",
-            //             trigger: "blur"
-            //         }
-            //     ]
-            // }
             this.permissionForm.authorType = val;
             this.$refs['permissionForm'].clearValidate()
             this.queryGetPermission()
@@ -409,18 +364,18 @@ export default {
                         this.total = res.data.totalCount
                     } else {
                         this.preRivateKeyList = []
-                        if(201102 === res.data.code) {
+                        if (201102 === res.data.code) {
                             this.$message({
-                            type: "info",
-                            message: this.errcode.errCode[res.data.code].cn
-                        });
-                        }else {
+                                type: "info",
+                                message: this.errcode.errCode[res.data.code].cn
+                            });
+                        } else {
                             this.$message({
-                            type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
-                        });
+                                type: "error",
+                                message: this.errcode.errCode[res.data.code].cn
+                            });
                         }
-                        
+
                     }
                 })
                 .catch(err => {
@@ -447,7 +402,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(this.adminRivateKeyList.length) this.permissionForm.otherRivateKey = this.adminRivateKeyList[0]['address'];
+                        if (this.adminRivateKeyList.length) this.permissionForm.otherRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             type: "error",

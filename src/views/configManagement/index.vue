@@ -1,34 +1,20 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'配置管理'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="'系统管理'" :headSubTitle="'配置管理'" @changGroup="changGroup" :headTooltip="`系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。`"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
-            <span class="instructions bg-efefef">系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。</span>
-            <!-- <el-form :model="configForm" :rules="rules" ref="configForm" class="demo-ruleForm">
-                <el-form-item label="管理员账号" prop="adminRivateKey" class="item-form">
-                    <el-select v-model="configForm.adminRivateKey" placeholder="请选择" class="select-32">
-                        <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-                            <span>{{item.userName}}</span>
-                            <span class="font-12 text-float-right">{{item.address | splitString}}...</span>
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="配置名称" prop="configKey" class="item-form">
-                    <el-input v-model.trim="configForm.configKey" placeholder="请输入" class="select-32"></el-input>
-                </el-form-item>
-                <el-form-item label="配置值" prop="configValue" class="item-form">
-                    <el-input v-model.trim="configForm.configValue" placeholder="请输入" class="select-32"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button size="small" type="primary" @click="modifyConfig('configForm')" class="add-btn" :disabled="disabled">修改</el-button>
-                </el-form-item>
-            </el-form> -->
-
-            <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
+            <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <template v-if="head.enName!='operate'">
-                            
-                            <span>{{scope.row[head.enName]}}</span>
+                            <template v-if="head.enName==='configKey'">
+                                <span>{{scope.row[head.enName]}}</span>
+                                <el-tooltip effect="dark" :content="scope.row['tips']" placement="top-start">
+                                    <i class="el-icon-info contract-icon font-12"></i>
+                                </el-tooltip>
+                            </template>
+                            <template v-else>
+                                <span>{{scope.row[head.enName]}}</span>
+                            </template>
                         </template>
                         <template v-else>
                             <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">修改</el-button>
@@ -36,9 +22,6 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-
         </div>
         <el-dialog title="修改配置值" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
             <system-config @close="close" @modifySuccess="modifySuccess" :configKey="configkey"></system-config>
@@ -145,6 +128,18 @@ export default {
             querySysConfigList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        var list = res.data.data;
+                        list.forEach(item => {
+                            switch (item.configKey) {
+                                case "tx_gas_limit":
+                                    item.tips = '一个区块最大gas限制'
+                                    break;
+
+                                case "tx_count_limit":
+                                    item.tips = '一个区块中可打包的最大交易数目'
+                                    break;
+                            }
+                        })
                         this.configList = res.data.data;
                         this.total = res.data.totalCount;
                     } else {
@@ -181,6 +176,7 @@ export default {
                             type: "error",
                             message: this.errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -188,6 +184,7 @@ export default {
                         type: "error",
                         message: "系统错误！"
                     });
+                    this.$message.closeAll();
                 });
         },
         modifyConfig(formName) {
