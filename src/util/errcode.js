@@ -81,8 +81,8 @@ let errCode = {
         cn: '从链上获取abi失败'
     },
     "201014": {
-        en: "contract deploy error",
-        cn: '合约部署错误'
+        en: "contract deploy error,permission Denied",
+        cn: '部署合约错误，请检查权限'
     },
     "201015": {
         en: "user's privateKey is null",
