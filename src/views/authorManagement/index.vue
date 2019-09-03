@@ -68,7 +68,7 @@
         </div>
 
         <el-dialog :title="titieText" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
-            <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :btnType="btnType" :deleteParam="deleteParam"></authorization-rivateKey>
+            <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :btnType="btnType" :deleteParam="deleteParam" :authorType="permissionForm.authorType"></authorization-rivateKey>
         </el-dialog>
     </div>
 </template>
@@ -245,6 +245,30 @@ export default {
         searchTable() {
             this.queryGetPermission()
         },
+        translationZh(val) {
+            var str = '';
+            switch (val) {
+                case 'permission':
+                    str = '链管理'
+                    break;
+                case 'userTable':
+                    str = '表'
+                    break;
+                case 'cns':
+                    str = 'CNS'
+                    break;
+                case 'node':
+                    str = '节点'
+                    break;
+                case 'sysConfig':
+                    str = '系统参数'
+                    break;
+                case 'deployAndCreate':
+                    str = '部署和建表'
+                    break;
+            }
+            return str;
+        },
         addAuthor() {
             this.$confirm("添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。", 'Tips', {
                 center: true,
@@ -252,7 +276,7 @@ export default {
             })
                 .then(_ => {
                     this.btnType = 'addBtn';
-                    this.titieText = '添加权限';
+                    this.titieText = `添加${this.translationZh(this.permissionForm.authorType)}权限`;
                     this.authDialogVisible = true;
                 })
                 .catch(_ => {

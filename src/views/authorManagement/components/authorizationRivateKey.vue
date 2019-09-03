@@ -9,12 +9,12 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="权限类型" prop="authorType" class="item-form" style="width: 320px;">
+            <!-- <el-form-item label="权限类型" prop="authorType" class="item-form" style="width: 320px;">
                 <el-select v-model="permissionForm.authorType" placeholder="请选择" :disabled="btnType==='deleteBtn'? true: false">
                     <el-option v-for="item in authorList" :key="item.type" :label="item.name" :value="item.type">
                     </el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="表名" prop="tableName" class="item-form" v-if="permissionForm.authorType==='userTable'" style="width: 320px;">
                 <el-input v-model.trim="permissionForm.tableName" v-if="permissionForm.authorType==='userTable'"></el-input>
             </el-form-item>
@@ -54,6 +54,9 @@ export default {
         },
         deleteParam: {
             type: Object
+        },
+        authorType: {
+            type: String
         }
     },
 
@@ -65,7 +68,7 @@ export default {
             permissionForm: {
                 adminRivateKey: '',
                 otherRivateKey: '',
-                authorType: this.deleteParam.authorType,
+                authorType: this.btnType==='deleteBtn' ? this.deleteParam.authorType : this.authorType,
                 tableName: this.btnType==='deleteBtn' ? this.deleteParam.tableName : '',
             },
             rules: {
@@ -199,42 +202,7 @@ export default {
                 groupId: localStorage.getItem("groupId"),
                 permissionType: this.permissionForm.authorType,
                 tableName: this.permissionForm.tableName && this.permissionForm.authorType === 'userTable' ? this.permissionForm.tableName : '',
-                fromAddress: this.permissionForm.adminRivateKeyAddress,
-                address: this.deleteParam.address
-            }
-            deletePermission(reqData)
-                .then(res => {
-                    this.loading = false;
-                    if (res.data.code === 0) {
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功'
-                        })
-                        this.$emit('authorizeSuccess')
-                    } else {
-                        this.$message({
-                            type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.loading = false;
-                    this.$message({
-                        type: "error",
-                        message: "系统错误！"
-                    });
-                });
-
-
-        },
-        sureDeleteUser(param) {
-            this.loading = true;
-            let reqData = {
-                groupId: localStorage.getItem("groupId"),
-                permissionType: this.permissionForm.authorType,
-                tableName: this.permissionForm.tableName && this.permissionForm.authorType === 'userTable' ? this.permissionForm.tableName : '',
-                fromAddress: this.permissionForm.adminRivateKeyAddress,
+                fromAddress: this.permissionForm.adminRivateKey,
                 address: this.deleteParam.address
             }
             deletePermission(reqData)
@@ -298,7 +266,7 @@ export default {
         getAdminAddress() {
             let reqAdminData = {
                 groupId: localStorage.getItem("groupId"),
-                permissionType: 'permission'
+                permissionType: this.authorType
             };
             let reqUserData = {
                 groupId: localStorage.getItem("groupId"),
@@ -323,12 +291,13 @@ export default {
                             })
                         })
                         if (this.permissionAdminList.length) {
-                            this.permissionForm.adminRivateKeyAddress = this.permissionAdminList[0].address
+                            this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
                         } else {
                             this.permissionForm.adminRivateKeyAddress = "";
                         }
                     } else {
-                        this.permissionAdminList = userList
+                        this.permissionAdminList = userList;
+                        this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
                     }
                 }));
         }
