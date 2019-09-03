@@ -228,6 +228,41 @@ export default {
 
 
         },
+        sureDeleteUser(param) {
+            this.loading = true;
+            let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                permissionType: this.permissionForm.authorType,
+                tableName: this.permissionForm.tableName && this.permissionForm.authorType === 'userTable' ? this.permissionForm.tableName : '',
+                fromAddress: this.permissionForm.adminRivateKeyAddress,
+                address: this.deleteParam.address
+            }
+            deletePermission(reqData)
+                .then(res => {
+                    this.loading = false;
+                    if (res.data.code === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功'
+                        })
+                        this.$emit('authorizeSuccess')
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.errcode.errCode[res.data.code].cn
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        type: "error",
+                        message: "系统错误！"
+                    });
+                });
+
+
+        },
         changeRivateKey(val) {
             this.adminRivateKey = val
         },
