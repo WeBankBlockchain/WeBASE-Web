@@ -18,6 +18,12 @@
         <content-head :headTitle="'交易审计'" :headSubTitle="'异常用户'" @changGroup="changGroup"></content-head>
         <div class="module-wrapper auto-wrapper" style="position: relative;">
             <div class="search-part">
+                <div class="search-part-left">
+                    <el-tooltip effect="dark" content="异常过多(大于等于20)，会停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。" placement="top-start">
+                        <i class="el-icon-info contract-icon font-15">Tips</i>
+                    </el-tooltip>
+                </div>
+
                 <div class="search-part-right">
                     <el-input placeholder="请输入用户" v-model="userName" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
@@ -52,10 +58,10 @@
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
-            <div class="notify-cation" v-if="noticeVisibility">
+            <!-- <div class="notify-cation" v-if="noticeVisibility">
                 <div style="text-align: right;"><i class="el-icon-close" @click="closeNotice"></i></div>
                 <p>异常过多，已经停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。</p>
-            </div>
+            </div> -->
         </div>
 
     </div>
@@ -123,17 +129,6 @@ export default {
                 item.hashs = hashArr;
             });
             return arr;
-        },
-        totalCounts() {
-            var total = this.total;
-            if (total >= 20) {
-                this.noticeVisibility = true;
-                setTimeout(() => {
-                    this.noticeVisibility = false
-                }, 7000);
-            } else {
-                this.noticeVisibility = false
-            }
         }
     },
     mounted() {
@@ -214,6 +209,11 @@ export default {
 .search-part-right {
     float: right;
     width: 464px;
+}
+.search-part-left {
+    float: left;
+    height: 40px;
+    line-height: 40px;
 }
 .input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
