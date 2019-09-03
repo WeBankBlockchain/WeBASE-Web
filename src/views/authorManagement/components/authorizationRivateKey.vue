@@ -41,6 +41,7 @@
 import { getUserList, postPermission, getPermissionFull ,deletePermission} from "@/util/api";
 import { constants } from 'crypto';
 import { truncate, truncateSync } from 'fs';
+import { debuglog } from 'util';
 export default {
     name: 'AuthorizationRivateKey',
 
@@ -93,7 +94,7 @@ export default {
             authorList: [
                 {
                     type: 'permission',
-                    name: '管理权限'
+                    name: '链管理权限'
                 },
                 {
                     type: 'userTable',
@@ -271,10 +272,15 @@ export default {
             };
             this.$axios.all([getPermissionFull(reqAdminData), getUserList(reqUserData, {})])
                 .then(this.$axios.spread((acct, perms) => {
-                    var fullList = acct.data.data, userList = perms.data.data;
+                    var fullList = acct.data.data, userList = perms.data.data, userRivateKeyList = [];
+                    userList.map(value => {
+                            if (value.hasPk === 1) {
+                                userRivateKeyList.push(value)
+                            }
+                        });
                     this.permissionAdminList = []
                     if (fullList.length) {
-                        userList.forEach(item => {
+                        userRivateKeyList.forEach(item => {
                             fullList.forEach(it => {
                                 if (it.address === item.address) {
                                     this.permissionAdminList.push(item)

@@ -24,11 +24,11 @@
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="上传文件" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
-                    <input multiple type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
+                    <input multiple title="" type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
                 </i>
             </el-tooltip>
             <el-tooltip effect="dark" content="群组内部署的合约都需要在合约管理里添加，编译保存，否则会判断为异常合约。" placement="top-start">
-                <i class="el-icon-info contract-icon font-15" ></i>
+                <i class="el-icon-info contract-icon font-15" style="cursor: default;"></i>
             </el-tooltip>
         </div>
 
