@@ -2,7 +2,6 @@
     <div>
         <v-content-head :headTitle="'系统管理'" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="`CRUD说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。Tips：如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。`"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
-
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item label="管理员账号" prop="adminRivateKey" class="item-form">
                     <el-select v-model="sqlForm.adminRivateKey" placeholder="请选择" class="select-32">
