@@ -43,7 +43,6 @@
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </el-form-item>
-
             </el-form>
             <el-table :data="authorRivateKeyList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
                 <el-table-column v-for="head in preRivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
