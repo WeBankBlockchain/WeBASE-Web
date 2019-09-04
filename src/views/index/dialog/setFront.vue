@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <el-dialog title="节点前置配置" :visible.sync="dialogVisible" :before-close="modelClose"  class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
+        <el-dialog title="节点前置配置" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
             <div>
                 <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="ip" prop="ip" style="width:330px">
@@ -31,19 +31,20 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button v-if='closeVisible' @click="modelClose">取 消</el-button>
-                <el-button type="primary" @click="submit('frontFrom')">确 定</el-button>
+                <el-button type="primary" :loading="loading" @click="submit('frontFrom')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 <script>
-import {addFront} from "@/util/api"
+import { addFront } from "@/util/api"
 import errcode from "@/util/errcode";
 export default {
     name: "setFront",
-    props: ["show",'showClose'],
-    data: function(){
+    props: ["show", 'showClose'],
+    data: function () {
         return {
+            loading: false,
             dialogVisible: this.show,
             closeVisible: this.showClose || false,
             frontFrom: {
@@ -104,42 +105,45 @@ export default {
         }
     },
     methods: {
-        submit: function(formName){
+        submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    this.loading = true;
                     this.setFront()
-                }else{
+                } else {
                     return false
                 }
             })
         },
-        setFront: function(){
+        setFront: function () {
             let reqData = {
                 frontIp: this.frontFrom.ip,
                 frontPort: this.frontFrom.port,
                 agency: this.frontFrom.company
             }
             addFront(reqData).then(res => {
-                if(res.data.code === 0){
+                this.loading = false;
+                if (res.data.code === 0) {
                     this.$message({
                         message: '添加前置成功',
                         type: "success"
                     });
                     this.$emit("close")
-                }else{
+                } else {
                     this.$message({
                         message: errcode.errCode[res.data.code].cn || '添加前置失败',
                         type: "error"
                     });
                 }
             }).catch(err => {
+                this.loading = false;
                 this.$message({
-                        message: '系统错误',
-                        type: "error"
-                    });
+                    message: '系统错误',
+                    type: "error"
+                });
             })
         },
-        modelClose: function(){
+        modelClose: function () {
             this.$emit("close")
         }
     }
