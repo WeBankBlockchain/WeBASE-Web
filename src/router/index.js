@@ -95,7 +95,7 @@ const routes = [
         children: [
             { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } },
-            { path: '/cnsManagement', component: cnsManagement, name: 'CNS管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } }
         ]
     },
