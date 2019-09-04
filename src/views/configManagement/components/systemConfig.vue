@@ -6,7 +6,7 @@
             </el-form-item>
             <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" placeholder="请选择">
-                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.name" :value="item.address">
+                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
@@ -144,6 +144,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
+                        if(this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             type: "error",

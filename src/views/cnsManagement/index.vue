@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-content-head :headTitle="'合约管理'" :headSubTitle="'CNS管理'" @changGroup="changGroup" :headTooltip="`CNS管理说明：合约命名服务CNS通过提供链上合约名称与合约地址映射关系的记录及相应的查询功能，方便调用者通过记忆简单的合约名来实现对链上合约的调用。`"></v-content-head>
+        <v-content-head :headTitle="'合约管理'" :headSubTitle="'CNS查询'" @changGroup="changGroup" :headTooltip="`CNS查询说明：合约命名服务CNS通过提供链上合约名称与合约地址映射关系的记录及相应的查询功能，方便调用者通过记忆简单的合约名来实现对链上合约的调用。`"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <!-- <span class="instructions bg-efefef"></span> -->
             <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">
@@ -159,11 +159,11 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             this.currentPage = 1;
-            this.queryConsensusNodeId();
+            this.getCnsList();
         },
         handleCurrentChange(val) {
             this.currentPage = val;
-            this.queryConsensusNodeId();
+            this.getCnsList();
         },
     }
 }

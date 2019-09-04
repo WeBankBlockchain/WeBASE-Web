@@ -117,12 +117,21 @@
                                 <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
                                     <div class="block-amount">
                                         <p class="trans-hash" :title="`${item.transHash}`">
-                                            <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">{{item.transHash}}</router-link>
+                                            <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transHash)" title="复制"></i>
+                                            <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">
+                                                {{item.transHash}}
+                                            </router-link>
                                         </p>
                                         <p class="trans-address color-8798AD">
-                                            <span>{{item.transFrom}}</span>
+                                            <span>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transFrom)" title="复制"></i>
+                                                {{splitAddress(item.transFrom)}}
+                                            </span>
                                             <img :src="sRight" alt="箭头">
-                                            <span>{{item.transTo}}</span>
+                                            <span>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transTo)" title="复制"></i>
+                                                {{splitAddress(item.transTo)}}
+                                            </span>
                                         </p>
 
                                     </div>
@@ -294,7 +303,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    
+
                     this.$message({
                         type: "error",
                         message: "系统错误！"
@@ -329,7 +338,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    
+
                     this.$message({
                         type: "error",
                         message: "系统错误！"
@@ -402,7 +411,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    
+
                     this.$message({
                         message: "系统错误！",
                         type: "error",
@@ -532,6 +541,14 @@ export default {
                 });
             }
         },
+        splitAddress(val) {
+            if (!val) return;
+            var startStr = '', endStr = '', str = '';
+            startStr = val.substring(0, 8);
+            endStr = val.substring(val.length - 4);
+            str = `${startStr}...${endStr}`;
+            return str;
+        }
     }
 };
 </script>
@@ -695,6 +712,7 @@ export default {
     max-width: 300px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .node-ip {
     color: #0db1c1;
@@ -709,9 +727,6 @@ export default {
 .trans-address span {
     display: inline-block;
     max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
 }
 .trans-address img {
     vertical-align: middle;

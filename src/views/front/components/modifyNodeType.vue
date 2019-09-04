@@ -157,6 +157,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
+                        if(this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             type: "error",
