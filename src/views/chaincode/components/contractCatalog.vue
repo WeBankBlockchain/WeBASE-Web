@@ -354,14 +354,14 @@ export default {
                 let filetype = this.uploadFiles[i].name.split(".")[1];
                 if (filessize > 400) {
                     this.$message({
-                        message: this.$t('text.fileExceeds'),
+                        message: '文件大小超过400k，请上传小于400k的文件',
                         type: "error"
                     });
                     this.cataLogShow = false
                     break;
                 } else if (filetype !== "sol") {
                     this.$message({
-                        message: this.$t('text.uploadSol'),
+                        message: '请上传.sol格式的文件',
                         type: "error"
                     });
                     this.cataLogShow = false
@@ -380,10 +380,9 @@ export default {
                 let num = 0;
                 this.contractList.forEach(value => {
                     if (value.contractName == filename && value.contractPath == val&& num===0) {
-                        console.log(num)
                         this.$message({
                             type: "error",
-                            message: this.$t('text.contractSameDirectory')
+                            message: '同一目录下不能存在同名合约'
                         });
                         num++;
                     }
@@ -459,7 +458,6 @@ export default {
             }
         },
         saveContract: function (data, title) {
-            console.log(data)
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 contractName: data.contractName,
