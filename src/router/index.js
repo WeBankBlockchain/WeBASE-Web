@@ -34,7 +34,6 @@ const transactionCharts = resolve => require(['@/views/transactionCharts/transac
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
 const authorManagement = resolve => require(['@/views/authorManagement'], resolve);
-const nodeManagement = resolve => require(['@/views/nodeManagement'], resolve);
 const configManagement = resolve => require(['@/views/configManagement'], resolve);
 const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
 const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
@@ -118,7 +117,7 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
-            { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
+            // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } }
             
         ]

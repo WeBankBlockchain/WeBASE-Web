@@ -159,11 +159,11 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             this.currentPage = 1;
-            this.queryConsensusNodeId();
+            this.getCnsList();
         },
         handleCurrentChange(val) {
             this.currentPage = val;
-            this.queryConsensusNodeId();
+            this.getCnsList();
         },
     }
 }

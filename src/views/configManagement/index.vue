@@ -225,6 +225,7 @@ export default {
                             type: "error",
                             message: this.errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -232,6 +233,7 @@ export default {
                         type: "error",
                         message: "系统错误！"
                     });
+                    this.$message.closeAll()
                 });
         },
         modifyItemConfig(item) {
