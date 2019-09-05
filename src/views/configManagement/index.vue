@@ -141,7 +141,7 @@ export default {
                         list.forEach(item => {
                             switch (item.configKey) {
                                 case "tx_gas_limit":
-                                    item.tips = '一个区块最大gas限制'
+                                    item.tips = '一个交易最大gas限制'
                                     break;
 
                                 case "tx_count_limit":
