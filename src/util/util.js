@@ -20,7 +20,7 @@ let changeDate = function (date) {
     let D = newData.getDate() > 9 ? newData.getDate() : "0" + newData.getDate();
     return Y + "-" + M + "-" + D
 };
-export function formatData () {
+export function formatData() {
     let newData = new Date();
     let Y = newData.getFullYear();
     let M = newData.getMonth() + 1 > 9 ? newData.getMonth() + 1 : "0" + (newData.getMonth() + 1);
@@ -213,4 +213,16 @@ export function completionDateData(startTime, endTime, data) {
         }
     }
     return dateList;
+}
+
+export function unique(array, onlyKey) {
+    let result = {}, finalResult = [], oneKey = onlyKey;
+    for (let i = 0; i < array.length; i++) {
+        result[array[i][oneKey]] = array[i];
+
+    }
+    for (let key in result) {
+        finalResult.push(result[key]);
+    }
+    return finalResult;
 }
