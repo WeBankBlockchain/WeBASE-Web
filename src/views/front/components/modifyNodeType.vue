@@ -33,7 +33,7 @@ export default {
 
     props: {
         modifyNode: {
-            type: String
+            type: Object
         }
     },
 
@@ -101,7 +101,30 @@ export default {
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.queryConsensusNodeId()
+                    if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'observer') {
+                        this.$confirm('设置为观察节点，节点将不参与共识 ', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.queryConsensusNodeId()
+                        }).catch(() => {
+                            console.log('close')
+                        });
+                    }else if((this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'remove') || (this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'remove')){
+                        this.$confirm('设置为游离节点，节点将不参与共识和同步  ', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.queryConsensusNodeId()
+                        }).catch(() => {
+                            console.log('close')
+                        });
+                    }else {
+                        this.queryConsensusNodeId()
+                    }
+                    
                 } else {
                     return false;
                 }
@@ -113,7 +136,7 @@ export default {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 nodeType: this.modifyForm.nodeType,
-                nodeId: this.modifyNode,
+                nodeId: this.modifyNode.nodeId,
                 fromAddress: this.modifyForm.adminRivateKey,
             }
             consensusNodeId(reqData)
@@ -122,7 +145,7 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
-                            message: '授权成功'
+                            message: '修改成功'
                         })
                         this.$emit('nodeModifySuccess')
                     } else {
@@ -133,6 +156,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: "系统错误！"
@@ -157,7 +181,7 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                        if (this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             type: "error",
