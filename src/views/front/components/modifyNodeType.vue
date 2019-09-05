@@ -156,6 +156,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: "系统错误！"
