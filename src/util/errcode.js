@@ -242,6 +242,10 @@ let errCode = {
         en: "invalid node type: sealer, observer, remove",
         cn: '无效节点类型:共识、观察者、游离'
     },
+    "201218": {
+        en: "set node consensus type fail, check permission or node's group config file",
+        cn: '请检查权限或节点群组配置文件'
+    },
     "201221": {
         en: "Contract version should only contains 'A-Z' or 'a-z' or '0-9' or dot mark",
         cn: '合约版本只应包含“A-Z”或“A-Z”或“0-9”或点号'
