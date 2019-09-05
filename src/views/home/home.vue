@@ -154,7 +154,8 @@ import {
     getNetworkStatistics,
     getNodeList,
     getBlockPage,
-    getTransactionList
+    getTransactionList,
+    getConsensusNodeId
 } from "@/util/api";
 import { changWeek, numberFormat } from "@/util/util";
 import router from "@/router";
@@ -349,43 +350,50 @@ export default {
         getNodeTable: function () {
             this.loadingNodes = true;
             let groupId = localStorage.getItem("groupId");
-            let reqString = `${groupId}/1/100`;
             let reqData = {
                 groupId: groupId,
                 pageNumber: 1,
-                pageSize: 200
+                pageSize: 100
             },
-                reqQuery = {};
-            getNodeList(reqData, reqQuery)
-                .then(res => {
+                reqQuery = {},
+
+                reqParam = {
+                    groupId: groupId,
+                    pageNumber: 1,
+                    pageSize: 100
+                };
+            this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
+                .then(this.$axios.spread((acct, perms) => {
                     this.loadingNodes = false;
-                    if (res.data.code === 0) {
-                        this.total = res.data.totalCount;
-                        this.nodeData = res.data.data || [];
-                        this.nodeData.forEach((value, index) => {
-                            if (value.status === 0) {
-                                value.value = "运行";
-                            } else if (value.status === 1) {
-                                value.value = "异常";
+                    var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
+                    var nodesStatusIdList = nodesStatusList.map(item => {
+                        return item.nodeId
+                    })
+                    this.nodeData = [];
+                    nodesAuthorList.forEach((item, index) => {
+                        nodesStatusList.forEach(it => {
+                            if (nodesStatusIdList.includes(item.nodeId)) {
+                                if (item.nodeId === it.nodeId) {
+                                    this.nodeData.push(Object.assign({}, item, it))
+                                }
+                            }else {
+                                this.nodeData.push(item)
                             }
-                        });
-                    } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error",
-                            duration: 2000
-                        });
-                        this.$message.closeAll()
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: "查询失败！",
-                        type: "error",
-                        duration: 2000
+
+                        })
+
+                    })
+                    this.nodeData.forEach(item => {
+                        if (item.nodeType === "observer") {
+                            item.pbftView = '--';
+                        } else if (item.nodeType === "remove") {
+                            item.pbftView = '--';
+                            item.blockNumber = '--';
+                            item.nodeActive = 1;
+                        }
                     });
-                    this.$message.closeAll()
-                });
+                    this.nodeData = unique(this.nodeData,'nodeId')
+                }))
         },
         getBlockList: function () {
             this.loadingBlock = true;

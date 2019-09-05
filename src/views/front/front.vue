@@ -73,6 +73,9 @@
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row[head.enName])}}</span>
+                                <span v-else-if="head.enName==='pbftView'">
+                                    {{scope.row[head.enName]}}
+                                </span>
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
@@ -100,7 +103,7 @@
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId } from "@/util/api";
-import { date } from "@/util/util";
+import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import Bus from "@/bus"
@@ -200,7 +203,7 @@ export default {
             nodeData: [],
             urlQuery: this.$root.$route.query,
             disabled: false,
-            modifyNode: '',
+            modifyNode: {},
             modifyDialogVisible: false
         };
     },
@@ -372,19 +375,38 @@ export default {
             this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
                 .then(this.$axios.spread((acct, perms) => {
                     this.loadingNodes = false;
-                    var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data ;
-                    this.nodeData = [];
-                    nodesAuthorList.forEach(item => {
-                        nodesStatusList.forEach(it => {
-                            if (item.nodeId === it.nodeId) {
-                                this.nodeData.push(Object.assign({}, item, it))
-                            }
-                        })
+                    var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
+                    var nodesStatusIdList = nodesStatusList.map(item => {
+                        return item.nodeId
                     })
+                    this.nodeData = [];
+                    nodesAuthorList.forEach((item, index) => {
+                        nodesStatusList.forEach(it => {
+                            if (nodesStatusIdList.includes(item.nodeId)) {
+                                if (item.nodeId === it.nodeId) {
+                                    this.nodeData.push(Object.assign({}, item, it))
+                                }
+                            }else {
+                                this.nodeData.push(item)
+                            }
+
+                        })
+
+                    })
+                    this.nodeData.forEach(item => {
+                        if (item.nodeType === "observer") {
+                            item.pbftView = '--';
+                        } else if (item.nodeType === "remove") {
+                            item.pbftView = '--';
+                            item.blockNumber = '--';
+                            item.nodeActive = 1;
+                        }
+                    });
+                    this.nodeData = unique(this.nodeData,'nodeId')
                 }))
         },
         modifyNodeType(param) {
-            this.modifyNode = param.nodeId
+            this.modifyNode = param;
             this.modifyDialogVisible = true;
         },
         copyNodeIdKey(val) {
