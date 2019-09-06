@@ -79,41 +79,49 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
-                <div v-for="(item,num) in eventLog" v-if="eventSHow">
-                    <div class="item">
-                        <span class="label">Address :</span>
-                        <span>{{item.address}}</span>
+                <template v-if="unEvent">
+                    <div  class="text-center">
+                        无法解析
                     </div>
-                    <div class="item">
-                        <span class="label">Name :</span>
-                        <span>{{item.eventName}}</span>
-                    </div>
-                    <div class="item">
-                        <span class="label">Topics :</span>
-                        <div style="display: inline-block;width:800px;">
-                            <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
+                </template>
+                <template v-else>
+                    <div v-for="(item,num) in eventLog" v-if="eventSHow">
+                        <div class="item">
+                            <span class="label">Address :</span>
+                            <span>{{item.address}}</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">Name :</span>
+                            <span>{{item.eventName}}</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">Topics :</span>
+                            <div style="display: inline-block;width:800px;">
+                                <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <span class="label">Data :</span>
+                            <div class="detail-input-content">
+                                <span v-if="!item.eventDataShow" class="input-data">{{item.data}}</span>
+                                <el-table class="input-data" :data="item.eventLgData" v-show="item.eventDataShow" style="display:inline-block;width:100%;">
+                                    <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
+                                    <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
+                                        <template slot-scope="scope">
+                                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                            <span>{{scope.row.data}}</span>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </div>
+                        <div class="item" v-show='item.eventButtonShow'>
+                            <span class="label"></span>
+                            <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
                         </div>
                     </div>
-                    <div class="item">
-                        <span class="label">Data :</span>
-                        <div class="detail-input-content">
-                            <span v-if="!item.eventDataShow" class="input-data">{{item.data}}</span>
-                            <el-table class="input-data" :data="item.eventLgData" v-show="item.eventDataShow" style="display:inline-block;width:100%;">
-                                <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
-                                <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
-                                    <template slot-scope="scope">
-                                        <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
-                                        <span>{{scope.row.data}}</span>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </div>
-                    </div>
-                    <div class="item" v-show='item.eventButtonShow'>
-                        <span class="label"></span>
-                        <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
-                    </div>
-                </div>
+                </template>
+
             </el-tab-pane>
         </el-tabs>
 
@@ -161,7 +169,8 @@ export default {
             eventDataShow: true,
             inputButtonShow: true,
             eventButtonShow: true,
-            userList: []
+            userList: [],
+            unEvent: false,
         };
     },
     mounted: function () {
@@ -209,7 +218,7 @@ export default {
                     if (res.data.code === 0) {
                         this.transactionData = res.data.data;
                         if (res.data.data) {
-                            
+
                             this.getCreatTime(res.data.data.blockNumber);
                             this.getAdderss();
                             if (res.data.data.to && res.data.data.to != "0x0000000000000000000000000000000000000000") {
@@ -293,7 +302,7 @@ export default {
             };
             getUserList(reqData)
                 .then(res => {
-                    
+
                     if (res.data.code === 0) {
                         this.userList = res.data.data;
                     } else {
@@ -393,6 +402,10 @@ export default {
         //decodeEvent
         decodeEventClick: function () {
             for (let i = 0; i < this.eventLog.length; i++) {
+                if (this.eventLog[i]['data'] === '0x') {
+                    this.unEvent = true
+                    return;
+                }
                 let data = {
                     groupId: localStorage.getItem("groupId"),
                     data: this.eventLog[i].topics[0]
