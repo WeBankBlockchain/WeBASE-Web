@@ -375,34 +375,39 @@ export default {
             this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
                 .then(this.$axios.spread((acct, perms) => {
                     this.loadingNodes = false;
-                    var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
-                    var nodesStatusIdList = nodesStatusList.map(item => {
-                        return item.nodeId
-                    })
-                    this.nodeData = [];
-                    nodesAuthorList.forEach((item, index) => {
-                        nodesStatusList.forEach(it => {
-                            if (nodesStatusIdList.includes(item.nodeId)) {
-                                if (item.nodeId === it.nodeId) {
-                                    this.nodeData.push(Object.assign({}, item, it))
+                    if (acct.data.code === 0 && perms.data.code === 0) {
+                        var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
+                        var nodesStatusIdList = nodesStatusList.map(item => {
+                            return item.nodeId
+                        })
+                        this.nodeData = [];
+                        nodesAuthorList.forEach((item, index) => {
+                            nodesStatusList.forEach(it => {
+                                if (nodesStatusIdList.includes(item.nodeId)) {
+                                    if (item.nodeId === it.nodeId) {
+                                        this.nodeData.push(Object.assign({}, item, it))
+                                    }
+                                } else {
+                                    this.nodeData.push(item)
                                 }
-                            }else {
-                                this.nodeData.push(item)
-                            }
+
+                            })
 
                         })
+                        this.nodeData.forEach(item => {
+                            if (item.nodeType === "observer") {
+                                item.pbftView = '--';
+                            } else if (item.nodeType === "remove") {
+                                item.pbftView = '--';
+                                item.blockNumber = '--';
+                                item.nodeActive = 1;
+                            }
+                        });
+                        this.nodeData = unique(this.nodeData, 'nodeId')
+                    }else {
+                        this.nodeData = [];
+                    }
 
-                    })
-                    this.nodeData.forEach(item => {
-                        if (item.nodeType === "observer") {
-                            item.pbftView = '--';
-                        } else if (item.nodeType === "remove") {
-                            item.pbftView = '--';
-                            item.blockNumber = '--';
-                            item.nodeActive = 1;
-                        }
-                    });
-                    this.nodeData = unique(this.nodeData,'nodeId')
                 }))
         },
         modifyNodeType(param) {

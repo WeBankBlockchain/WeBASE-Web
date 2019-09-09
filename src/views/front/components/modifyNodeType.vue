@@ -112,7 +112,17 @@ export default {
                             console.log('close')
                         });
                     }else if((this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'remove') || (this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'remove')){
-                        this.$confirm('设置为游离节点，节点将不参与共识和同步  ', '提示', {
+                        this.$confirm('设置为游离节点，节点将不参与共识和同步', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.queryConsensusNodeId()
+                        }).catch(() => {
+                            console.log('close')
+                        });
+                    }else if((this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'sealer') || (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer')){
+                        this.$confirm('设置为共识节点，节点将参与共识。请联系专业人员设置。', '提示', {
                             confirmButtonText: '确定',
                             cancelButtonText: '取消',
                             type: 'warning'
