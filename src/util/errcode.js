@@ -538,7 +538,7 @@ let errCode = {
     },
     "-51101": {
         en: "The last sealer cannot be removed",
-        cn: "最后一个封口机无法移除"
+        cn: "不能移除最后一个共识节点"
     },
     "-51102": {
         en: "The node is not reachable",
