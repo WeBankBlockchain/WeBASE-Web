@@ -31,7 +31,7 @@
             <el-select v-model="transation.userName" placeholder="请选择用户" style="width:240px">
                 <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
                     <span>{{item.userName}}</span>
-                    <span class="font-12">{{splitString(item.publicKey)}}...</span>
+                    <span class="font-12">{{splitString(item.address)}}...</span>
                 </el-option>
             </el-select>
         </div>
@@ -91,6 +91,7 @@ export default {
             contractVersion: this.version,
             contractAddress: this.data.contractAddress || "",
             constant: false,
+            pramasObj: null
         };
     },
     mounted: function () {
@@ -117,6 +118,7 @@ export default {
                 this.abiList.forEach(value => {
                     if (value.type === val) {
                         this.pramasData = value.inputs;
+                        this.pramasObj = value
                     }
                 });
             } else {
@@ -143,7 +145,8 @@ export default {
             this.funcList.forEach(value => {
                 if (value.funcId === this.transation.funcName) {
                     this.pramasData = value.inputs;
-                    this.constant = value.constant
+                    this.constant = value.constant;
+                    this.pramasObj = value
                 }
             });
             this.funcList.sort(function (a, b) {
@@ -225,7 +228,8 @@ export default {
                             input: {
                                 name: functionName,
                                 inputs: this.pramasData
-                            }
+                            },
+                            data: this.pramasObj
                         }
                         if (this.contractAddress && !this.data.contractAddress) {
                             successData.contractAddress = this.contractAddress

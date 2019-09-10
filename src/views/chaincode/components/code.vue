@@ -66,26 +66,33 @@
                     </div>
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
-                        <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress </span>
+                        <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress 
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" title="复制"></i>
+                        </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractAddress}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
-                        <span class="contract-info-list-title" style="color: #0B8AEE">contractName </span>
+                        <span class="contract-info-list-title" style="color: #0B8AEE">contractName
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractName)" title="复制"></i> </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractName}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
-                        <span class="contract-info-list-title" style="color: #0B8AEE">abi</span>
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" class="showText" ref="showAbiText">
+                        <span class="contract-info-list-title" style="color: #0B8AEE">abi
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(abiFile)" title="复制"></i>
+                        </span>
+                        <span class="showText" ref="showAbiText">
                             {{abiFile}}
                         </span>
-                        <i :class="[ showAbi ? 'el-icon-arrow-down': 'el-icon-arrow-up'] " v-if="complieAbiTextHeight" @click="showAbiText"></i>
+                        <i :class="[ showAbi ? 'el-icon-arrow-down': 'el-icon-arrow-up','font-13','cursor-pointer','visibility-wrapper'] " v-if="complieAbiTextHeight" @click="showAbiText"></i>
                     </div>
                     <div class="contract-info-list" style="border-bottom: 1px solid #e8e8e8" v-show="abiFile">
-                        <span class="contract-info-list-title" style="color: #0B8AEE">bin</span>
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" class="showText" ref="showBinText">
-                            {{bin}}
+                        <span class="contract-info-list-title" style="color: #0B8AEE">bytecodeBin
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(bytecodeBin)" title="复制"></i>
                         </span>
-                        <i :class="[ showBin ? 'el-icon-arrow-down': 'el-icon-arrow-up'] " v-if="complieBinTextHeight" @click="showBinText"></i>
+                        <span class="showText" ref="showBinText">
+                            {{bytecodeBin}}
+                        </span>
+                        <i :class="[ showBin ? 'el-icon-arrow-down': 'el-icon-arrow-up','font-13','cursor-pointer','visibility-wrapper'] " v-if="complieBinTextHeight" @click="showBinText"></i>
                     </div>
                 </div>
             </div>
@@ -96,7 +103,7 @@
         <el-dialog v-dialogDrag title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
     </div>
 </template>
@@ -167,6 +174,7 @@ export default {
             editorShow: false,
             editorData: null,
             editorInput: null,
+            editorOutput: null,
             uploadFileAdrShow: false,
             uploadAddress: "",
             disabled: false,
@@ -374,6 +382,7 @@ export default {
             this.editorData = null;
             this.editorData = val.resData;
             this.editorInput = val.input;
+            this.editorOutput = val.data.outputs;
             if (val && val.contractAddress) {
                 this.contractAddress = val.contractAddress;
                 this.data.contractAddress = val.contractAddress;
@@ -705,6 +714,25 @@ export default {
                 this.resizeCode()
             })
 
+        },
+        copyKey(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: '值为空，不复制',
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: '复制成功',
+                        duration: 2000
+                    });
+                });
+            }
         }
 
     }
@@ -807,11 +835,17 @@ export default {
     margin: 0 auto;
     border: 1px solid #e8e8e8;
     border-bottom: none;
+    position: relative;
 }
 .contract-info-list-title {
     display: inline-block;
-    width: 100px;
+    width: 105px;
     vertical-align: top;
+}
+.contract-info-list-title::after {
+    display: block;
+    content: "";
+    clear: both;
 }
 .ace-editor {
     height: 100% !important;
@@ -863,5 +897,12 @@ export default {
     word-wrap: break-word;
     max-height: 73px;
     overflow: hidden;
+}
+.visibility-wrapper {
+    position: absolute;
+    bottom: 10px;
+}
+.copy-public-key {
+    float: right;
 }
 </style>

@@ -20,6 +20,9 @@
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
                     <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">新增用户</el-button>
+                    <el-tooltip effect="dark" content="群组内发送交易的账号都需要在私钥管理里添加，否则会判断为异常用户。" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </div>
                 <div class="search-part-right">
                     <el-input placeholder="请输入用户名或公钥地址" v-model="userName" class="input-with-select">
@@ -57,8 +60,7 @@
                 </el-pagination>
             </div>
         </div>
-        <el-dialog :visible.sync="$store.state.creatUserVisible" title="新建用户" width="621px" :append-to-body="true" class="dialog-wrapper"
-         v-if='$store.state.creatUserVisible'  center>
+        <el-dialog :visible.sync="$store.state.creatUserVisible" title="新建用户" width="621px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
     </div>
@@ -117,24 +119,24 @@ export default {
         };
     },
     mounted() {
-        if(localStorage.getItem("root") === "admin"){
+        if (localStorage.getItem("root") === "admin") {
             this.disabled = false
-        }else{
+        } else {
             this.disabled = true
         }
         this.getUserInfoData();
     },
     methods: {
-        changGroup(){
+        changGroup() {
             this.getUserInfoData()
         },
         getUserInfoData() {
             this.loading = true;
             let reqData = {
-                    groupId: localStorage.getItem("groupId"),
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                groupId: localStorage.getItem("groupId"),
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {
                     userParam: this.userName.replace(/^\s+|\s+$/g, "")
                 };
@@ -163,27 +165,27 @@ export default {
             this.currentPage = 1;
             this.getUserInfoData();
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getUserInfoData();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getUserInfoData();
         },
-        creatUserInfo() {},
+        creatUserInfo() { },
         creatUserClose() {
             this.getUserInfoData();
         },
         bindUserClose() {
             this.getUserInfoData();
         },
-        handleClose: function() {
+        handleClose: function () {
             this.$refs.creatUser.modelClose();
         },
         modifyDescription(params) {
-            this.$prompt("请输入用户描述",'', {
+            this.$prompt("请输入用户描述", '', {
                 confirmButtonText: "确定",
                 cancelButtonText: "取消"
             })

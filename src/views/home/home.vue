@@ -117,12 +117,21 @@
                                 <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
                                     <div class="block-amount">
                                         <p class="trans-hash" :title="`${item.transHash}`">
-                                            <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">{{item.transHash}}</router-link>
+                                            <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transHash)" title="复制"></i>
+                                            <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">
+                                                {{item.transHash}}
+                                            </router-link>
                                         </p>
                                         <p class="trans-address color-8798AD">
-                                            <span>{{item.transFrom}}</span>
+                                            <span>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transFrom)" title="复制"></i>
+                                                {{splitAddress(item.transFrom)}}
+                                            </span>
                                             <img :src="sRight" alt="箭头">
-                                            <span>{{item.transTo}}</span>
+                                            <span>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transTo)" title="复制"></i>
+                                                {{splitAddress(item.transTo)}}
+                                            </span>
                                         </p>
 
                                     </div>
@@ -145,9 +154,10 @@ import {
     getNetworkStatistics,
     getNodeList,
     getBlockPage,
-    getTransactionList
+    getTransactionList,
+    getConsensusNodeId
 } from "@/util/api";
-import { changWeek, numberFormat } from "@/util/util";
+import { changWeek, numberFormat, unique } from "@/util/util";
 import router from "@/router";
 import errcode from "@/util/errcode";
 import sRight from "@/../static/image/s-right.png";
@@ -294,7 +304,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    
+
                     this.$message({
                         type: "error",
                         message: "系统错误！"
@@ -329,7 +339,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    
+
                     this.$message({
                         type: "error",
                         message: "系统错误！"
@@ -340,43 +350,53 @@ export default {
         getNodeTable: function () {
             this.loadingNodes = true;
             let groupId = localStorage.getItem("groupId");
-            let reqString = `${groupId}/1/100`;
             let reqData = {
                 groupId: groupId,
                 pageNumber: 1,
-                pageSize: 200
+                pageSize: 100
             },
-                reqQuery = {};
-            getNodeList(reqData, reqQuery)
-                .then(res => {
+                reqQuery = {},
+
+                reqParam = {
+                    groupId: groupId,
+                    pageNumber: 1,
+                    pageSize: 100
+                };
+            this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
+                .then(this.$axios.spread((acct, perms) => {
                     this.loadingNodes = false;
-                    if (res.data.code === 0) {
-                        this.total = res.data.totalCount;
-                        this.nodeData = res.data.data || [];
-                        this.nodeData.forEach((value, index) => {
-                            if (value.status === 0) {
-                                value.value = "运行";
-                            } else if (value.status === 1) {
-                                value.value = "异常";
+                    if (acct.data.code === 0 && perms.data.code === 0) {
+                        var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
+                        var nodesStatusIdList = nodesStatusList.map(item => {
+                            return item.nodeId
+                        })
+                        this.nodeData = [];
+                        nodesAuthorList.forEach((item, index) => {
+                            if (item.nodeType != 'remove') {
+                                nodesStatusList.forEach(it => {
+                                    if (nodesStatusIdList.includes(item.nodeId)) {
+                                        if (item.nodeId === it.nodeId) {
+                                            this.nodeData.push(Object.assign({}, item, it))
+                                        }
+                                    } else {
+                                        this.nodeData.push(item)
+                                    }
+                                })
+                            }
+
+                        })
+                        this.nodeData.forEach(item => {
+                            if (item.nodeType === "observer") {
+                                item.pbftView = '--';
                             }
                         });
+                        this.nodeData = unique(this.nodeData, 'nodeId')
                     } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error",
-                            duration: 2000
-                        });
-                        this.$message.closeAll()
+                        this.nodeData = [];
                     }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: "查询失败！",
-                        type: "error",
-                        duration: 2000
-                    });
-                    this.$message.closeAll()
-                });
+
+
+                }))
         },
         getBlockList: function () {
             this.loadingBlock = true;
@@ -402,7 +422,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    
+
                     this.$message({
                         message: "系统错误！",
                         type: "error",
@@ -532,6 +552,14 @@ export default {
                 });
             }
         },
+        splitAddress(val) {
+            if (!val) return;
+            var startStr = '', endStr = '', str = '';
+            startStr = val.substring(0, 8);
+            endStr = val.substring(val.length - 4);
+            str = `${startStr}...${endStr}`;
+            return str;
+        }
     }
 };
 </script>
@@ -695,6 +723,7 @@ export default {
     max-width: 300px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .node-ip {
     color: #0db1c1;
@@ -709,9 +738,6 @@ export default {
 .trans-address span {
     display: inline-block;
     max-width: 150px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
 }
 .trans-address img {
     vertical-align: middle;

@@ -15,7 +15,7 @@
  */
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'合约列表'" @changGroup="changGroup"></v-contentHead>
+        <v-contentHead :headTitle="'合约管理'" :headSubTitle="'合约列表'" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
