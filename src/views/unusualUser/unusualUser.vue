@@ -16,8 +16,14 @@
 <template>
     <div style="height:100%">
         <content-head :headTitle="'交易审计'" :headSubTitle="'异常用户'" @changGroup="changGroup"></content-head>
-        <div class="module-wrapper auto-wrapper">
+        <div class="module-wrapper auto-wrapper" style="position: relative;">
             <div class="search-part">
+                <div class="search-part-left">
+                    <el-tooltip effect="dark" content="异常过多(大于等于20)，会停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。" placement="top-start">
+                        <i class="el-icon-info contract-icon font-15">Tips</i>
+                    </el-tooltip>
+                </div>
+
                 <div class="search-part-right">
                     <el-input placeholder="请输入用户" v-model="userName" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
@@ -25,20 +31,20 @@
                 </div>
             </div>
             <div class="search-table" style="height: 76%">
-                <el-table :data="hashData" tooltip-effect="light"  style="overflow-y: auto; height:100%" v-loading="loading">
+                <el-table :data="hashData" tooltip-effect="light" style="overflow-y: auto; height:100%" v-loading="loading">
                     <el-table-column type="expand">
                         <template slot-scope="props">
                             <div class="expand-item">
                                 <ul class="expand-item-ul">
                                     <li v-for="item in props.row['hashs']" :key='item.hash'>
-                                    <div @click="showItem(item)"  class="expand-item-div">
-                                        <i :class="item.show?'el-icon-arrow-down':'el-icon-arrow-up'"></i>
-                                        <span class="expand-item-span">TxHash：
-                                            <span>{{item.hash}}</span>
-                                        </span>
-                                    </div>
-                                    <transaction-detail :transHash="item.hash" v-if="item.show"></transaction-detail>
-                                </li>
+                                        <div @click="showItem(item)" class="expand-item-div">
+                                            <i :class="item.show?'el-icon-arrow-down':'el-icon-arrow-up'"></i>
+                                            <span class="expand-item-span">TxHash：
+                                                <span>{{item.hash}}</span>
+                                            </span>
+                                        </div>
+                                        <transaction-detail :transHash="item.hash" v-if="item.show"></transaction-detail>
+                                    </li>
                                 </ul>
                             </div>
                         </template>
@@ -52,7 +58,12 @@
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
+            <!-- <div class="notify-cation" v-if="noticeVisibility">
+                <div style="text-align: right;"><i class="el-icon-close" @click="closeNotice"></i></div>
+                <p>异常过多，已经停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。</p>
+            </div> -->
         </div>
+
     </div>
 </template>
 
@@ -69,10 +80,11 @@ export default {
     data() {
         return {
             loading: false,
+            noticeVisibility: false,
             currentPage: 1,
             pageSize: 10,
             total: 0,
-            userName:'',
+            userName: '',
             unusualUserHead: [
                 {
                     enName: "userName",
@@ -123,17 +135,20 @@ export default {
         this.getUnusualUserList();
     },
     methods: {
-        changGroup(){
+        changGroup() {
             this.getUnusualUserList()
+        },
+        closeNotice() {
+            this.noticeVisibility = false;
         },
         getUnusualUserList() {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    groupId: groupId,
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                groupId: groupId,
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {};
             reqQuery = {
                 userName: this.userName
@@ -174,16 +189,16 @@ export default {
             this.currentPage = 1
             this.getUnusualUserList();
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getUnusualUserList();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getUnusualUserList();
         },
-        clearText: function(){
+        clearText: function () {
             this.getUnusualUserList()
         }
     }
@@ -195,30 +210,34 @@ export default {
     float: right;
     width: 464px;
 }
-.input-with-select>>>.el-input__inner {
+.search-part-left {
+    float: left;
+    height: 40px;
+    line-height: 40px;
+}
+.input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: 1px solid #eaedf3;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-input-group__append {
+.input-with-select >>> .el-input-group__append {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-button {
-    border: 1px solid #20D4D9;
+.input-with-select >>> .el-button {
+    border: 1px solid #20d4d9;
     border-radius: inherit;
-    background: #20D4D9;
+    background: #20d4d9;
     color: #fff;
 }
 
-
-.search-table>>>.el-table__expanded-cell[class*="cell"] {
+.search-table >>> .el-table__expanded-cell[class*="cell"] {
     padding-left: 20px;
     padding-top: 0;
 }
-.search-table>>> .el-table__body-wrapper {
+.search-table >>> .el-table__body-wrapper {
     overflow-y: auto;
 }
 
@@ -247,5 +266,22 @@ export default {
 .expand-item-span > span {
     color: #515356;
     margin-left: 47px;
+}
+.notify-cation {
+    margin: 0 auto;
+    width: 300px;
+    position: relative;
+    bottom: 50%;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    padding: 14px 24px 14px 13px;
+    border: 1px solid #ebeef5;
+    border-radius: 8px;
+    z-index: 1000;
+    padding-left: 30px;
+    background: #fff;
+}
+.notify-cation > div {
+    text-align: right;
+    cursor: pointer;
 }
 </style>

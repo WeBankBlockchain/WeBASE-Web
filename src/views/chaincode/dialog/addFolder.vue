@@ -19,7 +19,7 @@
             <div>
                 <el-form :model="folderFrom" :rules="rules" ref="folderFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="文件夹名称" prop="folderName" style="width:330px">
-                        <el-input v-model="folderFrom.folderName"></el-input>
+                        <el-input v-model="folderFrom.folderName" @keyup.enter.native="handleFolder"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
@@ -100,6 +100,9 @@ export default {
         },
         modelClose: function(){
             this.$emit("close")
+        },
+        handleFolder() {
+            console.log('enter')
         }
     }
 }

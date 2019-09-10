@@ -13,3 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import Vue from 'vue'
+/**
+ * 截取字符串前8位
+ */
+Vue.filter('splitString', function (value) {
+    return value.substring(0, 8)
+});
+
+/**
+ * authorType
+ */
+Vue.filter('permissionName', function (value) {
+    let name = ''
+    switch (value) {
+        case 'permission':
+            name = '管理权限'
+            break;
+        case 'userTable':
+            name = '表权限'
+            break;
+        case 'cns':
+            name = 'CNS权限'
+            break;
+        case 'node':
+            name = '节点权限'
+            break;
+        case 'sysConfig':
+            name = '系统参数权限'
+            break;
+        case 'deployAndCreate':
+            name = '部署和建表权限'
+            break;
+    }
+    return name
+});

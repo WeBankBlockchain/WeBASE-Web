@@ -33,7 +33,10 @@ const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve)
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
-const helpDoc = resolve => require(['@/components/helpDoc'], resolve);
+const authorManagement = resolve => require(['@/views/authorManagement'], resolve);
+const configManagement = resolve => require(['@/views/configManagement'], resolve);
+const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
+const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -44,15 +47,6 @@ const routes = [
         path: '/login',
         name: 'login',
         component: resolve => require(['@/views/login/login'], resolve),
-    },
-    {
-        path: '/helpDoc',
-        component: main,
-        name: '帮助文档',
-        menuShow: false,
-        children: [
-            { path: '/helpDoc', component: helpDoc, name: '帮助文档', menuShow: true, meta: { requireAuth: true } },
-        ]
     },
     {
         path: '/main',
@@ -100,7 +94,9 @@ const routes = [
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
             { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
-            { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } }
+            { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -112,6 +108,18 @@ const routes = [
         iconCls: 'wbs-icon-lock sidebar-icon',
         children: [
             { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
+        ]
+    },
+    {
+        path: '/',
+        component: main,
+        name: '系统管理',
+        menuShow: true,
+        iconCls: 'wbs-icon-xitongguanli sidebar-icon',
+        children: [
+            // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } }
+            
         ]
     },
     {
