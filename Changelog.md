@@ -13,7 +13,7 @@
 - 优化：引导用户导入外部用户
 - 批量upload合约
 
-- **兼容性**
+**兼容性**
 - 支持FISCO-BCOS v2.0.0-rc1 版本
 - 支持FISCO-BCOS v2.0.0-rc2 版本
 - 支持FISCO-BCOS v2.0.0-rc3 版本
