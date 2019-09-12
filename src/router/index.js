@@ -117,7 +117,7 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
-            { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
+            // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } }
             
         ]
