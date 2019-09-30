@@ -5,38 +5,44 @@
             <div class="search-part">
                 <div class="search-part-left">
                     <el-upload ref="upload" multiple action :limit="10" accept=".crt,.cer,.der" :http-request="uploadCrt" :before-upload="onBeforeUpload" :on-exceed="onUploadExceed">
-                        <el-button size="small" type="primary">导入证书</el-button>
+                        <el-button size="small" type="primary" :disabled="disabled">导入证书</el-button>
                         <!-- <div slot="tip">只能上传crt文件，且不超过500kb</div> -->
                     </el-upload>
                 </div>
             </div>
-            <el-table :data="certificateList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
-                <el-table-column v-for="head in certificateHead" :label="head.name" :key="head.enName" :width="head.width" show-overflow-tooltip align="center">
-                    <template slot-scope="scope">
-                        <template v-if="head.enName!='operate'">
-                            <template v-if="scope.row[head.enName]">
-                                <el-button v-if=" head.enName==='certName'" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" title="导出" @click="sureExportCert(scope.row)">{{scope.row[head.enName]}}</el-button>
-                                <span v-else-if="head.enName==='fingerPrint'">
-                                    <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
-                                    {{scope.row[head.enName]}}
-                                </span>
-                                <span v-else-if="head.enName==='validityFrom'">
-                                    {{format(scope.row['validityFrom'],'yyyy-MM-dd HH:mm:ss')}} 至 {{format(scope.row['validityTo'],'yyyy-MM-dd HH:mm:ss')}}
-                                </span>
-                                <span v-else>
-                                    {{scope.row[head.enName]}}
-                                </span>
+            <div class="search-table">
+                <el-table :data="certificateList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
+                    <el-table-column v-for="head in certificateHead" :label="head.name" :key="head.enName" :width="head.width" show-overflow-tooltip align="center">
+                        <template slot-scope="scope">
+                            <template v-if="head.enName!='operate'">
+                                <template v-if="scope.row[head.enName]">
+                                    <el-button v-if=" head.enName==='certName'" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" title="导出" @click="sureExportCert(scope.row)">{{scope.row[head.enName]}}</el-button>
+                                    <span v-else-if="head.enName==='fingerPrint'">
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        {{scope.row[head.enName]}}
+                                    </span>
+                                    <span v-else-if="head.enName==='father'">
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        {{scope.row[head.enName]}}
+                                    </span>
+                                    <span v-else-if="head.enName==='validityFrom'">
+                                        {{format(scope.row['validityFrom'],'yyyy-MM-dd HH:mm:ss')}} 至 {{format(scope.row['validityTo'],'yyyy-MM-dd HH:mm:ss')}}
+                                    </span>
+                                    <span v-else>
+                                        {{scope.row[head.enName]}}
+                                    </span>
+                                </template>
+                                <template v-else>-</template>
                             </template>
-                            <template v-else>-</template>
+                            <template v-else>
+                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deteleCert(scope.row)">删除</el-button>
+                            </template>
                         </template>
-                        <template v-else>
-                            <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deteleCert(scope.row)">删除</el-button>
-                        </template>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
+                    </el-table-column>
+                </el-table>
+                <!-- <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination> -->
+            </div>
         </div>
     </div>
 </template>
@@ -60,7 +66,7 @@ export default {
             disabled: false,
             loading: false,
             currentPage: 1,
-            pageSize: 10,
+            pageSize: 100,
             total: 0,
             certificateHead: [
                 {
@@ -76,6 +82,11 @@ export default {
                 {
                     enName: 'fingerPrint',
                     name: '指纹',
+                    width: ''
+                },
+                {
+                    enName: 'father',
+                    name: '父级指纹',
                     width: ''
                 },
                 {
@@ -277,8 +288,8 @@ export default {
 </script>
 
 <style scoped>
-.search-table-content {
-    padding: 0 40px 0 41px;
+.search-table {
+    padding: 0 40px 20px 41px;
 }
 .search-table-content >>> td,
 .search-table-content >>> th {
