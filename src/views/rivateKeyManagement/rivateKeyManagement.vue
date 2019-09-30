@@ -36,7 +36,7 @@
                         <template slot-scope="scope">
                             <template v-if="head.enName!='operate'">
                                 <span v-if="head.enName ==='userStatus'" :style="{'color': statusColor(scope.row[head.enName])}">{{userStatus(scope.row[head.enName])}}</span>
-                                <span v-else-if="head.enName ==='address'">
+                                <span v-else-if="head.enName ==='publicKey'">
                                     <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row[head.enName])" title="复制公钥"></i>
                                     {{scope.row[head.enName]}}
                                 </span>
@@ -100,7 +100,7 @@ export default {
                     name: "用户描述"
                 },
                 {
-                    enName: "address",
+                    enName: "publicKey",
                     name: "用户公钥地址信息"
                 },
                 {

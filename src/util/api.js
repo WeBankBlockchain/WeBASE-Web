@@ -714,3 +714,72 @@ export function queryCrudService(data) {
     })
 }
 
+//permission/sorted get批量权限
+export function getPermissionSorted(list) {
+    return get({
+        url: `${url.ORG_LIST}/permission/sorted`,
+        method: 'get',
+        params: list,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//permission/sorted post添加权限
+
+export function postPermissionSorted(data) {
+    return post({
+        url: `${url.ORG_LIST}/permission/sorted`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//上传证书文件 post：/cert
+export function importCert(data) {
+    return post({
+        url: `${url.ORG_LIST}/cert`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// 导出证书文件list get: /cert
+export function exportCert(list) {
+    return get({
+        url: `${url.ORG_LIST}/cert`,
+        method: 'get',
+        params: list,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// get证书文件list get: /cert/list
+export function certList(list) {
+    return get({
+        url: `${url.ORG_LIST}/cert/list`,
+        method: 'get',
+        params: list,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// delete 证书 /cert 
+export function deleteCert(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/cert`,
+        method: 'delete',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
