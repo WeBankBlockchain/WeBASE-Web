@@ -33,10 +33,13 @@ const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve)
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
-const authorManagement = resolve => require(['@/views/authorManagement'], resolve);
+const authorManagement = resolve => require(['@/views/authorManagement'], resolve); 
+const certificate = resolve => require(['@/views/certificate'], resolve); 
+const permission = resolve => require(['@/views/permission'], resolve);
 const configManagement = resolve => require(['@/views/configManagement'], resolve);
 const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
 const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
+const mailboxAlarmManagement = resolve => require(['@/views/mailboxAlarmManagement'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -118,7 +121,9 @@ const routes = [
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
             // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/permission', component: permission, name: '权限管理', menuShow: true, meta: { requireAuth: true } }, 
+            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/certificate', component: certificate, name: '证书管理', menuShow: true, meta: { requireAuth: true } }
             
         ]
     },
@@ -145,7 +150,7 @@ const routes = [
             { path: '/unusualUser', component: unusualUser, name: '异常用户', menuShow: true, meta: { requireAuth: true } },
             { path: '/unusualContract', component: unusualContract, name: '异常合约', menuShow: true, meta: { requireAuth: true } }
         ]
-    },
+    }, 
     {
         path: '/',
         component: main,
@@ -157,6 +162,16 @@ const routes = [
             { path: '/accountInfo', component: accountInfo, name: '帐号管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
+    // {
+    //     path: '/',
+    //     component: main,
+    //     name: '告警配置',
+    //     menuShow: true,
+    //     iconCls: 'wbs-icon-monitor sidebar-icon',
+    //     children: [
+    //         { path: '/mailboxAlarmManagement', component: mailboxAlarmManagement, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
+    //     ]
+    // },
     
 ]
 const router = new Router({

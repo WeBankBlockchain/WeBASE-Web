@@ -162,11 +162,14 @@ let errCode = {
         en: "node type cannot be empty",
         cn: '节点类型不能为空'
     },
+    "201110": {
+        en: "node type cannot be empty",
+        cn: '节点类型不能为空'
+    },
 
-
-    "201104": {
-        en: "permissionType not exists",
-        cn: '权限类型不存在'
+    "201111": {
+        en: "Permission state all cannot be empty",
+        cn: '权限状态全部不能为空'
     },
     "201104": {
         en: "permissionType not exists",
@@ -180,11 +183,6 @@ let errCode = {
         en: "permissionType not exists",
         cn: '权限类型不存在'
     },
-
-
-
-
-
 
     "201112": {
         en: "sql syntax error",
@@ -195,8 +193,8 @@ let errCode = {
         cn: '无效的账户地址'
     }, 
     "201202": {
-        en: "system config key is invalid",
-        cn: '系统配置密钥无效'
+        en: "permission denied, please check chain administrator permission",
+        cn: '权限被拒绝，请检查链管理员权限'
     }, 
     "201203": {
         en: "node id is invalid",
