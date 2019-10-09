@@ -143,7 +143,7 @@ export default {
                 },
                 {
                     enName: "operate",
-                    name: "",
+                    name: "操作",
                     width: '80'
                 }
             ]
@@ -423,10 +423,10 @@ export default {
 </script>
 
 <style scoped>
-.search-table-content >>> .el-table__row > td:nth-last-child(1) > div {
+/* .search-table-content >>> .el-table__row > td:nth-last-child(1) > div {
     visibility: hidden;
 }
 .search-table-content >>> .el-table__row:hover > td:nth-last-child(1) > div {
     visibility: visible;
-}
+} */
 </style>
