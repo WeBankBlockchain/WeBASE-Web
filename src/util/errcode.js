@@ -493,7 +493,22 @@ let errCode = {
         en: "not support transaction",
         cn: "不支持发交易"
     },
-
+    "202060": {
+        en: "cert handle error",
+        cn: "证书句柄错误"
+    },
+    "202061": {
+        en: "store cert error",
+        cn: "存储证书错误"
+    },
+    "202062": {
+        en: "cert format error, must start with -----BEGIN CERTIFICATE-----\\n, end with end",
+        cn: "证书格式错误，必须以----- BEGIN CERTIFICATE ----- \\ n开头，以end结尾"
+    },
+    "202063": {
+        en: "saving front's cert error",
+        cn: "保存前台的证书错误"
+    },
     "302000": {
         en: "user not logged in",
         cn: '未登录的用户'
