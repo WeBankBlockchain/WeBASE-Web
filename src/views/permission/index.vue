@@ -39,10 +39,14 @@
                             <template slot-scope="scope">
                                 <template v-if="head.enName!='operate'">
                                     <span v-if="head.enName ==='address'">{{formatUserName(scope.row[head.enName])}}</span>
+                                    <span v-else-if="head.enName ==='otherAddress'">
+                                        <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" title="复制"></i>
+                                        {{scope.row[head.enName]}}
+                                    </span>
                                     <el-checkbox v-else :disabled="disabled" v-model="scope.row[head.enName]"></el-checkbox>
                                 </template>
                                 <template v-else>
-                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="updatePermission(scope.row)">修改</el-button>
+                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="updatePermission(scope.row)">提交</el-button>
                                 </template>
                             </template>
                         </el-table-column>
@@ -122,6 +126,11 @@ export default {
                     width: ''
                 },
                 {
+                    enName: 'otherAddress',
+                    name: '地址',
+                    width: ''
+                },
+                {
                     enName: 'deployAndCreate',
                     name: '系统与建表权限',
                     width: ''
@@ -164,7 +173,7 @@ export default {
             arr = this.preRivateKeyList;
             if (arr.length > 0) {
                 this.chainAdmin = arr[0]['address']
-            }else {
+            } else {
                 this.chainAdmin = ''
             }
             return arr
@@ -281,12 +290,7 @@ export default {
             getUserList(reqData, {})
                 .then(res => {
                     if (res.data.code === 0) {
-                        this.adminRivateKeyList = [];
-                        res.data.data.forEach(value => {
-                            if (value.hasPk === 1) {
-                                this.adminRivateKeyList.push(value);
-                            }
-                        });
+                        this.adminRivateKeyList = res.data.data;
                     } else {
                         this.$message({
                             type: "error",
@@ -347,7 +351,7 @@ export default {
                 if (data.code === 0) {
                     var arr = [];
                     data.data.forEach(item => {
-                        arr.push(Object.assign({}, { address: item.key }, item.data))
+                        arr.push(Object.assign({}, { address: item.key },{ otherAddress: item.key }, item.data))
                     })
                     this.permissionList = arr;
                     this.sortedTotal = data.totalCount;
@@ -417,6 +421,25 @@ export default {
                 }
             })
             return userName
+        },
+        copyAddress(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
         },
     }
 }
