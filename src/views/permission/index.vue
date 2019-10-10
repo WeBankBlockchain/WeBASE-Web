@@ -291,11 +291,6 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = res.data.data;
-                        // res.data.data.forEach(value => {
-                        //     if (value.hasPk === 1) {
-                        //         this.adminRivateKeyList.push(value);
-                        //     }
-                        // });
                     } else {
                         this.$message({
                             type: "error",
