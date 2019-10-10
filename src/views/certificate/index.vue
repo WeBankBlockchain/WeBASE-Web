@@ -25,6 +25,14 @@
                                         <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
                                         {{scope.row[head.enName]}}
                                     </span>
+                                    <span v-else-if="head.enName==='address'">
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        {{scope.row[head.enName]}}
+                                    </span>
+                                    <span v-else-if="head.enName==='publicKey'">
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        {{scope.row[head.enName]}}
+                                    </span>
                                     <span v-else-if="head.enName==='validityFrom'">
                                         {{format(scope.row['validityFrom'],'yyyy-MM-dd HH:mm:ss')}} 至 {{format(scope.row['validityTo'],'yyyy-MM-dd HH:mm:ss')}}
                                     </span>

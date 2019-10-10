@@ -196,9 +196,9 @@ export default {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];
                         res.data.data.forEach(value => {
-                            if (value.hasPk === 1) {
+                            // if (value.hasPk === 1) {
                                 this.adminRivateKeyList.push(value);
-                            }
+                            // }
                         });
                     } else {
                         this.$message({
@@ -228,9 +228,9 @@ export default {
                 .then(this.$axios.spread((acct, perms) => {
                     var fullList = acct.data.data, userList = perms.data.data, userRivateKeyList = [];
                     userList.map(value => {
-                        if (value.hasPk === 1) {
+                        // if (value.hasPk === 1) {
                             userRivateKeyList.push(value)
-                        }
+                        // }
                     });
                     this.permissionAdminList = []
                     if (fullList.length) {
