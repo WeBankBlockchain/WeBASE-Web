@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="text-center" style="margin-bottom:5px">tips: 公钥用户无法授权其它用户</div>
         <el-form :model="permissionForm" :rules="rules" ref="permissionForm" label-width="110px" class="demo-ruleForm">
             <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="permissionForm.adminRivateKey" placeholder="请选择">
