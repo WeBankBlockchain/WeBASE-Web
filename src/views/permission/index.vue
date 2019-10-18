@@ -38,7 +38,15 @@
                         <el-table-column v-for="head in permissionHead" :label="head.name" :key="head.enName" :width="head.width" show-overflow-tooltip align="center">
                             <template slot-scope="scope">
                                 <template v-if="head.enName!='operate'">
-                                    <span v-if="head.enName ==='address'">{{formatUserName(scope.row[head.enName])}}</span>
+                                    <span v-if="head.enName ==='address'">
+                                        <template v-if="formatUserName(scope.row[head.enName]) === scope.row[head.enName]">
+                                            <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" title="复制"></i>
+                                            {{formatUserName(scope.row[head.enName])}}
+                                        </template>
+                                        <template v-else>
+                                            {{formatUserName(scope.row[head.enName])}}
+                                        </template>
+                                    </span>
                                     <span v-else-if="head.enName ==='otherAddress'">
                                         <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" title="复制"></i>
                                         {{scope.row[head.enName]}}
@@ -123,11 +131,6 @@ export default {
                 {
                     enName: 'address',
                     name: '用户',
-                    width: ''
-                },
-                {
-                    enName: 'otherAddress',
-                    name: '地址',
                     width: ''
                 },
                 {
@@ -428,6 +431,9 @@ export default {
                     userName = item.userName
                 }
             })
+            if(!userName){
+                userName = address;
+            }
             return userName
         },
         copyAddress(val) {
