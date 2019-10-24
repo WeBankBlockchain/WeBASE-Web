@@ -162,11 +162,14 @@ let errCode = {
         en: "node type cannot be empty",
         cn: '节点类型不能为空'
     },
+    "201110": {
+        en: "node type cannot be empty",
+        cn: '节点类型不能为空'
+    },
 
-
-    "201104": {
-        en: "permissionType not exists",
-        cn: '权限类型不存在'
+    "201111": {
+        en: "Permission state all cannot be empty",
+        cn: '权限状态全部不能为空'
     },
     "201104": {
         en: "permissionType not exists",
@@ -180,11 +183,6 @@ let errCode = {
         en: "permissionType not exists",
         cn: '权限类型不存在'
     },
-
-
-
-
-
 
     "201112": {
         en: "sql syntax error",
@@ -195,8 +193,8 @@ let errCode = {
         cn: '无效的账户地址'
     }, 
     "201202": {
-        en: "system config key is invalid",
-        cn: '系统配置密钥无效'
+        en: "permission denied, please check chain administrator permission",
+        cn: '权限被拒绝，请检查链管理员权限'
     }, 
     "201203": {
         en: "node id is invalid",
@@ -495,7 +493,22 @@ let errCode = {
         en: "not support transaction",
         cn: "不支持发交易"
     },
-
+    "202060": {
+        en: "cert handle error",
+        cn: "证书句柄错误"
+    },
+    "202061": {
+        en: "store cert error",
+        cn: "存储证书错误"
+    },
+    "202062": {
+        en: "cert format error, must start with -----BEGIN CERTIFICATE-----\\n, end with end",
+        cn: "证书格式错误，必须以----- BEGIN CERTIFICATE ----- \\ n开头，以end结尾"
+    },
+    "202063": {
+        en: "saving front's cert error",
+        cn: "保存前台的证书错误"
+    },
     "302000": {
         en: "user not logged in",
         cn: '未登录的用户'

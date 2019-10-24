@@ -16,7 +16,7 @@
 <template>
     <div style="height:100%">
         <content-head :headTitle="'交易审计'" :headSubTitle="'异常合约'" @changGroup="changGroup"></content-head>
-        <div class="module-wrapper auto-wrapper">
+        <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
                     <el-tooltip effect="dark" content="异常过多(大于等于20)，会停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。" placement="top-start">
@@ -29,7 +29,7 @@
                     </el-input>
                 </div>
             </div>
-            <div class="search-table" style="height: 76%">
+            <div class="search-table">
                 <el-table :data="hashData" tooltip-effect="light" style="overflow-y: auto; height:100%" v-loading="loading">
                     <el-table-column type="expand">
                         <template slot-scope="props">
