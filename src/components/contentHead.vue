@@ -28,7 +28,7 @@
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
         <div class="content-head-network">
-            <a target="_blank" href="https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/index.html">帮助文档</a>
+            <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">帮助文档</a>
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
                 <ul class="group-item">
                     <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
