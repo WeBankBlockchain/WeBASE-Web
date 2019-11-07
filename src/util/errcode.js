@@ -509,6 +509,40 @@ let errCode = {
         en: "saving front's cert error",
         cn: "保存前台的证书错误"
     },
+    "202070": {
+        en: "Mail server config error.",
+        cn: "邮箱服务配置错误。"
+    },
+    "202071": {
+        en: "Mail server config param not match.",
+        cn: "邮件服务器配置参数不匹配。"
+    },
+    "202072": {
+        en: "Mail server config error, db's server config is empty.",
+        cn: "邮件服务器配置错误，数据库的服务器配置为空。"
+    },
+    "202076": {
+        en: "Alert rule error.",
+        cn: "警报规则错误。"
+    },
+    "202077": {
+        en: "Alert rule param not match.",
+        cn: "警报规则参数不匹配。"
+    },
+    "202080": {
+        en: "Send mail error, please check mail server configuration.",
+        cn: "发送邮件错误，请检查邮件服务器配置。"
+    },
+    "202081": {
+        en: "Send mail error, please enable mail server before send.",
+        cn: "发送邮件错误，请在发送前启用邮件服务器。"
+    },
+
+
+
+
+
+
     "302000": {
         en: "user not logged in",
         cn: '未登录的用户'
