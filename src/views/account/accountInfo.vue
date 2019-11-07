@@ -80,6 +80,10 @@ export default {
                     name: "角色"
                 },
                 {
+                    enName: "email",
+                    name: "邮箱"
+                },
+                {
                     enName: "operate",
                     name: "操作"
                 }

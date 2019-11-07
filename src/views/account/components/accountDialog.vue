@@ -24,6 +24,9 @@
                     <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']"  @click.stop.prevent="showPassword"></i>
                 </el-input>
             </el-form-item>
+            <el-form-item v-if='accountForm.emailshow' label="邮箱" prop="email" style="width: 300px;">
+                <el-input v-model="accountForm.email" placeholder="请输入邮箱"></el-input>
+            </el-form-item>
             <el-form-item label="角色" prop="role" style="width: 300px;" v-if="accountForm['mShow']">
                 <el-select v-model="accountForm.role" placeholder="请选择" :disabled="accountForm['mDisabled']">
                     <el-option v-for="item in roleList" :key="item.roleId" :label="item.roleNameZh" :value="item.roleId">
@@ -66,7 +69,9 @@ export default {
                             disabled: false,
                             mDisabled: false,
                             dShow: true,
-                            mShow: true
+                            mShow: true,
+                            email: "",
+                            emailshow: false
                         };
                         break;
                     case "delete":
@@ -76,7 +81,9 @@ export default {
                             role: this.accountDialogOptions.data["roleId"],
                             disabled: true,
                             mDisabled: true,
-                            dShow: false
+                            dShow: false,
+                            emailshow: false
+                            // email: "",
                         };
                         break;
                     case "modify":
@@ -87,7 +94,9 @@ export default {
                             disabled: true,
                             mDisabled: false,
                             dShow: true,
-                            mShow: false
+                            mShow: false,
+                            email: this.accountDialogOptions.data["email"],
+                            emailshow: true
                         };
                         break;
                 }
@@ -139,6 +148,18 @@ export default {
                         message: "字母,数字组成,且至少包含一个大写字母和一个小写字母",
                         trigger: "blur"
                     }
+                ],
+                email: [
+                    {
+                        required: true,
+                        message: "请输入邮箱",
+                        trigger: "blur"
+                    },
+                    {
+                        pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/,
+                        message: "不符合规则",
+                        trigger: "blur"
+                    },
                 ]
             }
         };
@@ -215,7 +236,8 @@ export default {
             let reqData = {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
-                roleId: this.accountForm.role
+                roleId: this.accountForm.role,
+                email: this.accountForm.email
             };
             creatAccountInfo(reqData, {})
                 .then(res => {
@@ -248,7 +270,8 @@ export default {
             let reqData = {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
-                roleId: this.accountForm.role
+                roleId: this.accountForm.role,
+                email: this.accountForm.email
             };
             modifyAccountInfo(reqData, {})
                 .then(res => {
