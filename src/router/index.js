@@ -39,7 +39,8 @@ const permission = resolve => require(['@/views/permission'], resolve);
 const configManagement = resolve => require(['@/views/configManagement'], resolve);
 const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
 const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
-const mailboxAlarmManagement = resolve => require(['@/views/mailboxAlarmManagement'], resolve); 
+const emailAlarm = resolve => require(['@/views/alarm/emailAlarm'], resolve); 
+const emailAlarmType = resolve => require(['@/views/alarm/emailAlarmType'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -137,6 +138,8 @@ const routes = [
             // { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } },
             { path: '/nodesMetric', component: nodesMetric, name: '节点监控', menuShow: true, meta: { requireAuth: false } },
             { path: '/hostMetric', component: hostMetric, name: '主机监控', menuShow: true, meta: { requireAuth: false } },
+            { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
+            { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {
@@ -169,7 +172,8 @@ const routes = [
     //     menuShow: true,
     //     iconCls: 'wbs-icon-monitor sidebar-icon',
     //     children: [
-    //         { path: '/mailboxAlarmManagement', component: mailboxAlarmManagement, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
+    //         { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
+    //         { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', menuShow: true, meta: { requireAuth: false } },
     //     ]
     // },
     
