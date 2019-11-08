@@ -81,8 +81,8 @@ let errCode = {
         cn: '从链上获取abi失败'
     },
     "201014": {
-        en: "contract deploy error",
-        cn: '合约部署错误'
+        en: "contract deploy error,permission Denied",
+        cn: '部署合约错误，请检查权限'
     },
     "201015": {
         en: "user's privateKey is null",
@@ -116,7 +116,154 @@ let errCode = {
         en: "node request failed",
         cn: '节点请求失败'
     },
+    "201200": {
+        en: "Params not fit",
+        cn: '参数不合适'
+    },
+    "201101": {
+        en: "groupId cannot be empty",
+        cn: '群组不存在'
+    },
+    "201102": {
+        en: "TableName cannot be empty",
+        cn: '表名不能为空'
+    },
+    "201103": {
+        en: "permissionType cannot be empty",
+        cn: '权限类型不能为空'
+    },
+    "201104": {
+        en: "permissionType not exists",
+        cn: '权限类型不存在'
+    },
 
+    "201105": {
+        en: "from address cannot be empty",
+        cn: '被授权人地址不能为空'
+    },
+
+    "201106": {
+        en: "contract name cannot be empty",
+        cn: '合约名不能为空'
+    },
+    "201107": {
+        en: "system config key cannot be empty",
+        cn: '系统配置键不能为空'
+    },
+    "201108": {
+        en: "system config value cannot be empty",
+        cn: '系统配置值不能为空'
+    },
+    "201109": {
+        en: "node id cannot be empty",
+        cn: '节点ID不能为空'
+    }, 
+    "201110": {
+        en: "node type cannot be empty",
+        cn: '节点类型不能为空'
+    },
+    "201110": {
+        en: "node type cannot be empty",
+        cn: '节点类型不能为空'
+    },
+
+    "201111": {
+        en: "Permission state all cannot be empty",
+        cn: '权限状态全部不能为空'
+    },
+    "201104": {
+        en: "permissionType not exists",
+        cn: '权限类型不存在'
+    },
+    "201104": {
+        en: "permissionType not exists",
+        cn: '权限类型不存在'
+    },
+    "201104": {
+        en: "permissionType not exists",
+        cn: '权限类型不存在'
+    },
+
+    "201112": {
+        en: "sql syntax error",
+        cn: 'sql语法错误'
+    },
+    "201201": {
+        en: "address is invalid",
+        cn: '无效的账户地址'
+    }, 
+    "201202": {
+        en: "permission denied, please check chain administrator permission",
+        cn: '权限被拒绝，请检查链管理员权限'
+    }, 
+    "201203": {
+        en: "node id is invalid",
+        cn: '节点ID无效'
+    },
+    "201204": {
+        en: "invalid node type: sealer, observer, remove",
+        cn: '无效的节点类型：sealer，observer，remove'
+    },
+    "201205": {
+        en: "permission denied or params error, set system config value fail",
+        cn: '权限被拒绝或params错误，设置系统配置值失败'
+    },
+    "201206": {
+        en: "create system config in db fail for already exist",
+        cn: '在db中创建系统配置失败'
+    },
+    "201207": {
+        en: "system config key is invalid",
+        cn: '系统配置键无效'
+    },
+    "201208": {
+        en: "unsupported for this system config key",
+        cn: '不支持此系统配置键'
+    },
+    "201209": {
+        en: "provide value by positive integer mode, from 100000 to 2147483647",
+        cn: '以正整数模式提供值，范围从100000到2147483647'
+    },
+    "201210": {
+        en: "set system config value fail for params error or permission denied",
+        cn: '为params错误或拒绝权限设置系统配置值fail'
+    },
+    "201211": {
+        en: "query system config value list fail",
+        cn: '查询系统配置值列表失败'
+    },
+    "201216": {
+        en: "node id is invalid",
+        cn: "无效节点"
+    },
+    "201217": {
+        en: "invalid node type: sealer, observer, remove",
+        cn: '无效节点类型:共识、观察者、游离'
+    },
+    "201218": {
+        en: "set node consensus type fail, check permission or node's group config file",
+        cn: '请检查权限或节点群组配置文件'
+    },
+    "201221": {
+        en: "Contract version should only contains 'A-Z' or 'a-z' or '0-9' or dot mark",
+        cn: '合约版本只应包含“A-Z”或“A-Z”或“0-9”或点号'
+    },
+    "201222": {
+        en: "version of contract is out of length",
+        cn: '合同的版本过长'
+    },
+    "201226": {
+        en: "sql syntax error",
+        cn: 'sql语法错误'
+    },
+    "201227": {
+        en: "crud sql fail",
+        cn: '增删改查失败'
+    },
+    "201228": {
+        en: "table not exists",
+        cn: '表不存在'
+    },
 
     "202000": {
         en: "invalid front id",
@@ -323,16 +470,16 @@ let errCode = {
         cn: "公钥长度为130，公钥地址长度为42"
     },
     "202051": {
-        en: "un know this host",
-        cn: "找不到该host"
+        en: "un know this host/port",
+        cn: "找不到IP或端口 "
     },
     "202052": {
-        en: "un know this port",
-        cn: "找不到该端口"
+        en: "Invalid token",
+        cn: "无效的token"
     },
     "202053": {
-        en: "system user has not been initialized yet",
-        cn: "系统用户尚未初始化"
+        en: "Token has expired",
+        cn: "token已经失效"
     },
     "202054": {
         en: "contract had not deploy",
@@ -346,7 +493,22 @@ let errCode = {
         en: "not support transaction",
         cn: "不支持发交易"
     },
-
+    "202060": {
+        en: "cert handle error",
+        cn: "证书句柄错误"
+    },
+    "202061": {
+        en: "store cert error",
+        cn: "存储证书错误"
+    },
+    "202062": {
+        en: "cert format error, must start with -----BEGIN CERTIFICATE-----\\n, end with end",
+        cn: "证书格式错误，必须以----- BEGIN CERTIFICATE ----- \\ n开头，以end结尾"
+    },
+    "202063": {
+        en: "saving front's cert error",
+        cn: "保存前台的证书错误"
+    },
     "302000": {
         en: "user not logged in",
         cn: '未登录的用户'
@@ -359,8 +521,82 @@ let errCode = {
         en: "param exception",
         cn: "参数错误"
     },
-
-
+    "-50000": {
+        en: "Permission denied",
+        cn: "没有权限"
+    },
+    "-50001": {
+        en: "Table name already exist",
+        cn: "表名已经存在"
+    },
+    "-50100": {
+        en: "Unknow function call",
+        cn: "未知函数调用"
+    },
+    "-50101": {
+        en: "Table does not exist",
+        cn: "表不存在"
+    },
+    "-51000": {
+        en: "Table name and address already exist",
+        cn: "表名和地址已经存在"
+    }, 
+    "-51001": {
+        en: "Table name and address does not exist",
+        cn: "该地址不属于管理员，无法删除"
+    },
+    "-51100": {
+        en: "Invalid node ID",
+        cn: "无效的节点ID"
+    },
+    "-51101": {
+        en: "The last sealer cannot be removed",
+        cn: "不能移除最后一个共识节点"
+    },
+    "-51102": {
+        en: "The node is not reachable",
+        cn: "节点无法访问"
+    },
+    "-51103": {
+        en: "The node is not a group peer",
+        cn: "节点不是群组成员"
+    },
+    "-51104": {
+        en: "The node is already in the sealer list",
+        cn: "节点已经在共识列表中"
+    },
+    "-51105": {
+        en: "The node is already in the observer list",
+        cn: "节点已经在观察者列表中"
+    },
+    "-51200": {
+        en: "Contract name and version already exist",
+        cn: "合同名称和版本已存在"
+    },
+    "-51201": {
+        en: "Version string length exceeds the maximum limit",
+        cn: "版本字符串长度超过最大限制"
+    },
+    "-51300": {
+        en: "Invalid configuration entry",
+        cn: "配置条目无效"
+    },
+    "-51500": {
+        en: "Contract name and version already exist",
+        cn: "合同名称和版本已存在"
+    },
+    "-51501": {
+        en: "Condition parse error",
+        cn: "条件解析错误"
+    },
+    "-51502": {
+        en: "Condition operation undefined",
+        cn: "条件操作未定义"
+    },
+    "-51503": {
+        en: "Please provide field 'in field list",
+        cn: "请在字段列表中提供字段。"
+    },
     "422": {
         en: "param error",
         cn: "参数错误"

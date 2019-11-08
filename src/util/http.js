@@ -35,10 +35,11 @@ axiosIns.interceptors.response.use(
                 query: {redirect: router.currentRoute.fullPath}
             })
         }
-        // this.$message({
-        //     type: "error",
-        //     message: "登录状态失效，请重新登录！"
-        // });
+        if (response.data && (response.data.code === 202052 || response.data.code === 202053)) {
+            router.push({
+                path: "/login"
+            })
+        }
         return response;
     },
     error => {

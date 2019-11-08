@@ -63,6 +63,7 @@
 .font-weight-500 {
     font-weight: 500
 }
+
 .font-color-333{
   color: #333;
 }
@@ -87,6 +88,12 @@
 .font-color-8798ad {
     color: #8798ad;
 }
+.font-color-666 {
+    color: #666;
+}
+.font-color-fff {
+    color: #fff;
+}
 .font-46 {
     font-size: 46px;
 }
@@ -110,6 +117,9 @@
 }
 .bg-2956a3{
     background-color: #0db1c1;
+}
+.bg-efefef{
+  background-color: #efefef;
 }
 .bg-cecece{
   background-color: #cecece;
@@ -154,6 +164,9 @@
 }
 .more-search-table {
     padding: 29px 29px 0 30px;
+}
+.text-float-right {
+    float: right;
 }
 .text-left {
     text-align: left;
@@ -232,13 +245,13 @@
 }
 
 .el-button--text {
-    color: #00c1d4 !important;
+    color: #00c1d4;
 }
 .el-button--text.is-active,
 .el-button--text:active,
 .el-button--text:focus,
 .el-button--text:hover {
-    color: #00c1d4 !important;;
+    color: #00c1d4;
 }
 /* element-ui input*/
 
@@ -314,7 +327,7 @@
 /** el-table*/
 th,
 td {
-    padding: 8px 0;
+    /* padding: 8px 0; */
     font-size: 12px;
 }
 th {

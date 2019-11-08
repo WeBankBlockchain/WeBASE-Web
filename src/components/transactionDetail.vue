@@ -79,41 +79,49 @@
                 </div>
             </el-tab-pane>
             <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
-                <div v-for="(item,num) in eventLog" v-if="eventSHow">
-                    <div class="item">
-                        <span class="label">Address :</span>
-                        <span>{{item.address}}</span>
+                <template v-if="unEvent">
+                    <div  class="text-center">
+                        无法解析
                     </div>
-                    <div class="item">
-                        <span class="label">Name :</span>
-                        <span>{{item.eventName}}</span>
-                    </div>
-                    <div class="item">
-                        <span class="label">Topics :</span>
-                        <div style="display: inline-block;width:800px;">
-                            <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
+                </template>
+                <template v-else>
+                    <div v-for="(item,num) in eventLog" v-if="eventSHow">
+                        <div class="item">
+                            <span class="label">Address :</span>
+                            <span>{{item.address}}</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">Name :</span>
+                            <span>{{item.eventName}}</span>
+                        </div>
+                        <div class="item">
+                            <span class="label">Topics :</span>
+                            <div style="display: inline-block;width:800px;">
+                                <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <span class="label">Data :</span>
+                            <div class="detail-input-content">
+                                <span v-if="!item.eventDataShow" class="input-data">{{item.data}}</span>
+                                <el-table class="input-data" :data="item.eventLgData" v-show="item.eventDataShow" style="display:inline-block;width:100%;">
+                                    <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
+                                    <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
+                                        <template slot-scope="scope">
+                                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                            <span>{{scope.row.data}}</span>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </div>
+                        <div class="item" v-show='item.eventButtonShow'>
+                            <span class="label"></span>
+                            <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
                         </div>
                     </div>
-                    <div class="item">
-                        <span class="label">Data :</span>
-                        <div class="detail-input-content">
-                            <span v-if="!item.eventDataShow" class="input-data">{{item.data}}</span>
-                            <el-table class="input-data" :data="item.eventLgData" v-show="item.eventDataShow" style="display:inline-block;width:100%;">
-                                <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
-                                <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
-                                    <template slot-scope="scope">
-                                        <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
-                                        <span>{{scope.row.data}}</span>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                        </div>
-                    </div>
-                    <div class="item" v-show='item.eventButtonShow'>
-                        <span class="label"></span>
-                        <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
-                    </div>
-                </div>
+                </template>
+
             </el-tab-pane>
         </el-tabs>
 
@@ -121,8 +129,6 @@
 </template>
 <script>
 import {
-    getContractList,
-    getByteCode,
     getTransactionReceipt,
     hashTransactionInfo,
     getBlockDetail,
@@ -141,7 +147,7 @@ export default {
             type: String
         }
     },
-    data: function() {
+    data: function () {
         return {
             detail: null,
             transactionData: {},
@@ -163,19 +169,19 @@ export default {
             eventDataShow: true,
             inputButtonShow: true,
             eventButtonShow: true,
-            userList: []
+            userList: [],
+            unEvent: false,
         };
     },
-    mounted: function() {
-        // this.getContacts(this.getHashTransactionInfo);
+    mounted: function () {
         this.getHashTransactionInfo();
         this.getUser();
     },
-    destroyed: function() {
+    destroyed: function () {
         localStorage.setItem("transaction", "");
     },
     methods: {
-        link: function(val) {
+        link: function (val) {
             router.push({
                 path: "/privateKeyManagement",
                 query: {
@@ -183,7 +189,7 @@ export default {
                 }
             });
         },
-        copyPubilcKey: function(val) {
+        copyPubilcKey: function (val) {
             if (!val) {
                 this.$message({
                     type: "fail",
@@ -212,11 +218,12 @@ export default {
                     if (res.data.code === 0) {
                         this.transactionData = res.data.data;
                         if (res.data.data) {
+
                             this.getCreatTime(res.data.data.blockNumber);
                             this.getAdderss();
-                            if(res.data.data.to && res.data.data.to !="0x0000000000000000000000000000000000000000"){
+                            if (res.data.data.to && res.data.data.to != "0x0000000000000000000000000000000000000000") {
                                 this.getMethod(res.data.data.input)
-                            }else{
+                            } else {
                                 this.getDeloyAbi(res.data.data.input);
                             }
                         } else {
@@ -237,41 +244,44 @@ export default {
                         type: "error",
                         message: "系统错误!"
                     });
+                    this.$message.closeAll()
                 });
         },
-        getMethod: function(id){
-                let data = {
-                    groupId: localStorage.getItem("groupId"),
-                    data: id.substring(0, 10)
-                }
-                getFunctionAbi(data,{}).then(res => {
-                    
-                    if(res.data.code == 0){
-                        this.decodefun(id,res.data.data)
-                    }else{
-                    this.$message({
-                            type: "error",
-                            message: errcode.errCode[response.data.code].cn
-                        });
-                    }
-                }).catch(err => {
+        getMethod: function (id) {
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                data: id.substring(0, 10)
+            }
+            getFunctionAbi(data, {}).then(res => {
+
+                if (res.data.code == 0) {
+                    this.decodefun(id, res.data.data)
+                } else {
                     this.$message({
                         type: "error",
-                        message: "系统错误!"
+                        message: errcode.errCode[response.data.code].cn
                     });
-                })
-            },
-        getDeloyAbi: function(input){
-            if(input && input != "0x"){
+                    this.$message.closeAll()
+                }
+            }).catch(err => {
+                this.$message({
+                    type: "error",
+                    message: "系统错误!"
+                });
+                this.$message.closeAll()
+            })
+        },
+        getDeloyAbi: function (input) {
+            if (input && input != "0x") {
                 let data = {
                     groupId: localStorage.getItem("groupId"),
                     partOfBytecodeBin: input.substring(2)
                 }
-            getAbi(data).then(res => {
-                if(res.data.code == 0){
-                    this.decodeDeloy(res.data.data)
-                }else{
-                    this.$message({
+                getAbi(data).then(res => {
+                    if (res.data.code == 0) {
+                        this.decodeDeloy(res.data.data)
+                    } else {
+                        this.$message({
                             type: "error",
                             message: errcode.errCode[response.data.code].cn
                         });
@@ -282,9 +292,9 @@ export default {
                         message: "系统错误!"
                     });
                 })
-            }   
+            }
         },
-        getUser: function() {
+        getUser: function () {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
@@ -292,6 +302,7 @@ export default {
             };
             getUserList(reqData)
                 .then(res => {
+
                     if (res.data.code === 0) {
                         this.userList = res.data.data;
                     } else {
@@ -308,7 +319,7 @@ export default {
                     });
                 });
         },
-        getCreatTime: function(number) {
+        getCreatTime: function (number) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 blockNumber: number
@@ -336,7 +347,7 @@ export default {
                 this.decodeEventClick();
             }
         },
-        decode: function() {
+        decode: function () {
             if (this.showDecode) {
                 this.buttonTitle = "还原";
                 this.showDecode = false;
@@ -352,11 +363,11 @@ export default {
                 this.eventDataShow = true;
             }
         },
-        decodeAbi: function(val, list) {
+        decodeAbi: function (val, list) {
             this.inputButtonShow = true;
             let input = this.transactionData.input;
             this.transactionTo = this.transactionData.to;
-            
+
             if (this.transactionTo) {
                 this.decodefun(input, this.transactionTo);
             } else {
@@ -364,7 +375,7 @@ export default {
                 this.decodeDeloy(this.bin);
             }
         },
-        getAdderss: function() {
+        getAdderss: function () {
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 transHash: this.transHash
@@ -389,24 +400,28 @@ export default {
                 });
         },
         //decodeEvent
-        decodeEventClick: function() {
+        decodeEventClick: function () {
             for (let i = 0; i < this.eventLog.length; i++) {
+                if (this.eventLog[i]['data'] === '0x') {
+                    this.unEvent = true
+                    return;
+                }
                 let data = {
                     groupId: localStorage.getItem("groupId"),
                     data: this.eventLog[i].topics[0]
                 }
                 getFunctionAbi(data).then(res => {
-                    if(res.data.code == 0 && res.data.data){
-                        this.eventLog[i] = this.decodeEvent(res.data.data,this.eventLog[i])
+                    if (res.data.code == 0 && res.data.data) {
+                        this.eventLog[i] = this.decodeEvent(res.data.data, this.eventLog[i])
                         setTimeout(() => {
                             this.eventSHow = true;
-                        },200)
-                    }else if(res.data.code !== 0){
-                    this.$message({
+                        }, 200)
+                    } else if (res.data.code !== 0) {
+                        this.$message({
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
-                }
+                    }
                 }).catch(err => {
                     this.$message({
                         type: "error",
@@ -416,58 +431,57 @@ export default {
             }
         },
         //decodeEventLog
-        decodeEvent: function(eventData, data) {
+        decodeEvent: function (eventData, data) {
             let web3 = new Web3(Web3.givenProvider);
             let abi = "";
             eventData.abiInfo = JSON.parse(eventData.abiInfo)
             let list = data;
-                list.eventTitle = '还原'
-                list.eventDataShow = true;
-                list.eventButtonShow = true;
-                list.eventName = eventData.abiInfo.name + "(";
-                for (let i = 0; i < eventData.abiInfo.inputs.length; i++) {
-                    if (i == eventData.abiInfo.inputs.length - 1) {
-                        list.eventName =  list.eventName + eventData.abiInfo.inputs[i].type +" " + eventData.abiInfo.inputs[i].name;
-                    }else{
-                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";
-                    }   
+            list.eventTitle = '还原'
+            list.eventDataShow = true;
+            list.eventButtonShow = true;
+            list.eventName = eventData.abiInfo.name + "(";
+            for (let i = 0; i < eventData.abiInfo.inputs.length; i++) {
+                if (i == eventData.abiInfo.inputs.length - 1) {
+                    list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name;
+                } else {
+                    list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";
                 }
-                list.eventName = list.eventName + ")";
-                let eventResult = web3.eth.abi.decodeLog(eventData.abiInfo.inputs,list.data,list.topics);
-                list.outData = {};
-                list.eventLgData = [];
-                for (const key in eventResult) {
-                    if (+key || +key == 0) {
-                        list.outData[key] = eventResult[key];
-                    }
+            }
+            list.eventName = list.eventName + ")";
+            let eventResult = web3.eth.abi.decodeLog(eventData.abiInfo.inputs, list.data, list.topics.slice(1));
+            list.outData = {};
+            list.eventLgData = [];
+            for (const key in eventResult) {
+                if (+key || +key == 0) {
+                    list.outData[key] = eventResult[key];
                 }
-                if (eventData.abiInfo.inputs.length && JSON.stringify(list.outData) != "{}") {
-                    for (const key in list.outData) {
-                        eventData.abiInfo.inputs.forEach((items, index) => {
-                            if (index == key) {
-                                list.eventLgData[index] = {};
-                                list.eventLgData[index].name = items.name;
-                                list.eventLgData[index].data = list.outData[key];
-                            }
-                        });
-                    }
+            }
+            if (eventData.abiInfo.inputs.length && JSON.stringify(list.outData) != "{}") {
+                for (const key in list.outData) {
+                    eventData.abiInfo.inputs.forEach((items, index) => {
+                        if (index == key) {
+                            list.eventLgData[index] = {};
+                            list.eventLgData[index].name = items.name;
+                            list.eventLgData[index].data = list.outData[key];
+                        }
+                    });
                 }
+            }
             return list
         },
-        decodeButtonEvent: function(num){
-            // debugger
-            if(this.eventLog[num].eventDataShow){
-                this.$set(this.eventLog[num],'eventDataShow',false);
-                this.$set(this.eventLog[num],'eventTitle','解码')
-                this.$set(this.eventLog,num,this.eventLog[num])
-            }else{
-                this.$set(this.eventLog[num],'eventDataShow',true);
-                this.$set(this.eventLog[num],'eventTitle','还原');
-                this.$set(this.eventLog,num,this.eventLog[num])
+        decodeButtonEvent: function (num) {
+            if (this.eventLog[num].eventDataShow) {
+                this.$set(this.eventLog[num], 'eventDataShow', false);
+                this.$set(this.eventLog[num], 'eventTitle', '解码')
+                this.$set(this.eventLog, num, this.eventLog[num])
+            } else {
+                this.$set(this.eventLog[num], 'eventDataShow', true);
+                this.$set(this.eventLog[num], 'eventTitle', '还原');
+                this.$set(this.eventLog, num, this.eventLog[num])
             }
         },
         //transactionDecode
-        decodefun: function(input,abiData) {
+        decodefun: function (input, abiData) {
             let web3 = new Web3(Web3.givenProvider);
             if (this.userList.length) {
                 this.userList.forEach(value => {
@@ -479,7 +493,7 @@ export default {
             this.methodId = input.substring(0, 10);
             // this.methodId = data;
             let inputDatas = "0x" + input.substring(10);
-            if(abiData){
+            if (abiData) {
                 abiData.abiInfo = JSON.parse(abiData.abiInfo)
                 abiData.abiInfo.inputs.forEach((val, index) => {
                     if (val && val.type && val.name) {
@@ -494,7 +508,7 @@ export default {
                 });
                 this.funcData = abiData.abiInfo.name;
                 if (abiData.abiInfo.inputs.length) {
-                    this.decodeData = web3.eth.abi.decodeParameters( abiData.abiInfo.inputs,inputDatas);
+                    this.decodeData = web3.eth.abi.decodeParameters(abiData.abiInfo.inputs, inputDatas);
                     if (JSON.stringify(this.decodeData) != "{}") {
                         for (const key in this.decodeData) {
                             abiData.abiInfo.inputs.forEach((val, index) => {
@@ -521,8 +535,8 @@ export default {
             }
         },
         //deloy-contract-transaction-decode
-        decodeDeloy: function(items) {
-             if (this.userList.length) {
+        decodeDeloy: function (items) {
+            if (this.userList.length) {
                 this.userList.forEach(value => {
                     if (value.address == this.transactionData.from) {
                         this.transactionData.user = value.userName;
@@ -533,8 +547,8 @@ export default {
                 let input = JSON.parse(items.contractAbi);
                 this.funcData = items.contractName;
                 input.forEach(value => {
-                    if(value.type == "constructor"){
-                        value.inputs.forEach((item,index) => {
+                    if (value.type == "constructor") {
+                        value.inputs.forEach((item, index) => {
                             if (item && item.type && item.name) {
                                 this.abiType[index] = item.type + " " + item.name;
                             } else if (item && item.name) {
@@ -549,7 +563,7 @@ export default {
                 })
                 this.showDecode = false;
                 this.buttonTitle = "还原";
-            }else{
+            } else {
                 this.buttonSHow = false;
                 this.showDecode = false;
             }

@@ -33,7 +33,13 @@ const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve)
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
-const helpDoc = resolve => require(['@/components/helpDoc'], resolve);
+const authorManagement = resolve => require(['@/views/authorManagement'], resolve); 
+const certificate = resolve => require(['@/views/certificate'], resolve); 
+const permission = resolve => require(['@/views/permission'], resolve);
+const configManagement = resolve => require(['@/views/configManagement'], resolve);
+const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
+const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
+const mailboxAlarmManagement = resolve => require(['@/views/mailboxAlarmManagement'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -44,15 +50,6 @@ const routes = [
         path: '/login',
         name: 'login',
         component: resolve => require(['@/views/login/login'], resolve),
-    },
-    {
-        path: '/helpDoc',
-        component: main,
-        name: '帮助文档',
-        menuShow: false,
-        children: [
-            { path: '/helpDoc', component: helpDoc, name: '帮助文档', menuShow: true, meta: { requireAuth: true } },
-        ]
     },
     {
         path: '/main',
@@ -100,7 +97,9 @@ const routes = [
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
             { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
-            { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } }
+            { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
@@ -112,6 +111,20 @@ const routes = [
         iconCls: 'wbs-icon-lock sidebar-icon',
         children: [
             { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
+        ]
+    },
+    {
+        path: '/',
+        component: main,
+        name: '系统管理',
+        menuShow: true,
+        iconCls: 'wbs-icon-xitongguanli sidebar-icon',
+        children: [
+            // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/permission', component: permission, name: '权限管理', menuShow: true, meta: { requireAuth: true } }, 
+            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } },
+            { path: '/certificate', component: certificate, name: '证书管理', menuShow: true, meta: { requireAuth: true } }
+            
         ]
     },
     {
@@ -137,7 +150,7 @@ const routes = [
             { path: '/unusualUser', component: unusualUser, name: '异常用户', menuShow: true, meta: { requireAuth: true } },
             { path: '/unusualContract', component: unusualContract, name: '异常合约', menuShow: true, meta: { requireAuth: true } }
         ]
-    },
+    }, 
     {
         path: '/',
         component: main,
@@ -149,6 +162,16 @@ const routes = [
             { path: '/accountInfo', component: accountInfo, name: '帐号管理', menuShow: true, meta: { requireAuth: true } }
         ]
     },
+    // {
+    //     path: '/',
+    //     component: main,
+    //     name: '告警配置',
+    //     menuShow: true,
+    //     iconCls: 'wbs-icon-monitor sidebar-icon',
+    //     children: [
+    //         { path: '/mailboxAlarmManagement', component: mailboxAlarmManagement, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
+    //     ]
+    // },
     
 ]
 const router = new Router({
@@ -161,21 +184,6 @@ router.onError((error) => {
     if (isChunkLoadFailed) {
         router.go(0);
         router.replace(targetPath);
-    }
-});
-
-router.beforeEach((to, from, next) => {
-    if (to.meta.requireAuth) {
-        if (getCookie('NODE_MGR_ACCOUNT_C')) {
-            next();
-        } else {
-            next({
-                path: '/login'
-            });
-            
-        }
-    } else {
-        next();
     }
 });
 

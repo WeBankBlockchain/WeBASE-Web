@@ -139,13 +139,16 @@ export default {
                             type: "error",
                             message: errcode.errCode[response.data.code].cn
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err=>{
+                    
                     this.$message({
                         type: "error",
                         message: "系统错误!"
                     });
+                    this.$message.closeAll()
                 })
         },
         handleClick(tab, event) {
@@ -184,6 +187,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    
                     this.$message({
                         type: "error",
                         message: "系统错误!"
@@ -209,6 +213,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    
                     this.$message({
                         type: "error",
                         message: "系统错误!"
@@ -242,13 +247,16 @@ export default {
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
+                    
                     this.$message({
                         type: "error",
                         message: "系统错误！"
                     });
+                    this.$message.closeAll()
                 });
         },
         //解码eventLog
@@ -302,7 +310,7 @@ export default {
                                 let eventData = web3.eth.abi.decodeLog(
                                     value.inputs,
                                     val.data,
-                                    val.topics
+                                    val.topics.slice(1)
                                 );
                             }
                         });

@@ -26,10 +26,13 @@
                 <i class="el-icon-info"></i>
             </el-tooltip>
         </div>
-        <div class="send-item">
+        <div class="send-item" v-show="!constant">
             <span class="send-item-title">用户:</span>
-            <el-select v-model="transation.userName" placeholder="请选择用户"  style="width:240px">
-                <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'></el-option>
+            <el-select v-model="transation.userName" placeholder="请选择用户" style="width:240px">
+                <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
+                    <span>{{item.userName}}</span>
+                    <span class="font-12">{{splitString(item.address)}}...</span>
+                </el-option>
             </el-select>
         </div>
         <div class="send-item">
@@ -37,14 +40,14 @@
             <el-select v-model="transation.funcType" placeholder="方法类型" @change="changeType($event)" style="width:110px">
                 <el-option label="function" :value="'function'"></el-option>
             </el-select>
-            <el-select v-model="transation.funcName" placeholder="方法名" v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
+            <el-select v-model="transation.funcName" placeholder="方法名" filterable v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
                 <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
             </el-select>
         </div>
         <div class="send-item" v-show="pramasData.length" style="line-height: 25px;">
             <span class="send-item-title" style="position: relative;top: 5px;">参数:</span>
-                <ul  style="position: relative;top: -25px;">
-                    <li v-for="(item,index) in pramasData" style="margin-left:63px;">
+            <ul style="position: relative;top: -25px;">
+                <li v-for="(item,index) in pramasData" style="margin-left:63px;">
                     <el-input v-model="transation.funcValue[index]" style="width: 240px;" :placeholder="item.type">
                         <template slot="prepend">
                             <span class="">{{item.name}}</span>
@@ -53,10 +56,10 @@
                     <!-- <el-tooltip class="item" effect="dark" content="" placement="top-start">
                         <i class="el-icon-info" style="position: relative;top: 8px;"></i>
                     </el-tooltip> -->
-                    </li>
-                    <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
-                </ul>
-                
+                </li>
+                <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
+            </ul>
+
         </div>
         <div class="text-right send-btn">
             <el-button @click="close">取消</el-button>
@@ -70,8 +73,8 @@ import errcode from "@/util/errcode";
 
 export default {
     name: "sendTransation",
-    props: ["data", "dialogClose", "abi",'version','address'],
-    data: function() {
+    props: ["data", "dialogClose", "abi", 'version', 'address'],
+    data: function () {
         return {
             transation: {
                 userName: "",
@@ -88,23 +91,24 @@ export default {
             contractVersion: this.version,
             contractAddress: this.data.contractAddress || "",
             constant: false,
+            pramasObj: null
         };
     },
-    mounted: function() {
+    mounted: function () {
         this.getUserData();
         this.formatAbi();
     },
     methods: {
-        submit: function(formName) {
+        submit: function (formName) {
             this.send();
         },
-        close: function(formName) {
+        close: function (formName) {
             this.$emit("close", false);
         },
-        changeType: function(val) {
+        changeType: function (val) {
             this.funcList = [];
             if (val && val === "function") {
-                this.abiList.forEach((value,index) => {
+                this.abiList.forEach((value, index) => {
                     if (value.type === val) {
                         value.funcId = index
                         this.funcList.push(value);
@@ -114,10 +118,11 @@ export default {
                 this.abiList.forEach(value => {
                     if (value.type === val) {
                         this.pramasData = value.inputs;
+                        this.pramasObj = value
                     }
                 });
             } else {
-                this.abiList.forEach((value,index) => {
+                this.abiList.forEach((value, index) => {
                     if (value.type === "function") {
                         value.funcId = index
                         this.funcList.push(value);
@@ -128,32 +133,27 @@ export default {
                 this.transation.funcName = this.funcList[0].funcId;
             }
         },
-        // changeId: function() {
-        //     if (this.transation.userName) {
-        //         this.userList.forEach(value => {
-        //             if (this.transation.userName === value.userName) {
-        //                 this.userId = value.userId;
-        //             }
-        //         });
-        //     }
-        // },
-        formatAbi: function() {
+        formatAbi: function () {
             let abi = this.abi;
             if (abi) {
                 this.abiList = JSON.parse(abi);
                 this.changeType();
             }
         },
-        changeFunc: function() {
+        changeFunc: function () {
             this.constant = false;
             this.funcList.forEach(value => {
                 if (value.funcId === this.transation.funcName) {
                     this.pramasData = value.inputs;
-                    this.constant = value.constant
+                    this.constant = value.constant;
+                    this.pramasObj = value
                 }
             });
+            this.funcList.sort(function (a, b) {
+                return (a.name + '').localeCompare(b.name + '')
+            })
         },
-        getUserData: function() {
+        getUserData: function () {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
@@ -169,7 +169,6 @@ export default {
                         });
                         if (this.userList.length) {
                             this.transation.userName = this.userList[0].address;
-                            // this.userId = this.userList[0].userId;
                         }
                         this.changeFunc();
                     } else {
@@ -186,7 +185,7 @@ export default {
                     });
                 });
         },
-        send: function() {
+        send: function () {
             this.buttonClick = true;
             let pattren = /^\s+|\s+$/g;
             if (this.transation.funcType === "constructor") {
@@ -203,21 +202,19 @@ export default {
             }
             let functionName = "";
             this.funcList.forEach(value => {
-                if(value.funcId == this.transation.funcName){
+                if (value.funcId == this.transation.funcName) {
                     functionName = value.name
                 }
             })
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                user: this.transation.userName,
+                user: this.constant ? ' ' : this.transation.userName,
                 contractName: this.data.contractName,
-                // version: this.contractVersion,
                 funcName: functionName || "",
                 funcParam: this.transation.funcValue,
-                // abiInfo: this.abiList,
                 contractId: this.data.contractId,
             };
-            if(this.contractAddress){
+            if (this.contractAddress) {
                 data.contractAddress = this.contractAddress
             }
             sendTransation(data)
@@ -225,32 +222,36 @@ export default {
                     this.buttonClick = false;
                     this.close();
                     if (res.data.code === 0) {
-                        if (res.data.data) {
-                            let resData = res.data.data ;
-                            let successData = {
-                                resData: resData,
-                                input: {
-                                    name: functionName,
-                                    inputs: this.pramasData
-                                }
-                            }
-                            if(this.contractAddress && !this.data.contractAddress){
-                                successData.contractAddress = this.contractAddress
-                            }
-                            this.$emit("success", successData);
+                        var resData = res.data.data;
+                        let successData = {
+                            resData: resData,
+                            input: {
+                                name: functionName,
+                                inputs: this.pramasData
+                            },
+                            data: this.pramasObj
+                        }
+                        if (this.contractAddress && !this.data.contractAddress) {
+                            successData.contractAddress = this.contractAddress
+                        }
+                        this.$emit("success", successData);
+                        if (this.constant) {
+                            this.$message({
+                                type: "success",
+                                message: "查询成功!"
+                            });
                         } else {
-                            if(this.constant){
+                            if (resData.statusOK) {
                                 this.$message({
                                     type: "success",
-                                    message: "查询成功!"
+                                    message: "交易成功!"
                                 });
-                            }else{
+                            } else {
                                 this.$message({
                                     type: "success",
-                                    message: "发送交易成功!"
+                                    message: "交易失败!"
                                 });
                             }
-                            this.$emit("success", false);
                         }
                     } else {
                         this.$message({
@@ -268,6 +269,10 @@ export default {
                         message: "发送交易失败！"
                     });
                 });
+        },
+        splitString(val) {
+            var str = val;
+            return str.substring(0, 8)
         }
     }
 };
@@ -293,7 +298,6 @@ export default {
     line-height: 32px;
 }
 .send-btn {
-
 }
 .send-btn /deep/ .el-button {
     padding: 9px 16px;

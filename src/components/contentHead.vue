@@ -22,18 +22,20 @@
             <span :class="{ 'font-color-9da2ab': headSubTitle}">{{title}}</span>
             <span v-show="headSubTitle" class="font-color-9da2ab">/</span>
             <span>{{headSubTitle}}</span>
+            <el-tooltip effect="dark" :content="headTooltip" placement="bottom-start" v-if="headTooltip">
+                <i class="el-icon-info contract-icon font-15" ></i>
+            </el-tooltip>
+            <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
         <div class="content-head-network">
-            <router-link target="_blank" to="/helpDoc">帮助文档</router-link>
-            <!-- <span style="margin-left:10px"></span> -->
-            
-                <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
-                    <ul class="group-item">
-                        <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
-                    </ul>
-                    <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}</span>
-                </el-popover>
-            
+            <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">帮助文档</a>
+            <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
+                <ul class="group-item">
+                    <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
+                </ul>
+                <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}</span>
+            </el-popover>
+
             <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
             <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
             <!-- </span> -->
@@ -52,7 +54,7 @@
         <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
-         <!-- <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close' @changGroupSucess="changGroupSucess"></v-dialog> -->
+        <!-- <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close' @changGroupSucess="changGroupSucess"></v-dialog> -->
 
     </div>
 </template>
@@ -60,26 +62,43 @@
 <script>
 import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
-import helpDoc from "./helpDoc";
 import router from "@/router";
-import { loginOut ,getGroups } from "@/util/api";
+import { loginOut, getGroups } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
 export default {
     name: "conetnt-head",
-    props: ["headTitle", "icon", "route", "headSubTitle"],
+    props: {
+        headTitle: {
+            type: String
+        },
+        icon: {
+            type: Boolean
+        },
+        route: {
+            type: String
+        },
+        headSubTitle: {
+            type: String
+        },
+        headTooltip: {
+            type: String
+        },
+        headHref: {
+            type: Object
+        }
+    },
     components: {
         "v-dialog": dialog,
-        changePasswordDialog,
-        helpDoc
+        changePasswordDialog
     },
     watch: {
-        headTitle: function(val) {
+        headTitle: function (val) {
             this.title = val;
         }
     },
-    data: function() {
-        return { 
+    data: function () {
+        return {
             title: this.headTitle,
             groupName: "-",
             accountName: "-",
@@ -91,10 +110,10 @@ export default {
             groupList: []
         };
     },
-    beforeDestroy: function(){
+    beforeDestroy: function () {
         Bus.$off("deleteFront")
     },
-    mounted: function() {
+    mounted: function () {
         if (localStorage.getItem("groupName")) {
             this.groupName = localStorage.getItem("groupName");
         }
@@ -111,51 +130,47 @@ export default {
         })
     },
     methods: {
-        getGroupList: function(type) {
+        getGroupList: function (type) {
             getGroups().then(res => {
                 if (res.data.code === 0) {
-                    if(res.data.data && res.data.data.length){
+                    if (res.data.data && res.data.data.length) {
                         // this.dialogShow = true;
                         this.groupList = res.data.data || []
-                    }else{
+                    } else {
                         this.groupList = [];
-                        localStorage.setItem("groupName","")
-                        localStorage.setItem("groupId","")
+                        localStorage.setItem("groupName", "")
+                        localStorage.setItem("groupId", "")
                     }
-                    if(type && res.data.data && res.data.data.length){
+                    if (type && res.data.data && res.data.data.length) {
                         this.groupName = res.data.data[0].groupName;
-                        localStorage.setItem("groupName",res.data.data[0].groupName)
-                        localStorage.setItem("groupId",res.data.data[0].groupId)
-                    }else if(res.data.data && res.data.data.length && !localStorage.getItem("groupName")){
+                        localStorage.setItem("groupName", res.data.data[0].groupName)
+                        localStorage.setItem("groupId", res.data.data[0].groupId)
+                    } else if (res.data.data && res.data.data.length && !localStorage.getItem("groupName")) {
                         this.groupName = res.data.data[0].groupName;
-                        localStorage.setItem("groupName",res.data.data[0].groupName)
-                        localStorage.setItem("groupId",res.data.data[0].groupId)
-                    }else if(res.data.data && res.data.data.length && localStorage.getItem("groupName")){
+                        localStorage.setItem("groupName", res.data.data[0].groupName)
+                        localStorage.setItem("groupId", res.data.data[0].groupId)
+                    } else if (res.data.data && res.data.data.length && localStorage.getItem("groupName")) {
                         this.groupName = localStorage.getItem("groupName");
                     }
-                }else{
+                } else {
                     this.groupList = [];
-                    localStorage.setItem("groupName","")
-                    localStorage.setItem("groupId","")
-                    this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error",
-                            duration: 2000
-                        });
+                    localStorage.setItem("groupName", "")
+                    localStorage.setItem("groupId", "")
                 }
             }).catch(err => {
                 this.groupList = [];
-                localStorage.setItem("groupName","")
-                localStorage.setItem("groupId","")
+                localStorage.setItem("groupName", "")
+                localStorage.setItem("groupId", "")
                 this.$message({
-                        message: "系统错误！",
-                        type: "error",
-                        duration: 2000
-                    });
+                    message: "系统错误！",
+                    type: "error",
+                    duration: 2000
+                });
+                this.$message.closeAll()
             })
-            ;
+                ;
         },
-        checkGroup: function() {
+        checkGroup: function () {
             if (this.dialogShow) {
                 this.dialogShow = false;
             } else {
@@ -164,15 +179,15 @@ export default {
 
             this.path = this.$route.path;
         },
-        changeGroup: function(val){
+        changeGroup: function (val) {
             this.groupName = val.groupName
-            localStorage.setItem("groupName",val.groupName);
-            localStorage.setItem("groupId",val.groupId);
+            localStorage.setItem("groupName", val.groupName);
+            localStorage.setItem("groupId", val.groupId);
             this.$emit('changGroup', val.groupId);
             this.dialogShow = true;
         },
         // changGroupSucess(val){
-            
+
         // },
         // changeNetwork: function() {
         //     this.groupName = localStorage.getItem("groupName");
@@ -181,14 +196,14 @@ export default {
         // close: function() {
         //     this.dialogShow = false;
         // },
-        skip: function() {
+        skip: function () {
             if (this.route) {
                 this.$router.push(this.way);
             } else {
                 this.$router.go(-1);
             }
         },
-        signOut: function() {
+        signOut: function () {
             localStorage.removeItem("user");
             loginOut()
                 .then()
@@ -197,10 +212,10 @@ export default {
             delCookie("NODE_MGR_ACCOUNT_C");
             this.$router.push("/login");
         },
-        changePassword: function() {
+        changePassword: function () {
             this.changePasswordDialogVisible = true;
         },
-        success: function(val) {
+        success: function (val) {
             this.changePasswordDialogVisible = false;
         }
     }
@@ -252,7 +267,7 @@ export default {
     color: #ed5454;
 }
 .change-password {
-    color: #0DB1C1;
+    color: #0db1c1;
     cursor: pointer;
 }
 .network-name {
@@ -274,11 +289,11 @@ export default {
     border-right: 1px solid #657d95;
     margin-right: 15px;
 }
-.contant-head-name{
+.contant-head-name {
     position: relative;
     cursor: pointer;
 }
-.contant-head-name ul{
+.contant-head-name ul {
     position: absolute;
     width: 150%;
     left: -10px;
@@ -289,21 +304,21 @@ export default {
     z-index: 9999999;
     box-shadow: 1px 4px 4px;
 }
-.contant-head-name ul li{
+.contant-head-name ul li {
     width: 100%;
     padding: 0 10px;
     height: 32px;
     line-height: 32px;
     cursor: pointer;
 }
-.group-item{
+.group-item {
     line-height: 32px;
     text-align: center;
 }
-.group-item-list{
+.group-item-list {
     cursor: pointer;
 }
-.group-item-list:hover{
-    color: #0DB1C1
+.group-item-list:hover {
+    color: #0db1c1;
 }
 </style>

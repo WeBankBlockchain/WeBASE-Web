@@ -17,118 +17,131 @@
     <div class="over-view-wrapper">
         <v-content-head :headTitle="'数据概览'" @changGroup="changGroup"></v-content-head>
         <div style="margin: 5px;">
-        <div style="margin:10px 10px 6px 10px;">
-            <el-row>
-                <el-col :xs='24' :sm="24" :md="11" :lg="10" :xl="8" v-loading="loadingNumber">
-                    <div class="overview-item" style="font-size:0" v-for="(item, index) in detailsList" @click="goDetailRouter(item)" :class="item.bg">
-                        <div class="overview-item-img">
-                            <svg class="overview-item-svg" aria-hidden="true" v-if='item.icon == "#wbs-icon-node1"'>
-                                <use xlink:href="#wbs-icon-node1"></use>
-                            </svg>
-                            <svg class="overview-item-svg" aria-hidden="true" v-else-if='item.icon == "#wbs-icon-contract"'>
-                                <use xlink:href="#wbs-icon-contract"></use>
-                            </svg>
-                            <svg class="overview-item-svg" aria-hidden="true" v-else-if='item.icon == "#wbs-icon-block"'>
-                                <use xlink:href="#wbs-icon-block"></use>
-                            </svg>
-                            <svg class="overview-item-svg" aria-hidden="true" v-else-if='item.icon == "#wbs-icon-transation"'>
-                                <use xlink:href="#wbs-icon-transation"></use>
-                            </svg>
+            <div style="margin:10px 10px 6px 10px;">
+                <el-row>
+                    <el-col :xs='24' :sm="24" :md="11" :lg="10" :xl="8" v-loading="loadingNumber">
+                        <div class="overview-item" style="font-size:0" v-for="(item, index) in detailsList" @click="goDetailRouter(item)" :class="item.bg">
+                            <div class="overview-item-img">
+                                <svg class="overview-item-svg" aria-hidden="true" v-if='item.icon == "#wbs-icon-node1"'>
+                                    <use xlink:href="#wbs-icon-node1"></use>
+                                </svg>
+                                <svg class="overview-item-svg" aria-hidden="true" v-else-if='item.icon == "#wbs-icon-contract"'>
+                                    <use xlink:href="#wbs-icon-contract"></use>
+                                </svg>
+                                <svg class="overview-item-svg" aria-hidden="true" v-else-if='item.icon == "#wbs-icon-block"'>
+                                    <use xlink:href="#wbs-icon-block"></use>
+                                </svg>
+                                <svg class="overview-item-svg" aria-hidden="true" v-else-if='item.icon == "#wbs-icon-transation"'>
+                                    <use xlink:href="#wbs-icon-transation"></use>
+                                </svg>
+                            </div>
+                            <div class="overview-item-content">
+                                <div class="overview-item-number">{{item.value}}</div>
+                                <div class="overview-item-title">{{item.label}}</div>
+                            </div>
                         </div>
-                        <div class="overview-item-content">
-                            <div class="overview-item-number">{{item.value}}</div>
-                            <div class="overview-item-title">{{item.label}}</div>
+                    </el-col>
+                    <el-col :xs='24' :sm="24" :md="13" :lg="14" :xl="16">
+                        <div style="margin: 8px 0px 0 0px;" class="module-box-shadow bg-fff">
+                            <div class="part2-title">
+                                <span class="part2-title-left">关键监控指标</span>
+                                <span class="part2-title-right">最近有交易的7天交易量（笔）</span>
+                            </div>
+                            <div class="chart" ref="chart">
+                                <v-chart ref="linechart" :id="'homeId'" v-if="chartStatistics.show" :data="chartStatistics.date" :transactionDataArr="chartStatistics.dataArr" :size="chartStatistics.chartSize" v-loading="loadingCharts"></v-chart>
+                            </div>
                         </div>
-                    </div>
-                </el-col>
-                <el-col :xs='24' :sm="24" :md="13" :lg="14" :xl="16" >
-                    <div style="margin: 8px 0px 0 0px;" class="module-box-shadow bg-fff">
-                        <div class="part2-title">
-                            <span class="part2-title-left">关键监控指标</span>
-                            <span class="part2-title-right">最近有交易的7天交易量（笔）</span>
-                        </div>
-                        <div class="chart" ref="chart">
-                            <v-chart ref="linechart" :id="'homeId'" v-if="chartStatistics.show" :data="chartStatistics.date" :transactionDataArr="chartStatistics.dataArr" :size="chartStatistics.chartSize" v-loading="loadingCharts"></v-chart>
-                        </div>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
-        <div class="module-wrapper-small" style="padding: 30px 31px 26px 32px;">
-            <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
-                <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="" :width='head.width'>
-                    <template slot-scope="scope">
-                        <template>
-                            <span v-if="head.enName ==='nodeActive'">
-                                <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
-                            </span>
-                            <span v-else>{{scope.row[head.enName]}}</span>
+                    </el-col>
+                </el-row>
+            </div>
+            <div class="module-wrapper-small" style="padding: 30px 31px 26px 32px;">
+                <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
+                    <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="" :width='head.width'>
+                        <template slot-scope="scope">
+                            <template>
+                                <span v-if="head.enName ==='nodeActive'">
+                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
+                                </span>
+                                <span v-else-if="head.enName === 'nodeId'">
+                                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                                    {{scope.row[head.enName]}}
+                                </span>
+                                <span v-else>{{scope.row[head.enName]}}</span>
+                            </template>
                         </template>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-        <div style="min-width: 540px;margin: 8px 8px 0px 9px;">
-            <el-row :gutter="16">
-                <el-col :xs='24' :sm="24" :md="12" :lg="12" :xl="12">
-                    <div class="overview-wrapper">
-                        <p>
-                            <span class="overview-title">区块</span>
-                            <span class="overview-more cursor-pointer" @click="goRouter('blocks')">更多</span>
-                        </p>
-                        <div class="overview-item-base" v-loading="loadingBlock">
-                            <div class="block-item font-color-2e384d" v-for="item in blockData" :key='item.blockNumber'>
-                                <div class="block-amount" style="padding-bottom: 7px;">
-                                    <span>
-                                        <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">块高 {{item.blockNumber}}</router-link>
-                                    </span>
-                                    <span class="color-8798AD">{{item.blockTimestamp}}</span>
-                                </div>
-                                <div>
-                                    <div class="block-miner">
-                                        <span>出块者</span>
-                                        <p :title="`${item.sealer}`">{{item.sealer}}</p>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <div style="min-width: 540px;margin: 8px 8px 0px 9px;">
+                <el-row :gutter="16">
+                    <el-col :xs='24' :sm="24" :md="12" :lg="12" :xl="12">
+                        <div class="overview-wrapper">
+                            <p>
+                                <span class="overview-title">区块</span>
+                                <span class="overview-more cursor-pointer" @click="goRouter('blocks')">更多</span>
+                            </p>
+                            <div class="overview-item-base" v-loading="loadingBlock">
+                                <div class="block-item font-color-2e384d" v-for="item in blockData" :key='item.blockNumber'>
+                                    <div class="block-amount" style="padding-bottom: 7px;">
+                                        <span>
+                                            <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">块高 {{item.blockNumber}}</router-link>
+                                        </span>
+                                        <span class="color-8798AD">{{item.blockTimestamp}}</span>
                                     </div>
-                                    <div class="text-right">
-                                        <span class="block-trans" @click="linkRouter(item.blockNumber)">
-                                            <!-- <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip"> -->
+                                    <div>
+                                        <div class="block-miner">
+                                            <span>出块者</span>
+                                            <p :title="`${item.sealer}`">{{item.sealer}}</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <span class="block-trans" @click="linkRouter(item.blockNumber)">
+                                                <!-- <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip"> -->
                                                 <span>{{item.transCount}}</span>
                                                 <span>txns</span>
-                                            <!-- </router-link> -->
-                                        </span>
-                                        
+                                                <!-- </router-link> -->
+                                            </span>
+
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </el-col>
-                <el-col :xs='24' :sm="24" :md="12" :lg="12" :xl="12">
-                    <div class="overview-wrapper">
-                        <p>
-                            <span class="overview-title">交易</span>
-                            <span class="overview-more cursor-pointer" @click="goRouter('transactions')">更多</span>
-                        </p>
-                        <div class="overview-item-base" v-loading="loadingTransaction">
-                            <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
-                                <div class="block-amount">
-                                    <p class="trans-hash" :title="`${item.transHash}`">
-                                        <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">{{item.transHash}}</router-link>
-                                    </p>
-                                    <p class="trans-address color-8798AD">
-                                        <span>{{item.transFrom}}</span>
-                                        <img :src="sRight" alt="箭头">
-                                        <span>{{item.transTo}}</span>
-                                    </p>
-                                    
+                    </el-col>
+                    <el-col :xs='24' :sm="24" :md="12" :lg="12" :xl="12">
+                        <div class="overview-wrapper">
+                            <p>
+                                <span class="overview-title">交易</span>
+                                <span class="overview-more cursor-pointer" @click="goRouter('transactions')">更多</span>
+                            </p>
+                            <div class="overview-item-base" v-loading="loadingTransaction">
+                                <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
+                                    <div class="block-amount">
+                                        <p class="trans-hash" :title="`${item.transHash}`">
+                                            <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transHash)" title="复制"></i>
+                                            <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">
+                                                {{item.transHash}}
+                                            </router-link>
+                                        </p>
+                                        <p class="trans-address color-8798AD">
+                                            <span>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transFrom)" title="复制"></i>
+                                                {{splitAddress(item.transFrom)}}
+                                            </span>
+                                            <img :src="sRight" alt="箭头">
+                                            <span>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transTo)" title="复制"></i>
+                                                {{splitAddress(item.transTo)}}
+                                            </span>
+                                        </p>
+
+                                    </div>
+                                    <p class="color-8798AD text-right">{{item.blockTimestamp}}</p>
                                 </div>
-                                <p class="color-8798AD text-right">{{item.blockTimestamp}}</p>
                             </div>
                         </div>
-                    </div>
-                </el-col>
-            </el-row>
-        </div>
+                    </el-col>
+                </el-row>
+            </div>
         </div>
     </div>
 </template>
@@ -141,21 +154,21 @@ import {
     getNetworkStatistics,
     getNodeList,
     getBlockPage,
-    getTransactionList
+    getTransactionList,
+    getConsensusNodeId
 } from "@/util/api";
-import { changWeek, numberFormat } from "@/util/util";
+import { changWeek, numberFormat, unique } from "@/util/util";
 import router from "@/router";
 import errcode from "@/util/errcode";
 import sRight from "@/../static/image/s-right.png";
 import artboard from "@/../static/image/artboard.png"
-
 export default {
     name: "home",
     components: {
         "v-content-head": contentHead,
         "v-chart": charts
     },
-    data: function() {
+    data: function () {
         return {
             sRight: sRight,
             loadingNumber: false,
@@ -166,11 +179,6 @@ export default {
             numberFormat: numberFormat,
             artboard: artboard,
             detailsList: [
-                // {
-                //     label: "机构个数",
-                //     name: "orgCount",
-                //     value: 0
-                // },
                 {
                     label: "节点个数",
                     name: "nodeCount",
@@ -213,10 +221,6 @@ export default {
             reloadNumber: true,
             groupId: localStorage.getItem("groupId"),
             nodeHead: [
-                // {
-                //     enName: "orgName",
-                //     name: "机构名称"
-                // },
                 {
                     enName: "nodeId",
                     name: "节点Id",
@@ -232,18 +236,6 @@ export default {
                     name: "pbftView",
                     width: 180
                 },
-                // {
-                //     enName: "nodeIp",
-                //     name: "ip"
-                // },
-                // {
-                //     enName: "p2pPort",
-                //     name: "p2p端口"
-                // },
-                // {
-                //     enName: "rpcPort",
-                //     name: "rpc端口"
-                // },
                 {
                     enName: "nodeActive",
                     name: "状态",
@@ -255,33 +247,33 @@ export default {
             transactionList: []
         };
     },
-    mounted: function() {
+    mounted: function () {
         this.groupId = localStorage.getItem("groupId");
         this.getNetworkDetails();
         this.getNodeTable();
         this.getBlockList();
         this.getTransaction();
-        this.$nextTick(function() {
+        this.$nextTick(function () {
             this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
             this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
             this.getChart();
         });
     },
-    destroyed() {},
+    destroyed() { },
     methods: {
-        changGroup(val){
+        changGroup(val) {
             this.groupId = val
             this.getNetworkDetails();
             this.getNodeTable();
             this.getBlockList();
             this.getTransaction();
-            this.$nextTick(function() {
+            this.$nextTick(function () {
                 this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
                 this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
                 this.getChart();
             });
         },
-        linkRouter: function(val){
+        linkRouter: function (val) {
             router.push({
                 path: "/blockInfo",
                 query: {
@@ -289,14 +281,14 @@ export default {
                 }
             })
         },
-        getNetworkDetails: function() {
+        getNetworkDetails: function () {
             this.loadingNumber = true;
             let groupId = this.groupId;
             getNetworkStatistics(groupId)
                 .then(res => {
                     this.loadingNumber = false;
                     if (res.data.code === 0) {
-                        this.detailsList.forEach(function(value, index) {
+                        this.detailsList.forEach(function (value, index) {
                             for (let i in res.data.data) {
                                 if (value.name === i) {
                                     value.value = res.data.data[i];
@@ -308,16 +300,19 @@ export default {
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
+
                     this.$message({
                         type: "error",
                         message: "系统错误！"
                     });
+                    this.$message.closeAll()
                 });
         },
-        getChart: function() {
+        getChart: function () {
             this.loadingCharts = true;
             this.chartStatistics.show = false;
             this.chartStatistics.date = [];
@@ -340,62 +335,77 @@ export default {
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
+
                     this.$message({
                         type: "error",
                         message: "系统错误！"
                     });
+                    this.$message.closeAll()
                 });
         },
-        getNodeTable: function() {
+        getNodeTable: function () {
             this.loadingNodes = true;
             let groupId = localStorage.getItem("groupId");
-            let reqString = `${groupId}/1/100`;
             let reqData = {
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 100
+            },
+                reqQuery = {},
+
+                reqParam = {
                     groupId: groupId,
                     pageNumber: 1,
-                    pageSize: 200
-                },
-                reqQuery = {};
-            getNodeList(reqData, reqQuery)
-                .then(res => {
+                    pageSize: 100
+                };
+            this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
+                .then(this.$axios.spread((acct, perms) => {
                     this.loadingNodes = false;
-                    if (res.data.code === 0) {
-                        this.total = res.data.totalCount;
-                        this.nodeData = res.data.data || [];
-                        this.nodeData.forEach((value, index) => {
-                            if (value.status === 0) {
-                                value.value = "运行";
-                            } else if (value.status === 1) {
-                                value.value = "异常";
+                    if (acct.data.code === 0 && perms.data.code === 0) {
+                        var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
+                        var nodesStatusIdList = nodesStatusList.map(item => {
+                            return item.nodeId
+                        })
+                        this.nodeData = [];
+                        nodesAuthorList.forEach((item, index) => {
+                            if (item.nodeType != 'remove') {
+                                nodesStatusList.forEach(it => {
+                                    if (nodesStatusIdList.includes(item.nodeId)) {
+                                        if (item.nodeId === it.nodeId) {
+                                            this.nodeData.push(Object.assign({}, item, it))
+                                        }
+                                    } else {
+                                        this.nodeData.push(item)
+                                    }
+                                })
+                            }
+
+                        })
+                        this.nodeData.forEach(item => {
+                            if (item.nodeType === "observer") {
+                                item.pbftView = '--';
                             }
                         });
+                        this.nodeData = unique(this.nodeData, 'nodeId')
                     } else {
-                        this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error",
-                            duration: 2000
-                        });
+                        this.nodeData = [];
                     }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: "查询失败！",
-                        type: "error",
-                        duration: 2000
-                    });
-                });
+
+
+                }))
         },
-        getBlockList: function() {
+        getBlockList: function () {
             this.loadingBlock = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    groupId: groupId,
-                    pageNumber: 1,
-                    pageSize: 6
-                },
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 6
+            },
                 reqQuery = {};
             getBlockPage(reqData, reqQuery)
                 .then(res => {
@@ -408,24 +418,27 @@ export default {
                             type: "error",
                             duration: 2000
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
+
                     this.$message({
                         message: "系统错误！",
                         type: "error",
                         duration: 2000
                     });
+                    this.$message.closeAll()
                 });
         },
-        getTransaction: function() {
+        getTransaction: function () {
             this.loadingTransaction = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    groupId: groupId,
-                    pageNumber: 1,
-                    pageSize: 6
-                },
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 6
+            },
                 reqQuery = {};
             getTransactionList(reqData, reqQuery)
                 .then(res => {
@@ -438,10 +451,12 @@ export default {
                             type: "error",
                             duration: 2000
                         });
+                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
                     this.$message.error("系统错误");
+                    this.$message.closeAll()
                 });
         },
         goDetailRouter(item) {
@@ -483,7 +498,7 @@ export default {
             }
             return str;
         },
-        textColor: function(val) {
+        textColor: function (val) {
             let colorString = "";
             switch (val) {
                 case 1:
@@ -495,7 +510,7 @@ export default {
             }
             return colorString;
         },
-        nodesStatus: function(val) {
+        nodesStatus: function (val) {
             let transString = "";
             switch (val) {
                 case 1:
@@ -507,7 +522,7 @@ export default {
             }
             return transString;
         },
-        goRouter: function(val) {
+        goRouter: function (val) {
             switch (val) {
                 case "blocks":
                     router.push("blockInfo");
@@ -517,21 +532,48 @@ export default {
                     router.push("transactionInfo");
                     break;
             }
+        },
+        copyNodeIdKey: function (val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: "key为空，不复制。",
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: "复制成功",
+                        duration: 2000
+                    });
+                });
+            }
+        },
+        splitAddress(val) {
+            if (!val) return;
+            var startStr = '', endStr = '', str = '';
+            startStr = val.substring(0, 8);
+            endStr = val.substring(val.length - 4);
+            str = `${startStr}...${endStr}`;
+            return str;
         }
     }
 };
 </script>
 <style scoped>
-.node-bg{
+.node-bg {
     background: linear-gradient(to top right, #47befa, #37eef2);
 }
-.contract-bg{
-    background: linear-gradient(to top right,#466dff, #30a7ff);
+.contract-bg {
+    background: linear-gradient(to top right, #466dff, #30a7ff);
 }
-.block-bg{
+.block-bg {
     background: linear-gradient(to top right, #736aff, #b287ff);
 }
-.transation-bg{
+.transation-bg {
     background: linear-gradient(to top right, #ff6e9a, #ffa895);
 }
 .over-view-wrapper {
@@ -607,8 +649,8 @@ export default {
     padding: 0 39px 48px 40px;
     font-size: 12px;
 }
-.part3-table-content>>>th,
-.part3-table-content>>>td {
+.part3-table-content >>> th,
+.part3-table-content >>> td {
     padding: 8px 0;
 }
 .part1-details-bottom {
@@ -624,12 +666,12 @@ export default {
 .search-table-content {
     width: 100%;
 }
-.search-table-content>>>th {
+.search-table-content >>> th {
     background: #fafafa;
-    color: #2E384D;
+    color: #2e384d;
 }
-.search-table-content>>>th,
-.search-table-content>>>td {
+.search-table-content >>> th,
+.search-table-content >>> td {
     font-size: 14px;
 }
 .overview-wrapper {
@@ -681,28 +723,26 @@ export default {
     max-width: 300px;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .node-ip {
     color: #0db1c1;
 }
-.block-trans{
+.block-trans {
     display: inline-block;
     padding: 0 2px;
     background-color: #f6f7f8;
     color: #0db1c1;
     cursor: pointer;
 }
-.trans-address span{
+.trans-address span {
     display: inline-block;
-    max-width: 150px; 
-    overflow: hidden;
-    text-overflow: ellipsis;
+    max-width: 150px;
+}
+.trans-address img {
     vertical-align: middle;
 }
-.trans-address img{
-    vertical-align: middle;
-}
-.overview-item{
+.overview-item {
     display: inline-block;
     width: calc(49% - 15px);
     max-width: 300px;
@@ -715,30 +755,30 @@ export default {
     box-sizing: border-box;
     cursor: pointer;
 }
-.overview-item-img{
+.overview-item-img {
     display: inline-block;
     width: 50px;
 }
-.overview-item-content{
+.overview-item-content {
     font-size: 12px;
     display: inline-block;
     padding-left: 10px;
     width: calc(100% - 60px);
 }
-.overview-item-number{
+.overview-item-number {
     font-size: 24px;
     color: #fff;
 }
-.overview-item-title{
+.overview-item-title {
     width: 100%;
-    color: #fff
+    color: #fff;
 }
-.overview-item-svg{
+.overview-item-svg {
     width: 50px;
     height: 50px;
 }
-@media screen and (max-width: 1142px){
-    .overview-item{
+@media screen and (max-width: 1142px) {
+    .overview-item {
         display: inline-block;
         width: calc(49% - 15px);
         max-width: 300px;
@@ -750,23 +790,23 @@ export default {
         border-radius: 2px;
         box-sizing: border-box;
     }
-    .overview-item-img{
+    .overview-item-img {
         display: inline-block;
         width: 40px;
     }
-    .overview-item-svg{
+    .overview-item-svg {
         width: 40px;
         height: 40px;
     }
-    .overview-item-content{
+    .overview-item-content {
         font-size: 12px;
         display: inline-block;
         padding-left: 5px;
         width: calc(100% - 45px);
     }
 }
-@media screen and (max-width: 1042px){
-    .overview-item{
+@media screen and (max-width: 1042px) {
+    .overview-item {
         display: inline-block;
         width: calc(49% - 15px);
         max-width: 300px;
@@ -778,23 +818,23 @@ export default {
         border-radius: 2px;
         box-sizing: border-box;
     }
-    .overview-item-img{
+    .overview-item-img {
         display: inline-block;
         width: 35px;
     }
-    .overview-item-svg{
+    .overview-item-svg {
         width: 35px;
         height: 35px;
     }
-    .overview-item-content{
+    .overview-item-content {
         font-size: 12px;
         display: inline-block;
         padding-left: 5px;
         width: calc(100% - 40px);
     }
 }
-@media screen and (max-width: 991px){
-    .overview-item{
+@media screen and (max-width: 991px) {
+    .overview-item {
         display: inline-block;
         width: calc(49% - 8px);
         max-width: 385px;
@@ -806,15 +846,15 @@ export default {
         border-radius: 2px;
         box-sizing: border-box;
     }
-    .overview-item-img{
+    .overview-item-img {
         display: inline-block;
         width: 50px;
     }
-    .overview-item-svg{
+    .overview-item-svg {
         width: 50px;
         height: 50px;
     }
-    .overview-item-content{
+    .overview-item-content {
         font-size: 12px;
         display: inline-block;
         padding-left: 10px;
@@ -823,7 +863,7 @@ export default {
     /* .el-col:nth-child(2){
         margin: 8px 16px 16px 0;
     } */
-    .overview-item:nth-child(2){
+    .overview-item:nth-child(2) {
         margin: 8px 15px 16px 0;
     }
 }
