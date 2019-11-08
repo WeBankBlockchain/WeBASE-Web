@@ -15,6 +15,9 @@
  */
 <template>
     <div class="login-bg" :style="{backgroundImage: 'url(' + bgLogin +')'}">
+        <div class="login-lang">
+            <lang-select class="right-menu-item hover-effect"></lang-select>
+        </div>
         <div class="login">
             <div>
                 <svg class="icon" aria-hidden="true">
@@ -27,24 +30,24 @@
             <div class="msg-wrapper">
                 <div class="msg-error" v-show="msgError || timeout">
                     <i class="el-icon-remove"></i>
-                    <span v-if="msgError">{{msgErrorContent || "登录失败"}}</span>
-                    <span v-else-if="timeout">请求超时</span>
+                    <span v-if="msgError">{{msgErrorContent || this.$t('loginFail')}}</span>
+                    <span v-else-if="timeout">{{this.$t('reqOvertime')}}</span>
                 </div>
             </div>
             <div class="login-content">
                 <template>
                     <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-form">
-                        <el-form-item label="账号" prop="user">
-                            <el-input v-model="loginForm.user" placeholder="请输入账号">
+                        <el-form-item :label="$t('login.user')" prop="user">
+                            <el-input v-model="loginForm.user" :placeholder="$t('inputText.user')">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="密码" prop="password">
-                            <el-input v-model="loginForm.password" placeholder="请输入密码" type="password">
+                        <el-form-item :label="$t('login.password')" prop="password">
+                            <el-input v-model="loginForm.password" :placeholder="$t('inputText.password')" type="password">
                             </el-input>
                         </el-form-item>
-                        <el-form-item label="验证码" prop="vercode">
+                        <el-form-item :label="$t('login.verificationCode')" prop="vercode">
                             <div style="width: 100%;">
-                                <el-input style="width: 240px;" v-model="loginForm.vercode" placeholder="请输入验证码" @keyup.enter.native="submit('loginForm')">
+                                <el-input style="width: 240px;" v-model="loginForm.vercode" :placeholder="$t('inputText.verificationCode')" @keyup.enter.native="submit('loginForm')">
                                 </el-input>
                                 <span class="codeUrlImg">
                                     <img style="width: 100%;height: 100%" :src="codeUrl" alt="" @click="changeCode()">
@@ -55,7 +58,7 @@
                 </template>
             </div>
             <div>
-                <el-button @click="submit('loginForm')" type="primary" class="login-submit" :loading="logining">登录</el-button>
+                <el-button @click="submit('loginForm')" type="primary" class="login-submit" :loading="logining">{{this.$t('login.login')}}</el-button>
             </div>
         </div>
     </div>
@@ -68,9 +71,27 @@ import bg from "@/../static/image/banner.png";
 import logo from "@/../static/image/logo-2 copy@1.5x.jpg";
 import { delCookie } from '@/util/util'
 import errcode from "@/util/errcode";
+import langSelect from "@/components/langSelect"
 const sha256 = require("js-sha256").sha256;
 export default {
     name: "login",
+    components: {
+        "lang-select": langSelect
+    },
+    computed: {
+        rules() {
+            var obj = {
+                user: [{ required: true, message: this.$t('inputText.user'), trigger: "blur" }],
+                password: [
+                    { required: true, message: this.$t('inputText.password'), trigger: "blur" }
+                ],
+                vercode: [
+                    { required: true, message: this.$t('inputText.verificationCode'), trigger: "blur" }
+                ]
+            }
+            return obj
+        }
+    },
     data: function () {
         return {
             bgLogin: bg,
@@ -85,41 +106,41 @@ export default {
                 password: "",
                 vercode: "",
             },
-            rules: {
-                user: [{ required: true, message: "请输入账号", trigger: "blur" }],
-                password: [
-                    { required: true, message: "请输入密码", trigger: "blur" }
-                ],
-                vercode: [
-                    { required: true, message: "请输入验证码", trigger: "blur" }
-                ]
-            },
-            authToken: null,
-            newUserRules: {
-                user: [
-                    { required: true, message: "请输入账号", trigger: "blur" },
-                    {
-                        min: 1,
-                        max: 32,
-                        message: "长度在 1 到 32 个字符",
-                        trigger: "blur"
-                    }
-                ],
-                password: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
-                    {
-                        min: 5,
-                        max: 5,
-                        message: "登录密码错误",
-                        trigger: "blur"
-                    },
-                    {
-                        pattern: /admin/,
-                        message: "请正确输入密码",
-                        trigger: "blur"
-                    }
-                ]
-            }
+            // rules: {
+            //     user: [{ required: true, message: this.$t('inputText.user'), trigger: "blur" }],
+            //     password: [
+            //         { required: true, message: this.$t('inputText.password'), trigger: "blur" }
+            //     ],
+            //     vercode: [
+            //         { required: true, message: this.$t('inputText.verificationCode'), trigger: "blur" }
+            //     ]
+            // },
+            // authToken: null,
+            // newUserRules: {
+            //     user: [
+            //         { required: true, message: this.$t('inputText.user'), trigger: "blur" },
+            //         {
+            //             min: 1,
+            //             max: 32,
+            //             message: this.$t('rule.textLong'),
+            //             trigger: "blur"
+            //         }
+            //     ],
+            //     password: [
+            //         { required: true, message: this.$t('inputText.password'), trigger: "blur" },
+            //         {
+            //             min: 5,
+            //             max: 5,
+            //             message: this.$t('rule.passwordError'),
+            //             trigger: "blur"
+            //         },
+            //         {
+            //             pattern: /admin/,
+            //             message: this.$t('rule.loginPasswordType'),
+            //             trigger: "blur"
+            //         }
+            //     ]
+            // }
         };
     },
     mounted: function () {
@@ -147,7 +168,7 @@ export default {
                     this.codeUrl = "";
                     this.authToken = ""
                     this.$message({
-                        message: errcode.errCode[res.data.code].cn,
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
@@ -156,7 +177,7 @@ export default {
                 this.codeUrl = "";
                 this.authToken = ""
                 this.$message({
-                    message: '系统错误！',
+                    message: this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -184,7 +205,7 @@ export default {
                         router.push("/main")
                     } else {
                         this.changeCode()
-                        this.msgErrorContent = errcode.errCode[res.data.code].cn || ""
+                        this.msgErrorContent = this.$chooseLang(res.data.code)
                         this.msgError = true;
                         this.loginForm.password = "";
                         this.logining = false;
@@ -195,6 +216,11 @@ export default {
                     this.timeout = true;
                     this.loginForm.password = "";
                     this.logining = false;
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
                 });
         },
     }
@@ -303,5 +329,18 @@ export default {
     line-height: 32px;
     float: none;
     text-align: left;
+}
+.right-menu-item {
+   padding: 0 20px;
+}
+.hover-effect {
+    cursor: pointer;
+    /* transition: background 0.3s; */
+}
+.login-lang{
+    position: absolute;
+    left: 90%;
+    top: 20px;
+
 }
 </style>
