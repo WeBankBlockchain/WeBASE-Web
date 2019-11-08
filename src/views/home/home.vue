@@ -15,12 +15,12 @@
  */
 <template>
     <div class="over-view-wrapper">
-        <v-content-head :headTitle="'数据概览'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></v-content-head>
         <div style="margin: 5px;">
             <div style="margin:10px 10px 6px 10px;">
                 <el-row>
                     <el-col :xs='24' :sm="24" :md="11" :lg="10" :xl="8" v-loading="loadingNumber">
-                        <div class="overview-item" style="font-size:0" v-for="(item, index) in detailsList" @click="goDetailRouter(item)" :class="item.bg">
+                        <div class="overview-item" style="font-size:0" v-for="(item, index) in detailsList" :key='item.value' @click="goDetailRouter(item)" :class="item.bg">
                             <div class="overview-item-img">
                                 <svg class="overview-item-svg" aria-hidden="true" v-if='item.icon == "#wbs-icon-node1"'>
                                     <use xlink:href="#wbs-icon-node1"></use>
@@ -44,8 +44,8 @@
                     <el-col :xs='24' :sm="24" :md="13" :lg="14" :xl="16">
                         <div style="margin: 8px 0px 0 0px;" class="module-box-shadow bg-fff">
                             <div class="part2-title">
-                                <span class="part2-title-left">关键监控指标</span>
-                                <span class="part2-title-right">最近有交易的7天交易量（笔）</span>
+                                <span class="part2-title-left">{{this.$t('home.chartTitle')}}</span>
+                                <span class="part2-title-right">{{this.$t('home.chartExplain')}}</span>
                             </div>
                             <div class="chart" ref="chart">
                                 <v-chart ref="linechart" :id="'homeId'" v-if="chartStatistics.show" :data="chartStatistics.date" :transactionDataArr="chartStatistics.dataArr" :size="chartStatistics.chartSize" v-loading="loadingCharts"></v-chart>
@@ -77,20 +77,20 @@
                     <el-col :xs='24' :sm="24" :md="12" :lg="12" :xl="12">
                         <div class="overview-wrapper">
                             <p>
-                                <span class="overview-title">区块</span>
-                                <span class="overview-more cursor-pointer" @click="goRouter('blocks')">更多</span>
+                                <span class="overview-title">{{this.$t("home.block")}}</span>
+                                <span class="overview-more cursor-pointer" @click="goRouter('blocks')">{{this.$t("home.more")}}</span>
                             </p>
                             <div class="overview-item-base" v-loading="loadingBlock">
                                 <div class="block-item font-color-2e384d" v-for="item in blockData" :key='item.blockNumber'>
                                     <div class="block-amount" style="padding-bottom: 7px;">
                                         <span>
-                                            <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">块高 {{item.blockNumber}}</router-link>
+                                            <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">{{this.$t("home.blockHeight")}} {{item.blockNumber}}</router-link>
                                         </span>
                                         <span class="color-8798AD">{{item.blockTimestamp}}</span>
                                     </div>
                                     <div>
                                         <div class="block-miner">
-                                            <span>出块者</span>
+                                            <span>{{this.$t("home.tranfer")}}</span>
                                             <p :title="`${item.sealer}`">{{item.sealer}}</p>
                                         </div>
                                         <div class="text-right">
@@ -110,26 +110,26 @@
                     <el-col :xs='24' :sm="24" :md="12" :lg="12" :xl="12">
                         <div class="overview-wrapper">
                             <p>
-                                <span class="overview-title">交易</span>
-                                <span class="overview-more cursor-pointer" @click="goRouter('transactions')">更多</span>
+                                <span class="overview-title">{{this.$t("home.transaction")}}</span>
+                                <span class="overview-more cursor-pointer" @click="goRouter('transactions')">{{this.$t("home.more")}}</span>
                             </p>
                             <div class="overview-item-base" v-loading="loadingTransaction">
                                 <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
                                     <div class="block-amount">
                                         <p class="trans-hash" :title="`${item.transHash}`">
-                                            <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transHash)" title="复制"></i>
+                                            <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transHash)" :title="$t('text.copy')"></i>
                                             <router-link :to="{'path': 'transactionInfo', 'query': {blockNumber: item.transHash}}" class="node-ip">
                                                 {{item.transHash}}
                                             </router-link>
                                         </p>
                                         <p class="trans-address color-8798AD">
                                             <span>
-                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transFrom)" title="复制"></i>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transFrom)" :title="$t('text.copy')"></i>
                                                 {{splitAddress(item.transFrom)}}
                                             </span>
-                                            <img :src="sRight" alt="箭头">
+                                            <img :src="sRight" :alt="$t('text.arrow')">
                                             <span>
-                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transTo)" title="复制"></i>
+                                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transTo)" :title="$t('text.copy')"></i>
                                                 {{splitAddress(item.transTo)}}
                                             </span>
                                         </p>
@@ -180,28 +180,28 @@ export default {
             artboard: artboard,
             detailsList: [
                 {
-                    label: "节点个数",
+                    label: this.$t("home.nodes"),
                     name: "nodeCount",
                     value: 0,
                     icon: "#wbs-icon-node1",
                     bg: 'node-bg'
                 },
                 {
-                    label: "已部署的智能合约",
+                    label: this.$t("home.contracts"),
                     name: "contractCount",
                     value: 0,
                     icon: "#wbs-icon-contract",
                     bg: 'contract-bg'
                 },
                 {
-                    label: "区块数量",
+                    label: this.$t("home.blocks"),
                     name: "latestBlock",
                     value: 0,
                     icon: "#wbs-icon-block",
                     bg: "block-bg"
                 },
                 {
-                    label: "交易数量",
+                    label: this.$t("home.transactions"),
                     name: "transactionCount",
                     value: 0,
                     icon: "#wbs-icon-transation",
@@ -223,22 +223,22 @@ export default {
             nodeHead: [
                 {
                     enName: "nodeId",
-                    name: "节点Id",
+                    name: this.$t("home.nodeId"),
                     width: ""
                 },
                 {
                     enName: "blockNumber",
-                    name: "块高",
+                    name: this.$t("home.blockHeight"),
                     width: 180
                 },
                 {
                     enName: "pbftView",
-                    name: "pbftView",
+                    name: this.$t("home.pbftView"),
                     width: 180
                 },
                 {
                     enName: "nodeActive",
-                    name: "状态",
+                    name: this.$t("home.status"),
                     width: 150
                 }
             ],
@@ -514,10 +514,10 @@ export default {
             let transString = "";
             switch (val) {
                 case 1:
-                    transString = "运行";
+                    transString = this.$t("home.run");
                     break;
                 case 2:
-                    transString = "异常";
+                    transString = this.$t("home.unusual");
                     break;
             }
             return transString;
