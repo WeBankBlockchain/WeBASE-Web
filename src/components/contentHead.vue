@@ -341,7 +341,7 @@ export default {
 .content-head-lang{
     position: absolute;
     /* background-color: #fff; */
-    right: 280px;
+    right: 350px;
     top: 0px;
 }
 </style>
