@@ -20,7 +20,7 @@
             <div style="margin:10px 10px 6px 10px;">
                 <el-row>
                     <el-col :xs='24' :sm="24" :md="11" :lg="10" :xl="8" v-loading="loadingNumber">
-                        <div class="overview-item" style="font-size:0" v-for="(item, index) in detailsList" :key='item.value' @click="goDetailRouter(item)" :class="item.bg">
+                        <div class="overview-item" style="font-size:0" v-for="(item, index) in detailsList" @click="goDetailRouter(item)" :class="item.bg">
                             <div class="overview-item-img">
                                 <svg class="overview-item-svg" aria-hidden="true" v-if='item.icon == "#wbs-icon-node1"'>
                                     <use xlink:href="#wbs-icon-node1"></use>
@@ -84,13 +84,15 @@
                                 <div class="block-item font-color-2e384d" v-for="item in blockData" :key='item.blockNumber'>
                                     <div class="block-amount" style="padding-bottom: 7px;">
                                         <span>
-                                            <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">{{this.$t("home.blockHeight")}} {{item.blockNumber}}</router-link>
+                                            <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">
+                                                <span>{{$t("home.blockHeight")}}</span>
+                                                 {{item.blockNumber}}</router-link>
                                         </span>
                                         <span class="color-8798AD">{{item.blockTimestamp}}</span>
                                     </div>
                                     <div>
                                         <div class="block-miner">
-                                            <span>{{this.$t("home.tranfer")}}</span>
+                                            <span>{{$t("home.tranfer")}}</span>
                                             <p :title="`${item.sealer}`">{{item.sealer}}</p>
                                         </div>
                                         <div class="text-right">
@@ -168,17 +170,9 @@ export default {
         "v-content-head": contentHead,
         "v-chart": charts
     },
-    data: function () {
-        return {
-            sRight: sRight,
-            loadingNumber: false,
-            loadingCharts: false,
-            loadingNodes: false,
-            loadingBlock: false,
-            loadingTransaction: false,
-            numberFormat: numberFormat,
-            artboard: artboard,
-            detailsList: [
+    computed: {
+        detailsList() {
+            let data  = [
                 {
                     label: this.$t("home.nodes"),
                     name: "nodeCount",
@@ -207,20 +201,11 @@ export default {
                     icon: "#wbs-icon-transation",
                     bg: 'transation-bg'
                 }
-            ],
-            networkDetails: null,
-            chartStatistics: {
-                show: false,
-                date: [],
-                dataArr: [],
-                chartSize: {
-                    width: 0,
-                    height: 0
-                }
-            },
-            reloadNumber: true,
-            groupId: localStorage.getItem("groupId"),
-            nodeHead: [
+            ]
+            return data
+        },
+        nodeHead() {
+            let data = [
                 {
                     enName: "nodeId",
                     name: this.$t("home.nodeId"),
@@ -228,7 +213,7 @@ export default {
                 },
                 {
                     enName: "blockNumber",
-                    name: this.$t("home.blockHeight"),
+                    name: this.$t('home.blockHeight'),
                     width: 180
                 },
                 {
@@ -241,7 +226,33 @@ export default {
                     name: this.$t("home.status"),
                     width: 150
                 }
-            ],
+            ]
+            return data
+        }
+    },
+    data: function () {
+        return {
+            sRight: sRight,
+            loadingNumber: false,
+            loadingCharts: false,
+            loadingNodes: false,
+            loadingBlock: false,
+            loadingTransaction: false,
+            numberFormat: numberFormat,
+            artboard: artboard,
+            
+            networkDetails: null,
+            chartStatistics: {
+                show: false,
+                date: [],
+                dataArr: [],
+                chartSize: {
+                    width: 0,
+                    height: 0
+                }
+            },
+            reloadNumber: true,
+            groupId: localStorage.getItem("groupId"),
             nodeData: [],
             blockData: [],
             transactionList: []
@@ -297,8 +308,9 @@ export default {
                         });
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                         this.$message.closeAll()
                     }
@@ -306,8 +318,9 @@ export default {
                 .catch(err => {
 
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -332,17 +345,19 @@ export default {
                         this.$set(this.chartStatistics, "show", true);
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                         this.$message.closeAll()
                     }
                 })
                 .catch(err => {
 
-                    this.$message({
+                   this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -414,7 +429,7 @@ export default {
                         this.blockData = res.data.data;
                     } else {
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -424,7 +439,7 @@ export default {
                 .catch(err => {
 
                     this.$message({
-                        message: "系统错误！",
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -447,7 +462,7 @@ export default {
                         this.transactionList = res.data.data;
                     } else {
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -455,7 +470,11 @@ export default {
                     }
                 })
                 .catch(err => {
-                    this.$message.error("系统错误");
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
                     this.$message.closeAll()
                 });
         },
@@ -538,7 +557,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -546,7 +565,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });

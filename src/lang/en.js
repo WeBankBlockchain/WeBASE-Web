@@ -8,7 +8,8 @@ export default {
     inputText: {
         user: "Please enter user",
         password: "Please enter password",
-        verificationCode: "Please enter verificationCode"
+        verificationCode: "Please enter verificationCode",
+        blockInput: "Please enter block hash or block height"
     },
     text: {
         reqOvertime: "request timeout",
@@ -17,7 +18,13 @@ export default {
         copy: "copy",
         arrow: "arrow",
         copyErrorMsg: "Key is empty, do not copy.",
-        copySuccessMsg: "copy success"
+        copySuccessMsg: "copy success",
+        copyHash: "copy hash",
+        total: "total",
+        tiao: "",
+        blockSearchMsg: "search block hash does not support fuzzy query",
+        delete: "delete",
+        update: "update"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -31,7 +38,9 @@ export default {
         exit: "exit"
     },
     title: {
-        dataOverview: "Data overview"
+        dataOverview: "Data overview",
+        blockTitle: "Block information",
+        nodeTitle: "Node management"
     },
     home: {
         nodes: "node number",
@@ -44,12 +53,27 @@ export default {
         status: "status",
         block: "block",
         transaction: "transaction",
-        tranfer: "tranfer",
+        tranfer: "transfer",
         more: "more",
         run: "run",
         unusual: "unusual",
         chartTitle: "Key monitoring indicators",
         chartExplain: "transaction volume in the last 7 days",
-        chartTransactions: "transactions"
+        chartTransactions: "transactions",
+        blockHash: "block hash",
+        createTime: "create time"
+    },
+    nodes: {
+        nodeFront: "Node preposition",
+        frontId: "Front id",
+        ip: "ip",
+        frontPort: "Front port",
+        agency: "agency",
+        modifyTime: "modify time",
+        nodeStyle: "node style",
+        operation: "operation",
+        sealer: "sealer",
+        observer: "observer",
+        remove: "remove"
     }
 }
