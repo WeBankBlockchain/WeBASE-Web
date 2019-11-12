@@ -2,7 +2,7 @@
     <div>
         <v-content-head :headTitle="'告警配置'" :headSubTitle="'邮件告警配置'" @changGroup="changGroup" :headTooltip="`系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。`"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
-            <div>
+            <div style="padding-bottom: 10px;">
                 <span>是否启用告警</span>
                 <el-switch
                     v-model="enable"
@@ -41,18 +41,18 @@
                 </el-table-column>
                 <el-table-column label="告警级别" prop='alertLevel' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span v-if='scope.row.alertLevel == "high"' style="color: #f00">高</span>
-                        <span v-if='scope.row.alertLevel == "middle"' style="color: #ffd700">一般</span>
-                        <span v-else>低</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="告警状态" prop='status' show-overflow-tooltip align="center">
-                    <template slot-scope="scope">
-                        <span v-if='scope.row.status' style="color: #f00">已处理</span>
-                        <span v-else style="color: #3CB371">未处理</span>
+                        <span v-if='scope.row.alertLevel == 1' style="color: #f00">高</span>
+                        <span v-if='scope.row.alertLevel == 2' style="color: #ffd700">一般</span>
+                        <span v-if='scope.row.alertLevel == 3'>低</span>
                     </template>
                 </el-table-column>
                 <el-table-column label="告警内容" prop='alertContent' show-overflow-tooltip align="center"></el-table-column>
+                 <el-table-column label="告警状态" prop='status' show-overflow-tooltip align="center">
+                    <template slot-scope="scope">
+                        <span v-if='scope.row.status' style="color: #3CB371">已处理</span>
+                        <span v-else style="color: #f00">未处理</span>
+                    </template>
+                </el-table-column>
                 <!-- <el-table-column label="告警备注" prop='description' show-overflow-tooltip align="center"></el-table-column>
                 <el-table-column label="创建时间" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
                 <el-table-column label="修改时间" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column> -->

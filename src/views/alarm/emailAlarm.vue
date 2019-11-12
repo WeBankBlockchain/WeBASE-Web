@@ -20,7 +20,7 @@
                         inactive-color="#ff4949"
                         :active-value="1"
                         :inactive-value="0"
-                        @change='authChange($event)'>
+                        @change='authChange'>
                     </el-switch>
                     <el-tooltip class="item" effect="dark" content="默认使用username/password进行验证，通过SSL/TLS连接邮箱服务" placement="top-start">
                         <i class="el-icon-info"></i>
@@ -146,7 +146,13 @@ export default {
 
         },
         dataChange: function(){
-            this.tipShow = true
+            if(this.emailForm.serverType == this.emailData.protocol && this.emailForm.address == this.emailData.host &&
+            this.emailForm.port == this.emailData.port && this.emailForm.email == this.emailData.username &&
+            this.emailForm.password == this.emailData.password && this.emailForm.authentication == this.emailData.authentication){
+                this.tipShow = false
+            }else{
+                this.tipShow = true
+            }
         },
         authChange: function(val){
             this.dataChange()
