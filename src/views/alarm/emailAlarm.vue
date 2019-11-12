@@ -4,13 +4,13 @@
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="emailForm" :rules="rules" ref="emailForm" label-width="150px" class="demo-ruleForm">
                 <el-form-item label="协议类型" prop="serverType" style="width: 420px;display: inline-block">
-                    <el-input v-model="emailForm.serverType" style="width: 250px;"></el-input>
+                    <el-input v-model="emailForm.serverType" style="width: 250px;" @change='dataChange'></el-input>
                 </el-form-item><br>
                 <el-form-item label="地址" prop="address" style="width: 420px;display: inline-block">
-                    <el-input v-model="emailForm.address" style="width: 250px;"></el-input>
+                    <el-input v-model="emailForm.address" style="width: 250px;" @change='dataChange'></el-input>
                 </el-form-item>
                 <el-form-item label="端口" style="width: 420px;display: inline-block">
-                    <el-input v-model="emailForm.port" style="width: 250px;"></el-input>
+                    <el-input v-model="emailForm.port" style="width: 250px;" @change='dataChange'></el-input>
                 </el-form-item><br>
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item label="鉴权" style="width: 420px;display: inline-block">
@@ -27,10 +27,10 @@
                     </el-tooltip>
                 </el-form-item><br>
                 <el-form-item label="用户" prop="email" style="width: 420px;display: inline-block">
-                    <el-input v-model="emailForm.email" style="width: 250px;" :disabled="authDisabled"></el-input>
+                    <el-input v-model="emailForm.email" style="width: 250px;" :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password" style="width: 420px;display: inline-block">
-                    <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9 :disabled="authDisabled"></el-input>
+                    <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9 :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item><br>
                 
                 <!-- <el-form-item label="Status" style="width: 420px;display: inline-block">
@@ -45,7 +45,8 @@
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('emailForm')">保存</el-button>
-                    <el-button  @click="sendEmail">测试</el-button>
+                    <el-button  @click="sendEmail">测试</el-button><br>
+                    <span v-if='tipShow' style="color: #f00">邮箱配置已修改，未保存，请点击保存按钮保存修改项。</span>
                 </el-form-item>
             </el-form>
         </div>
@@ -133,7 +134,8 @@ export default {
                 ],
             },
             // testEmail: "",
-            authDisabled: false
+            authDisabled: false,
+            tipShow: false
         }
     },
     mounted: function(){
@@ -143,7 +145,11 @@ export default {
         changGroup: function(){
 
         },
+        dataChange: function(){
+            this.tipShow = true
+        },
         authChange: function(val){
+            this.dataChange()
             if(!val){
                 this.authDisabled = true
             }else{
@@ -166,7 +172,17 @@ export default {
                 });
         },
         testEamilData: function(val){
-            testEmail(val).then(res => {
+            let data = {
+                serverId: this.emailData.serverId,
+                host: this.emailForm.address,
+                port: this.emailForm.port,
+                username: this.emailForm.email,
+                password: this.emailForm.password,
+                protocol: this.emailForm.serverType,
+                defaultEncoding: this.emailForm.format,
+                authentication: this.emailForm.authentication,
+            };
+            testEmail(val,data).then(res => {
                 if(res.data.code === 0){
                     this.$message({
                             type: "success",
@@ -240,6 +256,7 @@ export default {
                 // status: this.emailForm.status,
             }
             changeEmailConfig(data).then(res => {
+                this.tipShow = false
                 if(res.data && res.data.code === 0){
                     this.$message({
                         type: "success",
@@ -254,12 +271,23 @@ export default {
                     }
                 })
                 .catch(err => {
+                    this.tipShow = false
                     this.$message({
                         type: "error",
                         message: "系统错误！"
                     });
                 });
         }
+    },
+    beforeRouteLeave: function(to,from,next){
+        if(this.tipShow){
+            this.$message({
+                type: "error",
+                message: "请保存修改的配置信息！"
+            });
+        }else{
+            next()
+        }  
     }
 }
 </script>
