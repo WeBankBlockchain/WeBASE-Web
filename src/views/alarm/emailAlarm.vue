@@ -5,32 +5,35 @@
             <el-form :model="emailForm" :rules="rules" ref="emailForm" label-width="150px" class="demo-ruleForm">
                 <el-form-item label="协议类型" prop="serverType" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.serverType" style="width: 250px;"></el-input>
-                </el-form-item>
+                </el-form-item><br>
                 <el-form-item label="地址" prop="address" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.address" style="width: 250px;"></el-input>
-                </el-form-item><br>
+                </el-form-item>
                 <el-form-item label="端口" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.port" style="width: 250px;"></el-input>
                 </el-form-item><br>
-                <el-form-item label="邮箱" prop="email" style="width: 420px;display: inline-block">
-                    <el-input v-model="emailForm.email" style="width: 250px;"></el-input>
-                </el-form-item>
-                <el-form-item label="密码" prop="password" style="width: 420px;display: inline-block">
-                    <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9></el-input>
-                </el-form-item><br>
-                <el-form-item label="Authentication" style="width: 420px;display: inline-block">
+                <hr style="margin-bottom: 30px;color: red;">
+                <el-form-item label="鉴权" style="width: 420px;display: inline-block">
                     <el-switch
                         v-model="emailForm.authentication"
                         active-color="#13ce66"
                         inactive-color="#ff4949"
                         :active-value="1"
-                        :inactive-value="0">
+                        :inactive-value="0"
+                        @change='authChange($event)'>
                     </el-switch>
                     <el-tooltip class="item" effect="dark" content="默认使用username/password进行验证，通过SSL/TLS连接邮箱服务" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </el-form-item><br>
-                <el-form-item label="Status" style="width: 420px;display: inline-block">
+                <el-form-item label="用户" prop="email" style="width: 420px;display: inline-block">
+                    <el-input v-model="emailForm.email" style="width: 250px;" :disabled="authDisabled"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password" style="width: 420px;display: inline-block">
+                    <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9 :disabled="authDisabled"></el-input>
+                </el-form-item><br>
+                
+                <!-- <el-form-item label="Status" style="width: 420px;display: inline-block">
                     <el-switch
                         v-model="emailForm.status"
                         active-color="#13ce66"
@@ -38,15 +41,11 @@
                         :active-value="1"
                         :inactive-value="0">
                     </el-switch>
-                </el-form-item>
+                </el-form-item> -->
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('emailForm')">保存</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-input placeholder="请输入测试邮箱" v-model="testEmail" class="input-with-select" style="width: 300px;">
-                        <el-button slot="append" @click="sendEmail">测试</el-button>
-                    </el-input>
+                    <el-button  @click="sendEmail">测试</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -72,7 +71,7 @@ export default {
                 password: "",
                 format: "",
                 authentication: 0,
-                status: 0,
+                // status: 0,
             },
             emailData: null,
             rules: {
@@ -133,7 +132,8 @@ export default {
                     },
                 ],
             },
-            testEmail: "",
+            // testEmail: "",
+            authDisabled: false
         }
     },
     mounted: function(){
@@ -143,17 +143,27 @@ export default {
         changGroup: function(){
 
         },
-        sendEmail: function(){
-            let inputPattern = /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/;
-            if(inputPattern.test(this.testEmail)){
-                this.testEamilData(this.testEmail)
+        authChange: function(val){
+            if(!val){
+                this.authDisabled = true
             }else{
-                this.$message({
-                        type: 'error',
-                        message: '邮箱格式不正确'
-                    }); 
-                this.testEmail = ""
+                this.authDisabled = false
             }
+        },
+        sendEmail: function(){
+            this.$prompt('请输入邮箱', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+                inputErrorMessage: '邮箱格式不正确'
+                }).then(({ value }) => {
+                    this.testEamilData(value)
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '取消输入'
+                    });       
+                });
         },
         testEamilData: function(val){
             testEmail(val).then(res => {
@@ -187,8 +197,11 @@ export default {
                         this.emailForm.password = res.data.data[0].password;
                         this.emailForm.format = res.data.data[0].defaultEncoding;
                         this.emailForm.authentication = res.data.data[0].authentication;
-                        this.emailForm.status = res.data.data[0].status;
+                        // this.emailForm.status = res.data.data[0].status;
                         this.emailData = res.data.data[0];
+                        if(!res.data.data[0].authentication){
+                            this.authDisabled = true
+                        }
                     }
                 }else {
                         this.$message({
@@ -224,7 +237,7 @@ export default {
                 protocol: this.emailForm.serverType,
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,
-                status: this.emailForm.status,
+                // status: this.emailForm.status,
             }
             changeEmailConfig(data).then(res => {
                 if(res.data && res.data.code === 0){
