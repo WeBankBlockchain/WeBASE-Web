@@ -39,7 +39,12 @@ export default {
         selectSuccess: "Query succeeded!",
         transactionSuccess: "Successful transaction!",
         transactionFail: "Transaction failed!",
-        noData: "No data"
+        noData: "No data",
+        input: "Please input",
+        search: "search",
+        example: "For example",
+        implement: "implement",
+        implementResult: "implement result"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -60,7 +65,9 @@ export default {
         contractRule: "Contract name does not conform to the rules",
         folderName: "Please enter a folder name",
         folderLong: "1 to 12 characters in length",
-        folderRule: "Folder name does not conform to the rules"
+        folderRule: "Folder name does not conform to the rules",
+        selectAdmin: "Please select an administrator",
+        sqlRule: "Please input sql"
     },
     head: {
         helpText: "Help document",
@@ -74,7 +81,10 @@ export default {
         nodeTitle: "Node management",
         contractTitle: "Contract management",
         contractIDE: "Contract IDE",
-        contractList: "Contract list"
+        contractList: "Contract list",
+        CNSmanager: "CNS query",
+        CNSTips: "CNS query Description: the contract naming service CNS provides the record of the mapping relationship between the contract name and the contract address on the chain and the corresponding query function, so that the caller can call the contract on the chain by remembering the simple contract name.",
+        CRUDTips: "CRUD说明：CRUD(增删改查)Crud Description: CRUD (add, delete, modify and query) can create tables and perform add, delete, modify and query operations on tables. Tips: if deployment and table creation permissions are enabled, the operation of table creation requires deployment and table creation permissions. Table permissions are required for deleting and modifying tables."
     },
     home: {
         nodes: "node number",
@@ -166,6 +176,14 @@ export default {
         contractBin: "contract bin",
         copyContractAbi: "Copy contract abi",
         copyContractBin: "Copy contract bin",
-        abiInfo: "ABI details"
+        abiInfo: "ABI details",
+        contractVersion: "Contract Version",
+        adminUser: 'Administrator account',
+        createTable: "Create table",
+        insertTable: "Insert table record",
+        searchTable: "Query table record",
+        updateTable: "Update table record",
+        deleteTable: "Delete table record",
+        tableDetail: "Display table details"
     }
 }

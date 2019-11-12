@@ -10,7 +10,7 @@ export default {
         password: "请输入密码",
         verificationCode: "请输入验证码",
         blockInput: "请输入区块哈希或块高",
-        contractSearch: "请输入合约名或合约地址"
+        contractSearch: "请输入合约名或合约地址",
     },
     text: {
         reqOvertime: "请求超时",
@@ -39,7 +39,12 @@ export default {
         selectSuccess: "查询成功！",
         transactionSuccess: "交易成功！",
         transactionFail: "交易失败！",
-        noData: "暂无数据"
+        noData: "暂无数据",
+        input: "请输入",
+        search: "查询",
+        example: "例如",
+        implement: "执行",
+        implementResult: "执行结果"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -60,7 +65,9 @@ export default {
         contractRule: "合约名不符合规则",
         folderName: "请输入文件夹名称",
         folderLong: "长度在 1 到 12 个字符",
-        folderRule: "文件夹名不符合规则"
+        folderRule: "文件夹名不符合规则",
+        selectAdmin: "请选择管理员",
+        sqlRule: "请输入sql"
     },
     head: {
         helpText: "帮助文档",
@@ -74,7 +81,10 @@ export default {
         nodeTitle: "节点管理",
         contractTitle: "合约管理",
         contractIDE: "合约IDE",
-        contractList: "合约列表"
+        contractList: "合约列表",
+        CNSmanager: "CNS查询",
+        CNSTips: "CNS查询说明：合约命名服务CNS通过提供链上合约名称与合约地址映射关系的记录及相应的查询功能，方便调用者通过记忆简单的合约名来实现对链上合约的调用。",
+        CRUDTips: "CRUD说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。Tips：如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。"
     },
     home: {
         nodes: "节点个数",
@@ -166,6 +176,14 @@ export default {
         contractBin: "合约bin",
         copyContractAbi: "复制合约abi",
         copyContractBin: "复制合约bin",
-        abiInfo: "abi详情"
+        abiInfo: "abi详情",
+        contractVersion: "合约版本",
+        adminUser: '管理员账号',
+        createTable: "创建表",
+        insertTable: "插入表记录",
+        searchTable: "查询表记录",
+        updateTable: "更新表记录",
+        deleteTable: "删除表记录",
+        tableDetail: "显示表详情"
     }
 }
