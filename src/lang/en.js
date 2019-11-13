@@ -44,7 +44,8 @@ export default {
         search: "search",
         example: "For example",
         implement: "implement",
-        implementResult: "implement result"
+        implementResult: "implement result",
+        confirmSubmit: "Confirm to submit?"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -84,7 +85,12 @@ export default {
         contractList: "Contract list",
         CNSmanager: "CNS query",
         CNSTips: "CNS query Description: the contract naming service CNS provides the record of the mapping relationship between the contract name and the contract address on the chain and the corresponding query function, so that the caller can call the contract on the chain by remembering the simple contract name.",
-        CRUDTips: "CRUD说明：CRUD(增删改查)Crud Description: CRUD (add, delete, modify and query) can create tables and perform add, delete, modify and query operations on tables. Tips: if deployment and table creation permissions are enabled, the operation of table creation requires deployment and table creation permissions. Table permissions are required for deleting and modifying tables."
+        CRUDTips: "Crud Description: CRUD (add, delete, modify and query) can create tables and perform add, delete, modify and query operations on tables. Tips: if deployment and table creation permissions are enabled, the operation of table creation requires deployment and table creation permissions. Table permissions are required for deleting and modifying tables.",
+        PrivateKey: "Private key management",
+        systemManager: "System management",
+        permission: "Privilege management",
+        permissionTips: "Description of management authority: authority control is based on the access mechanism of external account (tx.origin), which controls the authority of contract deployment, table creation, table writing (insertion, update and deletion), and table reading is not controlled by authority.",
+        permissionHref: "Specific documents: [permission control]"
     },
     home: {
         nodes: "node number",
@@ -185,5 +191,48 @@ export default {
         updateTable: "Update table record",
         deleteTable: "Delete table record",
         tableDetail: "Display table details"
+    },
+    privateKey: {
+        addUser: "Add users",
+        addUserTips: "The account number of the transaction sent in the group needs to be added to the private key management, otherwise it will be judged as an abnormal user.",
+        searchUser: "Please enter user name or public key address",
+        copyPublicKey: "Duplicate public key",
+        privateKey: "Private key",
+        publicKey: "Public key",
+        createUser: "Create user",
+        userName: "User name",
+        userId: "User id",
+        description: "User description",
+        userAddress: "User public key address",
+        userStatus: "User status",
+        inputDescription: "Please enter user description",
+        updateUserSuccess: "User modified successfully",
+        normal: "normal",
+        disable: "disable",
+        privateKeyUser: "Private key user",
+        publicKeyUser: "Public key user",
+        publicKeyInfo: "Public key information",
+        inputUserName: "Please enter user name",
+        inputPublicInfo: "Please enter public key information or public key address.",
+        userLong: "Within 120 characters",
+        inputPublic: "Please enter public key information",
+        addUserSuccess: "User added successfully!",
+        addUserFail: "Failed to add user!"
+    },
+    system: {
+        chainManager: "Chain management permission",
+        addChainManager: "Add chain management permission",
+        copyAddress: "Copy address",
+        commonManager: "General management permission",
+        chainAdministrator: "Chain Administrator",
+        submit: "submit",
+        tableName: "table Name",
+        userAddress: "Account address",
+        userName: "Account name",
+        deployAndCreate: "System and table building permission",
+        cns: "CNS permission",
+        sysConfig: "System configuration permission",
+        node: "Node permissions",
+        confirmPermission: "When adding the first administrator permission, the administrator will start the permission. Please confirm whether the account is correct. Misoperation may cause the service to be unavailable."
     }
 }
