@@ -68,7 +68,8 @@ export default {
         folderLong: "长度在 1 到 12 个字符",
         folderRule: "文件夹名不符合规则",
         selectAdmin: "请选择管理员",
-        sqlRule: "请输入sql"
+        sqlRule: "请输入sql",
+        outUserAddress: "请选择外部账号地址"
     },
     head: {
         helpText: "帮助文档",
@@ -233,6 +234,12 @@ export default {
         cns: "CNS权限",
         sysConfig: "系统配置权限",
         node: "节点权限",
-        confirmPermission: "添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。"
+        confirmPermission: "添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。",
+        dialogTips: "tips: 公钥用户无法授权其它用户",
+        outUserAddress: "外部账号地址",
+        inputUser: "请输入帐号",
+        authorizedSuccess: "授权成功",
+        deleteSuccess: "删除成功",
+        
     }
 }
