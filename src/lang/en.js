@@ -68,7 +68,8 @@ export default {
         folderLong: "1 to 12 characters in length",
         folderRule: "Folder name does not conform to the rules",
         selectAdmin: "Please select an administrator",
-        sqlRule: "Please input sql"
+        sqlRule: "Please input sql",
+        outUserAddress: "Please select an external account address"
     },
     head: {
         helpText: "Help document",
@@ -233,6 +234,11 @@ export default {
         cns: "CNS permission",
         sysConfig: "System configuration permission",
         node: "Node permissions",
-        confirmPermission: "When adding the first administrator permission, the administrator will start the permission. Please confirm whether the account is correct. Misoperation may cause the service to be unavailable."
+        confirmPermission: "When adding the first administrator permission, the administrator will start the permission. Please confirm whether the account is correct. Misoperation may cause the service to be unavailable.",
+        dialogTips: "Tips: public key users cannot authorize other users",
+        outUserAddress: "Address of external account",
+        inputUser: "Please enter your account number",
+        authorizedSuccess: "Authorized success",
+        deleteSuccess: "Delete successful",
     }
 }
