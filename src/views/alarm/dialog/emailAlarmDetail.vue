@@ -25,7 +25,7 @@
                         <span>{{alarmDetail.enable | Type}}</span>
                     </el-form-item>
                     <el-form-item label="告警等级" prop="ruleName">
-                        <span>{{alarmDetail.alertLevel}}</span>
+                        <span>{{alarmDetail.alertLevel | Level}}</span>
                     </el-form-item>
                 </el-form>
             </div>
@@ -66,6 +66,19 @@ export default {
                     break;
                 default:
                     return "证书告警";
+                    break;
+            }
+        },
+        Level: function(value){
+            switch(value) {
+                case 1: 
+                    return "高";
+                    break;
+                case 2:
+                    return "一般";
+                    break;
+                default:
+                    return "低";
                     break;
             }
         }

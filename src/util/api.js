@@ -851,10 +851,33 @@ export function startAlarm(data) {
     })
 }
 //test 邮箱 
-export function testEmail(data) {
+export function testEmail(list,data) {
     return post({
-        url: `${url.ORG_LIST}/alert/mail/test/${data}`,
+        url: `${url.ORG_LIST}/alert/mail/test/${list}`,
         method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//get  alarm log 
+export function getAlarmLogs() {
+    return get({
+        url: `${url.ORG_LIST}/log/list`,
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//put  alarm log 
+export function changeAlarmLog(data) {
+    return put({
+        url: `${url.ORG_LIST}/log`,
+        method: 'put',
+        data: data,
         headers: {
             Authorization: "Token " + localStorage.getItem("token") || ""
         }
