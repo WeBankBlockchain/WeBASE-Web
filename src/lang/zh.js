@@ -44,7 +44,8 @@ export default {
         search: "查询",
         example: "例如",
         implement: "执行",
-        implementResult: "执行结果"
+        implementResult: "执行结果",
+        confirmSubmit: "确认提交？"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -84,7 +85,12 @@ export default {
         contractList: "合约列表",
         CNSmanager: "CNS查询",
         CNSTips: "CNS查询说明：合约命名服务CNS通过提供链上合约名称与合约地址映射关系的记录及相应的查询功能，方便调用者通过记忆简单的合约名来实现对链上合约的调用。",
-        CRUDTips: "CRUD说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。Tips：如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。"
+        CRUDTips: "CRUD说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。Tips：如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。",
+        PrivateKey: "私钥管理",
+        systemManager: "系统管理",
+        permission: "权限管理",
+        permissionTips: "管理权限说明：权限控制是基于外部账户(tx.origin)的访问机制，对包括合约部署，表的创建，表的写操作（插入、更新和删除）进行权限控制，表的读操作不受权限控制。",
+        permissionHref: "具体可见文档：[权限控制]"
     },
     home: {
         nodes: "节点个数",
@@ -185,5 +191,48 @@ export default {
         updateTable: "更新表记录",
         deleteTable: "删除表记录",
         tableDetail: "显示表详情"
+    },
+    privateKey: {
+        addUser: "新增用户",
+        addUserTips: "群组内发送交易的账号都需要在私钥管理里添加，否则会判断为异常用户。",
+        searchUser: "请输入用户名或公钥地址",
+        copyPublicKey: "复制公钥",
+        privateKey: "私钥",
+        publicKey: "公钥",
+        createUser: "新建用户",
+        userName: "用户名称",
+        userId: "用户ID",
+        description: "用户描述",
+        userAddress: "用户公钥地址信息",
+        userStatus: "用户状态",
+        inputDescription: "请输入用户描述",
+        updateUserSuccess: "修改用户成功",
+        normal: "正常",
+        disable: "停用",
+        privateKeyUser: "私钥用户",
+        publicKeyUser: "公钥用户",
+        publicKeyInfo: "公钥信息",
+        inputUserName: "请输入用户名称",
+        inputPublicInfo: "请输入公钥信息或公钥地址",
+        userLong: "120个字符以内",
+        inputPublic: "请输入公钥信息",
+        addUserSuccess: "添加用户成功！",
+        addUserFail: "添加用户失败！"
+    },
+    system: {
+        chainManager: "链管理权限",
+        addChainManager: "添加链管理权限",
+        copyAddress: "复制地址",
+        commonManager: "普通管理权限",
+        chainAdministrator: "链管理员",
+        submit: "提交",
+        tableName: "表名称",
+        userAddress: "账号地址",
+        userName: "账号名称",
+        deployAndCreate: "系统与建表权限",
+        cns: "CNS权限",
+        sysConfig: "系统配置权限",
+        node: "节点权限",
+        confirmPermission: "添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。"
     }
 }

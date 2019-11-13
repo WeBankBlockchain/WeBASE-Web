@@ -1,16 +1,16 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'权限管理'" @changGroup="changGroup" :headTooltip="`管理权限说明：权限控制是基于外部账户(tx.origin)的访问机制，对包括合约部署，表的创建，表的写操作（插入、更新和删除）进行权限控制，表的读操作不受权限控制。`" :headHref="headHref">
+        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')" @changGroup="changGroup" :headTooltip="$t('title.permissionTips')" :headHref="headHref">
         </v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
-                <el-tab-pane label="链管理权限">
-                    <el-button type="text" :disabled="disabled" @click="addAuthor">添加链管理权限</el-button>
+                <el-tab-pane :label="$t('system.chainManager')">
+                    <el-button type="text" :disabled="disabled" @click="addAuthor">{{this.$t('system.addChainManager')}}</el-button>
                     <el-table :data="authorRivateKeyList" tooltip-effect="dark" v-loading="loading">
                         <el-table-column v-for="head in preRivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                             <template slot-scope="scope">
                                 <template v-if="head.enName!='operate'">
-                                    <span v-if="head.enName==='address'"><i class="wbs-icon-copy font-12 copy-key" @click="copyAddress(scope.row['address'])" title="复制地址"></i>{{scope.row[head.enName]}}</span>
+                                    <span v-if="head.enName==='address'"><i class="wbs-icon-copy font-12 copy-key" @click="copyAddress(scope.row['address'])" :title="$t('system.copyAddress')"></i>{{scope.row[head.enName]}}</span>
                                     <span v-else-if="head.enName==='userName'">
                                         <span v-if="scope.row[head.enName]">
                                             {{scope.row[head.enName]}}
@@ -20,7 +20,7 @@
                                     <span v-else>{{scope.row[head.enName]}}</span>
                                 </template>
                                 <template v-else>
-                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteUser(scope.row)">删除</el-button>
+                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteUser(scope.row)">{{this.$t('text.delete')}}</el-button>
                                 </template>
                             </template>
                         </el-table-column>
@@ -28,8 +28,8 @@
                     <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                     </el-pagination>
                 </el-tab-pane>
-                <el-tab-pane label="普通管理权限">
-                    链管理员
+                <el-tab-pane :label="$t('system.commonManager')">
+                    {{this.$t('system.chainAdministrator')}}
                     <el-select v-model="chainAdmin">
                         <el-option v-for="item in authorRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         </el-option>
@@ -40,7 +40,7 @@
                                 <template v-if="head.enName!='operate'">
                                     <span v-if="head.enName ==='address'">
                                         <template v-if="formatUserName(scope.row[head.enName]) === scope.row[head.enName]">
-                                            <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" title="复制"></i>
+                                            <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                             {{formatUserName(scope.row[head.enName])}}
                                         </template>
                                         <template v-else>
@@ -48,13 +48,13 @@
                                         </template>
                                     </span>
                                     <span v-else-if="head.enName ==='otherAddress'">
-                                        <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" title="复制"></i>
+                                        <i class="wbs-icon-copy font-12" @click="copyAddress(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                         {{scope.row[head.enName]}}
                                     </span>
                                     <el-checkbox v-else :disabled="disabled" v-model="scope.row[head.enName]"></el-checkbox>
                                 </template>
                                 <template v-else>
-                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="updatePermission(scope.row)">提交</el-button>
+                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="updatePermission(scope.row)">{{$t('system.submit')}}</el-button>
                                 </template>
                             </template>
                         </el-table-column>
@@ -64,7 +64,7 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <el-dialog title="添加链管理权限" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
+        <el-dialog :title="$t('system.addChainManager')" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
             <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :btnType="btnType" :deleteParam="deleteParam"></authorization-rivateKey>
         </el-dialog>
     </div>
@@ -88,10 +88,6 @@ export default {
 
     data() {
         return {
-            headHref: {
-                href: "https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html",
-                content: "具体可见文档：[权限控制]"
-            },
             loading: false,
             disabled: false,
             authDialogVisible: false,
@@ -102,24 +98,6 @@ export default {
             preRivateKeyList: [],
             adminRivateKeyList: [],
             authorType: 'permission',
-            preRivateKeyHead: [
-                {
-                    enName: "table_name",
-                    name: "表名称"
-                },
-                {
-                    enName: "address",
-                    name: "账号地址"
-                },
-                {
-                    enName: "userName",
-                    name: "账号名称"
-                },
-                {
-                    enName: "operate",
-                    name: "操作"
-                }
-            ],
             deleteParam: {},
             activeName: 0,
             chainAdmin: '',
@@ -127,42 +105,73 @@ export default {
             sortedPageSize: 10,
             sortedTotal: 0,
             permissionList: [],
-            permissionHead: [
-                {
-                    enName: 'address',
-                    name: '用户',
-                    width: ''
-                },
-                {
-                    enName: 'deployAndCreate',
-                    name: '系统与建表权限',
-                    width: ''
-                },
-                {
-                    enName: 'cns',
-                    name: 'CNS权限',
-                    width: ''
-                },
-                {
-                    enName: 'sysConfig',
-                    name: '系统配置权限',
-                    width: ''
-                },
-                {
-                    enName: 'node',
-                    name: '节点权限',
-                    width: ''
-                },
-                {
-                    enName: "operate",
-                    name: "操作",
-                    width: '80'
-                }
-            ]
         }
     },
 
     computed: {
+        headHref() {
+            let data = {
+                href: "https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html",
+                content: this.$t('title.permissionHref')
+            }
+            return data
+        },
+        preRivateKeyHead() {
+            let data = [
+                {
+                    enName: "table_name",
+                    name: this.$t("system.tableName")
+                },
+                {
+                    enName: "address",
+                    name: this.$t("system.userAddress")
+                },
+                {
+                    enName: "userName",
+                    name: this.$t("system.userName")
+                },
+                {
+                    enName: "operate",
+                    name: this.$t("nodes.operation")
+                }
+            ]
+            return data
+        },
+        permissionHead() {
+            let data = [
+                {
+                    enName: 'address',
+                    name: this.$t("contracts.user"),
+                    width: ''
+                },
+                {
+                    enName: 'deployAndCreate',
+                    name: this.$t("system.deployAndCreate"),
+                    width: ''
+                },
+                {
+                    enName: 'cns',
+                    name: this.$t("system.cns"),
+                    width: ''
+                },
+                {
+                    enName: 'sysConfig',
+                    name: this.$t("system.sysConfig"),
+                    width: ''
+                },
+                {
+                    enName: 'node',
+                    name: this.$t("system.node"),
+                    width: ''
+                },
+                {
+                    enName: "operate",
+                    name: this.$t("nodes.operation"),
+                    width: '80'
+                }
+            ]
+            return data
+        },
         authorRivateKeyList() {
             let arr = [];
             this.preRivateKeyList.forEach(item => {
@@ -245,13 +254,15 @@ export default {
                         this.preRivateKeyList = []
                         if (201102 === res.data.code) {
                             this.$message({
+                                message: this.$chooseLang(res.data.code),
                                 type: "info",
-                                message: this.errcode.errCode[res.data.code].cn
+                                duration: 2000
                             });
                         } else {
                             this.$message({
+                                message: this.$chooseLang(res.data.code),
                                 type: "error",
-                                message: this.errcode.errCode[res.data.code].cn
+                                duration: 2000
                             });
                         }
 
@@ -261,8 +272,9 @@ export default {
                     this.loading = false;
                     this.preRivateKeyList = []
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -304,8 +316,9 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                     this.$message.closeAll();
                 });
@@ -324,7 +337,7 @@ export default {
             this.deleteParam = Object.assign({}, param, { tableName: '' });
         },
         addAuthor() {
-            this.$confirm("添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。", 'Tips', {
+            this.$confirm(this.$t("system.confirmPermission"), 'Tips', {
                 center: true,
                 type: 'warning',
             })
@@ -337,7 +350,7 @@ export default {
                 });
         },
         handleClick(tab, event) {
-            if (tab.label === "普通管理权限") {
+            if (tab.label === this.$t("system.commonManager")) {
                 this.getPermissionInfo();
             }
         },
@@ -358,11 +371,24 @@ export default {
                     })
                     this.permissionList = arr;
                     this.sortedTotal = data.totalCount;
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
+            }).catch(err => {
+                this.loading = false;
+                this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             })
         },
         updatePermission(row) {
-            this.$confirm("添加第一个管理员权限的时候，管理员将启动权限，请确认账号是否正确。误操作可能导致服务不可用。", 'Tips', {
+            this.$confirm(this.$t("system.confirmPermission"), 'Tips', {
                 center: true,
                 type: 'warning',
             })
@@ -395,18 +421,20 @@ export default {
                 } else {
                     this.getPermissionInfo()
                     this.$message({
-                        type: 'error',
-                        message: this.errcode.errCode[data.code].cn,
-                    })
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
             })
             .catch(err => {
                 this.loading = false;
                 this.getPermissionInfo()
                 this.$message({
-                    type: "error",
-                    message: "系统错误！"
-                });
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             });
         },
         formatPermissionStatus(key) {
@@ -441,7 +469,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -449,7 +477,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
