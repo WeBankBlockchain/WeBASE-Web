@@ -52,7 +52,7 @@ Vue.use(JsonViewer)
 Vue.use(ace)
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
-Vue.use(ElementUI);
+// Vue.use(ElementUI);
 Vue.use(Clickoutside);
 Vue.use(ElementUI, {
     size: Cookies.get('size') || 'medium', // set element-ui default size
@@ -65,9 +65,10 @@ promise.polyfill();
 Vue.prototype.getCookie = getCookie;
 Vue.prototype.setCookie = setCookie;
 Vue.prototype.delCookie = delCookie;
+Vue.prototype.errcode = errcode;
 Vue.prototype.$chooseLang = chooseLang;
 //error code
-Vue.prototype.errcode = errcode;
+
 // require('./mock')
 /* eslint-disable no-new */
 new Vue({

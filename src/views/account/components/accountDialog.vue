@@ -16,24 +16,24 @@
 <template>
     <div>
         <el-form :model="accountForm" :rules="rules" ref="accountForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="帐号" prop="name" style="width: 300px;">
-                <el-input v-model="accountForm.name" placeholder="请输入帐号" maxlength="12" :disabled="accountForm['disabled']"></el-input>
+            <el-form-item :label="$t('account.user')" prop="name" style="width: 350px;">
+                <el-input v-model="accountForm.name" :placeholder="$t('system.inputUser')" maxlength="12" :disabled="accountForm['disabled']"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="password" style="width: 300px;" v-if="accountForm['dShow']">
-                <el-input v-model="accountForm.password" placeholder="请输入密码" minlength="6" maxlength="12" :type="inputType">
+            <el-form-item :label="$t('login.password')" prop="password" style="width: 350px;" v-if="accountForm['dShow']">
+                <el-input v-model="accountForm.password" :placeholder="$t('inputText.password')" minlength="6" maxlength="12" :type="inputType">
                     <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']"  @click.stop.prevent="showPassword"></i>
                 </el-input>
             </el-form-item>
-            <el-form-item label="角色" prop="role" style="width: 300px;" v-if="accountForm['mShow']">
-                <el-select v-model="accountForm.role" placeholder="请选择" :disabled="accountForm['mDisabled']">
+            <el-form-item :label="$t('account.roleNameZh')" prop="role" style="width: 350px;" v-if="accountForm['mShow']">
+                <el-select v-model="accountForm.role" :placeholder="$t('text.select')" :disabled="accountForm['mDisabled']" style="width: 250px">
                     <el-option v-for="item in roleList" :key="item.roleId" :label="item.roleNameZh" :value="item.roleId">
                     </el-option>
                 </el-select>
             </el-form-item>
         </el-form>
         <div class="dialog-footer">
-            <el-button @click="modelClose">取 消</el-button>
-            <el-button type="primary" @click="submit('accountForm')" :loading="loading">确 定</el-button>
+            <el-button @click="modelClose">{{this.$t('text.cancel')}}</el-button>
+            <el-button type="primary" @click="submit('accountForm')" :loading="loading">{{this.$t('text.sure')}}</el-button>
         </div>
     </div>
 </template>
@@ -103,45 +103,50 @@ export default {
             accountForm: {},
             roleList: [],
             inputType: "password",
-            rules: {
+        };
+    },
+    computed: {
+        rules() {
+            let data = {
                 name: [
                     {
                         required: true,
-                        message: "请输入帐号",
+                        message: this.$t('system.inputUser'),
                         trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 12,
-                        message: "长度在 1 到 12 个字符",
+                        message: this.$t('rule.folderLong'),
                         trigger: "blur"
                     },
                     {
                         pattern: /^[A-Za-z0-9]+$/,
-                        message: "用户名只能输入字母和数字",
+                        message: this.$t('rule.accountRule'),
                         trigger: "blur"
                     }
                 ],
                 password: [
                     {
                         required: true,
-                        message: "请输入密码",
+                        message: this.$t('inputText.password'),
                         trigger: "blur"
                     },
                     {
                         min: 6,
                         max: 12,
-                        message: "长度在 6 到 12 个字符",
+                        message: this.$t('rule.passwordLong'),
                         trigger: "blur"
                     },
                     {
                         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,12}$/,
-                        message: "字母,数字组成,且至少包含一个大写字母和一个小写字母",
+                        message: this.$t('rule.passwordRule'),
                         trigger: "blur"
                     }
                 ]
             }
-        };
+            return data
+        }
     },
     mounted() {
         this.getRoleList();
@@ -153,7 +158,7 @@ export default {
         submit: function(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.$confirm("确认提交？", {
+                    this.$confirm(this.$t('text.confirmSubmit'), {
                         center: true
                     })
                         .then(() => {
@@ -184,16 +189,17 @@ export default {
                         this.roleList = res.data.data;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },
@@ -223,24 +229,25 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: "success",
-                            message: "新增成功"
+                            message: this.$t('text.addSuccess')
                         });
                         this.modelClose();
                         this.$emit("success");
                     } else {
                         this.modelClose();
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.modelClose();
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },
@@ -256,24 +263,25 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: "success",
-                            message: "修改成功"
+                            message: this.$t('text.updateSuccessMsg')
                         });
                         this.modelClose();
                         this.$emit("success");
                     } else {
                         this.modelClose();
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.modelClose();
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },
@@ -284,24 +292,25 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: "success",
-                            message: "删除成功"
+                            message: this.$t('system.deleteSuccess')
                         });
                         this.modelClose();
                         this.$emit("success");
                     } else {
                         this.modelClose();
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.modelClose();
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },

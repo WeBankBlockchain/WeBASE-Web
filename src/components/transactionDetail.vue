@@ -32,7 +32,7 @@
                     </div>
                     <div class="item">
                         <span class="label">
-                            <el-tooltip class="item" effect="dark" content="部署合约，to字段为空。" placement="top-start">
+                            <el-tooltip class="item" effect="dark" :content="$t('transaction.toNull')" placement="top-start">
                                 <i class="el-icon-info"></i>
                             </el-tooltip>
                             <span>To:</span>
@@ -63,7 +63,7 @@
                                         <el-table-column prop="type" label="type" align="left"></el-table-column>
                                         <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                             <template slot-scope="scope">
-                                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
                                                 <span>{{scope.row.data}}</span>
                                             </template>
                                         </el-table-column>
@@ -81,7 +81,7 @@
             <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
                 <template v-if="unEvent">
                     <div  class="text-center">
-                        无法解析
+                        {{$t('transaction.unresolved')}}
                     </div>
                 </template>
                 <template v-else>
@@ -155,8 +155,8 @@ export default {
             decodeData: {},
             funcData: "",
             showDecode: false,
-            buttonTitle: "还原",
-            eventTitle: "还原",
+            // buttonTitle: this.$t('transaction.reduction'),
+            // eventTitle: this.$t('transaction.reduction'),
             abiType: [],
             methodId: "",
             inputData: [],
@@ -172,6 +172,16 @@ export default {
             userList: [],
             unEvent: false,
         };
+    },
+    computed: {
+        buttonTitle() {
+            let data = this.$t('transaction.reduction');
+            return data
+        },
+        eventTitle() {
+            let data = this.$t('transaction.reduction');
+            return data
+        }
     },
     mounted: function () {
         this.getHashTransactionInfo();
@@ -194,7 +204,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -202,7 +212,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
@@ -229,20 +239,22 @@ export default {
                         } else {
                             this.$message({
                                 type: "error",
-                                message: "无法查询到交易信息"
+                                message: this.$t('transaction.searchTransactionFail')
                             });
                         }
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误!"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -258,16 +270,18 @@ export default {
                     this.decodefun(id, res.data.data)
                 } else {
                     this.$message({
-                        type: "error",
-                        message: errcode.errCode[response.data.code].cn
-                    });
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                     this.$message.closeAll()
                 }
             }).catch(err => {
                 this.$message({
-                    type: "error",
-                    message: "系统错误!"
-                });
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
                 this.$message.closeAll()
             })
         },
@@ -282,14 +296,16 @@ export default {
                         this.decodeDeloy(res.data.data)
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[response.data.code].cn
+                            duration: 2000
                         });
                     }
                 }).catch(err => {
-                    this.$message({
+                   this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误!"
+                        duration: 2000
                     });
                 })
             }
@@ -307,15 +323,17 @@ export default {
                         this.userList = res.data.data;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[response.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误!"
+                        duration: 2000
                     });
                 });
         },
@@ -330,17 +348,19 @@ export default {
                         this.createTime = getDate(res.data.data.timestamp);
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[response.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误!"
+                        duration: 2000
                     });
-                });
+                })
         },
         handleClick(tab, event) {
             if (tab.label == "event") {
@@ -349,17 +369,17 @@ export default {
         },
         decode: function () {
             if (this.showDecode) {
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
                 this.showDecode = false;
             } else {
-                this.buttonTitle = "解码";
+                this.buttonTitle = this.$t('transaction.decode');
                 this.showDecode = true;
             }
             if (this.eventDataShow) {
-                this.buttonTitle = "解码";
+                this.buttonTitle = this.$t('transaction.decode');
                 this.eventDataShow = false;
             } else {
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
                 this.eventDataShow = true;
             }
         },
@@ -387,15 +407,17 @@ export default {
                         this.eventLog = res.data.data.logs;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -418,14 +440,16 @@ export default {
                         }, 200)
                     } else if (res.data.code !== 0) {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 }).catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 })
             }
@@ -436,7 +460,7 @@ export default {
             let abi = "";
             eventData.abiInfo = JSON.parse(eventData.abiInfo)
             let list = data;
-            list.eventTitle = '还原'
+            list.eventTitle = this.$t('transaction.reduction');
             list.eventDataShow = true;
             list.eventButtonShow = true;
             list.eventName = eventData.abiInfo.name + "(";
@@ -472,11 +496,11 @@ export default {
         decodeButtonEvent: function (num) {
             if (this.eventLog[num].eventDataShow) {
                 this.$set(this.eventLog[num], 'eventDataShow', false);
-                this.$set(this.eventLog[num], 'eventTitle', '解码')
+                this.$set(this.eventLog[num], 'eventTitle', this.$t('transaction.decode'))
                 this.$set(this.eventLog, num, this.eventLog[num])
             } else {
                 this.$set(this.eventLog[num], 'eventDataShow', true);
-                this.$set(this.eventLog[num], 'eventTitle', '还原');
+                this.$set(this.eventLog[num], 'eventTitle', this.$t('transaction.reduction'));
                 this.$set(this.eventLog, num, this.eventLog[num])
             }
         },
@@ -531,7 +555,7 @@ export default {
                     }
                 }
                 this.showDecode = false;
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
             }
         },
         //deloy-contract-transaction-decode
@@ -562,7 +586,7 @@ export default {
                     }
                 })
                 this.showDecode = false;
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
             } else {
                 this.buttonSHow = false;
                 this.showDecode = false;

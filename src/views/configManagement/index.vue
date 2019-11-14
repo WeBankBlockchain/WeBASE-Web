@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'配置管理'" @changGroup="changGroup" :headTooltip="`系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。`"></v-content-head>
+        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
@@ -17,13 +17,13 @@
                             </template>
                         </template>
                         <template v-else>
-                            <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">修改</el-button>
+                            <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">{{$t('text.update')}}</el-button>
                             <el-tooltip effect="dark" placement="top-start">
                                 <span slot="content">
-                                    不建议随意修改tx_count_limit和tx_gas_limit，如下情况可修改这些参数：</br>
-                                    机器网络或CPU等硬件性能有限：调小tx_count_limit，或降低业务压力；
-                                    </br>
-                                    业务逻辑太复杂，执行区块时gas不足：调大tx_gas_limit。
+                                    {{$t('system.configContent1')}}：<br>
+                                    {{$t('system.configContent2')}}；
+                                    <br>
+                                    {{$t('system.configContent3')}}
                                 </span>
                                 <i class="el-icon-info contract-icon font-12"></i>
                             </el-tooltip>
@@ -32,7 +32,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <el-dialog title="修改配置值" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+        <el-dialog :title="$t('system.updateConfig')" :visible.sync="modifyDialogVisible" width="420px" v-if="modifyDialogVisible" center>
             <system-config @close="close" @modifySuccess="modifySuccess" :configKey="configkey"></system-config>
         </el-dialog>
     </div>
@@ -69,48 +69,54 @@ export default {
             configkey: '',
             adminRivateKeyList: [],
             configList: [],
-            configHead: [
+            configKeyList: [],
+        }
+    },
+
+    computed: {
+        configHead() {
+            let data = [
                 {
                     enName: "configKey",
-                    name: "配置名称"
+                    name: this.$t('system.configKey')
                 },
                 {
                     enName: "configValue",
-                    name: "配置值"
+                    name: this.$t('system.configValue')
                 },
                 {
                     enName: "operate",
-                    name: "操作"
+                    name: this.$t('nodes.operation'),
                 }
-            ],
-            configKeyList: [],
-            rules: {
+            ]
+            return data
+        },
+        rules() {
+            let data = {
                 adminRivateKey: [
                     {
                         required: true,
-                        message: "请选择管理员账号",
+                        message: this.$t('rule.adminRule'),
                         trigger: "blur"
                     }
                 ],
                 configKey: [
                     {
                         required: true,
-                        message: "请选择配置名称",
+                        message: this.$t('rule.configName'),
                         trigger: "blur"
                     }
                 ],
                 configValue: [
                     {
                         required: true,
-                        message: "请输入配置值",
+                        message: this.$t('rule.configValue'),
                         trigger: "blur"
                     }
                 ]
             }
+            return data
         }
-    },
-
-    computed: {
     },
 
     mounted() {
@@ -141,11 +147,11 @@ export default {
                         list.forEach(item => {
                             switch (item.configKey) {
                                 case "tx_gas_limit":
-                                    item.tips = '一个交易最大gas限制'
+                                    item.tips = this.$t('system.gasLimit')
                                     break;
 
                                 case "tx_count_limit":
-                                    item.tips = '一个区块中可打包的最大交易数目'
+                                    item.tips = this.$t('system.countLimit')
                                     break;
                             }
                         })
@@ -153,15 +159,17 @@ export default {
                         this.total = res.data.totalCount;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -182,16 +190,18 @@ export default {
                         });
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                         this.$message.closeAll();
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                     this.$message.closeAll();
                 });
@@ -218,20 +228,22 @@ export default {
                         this.getSysConfigList()
                         this.$message({
                             type: 'success',
-                            message: '修改成功'
+                            message: this.$t('text.updateSuccessMsg')
                         })
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                         this.$message.closeAll()
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
