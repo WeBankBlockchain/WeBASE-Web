@@ -16,7 +16,7 @@
 <template>
     <div style="padding-left: 30px;">
         <div class="charts-title text-left">
-            <span class="total-count">当前总数量：{{numberFormat(chartStatistics.totalCount, 0, ".", ",")}}</span>
+            <span class="total-count">{{$t('transaction.total')}}：{{numberFormat(chartStatistics.totalCount, 0, ".", ",")}}</span>
         </div>
         <div :id="chartId" style="min-width: 250px; height: 476px; margin: 0 auto;"></div>
     </div>
@@ -77,6 +77,7 @@ export default {
     },
     methods: {
         chartShow: function() {
+            let vm = this
             this.chart = echarts.init(document.getElementById(this.chartId));
             // setTimeout(() => {
             //     this.chart.hideLoading();
@@ -102,7 +103,7 @@ export default {
                     width: this.chartSize.width
                 },
                 noDataLoadingOption: {
-                    text: "暂无数据",
+                    text: this.$t('text.noData'),
                     effect: "bubble",
                     effectOption: {
                         effect: {
@@ -125,9 +126,9 @@ export default {
                             '<span style="font-size:10px">' +
                             data[0].name +
                             '</span><br><table ><tr><td style="padding:0">' +
-                            '<span style="font-size:10px;color:white">交易量：' +
-                            data[0].value +
-                            "笔</a></span><br></td></tr></table>"
+                            '<span style="font-size:10px;color:white">' + vm.$t('home.chartTransactions') + '：' +
+                            data[0].value + vm.$t('transaction.stroke') +  
+                            "</a></span><br></td></tr></table>"
                         );
                     }
                 },

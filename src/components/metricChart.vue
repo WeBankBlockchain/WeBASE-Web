@@ -16,8 +16,8 @@
 <template>
     <div style="position: relative">
         <div :id="chartId" style="height: 350px; margin: 0 auto;"></div>
-        <div class="noData" style="color: #c23531" v-if="chartOption.data.lineDataList.valueList.length === 0">暂无数据</div>
-        <div class="noData" style="color: #2f4554" v-if="chartOption.data.contrastDataList.valueList.length === 0 && chartOption.data.contrastDataList.contractDataShow">暂无数据</div>
+        <div class="noData" style="color: #c23531" v-if="chartOption.data.lineDataList.valueList.length === 0">{{$t('text.noData')}}</div>
+        <div class="noData" style="color: #2f4554" v-if="chartOption.data.contrastDataList.valueList.length === 0 && chartOption.data.contrastDataList.contractDataShow">{{$t('text.noData')}}</div>
     </div>
 </template>
 
@@ -96,7 +96,7 @@ export default {
                 }
             }
             if (this.chartOption.data.contrastDataList.valueList.length > 0) {
-                yContrastTitle = "对比日数据";
+                yContrastTitle = this.$t('monitor.contrastDateData');
                 this.showContrast = true;
             }else {
                 this.showContrast = false
@@ -139,19 +139,19 @@ export default {
                             }else if(data[0]['data']===0&&data[1]['data']!=0){
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
-                                <span>${data[0]['seriesName']}:未采集到数据或数据为0</span><br/>
+                                <span>${data[0]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
                                 <span>${data[1]['seriesName']}:${data[1]['data']}</span><br/>
                                 `
                             }else if(data[0]['data']!=0&&data[1]['data']===0){
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
-                                <span>${data[1]['seriesName']}:未采集到数据或数据为0</span><br/>
+                                <span>${data[1]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
                                 `
                             }else {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
-                                <span>未采集到数据或数据为0</span><br/>
+                                <span>${this.$t('monitor.noData')}</span><br/>
                                 `
                             }
                         }else if(data.length === 1) {
@@ -164,7 +164,7 @@ export default {
                             }else {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
-                                <span>${data[0]['seriesName']}:未采集到数据或数据为0</span><br/>
+                                <span>${data[0]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
                                 `
                             }
                         }
@@ -172,7 +172,7 @@ export default {
                     }
                 },
                 legend: {
-                    data: ["显示日数据", yContrastTitle],
+                    data: [this.$t('monitor.showDateData'), yContrastTitle],
                     y: 20
                 },
                 dataZoom: [
@@ -238,7 +238,7 @@ export default {
                 },
                 series: [
                     {
-                        name: "显示日数据",
+                        name: this.$t('monitor.showDateData'),
                         type: "line",
                         data: yList,
                         smooth: true
@@ -276,7 +276,7 @@ export default {
         formatNodesMetric(val){
             let num ;
             if(val === 0) {
-                return str = '未获取到数据'
+                return str = this.$t('monitor.nullData')
             }
         }
     }

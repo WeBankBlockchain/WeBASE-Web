@@ -19,34 +19,37 @@
         <div class="module-wrapper">
             <div class="more-search-table">
                 <div class="search-item">
-                    <span>显示日期</span>
-                    <el-date-picker v-model="currentDate" type="date" placeholder="选择日期" :picker-options="pickerOption" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
+                    <span>{{$t('monitor.showDate')}}</span>
+                    <el-date-picker v-model="currentDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption"
+                     :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
-                    <span>对比日期</span>
-                    <el-date-picker v-model="contrastDate" type="date" placeholder="选择日期" :picker-options="pickerOption" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" class=" select-32" @change="changeContrastDate">
+                    <span>{{$t('monitor.contrastDate')}}</span>
+                    <el-date-picker v-model="contrastDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption"
+                     :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" class=" select-32" @change="changeContrastDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
-                    <span>起止时间</span>
-                    <el-time-picker is-range v-model="startEndTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" class="time-select-32">
+                    <span>{{$t('monitor.startEndTime')}}</span>
+                    <el-time-picker is-range v-model="startEndTime" :range-separator="$t('system.to')"
+                    :start-placeholder="$t('monitor.startTime')" :end-placeholder="$t('monitor.endTime')" :placeholder="$t('monitor.timeRange')" class="time-select-32">
                     </el-time-picker>
                 </div>
                 <div class="search-item">
-                    <span>数据粒度</span>
+                    <span>{{$t('monitor.dataGranularity')}}</span>
                     <el-radio-group v-model="timeGranularity">
-                        <el-radio :label="60">5分钟</el-radio>
-                        <el-radio :label="12">1分钟</el-radio>
-                        <el-radio :label="1">5秒钟</el-radio>
+                        <el-radio :label="60">5{{$t('monitor.minute')}}</el-radio>
+                        <el-radio :label="12">1{{$t('monitor.minute')}}</el-radio>
+                        <el-radio :label="1">5{{$t('monitor.second')}}</el-radio>
                     </el-radio-group>
-                    <el-button type="primary" @click="confirmParam(tab)" size="small" style="margin-left: 12px;" :loading="sureing">确认</el-button>
+                    <el-button type="primary" @click="confirmParam(tab)" size="small" style="margin-left: 12px;" :loading="sureing">{{$t('monitor.confirm')}}</el-button>
                 </div>
             </div>
             <div class="metric-content">
                 <el-button-group class="tab-list">
-                    <el-button :class="tab==='hostInfo'?'active':''" @click="changeTab('hostInfo')">主机信息</el-button>
-                    <el-button :class="tab==='chainInfo'?'active':''" @click="changeTab('chainInfo')">节点信息</el-button>
+                    <el-button :class="tab==='hostInfo'?'active':''" @click="changeTab('hostInfo')">{{$t('monitor.hostInfo')}}</el-button>
+                    <el-button :class="tab==='chainInfo'?'active':''" @click="changeTab('chainInfo')">{{$t('monitor.nodeInfo')}}</el-button>
                 </el-button-group>
                 <div class="tab-metric">
                     <el-row v-show="tab==='hostInfo'" v-loading="loadingInit">
@@ -74,6 +77,7 @@ import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth } from "@/util/api";
 import { format, numberFormat,formatData } from "@/util/util.js";
+import Bus from "@/bus"
 export default {
     name: "hostDetail",
     components: {
@@ -138,8 +142,18 @@ export default {
             nodesQuery: this.$root.$route.query
         };
     },
+    beforeDestroy: function () {
+        Bus.$off("changeGroup")
+        Bus.$off("chooselanguage")
+    },
     mounted() {
         this.getChartData();
+        Bus.$on("changeGroup", data => {
+            this.changGroup(localStorage.getItem('groupId'))
+        })
+        Bus.$on("chooselanguage", data => {
+            this.changGroup(localStorage.getItem('groupId'))
+        })
     },
     methods: {
         changGroup(val){
@@ -187,23 +201,23 @@ export default {
                             item.gap = this.timeGranularity;
                             if (item.metricType === "cpu") {
                                 item.metricName = "cpu";
-                                item.metricUint = "利用率";
+                                item.metricUint = this.$t('monitor.utilizationRate');
                                 item.metricU = "%";
                             } else if (item.metricType === "memory") {
-                                item.metricName = "内存";
-                                item.metricUint = "利用率";
+                                item.metricName = this.$t('monitor.RAM');
+                                item.metricUint = this.$t('monitor.utilizationRate');
                                 item.metricU = "%";
                             } else if (item.metricType === "disk") {
-                                item.metricName = "硬盘";
-                                item.metricUint = "利用率";
+                                item.metricName = this.$t('monitor.hardDisk');
+                                item.metricUint = this.$t('monitor.utilizationRate');
                                 item.metricU = "%";
                             } else if (item.metricType === "txbps") {
-                                item.metricName = "上行";
-                                item.metricUint = "带宽";
+                                item.metricName = this.$t('monitor.txbps');
+                                item.metricUint = this.$t('monitor.bandwidth');
                                 item.metricU = "KB/s";
                             } else if (item.metricType === "rxbps") {
-                                item.metricName = "下行";
-                                item.metricUint = "带宽";
+                                item.metricName = this.$t('monitor.rxbps');
+                                item.metricUint = this.$t('monitor.bandwidth');
                                 item.metricU = "KB/s";
                             }
                             if(this.chartParam.contrastBeginDate){
@@ -217,16 +231,17 @@ export default {
                         this.reloadNum++;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },
@@ -261,11 +276,11 @@ export default {
                         this.nodesHealthData = data;
                         this.nodesHealthData.forEach(item => {
                             if (item.metricType === "blockHeight") {
-                                item.metricName = "区块高度";
+                                item.metricName = this.$t('monitor.blockHeight');
                             } else if (item.metricType === "pbftView") {
                                 item.metricName = "pbftView";
                             }else if (item.metricType === 'pendingCount'){
-                                item.metricName = "待打包的交易数";
+                                item.metricName = this.$t('monitor.pendingCount');
                             }
                             item.data.contrastDataList.timestampList = timestampList;
                             item.data.lineDataList.timestampList = timestampList;
@@ -273,16 +288,17 @@ export default {
                         this.nodesReloadNum++;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },
@@ -305,14 +321,14 @@ export default {
             if (!this.startEndTime || !this.currentDate) {
                 this.$message({
                     type: "error",
-                    message: "请选择显示日期和时间"
+                    message: this.$t('monitor.selectDate')
                 });
                 return;
             }
             if (!this.contrastDate && !this.startEndTime) {
                 this.$message({
                     type: "error",
-                    message: "请选择显示日期和时间"
+                    message: this.$t('monitor.selectDate')
                 });
                 return;
             }

@@ -15,17 +15,17 @@
  */
 <template>
     <div style="height:100%">
-        <content-head :headTitle="'交易审计'" :headSubTitle="'异常用户'" @changGroup="changGroup"></content-head>
+        <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualUser')" @changGroup="changGroup"></content-head>
         <div class="module-wrapper" style="position: relative;">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-tooltip effect="dark" content="异常过多(大于等于20)，会停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。" placement="top-start">
+                    <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
                     </el-tooltip>
                 </div>
 
                 <div class="search-part-right">
-                    <el-input placeholder="请输入用户" v-model="userName" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('transaction.inputUser')" v-model="userName" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -49,7 +49,7 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column v-for="head in unusualUserHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" v-if="head.enName!=='hashs'">
+                    <el-table-column v-for="head in unusualUserHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" v-if="head.enName !== 'hashs'">
                         <template slot-scope="scope">
                             <span>{{scope.row[head.enName]}}</span>
                         </template>
@@ -85,28 +85,31 @@ export default {
             pageSize: 10,
             total: 0,
             userName: '',
-            unusualUserHead: [
-                {
-                    enName: "userName",
-                    name: "用户名称"
-                },
-                {
-                    enName: "transCount",
-                    name: "交易量"
-                },
-                {
-                    enName: "time",
-                    name: "最新交易时间"
-                },
-                {
-                    enName: "hashs",
-                    name: "哈希"
-                }
-            ],
             unusualUserList: []
         };
     },
     computed: {
+        unusualUserHead() {
+            let data = [
+                {
+                    enName: "userName",
+                    name: this.$t('privateKey.userName')
+                },
+                {
+                    enName: "transCount",
+                    name: this.$t('home.chartTransactions')
+                },
+                {
+                    enName: "time",
+                    name: this.$t('transaction.transactionTime')
+                },
+                {
+                    enName: "hashs",
+                    name: this.$t('transaction.hash')
+                }
+            ]
+            return data
+        },
         hashData() {
             var arr = this.unusualUserList,
                 list = [];
@@ -162,7 +165,7 @@ export default {
                     } else {
                         this.loading = false;
                         this.$message({
-                            message: this.errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -171,7 +174,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.errcode.errCode[err.data.code].cn || "查询异常用户失败！",
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

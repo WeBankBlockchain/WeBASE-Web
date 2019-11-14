@@ -1,11 +1,11 @@
 <template>
     <div>
-        <v-content-head :headTitle="'系统管理'" :headSubTitle="'证书管理'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
                     <el-upload ref="upload" multiple action :limit="10" accept=".crt,.cer,.der" :http-request="uploadCrt" :before-upload="onBeforeUpload" :on-exceed="onUploadExceed">
-                        <el-button size="small" type="primary" :disabled="disabled">导入证书</el-button>
+                        <el-button size="small" type="primary" :disabled="disabled">{{this.$t('system.addCertificate')}}</el-button>
                         <!-- <div slot="tip">只能上传crt文件，且不超过500kb</div> -->
                     </el-upload>
                 </div>
@@ -18,23 +18,23 @@
                                 <template v-if="scope.row[head.enName]">
                                     <el-button v-if=" head.enName==='certName'" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" title="导出" @click="sureExportCert(scope.row)">{{scope.row[head.enName]}}</el-button>
                                     <span v-else-if="head.enName==='fingerPrint'">
-                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                         {{scope.row[head.enName]}}
                                     </span>
                                     <span v-else-if="head.enName==='father'">
-                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                         {{scope.row[head.enName]}}
                                     </span>
                                     <span v-else-if="head.enName==='address'">
-                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                         {{scope.row[head.enName]}}
                                     </span>
                                     <span v-else-if="head.enName==='publicKey'">
-                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])" title="复制"></i>
+                                        <i class="wbs-icon-copy font-12" @click="copyFingerPrint(scope.row[head.enName])":title="$t('text.copy')"></i>
                                         {{scope.row[head.enName]}}
                                     </span>
                                     <span v-else-if="head.enName==='validityFrom'">
-                                        {{format(scope.row['validityFrom'],'yyyy-MM-dd HH:mm:ss')}} 至 {{format(scope.row['validityTo'],'yyyy-MM-dd HH:mm:ss')}}
+                                        {{format(scope.row['validityFrom'],'yyyy-MM-dd HH:mm:ss')}} {{$t('system.to')}} {{format(scope.row['validityTo'],'yyyy-MM-dd HH:mm:ss')}}
                                     </span>
                                     <span v-else>
                                         {{scope.row[head.enName]}}
@@ -43,7 +43,7 @@
                                 <template v-else>-</template>
                             </template>
                             <template v-else>
-                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deteleCert(scope.row)">删除</el-button>
+                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deteleCert(scope.row)">{{$t('text.delete')}}</el-button>
                             </template>
                         </template>
                     </el-table-column>
@@ -76,30 +76,37 @@ export default {
             currentPage: 1,
             pageSize: 100,
             total: 0,
-            certificateHead: [
+            certificateList: [],
+            format: format
+        }
+    },
+
+    computed: {
+        certificateHead() {
+            let data = [
                 {
                     enName: 'certName',
-                    name: '证书名称',
+                    name: this.$t('system.certName'),
                     width: ''
                 },
                 {
                     enName: 'certType',
-                    name: '证书类型',
+                    name: this.$t('system.certType'),
                     width: ''
                 },
                 {
                     enName: 'fingerPrint',
-                    name: '指纹',
+                    name: this.$t('system.fingerPrint'),
                     width: ''
                 },
                 {
                     enName: 'father',
-                    name: '父级指纹',
+                    name: this.$t('system.father'),
                     width: ''
                 },
                 {
                     enName: 'address',
-                    name: '地址',
+                    name: this.$t('system.address'),
                     width: ''
                 },
                 {
@@ -109,21 +116,17 @@ export default {
                 },
                 {
                     enName: 'validityFrom',
-                    name: '有效期',
+                    name: this.$t('system.validityFrom'),
                     width: '280'
                 },
                 {
                     enName: 'operate',
-                    name: '操作',
+                    name: this.$t('nodes.operation'),
                     width: ''
                 },
-            ],
-            certificateList: [],
-            format: format
+            ]
+            return data
         }
-    },
-
-    computed: {
     },
 
     watch: {
@@ -167,7 +170,7 @@ export default {
             })
         },
         deteleCert(row) {
-            this.$confirm('确认删除？')
+            this.$confirm(this.$t('text.confirmDelete'))
                 .then(_ => {
                     this.sureDeleteCert(row)
                 })
@@ -182,22 +185,28 @@ export default {
                 if (data.code === 0) {
                     this.$message({
                         type: 'success',
-                        message: '删除成功',
+                        message: this.$t('system.deleteSuccess')
                     })
                     this.getCertList()
                 } else {
                     this.$message({
-                        type: 'error',
-                        message: data.data,
-                        duration: 2500
-                    })
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
+            }).catch(err => {
+                this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             })
         },
         onBeforeUpload(file) {
             const isLt1M = Math.ceil(file.size / 1024) < 100;
             if (!isLt1M) {
-                this.$message.error('上传文件大小不能超过 100kb!');
+                this.$message.error(this.$t('system.fileSize'));
             }
             return isLt1M;
         },
@@ -219,16 +228,22 @@ export default {
                 if (data.code === 0) {
                     this.$message({
                         type: 'success',
-                        message: '导入成功',
+                        message: this.$t('system.importSuccess'),
                     })
                     this.getCertList()
                 } else {
                     this.$message({
-                        type: 'error',
-                        message: data.data,
-                        duration: 2500
-                    })
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
+            }).catch(err => {
+                this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             })
         },
         handleSizeChange(val) {
@@ -253,18 +268,30 @@ export default {
                 if (data.code === 0) {
                     this.certificateList = data.data;
                     this.total = data.totalCount;
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
+            }).catch(err => {
+                this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             })
         },
         onUploadExceed(files, fileList) {
-            this.$message.warning(`当前限制选择 10 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+            this.$message.warning(this.$t('system.uploadWarning1') + files.length + this.$t('system.uploadWarning2') + (files.length + fileList.length) + this.$t('system.uploadWarning3'));
         },
         copyFingerPrint(val) {
             if (!val) {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -272,7 +299,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
