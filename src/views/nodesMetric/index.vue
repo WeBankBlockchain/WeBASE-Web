@@ -15,11 +15,11 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'系统监控'" :headSubTitle="'节点监控'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.systemMonitor')" :headSubTitle="$t('title.nodesMonitor')" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-nodes-list">
                 <div class="serch-nodes">
-                    <span>节点</span>
+                    <span>{{$t('monitor.node')}}</span>
                     <el-select v-model="nodeId" @change="changeNodes" style="width: 220px;">
                         <el-option v-for="item in nodesOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
@@ -27,28 +27,32 @@
             </div>
             <div class="more-search-table" style="padding-top:10px;">
                 <div class="search-item">
-                    <span>显示日期</span>
-                    <el-date-picker v-model="currentDate" type="date" placeholder="选择日期" :picker-options="pickerOption" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
+                    <span>{{$t('monitor.showDate')}}</span>
+                    <el-date-picker v-model="currentDate" type="date" :placeholder="$t('monitor.selectDate')" 
+                    :picker-options="pickerOption" :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" :default-value="`${Date()}`" 
+                    class=" select-32" @change="changeCurrentDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
-                    <span>对比日期</span>
-                    <el-date-picker v-model="contrastDate" type="date" placeholder="选择日期" :picker-options="pickerOption" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd" class=" select-32" @change="changeContrastDate">
+                    <span>{{$t('monitor.contrastDate')}}</span>
+                    <el-date-picker v-model="contrastDate" type="date" :placeholder="$t('monitor.selectDate')" 
+                    :picker-options="pickerOption" :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" class=" select-32" @change="changeContrastDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
-                    <span>起止时间</span>
-                    <el-time-picker is-range v-model="startEndTime" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" class="time-select-32">
+                    <span>{{$t('monitor.startEndTime')}}</span>
+                    <el-time-picker is-range v-model="startEndTime" :range-separator="$t('system.to')" :start-placeholder="$t('monitor.startTime')" 
+                    :end-placeholder="$t('monitor.endTime')" :placeholder="$t('monitor.timeRange')" class="time-select-32">
                     </el-time-picker>
                 </div>
                 <div class="search-item">
-                    <span>数据粒度</span>
+                    <span>{{$t('monitor.dataGranularity')}}</span>
                     <el-radio-group v-model="timeGranularity">
-                        <el-radio :label="60">5分钟</el-radio>
-                        <el-radio :label="12">1分钟</el-radio>
-                        <el-radio :label="1">5秒钟</el-radio>
+                        <el-radio :label="60">5{{$t('monitor.minute')}}</el-radio>
+                        <el-radio :label="12">1{{$t('monitor.minute')}}</el-radio>
+                        <el-radio :label="1">5{{$t('monitor.second')}}</el-radio>
                     </el-radio-group>
-                    <el-button type="primary" @click="confirmParam()" size="small" style="margin-left: 12px;" :loading="sureing">确认</el-button>
+                    <el-button type="primary" @click="confirmParam()" size="small" style="margin-left: 12px;" :loading="sureing">{{$t('monitor.confirm')}}</el-button>
                 </div>
             </div>
             <div class="metric-content">
@@ -71,6 +75,7 @@ import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth, getFronts } from "@/util/api";
 import { format, numberFormat,formatData } from "@/util/util.js";
 import errcode from "@/util/errcode";
+import Bus from "@/bus"
 export default {
     name: "nodesMetric",
     components: {
@@ -118,11 +123,22 @@ export default {
             nodeId: this.$root.$route.query.nodeId || ""
         };
     },
+    beforeDestroy: function () {
+        Bus.$off("changeGroup")
+        Bus.$off("chooselanguage")
+    },
     mounted() {
         this.getFrontTable();
+        Bus.$on("changeGroup", data => {
+            this.changGroup()
+        })
+        Bus.$on("chooselanguage", data => {
+            this.changGroup()
+        })
     },
     methods: {
         changGroup(){
+
             this.getFrontTable()
         },
         changeNodes() {
@@ -150,14 +166,14 @@ export default {
                             }
                         } else {
                             this.$message({
-                                message: "添加前置信息",
+                                message: this.$t('monitor.addFrontInfo'),
                                 type: "error",
                                 duration: 2500
                             });
                         }
                     } else {
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -165,7 +181,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: "查询失败！",
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -213,11 +229,11 @@ export default {
                             this.nodesHealthData = data;
                             this.nodesHealthData.forEach(item => {
                                 if (item.metricType === "blockHeight") {
-                                    item.metricName = "区块高度";
+                                    item.metricName = this.$t('monitor.blockHeight');
                                 } else if (item.metricType === "pbftView") {
                                     item.metricName = "pbftView";
                                 } else if (item.metricType === "pendingCount") {
-                                    item.metricName = "待打包的交易数";
+                                    item.metricName = this.$t('monitor.pendingCount');
                                 }
                                 if(this.chartParam.contrastBeginDate){
                                     item.data.contrastDataList.contractDataShow = true
@@ -230,16 +246,17 @@ export default {
                             this.nodesReloadNum++;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn || "系统错误"
+                        duration: 2000
                     });
                 });
         },

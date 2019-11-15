@@ -16,12 +16,12 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="'节点管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
-        <v-content-head :headTitle="'节点管理'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
-            <h3 style="padding: 20px 0 0 40px;">前置列表</h3>
+            <h3 style="padding: 20px 0 0 40px;">{{this.$t("nodes.nodeFront")}}</h3>
             <div class="search-part" style="padding-top: 20px;">
                 <div class="search-part-left" v-if='!disabled'>
-                    <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点前置</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="createFront">{{this.$t("nodes.addFront")}}</el-button>
                 </div>
                 <!-- <div class="search-part-right">
                     <el-input placeholder="请输入前置编号" v-model="frontId" class="input-with-select">
@@ -37,15 +37,15 @@
                                 <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
                             </span>
                             <span v-else-if="head.enName === 'nodeId'">
-                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                 {{scope.row[head.enName]}}
                             </span>
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
                         <template slot-scope="scope">
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">删除</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">{{$t('text.delete')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -56,8 +56,8 @@
         <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
                 <h3 style="padding: 20px 0 8px 0;">
-                    节点列表
-                    <el-tooltip effect="dark" :content="`节点管理说明：可以通过节点管理设置节点类型。包括：1、根据节点NodeID设置对应节点为共识节点。2、 根据节点NodeID设置对应节点为观察节点。3、根据节点NodeID设置对应节点为游离节点。`" placement="top-start">
+                    {{this.$t("nodes.nodeList")}}
+                    <el-tooltip effect="dark" :content="$t('nodes.nodeDescription')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
                 </h3>
@@ -69,7 +69,7 @@
                                     <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
                                 </span>
                                 <span v-else-if="head.enName === 'nodeId'">
-                                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row[head.enName])}}</span>
@@ -79,7 +79,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
-                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">修改</el-button>
+                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
                         </template>
 
@@ -91,7 +91,7 @@
                     <v-nodesDialog :nodesDialogOptions="nodesDialogOptions" @success="success" @close="close"></v-nodesDialog>
                 </el-dialog> -->
                 <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
-                <el-dialog title="修改节点类型" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+                <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
             </div>
@@ -119,6 +119,76 @@ export default {
             this.urlQuery = this.$root.$route.query;
         }
     },
+    computed: {
+        frontHead() {
+            let data = [
+                {
+                    enName: "frontId",
+                    name: this.$t("nodes.frontId")
+                },
+                {
+                    enName: "frontIp",
+                    name: this.$t("nodes.ip")
+                },
+                {
+                    enName: "frontPort",
+                    name: this.$t("nodes.frontPort")
+                },
+                {
+                    enName: "nodeId",
+                    name: this.$t("home.nodeId")
+                },
+                {
+                    enName: "agency",
+                    name: this.$t("nodes.agency")
+                },
+                {
+                    enName: "createTime",
+                    name: this.$t("home.createTime")
+                },
+                {
+                    enName: "modifyTime",
+                    name: this.$t("nodes.modifyTime")
+                }
+            ];
+            return data
+        },
+        nodeHead() {
+            let data = [
+                {
+                    enName: "nodeId",
+                    name: this.$t("home.nodeId"),
+                    width: ""
+                },
+                {
+                    enName: "nodeType",
+                    name: this.$t("nodes.nodeStyle"),
+                    width: 180
+                },
+                {
+                    enName: "blockNumber",
+                    name: this.$t("home.blockHeight"),
+                    width: 180
+                },
+                {
+                    enName: "pbftView",
+                    name: "pbftView",
+                    width: 180
+                },
+                {
+                    enName: "nodeActive",
+                    name: this.$t("home.status"),
+                    width: 150
+                },
+                {
+                    enName: "operate",
+                    name: this.$t("nodes.operation"),
+                    width: 150
+                }
+            ];
+            return data
+        }
+    },
     data() {
         return {
             frontShow: false,
@@ -138,68 +208,6 @@ export default {
             nodesDialogOptions: {},
             frontId: null,
             loadingNodes: false,
-            frontHead: [
-                {
-                    enName: "frontId",
-                    name: "前置编号"
-                },
-                {
-                    enName: "frontIp",
-                    name: "ip"
-                },
-                {
-                    enName: "frontPort",
-                    name: "前置端口"
-                },
-                {
-                    enName: "nodeId",
-                    name: "节点id"
-                },
-                {
-                    enName: "agency",
-                    name: "所属机构"
-                },
-                {
-                    enName: "createTime",
-                    name: "创建时间"
-                },
-                {
-                    enName: "modifyTime",
-                    name: "修改时间"
-                }
-            ],
-            nodeHead: [
-                {
-                    enName: "nodeId",
-                    name: "节点Id",
-                    width: ""
-                },
-                {
-                    enName: "nodeType",
-                    name: "节点类型",
-                    width: 180
-                },
-                {
-                    enName: "blockNumber",
-                    name: "块高",
-                    width: 180
-                },
-                {
-                    enName: "pbftView",
-                    name: "pbftView",
-                    width: 180
-                },
-                {
-                    enName: "nodeActive",
-                    name: "状态",
-                    width: 150
-                },
-                {
-                    enName: "operate",
-                    name: "操作",
-                    width: 150
-                }
-            ],
             nodeData: [],
             urlQuery: this.$root.$route.query,
             disabled: false,
@@ -238,7 +246,7 @@ export default {
                     } else {
                         this.loading = false;
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -248,7 +256,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: "查询失败！",
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -289,10 +297,10 @@ export default {
             let transString = "";
             switch (val) {
                 case 1:
-                    transString = "运行";
+                    transString = this.$t("home.run");
                     break;
                 case 2:
-                    transString = "异常";
+                    transString = this.$t("home.unusual");
                     break;
             }
             return transString;
@@ -301,13 +309,13 @@ export default {
             var str = '';
             switch (key) {
                 case 'sealer':
-                    str = '共识';
+                    str = this.$t("nodes.sealer");
                     break;
                 case 'observer':
-                    str = '观察';
+                    str = this.$t("nodes.observer");
                     break;
                 case 'remove':
-                    str = '游离';
+                    str = this.$t("nodes.remove");
                     break;
             }
             return str;
@@ -321,7 +329,7 @@ export default {
                 data: val
             };
             this.nodesDialogVisible = true;
-            this.nodesDialogTitle = "删除节点";
+            this.nodesDialogTitle = this.$t("nodes.deleteNode");
         },
         close(val) {
             this.frontShow = false;
@@ -333,7 +341,7 @@ export default {
             this.$router.push({ path: 'hostDetail', query: { 'nodeIp': item.nodeIp, 'nodeId': item.nodeId } });
         },
         deletedFront(val) {
-            this.$confirm('确认删除？')
+            this.$confirm(this.$t("text.confirmDelete"))
                 .then(_ => {
                     deleteFront(val.frontId).then(res => {
                         if (res.data.code === 0) {
@@ -341,14 +349,14 @@ export default {
                             this.getFrontTable()
                         } else {
                             this.$message({
-                                message: errcode.errCode[res.data.code].cn,
+                                message: this.$chooseLang(res.data.code),
                                 type: "error",
                                 duration: 2000
                             });
                         }
                     }).catch(err => {
                         this.$message({
-                            message: "系统错误",
+                            message: this.$t('text.systemError'),
                             type: "error",
                             duration: 2000
                         });
@@ -419,7 +427,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -427,7 +435,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });

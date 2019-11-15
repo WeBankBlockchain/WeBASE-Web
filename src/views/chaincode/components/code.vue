@@ -22,29 +22,29 @@
             </span>
             <span class="contract-code-handle" v-show="codeShow">
                 <span class="contract-code-done" v-if="!contractAddress && !disabled">
-                    <el-tooltip class="item" effect="dark" content="按Ctrl+s保存合约内容" placement="top-start">
+                    <el-tooltip class="item" effect="dark" :content="$t('contracts.contractSaveTips')" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
-                    <span>保存</span>
+                    <span>{{this.$t("text.save")}}</span>
                 </span>
                 <span class="contract-code-done" @click="compile" v-if="!contractAddress && !disabled">
                     <i class="wbs-icon-bianyi font-16"></i>
-                    <span>编译</span>
+                    <span>{{this.$t("text.compile")}}</span>
                 </span>
                 <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile && bin && !disabled">
                     <i class="wbs-icon-deploy font-16"></i>
-                    <span>部署</span>
+                    <span>{{this.$t("text.deploy")}}</span>
                 </span>
                 <span class="contract-code-done" v-if="abiFile && bin && !disabled" @click="send">
                     <i class="wbs-icon-send font-16"></i>
-                    <span>发交易</span>
+                    <span>{{this.$t("text.send")}}</span>
                 </span>
             </span>
         </div>
         <div class="contract-code-content" :class="{infoHide: !successHide}">
             <div class="contract-code-mirror" :style="{height:codeHight}" ref="codeContent">
                 <div style="padding-top: 60px;text-align:center;" v-show="!codeShow">
-                    <span>请在左侧面板点击打开一个合约或新建一个合约</span>
+                    <span>{{this.$t("contracts.contractOpenTips")}}</span>
                 </div>
                 <div class="ace-editor" ref="ace" v-show="codeShow"></div>
             </div>
@@ -67,18 +67,18 @@
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress 
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" title="复制"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" :title="$t('text.copy')"></i>
                         </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractAddress}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractName
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractName)" title="复制"></i> </span>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractName)" :title="$t('text.copy')"></i> </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractName}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">abi
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(abiFile)" title="复制"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(abiFile)" :title="$t('text.copy')"></i>
                         </span>
                         <span class="showText" ref="showAbiText">
                             {{abiFile}}
@@ -87,7 +87,7 @@
                     </div>
                     <div class="contract-info-list" style="border-bottom: 1px solid #e8e8e8" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">bytecodeBin
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(bytecodeBin)" title="复制"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(bytecodeBin)" :title="$t('text.copy')"></i>
                         </span>
                         <span class="showText" ref="showBinText">
                             {{bytecodeBin}}
@@ -97,10 +97,10 @@
                 </div>
             </div>
         </div>
-        <el-dialog v-dialogDrag title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+        <el-dialog v-dialogDrag :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version' :address='uploadAddress'></v-transaction>
         </el-dialog>
-        <el-dialog v-dialogDrag title="选择用户" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
+        <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
@@ -499,7 +499,7 @@ export default {
             try {
                 output = JSON.parse(solc.compileStandard(JSON.stringify(input), this.findImports));
             } catch (error) {
-                this.errorInfo = "合约编译失败！";
+                this.errorInfo = this.$t("contracts.contractCompileFail");
                 this.errorMessage = error;
                 this.compileShow = true;
                 this.loading = false;
@@ -514,7 +514,7 @@ export default {
                     }
                 } else {
                     this.errorMessage = output.errors[0];
-                    this.errorInfo = "合约编译失败！";
+                    this.errorInfo = this.$t("contracts.contractCompileFail");
                     this.loading = false;
                 }
             }, 500)
@@ -524,7 +524,7 @@ export default {
                 if (obj.hasOwnProperty(this.contractName)) {
                     let compiledMap = obj[this.contractName]
                     this.abiFileShow = true;
-                    this.successInfo = "< 编译成功！";
+                    this.successInfo = this.$t("contracts.compileSuccess");
                     this.abiFile = compiledMap.abi;
                     this.abiFile = JSON.stringify(this.abiFile);
                     this.bin = compiledMap.evm.deployedBytecode.object;
@@ -539,14 +539,14 @@ export default {
                 } else {
                     this.$message({
                         type: "error",
-                        message: '合约名和文件名要保持一致'
+                        message: this.$t("contracts.conmileNameError")
                     })
-                    this.errorInfo = "合约编译失败！";
+                    this.errorInfo = this.$t("contracts.contractCompileFail");
                     this.compileShow = true;
                     this.loading = false;
                 }
             } else {
-                this.errorInfo = "合约编译失败！";
+                this.errorInfo = this.$t("contracts.contractCompileFail");
                 this.compileShow = true;
                 this.loading = false;
             }
@@ -638,11 +638,11 @@ export default {
                         this.abiFileShow = true;
                         this.status = 2;
                         this.contractAddress = res.data.data.contractAddress
-                        this.successInfo = "< 部署成功！";
+                        this.successInfo = this.$t("contracts.deploySuccess");
                         this.abiFile = res.data.data.contractAbi;
                         this.bin = res.data.data.contractBin;
                         this.$message({
-                            message: "合约部署成功！",
+                            message: this.$t("contracts.contractDeploySuccess"),
                             type: "success"
                         });
                         this.data.contractAbi = this.abiFile;
@@ -654,8 +654,9 @@ export default {
                     } else {
                         this.status = 3;
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
-                            type: "error"
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
                         });
                     }
                 })
@@ -663,8 +664,9 @@ export default {
                     this.status = 3;
                     this.loading = false;
                     this.$message({
-                        message: "系统错误",
-                        type: "error"
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
                     });
                 });
         },
@@ -720,7 +722,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: '值为空，不复制',
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -728,7 +730,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: '复制成功',
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });

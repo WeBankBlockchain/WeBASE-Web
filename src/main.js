@@ -35,21 +35,29 @@ import '@/assets/css/common.css'
 import '@/util/directives.js';
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import filters from './util/filter.js'
+import Cookies from 'js-cookie'
+import i18n from './lang' // internationalization
 
 import ace from 'ace-builds'
+import { chooseLang } from "./util/errcode.js";
 Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 60 * 1000;
+
 Vue.use(router);
 Vue.use(VueClipboard)
 Vue.use(JsonViewer)
 Vue.use(ace)
 Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
-Vue.use(ElementUI);
-Vue.use(Clickoutside)
+// Vue.use(ElementUI);
+Vue.use(Clickoutside);
+Vue.use(ElementUI, {
+    size: Cookies.get('size') || 'medium', // set element-ui default size
+    i18n: (key, value) => i18n.t(key, value)
+});
 import promise from 'es6-promise';
 //compatible Promise
 promise.polyfill();
@@ -57,14 +65,17 @@ promise.polyfill();
 Vue.prototype.getCookie = getCookie;
 Vue.prototype.setCookie = setCookie;
 Vue.prototype.delCookie = delCookie;
-//error code
 Vue.prototype.errcode = errcode;
+Vue.prototype.$chooseLang = chooseLang;
+//error code
+
 // require('./mock')
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
     router,
     store,
+    i18n,
     components: { App },
     template: '<App/>'
 });

@@ -16,19 +16,19 @@
 <template>
     <div class="send-wrapper">
         <div class="send-item">
-            <span class="send-item-title">合约名称:</span>
+            <span class="send-item-title">{{this.$t('contracts.contractName')}}:</span>
             <span>{{data.contractName}}</span>
         </div>
         <div class="send-item">
-            <span class="send-item-title">合约地址:</span>
-            <el-input v-model.trim="contractAddress" style="width: 240px;" placeholder="请输入合约地址"></el-input>
-            <el-tooltip class="item" effect="dark" content="选填项，导入已部署的合约地址。" placement="top-start">
+            <span class="send-item-title">{{this.$t('contracts.contractAddress')}}:</span>
+            <el-input v-model.trim="contractAddress" style="width: 240px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
+            <el-tooltip class="item" effect="dark" :content="$t('contracts.contractAddressInfo')" placement="top-start">
                 <i class="el-icon-info"></i>
             </el-tooltip>
         </div>
         <div class="send-item" v-show="!constant">
-            <span class="send-item-title">用户:</span>
-            <el-select v-model="transation.userName" placeholder="请选择用户" style="width:240px">
+            <span class="send-item-title">{{this.$t('contracts.user')}}:</span>
+            <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width:240px">
                 <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
                     <span>{{item.userName}}</span>
                     <span class="font-12">{{splitString(item.address)}}...</span>
@@ -36,18 +36,18 @@
             </el-select>
         </div>
         <div class="send-item">
-            <span class="send-item-title">方法:</span>
-            <el-select v-model="transation.funcType" placeholder="方法类型" @change="changeType($event)" style="width:110px">
+            <span class="send-item-title">{{this.$t('contracts.method')}}:</span>
+            <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width:110px">
                 <el-option label="function" :value="'function'"></el-option>
             </el-select>
-            <el-select v-model="transation.funcName" placeholder="方法名" filterable v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
+            <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
                 <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
             </el-select>
         </div>
         <div class="send-item" v-show="pramasData.length" style="line-height: 25px;">
-            <span class="send-item-title" style="position: relative;top: 5px;">参数:</span>
+            <span class="send-item-title" style="position: relative;top: 5px;">{{this.$t("contracts.params")}}:</span>
             <ul style="position: relative;top: -25px;">
-                <li v-for="(item,index) in pramasData" style="margin-left:63px;">
+                <li v-for="(item,index) in pramasData" style="margin-left:115px;">
                     <el-input v-model="transation.funcValue[index]" style="width: 240px;" :placeholder="item.type">
                         <template slot="prepend">
                             <span class="">{{item.name}}</span>
@@ -57,13 +57,13 @@
                         <i class="el-icon-info" style="position: relative;top: 8px;"></i>
                     </el-tooltip> -->
                 </li>
-                <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
+                <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>{{this.$t("contracts.paramsInfo")}}</p>
             </ul>
 
         </div>
         <div class="text-right send-btn">
-            <el-button @click="close">取消</el-button>
-            <el-button type="primary" @click="submit('transation')" :disabled='buttonClick'>确定</el-button>
+            <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
+            <el-button type="primary" @click="submit('transation')" :disabled='buttonClick'>{{this.$t("text.sure")}}</el-button>
         </div>
     </div>
 </template>
@@ -173,15 +173,17 @@ export default {
                         this.changeFunc();
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -238,25 +240,26 @@ export default {
                         if (this.constant) {
                             this.$message({
                                 type: "success",
-                                message: "查询成功!"
+                                message: this.$t("text.selectSuccess")
                             });
                         } else {
                             if (resData.statusOK) {
                                 this.$message({
                                     type: "success",
-                                    message: "交易成功!"
+                                    message: this.$t("text.transactionSuccess")
                                 });
                             } else {
                                 this.$message({
                                     type: "success",
-                                    message: "交易失败!"
+                                    message: this.$t("text.transactionFail")
                                 });
                             }
                         }
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                         this.close();
                     }
@@ -265,8 +268,9 @@ export default {
                     this.buttonClick = false;
                     this.close();
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "发送交易失败！"
+                        duration: 2000
                     });
                 });
         },
@@ -287,7 +291,7 @@ export default {
 }
 .send-item-title {
     display: inline-block;
-    width: 60px;
+    width: 110px;
     text-align: right;
 }
 .send-item-params {
