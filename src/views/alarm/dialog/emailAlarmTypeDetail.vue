@@ -93,7 +93,10 @@ export default {
         }
     },
     mounted: function(){
-        this.getAccountList()
+        if(this.alarmData.userList){
+            this.alarmForm.userList = JSON.parse(this.alarmData.userList)
+        }
+        this.getAccountList();
     },
     methods: {
         handleClose: function(){

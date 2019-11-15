@@ -24,7 +24,7 @@
                     <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']"  @click.stop.prevent="showPassword"></i>
                 </el-input>
             </el-form-item>
-            <el-form-item v-if='accountForm.emailshow' label="邮箱" prop="email" style="width: 300px;">
+            <el-form-item v-if='accountForm.emailshow' label="邮箱" style="width: 300px;">
                 <el-input v-model="accountForm.email" placeholder="请输入邮箱"></el-input>
             </el-form-item>
             <el-form-item label="角色" prop="role" style="width: 300px;" v-if="accountForm['mShow']">
@@ -71,7 +71,7 @@ export default {
                             dShow: true,
                             mShow: true,
                             email: "",
-                            emailshow: false
+                            emailshow: true
                         };
                         break;
                     case "delete":
@@ -149,18 +149,6 @@ export default {
                         trigger: "blur"
                     }
                 ],
-                email: [
-                    {
-                        required: true,
-                        message: "请输入邮箱",
-                        trigger: "blur"
-                    },
-                    {
-                        pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/,
-                        message: "不符合规则",
-                        trigger: "blur"
-                    },
-                ]
             }
         };
     },
@@ -237,8 +225,19 @@ export default {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
-                email: this.accountForm.email
             };
+            if(this.accountForm.email){
+                let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if(!pattern.test(this.accountForm.email)){
+                    this.$message({
+                        type: "error",
+                        message: "邮箱格式不正确"
+                    });
+                    return
+                }else{
+                    reqData.email = this.accountForm.email
+                }
+            }
             creatAccountInfo(reqData, {})
                 .then(res => {
                     this.loading = false;
@@ -271,8 +270,19 @@ export default {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
-                email: this.accountForm.email
             };
+            if(this.accountForm.email){
+                let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if(!pattern.test(this.accountForm.email)){
+                    this.$message({
+                        type: "error",
+                        message: "邮箱格式不正确"
+                    });
+                    return
+                }else{
+                    reqData.email = this.accountForm.email
+                }
+            }
             modifyAccountInfo(reqData, {})
                 .then(res => {
                     this.loading = false;

@@ -21,7 +21,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="邮件模板" prop='alertContent' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="发送间隔时间（秒）" prop='alertIntervalSeconds' show-overflow-tooltip align="center"></el-table-column>
+                <el-table-column label="发送间隔时间" prop='alertIntervalSeconds' show-overflow-tooltip align="center">
+                    <template slot-scope="scope">
+                        <span>{{scope.row.alertIntervalSeconds | Second}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作" fixed="right" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <el-button @click="handleClick(scope.row)" type="text" size="small">修改</el-button>
@@ -63,6 +67,8 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
+             </el-pagination>
         </div>
         <emailAlarmType-detail :show='emailAlarmTypeShow' v-if='emailAlarmTypeShow' :data="emailAlarmTypeData" @close='emailAlarmTypeClose'></emailAlarmType-detail>
         <emailAlarm-detail :show='emailAlarmShow' v-if='emailAlarmShow' :data='emailAlarmData' @close='emailAlarmClose'></emailAlarm-detail>
@@ -93,7 +99,10 @@ export default {
             emailAlarmData: null,
             enable: null,
             emailData: null,
-            alarmLogList: []
+            alarmLogList: [],
+            currentPage: 1,
+            pageSize: 10,
+            total: 0
         }
     },
     mounted: function(){
@@ -143,9 +152,14 @@ export default {
             });
         },
         getAlarmLogList: function(){
-            getAlarmLogs().then(res => {
+            let data = {
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            }
+            getAlarmLogs(data,{}).then(res => {
                 if(res.data.code === 0){
-                    this.alarmLogList = res.data.data
+                    this.alarmLogList = res.data.data;
+                    this.total = res.data.totalCount
                 }else {
                         this.$message({
                             type: "error",
@@ -284,7 +298,7 @@ export default {
         start: function(row,index){
             getEmailList().then(res => {
                 if(res.data && res.data.code === 0){
-                    if(res.data.data && res.data.data.length && res.data.data[0].status) {
+                    if(res.data.data && res.data.data.length && res.data.data[0].enable) {
                         this.startUpAlarm(row,index)
                     }else{
                         this.$message({
@@ -340,7 +354,16 @@ export default {
                         message: "系统错误！"
                     });
                 });
-        }
+        },
+        handleSizeChange: function(val) {
+            this.pageSize = val;
+            this.currentPage = 1;
+            this.getAlarmLogList();
+        },
+        handleCurrentChange: function(val) {
+            this.currentPage = val;
+            this.getAlarmLogList();
+        },
     },
     filters: {
         Type: function(value){
@@ -354,6 +377,13 @@ export default {
                 default:
                     return "证书告警";
                     break;
+            }
+        },
+        Second: function(value){
+            if(value > 1799) {
+                return (value/3600) + "小时"
+            }else {
+                return (value/60) + "分钟"
             }
         }
     }
