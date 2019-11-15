@@ -62,7 +62,7 @@
                         {{errorInfo}}
                     </div>
                     <div class="contract-info-list1" style="color: #f00" v-show="errorInfo">
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{errorMessage}}</span>
+                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-for="(item, index) in errorMessage">{{index+1}}、{{item}}</span>
                     </div>
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
@@ -513,7 +513,7 @@ export default {
                         );
                     }
                 } else {
-                    this.errorMessage = output.errors[0];
+                    this.errorMessage = output.errors;
                     this.errorInfo = "合约编译失败！";
                     this.loading = false;
                 }

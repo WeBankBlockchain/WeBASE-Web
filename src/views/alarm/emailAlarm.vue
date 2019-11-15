@@ -164,7 +164,7 @@ export default {
         },
         sendEmail: function(){
             this.$prompt('请输入邮箱', '提示', {
-                confirmButtonText: '确定',
+                confirmButtonText: '发送',
                 cancelButtonText: '取消',
                 inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
                 inputErrorMessage: '邮箱格式不正确'
