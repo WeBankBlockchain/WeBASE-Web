@@ -863,9 +863,10 @@ export function testEmail(list,data) {
 }
 
 //get  alarm log 
-export function getAlarmLogs() {
+export function getAlarmLogs(data,list) {
+    const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/log/list`,
+        url: `${url.ORG_LIST}/log/list/${params.str}`,
         method: 'get',
         headers: {
             Authorization: "Token " + localStorage.getItem("token") || ""
