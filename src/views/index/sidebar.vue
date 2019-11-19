@@ -72,7 +72,7 @@ export default {
         routesListC() {
             var list = this.routesList;
             list.forEach((item => {
-                switch (item.enName) {
+                switch (item.nameKey) {
                     case 'contractTitle':
                         item.name = this.$t('title.contractTitle')
                         break;
@@ -85,22 +85,10 @@ export default {
                     case 'transactionAudit':
                         item.name = this.$t('title.transactionAudit')
                         break;
-                    // case 'dataOverview':
-                    //     item.name = this.$t('title.dataOverview')
-                    //     break;
-                    // case 'nodeTitle':
-                    //     item.name = this.$t('title.nodeTitle')
-                    //     break;
-                    // case 'PrivateKey':
-                    //     item.name = this.$t('title.PrivateKey')
-                    //     break;
-                    // case 'accountManagement':
-                    //     item.name = this.$t('title.accountManagement')
-                    //     break;
                 }
                 if (item.children) {
                     item.children.forEach((it) => {
-                        switch (it.enName) {
+                        switch (it.nameKey) {
                             case 'dataOverview':
                                 it.name = this.$t('title.dataOverview')
                                 break;
