@@ -104,17 +104,18 @@ export default {
             authorType: 'permission',
             preRivateKeyHead: [
                 {
-                    enName: "table_name",
-                    name: "表名称"
+                    enName: "userName",
+                    name: "账号名称"
                 },
+                // {
+                //     enName: "table_name",
+                //     name: "表名称"
+                // },
                 {
                     enName: "address",
                     name: "账号地址"
                 },
-                {
-                    enName: "userName",
-                    name: "账号名称"
-                },
+                
                 {
                     enName: "operate",
                     name: "操作"
