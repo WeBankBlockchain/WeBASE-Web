@@ -51,17 +51,14 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="告警内容" prop='alertContent' show-overflow-tooltip align="center" width="400"></el-table-column>
-                <el-table-column label="告警时间" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="处理时间" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column>
                  <el-table-column label="告警状态" prop='status' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <span v-if='scope.row.status' style="color: #3CB371">已处理</span>
                         <span v-else style="color: #f00">未处理</span>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column label="告警备注" prop='description' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="创建时间" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="修改时间" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column> -->
+                 <el-table-column label="告警时间" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
+                <el-table-column label="处理时间" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column>
                 <el-table-column label="操作" fixed="right" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <el-button v-if='scope.row.status' @click="handle(scope.row)" type="text" size="small" disabled>确认</el-button>
