@@ -26,7 +26,7 @@
                 <i class="el-icon-caret-right font-color-aeb1b5" @click="hideMune(false)" style="font-size: 18px;"></i>
             </div>
             <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" active-text-color="#37eef2" active-background-color="#1e293e" background-color="#0c1220" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
-                <template v-for="(item,index) in routesList" v-if="item.menuShow">
+                <template v-for="(item,index) in routesListC" v-if="item.menuShow">
                     <el-submenu v-if="!item.leaf" :index="`${index}`" ref="ele" class="">
                         <template slot="title">
                             <div :style="{'padding-left':  menuShowC ? '13px':''}">
@@ -69,6 +69,92 @@ export default {
         };
     },
     computed: {
+        routesListC() {
+            var list = this.routesList;
+            list.forEach((item => {
+                switch (item.enName) {
+                    case 'contractTitle':
+                        item.name = this.$t('title.contractTitle')
+                        break;
+                    case 'systemManager':
+                        item.name = this.$t('title.systemManager')
+                        break;
+                    case 'systemMonitor':
+                        item.name = this.$t('title.systemMonitor')
+                        break;
+                    case 'transactionAudit':
+                        item.name = this.$t('title.transactionAudit')
+                        break;
+                    // case 'dataOverview':
+                    //     item.name = this.$t('title.dataOverview')
+                    //     break;
+                    // case 'nodeTitle':
+                    //     item.name = this.$t('title.nodeTitle')
+                    //     break;
+                    // case 'PrivateKey':
+                    //     item.name = this.$t('title.PrivateKey')
+                    //     break;
+                    // case 'accountManagement':
+                    //     item.name = this.$t('title.accountManagement')
+                    //     break;
+                }
+                if (item.children) {
+                    item.children.forEach((it) => {
+                        switch (it.enName) {
+                            case 'dataOverview':
+                                it.name = this.$t('title.dataOverview')
+                                break;
+                            case 'nodeTitle':
+                                it.name = this.$t('title.nodeTitle')
+                                break;
+                            case 'PrivateKey':
+                                it.name = this.$t('title.PrivateKey')
+                                break;
+                            case 'accountManagement':
+                                it.name = this.$t('title.accountManagement')
+                                break;
+                            case 'contractIDE':
+                                it.name = this.$t('title.contractIDE')
+                                break;
+                            case 'contractList':
+                                it.name = this.$t('title.contractList')
+                                break;
+                            case 'CNSmanager':
+                                it.name = this.$t('title.CNSmanager')
+                                break;
+                            case 'CRUDServiceManagement':
+                                it.name = this.$t('title.CRUDServiceManagement')
+                                break;
+                            case 'permission':
+                                it.name = this.$t('title.permission')
+                                break;
+                            case 'configManager':
+                                it.name = this.$t('title.configManager')
+                                break;
+                            case 'certificate':
+                                it.name = this.$t('title.certificate')
+                                break;
+                            case 'nodesMonitor':
+                                it.name = this.$t('title.nodesMonitor')
+                                break;
+                            case 'hostMonitor':
+                                it.name = this.$t('title.hostMonitor')
+                                break;
+                            case 'userTransaction':
+                                it.name = this.$t('title.userTransaction')
+                                break;
+                            case 'unusualUser':
+                                it.name = this.$t('title.unusualUser')
+                                break;
+                            case 'unusualContract':
+                                it.name = this.$t('title.unusualContract')
+                                break;
+                        }
+                    })
+                }
+            }))
+            return list
+        },
         menuShowC() {
             if (this.minMenu) {
                 return this.minMenu;
@@ -201,7 +287,7 @@ export default {
 .sidebar-contract-icon {
     position: absolute;
     display: inline-block;
-    left: 180px;
+    right: 0;
     top: 18px;
     font-size: 12px;
     letter-spacing: 0;
