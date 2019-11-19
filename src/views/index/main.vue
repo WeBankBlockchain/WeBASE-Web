@@ -36,10 +36,10 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
+        <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}" ref='menu'>
             <v-menu @sidebarChange="change($event)" :minMenu="show"></v-menu>
         </div>
-        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
+        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}" ref='content'>
             <router-view class="bg-f7f7f7"></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
@@ -52,6 +52,7 @@ import setFront from "./dialog/setFront"
 import { resetPassword, addnodes, getGroups } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
+import Bus from "@/bus"
 export default {
     name: "mains",
     components: {
@@ -147,13 +148,36 @@ export default {
             return this.menuShow;
         }
     },
+    beforeDestroy: function(){
+        Bus.$off("chooselanguage")
+    },
     mounted(){
         this.getGroupList();
+        Bus.$on("chooselanguage", data => {
+            this.changGroup()
+        })
+        this.changGroup()
     },
     methods: {
+        changGroup: function(){
+            if(localStorage.getItem("lang") == "en" && this.menuShow){
+                this.$refs.menu.style.width = "250px";
+                this.$refs.content.style.paddingLeft = "250px";
+                this.$refs.content.style.width = "calc(100% - 250px)"
+            }else if(localStorage.getItem("lang") == "zh" && this.menuShow){
+                this.$refs.menu.style.width = "200px";
+                this.$refs.content.style.paddingLeft = "200px";
+                this.$refs.content.style.width = "calc(100% - 200px)"
+            }else{
+                this.$refs.menu.style.width = "56px";
+                this.$refs.content.style.paddingLeft = "56px";
+                this.$refs.content.style.width = "calc(100% - 56px)"
+            }
+        },
         change: function(val) {
             this.menuShow = !val;
             this.menuHide = val;
+            this.changGroup()
         },
         submitForm(formName) {
             this.$refs[formName].validate(valid => {

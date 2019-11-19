@@ -95,6 +95,7 @@ export default {
         CNSmanager: "CNS查询",
         CNSTips: "CNS查询说明：合约命名服务CNS通过提供链上合约名称与合约地址映射关系的记录及相应的查询功能，方便调用者通过记忆简单的合约名来实现对链上合约的调用。",
         CRUDTips: "CRUD说明：CRUD(增删改查)可以创建表，对表进行增删改查操作。Tips：如果启用了部署和建表权限，建表操作需要部署和建表权限。删除和修改表操作需要该表的表权限。",
+        CRUDServiceManagement: "CRUD",
         PrivateKey: "私钥管理",
         systemManager: "系统管理",
         permission: "权限管理",
