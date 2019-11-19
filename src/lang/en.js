@@ -95,6 +95,7 @@ export default {
         CNSmanager: "CNS query",
         CNSTips: "CNS query Description: the contract naming service CNS provides the record of the mapping relationship between the contract name and the contract address on the chain and the corresponding query function, so that the caller can call the contract on the chain by remembering the simple contract name.",
         CRUDTips: "Crud Description: CRUD (add, delete, modify and query) can create tables and perform add, delete, modify and query operations on tables. Tips: if deployment and table creation permissions are enabled, the operation of table creation requires deployment and table creation permissions. Table permissions are required for deleting and modifying tables.",
+        CRUDServiceManagement: "CRUD",
         PrivateKey: "Private key management",
         systemManager: "System management",
         permission: "Privilege management",
@@ -114,7 +115,7 @@ export default {
         hostMonitor: "Host monitoring"
     },
     home: {
-        nodes: "node number",
+        nodes: "Node count",
         contracts: "deployed contracts",
         blocks: "blocks",
         transactions: "transactions",
@@ -142,7 +143,7 @@ export default {
         frontPort: "Front port",
         agency: "agency",
         modifyTime: "modify time",
-        nodeStyle: "node style",
+        nodeStyle: "node type",
         operation: "operation",
         sealer: "sealer",
         observer: "observer",
