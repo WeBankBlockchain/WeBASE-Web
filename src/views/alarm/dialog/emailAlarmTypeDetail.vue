@@ -8,6 +8,9 @@
                 </el-form-item>
                 <el-form-item label="告警内容" prop="alertContent">
                     <el-input v-model="alarmForm.alertContent" type="textarea" :rows="2" style="width: 250px;"></el-input>
+                    <el-tooltip class="item" effect="dark" content="告警内容中大括号{}及其中内容不可更改" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
                 <el-form-item label="接收者邮箱">
                     <el-select v-model="alarmForm.userList" multiple placeholder="请选择" @change='userChange($event)' style="width: 250px;">
@@ -30,6 +33,9 @@
                         <el-option label="12个小时" value="43200"></el-option>
                         <el-option label="一天" value="86400"></el-option>
                     </el-select>
+                    <el-tooltip class="item" effect="dark" content="选择框数值没有单位时单位是秒" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
             </el-form>
         </div>
