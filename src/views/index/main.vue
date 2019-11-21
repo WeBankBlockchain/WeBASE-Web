@@ -161,9 +161,15 @@ export default {
     methods: {
         changGroup: function(){
             if(localStorage.getItem("lang") == "en" && this.menuShow){
+<<<<<<< HEAD
                 this.$refs.menu.style.width = "220px";
                 this.$refs.content.style.paddingLeft = "220px";
                 this.$refs.content.style.width = "calc(100% - 220px)"
+=======
+                this.$refs.menu.style.width = "250px";
+                this.$refs.content.style.paddingLeft = "250px";
+                this.$refs.content.style.width = "calc(100% - 250px)"
+>>>>>>> 89bb8ee84e0b3c5b136f5797ef9e01760a64b0bd
             }else if(localStorage.getItem("lang") == "zh" && this.menuShow){
                 this.$refs.menu.style.width = "200px";
                 this.$refs.content.style.paddingLeft = "200px";
