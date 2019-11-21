@@ -161,9 +161,9 @@ export default {
     methods: {
         changGroup: function(){
             if(localStorage.getItem("lang") == "en" && this.menuShow){
-                this.$refs.menu.style.width = "250px";
-                this.$refs.content.style.paddingLeft = "250px";
-                this.$refs.content.style.width = "calc(100% - 250px)"
+                this.$refs.menu.style.width = "220px";
+                this.$refs.content.style.paddingLeft = "220px";
+                this.$refs.content.style.width = "calc(100% - 220px)"
             }else if(localStorage.getItem("lang") == "zh" && this.menuShow){
                 this.$refs.menu.style.width = "200px";
                 this.$refs.content.style.paddingLeft = "200px";
