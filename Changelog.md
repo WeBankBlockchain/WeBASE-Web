@@ -1,3 +1,25 @@
+v1.2.1 (2019-11-22)
+
+**Add**
+- 系统监控：邮件服务模块
+- 系统监控：邮件告警与告警日志
+- 证书管理增加SDK证书
+
+**Fix**
+- 优化：节点列表接口增加离线的共识/观察节点
+- bugfix：修复区块搜索
+- 优化：调整权限管理页面
+
+**兼容性**
+- 支持FISCO-BCOS v2.0.0-rc1 版本
+- 支持FISCO-BCOS v2.0.0-rc2 版本
+- 支持FISCO-BCOS v2.0.0-rc3 版本
+- 支持FISCO-BCOS v2.0.0 版本
+- WeBASE-Front v1.2.1
+- WeBASE-Node-Manager v1.2.1
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 v1.2.0 (2019-10-29)
 
 **Add**
@@ -12,13 +34,13 @@ v1.2.0 (2019-10-29)
 - 支持FISCO-BCOS v2.0.0-rc2 版本
 - 支持FISCO-BCOS v2.0.0-rc3 版本
 - 支持FISCO-BCOS v2.0.0 版本
-- WeBASE-Front V1.2.0
-- WeBASE-Node-Manager V1.2.0
+- WeBASE-Front v1.2.0
+- WeBASE-Node-Manager v1.2.0
 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
 
 
-### V1.1.0 (2019-09-9)
+### v1.1.0 (2019-09-9)
 **Add**
 - 查询cns
 - 节点共识状态管理
@@ -38,13 +60,13 @@ v1.2.0 (2019-10-29)
 - 支持FISCO-BCOS v2.0.0-rc2 版本
 - 支持FISCO-BCOS v2.0.0-rc3 版本
 - 支持FISCO-BCOS v2.0.0 版本
-- WeBASE-Node-Manager V1.1.0
-- WeBASE-Front V1.1.0
+- WeBASE-Node-Manager v1.1.0
+- WeBASE-Front v1.1.0
 
 - 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
 
 
-### V1.0.0
+### v1.0.0
 
 (2019-06-27)
 
