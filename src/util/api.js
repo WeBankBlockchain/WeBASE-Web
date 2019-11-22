@@ -783,3 +783,105 @@ export function deleteCert(data) {
         }
     })
 }
+// put 告警邮箱 配置 
+export function changeEmailConfig(data) {
+    return put({
+        url: `${url.ORG_LIST}/mailServer/config`,
+        method: 'put',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// get 告警邮箱 配置 
+export function getEmailList() {
+    return get({
+        url: `${url.ORG_LIST}/mailServer/config/list`,
+        method: 'get',
+        // data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// get all 告警 配置 
+export function getAlarmList() {
+    return get({
+        url: `${url.ORG_LIST}/alert/list`,
+        method: 'get',
+        // data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// get 单个 告警 配置 
+export function getAlarm(id) {
+    return get({
+        url: `${url.ORG_LIST}/alert/${id}`,
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+// put 单个 告警 配置 
+export function changeAlarm(data) {
+    return put({
+        url: `${url.ORG_LIST}/alert`,
+        method: 'put',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+// put 启动 告警 配置 
+export function startAlarm(data) {
+    return put({
+        url: `${url.ORG_LIST}/alert/toggle`,
+        method: 'put',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//test 邮箱 
+export function testEmail(list,data) {
+    return post({
+        url: `${url.ORG_LIST}/alert/mail/test/${list}`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//get  alarm log 
+export function getAlarmLogs(data,list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/log/list/${params.str}`,
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//put  alarm log 
+export function changeAlarmLog(data) {
+    return put({
+        url: `${url.ORG_LIST}/log`,
+        method: 'put',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
