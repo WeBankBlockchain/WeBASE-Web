@@ -49,6 +49,7 @@ import {
     deleteAccountInfo
 } from "@/util/api";
 const sha256 = require("js-sha256").sha256;
+import utils from "@/util/sm_sha"
 export default {
     name: "accountDialog",
     props: {
@@ -226,6 +227,11 @@ export default {
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
             };
+            if(localStorage.getItem("encryptionId") == 1){
+                reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password);
+            }else{
+                reqData.accountPwd = sha256(this.accountForm.password);
+            }
             if(this.accountForm.email){
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if(!pattern.test(this.accountForm.email)){
@@ -271,6 +277,11 @@ export default {
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
             };
+            if(localStorage.getItem("encryptionId") == 1){
+                reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password)
+            }else{
+                reqData.accountPwd = sha256(this.accountForm.password)
+            }
             if(this.accountForm.email){
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if(!pattern.test(this.accountForm.email)){

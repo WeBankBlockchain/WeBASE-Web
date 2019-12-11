@@ -294,6 +294,12 @@ export default {
             getUserList(reqData, {})
                 .then(res => {
                     if (res.data.code === 0) {
+                        if(res.data.data.length == 0){
+                            this.$message({
+                                type: "info",
+                                message: "请添加私钥用户！"
+                            }); 
+                        }
                         this.adminRivateKeyList = res.data.data;
                     } else {
                         this.$message({
