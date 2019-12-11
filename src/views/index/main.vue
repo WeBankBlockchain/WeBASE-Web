@@ -43,20 +43,24 @@
             <router-view class="bg-f7f7f7"></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
+        <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
     </div>
 </template>
 
 <script>
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
-import { resetPassword, addnodes, getGroups } from "@/util/api";
+import guide from "./dialog/guide"
+import { resetPassword, addnodes, getGroups,encryption } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
+import utils from "@/util/sm_sha"
 export default {
     name: "mains",
     components: {
         "v-menu": sidebar,
-        "set-front": setFront
+        "set-front": setFront,
+        'v-guide': guide
     },
     data: function() {
         // if (sessionStorage.getItem("reload") == 1) {
@@ -83,6 +87,7 @@ export default {
             }
         };
         return {
+            guideShow: false,
             frontShow: false,
             menuShow: true,
             menuHide: false,
@@ -148,6 +153,7 @@ export default {
         }
     },
     mounted(){
+        this.getEncryption();
         this.getGroupList();
     },
     methods: {
@@ -169,10 +175,18 @@ export default {
             this.$refs[formName].resetFields();
         },
         getResetPassword() {
-            let reqData = {
-                oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
-                newAccountPwd: sha256(this.rulePasswordForm.pass)
-            };
+            let reqData;
+            if(localStorage.getItem("encryptionId") == 1){
+                reqData = {
+                    oldAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.oldPass),
+                    newAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.pass)
+                };
+            }else{
+                reqData = {
+                    oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
+                    newAccountPwd: sha256(this.rulePasswordForm.pass)
+                };
+            }
             resetPassword(reqData, {})
                 .then(res => {
                     this.loading = false;
@@ -220,10 +234,10 @@ export default {
                             router.push("/home")
                         }
                     }else{
-                        this.frontShow = true
+                        this.guideShow = true
                     }
                 }else{
-                    this.frontShow = true
+                    this.guideShow = true
                      this.$message({
                         type: "error",
                         message: this.errcode.errCode[res.data.code].cn || '查询群组失败'
@@ -238,9 +252,31 @@ export default {
                 this.$message.closeAll()
             })
         },
+        getEncryption: function(){
+            encryption().then(res => {
+                if(res.data.code === 0){
+                    localStorage.setItem("encryptionId",res.data.data)
+                }else {
+                    this.$message({
+                        message: errcode.errCode[res.data.code].cn,
+                        type: "error"
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: "系统错误",
+                        type: "error"
+                    });
+                });
+        },
         closeFront: function(){
             this.frontShow = false;
             this.getGroupList()
+        },
+        closeGuide: function(){
+            this.guideShow = false
+            this.frontShow = true;
         }
     }
 };

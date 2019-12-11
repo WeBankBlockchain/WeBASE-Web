@@ -139,6 +139,12 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];
+                        if(res.data.data.length == 0){
+                            this.$message({
+                                type: "info",
+                                message: "请添加私钥用户！"
+                            }); 
+                        }
                         res.data.data.forEach(value => {
                             if (value.hasPk === 1) {
                                 this.adminRivateKeyList.push(value);

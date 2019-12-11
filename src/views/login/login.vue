@@ -61,7 +61,7 @@
     </div>
 </template>
 <script>
-import { login, networkList, haveNode, getPictureCheckCode } from "@/util/api";
+import { login, networkList, haveNode, getPictureCheckCode,encryption } from "@/util/api";
 import url from "@/util/url"
 import router from "@/router";
 import bg from "@/../static/image/banner.png";
@@ -69,6 +69,8 @@ import logo from "@/../static/image/logo-2 copy@1.5x.jpg";
 import { delCookie } from '@/util/util'
 import errcode from "@/util/errcode";
 const sha256 = require("js-sha256").sha256;
+const gm = require("@/util/SM2Sign");
+import utils from "@/util/sm_sha"
 export default {
     name: "login",
     data: function () {
@@ -123,7 +125,10 @@ export default {
         };
     },
     mounted: function () {
-        this.changeCode()
+        this.changeCode();
+        this.getEncryption()
+        // console.log(utils.sha4("Abcd1234"))
+        // console.log(gm.sm3Digest("Abcd1234"))
     },
     methods: {
         submit: function (formName) {
@@ -169,6 +174,11 @@ export default {
                 account: this.loginForm.user,
                 accountPwd: sha256(this.loginForm.password)
             };
+            if(localStorage.getItem("encryptionId") == 1){
+                reqData.accountPwd = "0x" + utils.sha4(this.loginForm.password)
+            }else{
+                reqData.accountPwd = sha256(this.loginForm.password)
+            }
             let checkCode = this.loginForm.vercode
             login(reqData, checkCode, this.authToken)
                 .then(res => {
@@ -197,6 +207,24 @@ export default {
                     this.logining = false;
                 });
         },
+        getEncryption: function(){
+            encryption().then(res => {
+                if(res.data.code === 0){
+                    localStorage.setItem("encryptionId",res.data.data)
+                }else {
+                    this.$message({
+                        message: errcode.errCode[res.data.code].cn,
+                        type: "error"
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: "系统错误",
+                        type: "error"
+                    });
+                });
+        }
     }
 };
 </script>
@@ -246,13 +274,14 @@ export default {
 .codeUrlImg {
     display: inline-block;
     height: 38px;
-    width: 60px;
+    width: 84px;
     line-height: 38px;
-    padding-left: 16px;
+    /* padding-left: 16px; */
     border: 1px solid #dcdfe6;
     border-radius: 2px;
     vertical-align: middle;
     cursor: pointer;
+    text-align: center
     /* background-color: #e4393c */
 }
 .logo {
