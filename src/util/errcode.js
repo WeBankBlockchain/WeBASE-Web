@@ -537,6 +537,13 @@ let errCode = {
         en: "Send mail error, please enable mail server before send.",
         cn: "发送邮件错误，请在发送前启用邮件服务器。"
     },
+    "202090": {
+        en: "更新guomi methodId错误"
+    },
+    "202091": {
+        en: "Front's encrypt type not matches with nodemgr",
+        cn: "Front的加密类型与nodemgr不匹配"
+    },
 
 
 
@@ -640,6 +647,8 @@ let errCode = {
         cn: '系统异常'
     }
 }
-export default {
-    errCode
+export function chooseLang(code) {
+    let lang = localStorage.getItem('lang')
+    let message = errCode[code][lang];
+    return message
 }

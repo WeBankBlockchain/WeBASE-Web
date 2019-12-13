@@ -15,16 +15,16 @@
  */
 <template>
     <div class="bg-f7f7f7">
-        <v-content-head :headTitle="'交易信息'" :icon="true" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.transactionInfo')" :icon="true" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
-                    <span>共</span>
+                    <span>{{$t('text.total')}}</span>
                     <span>{{numberFormat(total, 0, ".", ",")}}</span>
-                    <span>条</span>
+                    <span>{{$t('text.tiao')}}</span>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入交易哈希或块高" v-model="searchKey.value" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('inputText.transactionSearch')" v-model="searchKey.value" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -36,20 +36,20 @@
                             <v-transaction-detail :transHash="scope.row.transHash"></v-transaction-detail>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="transHash" label="交易哈希" align="center" :show-overflow-tooltip="true">
+                    <el-table-column prop="transHash" :label="$t('transaction.transactionHash')" align="center" :show-overflow-tooltip="true">
                         <template slot-scope="scope">
                             <span>
-                                <i class="wbs-icon-copy font-12 copy-key" @click="copyPubilcKey(scope.row['transHash'])" title="复制哈希"></i>
+                                <i class="wbs-icon-copy font-12 copy-key" @click="copyPubilcKey(scope.row['transHash'])" :title="$t('text.copyHash')"></i>
                                 {{scope.row['transHash']}}
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="blockNumber" label="块高" width="260" align="center" :show-overflow-tooltip="true">
+                    <el-table-column prop="blockNumber" :label="$t('home.blockHeight')" width="260" align="center" :show-overflow-tooltip="true">
                         <template slot-scope="scope">
                             <span>{{scope.row['blockNumber']}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center">
+                    <el-table-column prop="blockTimestamp" :label="$t('home.createTime')" width="280" :show-overflow-tooltip="true" align="center">
                         <template slot-scope="scope">
                             <span>{{scope.row['blockTimestamp']}}</span>
                         </template>
@@ -111,7 +111,7 @@ export default {
                 this.searchKey.value
             ) {
                 this.$message({
-                    message: "搜索交易哈希不支持模糊查询",
+                    message: this.$t('transaction.transactionSearchFail'),
                     type: "error",
                     duration: 2000
                 });
@@ -144,9 +144,8 @@ export default {
                         this.transactionList = res.data.data;
                         this.total = res.data.totalCount;
                     } else {
-                        console.log(this.$message,errcode.errCode[res.data.code].cn)
                         this.$message({
-                            message: errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -154,7 +153,11 @@ export default {
                 })
                 .catch(err => {
                     this.loading = false;
-                    this.$message.error("系统错误");
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
                     this.$message.closeAll()
                 });
         },
@@ -182,7 +185,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -190,7 +193,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });

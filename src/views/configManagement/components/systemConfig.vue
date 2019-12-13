@@ -1,24 +1,24 @@
 <template>
     <div>
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
-            <el-form-item label="配置名称"  style="width: 320px;">
+            <el-form-item :label="$t('system.configKey')"  style="width: 320px;">
                 <span>{{configKey}}</span>
             </el-form-item>
-            <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
-                <el-select v-model="modifyForm.adminRivateKey" placeholder="请选择">
+            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
+                <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="配置值" prop="configValue" style="width: 320px;">
-                <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? '范围从100000到2147483647' : ''"></el-input>
+            <el-form-item :label="$t('nodes.configValue')" prop="configValue" style="width: 320px;">
+                <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? $t('system.gasLong') : ''"></el-input>
             </el-form-item>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="close">取消</el-button>
-            <el-button type="primary" :loading="loading" @click="submit('modifyForm')">确定</el-button>
+            <el-button @click="close">{{this.$t('text.cancel')}}</el-button>
+            <el-button type="primary" :loading="loading" @click="submit('modifyForm')">{{this.$t('text.sure')}}</el-button>
         </div>
     </div>
 </template>
@@ -69,7 +69,29 @@ export default {
     },
 
     computed: {
-
+        rules() {
+            let data = {
+                adminRivateKey: [
+                    {
+                        required: true,
+                        message: this.$t("rule.adminRule"),
+                        trigger: "blur"
+                    }
+                ],
+                configValue: [
+                    {
+                        required: true,
+                        message: this.$t("rule.configValue"),
+                        trigger: "blur"
+                    },
+                    {
+                        type: 'number',
+                        message: this.$t("rule.configValueNumber"),
+                    }
+                ]
+            }
+            return data
+        }
     },
 
     watch: {
@@ -113,16 +135,18 @@ export default {
                         this.$emit('modifySuccess')
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -142,7 +166,7 @@ export default {
                         if(res.data.data.length == 0){
                             this.$message({
                                 type: "info",
-                                message: "请添加私钥用户！"
+                                message: this.$t("contracts.addPrivateKeyInfo")
                             }); 
                         }
                         res.data.data.forEach(value => {
@@ -153,15 +177,17 @@ export default {
                         if(this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
