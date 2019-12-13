@@ -15,13 +15,13 @@
  */
 <template>
     <div>
-        <el-dialog title="新建文件" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true">
+        <el-dialog :title="$t('contracts.createFile')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true">
             <div>
                 <el-form :model="fileFrom" :rules="rules" ref="fileFrom" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="合约名称" prop="contractName" >
+                    <el-form-item :label="$t('contracts.contractName')" prop="contractName" >
                         <el-input v-model="fileFrom.contractName" style="width: 210px;"></el-input>
                     </el-form-item>
-                    <el-form-item label="文件目录" >
+                    <el-form-item :label="$t('contracts.filePath')">
                         <el-select v-model="fileFrom.contractType" :disabled='disabled' placeholder="请选择">
                             <el-option
                             v-for="item in options"
@@ -34,8 +34,8 @@
                 </el-form>
             </div>
             <div slot="footer" class="dialog-footer">
-                <el-button @click="modelClose">取 消</el-button>
-                <el-button type="primary" @click="submit('fileFrom')">确 定</el-button>
+                <el-button @click="modelClose">{{this.$t("text.cancel")}}</el-button>
+                <el-button type="primary" @click="submit('fileFrom')">{{this.$t("text.sure")}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -44,6 +44,31 @@
 export default {
     name: "addFile",
     props: ['fileshow','data','id'],
+    computed: {
+        rules() {
+            let data = {
+                contractName: [
+                    {
+                        required: true,
+                        message: this.$t("rule.contractName"),
+                        trigger: "blur"
+                    },
+                    {
+                        min: 1,
+                        max: 32,
+                        message: this.$t("rule.contractLong"),
+                        trigger: "blur"
+                    },
+                    {
+                        pattern: /^[A-Za-z0-9_]+$/,
+                        message: this.$t("rule.contractRule"),
+                        trigger: "blur"
+                    }
+               ] 
+            }
+            return data
+        }
+    },
     data: function(){
         return {
             dialogVisible: this.fileshow,
@@ -53,26 +78,6 @@ export default {
             },
             disabled: false,
             folderId: this.id,
-            rules: {
-               contractName: [
-                    {
-                        required: true,
-                        message: "请输入合约名称",
-                        trigger: "blur"
-                    },
-                    {
-                        min: 1,
-                        max: 32,
-                        message: "长度在 1 到 32 个字符",
-                        trigger: "blur"
-                    },
-                    {
-                        pattern: /^[A-Za-z0-9_]+$/,
-                        message: "合约名不符合规则",
-                        trigger: "blur"
-                    }
-               ] 
-            },
             options: [],
         }
     },

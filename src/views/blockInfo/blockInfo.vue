@@ -15,41 +15,41 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'区块信息'" :icon="true" :route="'home'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.blockTitle')" :icon="true" :route="'home'" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
-                    <span>共</span>
+                    <span>{{this.$t("text.total")}}</span>
                     <span>{{numberFormat(total, 0, ".", ",")}}</span>
-                    <span>条</span>
+                    <span>{{this.$t("text.tiao")}}</span>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入区块哈希或块高" v-model="searchKey.value" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('inputText.blockInput')" v-model="searchKey.value" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
                 <el-table :data="blockData" class="block-table-content" v-loading="loading" @row-click="clickTable" ref="refTable">
-                    <el-table-column prop="blockNumber" label="块高" width="80" align="center">
+                    <el-table-column prop="blockNumber" :label="$t('home.blockHeight')" width="80" align="center">
                         <template slot-scope="scope">
                             <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="transCount" label="交易" width="50" align="center">
+                    <el-table-column prop="transCount" :label="$t('home.transaction')" width="50" align="center">
                         <template slot-scope="scope">
                             <span class="">{{scope.row['transCount']}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="pkHash" label="区块哈希" :show-overflow-tooltip="true" align="center">
+                    <el-table-column prop="pkHash" :label="$t('home.blockHash')" :show-overflow-tooltip="true" align="center">
                         <template slot-scope="scope">
                             <span class="">
-                                <i class="wbs-icon-copy font-12 copy-key" @click="copyPubilcKey(scope.row['pkHash'])" title="复制哈希"></i>
+                                <i class="wbs-icon-copy font-12 copy-key" @click="copyPubilcKey(scope.row['pkHash'])" :title="$t('text.copyHash')"></i>
                                 {{scope.row['pkHash']}}
                             </span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="blockTimestamp" label="创建时间" width="280" :show-overflow-tooltip="true" align="center">
+                    <el-table-column prop="blockTimestamp" :label="$t('home.createTime')" width="280" :show-overflow-tooltip="true" align="center">
                         <template slot-scope="scope">
                             <span class="">{{scope.row['blockTimestamp']}}</span>
                         </template>
@@ -101,7 +101,7 @@ export default {
                 this.searchKey.value
             ) {
                 this.$message({
-                    message: "搜索区块哈希不支持模糊查询",
+                    message: this.$t("text.blockSearchMsg"),
                     type: "error",
                     duration: 2000
                 });
@@ -137,9 +137,8 @@ export default {
                         this.blockData = res.data.data;
                         this.total = res.data.totalCount;
                     } else {
-                        console.log(this.$message.closeAll())
                         this.$message({
-                            message: this.errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -148,7 +147,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: "系统错误！",
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -188,7 +187,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -196,7 +195,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
