@@ -28,12 +28,12 @@
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
         <div class="content-head-network">
-            <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">帮助文档</a>
+            <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
                 <ul class="group-item">
                     <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
                 </ul>
-                <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>群组: {{groupName || '-'}}</span>
+                <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>{{this.$t("head.group")}}: {{groupName || '-'}}</span>
             </el-popover>
 
             <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
@@ -42,14 +42,17 @@
             <span style="padding-right:10px"></span>
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
-                    <span class="change-password" @click="changePassword">修改密码</span><br>
-                    <span class="sign-out" @click="signOut">退出</span>
+                    <span class="change-password" @click="changePassword">{{this.$t("head.changePassword")}}</span><br>
+                    <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span>
                 </div>
                 <a class="browse-user" slot="reference">
                     <i class="wbs-icon-user-icon"></i>
                     <i>{{accountName}}</i>
                 </a>
             </el-popover>
+        </div>
+        <div class="content-head-lang">
+            <lang-select class="right-menu-item hover-effect" />
         </div>
         <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
@@ -66,6 +69,7 @@ import router from "@/router";
 import { loginOut, getGroups } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
+import langSelect from "@/components/langSelect"
 export default {
     name: "conetnt-head",
     props: {
@@ -90,7 +94,8 @@ export default {
     },
     components: {
         "v-dialog": dialog,
-        changePasswordDialog
+        changePasswordDialog,
+        "lang-select": langSelect
     },
     watch: {
         headTitle: function (val) {
@@ -154,6 +159,11 @@ export default {
                     }
                 } else {
                     this.groupList = [];
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                     localStorage.setItem("groupName", "")
                     localStorage.setItem("groupId", "")
                 }
@@ -162,7 +172,7 @@ export default {
                 localStorage.setItem("groupName", "")
                 localStorage.setItem("groupId", "")
                 this.$message({
-                    message: "系统错误！",
+                    message: this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -320,5 +330,18 @@ export default {
 }
 .group-item-list:hover {
     color: #0db1c1;
+}
+.right-menu-item {
+   padding: 0 20px;
+}
+.hover-effect {
+    cursor: pointer;
+    /* transition: background 0.3s; */
+}
+.content-head-lang{
+    position: absolute;
+    /* background-color: #fff; */
+    right: 350px;
+    top: 0px;
 }
 </style>
