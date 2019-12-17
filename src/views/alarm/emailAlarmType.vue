@@ -1,9 +1,9 @@
 <template>
     <div>
-        <v-content-head :headTitle="'告警配置'" :headSubTitle="'邮件告警配置'" @changGroup="changGroup" :headTooltip="`系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。`"></v-content-head>
+        <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.alarmTypeConfig')" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <div style="padding-bottom: 10px;">
-                <span>是否启用告警</span>
+                <span>{{$t('alarm.enableAlarm')}}</span>
                 <el-switch
                     v-model="enable"
                     active-color="#13ce66"
@@ -13,56 +13,59 @@
                      @change='authChange($event)'>
                 </el-switch>
             </div>
-            <h3>告警配置列表</h3>
+            <h3>{{$t('alarm.alarmCofigList')}}</h3>
             <el-table :data="alarmList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
-                <el-table-column label="告警邮件标题"  show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.alarmEmailTile')"  show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <span @click="link(scope.row)" class="link">{{scope.row.ruleName}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="邮件模板" prop='alertContent' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="发送间隔时间" prop='alertIntervalSeconds' show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.emailContent')" prop='alertContent' show-overflow-tooltip align="center"></el-table-column>
+                <el-table-column :label="$t('alarm.sendTime')" prop='alertIntervalSeconds' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span>{{scope.row.alertIntervalSeconds | Second}}</span>
+                        <span v-if='scope.row.alertIntervalSeconds > 1799'>{{scope.row.alertIntervalSeconds/3600}}{{$t("alarm.hours")}}</span>
+                        <span v-else>{{scope.row.alertIntervalSeconds/60}}{{$t("alarm.minute")}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="操作" fixed="right" show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.operation')" fixed="right" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <el-button @click="handleClick(scope.row)" type="text" size="small">修改</el-button>
-                        <el-button v-if='scope.row.enable' type="text" size="small" @click='startUp(scope.row)'>禁用</el-button>
-                        <el-button v-if='!scope.row.enable' type="text" size="small" @click='startUp(scope.row)'>启用</el-button>
+                        <el-button @click="handleClick(scope.row)" type="text" size="small">{{$t('alarm.update')}}</el-button>
+                        <el-button v-if='scope.row.enable' type="text" size="small" @click='startUp(scope.row)'>{{$t('alarm.disable')}}</el-button>
+                        <el-button v-if='!scope.row.enable' type="text" size="small" @click='startUp(scope.row)'>{{$t('alarm.enable')}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
         </div>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
-            <h3>告警日志列表</h3>
+            <h3>{{$t('alarm.alarmLogList')}}</h3>
             <el-table :data="alarmLogList" tooltip-effect="dark"  class="search-table-content" style="padding-bottom: 20px;">
-                <el-table-column label="告警类型" prop='alertType' show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.alarmType')" prop='alertType' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span>{{scope.row.alertType | Type}}</span>
+                        <span v-if='scope.row.alertType == 1'>{{$t('alarm.nodeAlarm')}}</span>
+                        <span v-if='scope.row.alertType == 2'>{{$t('alarm.auditAlert')}}</span>
+                        <span v-if='scope.row.alertType == 3'>{{$t('alarm.certAlert')}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="告警级别" prop='alertLevel' show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.alarmLevel')" prop='alertLevel' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span v-if='scope.row.alertLevel == 1' style="color: #f00">高</span>
-                        <span v-if='scope.row.alertLevel == 2' style="color: #ffd700">一般</span>
-                        <span v-if='scope.row.alertLevel == 3'>低</span>
+                        <span v-if='scope.row.alertLevel == 1' style="color: #f00">{{$t('alarm.high')}}</span>
+                        <span v-if='scope.row.alertLevel == 2' style="color: #ffd700">{{$t('alarm.common')}}</span>
+                        <span v-if='scope.row.alertLevel == 3'>{{$t('alarm.low')}}</span>
                     </template>
                 </el-table-column>
-                <el-table-column label="告警内容" prop='alertContent' show-overflow-tooltip align="center" width="400"></el-table-column>
-                 <el-table-column label="告警状态" prop='status' show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.alarmContent')" prop='alertContent' show-overflow-tooltip align="center" width="400"></el-table-column>
+                 <el-table-column :label="$t('alarm.alarmStatus')" prop='status' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span v-if='scope.row.status' style="color: #3CB371">已处理</span>
-                        <span v-else style="color: #f00">未处理</span>
+                        <span v-if='scope.row.status' style="color: #3CB371">{{$t('alarm.processed')}}</span>
+                        <span v-else style="color: #f00">{{$t('alarm.unprocessed')}}</span>
                     </template>
                 </el-table-column>
-                 <el-table-column label="告警时间" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="处理时间" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column>
-                <el-table-column label="操作" fixed="right" show-overflow-tooltip align="center">
+                 <el-table-column :label="$t('alarm.alarmTime')" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
+                <el-table-column :label="$t('alarm.modifyTime')" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column>
+                <el-table-column :label="$t('alarm.operation')" fixed="right" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <el-button v-if='scope.row.status' @click="handle(scope.row)" type="text" size="small" disabled>确认</el-button>
-                        <el-button v-else @click="handle(scope.row)" type="text" size="small">确认</el-button>
+                        <el-button v-if='scope.row.status' @click="handle(scope.row)" type="text" size="small" disabled>{{$t('alarm.confirm')}}</el-button>
+                        <el-button v-else @click="handle(scope.row)" type="text" size="small">{{$t('alarm.confirm')}}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -93,7 +96,7 @@ export default {
             loading: false,
             emailAlarmTypeShow: false,
             emailAlarmTypeData: null,
-            buttonText: "启动",
+            buttonText: this.$t('alarm.start'),
             emailAlarmShow: false,
             emailAlarmData: null,
             enable: null,
@@ -111,16 +114,16 @@ export default {
     },
     methods: {
         handle: function(row){
-            this.$confirm('确定处理?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+            this.$confirm(this.$t('alarm.sureHandle'), this.$t('alarm.tip'), {
+                    confirmButtonText: this.$t('alarm.sure'),
+                    cancelButtonText: this.$t('alarm.cancel'),
                     type: 'warning'
                 }).then(() => {
                     this.uploadAlarmLog(row)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: this.$t("alarm.cancelEnter")
                     });          
                 });
         },
@@ -133,21 +136,23 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "该日志已确认"
+                        message: this.$t('alarm.logsSure')
                     });
                     this.getAlarmLogList()
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
             .catch(err => {
                 this.$message({
-                    type: "error",
-                    message: "系统错误！"
-                });
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             });
         },
         getAlarmLogList: function(){
@@ -161,16 +166,18 @@ export default {
                     this.total = res.data.totalCount
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
             .catch(err => {
                 this.$message({
-                    type: "error",
-                    message: "系统错误！"
-                });
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
             });
         },
         getEmailConfig: function(){
@@ -182,15 +189,17 @@ export default {
                     }
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -203,20 +212,22 @@ export default {
                 if(res.data && res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "修改告警邮箱配置成功！"
+                        message: this.$t('alarm.updateEmailAlarmConfigSuccess')
                     });
                     this.getEmailConfig();
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -228,16 +239,18 @@ export default {
                     this.alarmList = res.data.data
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -261,35 +274,35 @@ export default {
         },
         startUp: function(row){
             if(!row.enable && row.userList){
-                this.$confirm('启用告警, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$t('alarm.enableAlarm'), this.$t('alarm.tip'), {
+                    confirmButtonText: this.$t('alarm.sure'),
+                    cancelButtonText: this.$t('alarm.cnacel'),
                     type: 'warning'
                 }).then(() => {
                     this.start(row,1)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: this.$t("alarm.cancelEnter")
                     });          
                 });
             }else if(row.userList){
-                this.$confirm('禁用告警, 是否继续?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
+                this.$confirm(this.$t("alarm.disableAlarm"), this.$t('alarm.tip'), {
+                    confirmButtonText: this.$t('alarm.sure'),
+                    cancelButtonText: this.$t('alarm.cancel'),
                     type: 'warning'
                 }).then(() => {
                     this.start(row,0)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '已取消'
+                        message: this.$t("alarm.cancelEnter")
                     });          
                 });
             }else{
                 this.$message({
                         type: 'info',
-                        message: '请添加接收邮箱！'
+                        message: this.$t("alarm.addEmail")
                     }); 
             }
             
@@ -302,20 +315,22 @@ export default {
                     }else{
                         this.$message({
                             type: "error",
-                            message: "告警邮箱未设置！"
+                            message: this.$t("alarm.noAlarmEmail")
                         });
                     }
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -329,28 +344,30 @@ export default {
                     if(!index){
                         this.$message({
                             type: "success",
-                            message: "禁用告警成功！"
+                            message: this.$t("alarm.disableAlarmSuccess")
                         });
-                        this.buttonText = '启动'
+                        this.buttonText = this.$t("alarm.start")
                     }else{
                          this.$message({
                             type: "success",
-                            message: "启用告警成功！"
+                            message: this.$t("alarm.enableAlarmSuccess")
                         });
-                        this.buttonText = '关闭'
+                        this.buttonText = this.$t("alarm.cancel")
                     }
                     this.getAlarms();
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -364,28 +381,6 @@ export default {
             this.getAlarmLogList();
         },
     },
-    filters: {
-        Type: function(value){
-            switch (value) {
-                case 1:
-                    return "节点告警";
-                    break;
-                case 2: 
-                    return "审计告警";
-                    break;
-                default:
-                    return "证书告警";
-                    break;
-            }
-        },
-        Second: function(value){
-            if(value > 1799) {
-                return (value/3600) + "小时"
-            }else {
-                return (value/60) + "分钟"
-            }
-        }
-    }
 }
 </script>
 

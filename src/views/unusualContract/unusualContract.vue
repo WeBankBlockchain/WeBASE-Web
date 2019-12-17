@@ -15,16 +15,16 @@
  */
 <template>
     <div style="height:100%">
-        <content-head :headTitle="'交易审计'" :headSubTitle="'异常合约'" @changGroup="changGroup"></content-head>
+        <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-tooltip effect="dark" content="异常过多(大于等于20)，会停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。" placement="top-start">
+                    <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
                     </el-tooltip>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入合约地址" v-model="contractAddress" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('contracts.contractAddressInput')" v-model="contractAddress" class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -58,7 +58,7 @@
             </div>
             <div class="notify-cation" v-if="noticeVisibility">
                 <div style="text-align: right;"><i class="el-icon-close" @click="closeNotice"></i></div>
-                <p>异常过多，已经停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。</p>
+                <p>{{$t('transaction.unusualMoreTips')}}</p>
             </div>
         </div>
     </div>
@@ -82,28 +82,31 @@ export default {
             pageSize: 10,
             total: 0,
             contractAddress: "",
-            unusualContractHead: [
-                {
-                    enName: "contractAddress",
-                    name: "合约地址"
-                },
-                {
-                    enName: "transCount",
-                    name: "交易量"
-                },
-                {
-                    enName: "time",
-                    name: "最新交易时间"
-                },
-                {
-                    enName: "hashs",
-                    name: "hash"
-                }
-            ],
             unusualContractList: []
         };
     },
     computed: {
+        unusualContractHead() {
+            let data = [
+                {
+                    enName: "contractAddress",
+                    name: this.$t('contracts.contractAddress')
+                },
+                {
+                    enName: "transCount",
+                    name: this.$t('home.chartTransactions')
+                },
+                {
+                    enName: "time",
+                    name: this.$t('home.transactionTime')
+                },
+                {
+                    enName: "hashs",
+                    name: this.$t('home.hash')
+                }
+            ]
+            return data
+        },
         hashData() {
             var arr = this.unusualContractList,
                 list = [];
@@ -170,7 +173,7 @@ export default {
                     } else {
                         this.loading = false;
                         this.$message({
-                            message: this.errcode.errCode[res.data.code].cn,
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -179,7 +182,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.errcode.errCode[err.data.code].cn || "查询异常合约失败！",
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

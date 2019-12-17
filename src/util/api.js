@@ -41,6 +41,16 @@ export function loginOut() {
         }
     })
 }
+//
+export function encryption() {
+    return get({
+        url: `${url.ORG_LIST}/encrypt`,
+        method: 'get',
+        // headers: {
+        //     Authorization: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}
 //init change passWord
 export function resetPassword(data) {
     return put({
@@ -168,6 +178,17 @@ export function saveChaincode(data) {
 export function setCompile(data) {
     return post({
         url: `${url.ORG_LIST}/contract/compile`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/* Background compilation*/
+export function backgroundCompile(data){
+    return post({
+        url: `${url.ORG_LIST}/contract/comtractCompile `,
         method: 'post',
         data: data,
         headers: {

@@ -16,18 +16,18 @@
 <template>
     <div class="contract-menu" style="position: relative;height: 100% ;">
         <div class="contract-menu-header">
-            <el-tooltip class="item" effect="dark" content="新建文件" v-if="!disabled" placement="top-start">
+            <el-tooltip class="item" effect="dark" :content="$t('contracts.createFile')" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-Addfile icon contract-icon" @click='addFile'></i>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" v-if="!disabled" content="新建文件夹" placement="top-start">
+            <el-tooltip class="item" effect="dark" v-if="!disabled" :content="$t('contracts.createFolder')" placement="top-start">
                 <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="上传文件" v-if="!disabled" placement="top-start">
+            <el-tooltip class="item" effect="dark" :content="$t('contracts.upLoadFile')" v-if="!disabled" placement="top-start">
                 <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
                     <input multiple title="" type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
                 </i>
             </el-tooltip>
-            <el-tooltip effect="dark" content="群组内部署的合约都需要在合约管理里添加，编译保存，否则会判断为异常合约。" placement="top-start">
+            <el-tooltip effect="dark" :content="$t('contracts.contractTips')" placement="top-start">
                 <i class="el-icon-info contract-icon font-15" style="cursor: default;"></i>
             </el-tooltip>
         </div>
@@ -42,8 +42,8 @@
                         <!-- <i class="wbs-icon-delete contract-delete" v-if='!item.renameShow && !item.contractAddress'   @click="deleteFile(item)"></i> -->
                         <div class="contract-menu-handle" v-if='!disabled &&item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul v-if="contractFile">
-                                <li class="contract-menu-handle-list" @click="rename">重命名</li>
-                                <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">删除</li>
+                                <li class="contract-menu-handle-list" @click="rename">{{this.$t("contracts.rename")}}</li>
+                                <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{this.$t("text.delete")}}</li>
                             </ul>
                             <!-- <ul v-if="contractFolder">
                                 <li class="contract-menu-handle-list" @click="addFiles">新建文件</li>
@@ -58,8 +58,8 @@
                         <!-- <i class="wbs-icon-delete contract-delete" v-if="!item.renameShow" @click='deleteFolder(item)'></i> -->
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
-                                <li class="contract-menu-handle-list" @click="addFiles">新建文件</li>
-                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>删除</li>
+                                <li class="contract-menu-handle-list" @click="addFiles">{{this.$t('contracts.createFile')}}</li>
+                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{this.$t("text.delete")}}</li>
                             </ul>
                         </div>
                         <br>
@@ -71,8 +71,8 @@
                                 <!-- <i class="wbs-icon-delete contract-delete" v-if='!list.contractAddress && !list.renameShow' @click="deleteFile(list)"></i> -->
                                 <div class="contract-menu-handle" v-if='!disabled &&list.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                                     <ul v-if="contractFile">
-                                        <li class="contract-menu-handle-list" @click="rename">重命名</li>
-                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">删除</li>
+                                        <li class="contract-menu-handle-list" @click="rename">{{this.$t("contracts.rename")}}</li>
+                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{this.$t("text.delete")}}</li>
                                     </ul>
                                 </div>
                             </li>
@@ -142,7 +142,7 @@ export default {
             this.getContracts()
         })
         Bus.$on("compile", data => {
-            this.saveContract(data, '合约编译成功！')
+            this.saveContract(data, this.$t("contracts.contractCompileSuccess"))
         })
         Bus.$on("save", data => {
             this.saveContract(data)
@@ -261,7 +261,7 @@ export default {
                         } else if (item.contractId == this.ID && item.contractStatus == 2) {
                             this.$set(item, 'renameShow', false)
                             this.$message({
-                                message: '已部署的合约不能重新命名！',
+                                message: this.$t("contracts.renameFail"),
                                 type: "error"
                             });
                         } else {
@@ -282,7 +282,7 @@ export default {
                 } else if (value.contractId == this.ID && value.contractStatus == 2) {
                     this.$set(value, 'renameShow', false)
                     this.$message({
-                        message: '已部署的合约不能重新命名！',
+                        message: this.$t("contracts.renameFail"),
                         type: "error"
                     });
                 } else {
@@ -301,7 +301,7 @@ export default {
                     for (let i = 0; i < this.contractList.length; i++) {
                         if (this.contractList[i].contractName == this.contractName && this.contractList[i].contractPath == val.contractPath) {
                             this.$message({
-                                message: '同目录下存在相同的合约，请重新命名',
+                                message: this.$t("contracts.nameFail"),
                                 type: "error"
                             });
                             this.$set(val, 'renameShow', false)
@@ -320,7 +320,7 @@ export default {
                 }
             } else {
                 this.$message({
-                    message: '请输入数字或字母,长度为1到32位！',
+                    message: this.$t("contracts.contractLong"),
                     type: "error"
                 });
                 this.$set(val, 'renameShow', false)
@@ -354,14 +354,14 @@ export default {
                 let filetype = this.uploadFiles[i].name.split(".")[1];
                 if (filessize > 400) {
                     this.$message({
-                        message: '文件大小超过400k，请上传小于400k的文件',
+                        message: this.$t("contracts.contractSize"),
                         type: "error"
                     });
                     this.cataLogShow = false
                     break;
                 } else if (filetype !== "sol") {
                     this.$message({
-                        message: '请上传.sol格式的文件',
+                        message: this.$t("contracts.contractType"),
                         type: "error"
                     });
                     this.cataLogShow = false
@@ -382,7 +382,7 @@ export default {
                     if (value.contractName == filename && value.contractPath == val&& num===0) {
                         this.$message({
                             type: "error",
-                            message: '同一目录下不能存在同名合约'
+                            message: this.$t("contracts.contractNameSameFail")
                         });
                         num++;
                     }
@@ -476,20 +476,22 @@ export default {
                     if (data.contractId) {
                         this.$message({
                             type: "success",
-                            message: title || '合约保存成功！'
+                            message: title || this.$t("contracts.contractSaveSuccess")
                         });
                     }
                 } else {
                     this.$message({
-                        type: "error",
-                        message: errcode.errCode[res.data.code].cn
-                    });
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
             })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -565,16 +567,18 @@ export default {
                     }
                 } else {
                     this.$message({
-                        type: "error",
-                        message: errcode.errCode[res.data.code].cn
-                    });
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
             })
                 .catch(err => {
                     // this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -584,7 +588,7 @@ export default {
                 if (value.contractName == val.contractName && value.contractPath == val.contractPath) {
                     this.$message({
                         type: "error",
-                        message: "同一目录下不能存在同名合约！"
+                        message: this.$t("contracts.contractNameSameFail")
                     });
                     num++
                 }
@@ -664,7 +668,7 @@ export default {
             Bus.$emit('select', val)
         },
         deleteFile: function (val) {
-            this.$confirm('确认删除？')
+            this.$confirm(this.$t("text.confirmDelete"))
                 .then(_ => {
                     this.deleteData(val)
                 })
@@ -681,21 +685,23 @@ export default {
                     this.getContracts()
                 } else {
                     this.$message({
-                        type: "error",
-                        message: errcode.errCode[res.data.code].cn
-                    });
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
             })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
         deleteFolder: function (val) {
-            this.$confirm('确认删除？')
+            this.$confirm(this.$t("text.confirmDelete"))
                 .then(_ => {
                     this.deleteFolderData(val)
                 })
@@ -708,7 +714,7 @@ export default {
                 if (list[i].contractStatus == 2) {
                     this.$message({
                         type: "error",
-                        message: "文件夹内存在已部署的合约，无法删除文件夹"
+                        message: this.$t("contracts.contractDeleteFail")
                     })
                     return
                 } else {
