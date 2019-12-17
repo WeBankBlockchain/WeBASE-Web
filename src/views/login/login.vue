@@ -30,8 +30,8 @@
             <div class="msg-wrapper">
                 <div class="msg-error" v-show="msgError || timeout">
                     <i class="el-icon-remove"></i>
-                    <span v-if="msgError">{{msgErrorContent || this.$t('loginFail')}}</span>
-                    <span v-else-if="timeout">{{this.$t('reqOvertime')}}</span>
+                    <span v-if="msgError">{{msgErrorContent || this.$t('text.loginFail')}}</span>
+                    <span v-else-if="timeout">{{this.$t('text.reqOvertime')}}</span>
                 </div>
             </div>
             <div class="login-content">

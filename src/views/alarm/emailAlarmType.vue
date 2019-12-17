@@ -23,7 +23,8 @@
                 <el-table-column :label="$t('alarm.emailContent')" prop='alertContent' show-overflow-tooltip align="center"></el-table-column>
                 <el-table-column :label="$t('alarm.sendTime')" prop='alertIntervalSeconds' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span>{{scope.row.alertIntervalSeconds | Second}}</span>
+                        <span v-if='scope.row.alertIntervalSeconds > 1799'>{{scope.row.alertIntervalSeconds/3600}}{{$t("alarm.hours")}}</span>
+                        <span v-else>{{scope.row.alertIntervalSeconds/60}}{{$t("alarm.minute")}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('alarm.operation')" fixed="right" show-overflow-tooltip align="center">
@@ -40,7 +41,9 @@
             <el-table :data="alarmLogList" tooltip-effect="dark"  class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column :label="$t('alarm.alarmType')" prop='alertType' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
-                        <span>{{scope.row.alertType | Type}}</span>
+                        <span v-if='scope.row.alertType == 1'>{{$t('alarm.nodeAlarm')}}</span>
+                        <span v-if='scope.row.alertType == 2'>{{$t('alarm.auditAlert')}}</span>
+                        <span v-if='scope.row.alertType == 3'>{{$t('alarm.certAlert')}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('alarm.alarmLevel')" prop='alertLevel' show-overflow-tooltip align="center">
@@ -378,28 +381,6 @@ export default {
             this.getAlarmLogList();
         },
     },
-    filters: {
-        Type: function(value){
-            switch (value) {
-                case 1:
-                    return this.$t("alarm.nodeAlarm");
-                    break;
-                case 2: 
-                    return this.$t("alarm.auditAlert");
-                    break;
-                default:
-                    return this.$t("alarm.certAlert");
-                    break;
-            }
-        },
-        Second: function(value){
-            if(value > 1799) {
-                return (value/3600) + this.$t("alarm.hours");
-            }else {
-                return (value/60) + this.$t("alarm.minute");
-            }
-        }
-    }
 }
 </script>
 
