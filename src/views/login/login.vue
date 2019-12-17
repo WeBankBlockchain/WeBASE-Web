@@ -18,6 +18,12 @@
         <div class="login-lang">
             <lang-select class="right-menu-item hover-effect"></lang-select>
         </div>
+        <div class="login-encrypt">
+            <el-radio-group v-model="encryption" @change="handleEncryption" size="mini">
+                <el-radio-button label="guomi">{{$t('login.guomi')}}</el-radio-button>
+                <el-radio-button label="hash">{{$t('login.hash')}}</el-radio-button>
+            </el-radio-group>
+        </div>
         <div class="login">
             <div>
                 <svg class="icon" aria-hidden="true">
@@ -95,6 +101,7 @@ export default {
                 vercode: "",
             },
             authToken: null,
+            encryption: "hash"
             // newUserRules: {
             //     user: [
             //         { required: true, message: this.$t('inputText.user'), trigger: "blur" },
@@ -143,6 +150,13 @@ export default {
         // console.log(gm.sm3Digest("Abcd1234"))
     },
     methods: {
+        handleEncryption: function(){
+            if(this.encryption == 'guomi'){
+                localStorage.setItem('encryptionId',1)
+            }else {
+                localStorage.setItem('encryptionId',0)
+            }
+        },
         submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -222,6 +236,11 @@ export default {
         getEncryption: function(){
             encryption().then(res => {
                 if(res.data.code === 0){
+                    if(res.data.data == 1){
+                        this.encryption = 'guomi'
+                    }else{
+                        this.encryption = 'hash'
+                    }
                     localStorage.setItem("encryptionId",res.data.data)
                 }else {
                     this.$message({
@@ -351,5 +370,10 @@ export default {
     position: absolute;
     left: 90%;
     top: 20px;
+}
+.login-encrypt{
+    position: absolute;
+    left: 90%;  
+    top: 60px;
 }
 </style>
