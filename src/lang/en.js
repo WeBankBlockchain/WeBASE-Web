@@ -3,7 +3,9 @@ export default {
         user: "User",
         password: "Password",
         verificationCode: "Verification Code",
-        login: "Login"
+        login: "Login",
+        guomi: "sm3 encryption",
+        hash: "hash encryption"
     },
     inputText: {
         user: "Please Enter User",
