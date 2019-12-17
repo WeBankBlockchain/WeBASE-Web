@@ -159,6 +159,11 @@ export default {
                     }
                 } else {
                     this.groupList = [];
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                     localStorage.setItem("groupName", "")
                     localStorage.setItem("groupId", "")
                 }
@@ -325,5 +330,18 @@ export default {
 }
 .group-item-list:hover {
     color: #0db1c1;
+}
+.right-menu-item {
+   padding: 0 20px;
+}
+.hover-effect {
+    cursor: pointer;
+    /* transition: background 0.3s; */
+}
+.content-head-lang{
+    position: absolute;
+    /* background-color: #fff; */
+    right: 350px;
+    top: 0px;
 }
 </style>
