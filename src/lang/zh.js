@@ -468,6 +468,6 @@ export default {
         passwordPattern: "字母,数字组成,且至少包含一个大写字母和一个小写字母",
         updatePsdSuccess: "密码修改成功",
         updatePsdError: "密码修改失败",
-        
+
     }
 }
