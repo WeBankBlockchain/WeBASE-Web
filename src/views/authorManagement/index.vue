@@ -467,8 +467,6 @@ export default {
 </script>
 
 <style scoped>
-.author-module {
-}
 .demo-ruleForm {
     display: flex;
     display: -webkit-flex;
