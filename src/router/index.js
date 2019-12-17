@@ -57,12 +57,13 @@ const routes = [
         name: 'main',
         // redirect: '/home',
         leaf: true,
+        nameKey: "dataOverview",    
         menuShow: true,
         iconCls: 'wbs-icon-gailan sidebar-icon',
         component: main,
         children: [
             {
-                path: '/home', component: home, name: '数据概览', menuShow: true, meta: { requireAuth: true }
+                path: '/home', component: home, name: '数据概览',nameKey: "dataOverview", menuShow: true, meta: { requireAuth: true }
             }
         ]
     },
@@ -70,61 +71,66 @@ const routes = [
         path: '/',
         component: main,
         name: '区块浏览',
+        nameKey: "blockBrowsing",
         menuShow: false,
         iconCls: 'wbs-icon-overview sidebar-icon',
         children: [
-            { path: '/blockInfo', component: blockInfo, name: '区块信息', menuShow: true, meta: { requireAuth: true } },
-            { path: '/transactionInfo', component: transactionInfo, name: '交易信息', menuShow: true, meta: { requireAuth: true } },
+            { path: '/blockInfo', component: blockInfo, name: '区块信息',nameKey: "blockTitle", menuShow: true, meta: { requireAuth: true } },
+            { path: '/transactionInfo', component: transactionInfo, name: '交易信息',nameKey: "transactionInfo", menuShow: true, meta: { requireAuth: true } },
         ]
     },
     {
         path: '/',
         component: main,
         name: '节点管理',
+        nameKey: "nodeTitle",
         leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
-            { path: '/front', component: front, name: '节点管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/hostDetail', component: hostDetail, name: '节点详情', menuShow: true, meta: { requireAuth: true } }
+            { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
+            { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
         path: '/',
         component: main,
         name: '合约管理',
+        nameKey: "contractTitle",
         // leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
-            { path: '/contract', component: contract, name: '合约IDE', menuShow: true, meta: { requireAuth: true } },
-            { path: '/contractList', component: oldContract, name: '合约列表', menuShow: true, meta: { requireAuth: true } },
-            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', menuShow: true, meta: { requireAuth: true } },
-            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', menuShow: true, meta: { requireAuth: true } }
+            { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
+            { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
         path: '/',
         component: main,
         name: '私钥管理',
+        nameKey: "PrivateKey",
         leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-lock sidebar-icon',
         children: [
-            { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', nameKey: "PrivateKey", menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {
         path: '/',
         component: main,
         name: '系统管理',
+        nameKey: "systemManager",
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
             // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/permission', component: permission, name: '权限管理', menuShow: true, meta: { requireAuth: true } }, 
-            { path: '/configManagement', component: configManagement, name: '配置管理', menuShow: true, meta: { requireAuth: true } },
-            { path: '/certificate', component: certificate, name: '证书管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } }, 
+            { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
+            { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } }
             
         ]
     },
@@ -132,37 +138,40 @@ const routes = [
         path: '/',
         component: main,
         name: '系统监控',
+        nameKey: "systemMonitor",
         menuShow: true,
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
             // { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } },
-            { path: '/nodesMetric', component: nodesMetric, name: '节点监控', menuShow: true, meta: { requireAuth: false } },
-            { path: '/hostMetric', component: hostMetric, name: '主机监控', menuShow: true, meta: { requireAuth: false } },
-            { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
-            { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', menuShow: true, meta: { requireAuth: false } },
+            { path: '/nodesMetric', component: nodesMetric, name: '节点监控', nameKey: "nodesMonitor", menuShow: true, meta: { requireAuth: false } },
+            { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: true, meta: { requireAuth: false } },
+            { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', nameKey: "emailAlarm", menuShow: true, meta: { requireAuth: false } },
+            { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', nameKey: "emailAlarmType", menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {
         path: '/',
         component: main,
         name: '交易审计',
+        nameKey: "transactionAudit",
         menuShow: true,
         iconCls: 'wbs-icon-regulatory sidebar-icon',
         children: [
-            { path: '/transactionCharts', component: transactionCharts, name: '用户交易', menuShow: true, meta: { requireAuth: true } },
-            { path: '/unusualUser', component: unusualUser, name: '异常用户', menuShow: true, meta: { requireAuth: true } },
-            { path: '/unusualContract', component: unusualContract, name: '异常合约', menuShow: true, meta: { requireAuth: true } }
+            { path: '/transactionCharts', component: transactionCharts, name: '用户交易', nameKey: "userTransaction", menuShow: true, meta: { requireAuth: true } },
+            { path: '/unusualUser', component: unusualUser, name: '异常用户', nameKey: "unusualUser", menuShow: true, meta: { requireAuth: true } },
+            { path: '/unusualContract', component: unusualContract, name: '异常合约', nameKey: "unusualContract", menuShow: true, meta: { requireAuth: true } }
         ]
     }, 
     {
         path: '/',
         component: main,
         name: '帐号管理',
+        nameKey: "accountManagement",
         leaf: true,
         menuShow: false,
         iconCls: 'wbs-icon-key sidebar-icon',
         children: [
-            { path: '/accountInfo', component: accountInfo, name: '帐号管理', menuShow: true, meta: { requireAuth: true } }
+            { path: '/accountInfo', component: accountInfo, name: '帐号管理', nameKey: "accountManagement", menuShow: true, meta: { requireAuth: true } }
         ]
     },
     // {

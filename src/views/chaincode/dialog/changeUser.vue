@@ -24,15 +24,15 @@
                 </td>
             </tr> -->
             <tr>
-                <td style="width: 40px;">用户：</td>
+                <td style="width: 40px;">{{this.$t('contracts.user')}}：</td>
                 <td>
-                    <el-select v-model="userName" placeholder="请选择用户"  style="width: 240px">
+                    <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 240px">
                         <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
                     </el-select>    
                 </td>
             </tr>
             <tr v-if='inputs.length'>
-                <td style="vertical-align: top;">参数：</td>
+                <td style="vertical-align: top;">{{this.$t('contracts.params')}}：</td>
                 <td>
                     <div v-for='(item,index) in inputs' :key='item.name'>
                         <el-input v-model="parameter[index]" style="width: 240px;margin-bottom:10px;" :placeholder="item.type">
@@ -49,13 +49,13 @@
             <tr v-if='inputs.length'>
                 <td></td>
                 <td>
-                    <p style="padding: 0px 0 0 0px;"><i class="el-icon-info" style="padding-right: 4px;"></i>如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。</p>
+                    <p style="padding: 0px 0 0 0px;"><i class="el-icon-info" style="padding-right: 4px;"></i>{{this.$t('contracts.paramsInfo')}}</p>
                 </td>
             </tr>
         </table>
         <div class="text-right send-btn">
-            <el-button @click="close">取消</el-button>
-            <el-button type="primary" @click="submit">确定</el-button>
+            <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
+            <el-button type="primary" @click="submit">{{this.$t("text.sure")}}</el-button>
         </div>
     </div>
 </template>
@@ -125,15 +125,17 @@ export default {
                         }
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         }
@@ -156,9 +158,6 @@ export default {
 .opt-wrapper tr td {
     padding-top: 0;
     padding-bottom: 10px;
-}
-.send-btn {
-    
 }
 .send-btn /deep/ .el-button {
     padding: 9px 16px;

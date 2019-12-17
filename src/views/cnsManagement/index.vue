@@ -1,17 +1,17 @@
 <template>
     <div>
-        <v-content-head :headTitle="'合约管理'" :headSubTitle="'CNS查询'" @changGroup="changGroup" :headTooltip="`CNS查询说明：合约命名服务CNS通过提供链上合约名称与合约地址映射关系的记录及相应的查询功能，方便调用者通过记忆简单的合约名来实现对链上合约的调用。`"></v-content-head>
+        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <!-- <span class="instructions bg-efefef"></span> -->
             <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">
-                <el-form-item label="合约名称" prop="contractName" class="item-form">
-                    <el-input v-model.trim="cnsForm.contractName" placeholder="请输入" class="select-32"></el-input>
+                <el-form-item :label="$t('contracts.contractName')" prop="contractName" class="item-form">
+                    <el-input v-model.trim="cnsForm.contractName" :placeholder="$t('text.input')" class="select-32"></el-input>
                 </el-form-item>
-                <el-form-item label="合约版本" prop="contractVersion" class="item-form">
-                    <el-input v-model.trim="cnsForm.contractVersion" placeholder="请输入" class="select-32"></el-input>
+                <el-form-item :label="$t('contracts.contractVersion')" prop="contractVersion" class="item-form">
+                    <el-input v-model.trim="cnsForm.contractVersion" :placeholder="$t('text.input')" class="select-32"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button size="small" type="primary" @click="searchCns('cnsForm')" class="modify-btn" :disabled="disabled" :loading="loading">查询</el-button>
+                    <el-button size="small" type="primary" @click="searchCns('cnsForm')" class="modify-btn" :disabled="disabled" :loading="loading">{{this.$t('text.search')}}</el-button>
                 </el-form-item>
             </el-form>
 
@@ -53,48 +53,47 @@ export default {
                 contractName: '',
             },
             cnsList: [],
-            cnsHead: [
-                {
-                    enName: "name",
-                    name: "合约名称",
-                    width: '100'
-                },
-                {
-                    enName: "version",
-                    name: "合约版本",
-                    width: ''
-                },
-                {
-                    enName: "address",
-                    name: "合约地址",
-                    width: ''
-                },
-                {
-                    enName: "abi",
-                    name: "合约Abi",
-                    width: ''
-                },
-            ],
-            rules: {
-                // contractVersion: [
-                //     {
-                //         required: true,
-                //         message: "请输入合约版本号",
-                //         trigger: "blur"
-                //     }
-                // ],
-                contractName: [
-                    {
-                        required: true,
-                        message: "请输入合约名",
-                        trigger: "blur"
-                    }
-                ]
-            }
         }
     },
 
     computed: {
+        cnsHead() {
+            let data = [
+                {
+                    enName: "name",
+                    name: this.$t('contracts.contractName'),
+                    width: '120'
+                },
+                {
+                    enName: "version",
+                    name: this.$t('contracts.contractVersion'),
+                    width: ''
+                },
+                {
+                    enName: "address",
+                    name: this.$t('contracts.contractAddress'),
+                    width: ''
+                },
+                {
+                    enName: "abi",
+                    name: this.$t('contracts.contractAbi'),
+                    width: ''
+                },
+            ]
+            return data
+        },
+        rules() {
+            let data = {
+                contractName: [
+                    {
+                        required: true,
+                        message: this.$t('rule.contractName'),
+                        trigger: "blur"
+                    }
+                ]
+            }
+            return data
+        }
     },
 
     mounted() {
@@ -139,20 +138,22 @@ export default {
                         this.total = res.data.totalCount
                         this.$message({
                             type: 'success',
-                            message: '查询成功'
+                            message: this.$t('text.selectSuccess')
                         })
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },

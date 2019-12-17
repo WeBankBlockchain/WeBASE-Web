@@ -1,30 +1,30 @@
 <template>
     <div>
-        <div class="text-center" style="margin-bottom:5px">tips: 公钥用户无法授权其它用户</div>
+        <div class="text-center" style="margin-bottom:5px">{{this.$t('system.dialogTips')}}</div>
         <el-form :model="permissionForm" :rules="rules" ref="permissionForm" label-width="110px" class="demo-ruleForm">
-            <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
-                <el-select v-model="permissionForm.adminRivateKey" placeholder="请选择">
+            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
+                <el-select v-model="permissionForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in permissionAdminList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="外部账号地址" prop="otherRivateKey" style="width: 320px;" v-if="btnType==='addBtn'">
-                <el-select v-model.trim="permissionForm.otherRivateKey" placeholder="请输入帐号" filterable>
+            <el-form-item :label="$t('system.outUserAddress')" prop="otherRivateKey" style="width: 320px;" v-if="btnType==='addBtn'">
+                <el-select v-model.trim="permissionForm.otherRivateKey" :placeholder="$t('system.inputUser')" filterable>
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="外部账号地址" style="width: 320px;" v-if="btnType==='deleteBtn'">
+            <el-form-item :label="$t('system.outUserAddress')" style="width: 320px;" v-if="btnType==='deleteBtn'">
                 <span :title="deleteParam.address" class="delete-address">{{deleteParam.address}}</span>
             </el-form-item>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="close">取消</el-button>
-            <el-button type="primary" :loading="loading" @click="submit('permissionForm')">确定</el-button>
+            <el-button @click="close">{{this.$t('text.cancel')}}</el-button>
+            <el-button type="primary" :loading="loading" @click="submit('permissionForm')">{{this.$t('text.sure')}}</el-button>
         </div>
     </div>
 </template>
@@ -55,28 +55,30 @@ export default {
                 adminRivateKey: '',
                 otherRivateKey: ''
             },
-            rules: {
+            authorType: 'permission',
+        }
+    },
+
+    computed: {
+        rules() {
+            let data = {
                 adminRivateKey: [
                     {
                         required: true,
-                        message: "请选择管理员账号",
+                        message: this.$t("rule.adminRule"),
                         trigger: "blur"
                     }
                 ],
                 otherRivateKey: [
                     {
                         required: true,
-                        message: "请选择外部账号地址",
+                        message: this.$t("rule.outUserAddress"),
                         trigger: "blur"
                     }
                 ]
-            },
-            authorType: 'permission',
+            }
+            return data
         }
-    },
-
-    computed: {
-
     },
 
     watch: {
@@ -130,21 +132,23 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
-                            message: '授权成功'
+                            message: this.$t("system.authorizedSuccess")
                         })
                         this.$emit('authorizeSuccess')
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -163,21 +167,23 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
-                            message: '删除成功'
+                            message: this.$t("system.deleteSuccess") 
                         })
                         this.$emit('authorizeSuccess')
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
 
@@ -196,6 +202,12 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];
+                        if(res.data.data.length == 0){
+                            this.$message({
+                                type: "info",
+                                message: this.$t("system.deleteSuccess")
+                            }); 
+                        }
                         res.data.data.forEach(value => {
                             // if (value.hasPk === 1) {
                                 this.adminRivateKeyList.push(value);
@@ -203,15 +215,17 @@ export default {
                         });
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },

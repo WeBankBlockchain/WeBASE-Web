@@ -1,24 +1,24 @@
 <template>
     <div>
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
-            <el-form-item label="管理员账号" prop="adminRivateKey" style="width: 320px;">
-                <el-select v-model="modifyForm.adminRivateKey" placeholder="请选择">
+            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
+                <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="节点类型" prop="adminRivateKey" style="width: 320px;">
-                <el-select v-model="modifyForm.nodeType" placeholder="请选择">
+            <el-form-item :label="$t('nodes.nodeStyle')" prop="adminRivateKey" style="width: 320px;">
+                <el-select v-model="modifyForm.nodeType" :placeholder="$t('text.select')">
                     <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
                     </el-option>
                 </el-select>
             </el-form-item>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="close">取消</el-button>
-            <el-button type="primary" :loading="loading" @click="submit('modifyForm')">确定</el-button>
+            <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
+            <el-button type="primary" :loading="loading" @click="submit('modifyForm')">{{this.$t("text.sure")}}</el-button>
         </div>
     </div>
 </template>
@@ -44,42 +44,44 @@ export default {
             nodeTypeList: [
                 {
                     type: 'observer',
-                    name: '观察'
+                    name: this.$t("nodes.observer")
                 },
                 {
                     type: 'sealer',
-                    name: '共识'
+                    name: this.$t("nodes.sealer")
                 },
                 {
                     type: 'remove',
-                    name: '游离'
+                    name: this.$t("nodes.remove")
                 },
             ],
             modifyForm: {
                 adminRivateKey: '',
                 nodeType: ''
             },
-            rules: {
+        }
+    },
+
+    computed: {
+        rules() {
+            let data = {
                 adminRivateKey: [
                     {
                         required: true,
-                        message: "请选择管理员账号",
+                        message: this.$t("rule.adminRule"),
                         trigger: "blur"
                     }
                 ],
                 nodeType: [
                     {
                         required: true,
-                        message: "请选择节点类型",
+                        message: this.$t("rule.nodeType"),
                         trigger: "blur"
                     }
                 ]
             }
+            return data
         }
-    },
-
-    computed: {
-
     },
 
     watch: {
@@ -102,9 +104,9 @@ export default {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'observer') {
-                        this.$confirm('设置为观察节点，节点将不参与共识 ', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                        this.$confirm(this.$t("nodes.observerText"), this.$t("text.tips"), {
+                            confirmButtonText: this.$t("text.sure"),
+                            cancelButtonText: this.$t("text.cancel"),
                             type: 'warning'
                         }).then(() => {
                             this.queryConsensusNodeId()
@@ -112,9 +114,9 @@ export default {
                             console.log('close')
                         });
                     }else if((this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'remove') || (this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'remove')){
-                        this.$confirm('设置为游离节点，节点将不参与共识和同步', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                        this.$confirm(this.$t("nodes.removeText"), this.$t("text.tips"), {
+                            confirmButtonText: this.$t("text.sure"),
+                            cancelButtonText: this.$t("text.cancel"),
                             type: 'warning'
                         }).then(() => {
                             this.queryConsensusNodeId()
@@ -122,9 +124,9 @@ export default {
                             console.log('close')
                         });
                     }else if((this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'sealer') || (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer')){
-                        this.$confirm('设置为共识节点，节点将参与共识。请联系专业人员设置。', '提示', {
-                            confirmButtonText: '确定',
-                            cancelButtonText: '取消',
+                        this.$confirm(this.$t("nodes.sealerText"), this.$t("text.tips"), {
+                            confirmButtonText: this.$t("text.sure"),
+                            cancelButtonText: this.$t("text.cancel"),
                             type: 'warning'
                         }).then(() => {
                             this.queryConsensusNodeId()
@@ -155,21 +157,23 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
-                            message: '修改成功'
+                            message: this.$t("text.updateSuccessMsg")
                         })
                         this.$emit('nodeModifySuccess')
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -194,15 +198,17 @@ export default {
                         if (this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
