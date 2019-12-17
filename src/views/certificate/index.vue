@@ -124,6 +124,7 @@ export default {
                     name: this.$t('nodes.operation'),
                     width: ''
                 },
+                
             ]
             return data
         }
