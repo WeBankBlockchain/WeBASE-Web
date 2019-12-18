@@ -31,12 +31,12 @@
             </div>
             <div class="search-table">
                 <el-table :data="blockData" class="block-table-content" v-loading="loading" @row-click="clickTable" ref="refTable">
-                    <el-table-column prop="blockNumber" :label="$t('home.blockHeight')" width="80" align="center">
+                    <el-table-column prop="blockNumber" :label="$t('home.blockHeight')" width="120" align="center">
                         <template slot-scope="scope">
                             <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="transCount" :label="$t('home.transaction')" width="50" align="center">
+                    <el-table-column prop="transCount" :label="$t('home.transaction')" width="100" align="center">
                         <template slot-scope="scope">
                             <span class="">{{scope.row['transCount']}}</span>
                         </template>

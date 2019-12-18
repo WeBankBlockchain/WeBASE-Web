@@ -22,7 +22,8 @@
             <span :class="{ 'font-color-9da2ab': headSubTitle}">{{title}}</span>
             <span v-show="headSubTitle" class="font-color-9da2ab">/</span>
             <span>{{headSubTitle}}</span>
-            <el-tooltip effect="dark" :content="headTooltip" placement="bottom-start" v-if="headTooltip">
+            <el-tooltip effect="dark"  placement="bottom-start" v-if="headTooltip">
+                 <div slot="content">{{headTooltip}}</div>
                 <i class="el-icon-info contract-icon font-15" ></i>
             </el-tooltip>
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>

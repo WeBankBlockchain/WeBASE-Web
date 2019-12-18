@@ -31,7 +31,7 @@
                             <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="120" align="center"></el-table-column>
+                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center"></el-table-column>
                     <el-table-column prop="contractAddress" :label="$t('contracts.contractAddress')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('contracts.copyContractAddress')"></i>

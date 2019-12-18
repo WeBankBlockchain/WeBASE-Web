@@ -5,10 +5,10 @@
             <!-- <span class="instructions bg-efefef"></span> -->
             <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.contractName')" prop="contractName" class="item-form">
-                    <el-input v-model.trim="cnsForm.contractName" :placeholder="$t('text.input')" class="select-32"></el-input>
+                    <el-input v-model.trim="cnsForm.contractName" :placeholder="$t('text.input')" class="select-32" style="width: 200px;"></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('contracts.contractVersion')" prop="contractVersion" class="item-form">
-                    <el-input v-model.trim="cnsForm.contractVersion" :placeholder="$t('text.input')" class="select-32"></el-input>
+                    <el-input v-model.trim="cnsForm.contractVersion" :placeholder="$t('text.input')" class="select-32" style="width: 200px;"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button size="small" type="primary" @click="searchCns('cnsForm')" class="modify-btn" :disabled="disabled" :loading="loading">{{this.$t('text.search')}}</el-button>

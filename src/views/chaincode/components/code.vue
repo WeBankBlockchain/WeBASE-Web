@@ -21,7 +21,7 @@
                 <span>{{contractName + '.sol'}}</span>
             </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" v-if="!contractAddress && !disabled">
+                <span class="contract-code-done" v-if="!contractAddress && !disabled" @click="saveCode">
                     <el-tooltip class="item" effect="dark" :content="$t('contracts.contractSaveTips')" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
