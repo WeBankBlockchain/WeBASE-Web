@@ -551,7 +551,7 @@ let errCode = {
 
 
     "302000": {
-        en: "user not logged in",
+        en: " The user has not logged in yet",
         zh: '未登录的用户'
     },
     "302001":{
