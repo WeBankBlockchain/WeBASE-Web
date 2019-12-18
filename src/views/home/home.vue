@@ -310,7 +310,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -346,7 +346,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -424,12 +424,13 @@ export default {
                     if (res.data.code === 0) {
                         this.blockData = res.data.data;
                     } else {
+                        
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -461,7 +462,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
