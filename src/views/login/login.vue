@@ -368,12 +368,12 @@ export default {
 }
 .login-lang{
     position: absolute;
-    left: 85%;
+    left: 90%;
     top: 20px;
 }
 .login-encrypt{
     position: absolute;
-    left: 85%;  
+    left: 90%;  
     top: 60px;
 }
 .login-encrypt .el-radio-button__inner{
