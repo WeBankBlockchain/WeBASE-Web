@@ -20,7 +20,7 @@
                                     <span v-else>{{scope.row[head.enName]}}</span>
                                 </template>
                                 <template v-else>
-                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteUser(scope.row)">{{this.$t('text.delete')}}</el-button>
+                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteUser(scope.row)">{{$t('text.delete')}}</el-button>
                                 </template>
                             </template>
                         </el-table-column>
@@ -29,7 +29,7 @@
                     </el-pagination>
                 </el-tab-pane>
                 <el-tab-pane :label="$t('system.commonManager')">
-                    {{this.$t('system.chainAdministrator')}}
+                    {{$t('system.chainAdministrator')}}
                     <el-select v-model="chainAdmin">
                         <el-option v-for="item in authorRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         </el-option>

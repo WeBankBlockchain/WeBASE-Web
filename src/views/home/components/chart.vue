@@ -62,6 +62,7 @@ export default {
     },
     methods: {
         chartShow: function() {
+            let that = this
             this.chart = echarts.init(document.getElementById(this.chartId));
             let dayNum = this.chartData.length;
             let option = {
