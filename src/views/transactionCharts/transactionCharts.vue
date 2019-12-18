@@ -30,7 +30,8 @@
                     </div>
                     <div class="text-left-label">
                         <span class="text-left-label-title">{{this.$t('transaction.time')}}：</span>
-                        <el-date-picker @change="changeDate" v-model="transDate" type="datetimerange" :picker-options="transPickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" value-format="yyyy-MM-dd HH:mm:ss" class="date-select-32">
+                        <el-date-picker @change="changeDate" v-model="transDate" type="datetimerange" :picker-options="transPickerOptions" 
+                        :range-separator="$t('system.to')" :start-placeholder="$t('transaction.startTime')" :end-placeholder="$t('transaction.endTime')" align="left" value-format="yyyy-MM-dd HH:mm:ss" class="date-select-32">
                         </el-date-picker>
                     </div>
                     <div class="text-left-label1">

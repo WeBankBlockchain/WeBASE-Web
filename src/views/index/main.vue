@@ -20,7 +20,7 @@
             <div class="reset-password-title">
                 {{$t('main.changePassword')}}
             </div>
-            <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="100px" class="demo-ruleForm">
+            <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="140px" class="demo-ruleForm">
                 <el-form-item :label="$t('main.oldPassword')" prop="oldPass">
                     <el-input type="password" v-model="rulePasswordForm.oldPass" autocomplete="off"></el-input>
                 </el-form-item>
@@ -67,25 +67,7 @@ export default {
         //     sessionStorage.setItem("reload", 2);
         //     router.go(0);
         // }
-        var validatePass = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error(this.$t('main.inputPassword')));
-            } else {
-                if (this.rulePasswordForm.checkPass !== "") {
-                    this.$refs.rulePasswordForm.validateField("checkPass");
-                }
-                callback();
-            }
-        };
-        var validatePass2 = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error(this.$t('main.againPassword')));
-            } else if (value !== this.rulePasswordForm.pass) {
-                callback(new Error(this.$t('main.passwordError')));
-            } else {
-                callback();
-            }
-        };
+        
         return {
             guideShow: false,
             frontShow: false,
@@ -102,10 +84,30 @@ export default {
         };
     },
     computed: {
+        
         show: function() {
             return this.menuShow;
         },
         rules2() {
+            var  validatePass = (rule, value, callback) => {
+                if (value === "") {
+                    callback(new Error(this.$t('main.inputPassword')));
+                } else {
+                    if (this.rulePasswordForm.checkPass !== "") {
+                        this.$refs.rulePasswordForm.validateField("checkPass");
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === "") {
+                    callback(new Error(this.$t('main.againPassword')));
+                } else if (value !== this.rulePasswordForm.pass) {
+                   callback(new Error(this.$t('main.passwordError')));
+                } else {
+                    callback();
+                }
+            };
             let data = {
                 oldPass: [
                     {
