@@ -19,7 +19,7 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('contracts.contractSearch')" v-model="contractData" class="input-with-select">
+                    <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>

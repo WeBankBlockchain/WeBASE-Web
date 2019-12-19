@@ -46,7 +46,7 @@ export default {
         }
     },
     watch: {
-        reload: function() {
+        reload: function () {
             this.getChartData();
         }
     },
@@ -57,7 +57,7 @@ export default {
             showContrast: false
         };
     },
-    beforeDestroy: function() {
+    beforeDestroy: function () {
         window.onresize = null;
     },
     mounted() {
@@ -81,7 +81,7 @@ export default {
                 return item;
             });
             for (let i = 0; i < yList.length; i++) {
-                if(yList[i] === null) {
+                if (yList[i] === null) {
                     yList[i] = 0
                 }
             }
@@ -91,14 +91,14 @@ export default {
                 }
             );
             for (let i = 0; i < yList.length; i++) {
-                if(yContrastList[i] === null) {
+                if (yContrastList[i] === null) {
                     yContrastList[i] = 0
                 }
             }
             if (this.chartOption.data.contrastDataList.valueList.length > 0) {
                 yContrastTitle = this.$t('monitor.contrastDateData');
                 this.showContrast = true;
-            }else {
+            } else {
                 this.showContrast = false
             }
             let _this = this;
@@ -108,7 +108,7 @@ export default {
                         this.metricName === "nodes"
                             ? `${this.chartOption.metricName}`
                             : `${this.chartOption.metricName}${this.chartOption
-                                  .metricUint}(${this.chartOption.metricU})`,
+                                .metricUint}(${this.chartOption.metricU})`,
                     textStyle: {
                         color: "#1e53a4",
                         fontStyle: "normal",
@@ -127,41 +127,41 @@ export default {
                             backgroundColor: "#505765"
                         }
                     },
-                    formatter: function(data) {
+                    formatter: function (data) {
                         let str = ''
-                        if(data.length === 2 ){
-                            if(data[0]['data'] && data[1]['data']){
+                        if (data.length === 2) {
+                            if (data[0]['data'] && data[1]['data']) {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
                                 <span>${data[1]['seriesName']}:${data[1]['data']}</span>
                                 `
-                            }else if(data[0]['data']===0&&data[1]['data']!=0){
+                            } else if (data[0]['data'] === 0 && data[1]['data'] != 0) {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
                                 <span>${data[1]['seriesName']}:${data[1]['data']}</span><br/>
                                 `
-                            }else if(data[0]['data']!=0&&data[1]['data']===0){
+                            } else if (data[0]['data'] != 0 && data[1]['data'] === 0) {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
                                 <span>${data[1]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
                                 `
-                            }else {
+                            } else {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${this.$t('monitor.noData')}</span><br/>
                                 `
                             }
-                        }else if(data.length === 1) {
-                            if(data[0]['data']){
+                        } else if (data.length === 1) {
+                            if (data[0]['data']) {
 
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
                                 `
-                            }else {
+                            } else {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
@@ -191,12 +191,22 @@ export default {
                     top: "16",
                     feature: {
                         dataZoom: {
-                            yAxisIndex: "none"
+                            yAxisIndex: 'none',
+                            title: {
+                                zoom: this.$t('title.zoom'),
+                                back: this.$t('title.back')
+                            }
                         },
-                        restore: {},
-                        magicType: { 
-                            show: this.showContrast ? true : false, 
-                            type: ["stack", "tiled"] 
+                        restore: {
+                            title: this.$t('title.restore')
+                        },
+                        magicType: {
+                            show: this.showContrast ? true : false,
+                            type: ['stack', 'tiled'],
+                            title: {
+                                stack: this.$t('title.stack'),
+                                tiled: this.$t('title.tiled'),
+                            }
                         }
                     }
                 },
@@ -206,7 +216,7 @@ export default {
                     data: xList,
                     axisLabel: {
                         interval: "auto",
-                        formatter: function(value, index) {
+                        formatter: function (value, index) {
                             return value.substr(0, 5);
                         }
                     },
@@ -273,9 +283,9 @@ export default {
                 };
             }, 200);
         },
-        formatNodesMetric(val){
-            let num ;
-            if(val === 0) {
+        formatNodesMetric(val) {
+            let num;
+            if (val === 0) {
                 return str = this.$t('monitor.nullData')
             }
         }
