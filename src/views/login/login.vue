@@ -367,14 +367,14 @@ export default {
     text-align: left;
 }
 .login-lang{
-    position: absolute;
-    left: 90%;
+    position: relative;
+    left: 86%;
     top: 20px;
 }
 .login-encrypt{
-    position: absolute;
-    left: 90%;  
-    top: 60px;
+    position: relative;
+    left: 86%;  
+    top: 30px;
 }
 .login-encrypt .el-radio-button__inner{
     display: inline-block;

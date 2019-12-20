@@ -17,7 +17,7 @@
     <div>
         <el-dialog :title="$t('contracts.createFile')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true">
             <div>
-                <el-form :model="fileFrom" :rules="rules" ref="fileFrom" label-width="100px" class="demo-ruleForm">
+                <el-form :model="fileFrom" :rules="rules" ref="fileFrom" label-width="116px" class="demo-ruleForm">
                     <el-form-item :label="$t('contracts.contractName')" prop="contractName" >
                         <el-input v-model="fileFrom.contractName" style="width: 210px;"></el-input>
                     </el-form-item>

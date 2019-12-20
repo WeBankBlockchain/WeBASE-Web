@@ -22,7 +22,7 @@
             <span :class="{ 'font-color-9da2ab': headSubTitle}">{{title}}</span>
             <span v-show="headSubTitle" class="font-color-9da2ab">/</span>
             <span>{{headSubTitle}}</span>
-            <el-tooltip effect="dark"  placement="bottom-start" v-if="headTooltip">
+            <el-tooltip effect="dark"  placement="bottom-start" v-if="headTooltip" offset='0'>
                  <div slot="content">{{headTooltip}}</div>
                 <i class="el-icon-info contract-icon font-15" ></i>
             </el-tooltip>
@@ -55,7 +55,7 @@
         <div class="content-head-lang">
             <lang-select class="right-menu-item hover-effect" />
         </div>
-        <el-dialog title="修改密码" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
+        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
         <!-- <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close' @changGroupSucess="changGroupSucess"></v-dialog> -->
