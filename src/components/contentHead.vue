@@ -52,9 +52,9 @@
                 </a>
             </el-popover>
         </div>
-        <div class="content-head-lang">
+        <!-- <div class="content-head-lang">
             <lang-select class="right-menu-item hover-effect" />
-        </div>
+        </div> -->
         <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>

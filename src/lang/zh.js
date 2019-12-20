@@ -5,7 +5,7 @@ export default {
         verificationCode: "验证码",
         login: "登录",
         guomi: "国密",
-        hash: "非国密"
+        hash: "普通"
     },
     inputText: {
         user: "请输入账号",

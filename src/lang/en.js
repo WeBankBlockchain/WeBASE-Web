@@ -4,13 +4,13 @@ export default {
         password: "Password",
         verificationCode: "Verification Code",
         login: "Login",
-        guomi: "sm3",
-        hash: "hash"
+        guomi: "GM",
+        hash: "Normal"
     },
     inputText: {
         user: "Please User",
         password: "Please Password",
-        verificationCode: "Please verificationCode",
+        verificationCode: "Verification Code",
         blockInput: "Search by Block / Txn Hash",
         contractSearch: "Please enter the contract name or address",
         transactionSearch: "Search by Block / Txn Hash"
@@ -147,7 +147,7 @@ export default {
         createTime: "Create Time"
     },
     nodes: {
-        nodeFront: "Fron Node",
+        nodeFront: "Front Node",
         addFront: "Add",
         frontId: "Front ID",
         ip: "IP",
@@ -345,7 +345,7 @@ export default {
         confirm: "Confirm",
         addFrontInfo: "Add Front Information",
         blockHeight: "Block Height",
-        pendingCount: "Number of transactions to be packaged",
+        pendingCount: "Pending Transactions",
         dateFormat: "dd-MM-yyyy",
         dateLabel: "dd-MM-yyyy",
         startTime: "Start Time",
