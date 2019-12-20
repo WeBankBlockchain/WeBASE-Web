@@ -118,13 +118,9 @@ export default {
         },
         preRivateKeyHead() {
             let data = [
-                {
-                    enName: "table_name",
-                    name: this.$t("system.tableName")
-                },
                 // {
                 //     enName: "table_name",
-                //     name: "表名称"
+                //     name: this.$t("system.tableName")
                 // },
                 {
                     enName: "address",
