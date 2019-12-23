@@ -79,8 +79,8 @@ export default {
                             data[0].name +
                             '</span><br><table ><tr><td style="padding:0">' +
                             '<span style="font-size:10px;color:white">' + that.$t("home.chartTransactions") + '：' +
-                            data[0].value +
-                            "笔</a></span><br></td></tr></table>"
+                            data[0].value + that.$t('transaction.stroke') +
+                            "</a></span><br></td></tr></table>"
                         );
                     }
                 },

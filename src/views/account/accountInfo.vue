@@ -27,7 +27,8 @@
                     <el-table-column v-for="head in accountHeader" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <template v-if="head.enName!='operate'">
-                                <span>{{scope.row[head.enName]}}</span>
+                                <span v-if="head.enName === 'roleNameZh'">{{translate(scope.row['roleId'])}}</span>
+                                <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
                                 <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')" style="color:#ed5454">{{$t('text.delete')}}</el-button>
@@ -170,6 +171,19 @@ export default {
             }
             this.accountDialogVisible = true
             this.accountDialogTitle = this.$t('account.updataAccount')
+        },
+        translate(val){
+            var str = '';
+            switch (val) {
+                case 100000:
+                    str = this.$t('text.Administrator')
+                    break;
+            
+                case 100001:
+                    str = this.$t('text.normalUsers')
+                    break;
+            }
+            return str;
         }
     }
 };

@@ -21,7 +21,7 @@
             </el-form-item>
             <el-form-item :label="$t('login.password')" prop="password" style="width: 300px;" v-if="accountForm['dShow']">
                 <el-input v-model="accountForm.password" :placeholder="$t('inputText.password')" minlength="6" maxlength="12" :type="inputType">
-                    <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']"  @click.stop.prevent="showPassword"></i>
+                    <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']" @click.stop.prevent="showPassword"></i>
                 </el-input>
             </el-form-item>
             <el-form-item v-if='accountForm.emailshow' :label="$t('account.email')" style="width: 300px;">
@@ -162,10 +162,10 @@ export default {
         this.getRoleList();
     },
     methods: {
-        modelClose: function() {
+        modelClose: function () {
             this.$emit("close", false);
         },
-        submit: function(formName) {
+        submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.$confirm(this.$t('text.confirmSubmit'), {
@@ -183,7 +183,7 @@ export default {
                 }
             });
         },
-        getRoleList: function() {
+        getRoleList: function () {
             let groupId = localStorage.getItem("groupId");
             let reqQuery = {};
             reqQuery = {
@@ -196,6 +196,17 @@ export default {
             roleList({}, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
+                        res.data.data.forEach(item => {
+                            switch (item.roleId) {
+                                case 100000:
+                                    item.roleNameZh = this.$t('text.Administrator')
+                                    break;
+
+                                case 100001:
+                                    item.roleNameZh = this.$t('text.normalUsers')
+                                    break;
+                            }
+                        })
                         this.roleList = res.data.data;
                     } else {
                         this.$message({
@@ -213,7 +224,7 @@ export default {
                     });
                 });
         },
-        getAllAccountInfo: function() {
+        getAllAccountInfo: function () {
             let type = this.type;
             switch (type) {
                 case "creat":
@@ -227,26 +238,35 @@ export default {
                     break;
             }
         },
-        getCreatAccountInfo: function() {
+        getCreatAccountInfo: function () {
             let reqData = {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
             };
+<<<<<<< HEAD
             // if(localStorage.getItem("encryptionId") == 1){
             //     reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password);
             // }else{
             //     reqData.accountPwd = sha256(this.accountForm.password);
             // }
             if(this.accountForm.email){
+=======
+            if (localStorage.getItem("encryptionId") == 1) {
+                reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password);
+            } else {
+                reqData.accountPwd = sha256(this.accountForm.password);
+            }
+            if (this.accountForm.email) {
+>>>>>>> c2231e5db56f6470b02181bcc10009a4f8533d9d
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                if(!pattern.test(this.accountForm.email)){
+                if (!pattern.test(this.accountForm.email)) {
                     this.$message({
                         type: "error",
                         message: this.$t('account.emailTypeError')
                     });
                     return
-                }else{
+                } else {
                     reqData.email = this.accountForm.email
                 }
             }
@@ -278,26 +298,35 @@ export default {
                     });
                 });
         },
-        getModifyAccountInfo: function() {
+        getModifyAccountInfo: function () {
             let reqData = {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
             };
+<<<<<<< HEAD
             // if(localStorage.getItem("encryptionId") == 1){
             //     reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password)
             // }else{
             //     reqData.accountPwd = sha256(this.accountForm.password)
             // }
             if(this.accountForm.email){
+=======
+            if (localStorage.getItem("encryptionId") == 1) {
+                reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password)
+            } else {
+                reqData.accountPwd = sha256(this.accountForm.password)
+            }
+            if (this.accountForm.email) {
+>>>>>>> c2231e5db56f6470b02181bcc10009a4f8533d9d
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
-                if(!pattern.test(this.accountForm.email)){
+                if (!pattern.test(this.accountForm.email)) {
                     this.$message({
                         type: "error",
                         message: this.$t('account.emailTypeError')
                     });
                     return
-                }else{
+                } else {
                     reqData.email = this.accountForm.email
                 }
             }
@@ -329,7 +358,7 @@ export default {
                     });
                 });
         },
-        getDeleteAccountInfo: function() {
+        getDeleteAccountInfo: function () {
             deleteAccountInfo(this.accountForm.name, {})
                 .then(res => {
                     this.loading = false;
@@ -359,9 +388,9 @@ export default {
                 });
         },
         showPassword() {
-            if(this.inputType === 'password'){
+            if (this.inputType === 'password') {
                 this.inputType = 'text'
-            }else {
+            } else {
                 this.inputType = 'password'
             }
         }
@@ -383,6 +412,6 @@ export default {
     display: block;
 }
 .demo-ruleForm >>> .el-form-item__error {
-    padding-top: 0
+    padding-top: 0;
 }
 </style>

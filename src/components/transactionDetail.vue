@@ -155,8 +155,8 @@ export default {
             decodeData: {},
             funcData: "",
             showDecode: false,
-            buttonTitle: "还原",
-            eventTitle: "还原",
+            buttonTitle: this.$t('transaction.reduction'),
+            eventTitle: this.$t('transaction.reduction'),
             abiType: [],
             methodId: "",
             inputData: [],
@@ -349,17 +349,17 @@ export default {
         },
         decode: function () {
             if (this.showDecode) {
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
                 this.showDecode = false;
             } else {
-                this.buttonTitle = "解码";
+                this.buttonTitle = this.$t('transaction.decode');
                 this.showDecode = true;
             }
             if (this.eventDataShow) {
-                this.buttonTitle = "解码";
+                this.buttonTitle = this.$t('transaction.decode');
                 this.eventDataShow = false;
             } else {
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
                 this.eventDataShow = true;
             }
         },
@@ -472,11 +472,11 @@ export default {
         decodeButtonEvent: function (num) {
             if (this.eventLog[num].eventDataShow) {
                 this.$set(this.eventLog[num], 'eventDataShow', false);
-                this.$set(this.eventLog[num], 'eventTitle', '解码')
+                this.$set(this.eventLog[num], 'eventTitle', this.$t('transaction.decode'))
                 this.$set(this.eventLog, num, this.eventLog[num])
             } else {
                 this.$set(this.eventLog[num], 'eventDataShow', true);
-                this.$set(this.eventLog[num], 'eventTitle', '还原');
+                this.$set(this.eventLog[num], 'eventTitle', this.$t('transaction.reduction'));
                 this.$set(this.eventLog, num, this.eventLog[num])
             }
         },
@@ -531,7 +531,7 @@ export default {
                     }
                 }
                 this.showDecode = false;
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
             }
         },
         //deloy-contract-transaction-decode
@@ -562,7 +562,7 @@ export default {
                     }
                 })
                 this.showDecode = false;
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
             } else {
                 this.buttonSHow = false;
                 this.showDecode = false;

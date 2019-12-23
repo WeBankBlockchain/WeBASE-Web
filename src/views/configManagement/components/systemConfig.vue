@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
+        <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="146px" class="demo-ruleForm">
             <el-form-item :label="$t('system.configKey')"  style="width: 320px;">
                 <span>{{configKey}}</span>
             </el-form-item>
@@ -12,7 +12,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('nodes.configValue')" prop="configValue" style="width: 320px;">
+            <el-form-item :label="$t('system.configValue')" prop="configValue" style="width: 320px;">
                 <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? $t('system.gasLong') : ''"></el-input>
             </el-form-item>
         </el-form>
