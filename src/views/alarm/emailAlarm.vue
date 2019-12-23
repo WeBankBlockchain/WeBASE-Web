@@ -170,7 +170,7 @@ export default {
         sendEmail: function(){
             this.$prompt(this.$t("alarm.enterEmail"), this.$t("alarm.tip"), {
                 confirmButtonText: this.$t("alarm.send"),
-                cancelButtonText: this.$t("alarm.cnacel"),
+                cancelButtonText: this.$t("alarm.cancel"),
                 inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
                 inputErrorMessage: this.$t("alarm.emailTypeErr"),
                 }).then(({ value }) => {

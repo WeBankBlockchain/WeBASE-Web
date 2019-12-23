@@ -5,7 +5,7 @@ export default {
         verificationCode: "验证码",
         login: "登录",
         guomi: "国密",
-        hash: "非国密"
+        hash: "普通"
     },
     inputText: {
         user: "请输入账号",
@@ -49,7 +49,9 @@ export default {
         implement: "执行",
         implementResult: "执行结果",
         confirmSubmit: "确认提交？",
-        addSuccess: "新增成功"
+        addSuccess: "新增成功",
+        Administrator: '管理员',
+        normalUsers: '普通用户',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -116,7 +118,12 @@ export default {
         nodesMonitor: "节点监控",
         hostMonitor: "主机监控",
         emailAlarm: "邮件告警配置",
-        emailAlarmType: "告警类型配置"
+        emailAlarmType: "告警类型配置",
+        restore: '还原',
+        zoom: '区域缩放',
+        back: '区域缩放还原',
+        stack: '堆叠',
+        tiled: '平铺',
     },
     home: {
         nodes: "节点个数",
@@ -471,5 +478,8 @@ export default {
         updatePsdSuccess: "密码修改成功",
         updatePsdError: "密码修改失败",
 
+    },
+    placeholder: {
+        contractListSearch: '输入合约名或合约地址'
     }
 }

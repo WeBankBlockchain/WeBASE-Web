@@ -25,7 +25,7 @@
                     </el-tooltip>
                 </div>
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select">
+                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" style="width: 370px;">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>

@@ -19,7 +19,7 @@
             <lang-select class="right-menu-item hover-effect"></lang-select>
         </div>
         <div class="login-encrypt">
-            <el-radio-group v-model="encryption" @change="handleEncryption" size="mini" style="width: 190px">
+            <el-radio-group v-model="encryption" @change="handleEncryption" size="mini">
                 <el-radio-button label="hash">{{$t('login.hash')}}</el-radio-button>
                 <el-radio-button label="guomi">{{$t('login.guomi')}}</el-radio-button>
             </el-radio-group>
@@ -276,7 +276,7 @@ export default {
     position: absolute;
     width: 430px;
     /* height: 460px; */
-    top: 50%;
+    top: 52%;
     left: 70%;
     margin-top: -280px;
     margin-left: -201px;
@@ -368,13 +368,15 @@ export default {
 }
 .login-lang{
     position: absolute;
-    left: 90%;
+    right: 10px;
     top: 20px;
+    min-width: 160px;
 }
 .login-encrypt{
     position: absolute;
-    left: 90%;  
+    right: 10px;
     top: 60px;
+    min-width: 160px;
 }
 .login-encrypt .el-radio-button__inner{
     display: inline-block;
