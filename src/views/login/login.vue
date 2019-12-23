@@ -200,11 +200,11 @@ export default {
                 account: this.loginForm.user,
                 accountPwd: sha256(this.loginForm.password)
             };
-            if(localStorage.getItem("encryptionId") == 1){
-                reqData.accountPwd = "0x" + utils.sha4(this.loginForm.password)
-            }else{
-                reqData.accountPwd = sha256(this.loginForm.password)
-            }
+            // if(localStorage.getItem("encryptionId") == 1){
+            //     reqData.accountPwd = "0x" + utils.sha4(this.loginForm.password)
+            // }else{
+            //     reqData.accountPwd = sha256(this.loginForm.password)
+            // }
             let checkCode = this.loginForm.vercode
             login(reqData, checkCode, this.authToken)
                 .then(res => {
