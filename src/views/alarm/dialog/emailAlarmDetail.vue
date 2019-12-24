@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="$t('alarm.emailAlarmDetail')" :visible.sync="dialogVisible" width="600px" :before-close="handleClose">
+        <el-dialog :title="$t('alarm.emailAlarmDetail')" :visible.sync="dialogVisible" width="600px" :before-close="handleClose" :center="true">
             <div>
                 <el-form  ref="alarmForm" label-width="130px" class="demo-ruleForm">
                     <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">

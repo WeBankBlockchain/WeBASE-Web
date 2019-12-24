@@ -33,7 +33,7 @@
                     </el-form-item>
                 </el-form>
             </div>
-            <div slot="footer" class="dialog-footer">
+            <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button @click="modelClose">{{this.$t("text.cancel")}}</el-button>
                 <el-button type="primary" @click="submit('fileFrom')">{{this.$t("text.sure")}}</el-button>
             </div>
