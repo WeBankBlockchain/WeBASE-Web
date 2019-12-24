@@ -18,7 +18,11 @@
         <div class="login-lang">
             <lang-select class="right-menu-item hover-effect"></lang-select>
         </div>
+<<<<<<< HEAD
         <!-- <div class="login-encrypt">
+=======
+        <div class="login-encrypt">
+>>>>>>> c2231e5db56f6470b02181bcc10009a4f8533d9d
             <el-radio-group v-model="encryption" @change="handleEncryption" size="mini">
                 <el-radio-button label="hash">{{$t('login.hash')}}</el-radio-button>
                 <el-radio-button label="guomi">{{$t('login.guomi')}}</el-radio-button>
