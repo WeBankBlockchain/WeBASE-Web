@@ -156,6 +156,10 @@ export default {
                     name: this.$t("home.nodeId")
                 },
                 {
+                    enName: "clientVersion",
+                    name: this.$t("nodes.version")
+                },
+                {
                     enName: "agency",
                     name: this.$t("nodes.agency")
                 },

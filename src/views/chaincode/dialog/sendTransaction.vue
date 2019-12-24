@@ -21,14 +21,14 @@
         </div>
         <div class="send-item">
             <span class="send-item-title">{{this.$t('contracts.contractAddress')}}:</span>
-            <el-input v-model.trim="contractAddress" style="width: 240px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
+            <el-input v-model.trim="contractAddress" style="width: 260px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
             <el-tooltip class="item" effect="dark" :content="$t('contracts.contractAddressInfo')" placement="top-start">
                 <i class="el-icon-info"></i>
             </el-tooltip>
         </div>
         <div class="send-item" v-show="!constant">
             <span class="send-item-title">{{this.$t('contracts.user')}}:</span>
-            <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width:240px">
+            <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width:260px">
                 <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
                     <span>{{item.userName}}</span>
                     <span class="font-12">{{splitString(item.address)}}...</span>
@@ -37,18 +37,18 @@
         </div>
         <div class="send-item">
             <span class="send-item-title">{{this.$t('contracts.method')}}:</span>
-            <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width:110px">
+            <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width:120px">
                 <el-option label="function" :value="'function'"></el-option>
             </el-select>
-            <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width:125px">
+            <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width:135px">
                 <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
             </el-select>
         </div>
         <div class="send-item" v-show="pramasData.length" style="line-height: 25px;">
             <span class="send-item-title" style="position: relative;top: 5px;">{{this.$t("contracts.params")}}:</span>
             <ul style="position: relative;top: -25px;">
-                <li v-for="(item,index) in pramasData" style="margin-left:63px;">
-                    <el-input v-model="transation.funcValue[index]" style="width: 240px;" :placeholder="item.type">
+                <li v-for="(item,index) in pramasData" style="margin-left:120px;">
+                    <el-input v-model="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
                         <template slot="prepend">
                             <span class="">{{item.name}}</span>
                         </template>
@@ -291,7 +291,7 @@ export default {
 }
 .send-item-title {
     display: inline-block;
-    width: 60px;
+    width: 116px;
     text-align: right;
 }
 .send-item-params {

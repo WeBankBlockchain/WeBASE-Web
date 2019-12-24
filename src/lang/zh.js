@@ -169,7 +169,8 @@ export default {
         admin: "管理员账号",
         observerText: "设置为观察节点，节点将不参与共识",
         removeText: "设置为游离节点，节点将不参与共识和同步",
-        sealerText: "设置为共识节点，节点将参与共识。请联系专业人员设置"
+        sealerText: "设置为共识节点，节点将参与共识。请联系专业人员设置",
+        version: "节点版本"
     },
     contracts: {
         createFile: "新建文件",
