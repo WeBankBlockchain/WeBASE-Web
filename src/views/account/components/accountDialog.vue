@@ -244,21 +244,12 @@ export default {
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
             };
-<<<<<<< HEAD
             // if(localStorage.getItem("encryptionId") == 1){
             //     reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password);
             // }else{
             //     reqData.accountPwd = sha256(this.accountForm.password);
             // }
             if(this.accountForm.email){
-=======
-            if (localStorage.getItem("encryptionId") == 1) {
-                reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password);
-            } else {
-                reqData.accountPwd = sha256(this.accountForm.password);
-            }
-            if (this.accountForm.email) {
->>>>>>> c2231e5db56f6470b02181bcc10009a4f8533d9d
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if (!pattern.test(this.accountForm.email)) {
                     this.$message({
@@ -304,21 +295,12 @@ export default {
                 accountPwd: sha256(this.accountForm.password),
                 roleId: this.accountForm.role,
             };
-<<<<<<< HEAD
             // if(localStorage.getItem("encryptionId") == 1){
             //     reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password)
             // }else{
             //     reqData.accountPwd = sha256(this.accountForm.password)
             // }
             if(this.accountForm.email){
-=======
-            if (localStorage.getItem("encryptionId") == 1) {
-                reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password)
-            } else {
-                reqData.accountPwd = sha256(this.accountForm.password)
-            }
-            if (this.accountForm.email) {
->>>>>>> c2231e5db56f6470b02181bcc10009a4f8533d9d
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if (!pattern.test(this.accountForm.email)) {
                     this.$message({
