@@ -214,7 +214,7 @@ export default {
         sendSuccess: function (val) {
             this.dialogVisible = false;
             this.editorShow = true;
-            this.editorData = val;
+            this.editorData = val.resData;
         },
         handleSizeChange: function (val) {
             this.pageSize = val;
