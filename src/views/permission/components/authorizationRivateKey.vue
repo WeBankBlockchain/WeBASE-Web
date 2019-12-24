@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="text-center" style="margin-bottom:5px">{{this.$t('system.dialogTips')}}</div>
+        <div class="text-center" style="margin-bottom:20px">{{this.$t('system.dialogTips')}}</div>
         <el-form :model="permissionForm" :rules="rules" ref="permissionForm" label-width="110px" class="demo-ruleForm">
-            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
+            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey">
                 <el-select v-model="permissionForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in permissionAdminList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
@@ -10,7 +10,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('system.outUserAddress')" prop="otherRivateKey" style="width: 320px;" v-if="btnType==='addBtn'">
+            <el-form-item :label="$t('system.outUserAddress')" prop="otherRivateKey"  v-if="btnType==='addBtn'">
                 <el-select v-model.trim="permissionForm.otherRivateKey" :placeholder="$t('system.inputUser')" filterable>
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
@@ -18,7 +18,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('system.outUserAddress')" style="width: 320px;" v-if="btnType==='deleteBtn'">
+            <el-form-item :label="$t('system.outUserAddress')"  v-if="btnType==='deleteBtn'">
                 <span :title="deleteParam.address" class="delete-address">{{deleteParam.address}}</span>
             </el-form-item>
         </el-form>
