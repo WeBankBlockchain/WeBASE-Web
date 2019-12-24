@@ -98,7 +98,7 @@ export default {
                 },
                 {
                     enName: "time",
-                    name: this.$t('home.transactionTime')
+                    name: this.$t('transaction.transactionTime')
                 },
                 {
                     enName: "hashs",

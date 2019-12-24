@@ -20,7 +20,7 @@
             <div class="reset-password-title">
                 {{$t('main.changePassword')}}
             </div>
-            <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="140px" class="demo-ruleForm">
+            <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="148px" class="demo-ruleForm">
                 <el-form-item :label="$t('main.oldPassword')" prop="oldPass">
                     <el-input type="password" v-model="rulePasswordForm.oldPass" autocomplete="off"></el-input>
                 </el-form-item>
@@ -181,17 +181,17 @@ export default {
         },
         getResetPassword() {
             let reqData;
-            if(localStorage.getItem("encryptionId") == 1){
-                reqData = {
-                    oldAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.oldPass),
-                    newAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.pass)
-                };
-            }else{
+            // if(localStorage.getItem("encryptionId") == 1){
+            //     reqData = {
+            //         oldAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.oldPass),
+            //         newAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.pass)
+            //     };
+            // }else{
                 reqData = {
                     oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
                     newAccountPwd: sha256(this.rulePasswordForm.pass)
                 };
-            }
+            // }
             resetPassword(reqData, {})
                 .then(res => {
                     this.loading = false;

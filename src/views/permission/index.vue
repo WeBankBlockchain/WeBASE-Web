@@ -5,7 +5,7 @@
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
                 <el-tab-pane :label="$t('system.chainManager')">
-                    <el-button type="text" :disabled="disabled" @click="addAuthor">{{this.$t('system.addChainManager')}}</el-button>
+                    <el-button type="primary" :disabled="disabled" @click="addAuthor">{{this.$t('system.addChainManager')}}</el-button>
                     <el-table :data="authorRivateKeyList" tooltip-effect="dark" v-loading="loading">
                         <el-table-column v-for="head in preRivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                             <template slot-scope="scope">
