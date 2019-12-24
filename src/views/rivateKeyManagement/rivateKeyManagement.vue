@@ -60,7 +60,7 @@
                 </el-pagination>
             </div>
         </div>
-        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="621px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
     </div>

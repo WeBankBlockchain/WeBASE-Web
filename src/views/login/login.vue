@@ -18,12 +18,12 @@
         <div class="login-lang">
             <lang-select class="right-menu-item hover-effect"></lang-select>
         </div>
-        <div class="login-encrypt">
+        <!-- <div class="login-encrypt">
             <el-radio-group v-model="encryption" @change="handleEncryption" size="mini">
                 <el-radio-button label="hash">{{$t('login.hash')}}</el-radio-button>
                 <el-radio-button label="guomi">{{$t('login.guomi')}}</el-radio-button>
             </el-radio-group>
-        </div>
+        </div> -->
         <div class="login">
             <div>
                 <svg class="icon" aria-hidden="true">
@@ -200,11 +200,11 @@ export default {
                 account: this.loginForm.user,
                 accountPwd: sha256(this.loginForm.password)
             };
-            if(localStorage.getItem("encryptionId") == 1){
-                reqData.accountPwd = "0x" + utils.sha4(this.loginForm.password)
-            }else{
-                reqData.accountPwd = sha256(this.loginForm.password)
-            }
+            // if(localStorage.getItem("encryptionId") == 1){
+            //     reqData.accountPwd = "0x" + utils.sha4(this.loginForm.password)
+            // }else{
+            //     reqData.accountPwd = sha256(this.loginForm.password)
+            // }
             let checkCode = this.loginForm.vercode
             login(reqData, checkCode, this.authToken)
                 .then(res => {
@@ -220,7 +220,7 @@ export default {
                         router.push("/main")
                     } else {
                         this.changeCode()
-                        this.msgErrorContent = errcode.errCode[res.data.code].cn || ""
+                        this.msgErrorContent = this.$chooseLang(res.data.code)
                         this.msgError = true;
                         this.loginForm.password = "";
                         this.logining = false;
