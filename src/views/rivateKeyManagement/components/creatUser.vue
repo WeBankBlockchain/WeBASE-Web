@@ -29,7 +29,7 @@
             </span> -->
         </div>
         <div class="divide-line"></div>
-        <el-form :model="userForm" :rules="rules" ref="userForm" label-width="136px" class="demo-ruleForm">
+        <el-form :model="userForm" :rules="rules" ref="userForm" label-width="142px" class="demo-ruleForm">
             <el-form-item :label="$t('privateKey.userName')" prop="name" style="width: 546px;">
                 <el-input v-model="userForm.name" :placeholder="$t('privateKey.inputUserName')" maxlength="12"></el-input>
             </el-form-item>

@@ -51,7 +51,8 @@
             <div class="search-table">
                 <h3 style="padding: 20px 0 8px 0;">
                     {{this.$t("nodes.nodeList")}}
-                    <el-tooltip effect="dark" :content="$t('nodes.nodeDescription')" placement="top-start">
+                    <el-tooltip effect="dark"  placement="top-start">
+                        <div slot="content">{{$t('nodes.nodeDescription')}}</div>
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
                 </h3>
