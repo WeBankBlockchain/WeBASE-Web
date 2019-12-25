@@ -1,18 +1,18 @@
 <template>
     <div>
-        <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="146px" class="demo-ruleForm">
-            <el-form-item :label="$t('system.configKey')"  style="width: 320px;">
+        <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="90px" class="demo-ruleForm">
+            <el-form-item :label="$t('system.configKey')">
                 <span>{{configKey}}</span>
             </el-form-item>
-            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
-                <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
+            <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey">
+                <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')" style="width: 245px;">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('system.configValue')" prop="configValue" style="width: 320px;">
+            <el-form-item :label="$t('system.configValue')" prop="configValue">
                 <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? $t('system.gasLong') : ''"></el-input>
             </el-form-item>
         </el-form>

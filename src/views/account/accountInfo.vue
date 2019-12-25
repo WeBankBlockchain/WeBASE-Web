@@ -86,6 +86,10 @@ export default {
                     name: this.$t('account.roleNameZh')
                 },
                 {
+                    enName: "email",
+                    name: this.$t("account.email")
+                },
+                {
                     enName: "operate",
                     name: this.$t('nodes.operation')
                 }

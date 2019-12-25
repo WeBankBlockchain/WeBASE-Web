@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-dialog :title="$t('alarm.alarmCofig')" :visible.sync="dialogVisible" width="600px" :before-close="handleClose">
+        <el-dialog :title="$t('alarm.alarmCofig')" :visible.sync="dialogVisible" width="500px" :before-close="handleClose" :center="true">
         <div>
             <el-form :model="alarmForm" :rules="rules" ref="alarmForm" label-width="120px" class="demo-ruleForm">
                 <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">
@@ -35,7 +35,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div slot="footer" class="dialog-footer">
+        <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="handleClose">{{$t('alarm.cancel')}}</el-button>
             <el-button type="primary"  @click="submitForm('alarmForm')">{{$t('alarm.sure')}}</el-button>
         </div>

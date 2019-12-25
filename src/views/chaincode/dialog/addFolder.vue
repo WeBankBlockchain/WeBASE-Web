@@ -17,13 +17,13 @@
     <div>
         <el-dialog :title="$t('contracts.createFolder')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true">
             <div>
-                <el-form :model="folderFrom" :rules="rules" ref="folderFrom" label-width="100px" class="demo-ruleForm">
+                <el-form :model="folderFrom" :rules="rules" ref="folderFrom" label-width="110px" class="demo-ruleForm">
                     <el-form-item :label="$t('contracts.folderName')" prop="folderName" style="width:330px">
                         <el-input v-model="folderFrom.folderName" @keyup.enter.native="handleFolder"></el-input>
                     </el-form-item>
                 </el-form>
             </div>
-            <div slot="footer" class="dialog-footer">
+            <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button @click="modelClose">{{this.$t("text.cancel")}}</el-button>
                 <el-button type="primary" @click="submit('folderFrom')">{{this.$t("text.sure")}}</el-button>
             </div>

@@ -64,7 +64,7 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <el-dialog :title="$t('system.addChainManager')" :visible.sync="authDialogVisible" width="387px" v-if="authDialogVisible" center>
+        <el-dialog :title="$t('system.addChainManager')" :visible.sync="authDialogVisible" width="410px" v-if="authDialogVisible" center>
             <authorization-rivateKey @close="close" @authorizeSuccess="authorizeSuccess" :btnType="btnType" :deleteParam="deleteParam"></authorization-rivateKey>
         </el-dialog>
     </div>
