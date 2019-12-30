@@ -15,17 +15,17 @@
  */
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'用户查看'" @changGroup="changGroup"></v-contentHead>
+        <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
-                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">新增用户</el-button>
-                    <el-tooltip effect="dark" content="群组内发送交易的账号都需要在私钥管理里添加，否则会判断为异常用户。" placement="top-start">
+                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t('privateKey.addUser')}}</el-button>
+                    <el-tooltip effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </div>
                 <div class="search-part-right">
-                    <el-input placeholder="请输入用户名或公钥地址" v-model="userName" class="input-with-select">
+                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" style="width: 370px;">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -41,7 +41,7 @@
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName ==='userId'">
-                                    <el-tooltip :content="scope.row['hasPk'] == 1 ? '私钥':'公钥'" placement="top" effect="dark">
+                                    <el-tooltip :content="scope.row['hasPk'] == 1 ?  $t('privateKey.privateKey'):$t('privateKey.publicKey')" placement="top" effect="dark">
                                         <i class="wbs-icon-key-b font-12" :style="{'color': scope.row['hasPk'] == 1 ? '#FFC31F':'#4F9DFF'}"></i>
                                     </el-tooltip>
                                     {{scope.row[head.enName]}}
@@ -49,7 +49,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
-                                <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">修改</el-button>
+                                <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
                             </template>
                         </template>
 
@@ -60,7 +60,7 @@
                 </el-pagination>
             </div>
         </div>
-        <el-dialog :visible.sync="$store.state.creatUserVisible" title="新建用户" width="621px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
     </div>
@@ -86,37 +86,42 @@ export default {
             pageSize: 10,
             total: 0,
             rivateKeyList: [],
-            rivateKeyHead: [
-                {
-                    enName: "userName",
-                    name: "用户名称"
-                },
-                {
-                    enName: "userId",
-                    name: "用户ID"
-                },
-                {
-                    enName: "description",
-                    name: "用户描述"
-                },
-                {
-                    enName: "address",
-                    name: "用户公钥地址信息"
-                },
-                {
-                    enName: "userStatus",
-                    name: "用户状态"
-                },
-                {
-                    enName: "operate",
-                    name: "操作"
-                }
-            ],
             tdWidth: {
                 publicKey: 450
             },
             disabled: false
         };
+    },
+    computed: {
+        rivateKeyHead() {
+            let data = [
+                {
+                    enName: "userName",
+                    name: this.$t("privateKey.userName")
+                },
+                {
+                    enName: "userId",
+                    name: this.$t("privateKey.userId")
+                },
+                {
+                    enName: "description",
+                    name: this.$t("privateKey.description")
+                },
+                {
+                    enName: "address",
+                    name: this.$t("privateKey.userAddress")
+                },
+                {
+                    enName: "userStatus",
+                    name: this.$t("privateKey.userStatus")
+                },
+                {
+                    enName: "operate",
+                    name: this.$t("nodes.operation")
+                }
+            ];
+            return data
+        }
     },
     mounted() {
         if (localStorage.getItem("root") === "admin") {
@@ -148,16 +153,18 @@ export default {
                         this.total = res.data.totalCount;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -185,9 +192,9 @@ export default {
             this.$refs.creatUser.modelClose();
         },
         modifyDescription(params) {
-            this.$prompt("请输入用户描述", '', {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消"
+            this.$prompt(this.$t("privateKey.inputDescription"), '', {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
             })
                 .then(({ value }) => {
                     this.userDescriptionInfo(value, params);
@@ -195,7 +202,7 @@ export default {
                 .catch(() => {
                     this.$message({
                         type: "info",
-                        message: "取消"
+                        message: this.$t("text.cancel"),
                     });
                 });
         },
@@ -210,19 +217,21 @@ export default {
                         this.getUserInfoData();
                         this.$message({
                             type: "success",
-                            message: "修改用户成功"
+                            message: this.$t("privateKey.updateUserSuccess")
                         });
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "修改失败！"
+                        duration: 2000
                     });
                 });
         },
@@ -231,7 +240,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -239,7 +248,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
@@ -249,13 +258,13 @@ export default {
             let str = "";
             switch (key) {
                 case 1:
-                    str = "正常";
+                    str = this.$t("privateKey.normal");
                     break;
                 case 2:
-                    str = "停用";
+                    str = this.$t("privateKey.disable");
                     break;
                 default:
-                    str = "正常";
+                    str = this.$t("privateKey.normal");
                     break;
             }
             return str;

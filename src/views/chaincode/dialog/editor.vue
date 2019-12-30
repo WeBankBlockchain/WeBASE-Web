@@ -195,7 +195,7 @@ export default {
         }
     },
     mounted: function () {
-        this.editorHeight = document.body.offsetHeight * 0.75
+        this.editorHeight = document.body.offsetHeight * 0.75;
         if (this.transationData.output == "0x") {
             this.inputButtonShow = false
         } else {

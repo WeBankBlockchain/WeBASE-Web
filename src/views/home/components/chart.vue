@@ -62,6 +62,7 @@ export default {
     },
     methods: {
         chartShow: function() {
+            let that = this
             this.chart = echarts.init(document.getElementById(this.chartId));
             let dayNum = this.chartData.length;
             let option = {
@@ -77,9 +78,9 @@ export default {
                             '<span style="font-size:10px">' +
                             data[0].name +
                             '</span><br><table ><tr><td style="padding:0">' +
-                            '<span style="font-size:10px;color:white">交易量：' +
-                            data[0].value +
-                            "笔</a></span><br></td></tr></table>"
+                            '<span style="font-size:10px;color:white">' + that.$t("home.chartTransactions") + '：' +
+                            data[0].value + that.$t('transaction.stroke') +
+                            "</a></span><br></td></tr></table>"
                         );
                     }
                 },

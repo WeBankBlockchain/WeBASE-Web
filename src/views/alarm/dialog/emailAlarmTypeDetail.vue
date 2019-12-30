@@ -1,19 +1,19 @@
 <template>
     <div>
-        <el-dialog title="告警配置" :visible.sync="dialogVisible" width="600px" :before-close="handleClose">
+        <el-dialog :title="$t('alarm.alarmCofig')" :visible.sync="dialogVisible" width="500px" :before-close="handleClose" :center="true">
         <div>
             <el-form :model="alarmForm" :rules="rules" ref="alarmForm" label-width="120px" class="demo-ruleForm">
-                <el-form-item label="告警标题" prop="ruleName">
+                <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">
                     <el-input v-model="alarmForm.ruleName" style="width: 250px;"></el-input>
                 </el-form-item>
-                <el-form-item label="告警内容" prop="alertContent">
+                <el-form-item :label="$t('alarm.alarmContent')" prop="alertContent">
                     <el-input v-model="alarmForm.alertContent" type="textarea" :rows="2" style="width: 250px;"></el-input>
-                    <el-tooltip class="item" effect="dark" content="告警内容中大括号{}及其中内容不可更改" placement="top-start">
+                    <el-tooltip class="item" effect="dark" :content="$t('alarm.alarmContentTip')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </el-form-item>
-                <el-form-item label="接收者邮箱">
-                    <el-select v-model="alarmForm.userList" multiple placeholder="请选择" @change='userChange($event)' style="width: 250px;">
+                <el-form-item :label="$t('alarm.recipientEmail')">
+                    <el-select v-model="alarmForm.userList" multiple :placeholder="$t('alarm.pleaseSlect')" @change='userChange($event)' style="width: 250px;">
                         <el-option
                         v-for="item in accountList"
                         :key="item.account"
@@ -21,27 +21,23 @@
                         :value="item.email">
                         </el-option>
                     </el-select>
-                    <el-tooltip class="item" effect="dark" content="仅能选择已添加邮箱的用户" placement="top-start">
+                    <el-tooltip class="item" effect="dark" :content="$t('alarm.recipientEmailTip')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </el-form-item>
-                <el-form-item label="发送间隔时间" prop="alertIntervalSeconds">
-                    <el-select v-model="alarmForm.alertIntervalSeconds" placeholder="请选择" style="width: 250px;">
-                        <el-option label="5分钟" value="300"></el-option>
-                        <el-option label="半小时" value="1800"></el-option>
-                        <el-option label="一个小时" value="3600"></el-option>
-                        <el-option label="12个小时" value="43200"></el-option>
-                        <el-option label="一天" value="86400"></el-option>
+                <el-form-item :label="$t('alarm.sendTime')" prop="alertIntervalSeconds">
+                    <el-select v-model="alarmForm.alertIntervalSeconds" :placeholder="$t('alarm.pleaseSlect')" style="width: 250px;">
+                        <el-option :label="item.lable" :value="item.value" v-for='item in alertIntervalSecondsList' :key='item.value'></el-option>
                     </el-select>
-                    <el-tooltip class="item" effect="dark" content="选择框数值没有单位时单位是秒" placement="top-start">
+                    <el-tooltip class="item" effect="dark" :content="$t('alarm.alertIntervalSecondsTip')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </el-form-item>
             </el-form>
         </div>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="handleClose">取 消</el-button>
-            <el-button type="primary"  @click="submitForm('alarmForm')">确 定</el-button>
+        <div class="text-right sure-btn" style="margin-top:10px">
+            <el-button @click="handleClose">{{$t('alarm.cancel')}}</el-button>
+            <el-button type="primary"  @click="submitForm('alarmForm')">{{$t('alarm.sure')}}</el-button>
         </div>
         </el-dialog>
     </div>
@@ -64,38 +60,68 @@ export default {
                 alertIntervalSeconds: this.data.alertIntervalSeconds,
                 userList: []
             },
-            rules: {
+            accountList: [],
+            currentPage: 1,
+            pageSize: 1000,
+        }
+    },
+    computed: {
+        alertIntervalSecondsList() {
+            let data = [
+                {
+                    lable: "5" + this.$t('alarm.minute'),
+                    value: 300
+                },
+                {
+                    lable: this.$t('alarm.halfHour'),
+                    value: 1800
+                },
+                {
+                    lable: "1" + this.$t('alarm.hours'),
+                    value: 3600
+                },
+                {
+                    lable: "12" + this.$t('alarm.hours'),
+                    value: 43200
+                },
+                {
+                    lable: "1" + this.$t('alarm.date'),
+                    value: 86400
+                },
+            ]
+            return data
+        },
+        rules() {
+            let data = {
                ruleName: [
                    {
                         required: true,
-                        message: "请输入服务名称",
+                        message: this.$t('alarm.inputEmailTitle'),
                         trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 32,
-                        message: "长度在 1 到 32 个字符",
+                        message: this.$t('alarm.longSize'),
                         trigger: "blur"
                     }
                ],
                alertContent: [
                     {
                         required: true,
-                        message: "请输入服务名称",
+                        message: this.$t('alarm.inputalarmContent'),
                         trigger: "blur"
                     },
                ],
                alertIntervalSeconds: [
                     {
                         required: true,
-                        message: "请输入服务名称",
+                        message: this.$t('alarm.selectIntervalSeconds'),
                         trigger: "blur"
                     }, 
                ]
-            },
-            accountList: [],
-            currentPage: 1,
-            pageSize: 1000,
+            };
+            return data 
         }
     },
     mounted: function(){
@@ -123,7 +149,7 @@ export default {
                 if(!this.alarmForm.userList[this.alarmForm.userList.length-1]){
                     this.$message({
                             type: "error",
-                            message: "该用户没有邮箱，请在账号管理中添加邮箱！"
+                            message: this.$t('alarm.noEmail')
                         });
                         this.alarmForm.userList.splice(this.alarmForm.userList.length-1,1)
                 }
@@ -148,15 +174,17 @@ export default {
                         // }
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: errcode.errCode[err.data.code].cn || "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -176,20 +204,22 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "修改告警配置成功！"
+                        message: this.$t('alarm.updateAlarmSuccess')
                     });
                     this.handleClose();
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         }

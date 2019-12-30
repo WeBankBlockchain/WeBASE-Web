@@ -15,45 +15,45 @@
  */
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="'合约管理'" :headSubTitle="'合约列表'" @changGroup="changGroup"></v-contentHead>
+        <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
-                    <el-input placeholder="请输入合约名或合约地址" v-model="contractData" class="input-with-select">
+                    <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
                 <el-table :data="contractList" tooltip-effect="dark" v-loading="loading">
-                    <el-table-column prop="contractName" label="合约名称" show-overflow-tooltip width="120" align="center">
+                    <el-table-column prop="contractName" :label="$t('contracts.contractName')" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
                             <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractPath" label="合约目录" show-overflow-tooltip width="120" align="center"></el-table-column>
-                    <el-table-column prop="contractAddress" label="合约地址" show-overflow-tooltip align="center">
+                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center"></el-table-column>
+                    <el-table-column prop="contractAddress" :label="$t('contracts.contractAddress')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" title="复制合约地址"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('contracts.copyContractAddress')"></i>
                             <span>{{scope.row.contractAddress}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractAbi" label="合约abi" show-overflow-tooltip align="center">
+                    <el-table-column prop="contractAbi" :label="$t('contracts.contractAbi')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAbi)" title="复制合约abi"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
                             <span class="link" @click='openAbi(scope.row)'>{{scope.row.contractAbi}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractBin" label="合约bin" show-overflow-tooltip align="center">
+                    <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractBin)" title="复制合约bin"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
                             <span>{{scope.row.contractBin}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column fixed="right" label="操作" width="100">
+                    <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
                         <template slot-scope="scope">
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">发送交易</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -63,7 +63,7 @@
         </div>
         <!-- <v-editor :show='editorShow' :data='editorData' v-if='editorShow' @close='close'></v-editor> -->
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
-        <el-dialog title="发送交易" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+        <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' @close='editorClose'></v-editor>
@@ -131,14 +131,18 @@ export default {
                     this.contractList = res.data.data || [];
                     this.total = res.data.totalCount || 0;
                 } else {
-                    
-                    this.$message({
-                        message: this.errcode.errCode[res.data.code].cn,
+                   this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    console.log(this.$message.closeAll())
-                }
             })
         },
         copyPubilcKey: function (val) {
@@ -146,7 +150,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "值为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -154,7 +158,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
@@ -210,7 +214,7 @@ export default {
         sendSuccess: function (val) {
             this.dialogVisible = false;
             this.editorShow = true;
-            this.editorData = val;
+            this.editorData = val.resData;
         },
         handleSizeChange: function (val) {
             this.pageSize = val;

@@ -1,19 +1,19 @@
 <template>
     <div>
-        <v-content-head :headTitle="'告警配置'" :headSubTitle="'邮件告警配置'" @changGroup="changGroup" :headTooltip="`系统配置管理说明：系统配置可以配置系统属性值（目前支持tx_count_limit和tx_gas_limit属性的设置）。`"></v-content-head>
+        <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.emailAlarmConfig')" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="emailForm" :rules="rules" ref="emailForm" label-width="150px" class="demo-ruleForm">
-                <el-form-item label="协议类型" prop="serverType" style="width: 420px;display: inline-block">
+                <el-form-item :label="$t('alarm.agreementType')" prop="serverType" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.serverType" style="width: 250px;" @change='dataChange'></el-input>
                 </el-form-item><br>
-                <el-form-item label="地址" prop="address" style="width: 420px;display: inline-block">
+                <el-form-item :label="$t('alarm.address')" prop="address" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.address" style="width: 250px;" @change='dataChange'></el-input>
                 </el-form-item>
-                <el-form-item label="端口" style="width: 420px;display: inline-block">
+                <el-form-item :label="$t('alarm.port')" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.port" style="width: 250px;" @change='dataChange'></el-input>
                 </el-form-item><br>
                 <hr style="margin-bottom: 30px;color: red;">
-                <el-form-item label="鉴权" style="width: 420px;display: inline-block">
+                <el-form-item :label="$t('alarm.authentication')" style="width: 420px;display: inline-block">
                     <el-switch
                         v-model="emailForm.authentication"
                         active-color="#13ce66"
@@ -22,14 +22,14 @@
                         :inactive-value="0"
                         @change='authChange'>
                     </el-switch>
-                    <el-tooltip class="item" effect="dark" content="默认使用username/password进行验证，通过SSL/TLS连接邮箱服务" placement="top-start">
+                    <el-tooltip class="item" effect="dark" :content="$t('alarm.authenticationTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </el-form-item><br>
-                <el-form-item label="用户" prop="email" style="width: 420px;display: inline-block">
+                <el-form-item :label="$t('alarm.user')" prop="email" style="width: 420px;display: inline-block">
                     <el-input v-model="emailForm.email" style="width: 250px;" :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item>
-                <el-form-item label="密码" prop="password" style="width: 420px;display: inline-block">
+                <el-form-item :label="$t('alarm.password')" prop="password" style="width: 420px;display: inline-block">
                     <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9 :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item><br>
                 
@@ -44,9 +44,9 @@
                 </el-form-item> -->
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('emailForm')">保存</el-button>
-                    <el-button  @click="sendEmail">测试</el-button><br>
-                    <span v-if='tipShow' style="color: #f00">邮箱配置已修改，未保存，请点击保存按钮保存修改项。</span>
+                    <el-button type="primary" @click="submitForm('emailForm')">{{$t('alarm.save')}}</el-button>
+                    <el-button  @click="sendEmail">{{$t('alarm.test')}}</el-button><br>
+                    <span v-if='tipShow' style="color: #f00">{{$t('alarm.saveTips')}}</span>
                 </el-form-item>
             </el-form>
         </div>
@@ -75,67 +75,72 @@ export default {
                 // status: 0,
             },
             emailData: null,
-            rules: {
+            // testEmail: "",
+            authDisabled: false,
+            tipShow: false
+        }
+    },
+    computed: {
+        rules() {
+            let data = {
                 serverType: [
                     {
                         required: true,
-                        message: "请输入服务类型",
+                        message: this.$t("alarm.serverTypeTips"),
                         trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 32,
-                        message: "长度在 1 到 32 个字符",
+                        message: this.$t("alarm.longSize"),
                         trigger: "blur"
                     },
                     {
                         pattern: /^[A-Za-z0-9_]+$/,
-                        message: "不符合规则",
+                        message: this.$t("alarm.notRule"),
                         trigger: "blur"
                     }
                 ],
                 address: [
                     {
                         required: true,
-                        message: "请输入地址",
+                        message: this.$t("alarm.enterAddress"),
                         trigger: "blur"
                     },
                     {
                         pattern: /^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$/,
-                        message: "不符合规则",
+                        message: this.$t("alarm.notRule"),
                         trigger: "blur"
                     }
                 ],
                 email: [
                     {
                         required: true,
-                        message: "请输入邮箱",
+                        message: this.$t("alarm.enterEmail"),
                         trigger: "blur"
                     },
                     {
                         pattern: /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/,
-                        message: "不符合规则",
+                        message: this.$t("alarm.notRule"),
                         trigger: "blur"
                     },
                 ],
                 password: [
                     {
                         required: true,
-                        message: "请输入邮箱密码",
+                        message: this.$t("alarm.enterEmailPsd"),
                         trigger: "blur"
                     },
                 ],
                 format: [
                      {
                         required: true,
-                        message: "请输入编码格式",
+                        message: this.$t("alarm.enterFormat"),
                         trigger: "blur"
                     },
                 ],
-            },
-            // testEmail: "",
-            authDisabled: false,
-            tipShow: false
+            }
+            return data
         }
     },
     mounted: function(){
@@ -163,17 +168,17 @@ export default {
             }
         },
         sendEmail: function(){
-            this.$prompt('请输入邮箱', '提示', {
-                confirmButtonText: '发送',
-                cancelButtonText: '取消',
+            this.$prompt(this.$t("alarm.enterEmail"), this.$t("alarm.tip"), {
+                confirmButtonText: this.$t("alarm.send"),
+                cancelButtonText: this.$t("alarm.cancel"),
                 inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-                inputErrorMessage: '邮箱格式不正确'
+                inputErrorMessage: this.$t("alarm.emailTypeErr"),
                 }).then(({ value }) => {
                     this.testEamilData(value)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
-                        message: '取消输入'
+                        message: this.$t("alarm.cancelEnter"),
                     });       
                 });
         },
@@ -192,19 +197,21 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                             type: "success",
-                            message: "邮件发送成功！"
+                            message: this.$t("alarm.sendEmailSuccess"),
                         });
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -227,15 +234,17 @@ export default {
                     }
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -266,21 +275,23 @@ export default {
                 if(res.data && res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "修改告警邮箱配置成功！"
+                        message: this.$t("alarm.updateEmailAlarmConfigSuccess")
                     });
                     this.getEmailConfig();
                 }else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.tipShow = false
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "系统错误！"
+                        duration: 2000
                     });
                 });
         }
@@ -289,7 +300,7 @@ export default {
         if(this.tipShow){
             this.$message({
                 type: "error",
-                message: "请保存修改的配置信息！"
+                message: this.$t("alarm.enterSaveInfo")
             });
         }else{
             next()

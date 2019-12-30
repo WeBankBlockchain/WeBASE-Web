@@ -1,30 +1,30 @@
 <template>
     <div>
-        <el-dialog title="告警配置详情" :visible.sync="dialogVisible" width="600px" :before-close="handleClose">
+        <el-dialog :title="$t('alarm.emailAlarmDetail')" :visible.sync="dialogVisible" width="600px" :before-close="handleClose" :center="true">
             <div>
                 <el-form  ref="alarmForm" label-width="130px" class="demo-ruleForm">
-                    <el-form-item label="告警邮件标题" prop="ruleName">
+                    <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">
                         <span>{{alarmDetail.ruleName}}</span>
                     </el-form-item>
                     <!-- <el-form-item label="告警类型" prop="ruleName">
                         <span>{{alarmDetail.alertType | Status}}</span>
                     </el-form-item> -->
-                    <el-form-item label="告警内容" prop="ruleName">
+                    <el-form-item :label="$t('alarm.alarmContent')" prop="ruleName">
                         <span>{{alarmDetail.alertContent}}</span>
                     </el-form-item>
-                    <el-form-item label="发送邮件间隔" prop="ruleName">
+                    <el-form-item :label="$t('alarm.sendTime')" prop="ruleName">
                        <span>{{alarmDetail.alertIntervalSeconds}}</span>
                     </el-form-item>
-                    <el-form-item label="上次告警时间" prop="ruleName">
+                    <el-form-item :label="$t('alarm.lastAlertTime')" prop="ruleName">
                        <span>{{alarmDetail.lastAlertTime}}</span>
                     </el-form-item>
-                    <el-form-item label="发送告警邮件邮箱" prop="ruleName">
+                    <el-form-item :label="$t('alarm.userList')" prop="ruleName">
                         <span>{{alarmDetail.userList}}</span>
                     </el-form-item>
-                    <el-form-item label="状态" prop="ruleName">
+                    <el-form-item :label="$t('alarm.status')" prop="ruleName">
                         <span>{{alarmDetail.enable | Type}}</span>
                     </el-form-item>
-                    <el-form-item label="告警等级" prop="ruleName">
+                    <el-form-item :label="$t('alarm.alarmLevel')" prop="ruleName">
                         <span>{{alarmDetail.alertLevel | Level}}</span>
                     </el-form-item>
                 </el-form>
@@ -34,6 +34,7 @@
 </template>
 
 <script>
+let that;
 export default {
     name: "emailAlarmDetail",
     props: ['show','data'],
@@ -48,37 +49,40 @@ export default {
             this.$emit("close")
         }
     },
+    beforeCreate: function () {
+        that = this;
+    },
     filters: {
         Type: function(row){
             if(row){
-                return "启动"
+                return that.$t('alarm.start')
             }else{
-                return "关闭"
+                return that.$t('alarm.close')
             }
         },
         Status: function(value){
             switch (value) {
                 case 1:
-                    return "节点告警";
+                    return that.$t('alarm.nodeAlarm');
                     break;
                 case 2: 
-                    return "审计告警";
+                    return that.$t('alarm.auditAlert');
                     break;
                 default:
-                    return "证书告警";
+                    return that.$t('alarm.certAlert');
                     break;
             }
         },
         Level: function(value){
             switch(value) {
                 case 1: 
-                    return "高";
+                    return that.$t('alarm.high');
                     break;
                 case 2:
-                    return "一般";
+                    return that.$t('alarm.common');
                     break;
                 default:
-                    return "低";
+                    return that.$t('alarm.low');
                     break;
             }
         }
