@@ -15,11 +15,11 @@
  */
 <template>
     <div class="account-wrapper">
-        <content-head :headTitle="'账户管理'"></content-head>
+        <content-head :headTitle="$t('title.accountManagement')"></content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-button type="primary" class="search-part-left-btn" @click="creatAccount">新增账号</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="creatAccount">{{$t('account.addAccount')}}</el-button>
                 </div>
             </div>
             <div class="search-table">
@@ -27,11 +27,12 @@
                     <el-table-column v-for="head in accountHeader" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <template v-if="head.enName!='operate'">
-                                <span>{{scope.row[head.enName]}}</span>
+                                <span v-if="head.enName === 'roleNameZh'">{{translate(scope.row['roleId'])}}</span>
+                                <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
-                                <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')" style="color:#ed5454">删除</el-button>
-                                <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">修改</el-button>
+                                <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')" style="color:#ed5454">{{$t('text.delete')}}</el-button>
+                                <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">{{$t('text.update')}}</el-button>
                             </template>
                         </template>
 
@@ -70,26 +71,31 @@ export default {
             accountDialogVisible: false,
             accountDialogTitle: '',
             accountDialogOptions: {},
-            accountHeader: [
+            accountList: []
+        };
+    },
+    computed: {
+        accountHeader() {
+            let data = [
                 {
                     enName: "account",
-                    name: "帐号"
+                    name: this.$t('account.user')
                 },
                 {
                     enName: "roleNameZh",
-                    name: "角色"
+                    name: this.$t('account.roleNameZh')
                 },
                 {
                     enName: "email",
-                    name: "邮箱"
+                    name: this.$t("account.email")
                 },
                 {
                     enName: "operate",
-                    name: "操作"
+                    name: this.$t('nodes.operation')
                 }
-            ],
-            accountList: []
-        };
+            ]
+            return data
+        }
     },
     mounted() {
         this.getAccountList();
@@ -118,16 +124,18 @@ export default {
                         this.total = res.data.totalCount;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: this.errcode.errCode[err.data.code].cn || "系统错误！"
+                        duration: 2000
                     });
                 });
         },
@@ -142,7 +150,7 @@ export default {
         },
         creatAccount(){
             this.accountDialogVisible = true
-            this.accountDialogTitle = '创建帐号'
+            this.accountDialogTitle = this.$t('account.createAccount')
             this.accountDialogOptions = {
                 type:'creat',
                 data: {
@@ -157,7 +165,7 @@ export default {
                 data: val
             }
             this.accountDialogVisible = true
-            this.accountDialogTitle = '删除帐号'
+            this.accountDialogTitle = this.$t('account.deleteAccount')
             
         },
         modifyAccount(val, type) {
@@ -166,7 +174,20 @@ export default {
                 data: val
             }
             this.accountDialogVisible = true
-            this.accountDialogTitle = '修改帐号'
+            this.accountDialogTitle = this.$t('account.updataAccount')
+        },
+        translate(val){
+            var str = '';
+            switch (val) {
+                case 100000:
+                    str = this.$t('text.Administrator')
+                    break;
+            
+                case 100001:
+                    str = this.$t('text.normalUsers')
+                    break;
+            }
+            return str;
         }
     }
 };

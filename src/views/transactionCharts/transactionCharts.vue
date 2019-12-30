@@ -15,12 +15,12 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="'交易审计'" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="more-search-table search-min-width">
                 <div class="text-left">
                     <div class="text-left-label">
-                        <span>用户：</span>
+                        <span>{{this.$t('contracts.user')}}：</span>
                         <el-select v-model="userName" @change="changeUserName" class="select-32" clearable>
                             <el-option v-for="item in userList" :key="item.userName" :label="item.userName" :value="item.userName">
                                 <span v-if="item.userType==0">{{item.userName}}</span>
@@ -29,12 +29,13 @@
                         </el-select>
                     </div>
                     <div class="text-left-label">
-                        <span class="text-left-label-title">时长：</span>
-                        <el-date-picker @change="changeDate" v-model="transDate" type="datetimerange" :picker-options="transPickerOptions" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" align="left" value-format="yyyy-MM-dd HH:mm:ss" class="date-select-32">
+                        <span class="text-left-label-title">{{this.$t('transaction.time')}}：</span>
+                        <el-date-picker @change="changeDate" v-model="transDate" type="datetimerange" :picker-options="transPickerOptions" 
+                        :range-separator="$t('system.to')" :start-placeholder="$t('transaction.startTime')" :end-placeholder="$t('transaction.endTime')" align="left" value-format="yyyy-MM-dd HH:mm:ss" class="date-select-32">
                         </el-date-picker>
                     </div>
                     <div class="text-left-label1">
-                        <span class="text-left-label1-title">接口：</span>
+                        <span class="text-left-label1-title">{{this.$t('transaction.interface')}}：</span>
                         <el-select v-model="interfaceName" @change="changeInterfaceName" class="select-32" clearable>
                             <el-option v-for="item in interfaceList" :key="item.interfaceName" :label="item.interfaceName" :value="item.interfaceName">
                                 <span v-if="item.transUnusualType==0">{{item.interfaceName}}</span>
@@ -72,7 +73,6 @@ export default {
         return {
             loading: false,
             groupId: localStorage.getItem("groupId"),
-            headSubTitle: "用户交易",
             reloadNum: 1,
             chartStatistics: {
                 show: true,
@@ -89,10 +89,14 @@ export default {
             userName: "",
             interfaceName: "",
             transDate: [],
-            transPickerOptions: {
+        }
+    },
+    computed: {
+        transPickerOptions() {
+            let data = {
                 shortcuts: [
                     {
-                        text: "最近一周",
+                        text: this.$t('transaction.week'),
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -102,7 +106,7 @@ export default {
                         }
                     },
                     {
-                        text: "最近一个月",
+                        text: this.$t('transaction.month'),
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -112,7 +116,7 @@ export default {
                         }
                     },
                     {
-                        text: "最近三个月",
+                        text: this.$t('transaction.threeMonth'),
                         onClick(picker) {
                             const end = new Date();
                             const start = new Date();
@@ -126,7 +130,12 @@ export default {
                     return time.getTime() > Date.now() - 8.64e6;
                 }
             }
-        };
+            return data
+        },
+        headSubTitle() {
+            let data = this.$t('title.userTransaction');
+            return data
+        }
     },
     mounted() {
         this.$nextTick(() => {
@@ -237,18 +246,17 @@ export default {
                         this.reloadNum++;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
-                        
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn ||
-                            "获取监管用户列表失败！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -263,18 +271,18 @@ export default {
                         this.userList = res.data.data;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                         this.$message.closeAll()
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn ||
-                            "获取监管用户列表失败！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -293,17 +301,17 @@ export default {
                         this.interfaceList = res.data.data;
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message:
-                            this.errcode.errCode[err.data.code].cn ||
-                            "获取监管用户列表失败！"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });

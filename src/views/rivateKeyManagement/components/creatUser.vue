@@ -17,8 +17,8 @@
     <div class="key-dialog">
         <div class="text-center">
             <el-radio-group v-model="timeGranularity" @change='changeKey'>
-                <el-radio :label="'RIV'">私钥用户</el-radio>
-                <el-radio :label="'PUB'">公钥用户</el-radio>
+                <el-radio :label="'RIV'">{{this.$t("privateKey.privateKeyUser")}}</el-radio>
+                <el-radio :label="'PUB'">{{this.$t('privateKey.publicKeyUser')}}</el-radio>
                 <!-- <el-radio :label="1">5秒钟</el-radio> -->
             </el-radio-group>
             <!-- <span class="wbs-icon-radio radio-key riv-key" :style="{'color': rivKey ? '#4b8fe5':''}" @click="changeKey('RIV')">
@@ -29,20 +29,20 @@
             </span> -->
         </div>
         <div class="divide-line"></div>
-        <el-form :model="userForm" :rules="rules" ref="userForm" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="用户名称" prop="name" style="width: 546px;">
-                <el-input v-model="userForm.name" placeholder="请输入用户名称" maxlength="12"></el-input>
+        <el-form :model="userForm" :rules="rules" ref="userForm" label-width="142px" class="demo-ruleForm">
+            <el-form-item :label="$t('privateKey.userName')" prop="name" style="width: 546px;">
+                <el-input v-model="userForm.name" :placeholder="$t('privateKey.inputUserName')" maxlength="12"></el-input>
             </el-form-item>
-            <el-form-item label="公钥信息" prop="publicKey" style="width: 546px;" v-if="pubKey">
-                <el-input v-model="userForm.publicKey" placeholder="请输入公钥信息或公钥地址"></el-input>
+            <el-form-item :label="$t('privateKey.publicKeyInfo')" prop="publicKey" style="width: 546px;" v-if="pubKey">
+                <el-input v-model="userForm.publicKey" :placeholder="$t('privateKey.inputPublicInfo')"></el-input>
             </el-form-item>
-            <el-form-item label="备注" style="width: 546px">
-                <el-input type="textarea" v-model="userForm.explain" maxlength="120" placeholder="120个字符以内"></el-input>
+            <el-form-item :label="$t('privateKey.description')" style="width: 546px">
+                <el-input type="textarea" v-model="userForm.explain" maxlength="120" :placeholder="$t('privateKey.userLong')"></el-input>
             </el-form-item>
         </el-form>
         <div class="dialog-footer">
-            <el-button @click="modelClose">取 消</el-button>
-            <el-button type="primary" @click="submit('userForm')" :loading="loading">确 定</el-button>
+            <el-button @click="modelClose">{{this.$t('text.cancel')}}</el-button>
+            <el-button type="primary" @click="submit('userForm')" :loading="loading">{{this.$t('text.sure')}}</el-button>
         </div>
     </div>
 </template>
@@ -64,30 +64,35 @@ export default {
                 publicKey: ""
             },
             timeGranularity: "RIV",
-            rules: {
+            groupId: localStorage.getItem("groupId")
+        };
+    },
+    computed: {
+        rules() {
+            let data = {
                 name: [
                     {
                         required: true,
-                        message: "请输入用户名称",
+                        message: this.$t('privateKey.inputUserName'),
                         trigger: "blur"
                     },
                     {
                         min: 1,
                         max: 12,
-                        message: "长度在 1 到 12 个字符",
+                        message: this.$t('rule.folderLong'),
                         trigger: "blur"
                     }
                 ],
                 publicKey: [
                     {
                         required: true,
-                        message: "请输入公钥信息",
+                        message: this.$t('privateKey.inputPublic'),
                         trigger: "blur"
                     }
                 ]
-            },
-            groupId: localStorage.getItem("groupId")
-        };
+            };
+            return data
+        }
     },
     methods: {
         changeKey: function() {
@@ -122,7 +127,7 @@ export default {
         submit: function(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.$confirm("确认提交？", {
+                    this.$confirm(this.$t('text.confirmSubmit'), {
                         center: true
                     })
                         .then(() => {
@@ -154,22 +159,24 @@ export default {
                         this.$emit("success");
                         this.$message({
                             type: "success",
-                            message: "添加用户成功"
+                            message: this.$t("privateKey.addUserSuccess")
                         });
                         this.$emit("creatUserClose");
                         this.modelClose();
                     } else {
                         this.modelClose();
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "添加用户失败！"
+                        duration: 2000
                     });
                     this.modelClose();
                 });
@@ -187,23 +194,25 @@ export default {
                     if (res.data.code == 0) {
                         this.$message({
                             type: "success",
-                            message: "添加用户成功"
+                            message: this.$t("privateKey.addUserSuccess")
                         });
                         this.$emit("bindUserClose");
                         this.modelClose();
                     } else {
                         this.modelClose();
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.modelClose();
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "添加用户失败！"
+                        duration: 2000
                     });
                 });
         }

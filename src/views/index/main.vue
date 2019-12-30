@@ -18,21 +18,21 @@
         <div id="shade" v-if="accountStatus === '1'"></div>
         <div id="reset-password" v-if="accountStatus === '1'">
             <div class="reset-password-title">
-                修改密码
+                {{$t('main.changePassword')}}
             </div>
-            <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="旧密码" prop="oldPass">
+            <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="148px" class="demo-ruleForm">
+                <el-form-item :label="$t('main.oldPassword')" prop="oldPass">
                     <el-input type="password" v-model="rulePasswordForm.oldPass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="新密码" prop="pass">
+                <el-form-item :label="$t('main.newPassword')" prop="pass">
                     <el-input type="password" v-model="rulePasswordForm.pass" autocomplete="off"></el-input>
                 </el-form-item>
-                <el-form-item label="确认密码" prop="checkPass">
+                <el-form-item :label="$t('main.confirmPassword')" prop="checkPass">
                     <el-input type="password" v-model="rulePasswordForm.checkPass" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="submitForm('rulePasswordForm')" :loading="loading">提交</el-button>
-                    <el-button @click="resetForm('rulePasswordForm')">重置</el-button>
+                    <el-button type="primary" @click="submitForm('rulePasswordForm')" :loading="loading">{{$t('main.submit')}}</el-button>
+                    <el-button @click="resetForm('rulePasswordForm')">{{$t('main.reset')}}</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -43,46 +43,33 @@
             <router-view class="bg-f7f7f7"></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
+        <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
     </div>
 </template>
 
 <script>
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
-import { resetPassword, addnodes, getGroups } from "@/util/api";
+import guide from "./dialog/guide"
+import { resetPassword, addnodes, getGroups,encryption } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
+import utils from "@/util/sm_sha"
 export default {
     name: "mains",
     components: {
         "v-menu": sidebar,
-        "set-front": setFront
+        "set-front": setFront,
+        'v-guide': guide
     },
     data: function() {
         // if (sessionStorage.getItem("reload") == 1) {
         //     sessionStorage.setItem("reload", 2);
         //     router.go(0);
         // }
-        var validatePass = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error("请输入密码"));
-            } else {
-                if (this.rulePasswordForm.checkPass !== "") {
-                    this.$refs.rulePasswordForm.validateField("checkPass");
-                }
-                callback();
-            }
-        };
-        var validatePass2 = (rule, value, callback) => {
-            if (value === "") {
-                callback(new Error("请再次输入密码"));
-            } else if (value !== this.rulePasswordForm.pass) {
-                callback(new Error("两次输入密码不一致!"));
-            } else {
-                callback();
-            }
-        };
+        
         return {
+            guideShow: false,
             frontShow: false,
             menuShow: true,
             menuHide: false,
@@ -94,17 +81,44 @@ export default {
                 pass: "",
                 checkPass: ""
             },
-            rules2: {
+        };
+    },
+    computed: {
+        
+        show: function() {
+            return this.menuShow;
+        },
+        rules2() {
+            var  validatePass = (rule, value, callback) => {
+                if (value === "") {
+                    callback(new Error(this.$t('main.inputPassword')));
+                } else {
+                    if (this.rulePasswordForm.checkPass !== "") {
+                        this.$refs.rulePasswordForm.validateField("checkPass");
+                    }
+                    callback();
+                }
+            };
+            var validatePass2 = (rule, value, callback) => {
+                if (value === "") {
+                    callback(new Error(this.$t('main.againPassword')));
+                } else if (value !== this.rulePasswordForm.pass) {
+                   callback(new Error(this.$t('main.passwordError')));
+                } else {
+                    callback();
+                }
+            };
+            let data = {
                 oldPass: [
                     {
                         required: true,
-                        message: "请输入旧密码",
+                        message: this.$t('main.inputOldPassword'),
                         trigger: "blur"
                     },
                     {
                         min: 6,
                         max: 12,
-                        message: "长度在 6 到 12 个字符",
+                        message: this.$t('main.longPassword'),
                         trigger: "blur"
                     }
                 ],
@@ -117,12 +131,12 @@ export default {
                     {
                         min: 6,
                         max: 12,
-                        message: "长度在 6 到 12 个字符",
+                        message: this.$t('main.longPassword'),
                         trigger: "blur"
                     },
                     {
                         pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,12}$/,
-                        message: "字母,数字组成,且至少包含一个大写字母和一个小写字母",
+                        message: this.$t('main.passwordPattern'),
                         trigger: "blur"
                     }
                 ],
@@ -135,19 +149,16 @@ export default {
                     {
                         min: 6,
                         max: 12,
-                        message: "长度在 6 到 12 个字符",
+                        message: this.$t('main.longPassword'),
                         trigger: "blur"
                     }
                 ]
             }
-        };
-    },
-    computed: {
-        show: function() {
-            return this.menuShow;
+            return data
         }
     },
     mounted(){
+        this.getEncryption();
         this.getGroupList();
     },
     methods: {
@@ -169,17 +180,25 @@ export default {
             this.$refs[formName].resetFields();
         },
         getResetPassword() {
-            let reqData = {
-                oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
-                newAccountPwd: sha256(this.rulePasswordForm.pass)
-            };
+            let reqData;
+            // if(localStorage.getItem("encryptionId") == 1){
+            //     reqData = {
+            //         oldAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.oldPass),
+            //         newAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.pass)
+            //     };
+            // }else{
+                reqData = {
+                    oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
+                    newAccountPwd: sha256(this.rulePasswordForm.pass)
+                };
+            // }
             resetPassword(reqData, {})
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.$message({
                             type: "success",
-                            message: "密码修改成功"
+                            message: this.$t('main.updatePsdSuccess')
                         });
                         this.accountStatus = "2";
                         sessionStorage.setItem(
@@ -188,15 +207,17 @@ export default {
                         );
                     } else {
                         this.$message({
+                            message: this.$chooseLang(res.data.code),
                             type: "error",
-                            message: this.errcode.errCode[res.data.code].cn
+                            duration: 2000
                         });
                     }
                 })
                 .catch(err => {
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
-                        message: "密码修改失败"
+                        duration: 2000
                     });
                     this.$message.closeAll()
                 });
@@ -220,27 +241,53 @@ export default {
                             router.push("/home")
                         }
                     }else{
-                        this.frontShow = true
+                        this.guideShow = true
                     }
                 }else{
-                    this.frontShow = true
-                     this.$message({
+                    this.guideShow = true
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
-                        message: this.errcode.errCode[res.data.code].cn || '查询群组失败'
+                        duration: 2000
                     });
                 }
             }).catch(err => {
                 
                 this.$message({
-                        type: "error",
-                        message: "系统错误"
-                    });
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
                 this.$message.closeAll()
             })
+        },
+        getEncryption: function(){
+            encryption().then(res => {
+                if(res.data.code === 0){
+                    localStorage.setItem("encryptionId",res.data.data)
+                }else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
         },
         closeFront: function(){
             this.frontShow = false;
             this.getGroupList()
+        },
+        closeGuide: function(){
+            this.guideShow = false
+            this.frontShow = true;
         }
     }
 };
