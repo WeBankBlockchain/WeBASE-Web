@@ -1,4 +1,25 @@
-v1.2.1 (2019-11-22)
+### v1.2.2 (2020-01-02)
+
+**Add**
+- 支持国密（IDE合约编译）
+- 支持中英文切换
+- 增加添加前置引导页
+
+**Fix**
+- 优化：前置列表增加节点版本
+
+**兼容性**
+- 支持FISCO-BCOS v2.0.0-rc1 版本
+- 支持FISCO-BCOS v2.0.0-rc2 版本
+- 支持FISCO-BCOS v2.0.0-rc3 版本
+- 支持FISCO-BCOS v2.0.0 及以上版本
+- WeBASE-Front v1.2.2
+- WeBASE-Node-Manager v1.2.2
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
+
+### v1.2.1 (2019-11-22)
 
 **Add**
 - 系统监控：邮件服务模块
@@ -14,13 +35,13 @@ v1.2.1 (2019-11-22)
 - 支持FISCO-BCOS v2.0.0-rc1 版本
 - 支持FISCO-BCOS v2.0.0-rc2 版本
 - 支持FISCO-BCOS v2.0.0-rc3 版本
-- 支持FISCO-BCOS v2.0.0 版本
+- 支持FISCO-BCOS v2.0.0 及以上版本
 - WeBASE-Front v1.2.1
 - WeBASE-Node-Manager v1.2.1
 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
 
-v1.2.0 (2019-10-29)
+### v1.2.0 (2019-10-29)
 
 **Add**
 - 证书管理页面
@@ -33,14 +54,14 @@ v1.2.0 (2019-10-29)
 - 支持FISCO-BCOS v2.0.0-rc1 版本
 - 支持FISCO-BCOS v2.0.0-rc2 版本
 - 支持FISCO-BCOS v2.0.0-rc3 版本
-- 支持FISCO-BCOS v2.0.0 版本
+- 支持FISCO-BCOS v2.0.0 及以上版本
 - WeBASE-Front v1.2.0
 - WeBASE-Node-Manager v1.2.0
 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
 
 
-### v1.1.0 (2019-09-9)
+### v1.1.0 (2019-09-09)
 **Add**
 - 查询cns
 - 节点共识状态管理
@@ -59,7 +80,7 @@ v1.2.0 (2019-10-29)
 - 支持FISCO-BCOS v2.0.0-rc1 版本
 - 支持FISCO-BCOS v2.0.0-rc2 版本
 - 支持FISCO-BCOS v2.0.0-rc3 版本
-- 支持FISCO-BCOS v2.0.0 版本
+- 支持FISCO-BCOS v2.0.0 及以上版本
 - WeBASE-Node-Manager v1.1.0
 - WeBASE-Front v1.1.0
 
@@ -77,3 +98,4 @@ WeBASE-Web（微众区块链中间件平台-WeBASE管理平台），使用vue-cl
 4. 私钥管理：管理所有可以发交易的帐号；
 5. 联盟治理：监控整条链所有机构所有用户发送交易行为，查看是否有异常用户和异常合约；
 6. 帐号管理：只有admin帐号才能查看此功能，可以新增帐号（登录此系统帐号），修改密码等。
+
