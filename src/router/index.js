@@ -40,7 +40,9 @@ const configManagement = resolve => require(['@/views/configManagement'], resolv
 const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
 const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
 const emailAlarm = resolve => require(['@/views/alarm/emailAlarm'], resolve); 
-const emailAlarmType = resolve => require(['@/views/alarm/emailAlarmType'], resolve); 
+const emailAlarmType = resolve => require(['@/views/alarm/emailAlarmType'], resolve);
+const contractEvent = resolve => require(['@/views/contractEvent'], resolve);
+const blockEvent = resolve => require(['@/views/blockEvent'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -160,6 +162,19 @@ const routes = [
             { path: '/transactionCharts', component: transactionCharts, name: '用户交易', nameKey: "userTransaction", menuShow: true, meta: { requireAuth: true } },
             { path: '/unusualUser', component: unusualUser, name: '异常用户', nameKey: "unusualUser", menuShow: true, meta: { requireAuth: true } },
             { path: '/unusualContract', component: unusualContract, name: '异常合约', nameKey: "unusualContract", menuShow: true, meta: { requireAuth: true } }
+        ]
+    },
+    {
+        path: '/',
+        component: main,
+        name: '订阅事件',
+        nameKey: "subscribeEvent",
+        menuShow: true,
+        iconCls: 'wbs-icon-dingyue sidebar-icon',
+        children: [
+            { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: true, meta: { requireAuth: true } },
+            { path: '/contractEvent', component: contractEvent, name: '合约Event事件', nameKey: "contractEvent", menuShow: true, meta: { requireAuth: true } },
+            
         ]
     }, 
     {

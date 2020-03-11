@@ -906,3 +906,31 @@ export function changeAlarmLog(data) {
     })
 }
 
+//
+export function blockEventList(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/event/newBlockEvent/list/${params.str}`,
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+export function contractEventList(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/event/contractEvent/list/${params.str}`,
+        method: 'get',
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+
+
+

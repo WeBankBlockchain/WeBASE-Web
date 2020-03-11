@@ -124,6 +124,9 @@ export default {
         back: 'Back',
         stack: 'Stack',
         tiled: 'Tiled',
+        subscribeEvent: 'Subscribe Event',
+        blockEvent: 'Block Event',
+        contractEvent: 'Contract Event',
     },
     home: {
         nodes: "Nodes",
@@ -481,5 +484,17 @@ export default {
     },
     placeholder: {
         contractListSearch: 'Search by Name / Address'
+    },
+    table: {
+        contractAddress: 'Address',
+        contractAbi: 'Abi',
+        appId: "App Id",
+        exchangeName: "Exchange Name",
+        queueName: "Queue Name",
+        routingKey: "RoutingKey",
+        groupId: "Group Id",
+        fromBlock: 'From Block',
+        toBlock: 'To Block',
+        topicList: 'Topic List'
     }
 }

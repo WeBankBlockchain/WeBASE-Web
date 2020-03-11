@@ -116,6 +116,18 @@ let errCode = {
         en: "node request failed",
         zh: '节点请求失败'
     },
+    "201033": {
+        en: "data request sign not accessible",
+        zh: '数据请求标志不可访问'
+    },
+    "201038": {
+        en: "user name already exists",
+        zh: '用户名已经存在'
+    },
+    "201039": {
+        en: "address already exists",
+        zh: '地址已经存在'
+    },
     "201200": {
         en: "Params not fit",
         zh: '参数不合适'
