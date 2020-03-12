@@ -139,19 +139,19 @@ export default {
                             } else if (data[0]['data'] === 0 && data[1]['data'] != 0) {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
-                                <span>${data[0]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
+                                <span>${data[0]['seriesName']}:${_this.$t('monitor.noData')}</span><br/>
                                 <span>${data[1]['seriesName']}:${data[1]['data']}</span><br/>
                                 `
                             } else if (data[0]['data'] != 0 && data[1]['data'] === 0) {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
                                 <span>${data[0]['seriesName']}:${data[0]['data']}</span><br/>
-                                <span>${data[1]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
+                                <span>${data[1]['seriesName']}:${_this.$t('monitor.noData')}</span><br/>
                                 `
                             } else {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
-                                <span>${this.$t('monitor.noData')}</span><br/>
+                                <span>${_this.$t('monitor.noData')}</span><br/>
                                 `
                             }
                         } else if (data.length === 1) {
@@ -164,7 +164,7 @@ export default {
                             } else {
                                 str = `
                                 <span>${data[0]['name']}</span><br/>
-                                <span>${data[0]['seriesName']}:${this.$t('monitor.noData')}</span><br/>
+                                <span>${data[0]['seriesName']}:${_this.$t('monitor.noData')}</span><br/>
                                 `
                             }
                         }
