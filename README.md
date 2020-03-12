@@ -1,4 +1,9 @@
 # Web管理平台
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](https://webasedoc.readthedocs.io/zh_CN/latest/docs/WeBASE/CONTRIBUTING.html)
+[![CodeFactor](https://www.codefactor.io/repository/github/webankfintech/webase-web/badge)](https://www.codefactor.io/repository/github/webankfintech/webase-web)
+[![Code Lines](https://tokei.rs/b1/github/WeBankFinTech/WeBASE-Web?category=code)](https://github.com/WeBankFinTech/WeBASE-Web)
+[![license](http://img.shields.io/badge/license-Apache%20v2-blue.svg)](http://www.apache.org/licenses/)
+[![GitHub (pre-)release](https://img.shields.io/github/release/WeBankFinTech/WeBASE-Web/all.svg)](https://github.com/WeBankFinTech/WeBASE-Web/releases)
 
 ## 简介
 
