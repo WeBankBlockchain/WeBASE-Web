@@ -45,7 +45,7 @@ Vue.use(Router);
 const routes = [
     {
         path: '/',
-        redirect: '/home',
+        redirect: '/main',
     },
     {
         path: '/login',
