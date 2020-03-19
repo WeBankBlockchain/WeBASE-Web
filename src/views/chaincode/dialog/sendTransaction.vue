@@ -215,6 +215,7 @@ export default {
                 funcName: functionName || "",
                 funcParam: this.transation.funcValue,
                 contractId: this.data.contractId,
+                contractAbi: [this.pramasObj]
             };
             if (this.contractAddress) {
                 data.contractAddress = this.contractAddress
