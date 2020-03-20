@@ -58,20 +58,12 @@ export default {
                     name: this.$t('table.exchangeName')
                 },
                 {
+                    enName: 'routingKey',
+                    name: this.$t('table.routingKey')
+                },
+                {
                     enName: 'queueName',
                     name: this.$t('table.queueName')
-                },
-                {
-                    enName: 'contractAbi',
-                    name: this.$t('table.contractAbi')
-                },
-                {
-                    enName: 'fromBlock',
-                    name: this.$t('table.fromBlock')
-                },
-                {
-                    enName: 'toBlock',
-                    name: this.$t('table.toBlock')
                 },
                 {
                     enName: 'contractAddress',
@@ -80,10 +72,6 @@ export default {
                 {
                     enName: 'topicList',
                     name: this.$t('table.topicList')
-                },
-                {
-                    enName: 'routingKey',
-                    name: this.$t('table.routingKey')
                 },
             ]
             return arr

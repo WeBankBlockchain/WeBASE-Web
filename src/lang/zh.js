@@ -126,7 +126,7 @@ export default {
         tiled: '平铺',
         subscribeEvent: '订阅事件',
         blockEvent: '出块事件',
-        contractEvent: '合约Event事件',
+        contractEvent: '合约事件',
     },
     home: {
         nodes: "节点个数",

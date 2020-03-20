@@ -117,8 +117,8 @@ let errCode = {
         zh: '节点请求失败'
     },
     "201033": {
-        en: "data request sign not accessible",
-        zh: '数据请求标志不可访问'
+        en: "data request sign error",
+        zh: '访问webase-sign失败'
     },
     "201038": {
         en: "user name already exists",
@@ -556,11 +556,18 @@ let errCode = {
         en: "Front's encrypt type not matches with nodemgr",
         zh: "Front的加密类型与nodemgr不匹配"
     },
-
-
-
-
-
+    "201241": {
+        en: "Exchange or message queue not exists, please check mq server or mq configuration",
+        zh: 'Exchange或消息队列不存在，请检查mq服务器或mq配置'
+    },
+    "201242": {
+        en: "Database error: data already exists in db",
+        zh: '数据库错误：数据库中已存在数据'
+    },
+    "201243": {
+        en: "Database error: data not exists in db, please check your params",
+        zh: '数据库错误：数据库中不存在数据，请检查参数'
+    },
 
     "302000": {
         en: " The user has not logged in yet",

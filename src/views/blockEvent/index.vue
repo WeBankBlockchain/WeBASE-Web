@@ -58,13 +58,14 @@ export default {
                     name: this.$t('table.exchangeName')
                 },
                 {
-                    enName: 'queueName',
-                    name: this.$t('table.queueName')
-                },
-                {
                     enName: 'routingKey',
                     name: this.$t('table.routingKey')
                 },
+                {
+                    enName: 'queueName',
+                    name: this.$t('table.queueName')
+                },
+                
             ]
             return arr
         }
