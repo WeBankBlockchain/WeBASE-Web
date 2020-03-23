@@ -124,6 +124,9 @@ export default {
         back: 'Back',
         stack: 'Stack',
         tiled: 'Tiled',
+        subscribeEvent: 'Subscribe Event',
+        blockEvent: 'Block Event',
+        contractEvent: 'Contract Event',
     },
     home: {
         nodes: "Nodes",
@@ -252,7 +255,8 @@ export default {
         userLong: "Within 120 characters",
         inputPublic: "Please enter public key information",
         addUserSuccess: "User added successfully!",
-        addUserFail: "Failed to add user!"
+        addUserFail: "Failed to add user!",
+        signUserId: 'Sign User Id'
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -477,9 +481,22 @@ export default {
         longPassword: "6 to 12 characters",
         passwordPattern: "Letters, numbers, and at least one uppercase letter and one lowercase letter",
         updatePsdSuccess: "Password reset complete!",
-        updatePsdError: "Password change failed!"   
+        updatePsdError: "Password change failed!"
     },
     placeholder: {
         contractListSearch: 'Search by Name / Address'
+    },
+    table: {
+        contractAddress: 'Address',
+        contractAbi: 'Abi',
+        appId: "App Id",
+        exchangeName: "Exchange Name",
+        queueName: "Queue Name",
+        routingKey: "RoutingKey",
+        groupId: "Group Id",
+        fromBlock: 'From Block',
+        toBlock: 'To Block',
+        topicList: 'Topic List',
+
     }
 }

@@ -85,6 +85,9 @@ export default {
                     case 'transactionAudit':
                         item.name = this.$t('title.transactionAudit')
                         break;
+                    case 'subscribeEvent':
+                        item.name = this.$t('title.subscribeEvent')
+                        break;
                 }
                 if (item.children) {
                     item.children.forEach((it) => {
@@ -142,6 +145,12 @@ export default {
                                 break;
                             case 'emailAlarmType':
                                 it.name = this.$t('title.emailAlarmType')
+                                break;
+                            case 'blockEvent':
+                                it.name = this.$t('title.blockEvent')
+                                break;
+                            case 'contractEvent':
+                                it.name = this.$t('title.contractEvent')
                                 break;
                         }
                     })
