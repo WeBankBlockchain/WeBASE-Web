@@ -37,7 +37,7 @@ export function loginOut() {
         url: `${url.ORG_LIST}/account/logout`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -47,7 +47,7 @@ export function encryption() {
         url: `${url.ORG_LIST}/encrypt`,
         method: 'get',
         // headers: {
-        //     Authorization: "Token " + localStorage.getItem("token") || ""
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         // }
     })
 }
@@ -58,7 +58,7 @@ export function resetPassword(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -69,7 +69,7 @@ export function getChartData(data) {
         url: `${url.ORG_LIST}/group/transDaily/${data}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -79,7 +79,7 @@ export function getNetworkStatistics(data) {
         url: `${url.ORG_LIST}/group/general/${data}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -91,7 +91,7 @@ export function getBlockPage(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -103,7 +103,7 @@ export function getNodeList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -113,7 +113,7 @@ export function getErrorNodeList(data) {
         url: `${url.ORG_LIST}/node/nodeList/${data}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -126,7 +126,7 @@ export function getOrgList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -137,7 +137,7 @@ export function getContractList(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -148,7 +148,7 @@ export function addnodes(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -159,7 +159,7 @@ export function addgroup(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -170,7 +170,7 @@ export function saveChaincode(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -181,7 +181,7 @@ export function setCompile(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -192,7 +192,7 @@ export function backgroundCompile(data){
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -203,7 +203,7 @@ export function getDeployStatus(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -214,7 +214,7 @@ export function deleteCode(data, list) {
         url: `${url.ORG_LIST}/contract/${params.str}`,
         method: 'delete',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -224,7 +224,7 @@ export function networkList() {
         url: `${url.ORG_LIST}/network/all`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -235,7 +235,7 @@ export function editChain(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -247,7 +247,7 @@ export function getUserList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -258,7 +258,7 @@ export function getAddUser(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -269,7 +269,7 @@ export function getUserDescription(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -280,7 +280,7 @@ export function sendTransation(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -292,7 +292,7 @@ export function getTransactionReceipt(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -304,7 +304,7 @@ export function hashTransactionInfo(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -316,7 +316,7 @@ export function creatAccountInfo(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -327,7 +327,7 @@ export function modifyAccountInfo(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -337,7 +337,7 @@ export function deleteAccountInfo(data) {
         url: `${url.ORG_LIST}/account/${data}`,
         method: 'delete',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -349,7 +349,7 @@ export function roleList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -362,7 +362,7 @@ export function accountList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -374,7 +374,7 @@ export function errorLogList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -385,7 +385,7 @@ export function bindUser(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -398,7 +398,7 @@ export function monitorTransactionInfo(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -411,7 +411,7 @@ export function getTransactionList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -423,7 +423,7 @@ export function monitorUserList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -439,7 +439,7 @@ export function monitorUserInterfaceList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -457,7 +457,7 @@ export function unusualUserList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -469,7 +469,7 @@ export function unusualContractList(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -481,7 +481,7 @@ export function getByteCode(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -494,7 +494,7 @@ export function getBlockDetail(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -505,7 +505,7 @@ export function deleteNodes(data) {
         url: `${url.ORG_LIST}/node/nodeInfo/${data}`,
         method: 'delete',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -517,7 +517,7 @@ export function metricInfo(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -528,7 +528,7 @@ export function nodesHostInfo(data, list) {
         url: `${url.ORG_LIST}/performance/config/${params.str}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -540,7 +540,7 @@ export function nodesHealth(data, list) {
         method: 'get',
         params: params.querys,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -551,7 +551,7 @@ export function addFront(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -560,7 +560,7 @@ export function getGroups() {
         url: `${url.ORG_LIST}/group/all`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -570,7 +570,7 @@ export function getFronts(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -579,7 +579,7 @@ export function deleteFront(data) {
         url: `${url.ORG_LIST}/front/${data}`,
         method: 'delete',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -590,7 +590,7 @@ export function addFunctionAbi(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -600,7 +600,7 @@ export function getFunctionAbi(data, list) {
         url: `${url.ORG_LIST}/method/findById/${params.str}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -611,7 +611,7 @@ export function getAbi(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -630,7 +630,7 @@ export function postPermission(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -641,7 +641,7 @@ export function deletePermission(data) {
         method: 'delete',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -652,7 +652,7 @@ export function getPermission(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -663,7 +663,7 @@ export function getPermissionFull(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -674,7 +674,7 @@ export function consensusNodeId(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -685,7 +685,7 @@ export function getConsensusNodeId(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -696,7 +696,7 @@ export function querySysConfig(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -707,7 +707,7 @@ export function querySysConfigList(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -718,7 +718,7 @@ export function queryCnsList(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -730,7 +730,7 @@ export function queryCrudService(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -742,7 +742,7 @@ export function getPermissionSorted(list) {
         method: 'get',
         params: list,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -755,7 +755,7 @@ export function postPermissionSorted(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -767,7 +767,7 @@ export function importCert(data) {
         data: data,
         // responseType: 'blob/json',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -778,7 +778,7 @@ export function exportCert(list) {
         method: 'get',
         params: list,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -789,7 +789,7 @@ export function certList(list) {
         method: 'get',
         params: list,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -800,7 +800,7 @@ export function deleteCert(data) {
         method: 'delete',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -811,7 +811,7 @@ export function changeEmailConfig(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -822,7 +822,7 @@ export function getEmailList() {
         method: 'get',
         // data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -833,7 +833,7 @@ export function getAlarmList() {
         method: 'get',
         // data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -843,7 +843,7 @@ export function getAlarm(id) {
         url: `${url.ORG_LIST}/alert/${id}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -855,7 +855,7 @@ export function changeAlarm(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -867,7 +867,7 @@ export function startAlarm(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -878,7 +878,7 @@ export function testEmail(list,data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -890,7 +890,7 @@ export function getAlarmLogs(data,list) {
         url: `${url.ORG_LIST}/log/list/${params.str}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -901,7 +901,7 @@ export function changeAlarmLog(data) {
         method: 'put',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -913,7 +913,7 @@ export function blockEventList(data, list) {
         url: `${url.ORG_LIST}/event/newBlockEvent/list/${params.str}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -925,7 +925,7 @@ export function contractEventList(data, list) {
         url: `${url.ORG_LIST}/event/contractEvent/list/${params.str}`,
         method: 'get',
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }

@@ -255,7 +255,8 @@ export default {
         userLong: "120个字符以内",
         inputPublic: "请输入公钥信息",
         addUserSuccess: "添加用户成功！",
-        addUserFail: "添加用户失败！"
+        addUserFail: "添加用户失败！",
+        signUserId: 'Sign User Id'
     },
     system: {
         chainManager: "链管理权限",
@@ -496,6 +497,6 @@ export default {
         groupId: "所属群组",
         fromBlock: 'event起始区块',
         toBlock: 'event末区块',
-        topicList: '合约event名列表'
+        topicList: '合约event名列表',
     }
 }

@@ -255,7 +255,8 @@ export default {
         userLong: "Within 120 characters",
         inputPublic: "Please enter public key information",
         addUserSuccess: "User added successfully!",
-        addUserFail: "Failed to add user!"
+        addUserFail: "Failed to add user!",
+        signUserId: 'Sign User Id'
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -495,6 +496,7 @@ export default {
         groupId: "Group Id",
         fromBlock: 'From Block',
         toBlock: 'To Block',
-        topicList: 'Topic List'
+        topicList: 'Topic List',
+        
     }
 }
