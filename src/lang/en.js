@@ -490,13 +490,13 @@ export default {
         contractAddress: 'Address',
         contractAbi: 'Abi',
         appId: "App Id",
-        exchangeName: "Exchange Name",
+        exchangeName: "Exchange",
         queueName: "Queue Name",
         routingKey: "RoutingKey",
         groupId: "Group Id",
         fromBlock: 'From Block',
         toBlock: 'To Block',
-        topicList: 'Topic List',
-
+        topicList: 'Contract Event',
+        frontInfo: 'Front Info'
     }
 }
