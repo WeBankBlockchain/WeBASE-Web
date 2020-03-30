@@ -73,6 +73,10 @@ export default {
                     enName: 'topicList',
                     name: this.$t('table.topicList')
                 },
+                {
+                    enName: 'frontInfo',
+                    name: this.$t('table.frontInfo')
+                }
             ]
             return arr
         }

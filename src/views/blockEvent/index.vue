@@ -65,7 +65,10 @@ export default {
                     enName: 'queueName',
                     name: this.$t('table.queueName')
                 },
-                
+                {
+                    enName: 'frontInfo',
+                    name: this.$t('table.frontInfo')
+                }
             ]
             return arr
         }
