@@ -491,12 +491,13 @@ export default {
         contractAddress: '合约地址',
         contractAbi: '合约abi',
         appId: "应用编号",
-        exchangeName: "交换机",
+        exchangeName: "Exchange",
         queueName: "队列名",
         routingKey: "routingKey",
         groupId: "所属群组",
         fromBlock: 'event起始区块',
         toBlock: 'event末区块',
-        topicList: '合约event名列表',
+        topicList: '合约event',
+        frontInfo: '所属前置'
     }
 }
