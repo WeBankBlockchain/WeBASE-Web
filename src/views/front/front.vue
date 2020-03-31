@@ -250,9 +250,10 @@ export default {
                     }
                 })
                 .catch(err => {
+                    let _this = this
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: _this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

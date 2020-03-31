@@ -45,6 +45,7 @@ axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 60 * 1000;
+
 Vue.use(router);
 Vue.use(VueClipboard);
 Vue.use(ElementUI, {
@@ -57,6 +58,10 @@ Vue.prototype.$axios = axios;
 Vue.config.productionTip = false;
 Vue.use(Clickoutside)
 import promise from 'es6-promise';
+import {
+    message
+  } from '@/util/message.js';
+  Vue.prototype.$message = message;
 //compatible Promise
 promise.polyfill();
 //cookie function
