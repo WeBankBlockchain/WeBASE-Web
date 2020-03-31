@@ -246,18 +246,16 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
-                    let _this = this
+                    let _that = this;
                     this.loading = false;
                     this.$message({
-                        message: _this.$t('text.systemError'),
+                        message: _that.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
                 });
         },
         handleSizeChange(val) {

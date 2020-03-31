@@ -139,7 +139,6 @@ export default {
                             type: "error",
                             message: errcode.errCode[response.data.code].cn
                         });
-                        this.$message.closeAll()
                     }
                 })
                 .catch(err=>{
@@ -148,7 +147,6 @@ export default {
                         type: "error",
                         message: "系统错误!"
                     });
-                    this.$message.closeAll()
                 })
         },
         handleClick(tab, event) {
@@ -247,7 +245,6 @@ export default {
                             type: "error",
                             message: errcode.errCode[res.data.code].cn
                         });
-                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -256,7 +253,6 @@ export default {
                         type: "error",
                         message: "系统错误！"
                     });
-                    this.$message.closeAll()
                 });
         },
         //解码eventLog

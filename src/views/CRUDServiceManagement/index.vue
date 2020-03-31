@@ -170,7 +170,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -179,7 +178,6 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
                 });
         },
         runSql(formName) {

@@ -195,7 +195,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll();
                     }
                 })
                 .catch(err => {
@@ -204,7 +203,6 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll();
                 });
         },
         modifyConfig(formName) {
@@ -237,7 +235,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -246,7 +243,6 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
                 });
         },
         modifyItemConfig(item) {

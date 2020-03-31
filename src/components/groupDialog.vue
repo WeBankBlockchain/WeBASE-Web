@@ -75,7 +75,6 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
                 });
         },
         change: function(row) {

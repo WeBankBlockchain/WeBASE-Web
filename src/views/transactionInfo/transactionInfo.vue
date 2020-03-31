@@ -158,7 +158,6 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
                 });
         },
         handleSizeChange: function(val) {

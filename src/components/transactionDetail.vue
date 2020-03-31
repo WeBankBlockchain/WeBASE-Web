@@ -244,7 +244,6 @@ export default {
                         type: "error",
                         message: "系统错误!"
                     });
-                    this.$message.closeAll()
                 });
         },
         getMethod: function (id) {
@@ -261,14 +260,12 @@ export default {
                         type: "error",
                         message: errcode.errCode[response.data.code].cn
                     });
-                    this.$message.closeAll()
                 }
             }).catch(err => {
                 this.$message({
                     type: "error",
                     message: "系统错误!"
                 });
-                this.$message.closeAll()
             })
         },
         getDeloyAbi: function (input) {
