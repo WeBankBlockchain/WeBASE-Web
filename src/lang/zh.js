@@ -124,6 +124,9 @@ export default {
         back: '区域缩放还原',
         stack: '堆叠',
         tiled: '平铺',
+        subscribeEvent: '订阅事件',
+        blockEvent: '出块事件',
+        contractEvent: '合约事件',
     },
     home: {
         nodes: "节点个数",
@@ -252,7 +255,8 @@ export default {
         userLong: "120个字符以内",
         inputPublic: "请输入公钥信息",
         addUserSuccess: "添加用户成功！",
-        addUserFail: "添加用户失败！"
+        addUserFail: "添加用户失败！",
+        signUserId: 'Sign User Id'
     },
     system: {
         chainManager: "链管理权限",
@@ -482,5 +486,18 @@ export default {
     },
     placeholder: {
         contractListSearch: '输入合约名或合约地址'
+    },
+    table: {
+        contractAddress: '合约地址',
+        contractAbi: '合约abi',
+        appId: "应用编号",
+        exchangeName: "Exchange",
+        queueName: "队列名",
+        routingKey: "routingKey",
+        groupId: "所属群组",
+        fromBlock: 'event起始区块',
+        toBlock: 'event末区块',
+        topicList: '合约event',
+        frontInfo: '所属前置'
     }
 }
