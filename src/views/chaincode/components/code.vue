@@ -239,19 +239,19 @@ export default {
             this.version = data.contractVersion;
             this.complieAbiTextHeight = false;
             this.complieBinTextHeight = false;
-            this.$refs['showAbiText'].style.overflow = 'hidden'
-            this.$refs['showBinText'].style.overflow = 'hidden'
-            if (data.contractAbi) {
-                this.$nextTick(() => {
-                    if (this.$refs['showAbiText'].offsetHeight >= 72) {
-                        this.complieAbiTextHeight = true
-                    }
-                    if (this.$refs['showBinText'].offsetHeight >= 72) {
-                        this.complieBinTextHeight = true
-                    }
+            // this.$refs['showAbiText'].style.overflow = 'hidden'
+            // this.$refs['showBinText'].style.overflow = 'hidden'
+            // if (data.contractAbi) {
+            //     this.$nextTick(() => {
+            //         if (this.$refs['showAbiText'].offsetHeight >= 72) {
+            //             this.complieAbiTextHeight = true
+            //         }
+            //         if (this.$refs['showBinText'].offsetHeight >= 72) {
+            //             this.complieBinTextHeight = true
+            //         }
 
-                })
-            }
+            //     })
+            // }
 
         })
         Bus.$on("noData", data => {

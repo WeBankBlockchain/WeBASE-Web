@@ -250,6 +250,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
+                    router.push("/login");
                 }
             }).catch(err => {
                 
@@ -258,7 +259,7 @@ export default {
                     type: "error",
                     duration: 2000
                 });
-                this.$message.closeAll()
+                router.push("/login");
             })
         },
         getEncryption: function(){
