@@ -244,7 +244,7 @@ export default {
                                 message: this.$t("text.selectSuccess")
                             });
                         } else {
-                            if (resData.statusOK) {
+                            if (resData.status == '0x0') {
                                 this.$message({
                                     type: "success",
                                     message: this.$t("text.transactionSuccess")
