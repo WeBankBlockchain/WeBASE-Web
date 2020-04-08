@@ -1,3 +1,21 @@
+### v1.2.4 (2020-04-08)
+
+**Fix**
+- bugifx: 请求的headers中token字段由“Authorization”改成“AuthorizationToken”
+- bugifx: 发交易接口在前后端增加contractAbi字段，修复合约重载函数的问题
+
+**兼容性**
+- 支持FISCO-BCOS v2.0.0-rc1 版本
+- 支持FISCO-BCOS v2.0.0-rc2 版本
+- 支持FISCO-BCOS v2.0.0-rc3 版本
+- 支持FISCO-BCOS v2.0.0 及以上版本
+- WeBASE-Web v1.2.2+
+- WeBASE-Node-Manager v1.2.2+
+- WeBASE-Sign v1.2.2+
+- WeBASE-Transaction v1.2.2+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 ### v1.2.2 (2020-01-02)
 
 **Add**
