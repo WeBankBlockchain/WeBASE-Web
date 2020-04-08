@@ -1,4 +1,4 @@
-### v1.2.4 (2020-04-07)
+### v1.2.4 (2020-04-08)
 
 **Fix**
 - bugifx: 请求的headers中token字段由“Authorization”改成“AuthorizationToken”
