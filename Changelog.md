@@ -2,7 +2,7 @@
 
 **Fix**
 - bugifx: 请求的headers中token字段由“Authorization”改成“AuthorizationToken”
-- bugifx: 发交易接口在前后端增加contractAbi字段，修复合约重载函数的问题
+- bugifx: 发交易接口在前后端增加`contractAbi`字段，修复合约重载函数与获取abi失败的问题
 
 **兼容性**
 - 支持FISCO-BCOS v2.0.0-rc1 版本
