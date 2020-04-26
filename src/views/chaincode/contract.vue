@@ -91,7 +91,7 @@ export default {
         getEncryption: function (callback) {
             encryption().then(res => {
                 if (res.status == 200) {
-                    localStorage.setItem("encryptionId", res.data)
+                    localStorage.setItem("encryptionId", res.data.data)
                     callback();
                 } else {
                     this.$message({
