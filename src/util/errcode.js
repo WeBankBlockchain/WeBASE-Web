@@ -253,7 +253,7 @@ let errCode = {
     },
     "201130": {
         en: "Sign user Id cannot be empty",
-        zh: '签名用户Id不能为空'
+        zh: 'webase-sign用户编号不能为空'
     },
 
     "201213": {
@@ -283,10 +283,6 @@ let errCode = {
     "201205": {
         en: "permission denied or params error, set system config value fail",
         zh: '权限被拒绝或params错误，设置系统配置值失败'
-    },
-    "201206": {
-        en: "Create system config in db fail for already exist",
-        zh: '在数据库中为已存在的创建系统配置失败'
     },
     "201207": {
         en: "System config key is invalid",
@@ -322,7 +318,7 @@ let errCode = {
     },
     "201221": {
         en: "Contract version should only contains 'A-Z' or 'a-z' or '0-9' or dot mark ",
-        zh: '合同版本应仅包含“A-Z”或“A-Z”或“0-9”或点标记'
+        zh: '合同版本应仅包含“A-Z”或“A-Z”或“0-9”或点'
     },
     "201222": {
         en: "Version of contract is out of length",
@@ -377,20 +373,20 @@ let errCode = {
         zh: '合约ABI校验错误，请检查ABI参数格式'
     },
     "202000": {
-        en: "invalid node info",
-        zh: '无效的节点信息'
+        en: "invalid front info",
+        zh: '无效的节点id'
     },
     "202001": {
         en: "database exception",
         zh: '数据库异常'
     },
     "202002": {
-        en: "organization already exists",
-        zh: '组织已经存在'
+        en: "not fount any front",
+        zh: '找不到任何前置信息'
     },
     "202003": {
-        en: "organization not exists",
-        zh: '组织信息不存在'
+        en: "not support this ip",
+        zh: '不支持该ip'
     },
     "202004": {
         en: "front already exists",
@@ -614,7 +610,7 @@ let errCode = {
     },
     "202062": {
         en: "cert format error, must start with -----BEGIN CERTIFICATE-----\\n, end with end",
-        zh: "证书格式错误，必须以-----开始证书开始-----\\n, end with end"
+        zh: "证书格式错误，必须由 --BEGIN CERTIFICATE-- 包围"
     },
     "202063": {
         en: "saving front's cert error",
@@ -659,7 +655,7 @@ let errCode = {
 
     "202090": {
         en: "Update guomi methodId error",
-        zh: "更新guomi方法错误"
+        zh: "更新国密methodId错误"
     },
     "202091": {
         en: "Front's encrypt type not matches with nodemgr",
@@ -685,7 +681,7 @@ let errCode = {
     },
     "402000": {
         en: "param exception",
-        zh: "参数异常"
+        zh: "参数错误"
     },
     "-50000": {
         en: "Permission denied",
