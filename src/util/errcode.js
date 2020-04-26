@@ -381,7 +381,7 @@ let errCode = {
         zh: '数据库异常'
     },
     "202002": {
-        en: "not fount any front",
+        en: "not found any front",
         zh: '未添加前置'
     },
     "202003": {
