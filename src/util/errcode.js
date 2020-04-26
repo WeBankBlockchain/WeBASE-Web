@@ -382,7 +382,7 @@ let errCode = {
     },
     "202002": {
         en: "not fount any front",
-        zh: '找不到任何前置信息'
+        zh: '未添加前置'
     },
     "202003": {
         en: "not support this ip",
