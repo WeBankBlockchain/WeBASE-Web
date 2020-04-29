@@ -216,6 +216,7 @@ export default {
                 funcParam: this.transation.funcValue,
                 contractAbi: [this.pramasObj],
                 contractId: this.data.contractId,
+                contractAbi: [this.pramasObj]
             };
             if (this.contractAddress) {
                 data.contractAddress = this.contractAddress
@@ -244,7 +245,7 @@ export default {
                                 message: this.$t("text.selectSuccess")
                             });
                         } else {
-                            if (resData.statusOK) {
+                            if (resData.status == '0x0') {
                                 this.$message({
                                     type: "success",
                                     message: this.$t("text.transactionSuccess")
