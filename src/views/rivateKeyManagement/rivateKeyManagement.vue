@@ -112,6 +112,10 @@ export default {
                     name: this.$t("privateKey.userAddress")
                 },
                 {
+                    enName: 'signUserId',
+                    name: this.$t("privateKey.signUserId")
+                },
+                {
                     enName: "userStatus",
                     name: this.$t("privateKey.userStatus")
                 },
