@@ -1,3 +1,27 @@
+### v1.3.0 (2020-04-29)
+
+支持WeBASE v1.3.0
+
+**Add**
+- 新增链上事件通知页面
+- 私钥用户新增`signUserId`字段
+
+**Fix**
+- 修复solc js文件在国密与非国密的缓存问题
+- 完善错误码提示
+
+**兼容性**
+- 支持FISCO-BCOS v2.0.0-rc1 版本
+- 支持FISCO-BCOS v2.0.0-rc2 版本
+- 支持FISCO-BCOS v2.0.0-rc3 版本
+- 支持FISCO-BCOS v2.0.0 及以上版本
+- WeBASE-Node-Manager v1.3.0+
+- WeBASE-Front v1.3.0+
+- WeBASE-Sign v1.3.0+
+- WeBASE-Transaction v1.3.0+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 ### v1.2.4 (2020-04-08)
 
 **Fix**

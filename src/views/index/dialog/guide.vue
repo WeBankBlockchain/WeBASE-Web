@@ -19,7 +19,7 @@
                     <h3>{{$t('guide.addUser')}}</h3>
                     <p>{{$t('guide.addUserTip1')}}</p>
                     <div>
-                        <p>{{$t('guide.addUserTip1')}}</p>
+                        <p>{{$t('guide.addUserTip2')}}</p>
                         <p style='width: 100%'>
                             <img :src="addUserImg" alt="" style='width: 100%'>
                         </p>
