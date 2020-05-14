@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,9 @@ const STATES = {
     "3": "部署失败",
 };
 const COMPILE_INFO = ["<div>合约开始编译</div>","<div>合约编译中...</div>"]
+const ABI_ARGUMENT_TYPE = ['string', 'address', 'address[]', 'uint', 'uint[]', 'uint8', 'uint8[]', 'uint32', 'uint32[]', 'uint128', 'uint128[]', 'uint256', 'uint256[]', 'bytes', 'bytes4', 'bytes32', 'bytes32[]', 'bool']
 export default {
     STATES,
-    COMPILE_INFO
+    COMPILE_INFO,
+    ABI_ARGUMENT_TYPE
 }

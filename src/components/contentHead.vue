@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
             <span :class="{ 'font-color-9da2ab': headSubTitle}">{{title}}</span>
             <span v-show="headSubTitle" class="font-color-9da2ab">/</span>
             <span>{{headSubTitle}}</span>
-            <el-tooltip effect="dark"  placement="bottom-start" v-if="headTooltip" offset='0'>
-                 <div slot="content">{{headTooltip}}</div>
-                <i class="el-icon-info contract-icon font-15" ></i>
+            <el-tooltip effect="dark" placement="bottom-start" v-if="headTooltip" offset='0'>
+                <div slot="content">{{headTooltip}}</div>
+                <i class="el-icon-info contract-icon font-15"></i>
             </el-tooltip>
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
@@ -32,6 +32,7 @@
             <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
                 <ul class="group-item">
+                    <li class="cursor-pointer font-color-2956a3" @click="goGroupMgmt">{{this.$t('title.groupManagement')}}</li>
                     <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
                 </ul>
                 <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>{{this.$t("head.group")}}: {{groupName || '-'}}</span>
@@ -91,6 +92,12 @@ export default {
         },
         headHref: {
             type: Object
+        },
+        updateGroup: {
+            type: Number
+        },
+        updateGroupType: {
+            type: String
         }
     },
     components: {
@@ -101,7 +108,11 @@ export default {
     watch: {
         headTitle: function (val) {
             this.title = val;
+        },
+        updateGroup: function (val) {
+            this.getGroupList();
         }
+
     },
     data: function () {
         return {
@@ -140,8 +151,15 @@ export default {
             getGroups().then(res => {
                 if (res.data.code === 0) {
                     if (res.data.data && res.data.data.length) {
-                        // this.dialogShow = true;
                         this.groupList = res.data.data || []
+                        if (this.updateGroupType === 'update') {
+                            this.$nextTick(_ => {
+                                this.groupName = res.data.data[0].groupName;
+                                localStorage.setItem("groupName", res.data.data[0].groupName)
+                                localStorage.setItem("groupId", res.data.data[0].groupId)
+                            })
+                        }
+
                     } else {
                         this.groupList = [];
                         localStorage.setItem("groupName", "")
@@ -228,6 +246,9 @@ export default {
         },
         success: function (val) {
             this.changePasswordDialogVisible = false;
+        },
+        goGroupMgmt(){
+            this.$router.push('groupManagement')
         }
     }
 };
@@ -325,6 +346,8 @@ export default {
 .group-item {
     line-height: 32px;
     text-align: center;
+    max-height: 200px;
+    overflow-y: auto;
 }
 .group-item-list {
     cursor: pointer;
@@ -333,13 +356,13 @@ export default {
     color: #0db1c1;
 }
 .right-menu-item {
-   padding: 0 20px;
+    padding: 0 20px;
 }
 .hover-effect {
     cursor: pointer;
     /* transition: background 0.3s; */
 }
-.content-head-lang{
+.content-head-lang {
     position: absolute;
     /* background-color: #fff; */
     right: 350px;

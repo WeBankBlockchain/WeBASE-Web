@@ -30,6 +30,9 @@ export default {
         delete: "Delete",
         update: "Change",
         confirmDelete: "Are you sure to delete?",
+        confirmDorp: "Make sure stop the group first, then drop group data. Are you sure ?",
+        confirmDorp2: "Drop group data would remove all data of nodes, blocks, transations, contracts in db, confirm to drop group data?",
+        confirmStop: "Also, make sure that the number of groups the currently selected node belongs to is greater than 1. Otherwise, stopping the node's group will result in abnormal node consensus",
         sure: "Ok",
         cancel: "Cancel",
         select: "Please select",
@@ -52,9 +55,39 @@ export default {
         addSuccess: "Added Successfully",
         Administrator: 'Administrator',
         normalUsers: 'Normal users',
+        modify:"modify",
+        start: 'Start',
+        stop: 'Stop',
+        remove: 'Remove',
+        recover: 'Recover',
+        add: 'Add',
+        parse: 'Parse',
+        parseTitle: "Enter your contract's ABI to auto-parse",
+        INEXISTENT: "INEXISTENT",
+        STOPPING: "STOPPING",
+        RUNNING: "RUNNING",
+        STOPPED: "STOPPED",
+        DELETED: "DELETED",
+        parseAbiManually: "Or enter your parameters manually",
+        addParameter: "Add parameter",
+        functionType: "Function type",
+        argument: "Argument",
+        value: "Value",
+        dropGroupData: "DropGroupData",
+        running: "Running",
+        maintaining: "Maintaining",
+        nodeAddGroupSuccess: "Please go to the node management module to set the node as a 'consensus node'",
+        externalNode: "External node",
+        groupTimestamp: "Timestamp",
+        nodeList: "Node list",
+        joinExitedGroup: "Join Exited Group",
+        timestampConf: "Timestamp of group genesis conf",
+        sealerListConf: "Sealer list of group genesis conf, for example : ['nodeId1','nodeId2']",
     },
     rule: {
         textLong: "1 to 32 characters in length",
+        textLong1_12: "1 to 12 digits in length",
+        textLong1_32767: "Must be less than or equal to 32767",
         passwordError: "Login password error",
         loginPasswordType: "Please input the password correctly",
         ipName: "Please enter IP name",
@@ -68,6 +101,8 @@ export default {
         adminRule: "Please select administrator account",
         nodeType: "Please select a node type",
         contractName: "Please enter the contract name",
+        contractAddress: "Please enter the contract address",
+        contractAbi: "Please enter the contract ABI",
         contractLong: "1 to 32 characters in length",
         contractRule: "Contract name does not conform to the rules",
         folderName: "Please enter a folder name",
@@ -81,7 +116,11 @@ export default {
         configValueNumber: "Configuration value must be a number",
         accountRule: "User name can only enter letters and numbers",
         passwordLong: "6 to 12 characters in length",
-        passwordRule: "Composed of letters, numbers, and at least one uppercase letter and one lowercase letter"
+        passwordRule: "Composed of letters, numbers, and at least one uppercase letter and one lowercase letter",
+        groupTimestamp: "Please enter Timestamp",
+        nodeIdList: "Please enter nodeList",
+        number: "Please enter number",
+        groupId: "Please enter group ID"
     },
     head: {
         helpText: "Document",
@@ -127,6 +166,9 @@ export default {
         subscribeEvent: 'Subscribe Event',
         blockEvent: 'Block Event',
         contractEvent: 'Contract Event',
+        groupManagement: 'Group Mgmt',
+        abiList: 'ABI List',
+        parseAbi: 'Parse ABI',
     },
     home: {
         nodes: "Nodes",
@@ -173,7 +215,19 @@ export default {
         observerText: "Set as observer node, node will not sealer",
         removeText: "Set as remote node, node will not sealer and synchronization",
         sealerText: "Set as sealer node, node will  sealer.Please contact professional settings",
-        version: "Version"
+        version: "Version",
+        addGroup: "Generate Group",
+        groupId: "Group Id",
+        groupName: "Group Name",
+        nodeCount: "Node Count",
+        createTime: "Create Time",
+        nodeId: "Node Id",
+        frontIp: "Front ID",
+        modifyGroup: "Modify Group",
+        addAbi: "Import ABI",
+        groupStatus: "Status",
+        status: "Status",
+        groupTimestamp: "Timestamp"
     },
     contracts: {
         createFile: "Create File",
@@ -228,10 +282,13 @@ export default {
         updateTable: "Update Table Record",
         deleteTable: "Delete Table Record",
         tableDetail: "Display Table Details",
-        addPrivateKeyInfo: "Please add a private key user!"
+        addPrivateKeyInfo: "Please add a private key user!",
+        updateAbi: "Update",
+        deleteAbi: "Delete"
     },
     privateKey: {
         addUser: "Add Users",
+        importRivateKey: "Import Rivate Key",
         addUserTips: "The account number of the transaction sent in the group needs to be added to the private key management, otherwise it will be judged as an abnormal user.",
         searchUser: "Please enter user name or public key address",
         copyPublicKey: "Duplicate Public Key",
@@ -256,7 +313,12 @@ export default {
         inputPublic: "Please enter public key information",
         addUserSuccess: "User added successfully!",
         addUserFail: "Failed to add user!",
-        signUserId: 'Sign User Id'
+        signUserId: 'Sign User Id',
+        inputFileName: "Please enter privateKey name",
+        inputFileType: "Please enter privateKey type",
+        fileName: "privateKey Name",
+        fileType: "file Type",
+        importFile: "Import file"
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -300,7 +362,8 @@ export default {
         uploadWarning1: "The current limit selects 10 files. This time I selected",
         uploadWarning2: "files and selected",
         uploadWarning3: "files.",
-        to: "to"
+        to: "to",
+        updateSuccess: "Successfully updated",
     },
     account: {
         addAccount: "Add Account",
@@ -452,7 +515,9 @@ export default {
         inputalarmContent: "Please enter the alarm content",
         selectIntervalSeconds: "Please select an interval",
         noEmail: "This user does not have a mailbox, please add a mailbox in account management!",
-        updateAlarmSuccess: "Modify alarm configuration successfully!"
+        updateAlarmSuccess: "Modify alarm configuration successfully!",
+        groupTips: "Data of invalid group will be deleted regularly",
+        refresh: "Refresh"
     },
     guide: {
         guidePage: "Guide pages",
@@ -497,6 +562,8 @@ export default {
         fromBlock: 'From Block',
         toBlock: 'To Block',
         topicList: 'Contract Event',
-        frontInfo: 'Front Info'
+        frontInfo: 'Front Info',
+        transactionReceipt: 'Transaction Receipt',
+        transactionInfo: 'Transaction Info',
     }
 }

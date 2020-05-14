@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ let errCode = {
         en: "contractBin cannot be empty",
         zh: '合约bin不能为空'
     },
-    "201008": {
+    "201017": {
         en: "contract's current version has been deployed",
         zh: '合约的当前版本已部署'
     },
@@ -99,10 +99,10 @@ let errCode = {
         en: "file is not exist",
         zh: '文件不存在'
     },
-    "201017": {
-        en: "failed to get node config",
-        zh: '获取节点配置失败'
-    },
+    // "201017": {
+    //     en: "failed to get node config",
+    //     zh: '获取节点配置失败'
+    // },
     "201018": {
         en: "blockNumber and pbftView unchanged",
         zh: '块高和pbftview没有发生变化'
@@ -199,6 +199,18 @@ let errCode = {
         en: "external user's appId and signUserId cannot be empty",
         zh: '外部用户的appId和signUserId不能为空'
     },
+    "201043": {
+        en: "Invalid group operate type",
+        zh: '无效的群组操作类型'
+    },
+    "201044": {
+        en: "Invalid data type",
+        zh: '无效的数据类型'
+    },
+    "201045": {
+        en: "Group operate fail",
+        zh: '群组操作失败'
+    },
     "201100": {
         en: "Params not fit",
         zh: '参数不合适'
@@ -251,11 +263,72 @@ let errCode = {
         en: "sql syntax error",
         zh: 'sql语法错误'
     },
+    "201120": {
+        en: "Group operate fail",
+        zh: '群组操作失败'
+    },
+    "201121": {
+        en: "Node internal error",
+        zh: '节点内部错误'
+    },
+    "201122": {
+        en: "Group already exists",
+        zh: '群组已存在'
+    },
+    "201123": {
+        en: "Group already running",
+        zh: '群组已处于运行状态'
+    },
+    "201124": {
+        en: "Group already stopped",
+        zh: '群组已处于停止状态'
+    },
+    "201125": {
+        en: "Group already deleted",
+        zh: '群组已处于删除状态'
+    },
+    "201126": {
+        en: "Group not found",
+        zh: '群组不存在'
+    },
+    "201127": {
+        en: "Group operate param error",
+        zh: '参数不合法'
+    },
+    "201128": {
+        en: "Group peers not connected",
+        zh: '与sealer间不存在有效的p2p链接'
+    },
+    "201129": {
+        en: "Group genesis conf already exists",
+        zh: '创世块配置文件已存在'
+    },
+    "201130": {
+        en: "Group config.ini already exists",
+        zh: '群组配置文件已存在'
+    },
+    "201131": {
+        en: "Group genesis conf not found",
+        zh: '未找到创世块配置文件'
+    },
+    "201132": {
+        en: "Group config.ini not found",
+        zh: '未找到群组配置文件'
+    },
+    "201133": {
+        en: "Group is stopping",
+        zh: '正在释放资源'
+    },
+    "201134": {
+        en: "Group not deleted",
+        zh: '群组并未被删除'
+    },
+
+
     "201130": {
         en: "Sign user Id cannot be empty",
         zh: 'webase-sign用户编号不能为空'
     },
-
     "201213": {
         en: "address is invalid",
         zh: '地址无效'
@@ -661,7 +734,26 @@ let errCode = {
         en: "Front's encrypt type not matches with nodemgr",
         zh: "Front的加密类型与nodemgr不匹配"
     },
-
+    "202096": {
+        en: "Contract address already exists",
+        zh: "合同地址已存在"
+    },
+    "202097": {
+        en: "Abi info of this id not exists",
+        zh: "此ID的ABI信息不存在"
+    },
+    "202098": {
+        en: "Contract abi invalid, please check abi",
+        zh: "合同ABI无效，请检查ABI"
+    },
+    "202099": {
+        en: "Abi Id cannot be empty",
+        zh: "此ID的ABI信息不存在"
+    },
+    "202100": {
+        en: "ABI info of this id not exists",
+        zh: "Abi Id不能为空"
+    },
     "201232": {
         en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
         zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY----- "
@@ -670,7 +762,15 @@ let errCode = {
         en: "Pem file content error",
         zh: "Pem文件内容错误"
     },
-
+    
+    "202300": {
+        en: "Group id already exists",
+        zh: "群组id已存在"
+    },
+    "202301": {
+        en: "Node's front not exists",
+        zh: "节点前置不存在"
+    },
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
