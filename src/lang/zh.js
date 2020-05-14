@@ -30,6 +30,9 @@ export default {
         delete: "删除",
         update: "修改",
         confirmDelete: "确认删除？",
+        confirmDorp: "先停止群组,再删除群组数据,确认？",
+        confirmDorp2: "删除群组数据将删除对应节点数据、区块与交易数据、合约数据等，是否确认删除群组数据？",
+        confirmStop: "请确保当前选中节点所属群组数大于1个，否则停止该节点的群组将导致节点共识异常",
         sure: "确定",
         cancel: "取消",
         select: "请选择",
@@ -52,9 +55,40 @@ export default {
         addSuccess: "新增成功",
         Administrator: '管理员',
         normalUsers: '普通用户',
+        modify: "修改",
+        start: '启动',
+        stop: '停止',
+        remove: '移除',
+        recover: '恢复',
+        add: '添加',
+        parse: '解析',
+        parseTitle: "请输入合约ABI",
+        INEXISTENT: "不存在",
+        STOPPING: "正在停止",
+        RUNNING: "运行中",
+        STOPPED: "已停止",
+        DELETED: "已删除",
+        parseAbiManually: "函数ABI编辑",
+        addParameter: "添加参数",
+        functionType: "函数名",
+        argument: "参数",
+        value: "值",
+        dropGroupData: "删除群组数据",
+        running: "运行",
+        maintaining: "维护中",
+        nodeAddGroupSuccess: "请到节点管理模块将节点设置为共识节点",
+        externalNode: "外部节点",
+        groupTimestamp: "创世块时间戳",
+        nodeList: "节点列表",
+        joinExitedGroup: "单节点加入已有群组",
+        timestampConf: "群组创世块配置的时间戳",
+        sealerListConf: "群组创世块配置的共识节点列表 ，例如 : ['nodeId1','nodeId2']",
+
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
+        textLong1_12: "长度在 1 到 12 位",
+        textLong1_32767: "必须小于或等于32767",
         passwordError: "登录密码错误",
         loginPasswordType: "请正确输入密码",
         ipName: "请输入ip名称",
@@ -68,6 +102,8 @@ export default {
         adminRule: "请选择管理员账号",
         nodeType: "请选择节点类型",
         contractName: "请输入合约名称",
+        contractAddress: "请输入合约地址",
+        contractAbi: "请输入合约ABI",
         contractLong: "长度在 1 到 32 个字符",
         contractRule: "合约名不符合规则",
         folderName: "请输入文件夹名称",
@@ -81,7 +117,11 @@ export default {
         configValueNumber: "配置值必须为数字",
         accountRule: "用户名只能输入字母和数字",
         passwordLong: "长度在 6 到 12 个字符",
-        passwordRule: "字母,数字组成,且至少包含一个大写字母和一个小写字母"
+        passwordRule: "字母,数字组成,且至少包含一个大写字母和一个小写字母",
+        groupTimestamp: "请输入创世块时间戳",
+        nodeIdList: "请输入节点列表",
+        number: "请输入数字",
+        groupId: "请输入群组编号",
     },
     head: {
         helpText: "帮助文档",
@@ -127,6 +167,9 @@ export default {
         subscribeEvent: '订阅事件',
         blockEvent: '出块事件',
         contractEvent: '合约事件',
+        groupManagement: '群组管理',
+        abiList: 'ABI列表',
+        parseAbi: 'ABI解析',
     },
     home: {
         nodes: "节点个数",
@@ -173,7 +216,19 @@ export default {
         observerText: "设置为观察节点，节点将不参与共识",
         removeText: "设置为游离节点，节点将不参与共识和同步",
         sealerText: "设置为共识节点，节点将参与共识。请联系专业人员设置",
-        version: "节点版本"
+        version: "节点版本",
+        addGroup: "创建群组",
+        groupId: "群组编号",
+        groupName: "群组名称",
+        nodeCount: "节点数量",
+        createTime: "创建时间",
+        nodeId: "节点编号",
+        frontIp: "前置IP",
+        modifyGroup: "修改群组",
+        addAbi: "导入ABI",
+        groupStatus: "群组状态",
+        status: "状态",
+        groupTimestamp: "创世块时间戳"
     },
     contracts: {
         createFile: "新建文件",
@@ -228,10 +283,13 @@ export default {
         updateTable: "更新表记录",
         deleteTable: "删除表记录",
         tableDetail: "显示表详情",
-        addPrivateKeyInfo: "请添加私钥用户!"
+        addPrivateKeyInfo: "请添加私钥用户!",
+        updateAbi: "更新",
+        deleteAbi: "删除"
     },
     privateKey: {
         addUser: "新增用户",
+        importRivateKey: "导入私钥",
         addUserTips: "群组内发送交易的账号都需要在私钥管理里添加，否则会判断为异常用户。",
         searchUser: "请输入用户名或公钥地址",
         copyPublicKey: "复制公钥",
@@ -256,7 +314,12 @@ export default {
         inputPublic: "请输入公钥信息",
         addUserSuccess: "添加用户成功！",
         addUserFail: "添加用户失败！",
-        signUserId: 'Sign User Id'
+        signUserId: 'Sign User Id',
+        inputFileName: "请输入私钥用户名",
+        inputFileType: "请选择文件类型",
+        fileName: "私钥用户名",
+        fileType: "文件类型",
+        importFile: "导入文件"
     },
     system: {
         chainManager: "链管理权限",
@@ -300,7 +363,8 @@ export default {
         uploadWarning1: "当前限制选择 10 个文件，本次选择了",
         uploadWarning2: "个文件，共选择了",
         uploadWarning3: "个文件.",
-        to: "至"
+        to: "至",
+        updateSuccess: "更新成功",
     },
     account: {
         addAccount: "新增账号",
@@ -452,7 +516,9 @@ export default {
         inputalarmContent: "请输入告警内容",
         selectIntervalSeconds: "请选择间隔时间",
         noEmail: "该用户没有邮箱，请在账号管理中添加邮箱！",
-        updateAlarmSuccess: "修改告警配置成功！"
+        updateAlarmSuccess: "修改告警配置成功！",
+        groupTips: "非运行的群组会自动定时删除",
+        refresh: "刷新"
     },
     guide: {
         guidePage: "引导页",
@@ -498,6 +564,8 @@ export default {
         fromBlock: 'event起始区块',
         toBlock: 'event末区块',
         topicList: '合约event',
-        frontInfo: '所属前置'
+        frontInfo: '所属前置',
+        transactionReceipt: '交易回执',
+        transactionInfo: '交易信息',
     }
 }

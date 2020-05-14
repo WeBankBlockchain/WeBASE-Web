@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2019 the original author or authors.
+ * Copyright 2014-2020 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,9 @@ const emailAlarm = resolve => require(['@/views/alarm/emailAlarm'], resolve);
 const emailAlarmType = resolve => require(['@/views/alarm/emailAlarmType'], resolve);
 const contractEvent = resolve => require(['@/views/contractEvent'], resolve);
 const blockEvent = resolve => require(['@/views/blockEvent'], resolve); 
+const groupManagement = resolve => require(['@/views/groupManagement'], resolve);
+const abiList = resolve => require(['@/views/abiList'], resolve);
+const parseAbi = resolve => require(['@/views/parseAbi'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -97,14 +100,29 @@ const routes = [
     {
         path: '/',
         component: main,
+        name: '群组管理',
+        nameKey: "groupManagement",
+        leaf: true,
+        menuShow: false,
+        iconCls: 'wbs-icon-group sidebar-icon',
+        children: [
+            { path: '/groupManagement', component: groupManagement, name: '群组管理', nameKey: "groupManagement", menuShow: true, meta: { requireAuth: true } },
+            
+        ]
+    },
+    {
+        path: '/',
+        component: main,
         name: '合约管理',
         nameKey: "contractTitle",
         // leaf: true,
         menuShow: true,
-        iconCls: 'wbs-icon-heyueguanli sidebar-icon',
+        iconCls: 'wbs-icon-heyueguanli sidebar-icon', 
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
+            { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: true, meta: { requireAuth: true } },
+            { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: true, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } }
         ]
