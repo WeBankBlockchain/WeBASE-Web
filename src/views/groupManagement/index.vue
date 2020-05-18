@@ -11,15 +11,16 @@
                     <el-table :data="groupList" class="search-table-content" v-loading="loading">
                         <el-table-column v-for="head in groupHead" :label="head.name" :key="head.enName" :prop="head.enName" show-overflow-tooltip>
                             <template slot-scope="scope">
-                                <span v-if='head.enName === "groupName"' class="cursor-pointer">
+                                <span v-if='head.enName === "groupName"' class="cursor-pointer font-color-00c1d4">
                                     <span @click="queryCrudGroup(scope.row)">
                                         {{scope.row[head.enName]}}
                                     </span>
                                 </span>
-                                <span v-else-if='head.enName === "groupStatus"' :style="{'color': scope.row[head.enName] ===1 ? 'rgb(88, 203, 125)': '#E6A23C'}" class="cursor-pointer">
-                                    <span @click="queryCrudGroup(scope.row)">
+                                <span v-else-if='head.enName === "groupStatus"' :style="{'color': groupStatusColor(scope.row[head.enName])}">
+                                    <span  class="cursor-pointer" @click="queryCrudGroup(scope.row)">
                                         {{status(scope.row[head.enName])}}
                                     </span>
+                                    <i :class="scope.row['icon']" :title="scope.row['icon_text']"></i>
                                 </span>
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
@@ -164,6 +165,26 @@ export default {
                     if (res.data.code === 0) {
                         this.groupList = res.data.data;
                         this.total = res.data.totalCount;
+                        var abnormalList = []
+                        this.groupList.forEach(item => {
+                            if (item.groupStatus === 3) {
+                                abnormalList.push(item.groupId)
+                                item.icon = 'el-icon-warning';
+                                item.icon_text = `${this.$t('text.group')}${this.$t('text.groupConf')}`
+                            }
+                            if(item.groupStatus === 4) {
+                                item.icon = 'el-icon-warning'
+                                item.icon_text = `${this.$t('text.groupConf4_all')}`
+                            }
+                        });
+                        if (abnormalList.length > 0) {
+                            this.$notify({
+                                type: 'error',
+                                message: `${this.$t('text.group')} ${abnormalList} ${this.$t('text.groupConf')}`,
+                                duration: 9500,
+                                offset: 55
+                            });
+                        }
                     } else {
                         this.$message({
                             type: "error",
@@ -216,11 +237,11 @@ export default {
                         type: 'warning'
                     })
                         .then(_ => {
-                            
+
                             this.sureDeleteGroupData(val)
                         })
                         .catch(_ => { });
-                    
+
                 })
                 .catch(_ => { });
         },
@@ -262,6 +283,12 @@ export default {
                 case 2:
                     return this.$t('text.maintaining')
                     break;
+                case 3:
+                    return this.$t('text.abnormal')
+                    break;
+                case 4:
+                    return this.$t('text.abnormal')
+                    break;
             }
         },
         handleSizeChange(val) {
@@ -273,6 +300,23 @@ export default {
             this.currentPage = val;
             this.queryGroupTable();
         },
+        groupStatusColor(key) {
+            switch (key) {
+                case 1:
+                    return 'rgb(88, 203, 125)'
+                    break;
+
+                case 2:
+                    return '#E6A23C'
+                    break;
+                case 3:
+                    return '#F56C6C'
+                    break;
+                case 4:
+                    return '#F56C6C'
+                    break;
+            }
+        }
     }
 }
 </script>

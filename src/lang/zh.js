@@ -30,8 +30,8 @@ export default {
         delete: "删除",
         update: "修改",
         confirmDelete: "确认删除？",
-        confirmDorp: "先停止群组,再删除群组数据,确认？",
-        confirmDorp2: "删除群组数据将删除对应节点数据、区块与交易数据、合约数据等，是否确认删除群组数据？",
+        confirmDorp: "先停止群组,再删除本地群组数据,确认？",
+        confirmDorp2: "删除群组数据将删除本地数据库对应的节点数据、区块与交易数据、合约数据等（不影响链上数据）【此处回车】是否确认删除群组数据？",
         confirmStop: "请确保当前选中节点所属群组数大于1个，否则停止该节点的群组将导致节点共识异常",
         sure: "确定",
         cancel: "取消",
@@ -76,6 +76,7 @@ export default {
         dropGroupData: "删除群组数据",
         running: "运行",
         maintaining: "维护中",
+        abnormal: "异常",
         nodeAddGroupSuccess: "请到节点管理模块将节点设置为共识节点",
         externalNode: "外部节点",
         groupTimestamp: "创世块时间戳",
@@ -83,7 +84,12 @@ export default {
         joinExitedGroup: "单节点加入已有群组",
         timestampConf: "群组创世块配置的时间戳",
         sealerListConf: "群组创世块配置的共识节点列表 ，例如 : ['nodeId1','nodeId2']",
-
+        group: "群组",
+        groupConf: "的创世块冲突，请检查该群组的节点群组配置文件",
+        groupConf4: "的本地数据与链上群组数据存在冲突，如重建链或群组，请到",
+        groupMgmt: "群组管理",
+        groupConf4_1: "中删除相应群组的数据或新建后台数据库",
+        groupConf4_all: "群组的本地数据与链上群组数据存在冲突，如重建链或群组，请在群组管理中删除相应群组的数据或新建后台数据库"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -122,6 +128,7 @@ export default {
         nodeIdList: "请输入节点列表",
         number: "请输入数字",
         groupId: "请输入群组编号",
+        correctJson: "输入正确的JSON"
     },
     head: {
         helpText: "帮助文档",
@@ -272,6 +279,7 @@ export default {
         copyContractAddress: "复制合约地址",
         contractAbi: "合约abi",
         contractBin: "合约bin",
+        runtimeBin: "Runtime-bin",
         copyContractAbi: "复制合约abi",
         copyContractBin: "复制合约bin",
         abiInfo: "abi详情",

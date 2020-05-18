@@ -97,6 +97,11 @@ export default {
         abiHead() {
             let data = [
                 {
+                    enName: "contractName",
+                    name: this.$t("contracts.contractName"),
+                    width: '170'
+                },
+                {
                     enName: "contractAddress",
                     name: this.$t("contracts.contractAddress"),
                     width: '330'
@@ -108,7 +113,7 @@ export default {
                 },
                 {
                     enName: "contractBin",
-                    name: this.$t("contracts.contractBin"),
+                    name: this.$t("contracts.runtimeBin"),
                     width: ''
                 }
             ];
