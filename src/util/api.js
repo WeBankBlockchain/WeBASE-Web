@@ -1072,3 +1072,13 @@ export function p2pNodeList(groupId) {
 }
 
 
+//查询群组状态异常（4）
+export function groupStatus4(groupStatus) {
+    return get({
+        url: `${url.ORG_LIST}/group/all/${groupStatus}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}

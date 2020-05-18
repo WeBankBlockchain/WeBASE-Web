@@ -484,7 +484,6 @@ export default {
         },
         //decodeEvent
         decodeEventClick: function () {
-            // debugger;
             for (let i = 0; i < this.eventLog.length; i++) {
                 if (this.eventLog[i]['data'] === '0x') {
                     this.unEvent = true

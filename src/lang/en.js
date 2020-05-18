@@ -30,8 +30,8 @@ export default {
         delete: "Delete",
         update: "Change",
         confirmDelete: "Are you sure to delete?",
-        confirmDorp: "Make sure stop the group first, then drop group data. Are you sure ?",
-        confirmDorp2: "Drop group data would remove all data of nodes, blocks, transations, contracts in db, confirm to drop group data?",
+        confirmDorp: "Make sure stop the group first, then drop local group data. Are you sure ?",
+        confirmDorp2: "Deleting group data will delete the node data, block and transaction data, contract data, etc. corresponding to the local database (does not affect the data on the chain). [enter here] are you sure to delete the group data?",
         confirmStop: "Also, make sure that the number of groups the currently selected node belongs to is greater than 1. Otherwise, stopping the node's group will result in abnormal node consensus",
         sure: "Ok",
         cancel: "Cancel",
@@ -76,6 +76,7 @@ export default {
         dropGroupData: "DropGroupData",
         running: "Running",
         maintaining: "Maintaining",
+        abnormal: "Abnormal",
         nodeAddGroupSuccess: "Please go to the node management module to set the node as a 'consensus node'",
         externalNode: "External node",
         groupTimestamp: "Timestamp",
@@ -83,6 +84,12 @@ export default {
         joinExitedGroup: "Join Exited Group",
         timestampConf: "Timestamp of group genesis conf",
         sealerListConf: "Sealer list of group genesis conf, for example : ['nodeId1','nodeId2']",
+        group: "Group",
+        groupConf: "genesis conf，Please check the node group profile of this group.",
+        groupConf4: "a conflict between the local data of and the group data on the chain. For example, to rebuild the chain or group, please",
+        groupMgmt: "to group management",
+        groupConf4_1: "delete the data of the corresponding group or create a new background database in",
+        groupConf4_all: "There is a conflict between the local data of the group and the group data on the chain. For example, to rebuild the chain or group, please delete the data of the corresponding group or create a new background database in group management"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -120,7 +127,8 @@ export default {
         groupTimestamp: "Please enter Timestamp",
         nodeIdList: "Please enter nodeList",
         number: "Please enter number",
-        groupId: "Please enter group ID"
+        groupId: "Please enter group ID",
+        correctJson: "Enter correct JSON"
     },
     head: {
         helpText: "Document",
@@ -271,6 +279,7 @@ export default {
         copyContractAddress: "Copy Contract Address",
         contractAbi: "Abi",
         contractBin: "Bin",
+        runtimeBin: "Runtime-bin",
         copyContractAbi: "Copy Contract Abi",
         copyContractBin: "Copy Contract Bin",
         abiInfo: "ABI Details",

@@ -30,17 +30,27 @@
         </div>
         <div class="content-head-network">
             <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
+            <span v-if="abnormalList.length>0">
+                <el-tooltip class="item" effect="dark" placement="bottom-end">
+                    <div slot="content">
+                        <span>{{$t('text.group')}}</span>
+                        <span>{{abnormalList}}</span>
+                        <span>{{$t('text.groupConf4')}}</span>
+                        <span class="cursor-pointer font-color-2956a3" @click="goGroupMgmt">{{$t('text.groupMgmt')}}</span>
+                        <span>{{$t('text.groupConf4_1')}}</span>
+                    </div>
+                    <i class="el-icon-warning-outline font-color-E6A23C"></i>
+                </el-tooltip>
+
+            </span>
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
+                <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt">{{this.$t('title.groupManagement')}}</li>
                 <ul class="group-item">
-                    <li class="cursor-pointer font-color-2956a3" @click="goGroupMgmt">{{this.$t('title.groupManagement')}}</li>
                     <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
                 </ul>
                 <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>{{this.$t("head.group")}}: {{groupName || '-'}}</span>
             </el-popover>
-
-            <!-- <span @click="checkNetwork" class="select-network">切换群组 -->
             <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
-            <!-- </span> -->
             <span style="padding-right:10px"></span>
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
@@ -53,13 +63,9 @@
                 </a>
             </el-popover>
         </div>
-        <!-- <div class="content-head-lang">
-            <lang-select class="right-menu-item hover-effect" />
-        </div> -->
         <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
-        <!-- <v-dialog v-if="dialogShow" :show="dialogShow" @success="changeNetwork" @close='close' @changGroupSucess="changGroupSucess"></v-dialog> -->
 
     </div>
 </template>
@@ -68,7 +74,7 @@
 import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
-import { loginOut, getGroups } from "@/util/api";
+import { loginOut, getGroups, groupStatus4 } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
 import langSelect from "@/components/langSelect"
@@ -124,7 +130,8 @@ export default {
             headIcon: this.icon || false,
             way: this.route || "",
             changePasswordDialogVisible: false,
-            groupList: []
+            groupList: [],
+            abnormalList: []
         };
     },
     beforeDestroy: function () {
@@ -145,6 +152,7 @@ export default {
         Bus.$on("addFront", () => {
             this.getGroupList();
         })
+        this.queryGroupStatus4()
     },
     methods: {
         getGroupList: function (type) {
@@ -215,16 +223,6 @@ export default {
             this.$emit('changGroup', val.groupId);
             this.dialogShow = true;
         },
-        // changGroupSucess(val){
-
-        // },
-        // changeNetwork: function() {
-        //     this.groupName = localStorage.getItem("groupName");
-        //     this.dialogShow = false;
-        // },
-        // close: function() {
-        //     this.dialogShow = false;
-        // },
         skip: function () {
             if (this.route) {
                 this.$router.push(this.way);
@@ -247,8 +245,34 @@ export default {
         success: function (val) {
             this.changePasswordDialogVisible = false;
         },
-        goGroupMgmt(){
+        goGroupMgmt() {
             this.$router.push('groupManagement')
+        },
+        queryGroupStatus4() {
+            groupStatus4(4)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        var abnormalData = res.data.data;
+                        this.abnormalList = []
+                        abnormalData.forEach(item => {
+                            this.abnormalList.push(item.groupId)
+                        });
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    this.$message.closeAll()
+                })
         }
     }
 };
@@ -348,6 +372,7 @@ export default {
     text-align: center;
     max-height: 200px;
     overflow-y: auto;
+    position: relative;
 }
 .group-item-list {
     cursor: pointer;

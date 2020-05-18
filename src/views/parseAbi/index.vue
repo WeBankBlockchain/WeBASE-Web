@@ -33,8 +33,8 @@
                     </el-col>
                     <el-col :span="17">
                         <span class="font-color-fff text-hidden">value</span>
-                        <el-input v-model="item.argumentValue" validate-event   @input="inputArgumentValue"></el-input>
-                        <span ></span>
+                        <el-input v-model="item.argumentValue" validate-event @input="inputArgumentValue"></el-input>
+                        <span></span>
                     </el-col>
                 </el-row>
             </div>
@@ -152,8 +152,16 @@ export default {
             this.aceEditor.getSession().on("change", this.changeAce);
             this.aceEditor.resize();
         },
-        initArgument() {
+        emptyArgument() {
             this.argumentList = [];
+        },
+        initArgument() {
+            this.argumentList = [{
+                argumentOption: constant.ABI_ARGUMENT_TYPE,
+                type: 'string',
+                argumentValue: '',
+                name: this.$t('text.argument')
+            }]
         },
         initFuction() {
             this.functionList = ['constructor', 'your function']
@@ -165,24 +173,37 @@ export default {
             this.abiContent = this.aceEditor.getSession().getValue();
         },
         changeFunType(val) {
-            this.functionValue = '';
-            this.textarea = '';
-            if (this.abiJsonContent.length) {
-                this.abiJsonContent.forEach(item => {
-                    if (val == item.name) {
-                        var inputs = item.inputs
-                        inputs.forEach((it, i) => {
-                            Object.assign(this.argumentList[i], it)
-                        })
-                    }
-                })
-                this.functionValue = val;
-            }
-            if (this.functionType === 'constructor') {
-                this.parseConstructorAbi()
+            if (!this.abiJsonContent.length) {
+                this.initArgument()
             } else {
-                this.parseNewAbi()
+                if (val === 'constructor') {
+                    this.emptyArgument()
+                    sessionStorage.clear('temporaryArgument')
+                } else if (val === 'your function') {
+                    this.functionValue = ''
+                    this.argumentList = []
+                    var temporaryArgumentList = JSON.parse(sessionStorage.getItem('temporaryArgument'))
+                    if(temporaryArgumentList){
+                        this.argumentList.push(temporaryArgumentList[0])
+                    }else {
+                        this.initArgument()
+                    }
+                    
+                } else {
+                    this.functionValue = val
+                    this.emptyArgument()
+                    this.abiJsonContent.forEach(item => {
+                        if (this.functionType == item.name) {
+                            var inputs = item.inputs;
+                            for (let index = 0; index < inputs.length; index++) {
+                                this.argumentList.push(Object.assign({}, { argumentOption: constant.ABI_ARGUMENT_TYPE, }, inputs[index]))
+                            }
+                        }
+                    })
+                    sessionStorage.setItem('temporaryArgument',JSON.stringify(this.argumentList))
+                }
             }
+            this.textarea = '';
         },
         changeArgType(val) {
             this.textarea = '';
@@ -195,14 +216,16 @@ export default {
         parseAbi() {
             if (typeof this.abiContent == 'string') {
                 try {
-                    this.errorMsg = '';
+
                     var obj = JSON.parse(this.abiContent);
                     this.abiJsonContent = obj;
 
                     if (typeof obj == 'object' && obj) {
+                        this.errorMsg = '';
                         this.extractAbi(obj);
                     }
                 } catch (error) {
+                    this.errorMsg = this.$t('rule.correctJson')
                     console.log('error：' + this.abiContent + '!!!' + error);
                 }
             }
@@ -220,20 +243,24 @@ export default {
         },
         executeAbi() {
             this.initFuction()
+            this.emptyArgument()
             this.abiJsonContent.forEach(item => {
                 this.functionList.push(item.name)
             });
-            this.functionType = this.functionList[2]
+            this.functionType = this.functionList[2] || this.functionList[0]
             this.functionValue = this.functionList[2]
+
             this.abiJsonContent.forEach(item => {
                 if (this.functionType == item.name) {
-                    var inputs = item.inputs
-                    inputs.forEach((it, i) => {
-                        Object.assign(this.argumentList[i], it)
-                    })
+                    var inputs = item.inputs;
+                    for (let index = 0; index < inputs.length; index++) {
+                        this.argumentList.push(Object.assign({}, { argumentOption: constant.ABI_ARGUMENT_TYPE, }, inputs[index]))
+                    }
                 }
             })
+            sessionStorage.setItem('temporaryArgument',JSON.stringify(this.argumentList))
             if (this.functionType === 'constructor') {
+
                 this.parseConstructorAbi()
             } else {
                 this.parseNewAbi()
@@ -267,10 +294,14 @@ export default {
                 inputsVal.push(dataType(item.type, item.argumentValue))
 
             })
+            if(!inputs.length){
+                this.textarea = '';
+                return
+            }
             for (let i = 0; i < inputsVal.length; i++) {
-                if(!inputsVal[i]){
+                if (!inputsVal[i]) {
                     return false
-                }                
+                }
             }
             try {
                 this.textarea = web3Abi.encodeFunctionCall({
@@ -289,10 +320,14 @@ export default {
                 inputsVal.push(dataType(item.type, item.argumentValue))
 
             })
+            if(!inputs.length){
+                this.textarea = '';
+                return
+            }
             for (let i = 0; i < inputsVal.length; i++) {
-                if(!inputsVal[i]){
+                if (!inputsVal[i]) {
                     return false
-                }                
+                }
             }
             try {
                 this.textarea = web3Abi.encodeParameters(inputs, inputsVal)
