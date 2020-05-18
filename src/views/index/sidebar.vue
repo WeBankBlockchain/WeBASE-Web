@@ -98,6 +98,9 @@ export default {
                             case 'nodeTitle':
                                 it.name = this.$t('title.nodeTitle')
                                 break;
+                            case 'groupManagement':
+                                it.name = this.$t('title.groupManagement')
+                                break;
                             case 'PrivateKey':
                                 it.name = this.$t('title.PrivateKey')
                                 break;
@@ -106,6 +109,12 @@ export default {
                                 break;
                             case 'contractIDE':
                                 it.name = this.$t('title.contractIDE')
+                                break;
+                            case 'abiList':
+                                it.name = this.$t('title.abiList')
+                                break;
+                            case 'parseAbi':
+                                it.name = this.$t('title.parseAbi')
                                 break;
                             case 'contractList':
                                 it.name = this.$t('title.contractList')
@@ -166,14 +175,14 @@ export default {
             }
         }
     },
-    mounted: function() {
-        this.$nextTick(function() {
+    mounted: function () {
+        this.$nextTick(function () {
             localStorage.setItem("sidebarHide", false);
             this.changeRouter();
         });
     },
     methods: {
-        changeRouter: function() {
+        changeRouter: function () {
             let list = this.$router.options.routes;
             list.forEach(item => {
                 if (item.name === "帐号管理") {
@@ -187,7 +196,7 @@ export default {
             });
             this.routesList = list;
         },
-        select: function(index, indexPath) {
+        select: function (index, indexPath) {
             this.activeIndex = indexPath[0];
             this.activeRoute = index;
         },
@@ -195,7 +204,7 @@ export default {
         },
         handleClose(key, keyPath) {
         },
-        hideMune: function(val) {
+        hideMune: function (val) {
             this.$emit("sidebarChange", val);
             if (this.menuShow) {
                 this.menuShow = false;
@@ -208,7 +217,7 @@ export default {
                 localStorage.setItem("sidebarHide", false);
             }
         },
-        getAdmin: function() {}
+        getAdmin: function () { }
     }
 };
 </script>
@@ -218,12 +227,12 @@ export default {
     padding-top: 31px;
     border: none;
 }
-.el-menu-vertical-demo>>>.el-menu-item {
+.el-menu-vertical-demo >>> .el-menu-item {
     font-size: 14px;
     color: #9da2ab;
     text-align: left;
 }
-.el-menu-vertical-demo>>>.el-submenu__title {
+.el-menu-vertical-demo >>> .el-submenu__title {
     padding-left: 33px;
 }
 .el-menu-item-group > ul > .el-menu-item {
@@ -234,10 +243,10 @@ export default {
     height: 46px;
     line-height: 46px;
 }
-.sidebar-content>>>.el-menu--collapse {
+.sidebar-content >>> .el-menu--collapse {
     width: 56px;
 }
-.sidebar-content>>>.el-menu--collapse .is-active .el-tooltip {
+.sidebar-content >>> .el-menu--collapse .is-active .el-tooltip {
     padding-left: 17px !important;
     background-color: #1e293e;
 }
