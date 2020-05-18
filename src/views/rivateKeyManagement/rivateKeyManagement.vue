@@ -23,6 +23,7 @@
                     <el-tooltip effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
+                    <!-- <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_rivate_key_dialog')">{{this.$t('privateKey.importRivateKey')}}</el-button> -->
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" style="width: 370px;">
@@ -63,20 +64,25 @@
         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
+        <el-dialog :visible.sync="$store.state.importRivateKey" :title="$t('privateKey.importRivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importRivateKey' center>
+            <v-importKey @importRivateKeySuccess="importRivateKeySuccess" ref="importKey"></v-importKey>
+        </el-dialog>
     </div>
 </template>
 
 
 <script>
 import contentHead from "@/components/contentHead";
-import creatUser from "./components/creatUser";
+import creatUser from "./components/creatUser.vue";
+import importKey from "./components/importKey.vue";
 import { getUserList, getUserDescription } from "@/util/api";
 import errcode from "@/util/errcode";
 export default {
     name: "RivateKeyManagement",
     components: {
         "v-contentHead": contentHead,
-        "v-creatUser": creatUser
+        "v-creatUser": creatUser,
+        "v-importKey": importKey,
     },
     data() {
         return {
@@ -187,6 +193,9 @@ export default {
         },
         creatUserInfo() { },
         creatUserClose() {
+            this.getUserInfoData();
+        },
+        importRivateKeySuccess() {
             this.getUserInfoData();
         },
         bindUserClose() {

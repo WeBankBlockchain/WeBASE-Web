@@ -16,11 +16,19 @@
 <template>
     <div style="padding: 0">
         <el-tabs type="border-card" @tab-click="handleClick">
-            <el-tab-pane label="input">
+            <el-tab-pane :label="$t('table.transactionInfo')">
                 <div>
+                    <div class="item">
+                        <span class="label">Block Hash:</span>
+                        <span>{{transactionData.blockHash || ""}}</span>
+                    </div>
                     <div class="item">
                         <span class="label">Block Height:</span>
                         <span>{{transactionData.blockNumber || ""}}</span>
+                    </div>
+                    <div class="item">
+                        <span class="label">Gas:</span>
+                        <span>{{transactionData.gas || ""}}</span>
                     </div>
                     <div class="item">
                         <span class="label">From:</span>
@@ -38,6 +46,14 @@
                             <span>To:</span>
                         </span>
                         <span>{{transactionData.to || 'null'}}</span>
+                    </div>
+                    <div class="item">
+                        <span class="label">nonceRaw:</span>
+                        <span>{{transactionData.nonceRaw || ""}}</span>
+                    </div>
+                    <div class="item">
+                        <span class="label">Hash:</span>
+                        <span>{{transactionData.hash || ""}}</span>
                     </div>
                     <div class="item">
                         <span class="label">Timestamp:</span>
@@ -78,9 +94,9 @@
                     </div>
                 </div>
             </el-tab-pane>
-            <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
+            <!-- <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
                 <template v-if="unEvent">
-                    <div  class="text-center">
+                    <div class="text-center">
                         无法解析
                     </div>
                 </template>
@@ -121,6 +137,57 @@
                         </div>
                     </div>
                 </template>
+
+            </el-tab-pane> -->
+            <el-tab-pane :label="$t('table.transactionReceipt')" name="txReceiptInfo">
+                <el-row v-for="item in txReceiptInfoList" :key="item">
+                    <el-col :xs='24' :sm="24" :md="6" :lg="4" :xl="2">
+                        <span class="receipt-field">{{item}}：</span>
+                    </el-col>
+                    <el-col :xs='24' :sm="24" :md="18" :lg="20" :xl="22">
+                        <template v-if="item == 'logs'">
+                            <span v-if="txInfoReceiptMap[item]&& !txInfoReceiptMap[item].length">{{txInfoReceiptMap[item]}}</span>
+                            <div v-for="(item,num) in eventLog" v-if="eventSHow">
+                                <div class="item">
+                                    <span class="label">Address :</span>
+                                    <span>{{item.address}}</span>
+                                </div>
+                                <div class="item">
+                                    <span class="label">Name :</span>
+                                    <span>{{item.eventName}}</span>
+                                </div>
+                                <div class="item">
+                                    <span class="label">Topics :</span>
+                                    <div style="display: inline-block;width:800px;">
+                                        <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
+                                    </div>
+                                </div>
+                                <div class="item">
+                                    <span class="label">Data :</span>
+                                    <div class="detail-input-content">
+                                        <span v-if="!item.eventDataShow" class="input-data">{{item.data}}</span>
+                                        <el-table class="input-data" :data="item.eventLgData" v-show="item.eventDataShow" style="display:inline-block;width:100%;">
+                                            <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
+                                            <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
+                                                <template slot-scope="scope">
+                                                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                                    <span>{{scope.row.data}}</span>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </div>
+                                </div>
+                                <div class="item" v-show='item.eventButtonShow'>
+                                    <span class="label"></span>
+                                    <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <p class="base-p">{{txInfoReceiptMap[item]}}</p>
+                        </template>
+                    </el-col>
+                </el-row>
 
             </el-tab-pane>
         </el-tabs>
@@ -171,6 +238,22 @@ export default {
             eventButtonShow: true,
             userList: [],
             unEvent: false,
+            txReceiptInfoList: [
+                "output",
+                "blockHash",
+                "gasUsed",
+                "blockNumber",
+                "contractAddress",
+                "from",
+                "transactionIndex",
+                "to",
+                "logsBloom",
+                "transactionHash",
+                "status",
+                "logs"
+            ],
+            txInfoReceiptMap: {},
+            showReceiptDecode: true,
         };
     },
     mounted: function () {
@@ -218,7 +301,6 @@ export default {
                     if (res.data.code === 0) {
                         this.transactionData = res.data.data;
                         if (res.data.data) {
-
                             this.getCreatTime(res.data.data.blockNumber);
                             this.getAdderss();
                             if (res.data.data.to && res.data.data.to != "0x0000000000000000000000000000000000000000") {
@@ -343,7 +425,7 @@ export default {
                 });
         },
         handleClick(tab, event) {
-            if (tab.label == "event") {
+            if (tab.index == "1") {
                 this.decodeEventClick();
             }
         },
@@ -384,6 +466,7 @@ export default {
             getTransactionReceipt(data, {})
                 .then(res => {
                     if (res.data.code === 0) {
+                        this.txInfoReceiptMap = res.data.data;
                         this.eventLog = res.data.data.logs;
                     } else {
                         this.$message({
@@ -622,6 +705,14 @@ export default {
     border: 1px solid #eaedf3;
     border-radius: 4px;
     font-size: 12px;
+}
+.receipt-field {
+    font-weight: bold;
+}
+.base-p {
+    overflow: hidden;
+    word-break: break-all;
+    word-wrap: break-word;
 }
 </style>
 
