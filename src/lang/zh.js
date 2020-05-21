@@ -31,7 +31,7 @@ export default {
         update: "修改",
         confirmDelete: "确认删除？",
         confirmDorp: "先停止群组,再删除本地群组数据,确认？",
-        confirmDorp2: "删除群组数据将删除本地数据库对应的节点数据、区块与交易数据、合约数据等（不影响链上数据）【此处回车】是否确认删除群组数据？",
+        confirmDorp2: "删除群组数据将删除本地数据库对应的节点数据、区块与交易数据、合约数据等（不影响链上数据）是否确认删除群组数据？",
         confirmStop: "请确保当前选中节点所属群组数大于1个，否则停止该节点的群组将导致节点共识异常",
         sure: "确定",
         cancel: "取消",
@@ -177,6 +177,7 @@ export default {
         groupManagement: '群组管理',
         abiList: 'ABI列表',
         parseAbi: 'ABI解析',
+        uploadSolc: '上传不同版本编译器'
     },
     home: {
         nodes: "节点个数",
@@ -293,7 +294,8 @@ export default {
         tableDetail: "显示表详情",
         addPrivateKeyInfo: "请添加私钥用户!",
         updateAbi: "更新",
-        deleteAbi: "删除"
+        deleteAbi: "删除",
+        limit_1: "每次最多只能上传一个文件"
     },
     privateKey: {
         addUser: "新增用户",
@@ -327,7 +329,8 @@ export default {
         inputFileType: "请选择文件类型",
         fileName: "私钥用户名",
         fileType: "文件类型",
-        importFile: "导入文件"
+        importFile: "导入文件",
+        copy: "复制"
     },
     system: {
         chainManager: "链管理权限",
@@ -339,7 +342,7 @@ export default {
         tableName: "表名称",
         userAddress: "账号地址",
         userName: "账号名称",
-        deployAndCreate: "系统与建表权限",
+        deployAndCreate: "部署与建表权限",
         cns: "CNS权限",
         sysConfig: "系统配置权限",
         node: "节点权限",
@@ -360,6 +363,7 @@ export default {
         gasLong: "范围从100000到2147483647",
         addCertificate: "导入证书",
         export: "导出",
+        import: "导入",
         certName: "证书名称",
         certType: "证书类型",
         fingerPrint: "指纹",
