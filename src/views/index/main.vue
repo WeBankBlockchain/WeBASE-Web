@@ -51,7 +51,7 @@
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
@@ -223,7 +223,7 @@ export default {
                 });
         },
         getGroupList: function(){
-            getGroups().then(res => {
+            getGroupsInvalidIncluded().then(res => {
                 if(res.data.code === 0){
                     if(res.data.data && res.data.data.length){
                         if(!localStorage.getItem("groupId")){

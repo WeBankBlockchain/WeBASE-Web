@@ -17,6 +17,7 @@
     "echarts": "^4.2.0-rc.1",
     "element-ui": "^2.4.7",
     "es6-promise": "^4.2.5",
+    "file-saver": "^2.0.2",
     "js-base64": "^2.5.1",
     "js-cookie": "^2.2.0",
     "js-file-download": "^0.4.8",

@@ -27,8 +27,8 @@ let errCode = {
         zh: '系统异常'
     },
     "101003": {
-        en: "web3jMap of groupId is null, please call /{groupId}/web3/refresh to refresh",
-        zh: 'groupId的web3jMap为空，请调用/{groupId}/web3/refresh刷新'
+        en: "web3jMap of groupId is null, please try again",
+        zh: 'groupId的web3jMap为空，请重试'
     },
     "101004": {
         en: "groupList error for no group, web3jMap is empty!",
@@ -792,12 +792,16 @@ let errCode = {
         zh: "表名已经存在"
     },
     "-50100": {
+        en: "Table does not exist",
+        zh: "表不存在"
+    },
+    "-50101": {
         en: "Unknow function call",
         zh: "未知函数调用"
     },
-    "-50101": {
-        en: "Table does not exist",
-        zh: "表不存在"
+    "-50102": {
+        en: "Address invalid",
+        zh: "地址无效"
     },
     "-51000": {
         en: "Table name and address already exist",
@@ -844,8 +848,8 @@ let errCode = {
         zh: "配置条目无效"
     },
     "-51500": {
-        en: "Contract name and version already exist",
-        zh: "合约名称和版本已存在"
+        en: "Entry parse error",
+        zh: "解析错误"
     },
     "-51501": {
         en: "Condition parse error",
@@ -859,6 +863,7 @@ let errCode = {
         en: "Please provide field 'in field list",
         zh: "请在字段列表中提供字段。"
     },
+    
     "422": {
         en: "param error",
         zh: "参数错误"

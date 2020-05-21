@@ -31,7 +31,7 @@ export default {
         update: "Change",
         confirmDelete: "Are you sure to delete?",
         confirmDorp: "Make sure stop the group first, then drop local group data. Are you sure ?",
-        confirmDorp2: "Deleting group data will delete the node data, block and transaction data, contract data, etc. corresponding to the local database (does not affect the data on the chain). [enter here] are you sure to delete the group data?",
+        confirmDorp2: "Deleting group data will delete the node data, block and transaction data, contract data, etc. corresponding to the local database (does not affect the data on the chain). Are you sure to delete the group data?",
         confirmStop: "Also, make sure that the number of groups the currently selected node belongs to is greater than 1. Otherwise, stopping the node's group will result in abnormal node consensus",
         sure: "Ok",
         cancel: "Cancel",
@@ -177,6 +177,7 @@ export default {
         groupManagement: 'Group Mgmt',
         abiList: 'ABI List',
         parseAbi: 'Parse ABI',
+        uploadSolc: 'Upload different versions of compiler'
     },
     home: {
         nodes: "Nodes",
@@ -193,8 +194,8 @@ export default {
         more: "More",
         run: "Runing",
         unusual: "Unusual",
-        chartTitle: "#Trancation",
-        chartExplain: "#transaction in last 7 days",
+        chartTitle: "Trancation",
+        chartExplain: "Transaction in last 7 days",
         chartTransactions: "Transactions",
         blockHash: "Block Hash",
         createTime: "Create Time"
@@ -293,14 +294,15 @@ export default {
         tableDetail: "Display Table Details",
         addPrivateKeyInfo: "Please add a private key user!",
         updateAbi: "Update",
-        deleteAbi: "Delete"
+        deleteAbi: "Delete",
+        limit_1: "Only one file can be uploaded at a time"
     },
     privateKey: {
         addUser: "Add Users",
         importRivateKey: "Import Rivate Key",
         addUserTips: "The account number of the transaction sent in the group needs to be added to the private key management, otherwise it will be judged as an abnormal user.",
         searchUser: "Please enter user name or public key address",
-        copyPublicKey: "Duplicate Public Key",
+        copyPublicKey: "Copy Public Key",
         privateKey: "Private Key",
         publicKey: "Public Key",
         createUser: "Create User",
@@ -327,7 +329,8 @@ export default {
         inputFileType: "Please enter privateKey type",
         fileName: "privateKey Name",
         fileType: "file Type",
-        importFile: "Import file"
+        importFile: "Import file",
+        copy: "Copy"
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -360,6 +363,7 @@ export default {
         gasLong: "Range from 100000 to 2147483647",
         addCertificate: "Import Certificate",
         export: "Export",
+        import: "Import",
         certName: "Certificate Name",
         certType: "Certificate Type",
         fingerPrint: "Fingerprint",

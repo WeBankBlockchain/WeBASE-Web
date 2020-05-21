@@ -15,7 +15,7 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
+            <el-table-column fixed="right" :label="$t('nodes.operation')" width="120">
                 <template slot-scope="scope">
                     <el-button :disabled="scope.row.frontId=='-' ? true : false" :loading="loading&&operateIndex==scope.row.nodeId&&operateType==item.enName" type="text" size="small" @click="queryOperateGroup(scope.row,item.enName)" v-for="item in scope.row.groupStatusList" :key="item.enName">{{item.name}}</el-button>
                 </template>
@@ -29,7 +29,7 @@
 
 <script>
 
-import { createGroup, getFronts, crudGroup, groupStatus, getNodeList, p2pNodeList } from "@/util/api"
+import { createGroup, getFronts, crudGroup, groupStatus, getNodeList, p2pNodeList, getConsensusNodeId } from "@/util/api"
 import nodeAddGroup from "./nodeAddGroup";
 export default {
     name: 'modify',
@@ -87,6 +87,11 @@ export default {
                     width: ''
                 },
                 {
+                    enName: "groupId",
+                    name: this.$t("nodes.groupId"),
+                    width: ''
+                },
+                {
                     enName: "agency",
                     name: this.$t("nodes.agency"),
                     width: ''
@@ -108,7 +113,6 @@ export default {
     },
 
     mounted() {
-
         this.queryNodeList()
     },
 
@@ -116,7 +120,7 @@ export default {
 
         queryNodeList() {
             let groupId = localStorage.getItem("groupId");
-            
+
             p2pNodeList(groupId)
                 .then(res => {
                     if (res.data.code === 0) {
@@ -148,18 +152,18 @@ export default {
                         this.nodeIdList = [];
                         var recomNodelist = [];
                         var outsideList = []
-                        var sameList = this.nodeList.map(item=>{
-                            if(this.allNodeList.includes(item.nodeId)){
+                        var sameList = this.nodeList.map(item => {
+                            if (this.allNodeList.includes(item.nodeId)) {
                                 return item.nodeId
                             }
-                        })                  
+                        })
                         this.allNodeList.forEach(item => {
-                            if(!sameList.includes(item)){
+                            if (!sameList.includes(item)) {
                                 outsideList.push(item)
                             }
                         });
                         var outsideData = []
-                        outsideList.forEach(item=>{
+                        outsideList.forEach(item => {
                             outsideData.push({
                                 nodeId: item,
                             })
@@ -261,9 +265,50 @@ export default {
                             }
                         })
 
-                        this.newNodeList = array
-
+                        // this.newNodeList = array
+                        this.querygetConsensusNodeId(array)
                     } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        })
+                    }
+                })
+                .catch(error => {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.systemError')
+                    })
+                })
+        },
+        querygetConsensusNodeId(list) {
+            let reqParam = {
+                groupId: this.itemGroupData.groupId,
+                pageNumber: 1,
+                pageSize: 100
+            };
+            getConsensusNodeId(reqParam)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        var array = res.data.data, groupNodeList=[];
+                        array.forEach(item=>{
+                            if(item.nodeType==='sealer' || item.nodeType === 'observer') {
+                                groupNodeList.push(item.nodeId)
+                            }
+                        })
+                        this.newNodeList = list;
+                        this.newNodeList.forEach(item=>{
+                            if(groupNodeList.includes(item.nodeId)){
+                                item.groupId = this.itemGroupData.groupId
+                            }else {
+                                item.groupId = '-'
+                            }
+                        })
+                    } else {
+                        this.newNodeList = list;
+                        this.newNodeList.forEach(item=>{
+                            item.groupId = '-'
+                        })
                         this.$message({
                             type: "error",
                             message: this.$chooseLang(res.data.code)
@@ -330,6 +375,7 @@ export default {
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
+                        this.queryNodeList()
                         this.$emit('modifySuccess')
                     } else {
                         this.$message({
@@ -350,12 +396,31 @@ export default {
             this.addGroupData = val;
             this.addGroupVisibility = true
         },
-        addSuccess(){
+        addSuccess() {
             this.addGroupVisibility = false
             this.queryNodeList()
         },
         addClose() {
             this.addGroupVisibility = false
+        },
+        copyNodeIdKey(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: this.$t("text.copyErrorMsg"),
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: this.$t("text.copySuccessMsg"),
+                        duration: 2000
+                    });
+                });
+            }
         }
     }
 }

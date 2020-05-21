@@ -149,7 +149,7 @@ export default {
             this.modifyGroupVisibility = false;
         },
         modifySuccess() {
-            this.modifyGroupVisibility = false;
+            // this.modifyGroupVisibility = false;
             this.queryGroupTable();
             this.updateGroup++;
             this.updateGroupType = 'update'

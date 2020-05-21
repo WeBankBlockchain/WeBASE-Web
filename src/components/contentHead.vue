@@ -46,7 +46,10 @@
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
                 <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt">{{this.$t('title.groupManagement')}}</li>
                 <ul class="group-item">
-                    <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>{{item.groupName}}</li>
+                    <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>
+                        <i class="wbs-icon-radio font-6" :style="{'color': groupStatusColor(item.groupStatus)}"></i> 
+                        {{item.groupName}}
+                    </li>
                 </ul>
                 <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>{{this.$t("head.group")}}: {{groupName || '-'}}</span>
             </el-popover>
@@ -74,7 +77,7 @@
 import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
-import { loginOut, getGroups, groupStatus4 } from "@/util/api";
+import { loginOut, getGroups, groupStatus4, getGroupsInvalidIncluded } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
 import langSelect from "@/components/langSelect"
@@ -156,7 +159,7 @@ export default {
     },
     methods: {
         getGroupList: function (type) {
-            getGroups().then(res => {
+            getGroupsInvalidIncluded().then(res => {
                 if (res.data.code === 0) {
                     if (res.data.data && res.data.data.length) {
                         this.groupList = res.data.data || []
@@ -273,6 +276,23 @@ export default {
                     });
                     this.$message.closeAll()
                 })
+        },
+        groupStatusColor(key) {
+            switch (key) {
+                case 1:
+                    return 'rgb(88, 203, 125)'
+                    break;
+
+                case 2:
+                    return '#E6A23C'
+                    break;
+                case 3:
+                    return '#F56C6C'
+                    break;
+                case 4:
+                    return '#F56C6C'
+                    break;
+            }
         }
     }
 };
