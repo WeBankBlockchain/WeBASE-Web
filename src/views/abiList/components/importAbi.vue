@@ -20,8 +20,9 @@
 </template>
 
 <script>
-import { importAbi } from "@/util/api";
+import { importAbi, addFunctionAbi } from "@/util/api";
 import { isJson } from "@/util/util";
+import web3 from "@/util/ethAbi"
 export default {
     name: 'importAbi',
 
@@ -51,9 +52,9 @@ export default {
                 if (value === '') {
                     callback(new Error(_this.$t("rule.contractAbi")));
                 } else {
-                    if(!isJson(value)){
+                    if (!isJson(value)) {
                         callback(new Error('Invalid input: Unexpected end of JSON input'));
-                    }else {
+                    } else {
                         callback()
                     }
 
@@ -121,6 +122,7 @@ export default {
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
+                        this.setMethod()
                         this.$emit('importSuccess')
                         this.$message({
                             type: "success",
@@ -141,7 +143,83 @@ export default {
                     })
                 })
         },
-        close() { 
+        setMethod() {
+            let Web3EthAbi = web3;
+            let arry = [];
+            if (this.abiForm.contractAbi) {
+                let list = JSON.parse(this.abiForm.contractAbi);
+                list.forEach(value => {
+                    if (value.name && value.type == "function") {
+                        let data = {};
+                        let methodId;
+                        if (localStorage.getItem("encryptionId") == 1) {
+                            methodId = Web3EthAbi.smEncodeFunctionSignature({
+                                name: value.name,
+                                type: value.type,
+                                inputs: value.inputs
+                            });
+                        } else {
+                            methodId = Web3EthAbi.encodeFunctionSignature({
+                                name: value.name,
+                                type: value.type,
+                                inputs: value.inputs
+                            });
+                        }
+                        data.methodId = methodId;
+                        data.abiInfo = JSON.stringify(value);
+                        data.methodType = value.type;
+                        arry.push(data);
+                    } else if (value.name && value.type == "event") {
+                        let data = {};
+                        let methodId;
+                        if (localStorage.getItem("encryptionId") == 1) {
+                            methodId = Web3EthAbi.smEncodeEventSignature({
+                                name: value.name,
+                                type: value.type,
+                                inputs: value.inputs
+                            });
+                        } else {
+                            methodId = Web3EthAbi.encodeEventSignature({
+                                name: value.name,
+                                type: value.type,
+                                inputs: value.inputs
+                            });
+                        }
+                        data.methodId = methodId;
+                        data.abiInfo = JSON.stringify(value);
+                        data.methodType = value.type;
+                        arry.push(data);
+                    }
+                });
+                if (arry.length) {
+                    this.addAbiMethod(arry)
+                }
+            }
+        },
+        addAbiMethod(list) {
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                methodList: list
+            }
+            addFunctionAbi(data).then(res => {
+                if (res.data.code === 0) {
+                    console.log("method 保存成功！")
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
+        },
+        close() {
             this.$emit("closeImport")
         }
     }
