@@ -21,7 +21,10 @@
                 <div class="serch-nodes">
                     <span>{{$t('monitor.node')}}</span>
                     <el-select v-model="nodeId" @change="changeNodes" style="width: 220px;">
-                        <el-option v-for="item in nodesOptions" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                        <el-option v-for="item in nodesOptions" :key="item.value" :label="item.label" :value="item.value">
+                            <span style="float: left;">{{item.label}}</span>
+                            <span style="float: right;font-size: 13px">{{item.value}}</span>
+                        </el-option>
                     </el-select>
                 </div>
             </div>

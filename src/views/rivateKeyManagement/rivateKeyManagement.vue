@@ -38,7 +38,7 @@
                             <template v-if="head.enName!='operate'">
                                 <span v-if="head.enName ==='userStatus'" :style="{'color': statusColor(scope.row[head.enName])}">{{userStatus(scope.row[head.enName])}}</span>
                                 <span v-else-if="head.enName ==='address'">
-                                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row[head.enName])" title="复制公钥"></i>
+                                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName ==='userId'">
