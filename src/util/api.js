@@ -262,6 +262,41 @@ export function getAddUser(data) {
         }
     })
 }
+//import privateKey 
+export function queryImportPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/import`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//import pem privateKey 
+export function ImportPemPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/importPem`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//import p12 privateKey 
+export function ImportP12PrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/importP12`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+            'Content-Type': "multipart/form-data"
+        }
+
+    })
+}
 /**Modify user description */
 export function getUserDescription(data) {
     return put({

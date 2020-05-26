@@ -329,6 +329,19 @@ let errCode = {
         en: "Sign user Id cannot be empty",
         zh: 'webase-sign用户编号不能为空'
     },
+    "201151": {
+        en: "Unsupported contract param type to encoded",
+        zh: '不支持合约参数类型编码'
+    },
+    "201152": {
+        en: "Unsupported contract param type to decoded",
+        zh: '不支持合约参数类型解码'
+    },
+    "201153": {
+        en: "Unable to create instance of type, check input params",
+        zh: '无法创建类型的实例，请检查输入参数'
+    },
+    
     "201213": {
         en: "address is invalid",
         zh: '地址无效'
@@ -343,7 +356,7 @@ let errCode = {
     },
     "201202": {
         en: "Permission denied, please check chain administrator permission",
-        zh: '权限被拒绝，请检查链管理员权限'
+        zh: '权限管理,检查用户权限'
     },
     "201203": {
         en: "node id is invalid",
@@ -409,14 +422,23 @@ let errCode = {
         en: "Table not exists",
         zh: '表不存在'
     },
-    "201102": {
-        en: "TableName cannot be empty",
-        zh: '表名不能为空'
-    },
     "201231": {
         en: "Cert file not found, please check cert path in config",
         zh: '找不到证书文件，请检查配置中的证书路径'
     },
+    "201235": {
+        en: "P12's password cannot be chinese",
+        zh: 'p12密码不能为中文'
+    },
+    "201236": {
+        en: "P12's password not match ",
+        zh: 'p12的密码错误'
+    },
+    "201237": {
+        en: "P12 file content error",
+        zh: '文件内容错误'
+    },
+
     "201241": {
         en: "Exchange or message queue not exists, please check mq server or mq configuration",
         zh: 'Exchange或消息队列不存在，请检查mq服务器或mq配置'
@@ -754,6 +776,10 @@ let errCode = {
         en: "ABI info of this id not exists",
         zh: "Abi Id不能为空"
     },
+    "202110": {
+        en: "User's signUserId not exist",
+        zh: "用户的signUserId不存在"
+    },
     "201232": {
         en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
         zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY----- "
@@ -771,13 +797,66 @@ let errCode = {
         en: "Node's front not exists",
         zh: "节点前置不存在"
     },
+    "203003": {
+        en: "Param exception",
+        zh: "参数异常"
+    },
+    "203004": {
+        en: "Sign user id cannot be blank",
+        zh: "签名用户id不能为空"
+    },
+    "203005": {
+        en: "Invalid sign user id (max length of 64, only support letter and digit)",
+        zh: "无效的签名用户id（最大长度为64，仅支持字母和数字）"
+    },
+    "203006": {
+        en: "App id cannot be blank",
+        zh: "应用程序id不能为空"
+    },
+    "203007": {
+        en: "App id invalid, only support letter and digit",
+        zh: "应用程序id无效，仅支持字母和数字"
+    },
+    "203008": {
+        en: "Encrypt type should be 0 (ecdsa) or 1 (guomi)",
+        zh: "加密类型应为0（ecdsa）或1（guomi）"
+    },
+    "203009": {
+        en: "Encoded data string must be hex string",
+        zh: "编码的数据字符串必须是十六进制字符串"
+    },
+
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
     },
     "302001": {
-        en: "access denied",
+        en: "Access denied",
         zh: "没有权限"
+    },
+    "303001": {
+        en: "User of this sign user id is already exists",
+        zh: "此签名用户id的用户已存在"
+    },
+    "303002": {
+        en: "User does not exist or already been disable",
+        zh: "用户不存在或已被禁用"
+    },
+    "303003": {
+        en: "PrivateKey is null",
+        zh: "PrivateKey为空"
+    },
+    "303004": {
+        en: "PrivateKey decode fail",
+        zh: "私钥解码失败"
+    },
+    "303005": {
+        en: "PrivateKey format error",
+        zh: "PrivateKey格式错误"
+    },
+    "303006": {
+        en: "User of this sign user id is  already been disable",
+        zh: "此签名用户id的用户已被禁用"
     },
     "402000": {
         en: "param exception",

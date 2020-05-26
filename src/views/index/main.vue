@@ -181,17 +181,10 @@ export default {
         },
         getResetPassword() {
             let reqData;
-            // if(localStorage.getItem("encryptionId") == 1){
-            //     reqData = {
-            //         oldAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.oldPass),
-            //         newAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.pass)
-            //     };
-            // }else{
                 reqData = {
                     oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
                     newAccountPwd: sha256(this.rulePasswordForm.pass)
                 };
-            // }
             resetPassword(reqData, {})
                 .then(res => {
                     this.loading = false;
