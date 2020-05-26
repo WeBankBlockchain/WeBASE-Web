@@ -89,7 +89,9 @@ export default {
         groupConf4: "a conflict between the local data of and the group data on the chain. For example, to rebuild the chain or group, please",
         groupMgmt: "to group management",
         groupConf4_1: "delete the data of the corresponding group or create a new background database in",
-        groupConf4_all: "There is a conflict between the local data of the group and the group data on the chain. For example, to rebuild the chain or group, please delete the data of the corresponding group or create a new background database in group management"
+        groupConf4_all: "There is a conflict between the local data of the group and the group data on the chain. For example, to rebuild the chain or group, please delete the data of the corresponding group or create a new background database in group management",
+        confirm: 'Confirm',
+        importSuccessed: 'Import Successed',
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -177,7 +179,8 @@ export default {
         groupManagement: 'Group Mgmt',
         abiList: 'ABI List',
         parseAbi: 'Parse ABI',
-        uploadSolc: 'Upload different versions of compiler'
+        uploadSolc: 'Upload different versions of compiler',
+        otherUser: 'Users without user name or public key users are external administrator accounts'
     },
     home: {
         nodes: "Nodes",
@@ -327,10 +330,14 @@ export default {
         signUserId: 'Sign User Id',
         inputFileName: "Please enter privateKey name",
         inputFileType: "Please enter privateKey type",
-        fileName: "privateKey Name",
-        fileType: "file Type",
+        fileName: "PrivateKey Name",
+        fileType: "File Type",
         importFile: "Import file",
-        copy: "Copy"
+        copy: "Copy",
+        password: "Password",
+        placeholderPassword: "Please enter password",
+        passwordError: "Password cannot be Chinese",
+        file: "File"
     },
     system: {
         chainManager: "Chain Management Permission",

@@ -1,26 +1,45 @@
 <template>
     <div class="key-dialog">
         <el-form :model="keyForm" :rules="rules" ref="keyForm" label-width="142px" class="demo-ruleForm">
-            <el-form-item :label="$t('privateKey.fileName')" prop="fileName" style="width: 546px;">
-                <el-input v-model="keyForm.fileName" :placeholder="$t('privateKey.inputFileName')" maxlength="12"></el-input>
-            </el-form-item>
             <el-form-item :label="$t('privateKey.fileType')" prop="fileType" style="width: 546px;">
-                <el-radio-group v-model="keyForm.fileType">
+                <el-radio-group v-model="keyForm.fileType" @change="changeFileType">
                     <el-radio :label="item.enName" :key="item.enName" v-for="item in fileTypeList">{{item.enName}}</el-radio>
                 </el-radio-group>
             </el-form-item>
+            <el-form-item :label="$t('privateKey.fileName')" prop="fileName" style="width: 546px;">
+                <el-input v-model="keyForm.fileName" :placeholder="$t('privateKey.inputFileName')" maxlength="12"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
+                <el-input type="password" v-model="keyForm.password" :placeholder="$t('privateKey.placeholderPassword')"></el-input>
+            </el-form-item>
+             <el-form-item :label="$t('privateKey.description')" prop="description" style="width: 546px;">
+                <el-input v-model="keyForm.description" :placeholder="$t('privateKey.inputDescription')"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('privateKey.file')" prop="file" style="width: 546px;">
+                <el-upload
+                    ref="upload"
+                    :accept="keyForm.fileType"
+                    action=""
+                    :http-request="uploadFile"
+                    :auto-upload="false"
+                    :file-list="fileList"
+                    show-file-list
+                    :limit="1">
+                    <el-button slot="trigger" size="small" type="primary">{{this.$t('privateKey.importFile')}}</el-button>
+                </el-upload>
+            </el-form-item>
+           
         </el-form>
         <div class="dialog-footer">
             <el-button class="footer-button" @click="modelClose">{{this.$t('text.cancel')}}</el-button>
-            <el-upload ref="upload" action :http-request="uploadFile" :before-upload="onBeforeUpload" :accept="keyForm.fileType" :outo-uploading="false" :show-file-list="false">
-                <el-button type="primary" :disabled="disabled">{{this.$t('privateKey.importFile')}}</el-button>
-            </el-upload>
+            <el-button style="margin-left: 10px;" type="primary" @click="submitUploadList">{{this.$t('text.confirm')}}</el-button>
         </div>
     </div>
 </template>
 
 <script>
-import {  } from "@/util/api";
+import { queryImportPrivateKey, ImportPemPrivateKey, ImportP12PrivateKey } from "@/util/api";
+let Base64 = require("js-base64").Base64;
 export default {
     name: 'importKey',
 
@@ -31,12 +50,15 @@ export default {
     },
 
     data() {
+
         return {
             loading: false,
             disabled: false,
             keyForm: {
                 fileName: "",
-                fileType: ".txt"
+                fileType: ".txt",
+                password: "",
+                description: ""
             },
             fileTypeList: [
                 {
@@ -48,12 +70,23 @@ export default {
                 {
                     enName: '.p12',
                 }
-            ]
+            ],
+            fileList: []
         }
     },
 
     computed: {
         rules() {
+            var checkData = (rule, value, callback) => {
+                if (value) {
+                    if (/[\u4E00-\u9FA5]/g.test(value)) {
+                        callback(new Error(this.$t('privateKey.passwordError')));
+                    } else {
+                        callback();
+                    }
+                }
+                callback();
+            }
             let data = {
                 fileName: [
                     {
@@ -74,6 +107,14 @@ export default {
                         message: this.$t('privateKey.inputFileType'),
                         trigger: "blur"
                     }
+                ],
+                password: [
+                    {
+                        required: true,
+                        message: this.$t('privateKey.placeholderPassword'),
+                        trigger: "blur"
+                    },
+                    { validator: checkData, trigger: 'blur' }
                 ]
             };
             return data
@@ -98,59 +139,148 @@ export default {
             this.loading = false;
             this.$store.state.importRivateKey = false;
         },
-        onBeforeUpload(file) {
-            
+        onBeforeUpload() {
+
+        },
+        changeFileType(){
+            this.$refs.upload.clearFiles()
+            this.keyForm.fileName = ''
+            this.keyForm.description = '';
+        },
+        submitUploadList(){
+            this.$refs.upload.submit()
         },
         uploadFile(param) {
             this.$refs['keyForm'].validate(valid => {
                 if (valid) {
                     var reader = new FileReader(), self = this;
                     reader.readAsText(param.file, "UTF-8");
-                    reader.onload = function (e) {
-                        var fileString = e.target.result;
-                        self.postFile(fileString)
+                    reader.onload = function (evt) {
+                        var fileContent = evt.target.result;
+                        switch (self.keyForm.fileType) {
+                            case '.txt':
+                                try {
+                                    var fileString = JSON.parse(fileContent).privateKey;
+                                    self.textRivateKey(fileString)
+                                } catch (error) {
+                                    console.log(error)
+                                }
+                                break;
+                            case '.pem':
+
+                                self.pemRivateKey(fileContent)
+                                break;
+                            case '.p12':
+                                self.p12RivateKey(param.file)
+                                break;
+                        }
                     }
                     this.$refs.upload.clearFiles()
                 } else {
                     return false;
                 }
             });
+        },
+        textRivateKey(fileString) {
+            let reqQuery = {
+                privateKey: Base64.encode(fileString),
+                userName: this.keyForm.fileName,
+                groupId: localStorage.getItem("groupId"),
+                description: this.keyForm.description,
+            };
+            queryImportPrivateKey(reqQuery)
+                .then(res => {
+                    const { data, status } = res;
+                    if (status === 200) {
+                        this.$emit('importRivateKeySuccess')
+                        this.modelClose()
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.importSuccessed')
+                        })
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.systemError')
+                    });
+                });
+        },
+        pemRivateKey(fileContent) {
+            let reqQuery = {
+                pemContent: fileContent,
+                userName: this.keyForm.fileName,
+                groupId: localStorage.getItem("groupId"),
+                description: this.keyForm.description,
+            };
+            ImportPemPrivateKey(reqQuery)
+                .then(res => {
+                    const { data, status } = res;
+                    if (status === 200) {
+                        this.$emit('importRivateKeySuccess')
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.importSuccessed')
+                        });
+                        this.modelClose()
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.systemError')
+                    });
+                });
+
 
         },
-        postFile(fileString) {
-            let param = {
-                content: fileString,
-                fileType: this.keyForm.fileName
-            }
-            console.log('postFile',param)
-            importCert(param).then(res => {
-                const { data } = res;
-                if (data.code === 0) {
+        p12RivateKey(param) {
+            var form = new FormData()
+            form.append('userName', this.keyForm.fileName)
+            form.append('p12File', param)
+            form.append('p12Password', this.keyForm.password)
+            form.append('groupId', localStorage.getItem("groupId"))
+            form.append('description', this.keyForm.description)
+            ImportP12PrivateKey(form)
+                .then(res => {
+                    const { data, status } = res;
+                    if (status === 200) {
+                        this.$emit('importRivateKeySuccess')
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.importSuccessed')
+                        });
+                        this.modelClose()
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+                .catch(err => {
                     this.$message({
-                        type: 'success',
-                        message: this.$t('system.importSuccess'),
-                    })
-                    this.$emit('importRivateKeySuccess')
-                } else {
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
                         type: "error",
-                        duration: 2000
+                        message: this.$t('text.systemError')
                     });
-                }
-            }).catch(err => {
-                this.$message({
-                    message: this.$t('text.systemError'),
-                    type: "error",
-                    duration: 2000
                 });
-            })
         },
     }
 }
 </script>
 
-<style scoped>
+<style scoped> 
 .footer-button {
     margin-right: 10px;
 }
