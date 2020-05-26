@@ -89,7 +89,9 @@ export default {
         groupConf4: "的本地数据与链上群组数据存在冲突，如重建链或群组，请到",
         groupMgmt: "群组管理",
         groupConf4_1: "中删除相应群组的数据或新建后台数据库",
-        groupConf4_all: "群组的本地数据与链上群组数据存在冲突，如重建链或群组，请在群组管理中删除相应群组的数据或新建后台数据库"
+        groupConf4_all: "群组的本地数据与链上群组数据存在冲突，如重建链或群组，请在群组管理中删除相应群组的数据或新建后台数据库",
+        confirm: '确认',
+        importSuccessed: '导入成功',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -177,7 +179,8 @@ export default {
         groupManagement: '群组管理',
         abiList: 'ABI列表',
         parseAbi: 'ABI解析',
-        uploadSolc: '上传不同版本编译器'
+        uploadSolc: '上传不同版本编译器',
+        otherUser: '无用户名的用户或公钥用户为外部管理员账户'
     },
     home: {
         nodes: "节点个数",
@@ -329,8 +332,12 @@ export default {
         inputFileType: "请选择文件类型",
         fileName: "私钥用户名",
         fileType: "文件类型",
-        importFile: "导入文件",
-        copy: "复制"
+        importFile: "选择文件",
+        copy: "复制",
+        password: "密码",
+        placeholderPassword: "请输入密码",
+        passwordError: "密码不能是汉字",
+        file: "文件"
     },
     system: {
         chainManager: "链管理权限",

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="add-wrapper">
         <div class="text-center">
             <span class="fileinput-button">
                 <span class="font-color-00c1d4">{{this.$t('system.import')}}</span>
@@ -203,6 +203,9 @@ export default {
 </script>
 
 <style scoped>
+.add-wrapper {
+
+}
 .tool-tip {
     position: absolute;
     top: 11px;
@@ -224,5 +227,8 @@ export default {
     cursor: pointer;
     height: 42px;
     width: 49px;
+}
+.demo-ruleForm {
+    padding-right: 30px;
 }
 </style>

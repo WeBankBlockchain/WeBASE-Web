@@ -35,7 +35,7 @@
                         </el-option>
                     </el-select>
                     <el-table :data="updatePermissionList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
-                        <el-table-column v-for="head in permissionHead" :label="head.name" :key="head.enName" :width="head.width" show-overflow-tooltip align="center">
+                        <el-table-column v-for="head in permissionHead" :label="head.name" :key="head.enName" :width="head.width" :render-header="renderHeader" show-overflow-tooltip align="center">
                             <template slot-scope="scope">
                                 <template v-if="head.enName!='operate'">
                                     <span v-if="head.enName ==='address'">
@@ -54,7 +54,7 @@
                                     <el-checkbox v-else :disabled="disabled" v-model="scope.row[head.enName]"></el-checkbox>
                                 </template>
                                 <template v-else>
-                                    <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="updatePermission(scope.row)">{{$t('system.submit')}}</el-button>
+                                    <el-button :disabled="disabled || scope.row.disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="updatePermission(scope.row)">{{$t('system.submit')}}</el-button>
                                 </template>
                             </template>
                         </el-table-column>
@@ -204,6 +204,16 @@ export default {
                     }
                 }
             })
+            list.forEach(item => {
+                item.userName = this.otherUserName(item.address)
+            });
+            list.forEach(item => {
+                if (!item.userName && !this.authorRivateKeyList.length) {
+                    item.disabled = true
+                } else {
+                    item.disabled = false
+                }
+            })
             return list
         }
     },
@@ -303,19 +313,19 @@ export default {
             getUserList(reqData, {})
                 .then(res => {
                     if (res.data.code === 0) {
-                        if(res.data.data.length == 0){
+                        if (res.data.data.length == 0) {
                             this.$message({
                                 type: "info",
                                 message: this.$t('contracts.addPrivateKeyInfo'),
-                            }); 
+                            });
                         }
                         this.adminRivateKeyList = res.data.data;
                     } else {
-                            this.$message({
-                                message: this.$t('text.systemError'),
-                                type: "error",
-                                duration: 2000
-                            });
+                        this.$message({
+                            message: this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
                         this.$message.closeAll();
                     }
                 })
@@ -372,24 +382,24 @@ export default {
                 if (data.code === 0) {
                     var arr = [];
                     data.data.forEach(item => {
-                        arr.push(Object.assign({}, { address: item.key },{ otherAddress: item.key }, item.data))
+                        arr.push(Object.assign({}, { address: item.key }, { otherAddress: item.key }, item.data))
                     })
                     this.permissionList = arr;
                     this.sortedTotal = data.totalCount;
-                }else{
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             }).catch(err => {
                 this.loading = false;
                 this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
         updatePermission(row) {
@@ -426,21 +436,21 @@ export default {
                 } else {
                     this.getPermissionInfo()
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
-            .catch(err => {
-                this.loading = false;
-                this.getPermissionInfo()
-                this.$message({
+                .catch(err => {
+                    this.loading = false;
+                    this.getPermissionInfo()
+                    this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-            });
+                });
         },
         formatPermissionStatus(key) {
             var val = '';
@@ -457,6 +467,15 @@ export default {
                     break;
             }
         },
+        otherUserName(address) {
+            var userName = '';
+            this.adminRivateKeyList.forEach(item => {
+                if (item.address === address) {
+                    userName = item.userName
+                }
+            })
+            return userName
+        },
         formatUserName(address) {
             var userName = '';
             this.adminRivateKeyList.forEach(item => {
@@ -464,7 +483,7 @@ export default {
                     userName = item.userName
                 }
             })
-            if(!userName){
+            if (!userName) {
                 userName = address;
             }
             return userName
@@ -486,6 +505,18 @@ export default {
                         duration: 2000
                     });
                 });
+            }
+        },
+        renderHeader(h, { column, $index }) {
+            if ($index === 0) {
+                return h('span', {}, [
+                    h('span', {}, `${column.label}`),
+                    h('el-popover', { props: { placement: 'top-start', width: '200', trigger: 'hover', content: this.$t('title.otherUser') } }, [
+                        h('i', { slot: 'reference', class: 'el-icon-info' }, '')
+                    ])
+                ])
+            }else {
+                return h('span', {}, `${column.label}`)
             }
         },
     }

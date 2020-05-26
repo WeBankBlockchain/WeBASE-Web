@@ -51,3 +51,15 @@ Vue.directive('dialogDrag', {
 //         const dialogHeaderEl = el.querySelector('.el-popover');
 //     }
 // })
+Vue.directive('preventReClick', {
+    inserted: function (el, binding) {
+        el.addEventListener('click', () => {
+            if (!el.disabled) {
+                el.disabled = true
+                setTimeout(() => {
+                    el.disabled = false
+                }, binding.value || 3000)
+            }
+        })
+    }
+});

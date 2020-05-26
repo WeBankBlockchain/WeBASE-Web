@@ -20,10 +20,10 @@
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
                     <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t('privateKey.addUser')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_rivate_key_dialog')">{{this.$t('privateKey.importRivateKey')}}</el-button>
                     <el-tooltip effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
-                    <!-- <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_rivate_key_dialog')">{{this.$t('privateKey.importRivateKey')}}</el-button> -->
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" style="width: 370px;">

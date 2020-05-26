@@ -5,7 +5,7 @@
             <div class="search-part" style="padding-top: 20px;">
                 <div class="search-part-left">
                     <el-button type="primary" class="search-part-left-btn" @click="generateGroup">{{this.$t("nodes.addGroup")}}</el-button>
-                    <el-button type="text" icon="el-icon-refresh" @click="queryUpdateGroup" :title="$t('alarm.refresh')"></el-button>
+                    <el-button type="text" icon="el-icon-refresh" @click="queryUpdateGroup" v-preventReClick :title="$t('alarm.refresh')"></el-button>
                 </div>
                 <div class="">
                     <el-table :data="groupList" class="search-table-content" v-loading="loading">
@@ -17,7 +17,7 @@
                                     </span>
                                 </span>
                                 <span v-else-if='head.enName === "groupStatus"' :style="{'color': groupStatusColor(scope.row[head.enName])}">
-                                    <span  class="cursor-pointer" @click="queryCrudGroup(scope.row)">
+                                    <span class="cursor-pointer" @click="queryCrudGroup(scope.row)">
                                         {{status(scope.row[head.enName])}}
                                     </span>
                                     <i :class="scope.row['icon']" :title="scope.row['icon_text']"></i>
@@ -37,7 +37,7 @@
                     <el-dialog :title="$t('nodes.addGroup')" :visible.sync="generateGroupVisibility" v-if="generateGroupVisibility" center>
                         <generate-group @generateSuccess="generateSuccess" @close="close"></generate-group>
                     </el-dialog>
-                    <el-dialog :title="$t('nodes.modifyGroup')" :visible.sync="modifyGroupVisibility" v-if="modifyGroupVisibility" center>
+                    <el-dialog :title="$t('nodes.modifyGroup')+'('+'ID:'+' '+`${modifyGroupId}`+')'" :visible.sync="modifyGroupVisibility" v-if="modifyGroupVisibility" center>
                         <modify-group @modifySuccess="modifySuccess" @modifyClose="modifyClose" :itemGroupData="itemGroupData"></modify-group>
                     </el-dialog>
                 </div>
@@ -79,7 +79,8 @@ export default {
             total: 0,
             dropLoading: false,
             dropIndex: '',
-            updateGroupType: ''
+            updateGroupType: '',
+            modifyGroupId: ''
         }
     },
 
@@ -143,7 +144,7 @@ export default {
             this.generateGroupVisibility = false
             this.queryGroupTable();
             this.updateGroup++;
-            this.updateGroupType = 'update'
+            // this.updateGroupType = 'update'
         },
         modifyClose() {
             this.modifyGroupVisibility = false;
@@ -152,7 +153,7 @@ export default {
             // this.modifyGroupVisibility = false;
             this.queryGroupTable();
             this.updateGroup++;
-            this.updateGroupType = 'update'
+            // this.updateGroupType = 'update'
         },
         queryGroupTable() {
             let reqData = {
@@ -172,7 +173,7 @@ export default {
                                 item.icon = 'el-icon-warning';
                                 item.icon_text = `${this.$t('text.group')}${this.$t('text.groupConf')}`
                             }
-                            if(item.groupStatus === 4) {
+                            if (item.groupStatus === 4) {
                                 item.icon = 'el-icon-warning'
                                 item.icon_text = `${this.$t('text.groupConf4_all')}`
                             }
@@ -226,6 +227,7 @@ export default {
         },
         queryCrudGroup(row) {
             this.itemGroupData = row;
+            this.modifyGroupId = row.groupId
             this.modifyGroupVisibility = true;
         },
         queryDeleteGroupData(val) {
