@@ -214,7 +214,10 @@ export function completionDateData(startTime, endTime, data) {
     }
     return dateList;
 }
-
+/**
+* array:[{key: value}]
+* onlyKey
+* */
 export function unique(array, onlyKey) {
     let result = {}, finalResult = [], oneKey = onlyKey;
     for (let i = 0; i < array.length; i++) {
@@ -225,6 +228,13 @@ export function unique(array, onlyKey) {
         finalResult.push(result[key]);
     }
     return finalResult;
+}
+/**
+* array:[]
+* */
+export function unique1(array) {
+    var tmp = Array.from(new Set(array));
+    return tmp;
 }
 
 export function isJson(str) {

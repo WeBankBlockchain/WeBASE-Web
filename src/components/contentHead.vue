@@ -44,10 +44,10 @@
 
             </span>
             <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
-                <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt">{{this.$t('title.groupManagement')}}</li>
+                <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt" v-if="root==='admin'">{{this.$t('title.groupManagement')}}</li>
                 <ul class="group-item">
                     <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>
-                        <i class="wbs-icon-radio font-6" :style="{'color': groupStatusColor(item.groupStatus)}"></i> 
+                        <i class="wbs-icon-radio font-6" :style="{'color': groupStatusColor(item.groupStatus)}"></i>
                         {{item.groupName}}
                     </li>
                 </ul>
@@ -134,7 +134,8 @@ export default {
             way: this.route || "",
             changePasswordDialogVisible: false,
             groupList: [],
-            abnormalList: []
+            abnormalList: [],
+            root: localStorage.getItem('root')
         };
     },
     beforeDestroy: function () {
@@ -257,9 +258,11 @@ export default {
                     if (res.data.code === 0) {
                         var abnormalData = res.data.data;
                         this.abnormalList = []
-                        abnormalData.forEach(item => {
-                            this.abnormalList.push(item.groupId)
-                        });
+                        if (abnormalData) {
+                            abnormalData.forEach(item => {
+                                this.abnormalList.push(item.groupId)
+                            });
+                        }
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
