@@ -92,6 +92,7 @@ export default {
         groupConf4_all: "There is a conflict between the local data of the group and the group data on the chain. For example, to rebuild the chain or group, please delete the data of the corresponding group or create a new background database in group management",
         confirm: 'Confirm',
         importSuccessed: 'Import Successed',
+        noExportGroup: "The current group is obtained from the group on the chain, and there is no creation block configuration"
     },
     rule: {
         textLong: "1 to 32 characters in length",

@@ -310,7 +310,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -319,7 +318,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getChart: function () {
@@ -346,7 +345,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -355,7 +353,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getNodeTable: function () {
@@ -430,7 +428,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -439,7 +436,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getTransaction: function () {
@@ -462,7 +459,6 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        // this.$message.closeAll()
                     }
                 })
                 .catch(err => {
@@ -471,7 +467,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         goDetailRouter(item) {

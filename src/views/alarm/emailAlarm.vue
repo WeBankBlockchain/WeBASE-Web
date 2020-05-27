@@ -32,16 +32,6 @@
                 <el-form-item :label="$t('alarm.password')" prop="password" style="width: 420px;display: inline-block">
                     <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9 :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item><br>
-                
-                <!-- <el-form-item label="Status" style="width: 420px;display: inline-block">
-                    <el-switch
-                        v-model="emailForm.status"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        :active-value="1"
-                        :inactive-value="0">
-                    </el-switch>
-                </el-form-item> -->
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('emailForm')">{{$t('alarm.save')}}</el-button>
@@ -72,10 +62,8 @@ export default {
                 password: "",
                 format: "",
                 authentication: 0,
-                // status: 0,
             },
             emailData: null,
-            // testEmail: "",
             authDisabled: false,
             tipShow: false
         }
@@ -226,7 +214,6 @@ export default {
                         this.emailForm.password = res.data.data[0].password;
                         this.emailForm.format = res.data.data[0].defaultEncoding;
                         this.emailForm.authentication = res.data.data[0].authentication;
-                        // this.emailForm.status = res.data.data[0].status;
                         this.emailData = res.data.data[0];
                         if(!res.data.data[0].authentication){
                             this.authDisabled = true
@@ -268,7 +255,6 @@ export default {
                 protocol: this.emailForm.serverType,
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,
-                // status: this.emailForm.status,
             }
             changeEmailConfig(data).then(res => {
                 this.tipShow = false

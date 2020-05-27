@@ -207,7 +207,7 @@ export default {
                     type: "error",
                     duration: 2000
                 });
-                this.$message.closeAll()
+                
             })
                 ;
         },
@@ -277,7 +277,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 })
         },
         groupStatusColor(key) {
