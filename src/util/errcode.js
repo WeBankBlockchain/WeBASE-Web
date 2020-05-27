@@ -28,7 +28,7 @@ let errCode = {
     },
     "101003": {
         en: "web3jMap of groupId is null, please try again",
-        zh: 'groupId的web3jMap为空，请重试'
+        zh: '当前群组的web3j为空'
     },
     "101004": {
         en: "groupList error for no group, web3jMap is empty!",
@@ -476,8 +476,8 @@ let errCode = {
         zh: '数据库异常'
     },
     "202002": {
-        en: "not found any front",
-        zh: '未添加前置'
+        en: "Not found any front for this group",
+        zh: '找不到此群组的任何前置'
     },
     "202003": {
         en: "not support this ip",

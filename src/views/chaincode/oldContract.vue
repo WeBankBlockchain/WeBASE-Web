@@ -61,7 +61,6 @@
                 </el-pagination>
             </div>
         </div>
-        <!-- <v-editor :show='editorShow' :data='editorData' v-if='editorShow' @close='close'></v-editor> -->
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
@@ -171,8 +170,6 @@ export default {
                     contractId: val.contractId
                 }
             })
-            // this.editorShow = true;
-            // this.editorData = val.contractSource
         },
         editorClose: function () {
             this.editorShow = false;

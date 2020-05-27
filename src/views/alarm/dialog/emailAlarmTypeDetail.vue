@@ -167,11 +167,6 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.accountList = res.data.data || [];
-                        // for( let i = 0; i < this.accountList.length; i++){
-                        //     if(!this.accountList[i].email){
-                        //         this.accountList.splice(i,1)
-                        //     }
-                        // }
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
