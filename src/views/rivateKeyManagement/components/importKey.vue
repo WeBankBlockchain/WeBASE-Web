@@ -109,11 +109,6 @@ export default {
                     }
                 ],
                 password: [
-                    {
-                        required: true,
-                        message: this.$t('privateKey.placeholderPassword'),
-                        trigger: "blur"
-                    },
                     { validator: checkData, trigger: 'blur' }
                 ]
             };

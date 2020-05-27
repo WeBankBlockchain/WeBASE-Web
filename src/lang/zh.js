@@ -92,6 +92,7 @@ export default {
         groupConf4_all: "群组的本地数据与链上群组数据存在冲突，如重建链或群组，请在群组管理中删除相应群组的数据或新建后台数据库",
         confirm: '确认',
         importSuccessed: '导入成功',
+        noExportGroup: "当前群组为同步链上群组所得，无创世块配置"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

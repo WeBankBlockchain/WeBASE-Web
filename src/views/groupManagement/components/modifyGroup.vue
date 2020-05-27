@@ -15,7 +15,7 @@
                     </span>
                 </template>
             </el-table-column>
-            <el-table-column fixed="right" :label="$t('nodes.operation')" width="120">
+            <el-table-column fixed="right" :label="$t('nodes.operation')" width="170">
                 <template slot-scope="scope">
                     <el-button :disabled="scope.row.frontId=='-' ? true : false" :loading="loading&&operateIndex==scope.row.nodeId&&operateType==item.enName" type="text" size="small" @click="queryOperateGroup(scope.row,item.enName)" v-for="item in scope.row.groupStatusList" :key="item.enName">{{item.name}}</el-button>
                 </template>
@@ -31,6 +31,7 @@
 
 import { createGroup, getFronts, crudGroup, groupStatus, getNodeList, p2pNodeList, getConsensusNodeId } from "@/util/api"
 import nodeAddGroup from "./nodeAddGroup";
+
 export default {
     name: 'modify',
 
@@ -74,7 +75,7 @@ export default {
                 {
                     enName: "nodeId",
                     name: this.$t("nodes.nodeId"),
-                    width: '280'
+                    width: '220'
                 },
                 {
                     enName: "frontIp",
@@ -290,23 +291,23 @@ export default {
             getConsensusNodeId(reqParam)
                 .then(res => {
                     if (res.data.code === 0) {
-                        var array = res.data.data, groupNodeList=[];
-                        array.forEach(item=>{
-                            if(item.nodeType==='sealer' || item.nodeType === 'observer') {
+                        var array = res.data.data, groupNodeList = [];
+                        array.forEach(item => {
+                            if (item.nodeType === 'sealer' || item.nodeType === 'observer') {
                                 groupNodeList.push(item.nodeId)
                             }
                         })
                         this.newNodeList = list;
-                        this.newNodeList.forEach(item=>{
-                            if(groupNodeList.includes(item.nodeId)){
+                        this.newNodeList.forEach(item => {
+                            if (groupNodeList.includes(item.nodeId)) {
                                 item.groupId = this.itemGroupData.groupId
-                            }else {
+                            } else {
                                 item.groupId = '-'
                             }
                         })
                     } else {
                         this.newNodeList = list;
-                        this.newNodeList.forEach(item=>{
+                        this.newNodeList.forEach(item => {
                             item.groupId = '-'
                         })
                         this.$message({
@@ -421,7 +422,8 @@ export default {
                     });
                 });
             }
-        }
+        },
+        
     }
 }
 </script>

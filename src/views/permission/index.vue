@@ -44,6 +44,9 @@
                                             {{formatUserName(scope.row[head.enName])}}
                                         </template>
                                         <template v-else>
+                                            <el-tooltip :content="scope.row['hasPk'] == 1 ?  $t('privateKey.privateKey'):$t('privateKey.publicKey')" placement="top" effect="dark">
+                                                <i class="wbs-icon-key-b font-12" :style="{'color': scope.row['hasPk'] == 1 ? '#FFC31F':'#4F9DFF'}"></i>
+                                            </el-tooltip>
                                             {{formatUserName(scope.row[head.enName])}}
                                         </template>
                                     </span>
@@ -191,7 +194,8 @@ export default {
             return arr
         },
         updatePermissionList() {
-            var list = this.permissionList;
+            var list = this.permissionList, array = this.adminRivateKeyList;
+
             list.forEach(item => {
                 for (let key in item) {
                     switch (item[key]) {
@@ -205,13 +209,18 @@ export default {
                 }
             })
             list.forEach(item => {
-                item.userName = this.otherUserName(item.address)
-            });
+                array.forEach(it => {
+                    if (item.address === it.address) {
+
+                        item.hasPk = it.hasPk
+                    }
+                })
+            })
             list.forEach(item => {
-                if (!item.userName && !this.authorRivateKeyList.length) {
-                    item.disabled = true
-                } else {
+                if (item.hasPk === 1 || this.authorRivateKeyList.length) {
                     item.disabled = false
+                } else {
+                    item.disabled = true
                 }
             })
             return list
@@ -326,7 +335,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll();
+                        ;
                     }
                 })
                 .catch(err => {
@@ -335,7 +344,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll();
+                    ;
                 });
         },
         close() {
@@ -515,7 +524,7 @@ export default {
                         h('i', { slot: 'reference', class: 'el-icon-info' }, '')
                     ])
                 ])
-            }else {
+            } else {
                 return h('span', {}, `${column.label}`)
             }
         },
@@ -524,10 +533,4 @@ export default {
 </script>
 
 <style scoped>
-/* .search-table-content >>> .el-table__row > td:nth-last-child(1) > div {
-    visibility: hidden;
-}
-.search-table-content >>> .el-table__row:hover > td:nth-last-child(1) > div {
-    visibility: visible;
-} */
 </style>

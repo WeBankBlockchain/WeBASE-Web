@@ -29,6 +29,10 @@
                             <template slot-scope="scope">
                                 <el-button type="text" size="small" @click="queryCrudGroup(scope.row)">{{$t('text.update')}}</el-button>
                                 <el-button type="text" size="small" :loading="dropLoading&&dropIndex===scope.row.groupId" @click="queryDeleteGroupData(scope.row)">{{$t('text.dropGroupData')}}</el-button>
+                                <el-button type="text" size="small" :disabled="scope.row.groupType===1 ? true : false" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
+                                <el-tooltip effect="light" :content="$t('text.noExportGroup')" placement="bottom-end">
+                                    <i v-show="scope.row.groupType===1 ? true : false" class="el-icon-warning"></i>
+                                </el-tooltip>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -52,6 +56,7 @@ import contentHead from "@/components/contentHead";
 import generateGroup from "./components/generateGroup";
 import modifyGroup from "./components/modifyGroup";
 import { crudGroup, getUpdateGroup, getGroupsInvalidIncluded, deleteGroupData } from "@/util/api"
+const FileSaver = require("file-saver");
 export default {
     name: 'groupManagement',
 
@@ -273,8 +278,10 @@ export default {
                     })
                 })
         },
-        groupDetail() {
-
+        exportFile(itemGroupData) {
+            let str = JSON.stringify(itemGroupData);
+            var blob = new Blob([str], { type: "text;charset=utf-8" });
+            FileSaver.saveAs(blob, itemGroupData.groupName);
         },
         status(key) {
             switch (key) {
