@@ -174,6 +174,7 @@ export default {
             this.abiContent = this.aceEditor.getSession().getValue();
         },
         changeFunType(val) {
+            this.validateArgumentValue()
             if (!this.abiJsonContent.length) {
                 this.initArgument()
             } else {
@@ -222,6 +223,7 @@ export default {
                     item.argumentValue = ''
                 }
             })
+            this.validateArgumentValue()
         },
         parseAbi() {
             if (typeof this.abiContent == 'string') {
@@ -284,7 +286,17 @@ export default {
                 this.parseNewAbi()
             }
         },
+        validateArgumentValue(){
+            this.argumentList.forEach(item=>{
+                if(item.argumentValue) {
+                    item.msgObj = validate(item.type, item.argumentValue)
+                }else {
+                    item.msgObj = undefined
+                };
+            })
+        },
         inputArgumentValue(val) {
+            this.validateArgumentValue()
             if (val) {
                 if (this.functionType === 'constructor') {
                     this.parseConstructorAbi()
@@ -336,8 +348,11 @@ export default {
             var inputs = [], inputsVal = [];
             this.argumentList.forEach(item => {
                 inputs.push(item.type)
-                inputsVal.push(dataType(item.type, item.argumentValue))
-
+                try {
+                    inputsVal.push(dataType(item.type, item.argumentValue))
+                } catch (error) {
+                    console.log('erroe:',error)
+                }
             })
             if(!inputs.length){
                 this.textarea = '';

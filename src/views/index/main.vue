@@ -63,11 +63,6 @@ export default {
         'v-guide': guide
     },
     data: function() {
-        // if (sessionStorage.getItem("reload") == 1) {
-        //     sessionStorage.setItem("reload", 2);
-        //     router.go(0);
-        // }
-        
         return {
             guideShow: false,
             frontShow: false,
@@ -212,7 +207,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getGroupList: function(){

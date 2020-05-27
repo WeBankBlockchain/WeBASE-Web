@@ -5,7 +5,6 @@
                 <span class="font-color-00c1d4">{{this.$t('system.import')}}</span>
                 <input type="file" @change="importFile($event)" />
             </span>
-            <el-button type="text" @click="exportFile">{{this.$t('system.export')}}</el-button>
         </div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('nodes.groupTimestamp')" prop="groupTimestamp" style=" position:relative">
@@ -30,7 +29,6 @@
 
 <script>
 import { createGroup, crudGroup } from "@/util/api"
-const FileSaver = require("file-saver");
 export default {
     name: 'nodeAddGroup',
 
@@ -191,11 +189,6 @@ export default {
                 
                 
             }
-        },
-        exportFile() {
-            let str = JSON.stringify(this.itemGroupData);
-            var blob = new Blob([str], { type: "text;charset=utf-8" });
-            FileSaver.saveAs(blob, this.itemGroupData.groupName);
         },
     }
 

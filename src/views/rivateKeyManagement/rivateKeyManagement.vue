@@ -41,6 +41,10 @@
                                     <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
                                     {{scope.row[head.enName]}}
                                 </span>
+                                <span v-else-if="head.enName ==='signUserId'">
+                                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
+                                    {{scope.row[head.enName]}}
+                                </span>
                                 <span v-else-if="head.enName ==='userId'">
                                     <el-tooltip :content="scope.row['hasPk'] == 1 ?  $t('privateKey.privateKey'):$t('privateKey.publicKey')" placement="top" effect="dark">
                                         <i class="wbs-icon-key-b font-12" :style="{'color': scope.row['hasPk'] == 1 ? '#FFC31F':'#4F9DFF'}"></i>

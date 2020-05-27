@@ -15,7 +15,6 @@
  */
 <template>
     <div class="contract-content">
-        <!-- <v-content-head :headTitle="'合约管理'" :icon="true" v-if="urlQuery.from==='home'" :route="`${urlQuery.from}`"></v-content-head> -->
         <v-content-head  :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;"  @changGroup="changGroup"></v-content-head>
         <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
             <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide"></v-menu>
