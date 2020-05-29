@@ -25,7 +25,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column fixed="right" :label="$t('nodes.operation')" width="200">
+                        <el-table-column fixed="right" :label="$t('nodes.operation')" width="250">
                             <template slot-scope="scope">
                                 <el-button type="text" size="small" @click="queryCrudGroup(scope.row)">{{$t('text.update')}}</el-button>
                                 <el-button type="text" size="small" :loading="dropLoading&&dropIndex===scope.row.groupId" @click="queryDeleteGroupData(scope.row)">{{$t('text.dropGroupData')}}</el-button>
