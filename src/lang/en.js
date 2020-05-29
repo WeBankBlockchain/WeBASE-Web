@@ -68,6 +68,7 @@ export default {
         RUNNING: "RUNNING",
         STOPPED: "STOPPED",
         DELETED: "DELETED",
+        FAIL: "FAIL",
         parseAbiManually: "Or enter your parameters manually",
         addParameter: "Add parameter",
         functionType: "Function type",
@@ -92,7 +93,13 @@ export default {
         groupConf4_all: "There is a conflict between the local data of the group and the group data on the chain. For example, to rebuild the chain or group, please delete the data of the corresponding group or create a new background database in group management",
         confirm: 'Confirm',
         importSuccessed: 'Import Successed',
-        noExportGroup: "The current group is obtained from the group on the chain, and there is no creation block configuration"
+        noExportGroup: "The current group is obtained from the group on the chain, and there is no creation block configuration",
+        agreeNode_1: "Three steps for a new node to join a group: a) generate group to the node, b) start the group of the node, c) add the node in the Sealer/Observer list of the group;",
+        agreeNode_2: "If this node manager contains  another node(front) already in the group(as sealer or observer node), click left button below, add the new node as sealer/observer before generate a group;",
+        agreeNode_3: "If this node manager dosen't have any sealer or observer of the group, you need to add the new node",
+        agreeNode_4: "into the group as sealer/observer by yourself in the other ways; if already added, click 'continue' to go ahead;",
+        nodeId: "Node Id",
+        getFail: "get fail"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -240,7 +247,9 @@ export default {
         addAbi: "Import ABI",
         groupStatus: "Status",
         status: "Status",
-        groupTimestamp: "Timestamp"
+        groupTimestamp: "Timestamp",
+        failCreatGroup: "Failed to generate group",
+        failStartGroup: "Failed to start group",
     },
     contracts: {
         createFile: "Create File",
@@ -272,7 +281,7 @@ export default {
         folderSameFail: "The new folder has the same name as the existing folder",
         user: "User",
         params: "Params",
-        paramsInfo: "If the parameter type is an array, separate it with commas, without quotation marks, for example: arry1, arry2. Other types, such as string, do not need to be quoted.",
+        paramsInfo: 'If the parameter contains double quotes, escape, for example: AAA \ "BBB. If the parameter type is an array, enter it in the following format, separated by commas. Non numeric and Boolean values must use double quotation marks, for example: ["AAA", "BBB"] and [100101].',
         contractAddress: "Address",
         method: "Method",
         contractAddressInput: "Please enter the contract address",

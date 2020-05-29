@@ -320,3 +320,6 @@ export function dataType(type, value) {
             break;
     }
 }
+export function substring_0_40(params) {
+    return params.substring(0, 40)
+}

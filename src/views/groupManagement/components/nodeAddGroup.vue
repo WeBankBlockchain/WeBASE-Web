@@ -119,9 +119,9 @@ export default {
                     this.$notify({
                         title: this.$t('text.addSuccess'),
                         dangerouslyUseHTMLString: true,
-                        message: `<a class="cursor-pointer" @click="generateGroup">${this.$t("text.nodeAddGroupSuccess")}</a>`,
+                        message: `<a class="cursor-pointer"><span class="font-color-00c1d4">${this.$t("text.nodeAddGroupSuccess")}</span></a>`,
                         type: 'success',
-                        duration: 10000,
+                        duration: 0,
                         onClick: () => {
                             this.$router.push('front')
                         }
