@@ -159,7 +159,19 @@ export default {
             createGroup(data,"").then(res => {
                 this.loading = false;
                 if (res.data.code === 0) {
-                    callback()
+                    let array = res.data.data
+                    array.forEach(item => {
+                        if(item.code!=0){
+                            this.$message({
+                                type: 'error',
+                                message: this.$t('nodes.nodeFront')+`${item.frontId}`+this.$t('nodes.failCreatGroup'),
+                                duration: 4500
+                            })
+                        }
+                    });
+                    this.$nextTick(_=>{
+                        callback()
+                    })
                 } else {
                     this.$message({
                         type: "error",
@@ -182,6 +194,16 @@ export default {
             batchStartGroup(data).then(res => {
                 this.loading = false;
                 if (res.data.code === 0) {
+                    let array = res.data.data
+                    array.forEach(item => {
+                        if(item.code!=0){
+                            this.$message({
+                                type: 'error',
+                                message: this.$t('nodes.nodeFront')+`${item.frontId}`+this.$t('nodes.failStartGroup'),
+                                duration: 4500
+                            })
+                        }
+                    });
                     this.$emit('generateSuccess')
                 } else {
                     this.$message({

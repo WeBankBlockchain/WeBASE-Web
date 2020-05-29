@@ -77,7 +77,7 @@
 import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
-import { loginOut, getGroups, groupStatus4, getGroupsInvalidIncluded } from "@/util/api";
+import { loginOut, groupStatus4, getGroupsInvalidIncluded } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
 import langSelect from "@/components/langSelect"
