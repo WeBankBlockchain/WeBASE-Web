@@ -1,6 +1,9 @@
 <template>
     <div>
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
+            <el-form-item :label="$t('nodes.groupId')" prop="groupId" style="width: 320px;">
+                <span>{{itemNodeData.groupId}}</span>
+            </el-form-item>
             <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
@@ -99,7 +102,7 @@ export default {
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                        this.queryConsensusNodeId()
+                    this.queryConsensusNodeId()
                 } else {
                     return false;
                 }
@@ -109,7 +112,7 @@ export default {
         queryConsensusNodeId() {
             this.loading = true;
             let reqData = {
-                groupId: localStorage.getItem("groupId"),
+                groupId: this.itemNodeData.groupId,
                 nodeType: this.modifyForm.nodeType,
                 nodeId: this.itemNodeData.nodeId,
                 fromAddress: this.modifyForm.adminRivateKey,
@@ -145,7 +148,7 @@ export default {
         },
         getUserData: function () {
             let reqData = {
-                groupId: localStorage.getItem("groupId"),
+                groupId: this.itemNodeData.groupId,
                 pageNumber: 1,
                 pageSize: 1000
             };
@@ -158,10 +161,10 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(!this.adminRivateKeyList.length) {
+                        if (!this.adminRivateKeyList.length) {
                             this.$message({
                                 type: "info",
-                                message: this.$t('contracts.addPrivateKeyInfo'),
+                                message: this.$t('nodes.groupId') + this.itemNodeData.groupId + this.$t('contracts.addPrivateKeyInfo'),
                             });
                             return
                         }
