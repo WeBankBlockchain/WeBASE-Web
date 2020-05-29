@@ -24,7 +24,7 @@
         <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="addGroupVisibility" v-if="addGroupVisibility" center append-to-body>
             <node-add-group @addSuccess="addSuccess" @addClose="addClose" :itemGroupData="itemGroupData" :addGroupData="addGroupData"></node-add-group>
         </el-dialog>
-        <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="agreeNodeVisibility" v-if="agreeNodeVisibility" center append-to-body>
+        <el-dialog :title="$t('text.joinExitedGroup')+'('+ 'ID:'+' '+`${itemNodeData.groupId}`+')'" :visible.sync="agreeNodeVisibility" v-if="agreeNodeVisibility" center append-to-body>
             <agree-node @addSuccess="addSuccess" @addClose="addClose" :itemNodeData="itemNodeData" @nodeHadGroup="nodeHadGroup"></agree-node>
         </el-dialog>
     </div>
