@@ -27,7 +27,7 @@ let errCode = {
         zh: '系统异常'
     },
     "101003": {
-        en: "web3jMap of groupId is null, please try again",
+        en: "web3j instance of current group is null",
         zh: '当前群组的web3j为空'
     },
     "101004": {

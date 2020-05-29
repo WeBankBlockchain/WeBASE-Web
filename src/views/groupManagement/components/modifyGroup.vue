@@ -24,6 +24,9 @@
         <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="addGroupVisibility" v-if="addGroupVisibility" center append-to-body>
             <node-add-group @addSuccess="addSuccess" @addClose="addClose" :itemGroupData="itemGroupData" :addGroupData="addGroupData"></node-add-group>
         </el-dialog>
+        <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="agreeNodeVisibility" v-if="agreeNodeVisibility" center append-to-body>
+            <agree-node @addSuccess="addSuccess" @addClose="addClose" :itemNodeData="itemNodeData" @nodeHadGroup="nodeHadGroup"></agree-node>
+        </el-dialog>
     </div>
 </template>
 
@@ -31,12 +34,14 @@
 
 import { createGroup, getFronts, crudGroup, groupStatus, getNodeList, p2pNodeList, getConsensusNodeId } from "@/util/api"
 import nodeAddGroup from "./nodeAddGroup";
-
+import agreeNode from "./agreeNode";
+import { substring_0_40 } from "@/util/util"
 export default {
     name: 'modify',
 
     components: {
-        nodeAddGroup
+        nodeAddGroup,
+        agreeNode
     },
 
     props: {
@@ -60,7 +65,9 @@ export default {
             operateIndex: '',
             operateType: '',
             addGroupVisibility: false,
-            addGroupData: {}
+            addGroupData: {},
+            agreeNodeVisibility: false,
+            itemNodeData: {}
         }
     },
 
@@ -200,6 +207,25 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.nodeGroupStatus = res.data.data
+                        this.nodeGroupStatus.forEach(item => {
+                            item.groupStatusMap[this.itemGroupData.groupId] = item.groupStatusMap[item.nodeId] || item.groupStatusMap[this.itemGroupData.groupId]
+                            if (item.groupStatusMap[item.nodeId] === 'FAIL') {
+                                this.$notify.error({
+                                    title: '节点错误',
+                                    message: `<div  class="error-node cursor-pointer">
+                                    <span>
+                                        <i style="word-break: break-word;" class="wbs-icon-copy font-12">${substring_0_40(item.nodeId)}..</i>
+                                     <span>${this.$t('text.nodeId')}</span>${this.$t('text.getFail')}
+                                    </span>
+                                    </div>`,
+                                    dangerouslyUseHTMLString: true,
+                                    duration: 7000,
+                                    onClick: () => {
+                                        this.copyNodeIdKey(item.nodeId)
+                                    }
+                                });
+                            }
+                        })
                         this.newNodeList = []
                         this.nodeList.forEach(item => {
                             this.nodeGroupStatus.forEach(it => {
@@ -212,7 +238,7 @@ export default {
                         })
                         var array = [];
                         this.nodeList.forEach((item, index) => {
-                            array.push((Object.assign({}, this.newNodeList[index], item)))
+                            array.push((Object.assign({}, item, this.newNodeList[index])))
                         })
                         array.forEach(item => {
                             item.status = item.status || '-';
@@ -255,6 +281,12 @@ export default {
                                     item.groupStatusList = [{
                                         enName: 'recover',
                                         name: this.$t('text.recover'),
+                                    }]
+                                    break;
+                                case 'FAIL':
+                                    item.groupStatusList = [{
+                                        enName: 'add',
+                                        name: this.$t('text.add'),
                                     }]
                                     break;
                                 case '-':
@@ -340,6 +372,9 @@ export default {
                 case 'DELETED':
                     return this.$t('text.DELETED')
                     break;
+                case 'FAIL':
+                    return this.$t('text.FAIL')
+                    break;
                 case '-':
                     return '-'
                     break;
@@ -362,7 +397,8 @@ export default {
                 }
 
             } else {
-                this.queryCreateGroup(val)
+                // this.queryCreateGroup(val)
+                this.queryAgreeNode(val)
             }
         },
         queryCrudGroup(val, type) {
@@ -393,9 +429,17 @@ export default {
                     })
                 })
         },
+        //共识节点
+        queryAgreeNode(val) {
+            this.itemNodeData = val
+            this.agreeNodeVisibility = true
+        },
         queryCreateGroup(val) {
             this.addGroupData = val;
             this.addGroupVisibility = true
+        },
+        nodeHadGroup(val) {
+            this.queryCreateGroup(val)
         },
         addSuccess() {
             this.addGroupVisibility = false
@@ -423,10 +467,13 @@ export default {
                 });
             }
         },
-        
+
     }
 }
 </script>
 
 <style scoped>
+.error-node {
+    word-break: break-word;
+}
 </style>

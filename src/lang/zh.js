@@ -68,6 +68,7 @@ export default {
         RUNNING: "运行中",
         STOPPED: "已停止",
         DELETED: "已删除",
+        FAIL: "失败",
         parseAbiManually: "函数ABI编辑",
         addParameter: "添加参数",
         functionType: "函数名",
@@ -92,7 +93,15 @@ export default {
         groupConf4_all: "群组的本地数据与链上群组数据存在冲突，如重建链或群组，请在群组管理中删除相应群组的数据或新建后台数据库",
         confirm: '确认',
         importSuccessed: '导入成功',
-        noExportGroup: "当前群组为同步链上群组所得，无创世块配置"
+        noExportGroup: "当前群组为同步链上群组所得，无创世块配置",
+        agreeNode_1: "新节点加入已有群组包含3个步骤：生成群组、启动群组、加入群组的共识节点/观察节点;",
+        agreeNode_2: "本管理台中若已包含当前群组的节点前置（共识节点/观察节点），可点击下方左侧按钮，提前将新节点加入到当前群组的共识节点/观察节点;",
+        agreeNode_3: "本平台中无当前群组的节点前置（共识节点/观察节点），则需要用户另行将当前节点",
+        agreeNode_4: "添加到当前群组的共识节点/观察节点，如已添加，点击“继续”按钮进行下一步操作;",
+        addAgreeNode: "添加为观察节点",
+        agreedNode: "已添加，继续",
+        nodeId: "节点",
+        getFail: "获取失败"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -240,7 +249,9 @@ export default {
         addAbi: "导入ABI",
         groupStatus: "群组状态",
         status: "状态",
-        groupTimestamp: "创世块时间戳"
+        groupTimestamp: "创世块时间戳",
+        failCreatGroup: "生成群组失败",
+        failStartGroup: "启动群组失败",
     },
     contracts: {
         createFile: "新建文件",
@@ -272,7 +283,7 @@ export default {
         folderSameFail: "新建文件夹与已存在的文件夹名称相同",
         user: "用户",
         params: "参数",
-        paramsInfo: "如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号。",
+        paramsInfo: '如果参数包含双引号，需转义，例如：aaa\"bbb。如果参数类型是数组，请按照以下格式输入，以逗号分隔，非数值和布尔值须使用双引号，例如：["aaa","bbb"]和[100,101]。',
         contractAddress: "合约地址",
         method: "方法",
         contractAddressInput: "请输入合约地址",
