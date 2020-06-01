@@ -127,7 +127,7 @@ export default {
                         }
                     });
                     this.queryCrudGroup()
-                    this.$emit('addSuccess')
+                    this.$emit('addGroupSuccess')
                 } else {
                     this.$message({
                         type: "error",
