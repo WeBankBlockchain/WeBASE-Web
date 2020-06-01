@@ -43,13 +43,13 @@
                 </el-tooltip>
 
             </span>
-            <el-dropdown trigger="click" @command="changeGroup">
+            <el-dropdown trigger="click" @command="changeGroup" placement="bottom">
                 <span class="cursor-pointer font-color-fff" @click="groupVisible = !groupVisible">
                     {{this.$t("head.group")}}: {{groupName}}<i :class="[groupVisible?'el-icon-arrow-up':'el-icon-arrow-down']"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt" v-if="root==='admin'">{{this.$t('title.groupManagement')}}</li>
-                    <ul style="max-height: 220px;overflow-y:auto">
+                    <ul style="max-height: 220px;overflow-y:auto" class="text-center">
                         <el-dropdown-item v-for=" item in groupList" :key="item.group" :command="item">
                             <i class="wbs-icon-radio font-6" :style="{'color': groupStatusColor(item.groupStatus)}"></i>
                             {{item.groupName}}
