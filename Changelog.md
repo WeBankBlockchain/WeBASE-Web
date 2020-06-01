@@ -1,3 +1,25 @@
+### v1.3.1 (2020-06-01)
+
+支持WeBASE v1.3.1
+
+**Add**
+- 新增合约abi管理，abi解析
+- 支持导入.pem/.p12/.txt私钥
+- 新增群组管理页面，增加群组状态，用于动态增删启停群组
+- 新增节点前置状态展示
+
+**Fix**
+- 优化错误提示，在浏览器F12开发模式下可查看具体错误内容
+
+**兼容性**
+- 支持FISCO-BCOS v2.2.0 及以上版本
+- WeBASE-Node-Manager v1.3.1+
+- WeBASE-Front v1.3.0+
+- WeBASE-Sign v1.3.0+
+- WeBASE-Transaction v1.3.0+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 ### v1.3.0 (2020-04-29)
 
 支持WeBASE v1.3.0
