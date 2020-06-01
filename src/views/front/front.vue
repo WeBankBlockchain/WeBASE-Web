@@ -348,7 +348,7 @@ export default {
                 .then(_ => {
                     deleteFront(val.frontId).then(res => {
                         if (res.data.code === 0) {
-                            Bus.$emit("deleteFront")
+                            // Bus.$emit("deleteFront")
                             this.getFrontTable()
                         } else {
                             this.$message({
