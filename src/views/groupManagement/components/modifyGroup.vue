@@ -22,7 +22,7 @@
             </el-table-column>
         </el-table>
         <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="addGroupVisibility" v-if="addGroupVisibility" center append-to-body>
-            <node-add-group @addSuccess="addSuccess" @addClose="addClose" :itemGroupData="itemGroupData" :addGroupData="addGroupData"></node-add-group>
+            <node-add-group @addGroupSuccess="addGroupSuccess" @addClose="addClose" :itemGroupData="itemGroupData" :addGroupData="addGroupData"></node-add-group>
         </el-dialog>
         <el-dialog :title="$t('text.joinExitedGroup')+'('+ 'ID:'+' '+`${itemNodeData.groupId}`+')'" :visible.sync="agreeNodeVisibility" v-if="agreeNodeVisibility" center append-to-body>
             <agree-node @addSuccess="addSuccess" @addClose="addClose" :itemNodeData="itemNodeData" @nodeHadGroup="nodeHadGroup"></agree-node>
@@ -432,6 +432,7 @@ export default {
         //共识节点
         queryAgreeNode(val) {
             this.itemNodeData = val
+            this.itemNodeData.groupId = this.itemGroupData.groupId
             this.agreeNodeVisibility = true
         },
         queryCreateGroup(val) {
@@ -444,6 +445,13 @@ export default {
         addSuccess() {
             this.addGroupVisibility = false
             this.queryNodeList()
+        },
+        addGroupSuccess(){
+            this.addGroupVisibility = false;
+            this.$nextTick(_=>{
+                this.agreeNodeVisibility = false
+                this.queryNodeList()
+            })
         },
         addClose() {
             this.addGroupVisibility = false
