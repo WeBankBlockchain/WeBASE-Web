@@ -43,17 +43,20 @@
                 </el-tooltip>
 
             </span>
-            <el-popover placement="bottom" width="120" min-width="50px" trigger="click">
-                <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt" v-if="root==='admin'">{{this.$t('title.groupManagement')}}</li>
-                <ul class="group-item">
-                    <li class="group-item-list" v-for='item in groupList' :key='item.groupId' @click='changeGroup(item)'>
-                        <i class="wbs-icon-radio font-6" :style="{'color': groupStatusColor(item.groupStatus)}"></i>
-                        {{item.groupName}}
-                    </li>
-                </ul>
-                <span slot="reference" class="contant-head-name" style="color: #fff" @click='checkGroup'>{{this.$t("head.group")}}: {{groupName || '-'}}</span>
-            </el-popover>
-            <i :class="[dialogShow?'el-icon-arrow-up':'el-icon-arrow-down','select-network']"></i>
+            <el-dropdown trigger="click" @command="changeGroup">
+                <span class="cursor-pointer font-color-fff" @click="groupVisible = !groupVisible">
+                    {{this.$t("head.group")}}: {{groupName}}<i :class="[groupVisible?'el-icon-arrow-up':'el-icon-arrow-down']"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <li class="cursor-pointer font-color-2956a3 text-center" @click="goGroupMgmt" v-if="root==='admin'">{{this.$t('title.groupManagement')}}</li>
+                    <ul style="max-height: 220px;overflow-y:auto">
+                        <el-dropdown-item v-for=" item in groupList" :key="item.group" :command="item">
+                            <i class="wbs-icon-radio font-6" :style="{'color': groupStatusColor(item.groupStatus)}"></i>
+                            {{item.groupName}}
+                        </el-dropdown-item>
+                    </ul>
+                </el-dropdown-menu>
+            </el-dropdown>
             <span style="padding-right:10px"></span>
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
@@ -135,7 +138,8 @@ export default {
             changePasswordDialogVisible: false,
             groupList: [],
             abnormalList: [],
-            root: localStorage.getItem('root')
+            root: localStorage.getItem('root'),
+            groupVisible: false
         };
     },
     beforeDestroy: function () {
@@ -207,7 +211,7 @@ export default {
                     type: "error",
                     duration: 2000
                 });
-                
+
             })
                 ;
         },
@@ -225,7 +229,7 @@ export default {
             localStorage.setItem("groupName", val.groupName);
             localStorage.setItem("groupId", val.groupId);
             this.$emit('changGroup', val.groupId);
-            this.dialogShow = true;
+            // this.dialogShow = true;
         },
         skip: function () {
             if (this.route) {
@@ -277,7 +281,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 })
         },
         groupStatusColor(key) {
