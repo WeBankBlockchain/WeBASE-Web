@@ -4,14 +4,11 @@
         
             <table>
                 <td>
-                    <tr class="item-p">1：{{this.$t('text.agreeNode_1')}}</tr>
-                    <tr class="item-p">2：{{this.$t('text.agreeNode_2')}}</tr>
-                    <tr class="item-p">3：<span>{{this.$t('text.agreeNode_3')}}</span>
-                        <span>
-                            <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(itemNodeData.nodeId)" :title="$t('text.copy')"></i>
-                            <span :title="itemNodeData.nodeId">{{itemNodeData.nodeId | splitString}}...</span>
-                        </span>
-                        <span>{{this.$t('text.agreeNode_4')}}</span></tr>
+                    <tr class="item-p"> &#12288;&#12288;{{this.$t('text.agreeNode_1')}}
+                        <strong>{{this.$t('text.agreeNode_5')}}</strong>
+                        {{this.$t('text.agreeNode_6')}};
+                        {{this.$t('text.agreeNode_7')}}。
+                    </tr>
                 </td>
             </table>
         </div>
