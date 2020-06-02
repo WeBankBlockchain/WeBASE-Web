@@ -7,17 +7,26 @@
             </span>
         </div>
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="130px" class="demo-ruleForm">
+            <el-form-item :label="$t('nodes.groupId')" prop="groupId" style=" position:relative">
+                <el-input v-model="ruleForm.groupId"></el-input>
+            </el-form-item>
             <el-form-item :label="$t('nodes.groupTimestamp')" prop="groupTimestamp" style=" position:relative">
                 <el-input v-model="ruleForm.groupTimestamp"></el-input>
                 <el-tooltip class="tool-tip" effect="dark" :content="$t('text.timestampConf')" placement="right">
                     <i class="el-icon-info"></i>
                 </el-tooltip>
             </el-form-item>
-            <el-form-item :label="$t('nodes.nodeList')" prop="nodeIdList" style=" position:relative">
+            <el-form-item :label="$t('nodes.sealerNodeList')" prop="nodeIdList" style=" position:relative">
                 <el-input v-model="ruleForm.nodeIdList" type="textarea" :autosize="{ minRows: 4}"></el-input>
                 <el-tooltip class="tool-tip" effect="dark" :content="$t('text.sealerListConf')" placement="right">
                     <i class="el-icon-info"></i>
                 </el-tooltip>
+            </el-form-item>
+            <el-form-item :label="$t('nodes.targetNode')" prop="targetNode" style="position:relative" class="tatget-node">
+                <el-select v-model="ruleForm.targetNode" placeholder="请选择" :multiple="true">
+                    <el-option v-for="item in frontData" :key="item.frontId" :label="item.frontId" :value="item.nodeId">
+                    </el-option>
+                </el-select>
             </el-form-item>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
@@ -28,42 +37,44 @@
 </template>
 
 <script>
-import { createGroup, crudGroup } from "@/util/api"
-import { isJson  } from "@/util/util";
+import { getFronts, createGroup, crudGroup } from "@/util/api";
+import { isJson } from "@/util/util";
 export default {
-    name: 'nodeAddGroup',
+    name: 'groupConfig',
 
     components: {
     },
 
     props: {
-        itemGroupData: {
-            type: Object
-        },
-        addGroupData: {
-            type: Object
-        }
     },
 
     data() {
         let _this = this;
         let validateJSON = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error(_this.$t("rule.contractAbi")));
+            if (value === '') {
+                callback(new Error(_this.$t("rule.contractAbi")));
+            } else {
+                if (!isJson(value)) {
+                    callback(new Error(_this.$t("rule.correctJson")));
                 } else {
-                    if (!isJson(value)) {
-                        callback(new Error(_this.$t("rule.correctJson")));
-                    } else {
-                        callback()
-                    }
+                    callback()
                 }
             }
+        }
         return {
             ruleForm: {
-                groupTimestamp: this.itemGroupData.groupTimestamp,
-                nodeIdList: this.itemGroupData.nodeIdList
+                groupId: '',
+                groupTimestamp: '',
+                nodeIdList: '',
+                targetNode: [],
             },
             rules: {
+                groupId: [
+                    {
+                        required: true,
+                        message: this.$t('rule.groupId')
+                    },
+                ],
                 groupTimestamp: [
                     {
                         required: true,
@@ -78,10 +89,18 @@ export default {
                     {
                         validator: validateJSON, trigger: 'blur'
                     }
+                ],
+                targetNode: [
+                    {
+                        required: true,
+                        message: this.$t('rule.targetNode')
+                    }
                 ]
             },
             loading: false,
-            description: ''
+            description: '',
+            frontData: [],
+            frontNodeList: []
         }
     },
 
@@ -95,36 +114,77 @@ export default {
     },
 
     mounted() {
-
+        this.getFrontTable()
     },
 
     methods: {
         close() {
-            this.$emit('addClose')
+            this.$emit('closeGroupConf')
+        },
+        importFile(e) {
+            if (!e.target.files.length) {
+                return;
+            }
+            var fileString = "";
+            let files = e.target.files[0];
+            let reader = new FileReader();
+            reader.readAsText(files, "UTF-8");
+            let _this = this;
+            reader.onload = function (evt) {
+                fileString = evt.target.result;
+                try {
+                    _this.ruleForm.groupTimestamp = JSON.parse(fileString).groupTimestamp
+                    _this.ruleForm.nodeIdList = JSON.parse(fileString).nodeIdList
+                    _this.ruleForm.groupId = JSON.parse(fileString).groupId
+                } catch (error) {
+                    console.log(error)
+                }
+
+
+            }
+        },
+        getFrontTable() {
+            getFronts()
+                .then(res => {
+                    if (res.data.code === 0) {
+                        this.frontData = res.data.data || [];
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
         },
         submit(ruleForm) {
             let _this = this
             this.$refs[ruleForm].validate(valid => {
                 if (valid) {
-                    this.$confirm(_this.$t("text.groupTimestamp") + `${_this.ruleForm.groupTimestamp}` + ',' + _this.$t("text.nodeList") + `${_this.ruleForm.nodeIdList}` + ',' + _this.$t("text.confirmSubmit"), {
-                        type: 'warning'
+                    var targetNodeList = this.ruleForm.targetNode;
+                    targetNodeList.forEach(i=>{
+                        this.queryCreateGroup(i, this.frontId(i), this.queryCrudGroup)
                     })
-                        .then(_ => {
-                            this.loading = true;
-                            this.queryCreateGroup()
-                        })
-                        .catch(_ => { });
-
                 } else {
                     return false;
                 }
             });
         },
-        queryCreateGroup() {
+        queryCreateGroup(nodeId, frontId, callback) {
             this.loading = true;
-            var nodeId = this.addGroupData.nodeId;
+            var nodeId = nodeId;
+            var frontId = frontId;
             let data = {
-                generateGroupId: this.itemGroupData.groupId,
+                generateGroupId: this.ruleForm.groupId,
                 timestamp: this.ruleForm.groupTimestamp,
                 nodeList: JSON.parse(this.ruleForm.nodeIdList),
                 description: this.description
@@ -142,12 +202,12 @@ export default {
                             this.$router.push('front')
                         }
                     });
-                    this.queryCrudGroup()
-                    this.$emit('addGroupSuccess')
+                    callback(nodeId)
                 } else {
                     this.$message({
                         type: "error",
-                        message: this.$chooseLang(res.data.code)
+                        message: `${frontId}${this.$chooseLang(res.data.code)}`,
+                        duration: 4500
                     })
                 }
             }).catch(err => {
@@ -158,18 +218,16 @@ export default {
                 })
             })
         },
-        queryCrudGroup() {
-            this.loading = true;
-            let nodeId = this.addGroupData.nodeId;
+        queryCrudGroup(nodeId) {
+            var nodeId = nodeId;
             let data = {
-                generateGroupId: this.itemGroupData.groupId,
+                generateGroupId: this.ruleForm.groupId,
                 type: 'start'
             }
             crudGroup(data, nodeId)
                 .then(res => {
-                    this.loading = false;
                     if (res.data.code === 0) {
-
+                        this.$emit('addGroupSuccess')
                     } else {
                         this.$message({
                             type: "error",
@@ -178,42 +236,27 @@ export default {
                     }
                 })
                 .catch(error => {
-                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: this.$t('text.systemError')
                     })
                 })
         },
-        importFile(e) {
-            if (!e.target.files.length) {
-                return;
+        frontId(nodeId) {
+            var frontId = '';
+            var nodeId = nodeId;
+            var array = this.frontData;
+            for (let i = 0; i < array.length; i++) {
+                if (array[i]['nodeId'] == nodeId) frontId = array[i]['frontId']
             }
-            var fileString = "";
-            let files = e.target.files[0];
-            let reader = new FileReader();
-            reader.readAsText(files, "UTF-8");
-            let _this = this;
-            reader.onload = function (evt) {
-                fileString = evt.target.result;
-                try {
-                    _this.ruleForm.groupTimestamp = JSON.parse(fileString).groupTimestamp
-                    _this.ruleForm.nodeIdList = JSON.parse(fileString).nodeIdList
-                } catch (error) {
-                    console.log(error) 
-                }
-                
-                
-            }
-        },
+            return frontId
+        }
     }
-
 }
 </script>
 
 <style scoped>
 .add-wrapper {
-
 }
 .tool-tip {
     position: absolute;
@@ -239,5 +282,8 @@ export default {
 }
 .demo-ruleForm {
     padding-right: 30px;
+}
+.tatget-node >>> .el-select {
+    width: 346px;
 }
 </style>

@@ -84,8 +84,9 @@ export default {
         nodeList: "节点列表",
         joinExitedGroup: "单节点加入已有群组",
         timestampConf: "群组创世块配置的时间戳",
-        sealerListConf: "群组创世块配置的共识节点列表 ，例如 : ['nodeId1','nodeId2']",
+        sealerListConf: '群组创世块配置的共识节点列表 ，例如 : ["nodeId1","nodeId2"]',
         group: "群组",
+        groupConfTitle: "创世块配置",
         groupConf: "的创世块冲突，请检查该群组的节点群组配置文件",
         groupConf4: "的本地数据与链上群组数据存在冲突，如重建链或群组，请到",
         groupMgmt: "群组管理",
@@ -94,14 +95,18 @@ export default {
         confirm: '确认',
         importSuccessed: '导入成功',
         noExportGroup: "当前群组为同步链上群组所得，无创世块配置",
-        agreeNode_1: "新节点加入已有群组包含3个步骤：生成群组、启动群组、加入群组的共识节点/观察节点;",
+        agreeNode_1: "新节点加入已有群组包含3个步骤：",
         agreeNode_2: "本管理台中若已包含当前群组的节点前置（共识节点/观察节点），可点击下方左侧按钮，提前将新节点加入到当前群组的共识节点/观察节点;",
         agreeNode_3: "本平台中无当前群组的节点前置（共识节点/观察节点），则需要用户另行将当前节点",
         agreeNode_4: "添加到当前群组的共识节点/观察节点，如已添加，点击“继续”按钮进行下一步操作;",
+        agreeNode_5: "生成群组、启动群组、加入群组",
+        agreeNode_6: "（共识节点/观察节点）",
+        agreeNode_7: "详情可参考右上角的帮助文档-WeBASE管理平台使用手册-附录-动态群组管理使用指南",
         addAgreeNode: "添加为观察节点",
         agreedNode: "已添加，继续",
         nodeId: "节点",
-        getFail: "获取失败"
+        getFail: "获取失败",
+        agreeNodeBtn: "已添加为共识/观察节点，继续"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -140,7 +145,8 @@ export default {
         nodeIdList: "请输入节点列表",
         number: "请输入数字",
         groupId: "请输入群组编号",
-        correctJson: "输入正确的JSON"
+        correctJson: "输入正确的JSON",
+        targetNode: "请选择目标节点"
     },
     head: {
         helpText: "帮助文档",
@@ -252,6 +258,9 @@ export default {
         groupTimestamp: "创世块时间戳",
         failCreatGroup: "生成群组失败",
         failStartGroup: "启动群组失败",
+        addHadGroup: "加入已有群组",
+        targetNode: "目标节点",
+        sealerNodeList: "共识节点列表",
     },
     contracts: {
         createFile: "新建文件",
