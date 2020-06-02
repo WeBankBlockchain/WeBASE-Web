@@ -297,9 +297,17 @@ export default {
                                     break;
                             }
                         })
-
-                        // this.newNodeList = array
-                        this.querygetConsensusNodeId(array)
+                        var runningList = []
+                        array.forEach(item=>{
+                            if(item.status ==='RUNNING'){
+                                runningList.push(item.status)
+                            }
+                        })
+                        if(runningList.length){
+                            this.querygetConsensusNodeId(array)
+                        }else {
+                            this.newNodeList = array
+                        }
                     } else {
                         this.$message({
                             type: "error",
