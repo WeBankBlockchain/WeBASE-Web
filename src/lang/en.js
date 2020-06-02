@@ -84,8 +84,9 @@ export default {
         nodeList: "Node list",
         joinExitedGroup: "Join Exited Group",
         timestampConf: "Timestamp of group genesis conf",
-        sealerListConf: "Sealer list of group genesis conf, for example : ['nodeId1','nodeId2']",
+        sealerListConf: 'Sealer list of group genesis conf, for example : ["nodeId1","nodeId2"]',
         group: "Group",
+        groupConfTitle: "Genesis config",
         groupConf: "genesis conf，Please check the node group profile of this group.",
         groupConf4: "a conflict between the local data of and the group data on the chain. For example, to rebuild the chain or group, please",
         groupMgmt: "to group management",
@@ -94,12 +95,16 @@ export default {
         confirm: 'Confirm',
         importSuccessed: 'Import Successed',
         noExportGroup: "The current group is obtained from the group on the chain, and there is no creation block configuration",
-        agreeNode_1: "Three steps for a new node to join a group: a) generate group to the node, b) start the group of the node, c) add the node in the Sealer/Observer list of the group;",
+        agreeNode_1: "Three steps for a new node to join a group: ",
         agreeNode_2: "If this node manager contains  another node(front) already in the group(as sealer or observer node), click left button below, add the new node as sealer/observer before generate a group;",
         agreeNode_3: "If this node manager dosen't have any sealer or observer of the group, you need to add the new node",
         agreeNode_4: "into the group as sealer/observer by yourself in the other ways; if already added, click 'continue' to go ahead;",
+        agreeNode_5: "generate group, start group, join group",
+        agreeNode_6: "(consensus node / observation node)",
+        agreeNode_7: "For details, please refer to the help document - User Manual of webase management platform - appendix - dynamic group management user guide in the upper right corner",
         nodeId: "Node Id",
-        getFail: "get fail"
+        getFail: "get fail",
+        agreeNodeBtn: "Added as consensus / observation node, continue"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -138,7 +143,8 @@ export default {
         nodeIdList: "Please enter nodeList",
         number: "Please enter number",
         groupId: "Please enter group ID",
-        correctJson: "Enter correct JSON"
+        correctJson: "Invalid input: Unexpected end of JSON input",
+        targetNode: "Please enter target node"
     },
     head: {
         helpText: "Document",
@@ -250,6 +256,9 @@ export default {
         groupTimestamp: "Timestamp",
         failCreatGroup: "Failed to generate group",
         failStartGroup: "Failed to start group",
+        addHadGroup: "Join Group",
+        targetNode: "Target Node",
+        sealerNodeList: "Sealer Nodes",
     },
     contracts: {
         createFile: "Create File",
