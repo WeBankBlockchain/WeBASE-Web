@@ -25,6 +25,8 @@
             <el-form-item :label="$t('nodes.targetNode')" prop="targetNode" style="position:relative" class="tatget-node">
                 <el-select v-model="ruleForm.targetNode" placeholder="请选择" :multiple="true">
                     <el-option v-for="item in frontData" :key="item.frontId" :label="item.frontId" :value="item.nodeId">
+                        <span style="float: left">{{ item.frontId }}</span>
+                        <span style="float: right; color: #8492a6; font-size: 13px" :title="item.nodeId">{{ item.nodeId | splitString_0_25}}...</span>
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -171,7 +173,7 @@ export default {
             this.$refs[ruleForm].validate(valid => {
                 if (valid) {
                     var targetNodeList = this.ruleForm.targetNode;
-                    targetNodeList.forEach(i=>{
+                    targetNodeList.forEach(i => {
                         this.queryCreateGroup(i, this.frontId(i), this.queryCrudGroup)
                     })
                 } else {
