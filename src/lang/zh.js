@@ -194,7 +194,7 @@ export default {
         contractEvent: '合约事件',
         groupManagement: '群组管理',
         abiList: 'ABI列表',
-        parseAbi: 'ABI解析',
+        parseAbi: 'ABI编码',
         uploadSolc: '上传不同版本编译器',
         otherUser: '无用户名的用户或公钥用户为外部管理员账户'
     },

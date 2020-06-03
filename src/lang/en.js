@@ -192,7 +192,7 @@ export default {
         contractEvent: 'Contract Event',
         groupManagement: 'Group Mgmt',
         abiList: 'ABI List',
-        parseAbi: 'Parse ABI',
+        parseAbi: 'ABI Encode',
         uploadSolc: 'Upload different versions of compiler',
         otherUser: 'Users without user name or public key users are external administrator accounts'
     },
