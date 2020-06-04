@@ -18,7 +18,7 @@
             </el-form-item>
             <el-form-item :label="$t('nodes.sealerNodeList')" prop="nodeIdList" style=" position:relative">
                 <el-input v-model="ruleForm.nodeIdList" type="textarea" :autosize="{ minRows: 4}"></el-input>
-                <el-tooltip class="tool-tip" effect="dark" :content="$t('text.sealerListConf')" placement="right">
+                <el-tooltip class="tool-tip" effect="dark" :content="$t('text.sealerListConf_1')" placement="right">
                     <i class="el-icon-info"></i>
                 </el-tooltip>
             </el-form-item>

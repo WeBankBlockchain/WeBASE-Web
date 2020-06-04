@@ -85,6 +85,7 @@ export default {
         joinExitedGroup: "Join Exited Group",
         timestampConf: "Timestamp of group genesis conf",
         sealerListConf: 'Sealer list of group genesis conf, for example : ["nodeId1","nodeId2"]',
+        sealerListConf_1: 'Sealer list of group genesis conf ，The joining group must be consistent with the consensus node list (not the current consensus node list) configured by the creation block，for example : ["nodeId1","nodeId2"]',
         group: "Group",
         groupConfTitle: "Genesis config",
         groupConf: "genesis conf，Please check the node group profile of this group.",
