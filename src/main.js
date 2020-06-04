@@ -21,7 +21,7 @@ import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
 import axios from 'axios'
-import {getCookie,setCookie,delCookie} from './util/util'
+import { getCookie, setCookie, delCookie } from './util/util'
 import JsonViewer from "vue-json-viewer"
 import errcode from './util/errcode'
 import VueClipboard from 'vue-clipboard2'
@@ -66,7 +66,11 @@ Vue.prototype.delCookie = delCookie;
 //error code
 Vue.prototype.errcode = errcode;
 Vue.prototype.$chooseLang = chooseLang;
-// require('./mock')
+// lodash
+import _ from 'lodash';
+Vue.prototype._ = _;
+import { message } from '@/util/message.js';
+Vue.prototype.$message = message;
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

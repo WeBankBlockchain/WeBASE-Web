@@ -34,6 +34,9 @@
                                 <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                 {{scope.row[head.enName]}}
                             </span>
+                            <span v-else-if="head.enName === 'status'">
+                                <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
+                            </span>
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
@@ -171,6 +174,10 @@ export default {
                 {
                     enName: "modifyTime",
                     name: this.$t("nodes.modifyTime")
+                },
+                {
+                    enName: "status",
+                    name: this.$t("nodes.status")
                 }
             ];
             return data
@@ -246,7 +253,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        
                     }
                 })
                 .catch(err => {
@@ -256,7 +263,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         handleSizeChange(val) {
@@ -341,7 +348,7 @@ export default {
                 .then(_ => {
                     deleteFront(val.frontId).then(res => {
                         if (res.data.code === 0) {
-                            Bus.$emit("deleteFront")
+                            // Bus.$emit("deleteFront")
                             this.getFrontTable()
                         } else {
                             this.$message({

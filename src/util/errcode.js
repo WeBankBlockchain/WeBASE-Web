@@ -27,8 +27,8 @@ let errCode = {
         zh: '系统异常'
     },
     "101003": {
-        en: "web3jMap of groupId is null, please call /{groupId}/web3/refresh to refresh",
-        zh: 'groupId的web3jMap为空，请调用/{groupId}/web3/refresh刷新'
+        en: "web3j instance of current group is null",
+        zh: '当前群组的web3j为空'
     },
     "101004": {
         en: "groupList error for no group, web3jMap is empty!",
@@ -63,7 +63,7 @@ let errCode = {
         en: "contractBin cannot be empty",
         zh: '合约bin不能为空'
     },
-    "201008": {
+    "201017": {
         en: "contract's current version has been deployed",
         zh: '合约的当前版本已部署'
     },
@@ -99,10 +99,10 @@ let errCode = {
         en: "file is not exist",
         zh: '文件不存在'
     },
-    "201017": {
-        en: "failed to get node config",
-        zh: '获取节点配置失败'
-    },
+    // "201017": {
+    //     en: "failed to get node config",
+    //     zh: '获取节点配置失败'
+    // },
     "201018": {
         en: "blockNumber and pbftView unchanged",
         zh: '块高和pbftview没有发生变化'
@@ -199,6 +199,18 @@ let errCode = {
         en: "external user's appId and signUserId cannot be empty",
         zh: '外部用户的appId和signUserId不能为空'
     },
+    "201043": {
+        en: "Invalid group operate type",
+        zh: '无效的群组操作类型'
+    },
+    "201044": {
+        en: "Invalid data type",
+        zh: '无效的数据类型'
+    },
+    "201045": {
+        en: "Group operate fail",
+        zh: '群组操作失败'
+    },
     "201100": {
         en: "Params not fit",
         zh: '参数不合适'
@@ -251,11 +263,85 @@ let errCode = {
         en: "sql syntax error",
         zh: 'sql语法错误'
     },
+    "201120": {
+        en: "Group operate fail",
+        zh: '群组操作失败'
+    },
+    "201121": {
+        en: "Node internal error",
+        zh: '节点内部错误'
+    },
+    "201122": {
+        en: "Group already exists",
+        zh: '群组已存在'
+    },
+    "201123": {
+        en: "Group already running",
+        zh: '群组已处于运行状态'
+    },
+    "201124": {
+        en: "Group already stopped",
+        zh: '群组已处于停止状态'
+    },
+    "201125": {
+        en: "Group already deleted",
+        zh: '群组已处于删除状态'
+    },
+    "201126": {
+        en: "Group not found",
+        zh: '群组不存在'
+    },
+    "201127": {
+        en: "Group operate param error",
+        zh: '参数不合法'
+    },
+    "201128": {
+        en: "Group peers not connected",
+        zh: '与sealer间不存在有效的p2p链接'
+    },
+    "201129": {
+        en: "Group genesis conf already exists",
+        zh: '创世块配置文件已存在'
+    },
+    "201130": {
+        en: "Group config.ini already exists",
+        zh: '群组配置文件已存在'
+    },
+    "201131": {
+        en: "Group genesis conf not found",
+        zh: '未找到创世块配置文件'
+    },
+    "201132": {
+        en: "Group config.ini not found",
+        zh: '未找到群组配置文件'
+    },
+    "201133": {
+        en: "Group is stopping",
+        zh: '正在释放资源'
+    },
+    "201134": {
+        en: "Group not deleted",
+        zh: '群组并未被删除'
+    },
+
+
     "201130": {
         en: "Sign user Id cannot be empty",
         zh: 'webase-sign用户编号不能为空'
     },
-
+    "201151": {
+        en: "Unsupported contract param type to encoded",
+        zh: '不支持合约参数类型编码'
+    },
+    "201152": {
+        en: "Unsupported contract param type to decoded",
+        zh: '不支持合约参数类型解码'
+    },
+    "201153": {
+        en: "Unable to create instance of type, check input params",
+        zh: '无法创建类型的实例，请检查输入参数'
+    },
+    
     "201213": {
         en: "address is invalid",
         zh: '地址无效'
@@ -270,7 +356,7 @@ let errCode = {
     },
     "201202": {
         en: "Permission denied, please check chain administrator permission",
-        zh: '权限被拒绝，请检查链管理员权限'
+        zh: '权限管理,检查用户权限'
     },
     "201203": {
         en: "node id is invalid",
@@ -336,14 +422,23 @@ let errCode = {
         en: "Table not exists",
         zh: '表不存在'
     },
-    "201102": {
-        en: "TableName cannot be empty",
-        zh: '表名不能为空'
-    },
     "201231": {
         en: "Cert file not found, please check cert path in config",
         zh: '找不到证书文件，请检查配置中的证书路径'
     },
+    "201235": {
+        en: "P12's password cannot be chinese",
+        zh: 'p12密码不能为中文'
+    },
+    "201236": {
+        en: "P12's password not match ",
+        zh: 'p12的密码错误'
+    },
+    "201237": {
+        en: "P12 file content error",
+        zh: '文件内容错误'
+    },
+
     "201241": {
         en: "Exchange or message queue not exists, please check mq server or mq configuration",
         zh: 'Exchange或消息队列不存在，请检查mq服务器或mq配置'
@@ -381,8 +476,8 @@ let errCode = {
         zh: '数据库异常'
     },
     "202002": {
-        en: "not found any front",
-        zh: '未添加前置'
+        en: "Not found any front for this group",
+        zh: '找不到此群组的任何前置'
     },
     "202003": {
         en: "not support this ip",
@@ -661,7 +756,30 @@ let errCode = {
         en: "Front's encrypt type not matches with nodemgr",
         zh: "Front的加密类型与nodemgr不匹配"
     },
-
+    "202096": {
+        en: "Contract address already exists",
+        zh: "合同地址已存在"
+    },
+    "202097": {
+        en: "Abi info of this id not exists",
+        zh: "此ID的ABI信息不存在"
+    },
+    "202098": {
+        en: "Contract abi invalid, please check abi",
+        zh: "合同ABI无效，请检查ABI"
+    },
+    "202099": {
+        en: "Abi Id cannot be empty",
+        zh: "此ID的ABI信息不存在"
+    },
+    "202100": {
+        en: "ABI info of this id not exists",
+        zh: "Abi Id不能为空"
+    },
+    "202110": {
+        en: "User's signUserId not exist",
+        zh: "用户的signUserId不存在"
+    },
     "201232": {
         en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
         zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY----- "
@@ -670,14 +788,75 @@ let errCode = {
         en: "Pem file content error",
         zh: "Pem文件内容错误"
     },
+    
+    "202300": {
+        en: "Group id already exists",
+        zh: "群组id已存在"
+    },
+    "202301": {
+        en: "Node's front not exists",
+        zh: "节点前置不存在"
+    },
+    "203003": {
+        en: "Param exception",
+        zh: "参数异常"
+    },
+    "203004": {
+        en: "Sign user id cannot be blank",
+        zh: "签名用户id不能为空"
+    },
+    "203005": {
+        en: "Invalid sign user id (max length of 64, only support letter and digit)",
+        zh: "无效的签名用户id（最大长度为64，仅支持字母和数字）"
+    },
+    "203006": {
+        en: "App id cannot be blank",
+        zh: "应用程序id不能为空"
+    },
+    "203007": {
+        en: "App id invalid, only support letter and digit",
+        zh: "应用程序id无效，仅支持字母和数字"
+    },
+    "203008": {
+        en: "Encrypt type should be 0 (ecdsa) or 1 (guomi)",
+        zh: "加密类型应为0（ecdsa）或1（guomi）"
+    },
+    "203009": {
+        en: "Encoded data string must be hex string",
+        zh: "编码的数据字符串必须是十六进制字符串"
+    },
 
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
     },
     "302001": {
-        en: "access denied",
+        en: "Access denied",
         zh: "没有权限"
+    },
+    "303001": {
+        en: "User of this sign user id is already exists",
+        zh: "此签名用户id的用户已存在"
+    },
+    "303002": {
+        en: "User does not exist or already been disable",
+        zh: "用户不存在或已被禁用"
+    },
+    "303003": {
+        en: "PrivateKey is null",
+        zh: "PrivateKey为空"
+    },
+    "303004": {
+        en: "PrivateKey decode fail",
+        zh: "私钥解码失败"
+    },
+    "303005": {
+        en: "PrivateKey format error",
+        zh: "PrivateKey格式错误"
+    },
+    "303006": {
+        en: "User of this sign user id is  already been disable",
+        zh: "此签名用户id的用户已被禁用"
     },
     "402000": {
         en: "param exception",
@@ -692,12 +871,16 @@ let errCode = {
         zh: "表名已经存在"
     },
     "-50100": {
+        en: "Table does not exist",
+        zh: "表不存在"
+    },
+    "-50101": {
         en: "Unknow function call",
         zh: "未知函数调用"
     },
-    "-50101": {
-        en: "Table does not exist",
-        zh: "表不存在"
+    "-50102": {
+        en: "Address invalid",
+        zh: "地址无效"
     },
     "-51000": {
         en: "Table name and address already exist",
@@ -744,8 +927,8 @@ let errCode = {
         zh: "配置条目无效"
     },
     "-51500": {
-        en: "Contract name and version already exist",
-        zh: "合约名称和版本已存在"
+        en: "Entry parse error",
+        zh: "解析错误"
     },
     "-51501": {
         en: "Condition parse error",
@@ -759,6 +942,7 @@ let errCode = {
         en: "Please provide field 'in field list",
         zh: "请在字段列表中提供字段。"
     },
+    
     "422": {
         en: "param error",
         zh: "参数错误"
