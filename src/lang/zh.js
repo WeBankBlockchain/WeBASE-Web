@@ -85,6 +85,7 @@ export default {
         joinExitedGroup: "单节点加入已有群组",
         timestampConf: "群组创世块配置的时间戳",
         sealerListConf: '群组创世块配置的共识节点列表 ，例如 : ["nodeId1","nodeId2"]',
+        sealerListConf_1: '群组创世块配置的共识节点列表 ，加入群组必须与创世块配置的共识节点列表（非当前共识节点列表）一致，例如 : ["nodeId1","nodeId2"]',
         group: "群组",
         groupConfTitle: "创世块配置",
         groupConf: "的创世块冲突，请检查该群组的节点群组配置文件",

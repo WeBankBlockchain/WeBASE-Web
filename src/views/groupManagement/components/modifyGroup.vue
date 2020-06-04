@@ -381,7 +381,7 @@ export default {
                     return this.$t('text.DELETED')
                     break;
                 case 'FAIL':
-                    return this.$t('text.FAIL')
+                    return this.$t('text.getFail')
                     break;
                 case '-':
                     return '-'

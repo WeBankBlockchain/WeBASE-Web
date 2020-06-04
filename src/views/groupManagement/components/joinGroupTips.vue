@@ -58,7 +58,7 @@ export default {
         closeGroupConf() {
             this.groupConfVisible = false;
         },
-        addGroupSuccess(){
+        addGroupSuccess() {
             this.closeGroupConf()
             this.$emit('joinGroupTipsSuccess')
         }
@@ -67,4 +67,9 @@ export default {
 </script>
 
 <style scoped>
+.item-p {
+    height: 24px;
+    line-height: 24px;
+    font-size: 14px;
+}
 </style>
