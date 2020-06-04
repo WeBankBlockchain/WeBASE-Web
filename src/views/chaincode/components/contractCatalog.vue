@@ -39,23 +39,17 @@
                         <i class="wbs-icon-file" @click='select(item)' v-if='!item.renameShow' :id='item.contractId'></i>
                         <span @contextmenu.prevent="handle($event,item)" @click='select(item)' :id='item.contractId' v-if='!item.renameShow' :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <el-input v-model="contractName" v-focus="true" autofocus='autofocus' maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
-                        <!-- <i class="wbs-icon-delete contract-delete" v-if='!item.renameShow && !item.contractAddress'   @click="deleteFile(item)"></i> -->
                         <div class="contract-menu-handle" v-if='!disabled &&item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul v-if="contractFile">
                                 <li class="contract-menu-handle-list" @click="rename">{{this.$t("contracts.rename")}}</li>
                                 <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{this.$t("text.delete")}}</li>
                             </ul>
-                            <!-- <ul v-if="contractFolder">
-                                <li class="contract-menu-handle-list" @click="addFiles">新建文件</li>
-                            </ul> -->
                         </div>
                     </div>
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
                         <i :class="item.folderIcon" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
                         <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
                         <span @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
-                        <!-- <el-input v-model="contractName" autofocus='autofocus'  @blur="changeName(item)" v-if="item.renameShow"></el-input> -->
-                        <!-- <i class="wbs-icon-delete contract-delete" v-if="!item.renameShow" @click='deleteFolder(item)'></i> -->
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
                                 <li class="contract-menu-handle-list" @click="addFiles">{{this.$t('contracts.createFile')}}</li>
@@ -68,7 +62,6 @@
                                 <i class="wbs-icon-file" v-if='!list.renameShow' @click='select(list)'></i>
                                 <span @click='select(list)' @contextmenu.prevent="handle($event,list)" :id='list.contractId' v-if='!list.renameShow' :class="{'colorActive': list.contractActive}">{{list.contractName}}</span>
                                 <el-input v-model="contractName" autofocus='autofocus' maxlength="32" @blur="changeName(list)" v-if="list.renameShow"></el-input>
-                                <!-- <i class="wbs-icon-delete contract-delete" v-if='!list.contractAddress && !list.renameShow' @click="deleteFile(list)"></i> -->
                                 <div class="contract-menu-handle" v-if='!disabled &&list.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                                     <ul v-if="contractFile">
                                         <li class="contract-menu-handle-list" @click="rename">{{this.$t("contracts.rename")}}</li>
@@ -94,7 +87,6 @@ import { getContractList, saveChaincode, deleteCode } from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
 import Clickoutside from 'element-ui/src/utils/clickoutside'
-// console.log(Clickoutside)
 export default {
     name: "contractCatalog",
     components: {
@@ -102,7 +94,6 @@ export default {
         "add-file": addFile,
         "select-catalog": selectCatalog,
     },
-    // directives: { clickoutside  },
     data: function () {
         return {
             foldershow: false,
@@ -184,9 +175,6 @@ export default {
         }
     },
     methods: {
-        // handleClickOutside: function(){
-        //     this.checkNull();
-        // },
         checkNull: function (list) {
             this.contractArry.forEach(value => {
                 value.handleModel = false;
@@ -230,7 +218,6 @@ export default {
                     this.contractFolder = false;
                 } else {
                     this.contractFile = false;
-                    // this.contractTotal = false;
                     this.contractFolder = true;
                 }
             } else {
@@ -493,7 +480,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getContracts: function (list) {
@@ -516,7 +503,7 @@ export default {
                             if (value.contractPath != "/") {
                                 let item = {
                                     folderName: value.contractPath,
-                                    folderId: (new Date()).getTime(),
+                                    folderId: (new Date()).getTime() + + `${value.contractPath}`,
                                     folderActive: false,
                                     groupId: localStorage.getItem("groupId")
                                 }
@@ -530,7 +517,6 @@ export default {
                             if (!obj[this.folderList[i].folderName] && this.folderList[i].groupId == localStorage.getItem("groupId")) {
                                 result.push(this.folderList[i]);
                                 obj[this.folderList[i].folderName] = true;
-                                // obj[this.folderList[i].groupId] = true
                             } else if (this.folderList[i].groupId != localStorage.getItem("groupId")) {
                                 arrry.push(this.folderList[i]);
                             }
@@ -574,7 +560,6 @@ export default {
                 }
             })
                 .catch(err => {
-                    // this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",

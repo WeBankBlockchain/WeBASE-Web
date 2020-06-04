@@ -18,20 +18,12 @@
         <div class="login-lang">
             <lang-select class="right-menu-item hover-effect"></lang-select>
         </div>
-        <!-- <div class="login-encrypt">
-            <el-radio-group v-model="encryption" @change="handleEncryption" size="mini">
-                <el-radio-button label="hash">{{$t('login.hash')}}</el-radio-button>
-                <el-radio-button label="guomi">{{$t('login.guomi')}}</el-radio-button>
-            </el-radio-group>
-        </div> -->
         <div class="login">
             <div>
                 <svg class="icon" aria-hidden="true">
                     <use xlink:href="#wbs-icon-WeBASE"></use>
                 </svg>
                 <p class="logo-content">WeBank Blockchain Application Software Extension</p>
-                <!-- <i class="wbs-icon-WeBASE"></i> -->
-                <!-- <h2 class="login-title">WeBASE</h2> -->
             </div>
             <div class="msg-wrapper">
                 <div class="msg-error" v-show="msgError || timeout">
@@ -102,31 +94,6 @@ export default {
             },
             authToken: null,
             encryption: "hash"
-            // newUserRules: {
-            //     user: [
-            //         { required: true, message: this.$t('inputText.user'), trigger: "blur" },
-            //         {
-            //             min: 1,
-            //             max: 32,
-            //             message: this.$t('rule.textLong'),
-            //             trigger: "blur"
-            //         }
-            //     ],
-            //     password: [
-            //         { required: true, message: this.$t('inputText.password'), trigger: "blur" },
-            //         {
-            //             min: 5,
-            //             max: 5,
-            //             message: this.$t('rule.passwordError'),
-            //             trigger: "blur"
-            //         },
-            //         {
-            //             pattern: /admin/,
-            //             message: this.$t('rule.loginPasswordType'),
-            //             trigger: "blur"
-            //         }
-            //     ]
-            // }
         };
     },
     computed: {
@@ -146,8 +113,6 @@ export default {
     mounted: function () {
         this.changeCode();
         this.getEncryption()
-        // console.log(utils.sha4("Abcd1234"))
-        // console.log(gm.sm3Digest("Abcd1234"))
     },
     methods: {
         handleEncryption: function(){
@@ -200,11 +165,6 @@ export default {
                 account: this.loginForm.user,
                 accountPwd: sha256(this.loginForm.password)
             };
-            // if(localStorage.getItem("encryptionId") == 1){
-            //     reqData.accountPwd = "0x" + utils.sha4(this.loginForm.password)
-            // }else{
-            //     reqData.accountPwd = sha256(this.loginForm.password)
-            // }
             let checkCode = this.loginForm.vercode
             login(reqData, checkCode, this.authToken)
                 .then(res => {
@@ -299,7 +259,6 @@ export default {
 .msg-wrapper {
     min-height: 20px;
     height: auto;
-    /* margin: 5px 0; */
 }
 .msg-error {
     color: #e4393c;
@@ -309,13 +268,11 @@ export default {
     height: 38px;
     width: 84px;
     line-height: 38px;
-    /* padding-left: 16px; */
     border: 1px solid #dcdfe6;
     border-radius: 2px;
     vertical-align: middle;
     cursor: pointer;
     text-align: center
-    /* background-color: #e4393c */
 }
 .logo {
     width: 120px;
@@ -335,15 +292,6 @@ export default {
     height: 54px;
     padding-left: 60px;
 }
-/* .login-content .login-label .el-form-item__label {
-    position: absolute !important;
-    left: 52px !important;
-    top: 12px !important;
-    z-index: 999 !important;
-    border-right: 1px solid #cfdae9 !important;
-    height: 30px !important;
-    line-height: 30px !important;
-} */
 .login-submit {
     width: 100%;
     height: 45px;
@@ -353,7 +301,6 @@ export default {
 .icon {
     width: 142px;
     height: 142px;
-    /* vertical-align: -0.15em; */
     fill: currentColor;
     overflow: hidden;
 }

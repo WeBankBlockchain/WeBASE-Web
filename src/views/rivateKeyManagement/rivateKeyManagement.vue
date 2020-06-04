@@ -20,6 +20,7 @@
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
                     <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t('privateKey.addUser')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_rivate_key_dialog')">{{this.$t('privateKey.importRivateKey')}}</el-button>
                     <el-tooltip effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -37,7 +38,11 @@
                             <template v-if="head.enName!='operate'">
                                 <span v-if="head.enName ==='userStatus'" :style="{'color': statusColor(scope.row[head.enName])}">{{userStatus(scope.row[head.enName])}}</span>
                                 <span v-else-if="head.enName ==='address'">
-                                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row[head.enName])" title="复制公钥"></i>
+                                    <i class="wbs-icon-copy font-12 copy-public-key" v-show="scope.row[head.enName]" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
+                                    {{scope.row[head.enName]}}
+                                </span>
+                                <span v-else-if="head.enName ==='signUserId'">
+                                    <i class="wbs-icon-copy font-12 copy-public-key" v-show="scope.row[head.enName]" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName ==='userId'">
@@ -63,20 +68,25 @@
         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
+        <el-dialog :visible.sync="$store.state.importRivateKey" :title="$t('privateKey.importRivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importRivateKey' center>
+            <v-importKey @importRivateKeySuccess="importRivateKeySuccess" ref="importKey"></v-importKey>
+        </el-dialog>
     </div>
 </template>
 
 
 <script>
 import contentHead from "@/components/contentHead";
-import creatUser from "./components/creatUser";
+import creatUser from "./components/creatUser.vue";
+import importKey from "./components/importKey.vue";
 import { getUserList, getUserDescription } from "@/util/api";
 import errcode from "@/util/errcode";
 export default {
     name: "RivateKeyManagement",
     components: {
         "v-contentHead": contentHead,
-        "v-creatUser": creatUser
+        "v-creatUser": creatUser,
+        "v-importKey": importKey,
     },
     data() {
         return {
@@ -187,6 +197,9 @@ export default {
         },
         creatUserInfo() { },
         creatUserClose() {
+            this.getUserInfoData();
+        },
+        importRivateKeySuccess() {
             this.getUserInfoData();
         },
         bindUserClose() {

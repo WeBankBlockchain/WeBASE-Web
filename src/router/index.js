@@ -26,14 +26,12 @@ const hostDetail = resolve => require(['@/views/front/components/hostDetail'], r
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
 const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/rivateKeyManagement'], resolve);
-const errorLogExport = resolve => require(['@/views/errorLogExport/errorLogExport'], resolve);
 const hostMetric = resolve => require(['@/views/hostMetric'], resolve);
 const nodesMetric = resolve => require(['@/views/nodesMetric'], resolve);
 const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve);
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
-const authorManagement = resolve => require(['@/views/authorManagement'], resolve); 
 const certificate = resolve => require(['@/views/certificate'], resolve); 
 const permission = resolve => require(['@/views/permission'], resolve);
 const configManagement = resolve => require(['@/views/configManagement'], resolve);
@@ -43,6 +41,9 @@ const emailAlarm = resolve => require(['@/views/alarm/emailAlarm'], resolve);
 const emailAlarmType = resolve => require(['@/views/alarm/emailAlarmType'], resolve);
 const contractEvent = resolve => require(['@/views/contractEvent'], resolve);
 const blockEvent = resolve => require(['@/views/blockEvent'], resolve); 
+const groupManagement = resolve => require(['@/views/groupManagement'], resolve);
+const abiList = resolve => require(['@/views/abiList'], resolve);
+const parseAbi = resolve => require(['@/views/parseAbi'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -97,14 +98,29 @@ const routes = [
     {
         path: '/',
         component: main,
+        name: '群组管理',
+        nameKey: "groupManagement",
+        leaf: true,
+        menuShow: false,
+        iconCls: 'wbs-icon-group sidebar-icon',
+        children: [
+            { path: '/groupManagement', component: groupManagement, name: '群组管理', nameKey: "groupManagement", menuShow: true, meta: { requireAuth: true } },
+            
+        ]
+    },
+    {
+        path: '/',
+        component: main,
         name: '合约管理',
         nameKey: "contractTitle",
         // leaf: true,
         menuShow: true,
-        iconCls: 'wbs-icon-heyueguanli sidebar-icon',
+        iconCls: 'wbs-icon-heyueguanli sidebar-icon', 
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
+            { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: true, meta: { requireAuth: true } },
+            { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: true, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } }
         ]
@@ -129,7 +145,6 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
-            // { path: '/authorManagement', component: authorManagement, name: '权限管理', menuShow: true, meta: { requireAuth: true } },
             { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } }, 
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
             { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } }
@@ -144,7 +159,6 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
-            // { path: '/errorLogExport', component: errorLogExport, name: '错误日志', menuShow: true, meta: { requireAuth: true } },
             { path: '/nodesMetric', component: nodesMetric, name: '节点监控', nameKey: "nodesMonitor", menuShow: true, meta: { requireAuth: false } },
             { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: true, meta: { requireAuth: false } },
             { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', nameKey: "emailAlarm", menuShow: true, meta: { requireAuth: false } },
@@ -188,31 +202,16 @@ const routes = [
         children: [
             { path: '/accountInfo', component: accountInfo, name: '帐号管理', nameKey: "accountManagement", menuShow: true, meta: { requireAuth: true } }
         ]
-    },
-    // {
-    //     path: '/',
-    //     component: main,
-    //     name: '告警配置',
-    //     menuShow: true,
-    //     iconCls: 'wbs-icon-monitor sidebar-icon',
-    //     children: [
-    //         { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', menuShow: true, meta: { requireAuth: false } },
-    //         { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', menuShow: true, meta: { requireAuth: false } },
-    //     ]
-    // },
+    }
     
 ]
 const router = new Router({
     routes
 });
-router.onError((error) => {
-    const pattern = /Loading chunk (\d)+ failed/g;
-    const isChunkLoadFailed = error.message.match(pattern);
-    const targetPath = router.history.pending.fullPath;
-    if (isChunkLoadFailed) {
-        router.go(0);
-        router.replace(targetPath);
-    }
-});
+const originalPush = Router.prototype.push;
+Router.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => err)
+}
 
 export default router

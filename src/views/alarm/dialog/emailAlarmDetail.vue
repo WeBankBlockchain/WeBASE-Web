@@ -6,9 +6,6 @@
                     <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">
                         <span>{{alarmDetail.ruleName}}</span>
                     </el-form-item>
-                    <!-- <el-form-item label="告警类型" prop="ruleName">
-                        <span>{{alarmDetail.alertType | Status}}</span>
-                    </el-form-item> -->
                     <el-form-item :label="$t('alarm.alarmContent')" prop="ruleName">
                         <span>{{alarmDetail.alertContent}}</span>
                     </el-form-item>

@@ -25,6 +25,7 @@ const state = {
     isLogin: 0,
     loading: false,
     language: getLanguage(),
+    importRivateKey: false
 }
 export default new Vuex.Store({
     state,
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     mutations: {
         switch_creat_user_dialog(state) {
             state.creatUserVisible = !state.creatUserVisible
+        },
+        switch_import_rivate_key_dialog(state) {
+            state.importRivateKey = !state.importRivateKey
         },
         changeLogin(state, status) {
             state.isLogin = status
@@ -55,6 +59,9 @@ export default new Vuex.Store({
     actions: {
         switch_creat_user_dialog(context) {
             context.commit('switch_creat_user_dialog')
+        },
+        switch_import_rivate_key_dialog(context) {
+            context.commit('switch_import_rivate_key_dialog')
         },
         loginAction({ commit }) {
             commit('changeLogin', 1)

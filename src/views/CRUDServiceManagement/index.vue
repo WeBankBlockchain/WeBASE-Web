@@ -170,7 +170,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        
                     }
                 })
                 .catch(err => {
@@ -179,7 +179,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         runSql(formName) {
@@ -213,12 +213,6 @@ export default {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.runSqlResult = res.data.data;
-                        // if(sqlType==='select'|| sqlType ==='desc'){
-                        //     this.runSqlResult = res.data.data;
-                        // }else {
-                        //     this.runSqlResult = res.data.msg
-                        // }
-
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),

@@ -258,7 +258,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getMonitorUserList() {
@@ -275,7 +275,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        this.$message.closeAll()
+                        
                     }
                 })
                 .catch(err => {
@@ -284,7 +284,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getMonitorUserInterfaceList(val) {
@@ -313,7 +313,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         changeUserName(val) {

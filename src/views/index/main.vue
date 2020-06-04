@@ -51,7 +51,7 @@
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
@@ -63,11 +63,6 @@ export default {
         'v-guide': guide
     },
     data: function() {
-        // if (sessionStorage.getItem("reload") == 1) {
-        //     sessionStorage.setItem("reload", 2);
-        //     router.go(0);
-        // }
-        
         return {
             guideShow: false,
             frontShow: false,
@@ -181,17 +176,10 @@ export default {
         },
         getResetPassword() {
             let reqData;
-            // if(localStorage.getItem("encryptionId") == 1){
-            //     reqData = {
-            //         oldAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.oldPass),
-            //         newAccountPwd: "0x" + utils.sha4(this.rulePasswordForm.pass)
-            //     };
-            // }else{
                 reqData = {
                     oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
                     newAccountPwd: sha256(this.rulePasswordForm.pass)
                 };
-            // }
             resetPassword(reqData, {})
                 .then(res => {
                     this.loading = false;
@@ -219,11 +207,11 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    this.$message.closeAll()
+                    
                 });
         },
         getGroupList: function(){
-            getGroups().then(res => {
+            getGroupsInvalidIncluded().then(res => {
                 if(res.data.code === 0){
                     if(res.data.data && res.data.data.length){
                         if(!localStorage.getItem("groupId")){

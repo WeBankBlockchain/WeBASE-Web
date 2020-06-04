@@ -186,7 +186,7 @@ export function setCompile(data) {
     })
 }
 /* Background compilation*/
-export function backgroundCompile(data){
+export function backgroundCompile(data) {
     return post({
         url: `${url.ORG_LIST}/contract/comtractCompile `,
         method: 'post',
@@ -260,6 +260,41 @@ export function getAddUser(data) {
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
+    })
+}
+//import privateKey 
+export function queryImportPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/import`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//import pem privateKey 
+export function ImportPemPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/importPem`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//import p12 privateKey 
+export function ImportP12PrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/importP12`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+            'Content-Type': "multipart/form-data"
+        }
+
     })
 }
 /**Modify user description */
@@ -872,7 +907,7 @@ export function startAlarm(data) {
     })
 }
 //test 邮箱 
-export function testEmail(list,data) {
+export function testEmail(list, data) {
     return post({
         url: `${url.ORG_LIST}/alert/mail/test/${list}`,
         method: 'post',
@@ -884,7 +919,7 @@ export function testEmail(list,data) {
 }
 
 //get  alarm log 
-export function getAlarmLogs(data,list) {
+export function getAlarmLogs(data, list) {
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/log/list/${params.str}`,
@@ -930,7 +965,155 @@ export function contractEventList(data, list) {
     })
 }
 
+// 新增群组
+export function createGroup(data,nodeId) {
+    return post({
+        url: `${url.ORG_LIST}/group/generate/${nodeId}`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// 批量启动group
+export function batchStartGroup(data) {
+    return post({
+        url: `${url.ORG_LIST}/group/batchStart`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//刷新动态添加的群组
+export function getUpdateGroup() {
+    return get({
+        url: `${url.ORG_LIST}/group/update`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//增删改查群组
+export function crudGroup(data, nodeId) {
+    return post({
+        url: `${url.ORG_LIST}/group/operate/${nodeId}`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//all group
+export function getGroupsInvalidIncluded(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/group/all/invalidIncluded/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//单个节点获取所有群组状态
+export function groupStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/group/queryGroupStatus/list`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function deleteGroupData(groupId) {
+    return deleted({
+        url: `${url.ORG_LIST}/group/${groupId}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//abi 列表
+export function getAbiList(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/abi/list/${params.str}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 
+export function getAbiInfo(abiId) {
+    return get({
+        url: `${url.ORG_LIST}/abi/${abiId}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function importAbi(data) {
+    return post({
+        url: `${url.ORG_LIST}/abi`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//update imported abi
+export function updateImportAbi(data) {
+    return put({
+        url: `${url.ORG_LIST}/abi`,
+        method: 'put',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function deleteImportAbi(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/abi/${data}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//p2p连接的节点 
+export function p2pNodeList(groupId) {
+    return get({
+        url: `${url.ORG_LIST}/node/nodeIdList/${groupId}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 
+//查询群组状态异常（4）
+export function groupStatus4(groupStatus) {
+    return get({
+        url: `${url.ORG_LIST}/group/all/${groupStatus}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
