@@ -18,7 +18,7 @@ export default {
     text: {
         reqOvertime: "Request Timeout",
         loginFail: "Landing Failed",
-        systemError: "Yystem Error",
+        systemError: "System Error",
         copy: "Copy",
         arrow: "Arrow",
         copyErrorMsg: "Key is empty, do not copy.",
