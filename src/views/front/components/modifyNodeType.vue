@@ -9,7 +9,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('nodes.nodeStyle')" prop="adminRivateKey" style="width: 320px;">
+            <el-form-item :label="$t('nodes.nodeStyle')" prop="nodeType" style="width: 320px;">
                 <el-select v-model="modifyForm.nodeType" :placeholder="$t('text.select')">
                     <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
                     </el-option>
