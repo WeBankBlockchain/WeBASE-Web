@@ -17,7 +17,7 @@ export default {
     },
     text: {
         reqOvertime: "Request Timeout",
-        loginFail: "Landing Failed",
+        loginFail: "Login Failed",
         systemError: "System Error",
         copy: "Copy",
         arrow: "Arrow",
