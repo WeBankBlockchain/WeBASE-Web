@@ -33,7 +33,7 @@
                     </el-col>
                     <el-col :span="17">
                         <span class="font-color-fff text-hidden">value</span>
-                        <el-input v-model="item.argumentValue" validate-event @input="inputArgumentValue"></el-input>
+                        <input class="input-inner" type="text" v-model="item.argumentValue" @input="inputArgumentValue($event,item.type)"></input>
                         <span></span>
                     </el-col>
                 </el-row>
@@ -189,17 +189,17 @@ export default {
                             }
                         }
                     })
-                    sessionStorage.setItem('temporaryArgument',JSON.stringify(this.argumentList));
+                    sessionStorage.setItem('temporaryArgument', JSON.stringify(this.argumentList));
                 } else if (val === 'your function') {
                     this.functionValue = ''
                     this.argumentList = []
                     var temporaryArgumentList = JSON.parse(sessionStorage.getItem('temporaryArgument'))
-                    if(temporaryArgumentList.length){
+                    if (temporaryArgumentList.length) {
                         this.argumentList.push(temporaryArgumentList[0])
-                    }else {
+                    } else {
                         this.initArgument()
                     }
-                    
+
                 } else {
                     this.functionValue = val
                     this.emptyArgument()
@@ -211,7 +211,7 @@ export default {
                             }
                         }
                     })
-                    sessionStorage.setItem('temporaryArgument',JSON.stringify(this.argumentList))
+                    sessionStorage.setItem('temporaryArgument', JSON.stringify(this.argumentList))
                 }
             }
             this.textarea = '';
@@ -245,7 +245,7 @@ export default {
         extractAbi(obj) {
             var array = []
             obj.forEach(item => {
-                if (item.inputs.length && (item.type === 'function'|| item.type === 'constructor')) {
+                if (item.inputs.length && (item.type === 'function' || item.type === 'constructor')) {
                     array.push(item)
                 }
             })
@@ -271,7 +271,7 @@ export default {
                     }
                 }
             })
-            sessionStorage.setItem('temporaryArgument',JSON.stringify(this.argumentList))
+            sessionStorage.setItem('temporaryArgument', JSON.stringify(this.argumentList))
             if (this.functionType === 'constructor') {
 
                 this.parseConstructorAbi()
@@ -286,11 +286,11 @@ export default {
                 this.parseNewAbi()
             }
         },
-        validateArgumentValue(){
-            this.argumentList.forEach(item=>{
-                if(item.argumentValue) {
+        validateArgumentValue() {
+            this.argumentList.forEach(item => {
+                if (item.argumentValue) {
                     item.msgObj = validate(item.type, item.argumentValue)
-                }else {
+                } else {
                     item.msgObj = undefined
                 };
             })
@@ -317,12 +317,12 @@ export default {
                 inputsVal.push(dataType(item.type, item.argumentValue))
 
             })
-            if(!inputs.length){
+            if (!inputs.length) {
                 this.textarea = '';
                 return
             }
             for (let i = 0; i < inputsVal.length; i++) {
-                if (!inputsVal[i] && typeof(inputsVal[i])!='boolean') {
+                if (!inputsVal[i] && typeof (inputsVal[i]) != 'boolean') {
                     return false
                 }
             }
@@ -351,15 +351,15 @@ export default {
                 try {
                     inputsVal.push(dataType(item.type, item.argumentValue))
                 } catch (error) {
-                    console.log('erroe:',error)
+                    console.log('erroe:', error)
                 }
             })
-            if(!inputs.length){
+            if (!inputs.length) {
                 this.textarea = '';
                 return
             }
             for (let i = 0; i < inputsVal.length; i++) {
-                if (!inputsVal[i] && typeof(inputsVal[i])!='boolean') {
+                if (!inputsVal[i] && typeof (inputsVal[i]) != 'boolean') {
                     return false
                 }
             }
@@ -453,5 +453,24 @@ export default {
 .container {
     padding: 0 20px;
     padding-right: 50%;
+}
+.input-inner {
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 36px;
+    line-height: 36px;
+    outline: 0;
+    padding: 0 15px;
+    -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    width: 100%;
 }
 </style>
