@@ -164,7 +164,7 @@ export default {
                         if (!this.adminRivateKeyList.length) {
                             this.$message({
                                 type: "info",
-                                message: this.$t('nodes.groupId') + this.itemNodeData.groupId + this.$t('contracts.addPrivateKeyInfo'),
+                                message: this.$t('nodes.groupId') +' ' + this.itemNodeData.groupId +', ' + this.$t('contracts.addPrivateKeyInfo'),
                             });
                             return
                         }

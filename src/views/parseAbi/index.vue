@@ -322,7 +322,7 @@ export default {
                 return
             }
             for (let i = 0; i < inputsVal.length; i++) {
-                if (!inputsVal[i]) {
+                if (!inputsVal[i] && typeof(inputsVal[i])!='boolean') {
                     return false
                 }
             }
@@ -359,7 +359,7 @@ export default {
                 return
             }
             for (let i = 0; i < inputsVal.length; i++) {
-                if (!inputsVal[i]) {
+                if (!inputsVal[i] && typeof(inputsVal[i])!='boolean') {
                     return false
                 }
             }
