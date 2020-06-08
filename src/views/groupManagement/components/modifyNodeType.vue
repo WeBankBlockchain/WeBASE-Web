@@ -1,6 +1,9 @@
 <template>
     <div>
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
+            <el-form-item :label="$t('nodes.groupId')" prop="groupId" style="width: 320px;">
+                <span>{{itemNodeData.groupId}}</span>
+            </el-form-item>
             <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
@@ -9,7 +12,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('nodes.nodeStyle')" prop="nodeType" style="width: 320px;">
+            <el-form-item :label="$t('nodes.nodeStyle')" prop="nodeStyle" style="width: 320px;">
                 <el-select v-model="modifyForm.nodeType" :placeholder="$t('text.select')">
                     <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
                     </el-option>
@@ -32,7 +35,7 @@ export default {
     },
 
     props: {
-        modifyNode: {
+        itemNodeData: {
             type: Object
         }
     },
@@ -49,15 +52,11 @@ export default {
                 {
                     type: 'sealer',
                     name: this.$t("nodes.sealer")
-                },
-                {
-                    type: 'remove',
-                    name: this.$t("nodes.remove")
-                },
+                }
             ],
             modifyForm: {
                 adminRivateKey: '',
-                nodeType: ''
+                nodeType: 'observer'
             },
         }
     },
@@ -103,40 +102,7 @@ export default {
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'observer') {
-                        this.$confirm(this.$t("nodes.observerText"), this.$t("text.tips"), {
-                            confirmButtonText: this.$t("text.sure"),
-                            cancelButtonText: this.$t("text.cancel"),
-                            type: 'warning'
-                        }).then(() => {
-                            this.queryConsensusNodeId()
-                        }).catch(() => {
-                            console.log('close')
-                        });
-                    }else if((this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'remove') || (this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'remove')){
-                        this.$confirm(this.$t("nodes.removeText"), this.$t("text.tips"), {
-                            confirmButtonText: this.$t("text.sure"),
-                            cancelButtonText: this.$t("text.cancel"),
-                            type: 'warning'
-                        }).then(() => {
-                            this.queryConsensusNodeId()
-                        }).catch(() => {
-                            console.log('close')
-                        });
-                    }else if((this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'sealer') || (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer')){
-                        this.$confirm(this.$t("nodes.sealerText"), this.$t("text.tips"), {
-                            confirmButtonText: this.$t("text.sure"),
-                            cancelButtonText: this.$t("text.cancel"),
-                            type: 'warning'
-                        }).then(() => {
-                            this.queryConsensusNodeId()
-                        }).catch(() => {
-                            console.log('close')
-                        });
-                    }else {
-                        this.queryConsensusNodeId()
-                    }
-                    
+                    this.queryConsensusNodeId()
                 } else {
                     return false;
                 }
@@ -146,9 +112,9 @@ export default {
         queryConsensusNodeId() {
             this.loading = true;
             let reqData = {
-                groupId: localStorage.getItem("groupId"),
+                groupId: this.itemNodeData.groupId,
                 nodeType: this.modifyForm.nodeType,
-                nodeId: this.modifyNode.nodeId,
+                nodeId: this.itemNodeData.nodeId,
                 fromAddress: this.modifyForm.adminRivateKey,
             }
             consensusNodeId(reqData)
@@ -182,7 +148,7 @@ export default {
         },
         getUserData: function () {
             let reqData = {
-                groupId: localStorage.getItem("groupId"),
+                groupId: this.itemNodeData.groupId,
                 pageNumber: 1,
                 pageSize: 1000
             };
@@ -195,6 +161,13 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
+                        if (!this.adminRivateKeyList.length) {
+                            this.$message({
+                                type: "info",
+                                message: this.$t('nodes.groupId') +' ' + this.itemNodeData.groupId +', ' + this.$t('contracts.addPrivateKeyInfo'),
+                            });
+                            return
+                        }
                         if (this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({

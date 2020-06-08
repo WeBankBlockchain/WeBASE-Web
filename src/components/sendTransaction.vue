@@ -53,9 +53,6 @@
                             <span class="">{{item.name}}</span>
                         </template>
                     </el-input>
-                    <!-- <el-tooltip class="item" effect="dark" content="" placement="top-start">
-                        <i class="el-icon-info" style="position: relative;top: 8px;"></i>
-                    </el-tooltip> -->
                 </li>
                 <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>{{this.$t("contracts.paramsInfo")}}</p>
             </ul>
@@ -70,7 +67,7 @@
 <script>
 import { sendTransation, getUserList } from "@/util/api";
 import errcode from "@/util/errcode";
-
+import {isJson} from "@/util/util"
 export default {
     name: "sendTransation",
     props: ["data", "dialogClose", "abi", 'version', 'address'],
@@ -193,13 +190,23 @@ export default {
             if (this.transation.funcType === "constructor") {
                 this.transation.funcName = this.data.contractName;
             }
+            
             if (this.transation.funcValue.length) {
                 for (let i = 0; i < this.transation.funcValue.length; i++) {
                     let data = this.transation.funcValue[i].replace(
                         /^\s+|\s+$/g,
                         ""
                     );
-                    this.transation.funcValue[i] = data;
+                    if(data && isJson(data)){
+                        try {
+                            this.transation.funcValue[i] = JSON.parse(data)
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    }else {
+                        this.transation.funcValue[i] = data;
+                    }
+                    
                 }
             }
             let functionName = "";
@@ -208,6 +215,7 @@ export default {
                     functionName = value.name
                 }
             })
+            
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 user: this.constant ? ' ' : this.transation.userName,

@@ -5,6 +5,7 @@
             <div class="search-part" style="padding-top: 20px;">
                 <div class="search-part-left">
                     <el-button type="primary" class="search-part-left-btn" @click="generateGroup">{{this.$t("nodes.addGroup")}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="addHadGroup">{{this.$t("nodes.addHadGroup")}}</el-button>
                     <el-button type="text" icon="el-icon-refresh" @click="queryUpdateGroup" v-preventReClick :title="$t('alarm.refresh')"></el-button>
                 </div>
                 <div class="">
@@ -25,7 +26,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column fixed="right" :label="$t('nodes.operation')" width="200">
+                        <el-table-column fixed="right" :label="$t('nodes.operation')" width="250">
                             <template slot-scope="scope">
                                 <el-button type="text" size="small" @click="queryCrudGroup(scope.row)">{{$t('text.update')}}</el-button>
                                 <el-button type="text" size="small" :loading="dropLoading&&dropIndex===scope.row.groupId" @click="queryDeleteGroupData(scope.row)">{{$t('text.dropGroupData')}}</el-button>
@@ -44,6 +45,9 @@
                     <el-dialog :title="$t('nodes.modifyGroup')+'('+'ID:'+' '+`${modifyGroupId}`+')'" :visible.sync="modifyGroupVisibility" v-if="modifyGroupVisibility" center>
                         <modify-group @modifySuccess="modifySuccess" @modifyClose="modifyClose" :itemGroupData="itemGroupData"></modify-group>
                     </el-dialog>
+                    <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="joinGroupTipsVisibility" v-if="joinGroupTipsVisibility" center>
+                        <join-group-tips @joinGroupTipsSuccess="joinGroupTipsSuccess"></join-group-tips>
+                    </el-dialog>
                 </div>
 
             </div>
@@ -55,6 +59,7 @@
 import contentHead from "@/components/contentHead";
 import generateGroup from "./components/generateGroup";
 import modifyGroup from "./components/modifyGroup";
+import joinGroupTips from "./components/joinGroupTips";
 import { crudGroup, getUpdateGroup, getGroupsInvalidIncluded, deleteGroupData } from "@/util/api"
 const FileSaver = require("file-saver");
 export default {
@@ -63,7 +68,8 @@ export default {
     components: {
         contentHead,
         generateGroup,
-        modifyGroup
+        modifyGroup,
+        joinGroupTips
     },
 
     props: {
@@ -85,7 +91,8 @@ export default {
             dropLoading: false,
             dropIndex: '',
             updateGroupType: '',
-            modifyGroupId: ''
+            modifyGroupId: '',
+            joinGroupTipsVisibility: false
         }
     },
 
@@ -139,6 +146,9 @@ export default {
         generateGroup() {
             this.generateGroupVisibility = true;
         },
+        addHadGroup() {
+            this.joinGroupTipsVisibility = true;
+        },
         modify() {
             this.modifyGroupVisibility = true;
         },
@@ -159,6 +169,10 @@ export default {
             this.queryGroupTable();
             this.updateGroup++;
             // this.updateGroupType = 'update'
+        },
+        joinGroupTipsSuccess(){
+            this.joinGroupTipsVisibility = false
+            this.queryGroupTable()
         },
         queryGroupTable() {
             let reqData = {
