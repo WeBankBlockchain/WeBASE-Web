@@ -47,7 +47,7 @@ export default {
                     callback(new Error(_this.$t("rule.contractAbi")));
                 } else {
                     if(!isJson(value)){
-                        callback(new Error('Invalid input: Unexpected end of JSON input'));
+                        callback(new Error(_this.$t("rule.correctJson")));
                     }else {
                         callback()
                     }
