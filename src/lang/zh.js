@@ -240,7 +240,7 @@ export default {
         frontConfig: "节点前置配置",
         addFrontSuccessMsg: "添加前置成功",
         addFrontErrMsg: "添加前置失败",
-        admin: "管理员账号",
+        admin: "私钥用户",
         observerText: "设置为观察节点，节点将不参与共识",
         removeText: "设置为游离节点，节点将不参与共识和同步",
         sealerText: "设置为共识节点，节点将参与共识。请联系专业人员设置",
