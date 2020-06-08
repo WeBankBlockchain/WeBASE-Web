@@ -356,7 +356,7 @@ let errCode = {
     },
     "201202": {
         en: "Permission denied, please check chain administrator permission",
-        zh: '权限管理,检查用户权限'
+        zh: '权限不足，请到“权限管理”检查用户权限'
     },
     "201203": {
         en: "node id is invalid",
