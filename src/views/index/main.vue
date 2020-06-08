@@ -51,7 +51,7 @@
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
@@ -154,7 +154,7 @@ export default {
     },
     mounted(){
         this.getEncryption();
-        this.getGroupList();
+        this.getFrontTable();
     },
     methods: {
         change: function(val) {
@@ -210,6 +210,40 @@ export default {
                     
                 });
         },
+        getFrontTable() {
+            let reqData = {
+                // frontId: this.frontId
+            }
+            getFronts(reqData)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        if(res.data.data.length > 0){
+                            this.getGroupList()
+                        }else{
+                            router.push("/front");
+                            this.frontShow = true
+                        }
+                        
+                    } else {
+                        router.push("/front");
+                        this.frontShow = true
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                        
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
         getGroupList: function(){
             getGroupsInvalidIncluded().then(res => {
                 if(res.data.code === 0){
@@ -232,13 +266,13 @@ export default {
                         this.guideShow = true
                     }
                 }else{
-                    this.guideShow = true
+                    this.guideShow = false
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-                    router.push("/login");
+                   
                 }
             }).catch(err => {
                 
@@ -247,7 +281,8 @@ export default {
                     type: "error",
                     duration: 2000
                 });
-                router.push("/login");
+                router.push("/front");
+                this.frontShow = true
             })
         },
         getEncryption: function(){

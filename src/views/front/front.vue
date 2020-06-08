@@ -16,13 +16,9 @@
 <template>
     <div>
         <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head>
-        <div class="module-wrapper">
+        <!-- <div class="module-wrapper">
             <h3 style="padding: 20px 0 0 40px;">{{this.$t("nodes.nodeFront")}}</h3>
-            <div class="search-part" style="padding-top: 20px;">
-                <div class="search-part-left" v-if='!disabled'>
-                    <el-button type="primary" class="search-part-left-btn" @click="createFront">{{this.$t("nodes.addFront")}}</el-button>
-                </div>
-            </div>
+            
             <div class="search-table">
                 <el-table :data="frontData" class="search-table-content" v-loading="loading">
                     <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip>
@@ -46,35 +42,35 @@
                 <el-pagination v-show='total > 10' class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
-        </div>
+        </div> -->
         <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
-                <h3 style="padding: 20px 0 8px 0;">
+                <!-- <h3 style="padding: 20px 0 8px 0;">
                     {{this.$t("nodes.nodeList")}}
                     <el-tooltip effect="dark"  placement="top-start">
                         <div slot="content">{{$t('nodes.nodeDescription')}}</div>
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
-                </h3>
-                <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
-                    <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
+                </h3> -->
+                <div class="search-part" style="padding-top: 20px;">
+                    <div class="search-part-left" v-if='!disabled'>
+                        <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点</el-button>
+                    </div>
+                </div>
+                <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
+                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
                         <template slot-scope="scope">
-                            <template v-if="head.enName!='operate'">
-                                <span v-if="head.enName ==='nodeActive'">
+                            <!-- <template v-if="head.enName!='status'">
+                                <span v-if="head.enName ==='status'">
                                     <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
                                 </span>
-                                <span v-else-if="head.enName === 'nodeId'">
-                                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
-                                    {{scope.row[head.enName]}}
-                                </span>
-                                <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row[head.enName])}}</span>
-                                <span v-else-if="head.enName==='pbftView'">
-                                    {{scope.row[head.enName]}}
-                                </span>
                                 <span v-else>{{scope.row[head.enName]}}</span>
+                            </template> -->
+                            <template v-if="head.enName ==='operate'">
+                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
                             <template v-else>
-                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
+                                <span>{{scope.row[head.enName]}}</span>
                             </template>
                         </template>
 
@@ -86,6 +82,7 @@
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
+                <add-node v-if='addNodeShow' :show='addNodeShow' @close='addNodeClose'></add-node>
             </div>
         </div>
     </div>
@@ -98,13 +95,15 @@ import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId } fro
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
+import addNode from "./dialog/addNode"
 import Bus from "@/bus"
 export default {
     name: "node",
     components: {
         "v-content-head": contentHead,
         "v-setFront": setFront,
-        modifyNodeType
+        modifyNodeType,
+        "add-node": addNode
     },
     watch: {
         $route() {
@@ -134,16 +133,17 @@ export default {
             urlQuery: this.$root.$route.query,
             disabled: false,
             modifyNode: {},
-            modifyDialogVisible: false
+            modifyDialogVisible: false,
+            addNodeShow: false
         };
     },
     computed: {
         frontHead() {
             let data = [
-                {
-                    enName: "frontId",
-                    name: this.$t("nodes.frontId")
-                },
+                // {
+                //     enName: "frontId",
+                //     name: this.$t("nodes.frontId")
+                // },
                 {
                     enName: "frontIp",
                     name: this.$t("nodes.ip")
@@ -168,9 +168,19 @@ export default {
                     enName: "createTime",
                     name: this.$t("home.createTime")
                 },
+                // {
+                //     enName: "modifyTime",
+                //     name: this.$t("nodes.modifyTime")
+                // },
                 {
-                    enName: "modifyTime",
-                    name: this.$t("nodes.modifyTime")
+                    enName: "status",
+                    name: this.$t("home.status"),
+                    width: 150
+                },
+                {
+                    enName: "operate",
+                    name: this.$t("nodes.operation"),
+                    width: 150
                 }
             ];
             return data
@@ -217,10 +227,14 @@ export default {
         } else {
             this.disabled = true
         }
+        // this.getFrontTable();
         this.getFrontTable();
-        this.getNodeTable();
     },
     methods: {
+        addNodeClose: function() {
+            this.addNodeShow = false;
+            this.getNodeTable();
+        },
         changGroup() {
             this.getFrontTable();
             this.getNodeTable();
@@ -239,6 +253,7 @@ export default {
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loading = false;
+                        this.getGroupList();
                     } else {
                         this.loading = false;
                         this.$message({
@@ -258,6 +273,32 @@ export default {
                     });
                     
                 });
+        },
+        getGroupList: function(){
+            getGroupsInvalidIncluded().then(res => {
+                if(res.data.code === 0){
+                    if(res.data.data && res.data.data.length){
+                        if(!localStorage.getItem("groupId")){
+                            localStorage.setItem("groupId",res.data.data[0].groupId)
+                        }
+                        if(!localStorage.getItem("groupName")){
+                            localStorage.setItem("groupName",res.data.data[0].groupName);
+                        }
+                    }
+                }else{
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
         },
         handleSizeChange(val) {
             this.pageSize = val;
@@ -317,7 +358,7 @@ export default {
             return str;
         },
         createFront() {
-            this.frontShow = true;
+            this.addNodeShow = true;
         },
         deleteNodes(val, type) {
             this.nodesDialogOptions = {

@@ -1117,3 +1117,57 @@ export function groupStatus4(groupStatus) {
         }
     })
 }
+
+//获取 Docker 镜像版本
+export function getConfigList (data) {
+    return get ({
+        url: `${url.ORG_LIST}/config/list`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//部署接口
+export function deployConfig (data) {
+    return post ({
+        url: `${url.ORG_LIST}/deploy/init`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//新增节点
+export function newNode (data) {
+    return post ({
+        url: `${url.ORG_LIST}/node/add`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//节点升级
+export function upgradeNode (data) {
+    return post ({
+        url: `${url.ORG_LIST}/node/upgrade`,
+        method: "post",
+        data: data,
+         
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+
+
+
