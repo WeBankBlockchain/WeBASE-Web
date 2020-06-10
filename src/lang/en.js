@@ -320,7 +320,8 @@ export default {
         addPrivateKeyInfo: "Please add a private key user!",
         updateAbi: "Update",
         deleteAbi: "Delete",
-        limit_1: "Only one file can be uploaded at a time"
+        limit_1: "Only one file can be uploaded at a time",
+        txResult: "Trading content"
     },
     privateKey: {
         addUser: "Add Users",

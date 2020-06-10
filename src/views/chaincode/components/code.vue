@@ -119,7 +119,7 @@ let Mode = require("ace-mode-solidity/build/remix-ide/mode-solidity").Mode;
 import errcode from "@/util/errcode";
 let Base64 = require("js-base64").Base64;
 import constant from "@/util/constant";
-import editor from "../dialog/editor"
+import editor from "@/components/editor"
 import uploadFileAdr from "../dialog/uploadFileAdr"
 import Bus from '@/bus'
 import web3 from "@/util/ethAbi"
