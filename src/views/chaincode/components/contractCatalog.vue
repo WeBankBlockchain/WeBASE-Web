@@ -41,8 +41,8 @@
                         <el-input v-model="contractName" v-focus="true" autofocus='autofocus' maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
                         <div class="contract-menu-handle" v-if='!disabled &&item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul v-if="contractFile">
-                                <li class="contract-menu-handle-list" @click="rename">{{this.$t("contracts.rename")}}</li>
-                                <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{this.$t("text.delete")}}</li>
+                                <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
+                                <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li>
                             </ul>
                         </div>
                     </div>
@@ -52,8 +52,8 @@
                         <span @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
-                                <li class="contract-menu-handle-list" @click="addFiles">{{this.$t('contracts.createFile')}}</li>
-                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{this.$t("text.delete")}}</li>
+                                <li class="contract-menu-handle-list" @click="addFiles">{{$t('contracts.createFile')}}</li>
+                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
                             </ul>
                         </div>
                         <br>
@@ -64,8 +64,8 @@
                                 <el-input v-model="contractName" autofocus='autofocus' maxlength="32" @blur="changeName(list)" v-if="list.renameShow"></el-input>
                                 <div class="contract-menu-handle" v-if='!disabled &&list.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                                     <ul v-if="contractFile">
-                                        <li class="contract-menu-handle-list" @click="rename">{{this.$t("contracts.rename")}}</li>
-                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{this.$t("text.delete")}}</li>
+                                        <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
+                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li>
                                     </ul>
                                 </div>
                             </li>
