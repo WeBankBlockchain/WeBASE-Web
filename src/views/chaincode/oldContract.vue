@@ -71,7 +71,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import sendTransation from "./dialog/sendTransaction"
-import editor from "./dialog/editor"
+import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
 import { getContractList } from "@/util/api"
 import router from '@/router'
