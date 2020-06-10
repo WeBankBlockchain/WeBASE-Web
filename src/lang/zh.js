@@ -320,7 +320,8 @@ export default {
         addPrivateKeyInfo: "请添加私钥用户!",
         updateAbi: "更新",
         deleteAbi: "删除",
-        limit_1: "每次最多只能上传一个文件"
+        limit_1: "每次最多只能上传一个文件",
+        txResult: "交易内容"
     },
     privateKey: {
         addUser: "新增用户",
