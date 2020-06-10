@@ -77,13 +77,11 @@
 </template>
 
 <script>
-import dialog from "./groupDialog";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
 import { loginOut, groupStatus4, getGroupsInvalidIncluded } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
-import langSelect from "@/components/LangSelect"
 export default {
     name: "conetnt-head",
     props: {
@@ -113,9 +111,7 @@ export default {
         }
     },
     components: {
-        "v-dialog": dialog,
-        changePasswordDialog,
-        "lang-select": langSelect
+        changePasswordDialog
     },
     watch: {
         headTitle: function (val) {

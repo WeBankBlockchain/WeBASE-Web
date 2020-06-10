@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="130px" class="demo-ruleForm">
+        <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="135px" class="demo-ruleForm">
             <el-form-item :label="$t('main.oldPassword')" prop="oldPass">
                 <el-input type="password" v-model="rulePasswordForm.oldPass" autocomplete="off"></el-input>
             </el-form-item>
