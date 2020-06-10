@@ -28,7 +28,7 @@
                 <td>
                     <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 240px">
                         <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
-                    </el-select>    
+                    </el-select>
                 </td>
             </tr>
             <tr v-if='inputs.length'>
@@ -62,10 +62,11 @@
 <script>
 import { sendTransation, getUserList } from "@/util/api";
 import errcode from "@/util/errcode";
+import { isJson } from "@/util/util"
 export default {
     name: "changeUser",
     props: ["abi"],
-    data: function() {
+    data: function () {
         return {
             userName: "",
             userList: [],
@@ -78,12 +79,12 @@ export default {
             errorInfo: ""
         };
     },
-    mounted: function() {
+    mounted: function () {
         this.getUserData();
         this.changeConstructor();
     },
     methods: {
-        changeConstructor: function() {
+        changeConstructor: function () {
             if (this.abifile.length) {
                 this.abifile.forEach(value => {
                     if (value.type === "constructor") {
@@ -92,20 +93,32 @@ export default {
                 });
             }
         },
-        close: function() {
+        close: function () {
             this.$emit("close");
         },
-        submit: function() {
-                this.versionShow = false;
-                this.errorInfo = ''
-                let data = {
-                    userId: this.userName,
-                    params: this.parameter,
-                };
-                this.$emit("change", data);
-                this.$emit("close");
+        submit: function () {
+            this.versionShow = false;
+            this.errorInfo = ''
+            var params = []
+            for (let i = 0; i < this.parameter.length; i++) {
+                if (this.parameter[i] && isJson(this.parameter[i])) {
+                    try {
+                        params[i] = JSON.parse(this.parameter[i])
+                    } catch (error) {
+                        console.log(error)
+                    }
+                } else {
+                    params[i] = this.parameter[i];
+                }
+            }
+            let data = {
+                userId: this.userName,
+                params: params
+            };
+            this.$emit("change", data);
+            this.$emit("close");
         },
-        getUserData: function() {
+        getUserData: function () {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
