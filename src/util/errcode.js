@@ -188,8 +188,8 @@ let errCode = {
         zh: '用户名已经存在'
     },
     "201039": {
-        en: "address already exists",
-        zh: '地址已经存在'
+        en: "private key already exists",
+        zh: '私钥已存在'
     },
     "201040": {
         en: "private key not exists",
@@ -198,6 +198,10 @@ let errCode = {
     "201041": {
         en: "external user's appId and signUserId cannot be empty",
         zh: '外部用户的appId和signUserId不能为空'
+    },
+    "201042": {
+        en: "There is no sol files in source",
+        zh: '源文件中没有sol文件'
     },
     "201043": {
         en: "Invalid group operate type",
@@ -208,8 +212,12 @@ let errCode = {
         zh: '无效的数据类型'
     },
     "201045": {
-        en: "Group operate fail",
-        zh: '群组操作失败'
+        en: "Encode string can not be empty",
+        zh: '编码字符串不能为空'
+    },
+    "201046": {
+        en: "Transaction failed!",
+        zh: '交易失败!'
     },
     "201100": {
         en: "Params not fit",
