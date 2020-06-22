@@ -1,3 +1,17 @@
+### v1.3.2 (2020-06-22)
+
+支持WeBASE v1.3.2
+
+**Fix**
+- 修复页面展示bugs
+- 优化交易调用代码
+
+**兼容性**
+- 支持FISCO-BCOS v2.4.0 及以上版本
+- WeBASE-Node-Manager v1.3.1+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 ### v1.3.1 (2020-06-01)
 
 支持WeBASE v1.3.1
