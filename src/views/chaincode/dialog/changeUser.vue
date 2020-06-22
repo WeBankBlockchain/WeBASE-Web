@@ -16,17 +16,10 @@
 <template>
     <div class="chang-wrapper">
         <table class="opt-wrapper">
-            <!-- <tr>
-                <td>合约版本号：</td>
-                <td>
-                    <el-input v-model="version" placeholder="请输入数字或字母" @blur='versionBlur' maxlength='18' style="width: 240px"></el-input>
-                    <span style="color: #f00" v-show="versionShow">{{errorInfo}}</span>
-                </td>
-            </tr> -->
             <tr>
                 <td style="width: 40px;">{{this.$t('contracts.user')}}：</td>
                 <td>
-                    <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 240px">
+                    <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 100%">
                         <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
                     </el-select>
                 </td>
@@ -34,15 +27,12 @@
             <tr v-if='inputs.length'>
                 <td style="vertical-align: top;">{{this.$t('contracts.params')}}：</td>
                 <td>
-                    <div v-for='(item,index) in inputs' :key='item.name'>
-                        <el-input v-model="parameter[index]" style="width: 240px;margin-bottom:10px;" :placeholder="item.type">
+                    <div v-for='(item,index) in inputs' :key='item.name' class="params-input">
+                        <el-input v-model.trim="parameter[index]" style="margin-bottom:10px;" :placeholder="item.type">
                             <template slot="prepend">
-                                <span>{{item.name}}</span>
+                                <span :title="item.name">{{item.name}}</span>
                             </template>
                         </el-input>
-                        <!-- <el-tooltip class="item" effect="dark" content="如果参数类型是数组，请用逗号分隔，不需要加上引号，例如：arry1,arry2。string等其他类型也不用加上引号" placement="top-start">
-                            <i class="el-icon-info" style="position: relative;top: 8px;"></i>
-                        </el-tooltip> -->
                     </div>
                 </td>
             </tr>
@@ -174,6 +164,12 @@ export default {
 }
 .send-btn /deep/ .el-button {
     padding: 9px 16px;
+}
+.params-input >>> .el-input-group__prepend {
+    max-width: 136px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 </style>
 
