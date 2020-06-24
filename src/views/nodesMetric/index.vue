@@ -131,7 +131,9 @@ export default {
         Bus.$off("chooselanguage")
     },
     mounted() {
-        this.getFrontTable();
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+            this.getFrontTable();
+        }
         Bus.$on("changeGroup", data => {
             this.changGroup()
         })

@@ -76,7 +76,7 @@ export default {
                         type: "success",
                         message: "新增节点成功"
                     })
-                    this.modelClose
+                    this.modelClose()
                 }else{
                     this.$message({
                             message: this.$chooseLang(res.data.code),

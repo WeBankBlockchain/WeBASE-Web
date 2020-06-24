@@ -43,6 +43,7 @@
             <router-view class="bg-f7f7f7"></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
+        <set-config :show='configShow' v-if='configShow' @close='closeConfig'></set-config>
         <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
     </div>
 </template>
@@ -50,17 +51,20 @@
 <script>
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
+import setConfig from "./dialog/setConfig"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts,getChainInfo } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
+import Bus from "@/bus"
 export default {
     name: "mains",
     components: {
         "v-menu": sidebar,
         "set-front": setFront,
-        'v-guide': guide
+        'v-guide': guide,
+        'set-config': setConfig
     },
     data: function() {
         return {
@@ -76,6 +80,8 @@ export default {
                 pass: "",
                 checkPass: ""
             },
+            configType: 1,
+            configShow: false
         };
     },
     computed: {
@@ -210,6 +216,9 @@ export default {
                     
                 });
         },
+        getConfigData: function () {
+            
+        },
         getFrontTable() {
             let reqData = {
                 // frontId: this.frontId
@@ -221,12 +230,21 @@ export default {
                             this.getGroupList()
                         }else{
                             router.push("/front");
-                            this.frontShow = true
+                            // if(this.configType !== 1){
+                            //     this.frontShow = true
+                            // }else{
+                            //     this.configShow = true
+                            // }
+                            
                         }
                         
                     } else {
                         router.push("/front");
-                        this.frontShow = true
+                        // if(this.configType !== 1){
+                        //         this.frontShow = true
+                        //     }else{
+                        //         this.configShow = true
+                        //     }
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
@@ -263,7 +281,7 @@ export default {
                             router.push("/home")
                         }
                     }else{
-                        this.guideShow = true
+                        // this.guideShow = true
                     }
                 }else{
                     this.guideShow = false
@@ -275,14 +293,17 @@ export default {
                    
                 }
             }).catch(err => {
-                
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
                 router.push("/front");
-                this.frontShow = true
+                if(this.configType !== 1){
+                                this.frontShow = true
+                            }else{
+                                this.configShow = true
+                            }
             })
         },
         getEncryption: function(){
@@ -307,7 +328,12 @@ export default {
         },
         closeFront: function(){
             this.frontShow = false;
-            this.getGroupList()
+            this.getFrontTable()
+        },
+        closeConfig: function() {
+            this.configShow = false;
+            this.getFrontTable();
+            Bus.$emit("changeConfig")
         },
         closeGuide: function(){
             this.guideShow = false

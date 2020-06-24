@@ -129,9 +129,11 @@ export default {
         } else {
             this.disabled = true
         }
-        this.$nextTick(function () {
-            this.getContracts()
-        })
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+            this.$nextTick(function () {
+                this.getContracts()
+            })
+        }
         Bus.$on("compile", data => {
             this.saveContract(data, this.$t("contracts.contractCompileSuccess"))
         })

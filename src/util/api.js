@@ -1154,10 +1154,22 @@ export function newNode (data) {
     })
 }
 
+//部署新增节点
+export function addNode (data) {
+    return post ({
+        url: `${url.ORG_LIST}/deploy/node/add`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 //节点升级
 export function upgradeNode (data) {
     return post ({
-        url: `${url.ORG_LIST}/node/upgrade`,
+        url: `${url.ORG_LIST}/deploy/upgrade`,
         method: "post",
         data: data,
          
@@ -1167,7 +1179,74 @@ export function upgradeNode (data) {
     })
 }
 
+//删除链
+export function deleteChain () {
+    return deleted ({
+        url: `${url.ORG_LIST}/deploy/delete`,
+        method: "delete",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
+//删除节点
+export function deleteNode(data) {
+    return post ({
+        url: `${url.ORG_LIST}/deploy/node/delete`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//停止节点
+export function stopNode (data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/node/stop`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//启动节点
+export function startNode (data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/node/start`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//链信息
+export function getChainInfo () {
+    return get ({
+        url: `${url.ORG_LIST}/deploy/chain/info`,
+        method: "get",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//获取链的部署进度
+export function getProgress () {
+    return get ({
+        url: `${url.ORG_LIST}/deploy/progress`,
+        method: "get",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 
 

@@ -136,7 +136,9 @@ export default {
         } else {
             this.disabled = true
         }
-        this.queryAbiList()
+        if(localStorage.getItem('groupId') && localStorage.getItem("configData") == 5){
+            this.queryAbiList()
+        }
     },
 
     methods: {
