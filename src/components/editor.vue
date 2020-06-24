@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 <template>
-    <el-dialog v-dialogDrag :title="'交易内容'" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh">
-        <div v-if='!transationData'>无数据</div>
+    <el-dialog v-dialogDrag :title="$t('contracts.txResult')" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh">
+        <div v-if='!transationData'>{{$t('text.noData')}}</div>
         <div v-if='transationData && !transationData.logs' slot :style="{'height':editorHeight + 'px'}" style="overflow-y:auto">
             <json-viewer :value="transationData" :expand-depth='5' copyable></json-viewer>
         </div>
@@ -44,7 +44,7 @@
                                 <el-table-column prop="type" label="type" align="left"></el-table-column>
                                 <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                     <template slot-scope="scope">
-                                        <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                        <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
                                         <span>{{scope.row.data}}</span>
                                     </template>
                                 </el-table-column>
@@ -113,7 +113,7 @@
                                             <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
                                             <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                                 <template slot-scope="scope">
-                                                    <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                                    <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
                                                     <span>{{scope.row.data}}</span>
                                                 </template>
                                             </el-table-column>
@@ -154,7 +154,6 @@
 </template>
 <script>
 import { getFunctionAbi } from "@/util/api"
-import errcode from "@/util/errcode";
 import { debuglog } from 'util';
 export default {
     name: 'editor',
@@ -167,14 +166,14 @@ export default {
             modePath: 'ace/mode/solidity',
             editorDialog: this.show || false,
             eventSHow: false,
-            eventTitle: "还原",
+            eventTitle: this.$t('transaction.reduction'),
             funcData: "",
             methodId: "",
             abiType: "",
             inputData: [],
             decodeData: "",
             showDecode: true,
-            buttonTitle: "解码",
+            buttonTitle: this.$t('transaction.decode'),
             typesArray: this.input,
             inputButtonShow: true,
             editorHeight: ''
@@ -199,19 +198,15 @@ export default {
         decodeOutput: function () {
             if (this.showDecode) {
                 this.showDecode = false;
-                this.buttonTitle = '还原'
+                this.buttonTitle = this.$t('transaction.reduction')
             } else {
                 this.showDecode = true;
-                this.buttonTitle = '解码'
+                this.buttonTitle = this.$t('transaction.decode')
             }
         },
         decodefun: function () {
             let web3 = new Web3(Web3.givenProvider);
-            // this.methodId = input.substring(0, 10);
-            // this.methodId = data;
-            // let inputDatas = "0x" + input.substring(10);
             if (this.typesArray) {
-                // abiData.abiInfo = JSON.parse(abiData.abiInfo)
                 this.typesArray.inputs.forEach((val, index) => {
                     if (val && index < this.typesArray.inputs.length - 1) {
                         this.abiType = this.abiType + val.type + " " + val.name + ",";
@@ -232,39 +227,11 @@ export default {
                                 this.inputData[index].data = this.decodeData[index];
                                 
                             }
-                            // this.editorOutput.forEach((val, index) => {
-                            //     this.inputData[index] = {};
-                            //     this.inputData[index].name = val.name;
-                            //     this.inputData[index].type = val.type;
-                            //     console.log('========',this.decodeData[key].toString())
-                            //     this.inputData[index].data = this.decodeData[key].toString();
-                            //     if (val && val.name && val.type) {
-                            //         if (key === val.name) {
-                            //             this.inputData[index] = {};
-                            //             this.inputData[index].name = val.name;
-                            //             this.inputData[index].type = val.type;
-                            //             this.inputData[index].data = this.decodeData[key];
-                            //         }
-                            //     }else if (val && val.type) {
-                            //         if (index == key) {
-                            //             this.inputData[index] = {};
-                            //             this.inputData[index].name = val.name;
-                            //             this.inputData[index].type = val.type;
-                            //             this.inputData[index].data = this.decodeData[key];
-                            //         }
-                            //     }else if (val) {
-                            //         if (index == key) {
-                            //             this.inputData[index] = {};
-                            //             this.inputData[index].type = val;
-                            //             this.inputData[index].data = this.decodeData[key];
-                            //         }
-                            //     }
-                            // });
                         }
                     }
                 }
                 this.showDecode = false;
-                this.buttonTitle = "还原";
+                this.buttonTitle = this.$t('transaction.reduction');
             }
         },
         decodeEvent: function () {
@@ -279,17 +246,16 @@ export default {
                         setTimeout(() => {
                             this.eventSHow = true;
                         }, 200)
-                        // console.log(this.transationData.logs[i])
                     } else if (res.data.code !== 0) {
                         this.$message({
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            message: this.$chooseLang(res.data.code)
                         });
                     }
                 }).catch(err => {
                     this.$message({
                         type: "error",
-                        message: "系统错误！"
+                        message: this.$t("text.systemError"),
                     });
                 })
             }
@@ -299,7 +265,7 @@ export default {
             let abi = "";
             eventData.abiInfo = JSON.parse(eventData.abiInfo)
             let list = data;
-            list.eventTitle = '还原'
+            list.eventTitle = this.$t('transaction.reduction')
             list.eventDataShow = true;
             list.eventButtonShow = true;
             list.eventName = eventData.abiInfo.name + "(";
@@ -337,7 +303,7 @@ export default {
                 this.$message({
                     type: "fail",
                     showClose: true,
-                    message: "key为空，不复制。",
+                    message: this.$t("text.copyErrorMsg"),
                     duration: 2000
                 });
             } else {
@@ -345,7 +311,7 @@ export default {
                     this.$message({
                         type: "success",
                         showClose: true,
-                        message: "复制成功",
+                        message: this.$t("text.copySuccessMsg"),
                         duration: 2000
                     });
                 });
@@ -357,10 +323,10 @@ export default {
         decode: function (val) {
             if (val.eventDataShow) {
                 this.$set(val, 'eventDataShow', false);
-                this.eventTitle = '解码'
+                this.eventTitle = this.$t('transaction.decode')
             } else {
                 this.$set(val, 'eventDataShow', true);
-                this.eventTitle = '还原'
+                this.eventTitle = this.$t('transaction.reduction')
             }
 
         }
@@ -369,7 +335,6 @@ export default {
 </script>
 <style>
 .transation-content {
-    /* width:200px; */
     word-wrap: break-word;
     word-break: break-all;
 }

@@ -293,7 +293,7 @@ export default {
         folderSameFail: "The new folder has the same name as the existing folder",
         user: "User",
         params: "Params",
-        paramsInfo: 'If the parameter contains double quotes, escape, for example: AAA\\"BBB. If the parameter type is an array, enter it in the following format, separated by commas. Non numeric and Boolean values must use double quotation marks, for example: ["AAA", "BBB"] and [100101].',
+        paramsInfo: 'If the parameter type is an array, enter the following format, comma separated, with double quotes for non-numeric and Boolean values, such as ["aaa","bbb"] and [100,101]; Escape if array parameters contain double quotes, for example: ["aaa\\"bbb","ccc"].',
         contractAddress: "Address",
         method: "Method",
         contractAddressInput: "Please enter the contract address",
@@ -320,7 +320,8 @@ export default {
         addPrivateKeyInfo: "Please add a private key user!",
         updateAbi: "Update",
         deleteAbi: "Delete",
-        limit_1: "Only one file can be uploaded at a time"
+        limit_1: "Only one file can be uploaded at a time",
+        txResult: "Trading content"
     },
     privateKey: {
         addUser: "Add Users",

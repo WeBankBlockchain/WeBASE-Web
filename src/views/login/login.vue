@@ -72,7 +72,7 @@ import errcode from "@/util/errcode";
 const sha256 = require("js-sha256").sha256;
 const gm = require("@/util/SM2Sign");
 import utils from "@/util/sm_sha"
-import langSelect from "@/components/langSelect"
+import langSelect from "@/components/LangSelect"
 export default {
     name: "login",
     components: {
