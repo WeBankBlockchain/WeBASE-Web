@@ -239,8 +239,11 @@ export default {
         } else {
             this.disabled = true
         }
-        this.getUserData()
-        this.queryGetPermission();//链管理列表
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+            this.getUserData()
+            this.queryGetPermission();//链管理列表
+        }
+        
     },
 
     methods: {

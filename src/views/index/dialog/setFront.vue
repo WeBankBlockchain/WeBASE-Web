@@ -146,7 +146,7 @@ export default {
         add: function () {
             let value = {
                     ip: "",
-                    number: 1,
+                    number: null,
                     name: "",
                     group: "",
                     key: Date.now()

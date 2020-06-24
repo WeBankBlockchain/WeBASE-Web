@@ -126,8 +126,10 @@ export default {
         } else {
             this.disabled = true
         }
-        this.getUserData()
-        this.getSysConfigList()
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+            this.getUserData()
+            this.getSysConfigList()
+        }
     },
 
     methods: {

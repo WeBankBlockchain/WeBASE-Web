@@ -111,6 +111,7 @@ export default {
         }
     },
     mounted: function () {
+        localStorage.setItem("config",0)
         this.changeCode();
         this.getEncryption()
     },
@@ -177,6 +178,7 @@ export default {
                         localStorage.setItem("token", res.data.data.token);
                         sessionStorage.setItem("accountStatus", res.data.data.accountStatus);
                         sessionStorage.setItem("reload", 1);
+                        localStorage.setItem("config",0)
                         router.push("/main")
                     } else {
                         this.changeCode()

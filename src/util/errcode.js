@@ -826,6 +826,111 @@ let errCode = {
         zh: "编码的数据字符串必须是十六进制字符串"
     },
 
+    "205001": {
+        en: "No docker image tag update url.",
+        zh: "没有配置 Docker 镜像更新 URL 地址。"
+    },
+    "205002": {
+        en: "Update docker tag from registry error.",
+        zh: "从 Docker 源更新镜像版本失败。"
+    },
+    "205003": {
+        en: "Unknown config type.",
+        zh: "未知的配置类型。"
+    },
+    "205004": {
+        en: "Save IP config error.",
+        zh: "保存IP配置错误。"
+    },
+    "205005": {
+        en: "Tag id param error.",
+        zh: "错误的镜像版本。"
+    },
+    "205006": {
+        en: "ipconf null.",
+        zh: "主机配置参数为空"
+    },
+    "205007": {
+        en: "Chain name exists.",
+        zh: "链已存在，部署失败"
+    },
+    "205008": {
+        en: "Insert new chain failed.",
+        zh: "插入链信息到数据库失败。"
+    },
+    "205009": {
+        en: "No ipconf file.",
+        zh: "生成主机，机构，群组配置信息文件失败。"
+    },
+    "205010": {
+        en: "Exec build chain script failed.",
+        zh: "执行 build_chain.sh 链生成脚本失败。"
+    },
+    "205011": {
+        en: "ipconf line error.",
+        zh: "主机，机构，群组配置信息错误。"
+    },
+    "205012": {
+        en: "IP and num config error.",
+        zh: "主机 IP，节点数量配置错误。"
+    },
+    "205013": {
+        en: "Agency name config error.",
+        zh: "机构名称格式错误，只能包含大小写字母，数字，下划线。"
+    },
+    "205014": {
+        en: "Groups config error.",
+        zh: "群组配置错误。"
+    },
+    "205015": {
+        en: "Connect to host error.",
+        zh: "SSH 登录主机失败，请检查 SSH 配置。"
+    },
+    "205016": {
+        en: "Insert new agency failed.",
+        zh: "插入新机构信息到数据库失败。"
+    },
+    "205017": {
+        en: "Insert new group failed.",
+        zh: "插入新群组信息到数据库失败。"
+    },
+    "205018": {
+        en: "Insert new host failed.",
+        zh: "插入主机信息到数据库失败。"
+    },
+    "205019": {
+        en: "Insert new front failed.",
+        zh: "插入前置信息到数据库失败。"
+    },
+    "205020": {
+        en: "Insert new node failed.",
+        zh: "插入节点信息到数据库失败。"
+    },
+    "205021": {
+        en: "Insert new front node group failed.",
+        zh: "插入前置和群组映射关系到数据库失败。"
+    },
+    "205022": {
+        en: "Parse host index from node directory failed.",
+        zh: "通过目录名称解析节点在主机的序号失败。"
+    },
+    "205023": {
+        en: "A host only belongs to one agency.",
+        zh: "一个 IP 主机，只能属于一个机构。"
+    },
+    "205024": {
+        en: "Unexpected exception occurred when deploy.",
+        zh: "部署时发生未知错误。"
+    },
+    "205025": {
+        en: "SSH password login not supported yet.",
+        zh: "不支持使用 SSH 密码登录主机。"
+    },
+    "205026": {
+        en: "Chain has no agency.",
+        zh: "该链没有机构"
+    },
+
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
