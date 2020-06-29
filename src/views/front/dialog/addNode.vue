@@ -5,13 +5,13 @@
             <div>
                 <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item  label='IP' prop='ip'>
-                        <el-input v-model="nodeFrom.ip" placeholder="请输入IP" style="width: 140px;" maxlength="16"></el-input>
+                        <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 140px;" maxlength="16"></el-input>
                     </el-form-item>
-                    <el-form-item label='所属机构'>
-                        <el-input v-model="nodeFrom.agencyName" placeholder="请输入所属机构" style="width: 140px;" maxlength="16"></el-input>
+                    <el-form-item :label='$t("nodes.agency")'>
+                        <el-input v-model="nodeFrom.agencyName" :placeholder="$t('nodes.inputAgency')" style="width: 140px;" maxlength="16"></el-input>
                     </el-form-item>
-                    <el-form-item label='节点数量'>
-                        <el-input v-model="nodeFrom.num" placeholder="请输入节点数量" style="width: 140px;" maxlength="16"></el-input>
+                    <el-form-item :label='$t("nodes.nodeCount")'>
+                        <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 140px;" maxlength="16"></el-input>
                     </el-form-item>
                 </el-form>
                 <div class="text-right sure-btn" style="margin-top:10px">
@@ -32,8 +32,8 @@ export default {
         rules () {
             let data = {
                 ip: [
-                    {required: true, message: '请输入IP', trigger: 'blur'},
-                    {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: 'IP格式不正确', trigger: 'blur'}
+                    {required: true, message: this.$t('rule.ipName'), trigger: 'blur'},
+                    {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/,  message: this.$t('nodes.ipError'), trigger: 'blur'}
                 ]
             }
             return data
@@ -74,7 +74,7 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "新增节点成功"
+                        message: this.$t('nodes.addNodeSuccess')
                     })
                     this.modelClose()
                 }else{

@@ -1,16 +1,16 @@
 <template>
     <div>
-        <el-dialog title="新增节点" :visible.sync="dialogVisible" :before-close="modelClose" 
+        <el-dialog :title="$t('nodes.deleteNode')" :visible.sync="dialogVisible" :before-close="modelClose" 
          class="dialog-wrapper" width="500px" :center="true" :show-close='true'>
             <el-form  :model="nodeFrom"  ref="nodeFrom" label-width="340px" class="demo-ruleForm">
-                <el-form-item  label='如果节点是主机最后一个节点，是否删除主机'>
+                <el-form-item  :label='$t("nodes.deleteErrorInfo1")'>
                     <el-switch
                         v-model="nodeFrom.host"
                         active-color="#13ce66"
                         inactive-color="#ff4949">
                     </el-switch>
                 </el-form-item>
-                <el-form-item  label='如果节点是机构最后一个节点，是否删除机构信息'>
+                <el-form-item  :label='$t("nodes.deleteErrorInfo2")'>
                     <el-switch
                         v-model="nodeFrom.org"
                         active-color="#13ce66"
@@ -67,7 +67,7 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "删除节点成功"
+                        message:this.$t("nodes.dleteNodeSuccess")
                     })
                     this.modelClose()
                 }else {

@@ -57,9 +57,9 @@
                 </h3> -->
                 <div class="search-part" style="padding-top: 20px;">
                     <div class="search-part-left" v-if='!disabled'>
-                        <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">部署</el-button>
-                        <el-button type="primary" class="search-part-left-btn" @click="createFront">新增节点</el-button>
-                        <el-button type="primary" class="search-part-left-btn" @click="update">升级节点</el-button>
+                        <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" @click="createFront">{{$t('text.addNode')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" @click="update">{{$t('text.upgradeNode')}}</el-button>
                     </div>
                 </div>
                 <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
@@ -67,12 +67,13 @@
                         <template slot-scope="scope">
                             <template v-if="head.enName ==='status'">
                                 <span>
-                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{scope.row.status|Status}}
+                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{Status(scope.row.status)}}
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='nodeType'">
                                 <span>
-                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodeText(scope.row.nodeType)}}
+                                    {{nodeText(scope.row.nodeType)}}
+                                    <span v-if='!scope.row.nodeType' class="el-icon-loading"></span>
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='chainStatus'">
@@ -80,17 +81,17 @@
                                 <span v-if='statusNumber > 0 && statusNumber < 100 '>
                                     <el-progress :percentage="statusNumber" ></el-progress>
                                 </span>
-                                <span v-if='statusNumber == 100'>运行</span>
-                                <span v-if='statusNumber < 0'>失败</span>
-                                 <span v-if='!statusNumber && statusNumber != 0 && scope.row.status == 1'>运行</span>
+                                <span v-if='statusNumber == 100'>{{$t('home.run')}}</span>
+                                <span v-if='statusNumber < 0'>{{$t("text.FAIL")}}</span>
+                                 <span v-if='!statusNumber && statusNumber != 0 && scope.row.status == 1'>{{$t('home.run')}}</span>
                             </template>
                             <template v-else-if="head.enName ==='operate'">
                                 <el-button v-if='scope.row.status == 2' :disabled="disabled" type="text" size="small" 
-                                :style="{'color': disabled?'#666':''}" @click="start(scope.row)">启动</el-button>
+                                :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove"' 
-                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">停止</el-button>
+                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
                                 <el-button v-if='(scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2'  
-                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">删除</el-button>
+                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
                                 <el-button v-if='scope.row.status == 1'  :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
@@ -115,19 +116,19 @@
             </div>
         </div>
         <div class="module-wrapper search-table" style="margin-top: 10px;padding: 20px 40px;" v-if='deployShow'>
-            <p class="guide-title">构建区块链网络流程</p>
+            <p class="guide-title">{{$t("nodes.guideTitle")}}</p>
             <div>
                 <div class="guide-item">
-                    <span class="guide-item-title">1、点击部署按钮</span>
+                    <span class="guide-item-title">1、{{$t("nodes.deployButton")}}</span>
                     <img class="guide-item-img" :src="guideImg" alt="箭头">
-                    <span class="guide-item-title">2、填写区块链信息</span>
+                    <span class="guide-item-title">2、{{$t("nodes.blockChainButton")}}</span>
                     <img class="guide-item-img" :src="guideImg" alt="箭头">
-                    <span class="guide-item-title">3、部署</span>
+                    <span class="guide-item-title">3、{{$t('text.deploy')}}</span>
                 </div>
                 <div class="guide-content">
-                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 44px">1、点击部署按钮</span>弹出部署区块链弹窗。当链存在时，此按钮不显示</p>
-                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 30px">2、填写区块链信息</span>选择区块链版本，填写WeBASE-Sign的地址，最后再填写主机信息：包括主机IP，主机部署节点数量，主机所属机构，节点所属群组和区块链数据存储目录。</p>
-                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 100px">3、部署</span>点击弹窗“开始部署”按钮，区块链部署时间较长，在进度条消失之前不要点击其他地方。</p>
+                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 44px">1、{{$t("nodes.deployButton")}}</span>{{$t("nodes.guidetep1")}}</p>
+                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 30px">2、{{$t("nodes.blockChainButton")}}</span>{{$t("nodes.guidetep2")}}</p>
+                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 100px">3、{{$t('text.deploy')}}</span>{{$t("nodes.guidetep3")}}</p>
                 </div>
             </div>
         </div>
@@ -410,7 +411,7 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "启动成功"
+                        message: this.$t("nodes.startSuccess")
                     })
                     this.getData()
                 }else{
@@ -441,7 +442,7 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "停止成功"
+                        message: this.$t("nodes.stopSuccess")
                     })
                     this.getData()
                 }else{
@@ -488,6 +489,7 @@ export default {
         newNodeClose: function() {
             this.newNodeShow = false;
             this.getData();
+            this.getProgresses();
         },
         changGroup() {
             this.getFrontTable();
@@ -547,14 +549,16 @@ export default {
             }
             getConsensusNodeId(reqData).then(res => {
                 if(res.data.code === 0){
-                    for(let i = 0; i < this.frontData.length; i++){
+                    if(res.data.data){
+                        for(let i = 0; i < this.frontData.length; i++){
                         // this.frontData[i].nodeType = "";
-                        for(let index = 0; index < res.data.data.length; index++){
-                            if(this.frontData[i].nodeId == res.data.data[index].nodeId){
-                                this.$set(this.frontData[i],'nodeType',res.data.data[index].nodeType)
+                            for(let index = 0; index < res.data.data.length; index++){
+                                if(this.frontData[i].nodeId == res.data.data[index].nodeId){
+                                    this.$set(this.frontData[i],'nodeType',res.data.data[index].nodeType)
+                                }
                             }
                         }
-                    }
+                    } 
                 }else{
                     this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -785,25 +789,23 @@ export default {
         },
         nodeModifyClose() {
             this.modifyDialogVisible = false
-        }
-    },
-    filters: {
-        Status (val) {
+        },
+        Status(val) {
             switch (val) {
                 case 0:
-                    return "初始化"
+                    return this.$t("nodes.initialize")
                     break;
                 case 1:
-                    return "运行"
+                    return this.$t("text.running")
                     break;
                 case 2:
-                    return "停止"
+                    return this.$t("text.stop")
                     break;
                 default:
-                    return "升级中"
+                    return this.$t('nodes.upgrading')
             }
         }
-    }
+    },
 };
 </script>
 <style scoped>
