@@ -1,32 +1,23 @@
 <template>
     <div>
         <div>
-        <el-dialog title="新增节点" :visible.sync="dialogVisible" :before-close="modelClose" 
+        <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" 
          class="dialog-wrapper" width="500px" :center="true" :show-close='true'>
             <div>
                 <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item  label='IP' prop='ip'>
-                        <el-input v-model="nodeFrom.ip" placeholder="请输入IP" style="width: 250px;" maxlength="16" @blur='ipChange'></el-input>
+                        <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 250px;" maxlength="16" @blur='ipChange'></el-input>
                     </el-form-item>
-                    <!-- <el-form-item  label='使用新群组'>
-                        <el-radio-group v-model="radio">
-                            <el-radio v-model="radio" label="1">是</el-radio>
-                            <el-radio v-model="radio" label="2">否</el-radio>
-                        </el-radio-group>
-                    </el-form-item> -->
-                    <!-- <el-form-item  label='新群组'  v-if='radio == 1'>
-                        <el-input v-model="nodeFrom.groupId" placeholder="请输入新群组id" style="width: 250px;" maxlength="16"></el-input>
-                    </el-form-item> -->
-                    <el-form-item  label='选择群组'>
-                        <el-select v-model="nodeFrom.groupId" placeholder="请选择活动区域" style="width: 250px;">
+                    <el-form-item  :label='$t("nodes.selectGroup")'>
+                        <el-select v-model="nodeFrom.groupId" :placeholder="$t('nodes.selectGroup')" style="width: 250px;">
                             <el-option :label="item.groupName" :value="item.groupId" v-for='item in groupList'  :key='item.groupId'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label='所属机构' v-if='agencyShow'>
-                        <el-input v-model="nodeFrom.agencyName" placeholder="请输入所属机构" style="width: 250px;" maxlength="16"></el-input>
+                    <el-form-item :label='$t("nodes.agency")' v-if='agencyShow'>
+                        <el-input v-model="nodeFrom.agencyName" :placeholder="$t('nodes.inputAgency')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item>
-                    <el-form-item label='节点数量'>
-                        <el-input v-model="nodeFrom.num" placeholder="请输入节点数量" style="width: 250px;" maxlength="16"></el-input>
+                    <el-form-item :label='$t("nodes.nodeCount")'>
+                        <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item>
                 </el-form>
                 <div class="text-right sure-btn" style="margin-top:10px">
@@ -54,16 +45,21 @@ export default {
                 num: 1,
                 groupId: ""
             },
-            rules: {
-                ip: [
-                    {required: true, message: '请输入IP', trigger: 'blur'},
-                    {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: 'IP格式不正确', trigger: 'blur'}
-                ]
-            },
             loading: false,
             groupList: [],
             agencyShow: false,
             nodeList: this.data
+        }
+    },
+    computed: {
+       rules(){
+           let data = {
+               ip: [
+                    {required: true, message: this.$t("rule.ipName"), trigger: 'blur'},
+                    {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: this.$t("nodes.ipError"), trigger: 'blur'}
+                ]
+            }
+            return data
         }
     },
     mounted: function () {
@@ -115,7 +111,7 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "success",
-                        message: "新增节点成功"
+                        message: this.$t('nodes.addNodeSuccess')
                     })
                     this.modelClose()
                 }else{

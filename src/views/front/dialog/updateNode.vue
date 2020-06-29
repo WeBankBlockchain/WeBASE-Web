@@ -1,10 +1,10 @@
 <template>
     <div>
-        <el-dialog title="新增节点" :visible.sync="dialogVisible" :before-close="modelClose" 
+        <el-dialog :title="$t('text.upgradeNode')" :visible.sync="dialogVisible" :before-close="modelClose" 
          class="dialog-wrapper" width="500px" :center="true" :show-close='true'>
             <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="100px" class="demo-ruleForm">
-                <el-form-item  label='选择版本' prop="newTagId">
-                    <el-select v-model="nodeFrom.newTagId" placeholder="请选择区块链版本" style="width: 250px;">
+                <el-form-item  :label="$t('nodes.selectVersion')" prop="newTagId">
+                    <el-select v-model="nodeFrom.newTagId" :placeholder="$t('nodes.selectVersionInfo')" style="width: 250px;">
                         <el-option
                                 v-for="item in configList"
                                 :key="item.id"
@@ -38,11 +38,16 @@ export default {
             nodeFrom: {
                 newTagId: ""
             },
-            rules: {
-                newTagId: [
-                    {required: true, message: '请选择', trigger: 'blur'},
+        }
+    },
+    computed: {
+        rules(){
+           let data = {
+               ip: [
+                   {required: true, message: this.$t('nodes.selectVersionInfo'), trigger: 'blur'}
                 ]
             }
+            return data
         }
     },
     mounted: function () {
@@ -99,7 +104,7 @@ export default {
                 if(res.data.code === 0){
                     this.$message({
                         type: "info",
-                        message: "正在升级，请稍等"
+                        message: this.$t('nodes.upgraded')
                     })
                     this.$emit("success")
                 }else {
