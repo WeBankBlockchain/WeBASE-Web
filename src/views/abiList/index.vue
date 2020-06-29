@@ -40,7 +40,7 @@
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
-        <editor v-if='editorShow' :show='editorShow' :data='editorData' @close='editorClose'></editor>
+        <editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></editor>
         <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
             <import-abi @importSuccess="importSuccess" @closeImport="closeImport"></import-abi>
         </el-dialog>
@@ -89,7 +89,9 @@ export default {
             currentPage: 1,
             pageSize: 10,
             total: 0,
-            updateItem: {}
+            updateItem: {},
+            editorInput: null,
+            editorOutput: null,
         }
     },
 
@@ -134,7 +136,9 @@ export default {
         } else {
             this.disabled = true
         }
-        this.queryAbiList()
+        if(localStorage.getItem('groupId') && localStorage.getItem("configData") == 5){
+            this.queryAbiList()
+        }
     },
 
     methods: {
@@ -209,6 +213,9 @@ export default {
             this.dialogVisible = false;
             this.editorShow = true;
             this.editorData = val.resData;
+            console.log(val)
+            this.editorInput = val.input;
+            this.editorOutput = val.data.outputs;
         },
         editorClose() {
             this.editorShow = false;

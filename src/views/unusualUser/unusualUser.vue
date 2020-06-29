@@ -135,7 +135,9 @@ export default {
         }
     },
     mounted() {
-        this.getUnusualUserList();
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+            this.getUnusualUserList();
+        }
     },
     methods: {
         changGroup() {

@@ -12,7 +12,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('nodes.nodeStyle')" prop="adminRivateKey" style="width: 320px;">
+            <el-form-item :label="$t('nodes.nodeStyle')" prop="nodeStyle" style="width: 320px;">
                 <el-select v-model="modifyForm.nodeType" :placeholder="$t('text.select')">
                     <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
                     </el-option>
@@ -164,7 +164,7 @@ export default {
                         if (!this.adminRivateKeyList.length) {
                             this.$message({
                                 type: "info",
-                                message: this.$t('nodes.groupId') + this.itemNodeData.groupId + this.$t('contracts.addPrivateKeyInfo'),
+                                message: this.$t('nodes.groupId') +' ' + this.itemNodeData.groupId +', ' + this.$t('contracts.addPrivateKeyInfo'),
                             });
                             return
                         }

@@ -15,138 +15,202 @@
  */
 <template>
     <div>
-        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
+        <el-dialog :title="'区块链配置'" :visible.sync="dialogVisible" :before-close="modelClose" 
+        class="dialog-wrapper" width="750px" :center="true" :show-close='true'>
             <div>
-                <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="ip" prop="ip" style="width:330px">
-                        <el-input v-model="frontFrom.ip"></el-input>
+                <!-- <div class="config-item">
+                    <div class="config-item-tile">docker版本:</div>
+                    <el-select v-model="tagId" placeholder="请选择" style="width: 300px;">
+                                <el-option
+                                v-for="item in configList"
+                                :key="item.id"
+                                :label="item.configValue"
+                                :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-button type="primary" icon='el-icon-refresh-right' style="margin-left: 20px;" @click='refresh'></el-button>
+                </div> -->
+                <el-form  :model="configFrom"  ref="configFrom" label-width="0px" class="demo-ruleForm">
+                     <div class="config-item-tile">docker版本:</div>
+                    <el-form-item  prop="tagId" style="display: inline-block;" :rules="[
+                            {required: true, message: '请选择', trigger: 'blur'},]">
+                            <el-select v-model="configFrom.tagId" placeholder="请选择" style="width: 300px;">
+                                <el-option
+                                v-for="item in configList"
+                                :key="item.id"
+                                :label="item.configValue"
+                                :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-button type="primary" icon='el-icon-refresh-right' style="margin-left: 20px;" @click='refresh'></el-button>
                     </el-form-item>
-                    <el-form-item :label="$t('nodes.frontPort')" prop="port" style="width:330px">
-                        <el-input v-model="frontFrom.port"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="$t('nodes.agency')" prop="company" style="width:330px">
-                        <el-input v-model="frontFrom.company"></el-input>
-                    </el-form-item>
+                     <div class="config-item-tile">docker目录:</div>
+                      <el-form-item  prop="rootDirOnHost" :rules="[
+                            {required: true, message: '请选择', trigger: 'blur'},]">
+                            <el-input v-model="configFrom.rootDirOnHost" placeholder="请输入IP" style="width: 300px;" ></el-input>
+                      </el-form-item>
+                    <div class="config-item-tile">主机:</div>
+                    <div v-for="(item,index) in configFrom.data" :key="item.key">
+                        <el-form-item  :prop="'data.' + index + '.ip'" style="display: inline-block;width: 150px;" :rules="[
+                            {required: true, message: '请输入IP', trigger: 'blur'},
+                            {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: 'IP格式不正确', trigger: 'blur'}
+                            ]">
+                            <el-input v-model="item.ip" placeholder="请输入IP" style="width: 140px;" maxlength="16"></el-input>
+                        </el-form-item>
+                        <el-form-item  :prop="'data.' + index + '.number'" style="display: inline-block;width: 150px;" :rules=" [
+                                {required: true, message: '请输入数量', trigger: 'blur'},
+                                {pattern:/^[1-9]\d*$/,message: '必须大于1', trigger: 'blur'}
+                            ]">
+                                <el-input v-model="item.number"  placeholder="请输入节点数量" style="width: 140px;" maxlength="1"></el-input>
+                        </el-form-item>
+                        <el-form-item  :prop="'data.' + index + '.name'" style="display: inline-block;width: 150px;" :rules=" [
+                                {required: true, message: '请输入的机构', trigger: 'blur'},
+                                {pattern:/^[^\s]*$/,message: '不能含有空格', trigger: 'blur'},
+                            ]">
+                            <el-input v-model="item.name" placeholder="请输入机构名称" style="width: 140px;" maxlength="9"></el-input>
+                        </el-form-item>
+                        <el-form-item  :prop="'data.' + index + '.group'" style="display: inline-block;width: 150px;" :rules=" [
+                                {required: true, message: '请输入群组id', trigger: 'blur'},
+                            ]">
+                                <el-input v-model="item.group" placeholder="请输入群组id" style="width: 140px;" maxlength="8"></el-input>
+                        </el-form-item>
+                        <span class="el-icon-plus" style="cursor: pointer;display: inline-block;padding-left: 20px" @click="add()"></span>
+                        <span v-if="configFrom.data.length > 1" class="el-icon-minus" style="cursor: pointer;display: inline-block;padding-left: 10px" @click="delet(item)"></span>
+                    </div>
                 </el-form>
             </div>
             <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button v-if='closeVisible' @click="modelClose">{{this.$t("text.cancel")}}</el-button>
-                <el-button type="primary" :loading="loading" @click="submit('frontFrom')">{{this.$t("text.sure")}}</el-button>
+                <el-button type="primary" :loading="loading" @click="submit('configFrom')">{{this.$t("text.sure")}}</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 <script>
-import { addFront } from "@/util/api"
+import { getConfigList,deployConfig } from "@/util/api"
 import errcode from "@/util/errcode";
 export default {
     name: "setFront",
     props: ["show", 'showClose'],
-    computed: {
-        rules() {
-            let data = {
-                ip: [
-                    {
-                        required: true,
-                        message: this.$t("rule.ipName"),
-                        trigger: "blur"
-                    },
-                    {
-                        pattern: /((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/,
-                        message: this.$t("rule.ipRule"),
-                        trigger: "blur"
-                    }
-                ],
-                port: [
-                    {
-                        required: true,
-                        message: this.$t("rule.portName"),
-                        trigger: "blur"
-                    },
-                    {
-                        min: 1,
-                        max: 12,
-                        message: this.$t("rule.portLong"),
-                        trigger: "blur"
-                    },
-                    {
-                        pattern: /^[0-9]*[1-9][0-9]*$/,
-                        message: this.$t("rule.portRule"),
-                        trigger: "blur"
-                    }
-                ],
-                company: [
-                    {
-                        required: true,
-                        message: this.$t("rule.agencyName"),
-                        trigger: "blur"
-                    },
-                    {
-                        min: 1,
-                        max: 16,
-                        message: this.$t("rule.agencyLong"),
-                        trigger: "blur"
-                    },
-                    {
-                        pattern: /^([\u4E00-\uFA29]|[\uE7C7-\uE7F3]|[a-zA-Z0-9_]){1,20}$/,
-                        message: this.$t("rule.agencyRule"),
-                        trigger: "blur"
-                    }
-                ]
-            }
-            return data
-        }
-    },
     data: function () {
         return {
             loading: false,
             dialogVisible: this.show,
             closeVisible: this.showClose || false,
-            frontFrom: {
-                ip: "",
-                port: "",
-                company: "",
+            configList: [],
+            type: 1,
+            update: false,
+            configFrom: {
+                tagId: "",
+                rootDirOnHost: "/opt/fisco",
+                data: [
+                    {
+                        ip: "",
+                        number: null,
+                        name: "",
+                        group: "",
+                        key: Date.now()
+                    }
+                ]
             },
         }
     },
+    mounted: function() {
+        this.getConfigs();
+    },
     methods: {
+        getConfigs: function () {
+            let reqData = {
+                type: this.type,
+                update: this.update
+            }
+            getConfigList(reqData).then(res => {
+                if(res.data.code === 0){
+                    this.configList = res.data.data
+                }else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        add: function () {
+            let value = {
+                    ip: "",
+                    number: null,
+                    name: "",
+                    group: "",
+                    key: Date.now()
+                };
+                this.configFrom.data.push(value)
+        },
+        delet: function (value) {
+            for (let i = 0; i < this.configFrom.data.length; i++){
+                if(this.configFrom.data[i].key == value.key){
+                    this.configFrom.data.splice(i,1)
+                }
+            }
+        },
+        refresh: function () {
+            this.update = true;
+            this.getConfigs();
+        },
         submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.loading = true;
-                    this.setFront()
+                    this.deploy()
                 } else {
                     return false
                 }
             })
         },
-        setFront: function () {
-            let reqData = {
-                frontIp: this.frontFrom.ip,
-                frontPort: this.frontFrom.port,
-                agency: this.frontFrom.company
+        deploy: function () {
+            console.log(this.configFrom);
+            let array = []
+            for (let i = 0; i < this.configFrom.data.length; i++){
+                let strings = this.configFrom.data[i].ip + ":" + this.configFrom.data[i].number + " " + this.configFrom.data[i].name + " " + this.configFrom.data[i].group;
+                array.push(strings)
             }
-            addFront(reqData).then(res => {
+            let reqData = {
+                ipconf: array,
+                tagId: this.configFrom.tagId,
+                rootDirOnHost: this.configFrom.rootDirOnHost
+            }
+            deployConfig(reqData).then(res => {
                 this.loading = false;
-                if (res.data.code === 0) {
+                if(res.data.code == 0) {
                     this.$message({
-                        message: this.$t("nodes.addFrontSuccessMsg"),
-                        type: "success"
-                    });
-                    this.$emit("close")
-                } else {
+                        type: "success",
+                        message: "区块链正在部署"
+                    })
+                    this.modelClose()
+                }else{
                     this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error"
-                    });
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
                 }
-            }).catch(err => {
-                this.loading = false;
-                this.$message({
-                    message: this.$t('text.systemError'),
-                    type: "error"
-                });
             })
+            .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
         },
         modelClose: function () {
             this.$emit("close")
@@ -154,4 +218,13 @@ export default {
     }
 }
 </script>
+<style scoped>
+.config-item{
+    padding-bottom: 10px;
+}
+.config-item-tile{
+    padding-bottom: 5px;
+}
+
+</style>
 

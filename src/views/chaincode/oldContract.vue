@@ -65,13 +65,13 @@
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
     </div>
 </template>
 <script>
 import contentHead from "@/components/contentHead";
-import sendTransation from "./dialog/sendTransaction"
-import editor from "./dialog/editor"
+import sendTransation from "@/components/sendTransaction";
+import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
 import { getContractList } from "@/util/api"
 import router from '@/router'
@@ -101,7 +101,9 @@ export default {
             data: null,
             dialogVisible: false,
             total: 0,
-            disabled: false
+            disabled: false,
+            editorInput: null,
+            editorOutput: null,
         }
     },
     mounted: function () {
@@ -110,7 +112,9 @@ export default {
         } else {
             this.disabled = true
         }
-        this.getContracts()
+        if(localStorage.getItem("groupId")){
+            this.getContracts()
+        }
     },
     methods: {
         changGroup: function () {
@@ -212,6 +216,8 @@ export default {
             this.dialogVisible = false;
             this.editorShow = true;
             this.editorData = val.resData;
+            this.editorInput = val.input;
+            this.editorOutput = val.data.outputs;
         },
         handleSizeChange: function (val) {
             this.pageSize = val;
