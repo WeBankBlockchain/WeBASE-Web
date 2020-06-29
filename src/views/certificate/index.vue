@@ -142,7 +142,9 @@ export default {
         } else {
             this.disabled = true
         }
-        this.getCertList()
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+            this.getCertList()
+        }
     },
 
     methods: {

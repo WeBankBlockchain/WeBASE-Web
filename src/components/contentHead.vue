@@ -29,7 +29,9 @@
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
         <div class="content-head-network">
+           
             <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
+             <el-button type='text' size='small' @click='deleteConfig'>删除</el-button>
             <span v-if="abnormalList.length>0">
                 <el-tooltip class="item" effect="dark" placement="bottom-end">
                     <div slot="content">
@@ -77,13 +79,11 @@
 </template>
 
 <script>
-import dialog from "./groupdialog";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
-import { loginOut, groupStatus4, getGroupsInvalidIncluded } from "@/util/api";
+import { loginOut, groupStatus4, getGroupsInvalidIncluded,deleteChain } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
-import langSelect from "@/components/langSelect"
 export default {
     name: "conetnt-head",
     props: {
@@ -113,9 +113,7 @@ export default {
         }
     },
     components: {
-        "v-dialog": dialog,
-        changePasswordDialog,
-        "lang-select": langSelect
+        changePasswordDialog
     },
     watch: {
         headTitle: function (val) {
@@ -163,6 +161,14 @@ export default {
         this.queryGroupStatus4()
     },
     methods: {
+        deleteConfig: function(){
+            deleteChain().then(res => {
+                if(res.data.code === 0){
+                    this.$message("删除成功")
+                    router.push("/login")
+                }
+            })
+        },
         getGroupList: function (type) {
             getGroupsInvalidIncluded().then(res => {
                 if (res.data.code === 0) {
