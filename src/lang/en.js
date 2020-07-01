@@ -278,7 +278,7 @@ export default {
         inputNodes: "Please enter the number of nodes",
         addNodeSuccess: "New node succeeds",
         chainConfig: "Blockchain configuration",
-        chainVersion: "Blockchain application version",
+        chainVersion: "Docker image version",
         newVersion: "Get the latest version",
         webaseSignAdr: "the address of the WeBASE-Sign",
         addressError: "Incorrect address format",
@@ -294,7 +294,7 @@ export default {
         noWhitespace: "No whitespace",
         hostAgency: "The agency of the host",
         nodesGroup: "Please enter the group to which the node belongs",
-        nodesGroupInfo: "The node belongs to a group, which defaults to 1",
+        nodesGroupInfo: "The node belongs to a group.",
         chainDirectory: "Blockchain data storage directory",
         inputChainDirectory: "Please enter the blockchain data storage directory",
         startDeploy: "Start the deployment",
@@ -305,7 +305,8 @@ export default {
         upgraded: "Please wait while upgrading",
         deleteErrorInfo1: "If the node is the last node of the host, whether to delete the host",
         deleteErrorInfo2: "If the node is the last node of the agency, whether to delete the agency",
-        dleteNodeSuccess: "Node removal successful"
+        dleteNodeSuccess: "Node removal successful",
+        dockerRefresh: "Docker image list has been refreshed"
     },
     contracts: {
         createFile: "Create File",
