@@ -116,13 +116,21 @@ export default {
         this.getConfigs();
     },
     methods: {
-        getConfigs: function () {
+        getConfigs: function (val) {
             let reqData = {
                 type: this.type,
                 update: this.update
             }
             getConfigList(reqData).then(res => {
                 if(res.data.code === 0){
+                    if(val){
+                       this.$message({
+                            message: this.$t("nodes.dockerRefresh"),
+                            type: "success",
+                            duration: 2000
+                        }); 
+                    }
+                    this.configList = [];
                     this.configList = res.data.data
                 }else {
                         this.$message({
@@ -159,7 +167,7 @@ export default {
         },
         refresh: function () {
             this.update = true;
-            this.getConfigs();
+            this.getConfigs('new');
         },
         submit: function (formName) {
             this.$refs[formName].validate(valid => {
