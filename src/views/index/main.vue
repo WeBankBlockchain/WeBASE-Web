@@ -227,24 +227,15 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         if(res.data.data.length > 0){
+                            this.accountStatus = sessionStorage.getItem("accountStatus");
                             this.getGroupList()
                         }else{
-                            router.push("/front");
-                            // if(this.configType !== 1){
-                            //     this.frontShow = true
-                            // }else{
-                            //     this.configShow = true
-                            // }
-                            
+                            this.accountStatus = sessionStorage.getItem("accountStatus");
+                            router.push("/front");  
                         }
                         
                     } else {
                         router.push("/front");
-                        // if(this.configType !== 1){
-                        //         this.frontShow = true
-                        //     }else{
-                        //         this.configShow = true
-                        //     }
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
