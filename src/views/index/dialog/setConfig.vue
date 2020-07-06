@@ -166,6 +166,7 @@ export default {
             }
         },
         refresh: function () {
+            this.configFrom.tagId = "";
             this.update = true;
             this.getConfigs('new');
         },
