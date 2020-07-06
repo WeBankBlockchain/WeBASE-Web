@@ -270,7 +270,7 @@ export default {
         guidetep1: "弹出部署区块链弹窗。当链存在时，此按钮不显示",
         guidetep2: "选择区块链版本，填写WeBASE-Sign的地址，最后再填写主机信息：包括主机IP，主机部署节点数量，主机所属机构，节点所属群组和区块链数据存储目录。",
         guidetep3: "点击弹窗“开始部署”按钮，区块链部署时间较长，请耐心等待。",
-        startSuccess: "启动成功",
+        startSuccess: "启动命令已执行",
         stopSuccess: "停止成功",
         initialize: "初始化",
         upgrading: "升级中",
