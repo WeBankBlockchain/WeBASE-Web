@@ -278,7 +278,7 @@ export default {
         inputNodes: "请输入节点数量",
         addNodeSuccess: "新增节点成功",
         chainConfig: "区块链配置",
-        chainVersion: "区块链应用版本",
+        chainVersion: "Docker 镜像版本",
         newVersion: "获取最新版本",
         webaseSignAdr: "WeBASE-Sign的地址",
         addressError: "地址格式不正确",
@@ -294,7 +294,7 @@ export default {
         noWhitespace: "不能含有空格",
         hostAgency: "主机所属机构",
         nodesGroup: "请输入节点所属群组",
-        nodesGroupInfo: "节点所属群组，默认为1",
+        nodesGroupInfo: "节点所属群组",
         chainDirectory: "区块链数据存储目录",
         inputChainDirectory: "请输入区块链数据存储目录",
         startDeploy: "开始部署",
@@ -305,7 +305,8 @@ export default {
         upgraded: "正在升级，请稍等",
         deleteErrorInfo1: "如果节点是主机最后一个节点，是否删除主机",
         deleteErrorInfo2: "如果节点是机构最后一个节点，是否删除机构信息",
-        dleteNodeSuccess: "删除节点成功"
+        dleteNodeSuccess: "删除节点成功",
+        dockerRefresh: "Docker 镜像列表已刷新"
     },
     contracts: {
         createFile: "新建文件",

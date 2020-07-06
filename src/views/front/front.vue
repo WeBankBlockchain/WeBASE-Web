@@ -208,6 +208,7 @@ export default {
             deployShow: false,
             progressInterval: null,
             statusNumber: null,
+            number: 0
         };
     },
     computed: {
@@ -371,6 +372,11 @@ export default {
             this.getConfigList()
             this.frontInterval = setInterval(() => {
                 this.getConfigList();
+                this.number++
+                if(this.number == 100){
+                    clearInterval(this.frontInterval);
+                    this.number = 0;
+                }
             },10000)
         },
         getConfigList: function () {
