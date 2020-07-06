@@ -270,7 +270,7 @@ export default {
         guidetep1: "The deployment blockchain pop-up window pops up.This button does not display when the chain is present.",
         guidetep2: "Select the blockchain version, fill in the address of Webpase-Sign, and finally fill in host information: including host IP, number of host deployment nodes, host organization, node group and block chain data storage directory.",
         guidetep3: "Click the 'Start deployment' button in the popup window. It will take a long time to deploy blockchain. Please wait patiently.",
-        startSuccess: "Start success",
+        startSuccess: "The startup command has been executed",
         stopSuccess: "Stop success",
         initialize: "Initialize",
         upgrading: "Upgrading",
