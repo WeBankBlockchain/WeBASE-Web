@@ -306,7 +306,10 @@ export default {
         deleteErrorInfo1: "If the node is the last node of the host, whether to delete the host",
         deleteErrorInfo2: "If the node is the last node of the agency, whether to delete the agency",
         dleteNodeSuccess: "Node removal successful",
-        dockerRefresh: "Docker image list has been refreshed"
+        dockerRefresh: "Docker image list has been refreshed",
+        nodesNumber: "The number of deployment time nodes cannot be less than 2",
+        chainStatus: "Chain status",
+        starting: "starting"
     },
     contracts: {
         createFile: "Create File",

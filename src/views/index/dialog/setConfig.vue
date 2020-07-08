@@ -181,11 +181,21 @@ export default {
             })
         },
         deploy: function () {
-            console.log(this.configFrom);
-            let array = []
+            let array = [];
+            let nodeNumber = 0;
             for (let i = 0; i < this.configFrom.data.length; i++){
+                nodeNumber = nodeNumber + this.configFrom.data[i].number
                 let strings = this.configFrom.data[i].ip + ":" + this.configFrom.data[i].number + " " + this.configFrom.data[i].name + " " + this.configFrom.data[i].group;
                 array.push(strings)
+            }
+            if(nodeNumber == 1 || nodeNumber < 1){
+                this.$message({
+                    message: this.$t("nodes.nodesNumber"),
+                    type: "error",
+                    duration: 2000
+                });
+                this.loading = false;
+                return
             }
             let reqData = {
                 ipconf: array,

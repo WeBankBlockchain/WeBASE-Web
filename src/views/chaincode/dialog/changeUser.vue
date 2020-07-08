@@ -28,7 +28,7 @@
                 <td style="vertical-align: top;">{{this.$t('contracts.params')}}：</td>
                 <td>
                     <div v-for='(item,index) in inputs' :key='item.name' class="params-input">
-                        <el-input v-model.trim="parameter[index]" style="margin-bottom:10px;" :placeholder="item.type">
+                        <el-input v-model="parameter[index]" style="margin-bottom:10px;" :placeholder="item.type">
                             <template slot="prepend">
                                 <span :title="item.name">{{item.name}}</span>
                             </template>

@@ -306,7 +306,10 @@ export default {
         deleteErrorInfo1: "如果节点是主机最后一个节点，是否删除主机",
         deleteErrorInfo2: "如果节点是机构最后一个节点，是否删除机构信息",
         dleteNodeSuccess: "删除节点成功",
-        dockerRefresh: "Docker 镜像列表已刷新"
+        dockerRefresh: "Docker 镜像列表已刷新",
+        nodesNumber: "部署时节点个数不能少于2个",
+        chainStatus: "链状态",
+        starting: "启动中"
     },
     contracts: {
         createFile: "新建文件",
