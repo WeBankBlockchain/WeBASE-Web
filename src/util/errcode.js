@@ -1078,6 +1078,10 @@ let errCode = {
         "en":"Control container through Docker api error.",
         "zh":"Docker 容器操作失败"
     },
+    "205062": {
+        "en": "Two nodes at least.",
+        "zh": "至少两个节点。"
+    },
 
     "302000": {
         en: "user not logged in",
