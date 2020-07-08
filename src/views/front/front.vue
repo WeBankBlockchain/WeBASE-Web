@@ -65,7 +65,12 @@
                 <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
                     <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
                         <template slot-scope="scope">
-                            <template v-if="head.enName ==='status'">
+                            <template v-if='head.enName === "frontIp"'>
+                                <span>
+                                    <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
+                                </span>
+                            </template>
+                            <template v-else-if="head.enName ==='status'">
                                 <span>
                                     <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{Status(scope.row.status)}}
                                 </span>
@@ -77,22 +82,23 @@
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='chainStatus'">
-                                <span class="el-icon-loading" v-if='statusNumber == 0'></span>
+                                <span class="el-icon-loading" v-if='(statusNumber == 0 || statusNumber == 100) && (configData && configData.chainStatus  != 5)'></span>
+                                <span class="el-icon-loading" v-if='(!statusNumber && statusNumber != 0) && (configData && configData.chainStatus  != 5)'></span>
                                 <span v-if='statusNumber > 0 && statusNumber < 100 '>
                                     <el-progress :percentage="statusNumber" ></el-progress>
                                 </span>
-                                <span v-if='statusNumber == 100'>{{$t('home.run')}}</span>
+                                <span v-if='statusNumber == 100 && (configData && configData.chainStatus  == 5)'>{{$t('home.run')}} </span>
                                 <span v-if='statusNumber < 0'>{{$t("text.FAIL")}}</span>
-                                 <span v-if='!statusNumber && statusNumber != 0 && scope.row.status == 1'>{{$t('home.run')}}</span>
+                                 <span v-if='!statusNumber && statusNumber != 0 && scope.row.status == 1 && (configData && configData.chainStatus  == 5)'>{{$t('home.run')}}</span>
                             </template>
                             <template v-else-if="head.enName ==='operate'">
-                                <el-button v-if='scope.row.status == 2' :disabled="disabled" type="text" size="small" 
+                                <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 5)' :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
-                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove"' 
+                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 5)' 
                                 :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
-                                <el-button v-if='(scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2'  
+                                <el-button v-if='(scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 5)'  
                                 :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
-                                <el-button v-if='scope.row.status == 1'  :disabled="disabled" type="text" size="small" 
+                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 5)'  :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
                             <template v-else>
@@ -240,7 +246,7 @@ export default {
                 },
                 {
                     enName: "chainStatus",
-                    name: '链状态'
+                    name: this.$t("nodes.chainStatus"),
                 },
                 {
                     enName: "status",
@@ -365,6 +371,7 @@ export default {
             this.getProgresses()
         },
         getData: function () {
+            this.number = 0;
             this.loadingNodes = true;
             if(this.frontInterval){
                 clearInterval(this.frontInterval)
@@ -373,7 +380,7 @@ export default {
             this.frontInterval = setInterval(() => {
                 this.getConfigList();
                 this.number++
-                if(this.number == 100){
+                if(this.number == 1000){
                     clearInterval(this.frontInterval);
                     this.number = 0;
                 }
@@ -495,7 +502,7 @@ export default {
         newNodeClose: function() {
             this.newNodeShow = false;
             this.getData();
-            this.getProgresses();
+            // this.getProgresses();
         },
         changGroup() {
             this.getFrontTable();
@@ -520,12 +527,12 @@ export default {
                         }else{
                             this.deployShow = false
                         }
-                        this.getGroupList();
                         for(let i = 0; i < this.frontData.length; i++){
                             this.$set(this.frontData[i],'nodeType',"")
                         }
                         if(this.configData && this.configData.chainStatus == 5){
-                            this.getConsensus()
+                            this.getGroupList();
+                            this.getConsensus();
                         }
                     } else {
                         this.loadingNodes = false;
