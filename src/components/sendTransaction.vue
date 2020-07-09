@@ -21,7 +21,7 @@
         </div>
         <div class="send-item">
             <span class="send-item-title">{{this.$t('contracts.contractAddress')}}:</span>
-            <el-input v-model.trim="contractAddress" style="width: 260px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
+            <el-input v-model="contractAddress" style="width: 260px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
             <el-tooltip class="item" effect="dark" :content="$t('contracts.contractAddressInfo')" placement="top-start">
                 <i class="el-icon-info"></i>
             </el-tooltip>
@@ -48,7 +48,7 @@
             <span class="send-item-title" style="position: relative;top: 5px;">{{this.$t("contracts.params")}}:</span>
             <ul style="position: relative;top: -25px;">
                 <li v-for="(item,index) in pramasData" style="margin-left:120px;">
-                    <el-input v-model.trim="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
+                    <el-input v-model="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
                         <template slot="prepend">
                             <span class="">{{item.name}}</span>
                         </template>

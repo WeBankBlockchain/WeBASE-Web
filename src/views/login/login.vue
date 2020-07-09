@@ -177,6 +177,7 @@ export default {
                         localStorage.setItem("token", res.data.data.token);
                         sessionStorage.setItem("accountStatus", res.data.data.accountStatus);
                         sessionStorage.setItem("reload", 1);
+                        localStorage.setItem("nodeVersionChange","")
                         router.push("/main")
                     } else {
                         this.changeCode()
