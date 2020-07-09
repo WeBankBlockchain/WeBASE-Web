@@ -193,6 +193,17 @@ export default {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
                 }
+                if(item.nameKey == 'systemManager'){
+                    if(item.children){
+                        item.children.forEach(it => {
+                            if(it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")){
+                                it.menuShow = false;
+                            }else{
+                                it.menuShow = true;
+                            }
+                        })
+                    }
+                }
             });
             this.routesList = list;
         },
