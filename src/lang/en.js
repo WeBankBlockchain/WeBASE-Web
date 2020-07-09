@@ -309,7 +309,8 @@ export default {
         dockerRefresh: "Docker image list has been refreshed",
         nodesNumber: "The number of deployment time nodes cannot be less than 2",
         chainStatus: "Chain status",
-        starting: "starting"
+        starting: "starting",
+        notice: "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported."
     },
     contracts: {
         createFile: "Create File",

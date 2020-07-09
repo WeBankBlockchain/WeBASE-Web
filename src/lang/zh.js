@@ -309,7 +309,8 @@ export default {
         dockerRefresh: "Docker 镜像列表已刷新",
         nodesNumber: "部署时节点个数不能少于2个",
         chainStatus: "链状态",
-        starting: "启动中"
+        starting: "启动中",
+        notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。"
     },
     contracts: {
         createFile: "新建文件",
