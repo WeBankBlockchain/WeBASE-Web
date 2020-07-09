@@ -37,10 +37,10 @@
             </el-form>
         </div>
         <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
-            <v-menu @sidebarChange="change($event)" :minMenu="show"></v-menu>
+            <v-menu @sidebarChange="change($event)" :minMenu="show" ref='menu'></v-menu>
         </div>
         <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
-            <router-view class="bg-f7f7f7"></router-view>
+            <router-view class="bg-f7f7f7" @versionChange='versionChange'></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
         <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
@@ -51,7 +51,7 @@
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
@@ -71,6 +71,7 @@ export default {
             loading: false,
             accountStatus: 0,
             account: localStorage.getItem("user"),
+            frontData: [],
             rulePasswordForm: {
                 oldPass: "",
                 pass: "",
@@ -155,8 +156,12 @@ export default {
     mounted(){
         this.getEncryption();
         this.getGroupList();
+        this.getFrontTable();
     },
     methods: {
+        versionChange: function () {
+            this.$refs.menu.changeRouter();
+        },
         change: function(val) {
             this.menuShow = !val;
             this.menuHide = val;
@@ -250,6 +255,48 @@ export default {
                 router.push("/login");
             })
         },
+        getFrontTable() {
+            let reqData = {}
+            getFronts(reqData)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        let versionKey;
+                        this.frontData = res.data.data || [];
+                        let num = 0;
+                        for(let i = 0; i < this.frontData.length; i++){
+                            if(this.frontData[i].clientVersion){
+                                versionKey = this.frontData[i].clientVersion.substring(2,3)
+                                if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
+                                    num ++
+                                }
+                            }
+                        }
+                        if(num > 0) {
+                            localStorage.setItem("nodeVersionChange",1)
+                        }else{
+                            localStorage.setItem("nodeVersionChange","")
+                        }
+                        if(localStorage.getItem("nodeVersionChange")){
+                            this.$refs.menu.changeRouter();
+                        }
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                        
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
         getEncryption: function(){
             encryption().then(res => {
                 if(res.data.code === 0){
@@ -272,7 +319,8 @@ export default {
         },
         closeFront: function(){
             this.frontShow = false;
-            this.getGroupList()
+            this.getGroupList();
+            this.getFrontTable();
         },
         closeGuide: function(){
             this.guideShow = false

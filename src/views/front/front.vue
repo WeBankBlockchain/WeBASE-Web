@@ -246,6 +246,26 @@ export default {
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loading = false;
+                        let num = 0;
+                        let versionKey;
+                        if(!localStorage.getItem("nodeVersionChange")){
+                            for(let i = 0; i < this.frontData.length; i++){
+                                if(this.frontData[i].clientVersion){
+                                    versionKey = this.frontData[i].clientVersion.substring(2,3)
+                                    if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
+                                        num ++
+                                    }
+                                }
+                            }
+                            if(num > 0) {
+                                localStorage.setItem("nodeVersionChange",1)
+                            }else{
+                                localStorage.setItem("nodeVersionChange","")
+                            }
+                            if(localStorage.getItem("nodeVersionChange")){
+                                this.$emit("versionChange")
+                            }
+                        }  
                     } else {
                         this.loading = false;
                         this.$message({
@@ -337,7 +357,8 @@ export default {
         close(val) {
             this.frontShow = false;
             Bus.$emit("addFront")
-            this.getFrontTable()
+            this.getFrontTable();
+            this.getNodeTable();
         },
         showDetail(item) {
             if (item.nodeType === 2) return;
@@ -349,7 +370,8 @@ export default {
                     deleteFront(val.frontId).then(res => {
                         if (res.data.code === 0) {
                             // Bus.$emit("deleteFront")
-                            this.getFrontTable()
+                            this.getFrontTable();
+                            this.getNodeTable()
                         } else {
                             this.$message({
                                 message: this.$chooseLang(res.data.code),
