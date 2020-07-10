@@ -1082,6 +1082,10 @@ let errCode = {
         "en": "Two nodes at least.",
         "zh": "至少两个节点。"
     },
+    "205063": {
+        "en": "Group need two sealers at least.",
+        zh: "群组至少需要两个共识节点。"
+    },
 
     "302000": {
         en: "user not logged in",
