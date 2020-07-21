@@ -110,6 +110,14 @@ export default {
         agreeNodeBtn: "已添加为共识/观察节点，继续",
         addNode: "新增节点",
         upgradeNode: "升级节点",
+        reset: "重置",
+        resetSuccess: "重置成功",
+        deploying: "部署中",
+        deployFail: "部署失败",
+        restarting: "重启中",
+        deleteChain: "此操作将删除该链, 是否继续?",
+        adding: "添加中",
+        addFail: "添加失败"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -310,7 +318,7 @@ export default {
         nodesNumber: "部署时节点个数不能少于2个",
         chainStatus: "链状态",
         starting: "启动中",
-        notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。"
+        notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。",
     },
     contracts: {
         createFile: "新建文件",

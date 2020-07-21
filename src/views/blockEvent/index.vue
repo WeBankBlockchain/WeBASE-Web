@@ -86,7 +86,7 @@ export default {
         Bus.$on("changeGroup", data => {
             this.changeGroup(data)
         })
-        if (this.group && localStorage.getItem("configData") == 5) {
+        if (this.group && localStorage.getItem("configData") == 3) {
             this.queryBlockEventList()
         }
     },

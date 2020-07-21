@@ -31,7 +31,7 @@
         <div class="content-head-network">
            
             <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
-             <el-button type='text' size='small' @click='deleteConfig'>删除</el-button>
+             <!-- <el-button type='text' size='small' @click='deleteConfig'>删除</el-button> -->
             <span v-if="abnormalList.length>0">
                 <el-tooltip class="item" effect="dark" placement="bottom-end">
                     <div slot="content">
@@ -161,14 +161,6 @@ export default {
         this.queryGroupStatus4()
     },
     methods: {
-        deleteConfig: function(){
-            deleteChain().then(res => {
-                if(res.data.code === 0){
-                    this.$message("删除成功")
-                    router.push("/login")
-                }
-            })
-        },
         getGroupList: function (type) {
             getGroupsInvalidIncluded().then(res => {
                 if (res.data.code === 0) {
