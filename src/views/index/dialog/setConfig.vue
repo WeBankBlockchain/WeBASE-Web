@@ -15,8 +15,15 @@
  */
 <template>
     <div>
-        <el-dialog :title="$t('nodes.chainConfig')" :visible.sync="dialogVisible" :before-close="modelClose" 
-        class="dialog-wrapper" width="750px" :center="true" :show-close='true'>
+        <el-dialog 
+        :title="$t('nodes.chainConfig')" 
+        :visible.sync="dialogVisible" 
+        :before-close="modelClose" 
+        :close-on-click-modal='false'
+        class="dialog-wrapper" 
+        width="750px" 
+        :center="true" 
+        :show-close='true'>
             <div>
                 <el-form  :model="configFrom"  ref="configFrom" label-width="0px" class="demo-ruleForm">
                      <div class="config-item-tile">{{$t('nodes.chainVersion')}}:</div>
@@ -33,38 +40,38 @@
                             <el-button type="primary"  style="margin-left: 20px;" @click='refresh'>{{$t('nodes.newVersion')}}</el-button>
                     </el-form-item>
                      
-                       <div class="config-item-tile">{{$t('nodes.webaseSignAdr')}}</div>
+                       <!-- <div class="config-item-tile">{{$t('nodes.webaseSignAdr')}}</div>
                       <el-form-item  prop="webaseSignAddr" :rules="[
                             {required: true, message: $t('alarm.pleaseSlect'), trigger: 'blur'},
                             {pattern:/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\:([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-5]{2}[0-3][0-5])$/, message: $t('nodes.addressError'), trigger: 'blur'}]">
                             <el-input v-model="configFrom.webaseSignAddr" :placeholder="$t('nodes.webaseSghAdrInfo')" style="width: 300px;" ></el-input>
                       </el-form-item>
-                      <hr style="margin: 15px 0;">
+                      <hr style="margin: 15px 0;"> -->
                     <div class="config-item-tile">{{$t('nodes.hostList')}}</div>
                     <div v-for="(item,index) in configFrom.data" :key="item.key">
                         <el-form-item  :prop="'data.' + index + '.ip'" style="display: inline-block;width: 150px;" :rules="[
                             {required: true, message: $t('nodes.inputHostIp'), trigger: 'blur'},
                             {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: $t('nodes.ipError'), trigger: 'blur'}
                             ]">
-                            <el-input v-model="item.ip" :placeholder="$t('nodes.hostIp')" style="width: 140px;" maxlength="16"></el-input>
+                            <el-input v-model.trim="item.ip" :placeholder="$t('nodes.hostIp')" style="width: 140px;" maxlength="16"></el-input>
                         </el-form-item>
                         <el-form-item  :prop="'data.' + index + '.number'" style="display: inline-block;width: 150px;" :rules=" [
                                 {required: true, message: $t('nodes.inputNodesNumber'), trigger: 'blur'},
                                 {pattern:/^[1-9]\d*$/,message: $t('nodes.thanOne'), trigger: 'blur'}
                             ]">
-                                <el-input v-model="item.number"  :placeholder="$t('nodes.NodesNumber')" style="width: 140px;" maxlength="1"></el-input>
+                                <el-input v-model.trim="item.number"  :placeholder="$t('nodes.NodesNumber')" style="width: 140px;" maxlength="1"></el-input>
                         </el-form-item>
                         <el-form-item  :prop="'data.' + index + '.name'" style="display: inline-block;width: 150px;" :rules=" [
                                 {required: true, message: $t('nodes.inputHostAgency'), trigger: 'blur'},
                                 {pattern:/^[^\s]*$/,message: $t('nodes.noWhitespace'), trigger: 'blur'},
                             ]">
-                            <el-input v-model="item.name" :placeholder="$t('nodes.hostAgency')" style="width: 140px;" maxlength="32"></el-input>
+                            <el-input v-model.trim="item.name" :placeholder="$t('nodes.hostAgency')" style="width: 140px;" maxlength="32"></el-input>
                         </el-form-item>
-                        <el-form-item  :prop="'data.' + index + '.group'" style="display: inline-block;width: 150px;" :rules=" [
+                        <!-- <el-form-item  :prop="'data.' + index + '.group'" style="display: inline-block;width: 150px;" :rules=" [
                                 {required: true, message: $t('nodes.nodesGroup'), trigger: 'blur'},
                             ]">
                                 <el-input v-model="item.group" :placeholder="$t('nodes.nodesGroupInfo')" style="width: 140px;" maxlength="8"></el-input>
-                        </el-form-item>
+                        </el-form-item> -->
                         <span class="el-icon-plus" style="cursor: pointer;display: inline-block;padding-left: 20px" @click="add()"></span>
                         <span v-if="configFrom.data.length > 1" class="el-icon-minus" style="cursor: pointer;display: inline-block;padding-left: 10px" @click="delet(item)"></span>
                     </div>
@@ -99,13 +106,13 @@ export default {
             configFrom: {
                 tagId: "",
                 rootDirOnHost: "/opt/fisco",
-                webaseSignAddr: "",
+                // webaseSignAddr: "",
                 data: [
                     {
                         ip: "",
                         number: null,
                         name: "",
-                        group: "",
+                        group: 1,
                         key: Date.now()
                     }
                 ]
@@ -153,7 +160,7 @@ export default {
                     ip: "",
                     number: null,
                     name: "",
-                    group: "",
+                    group: 1,
                     key: Date.now()
                 };
                 this.configFrom.data.push(value)
@@ -201,7 +208,7 @@ export default {
                 ipconf: array,
                 tagId: this.configFrom.tagId,
                 rootDirOnHost: this.configFrom.rootDirOnHost,
-                webaseSignAddr: this.configFrom.webaseSignAddr
+                // webaseSignAddr: this.configFrom.webaseSignAddr
             }
             deployConfig(reqData).then(res => {
                 this.loading = false;

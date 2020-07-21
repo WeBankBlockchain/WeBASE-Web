@@ -143,7 +143,7 @@ export default {
         }
     },
     mounted() {
-        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 5){
+        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 3){
             this.getUnusualContractList();
         }
     },

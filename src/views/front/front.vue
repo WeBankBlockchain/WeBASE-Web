@@ -16,52 +16,40 @@
 <template>
     <div class="front-module">
         <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='head'></v-content-head>
-        <!-- <div class="module-wrapper">
-            <h3 style="padding: 20px 0 0 40px;">{{this.$t("nodes.nodeFront")}}</h3>
-            
-            <div class="search-table">
-                <el-table :data="frontData" class="search-table-content" v-loading="loading">
-                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip>
-                        <template slot-scope="scope">
-                            <span v-if='head.enName === "frontIp"'>
-                                <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
-                            </span>
-                            <span v-else-if="head.enName === 'nodeId'">
-                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else-if="head.enName === 'status'">
-                                <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
-                            </span>
-                            <span v-else>{{scope.row[head.enName]}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
-                        <template slot-scope="scope">
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">{{$t('text.delete')}}</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination v-show='total > 10' class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-                </el-pagination>
-            </div>
-        </div> -->
-        <div class="module-wrapper" style="margin-top: 10px;">
-            <div class="search-table">
-                <!-- <h3 style="padding: 20px 0 8px 0;">
-                    {{this.$t("nodes.nodeList")}}
-                    <el-tooltip effect="dark"  placement="top-start">
-                        <div slot="content">{{$t('nodes.nodeDescription')}}</div>
-                        <i class="el-icon-info contract-icon font-15"></i>
-                    </el-tooltip>
-                </h3> -->
-                <div class="search-part" style="padding-top: 20px;">
+        <div class="module-wrapper" >
+            <div class="search-part" style="padding-top: 20px;">
                     <div class="search-part-left" v-if='!disabled'>
                         <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
-                        <el-button type="primary" class="search-part-left-btn" @click="createFront">{{$t('text.addNode')}}</el-button>
-                        <el-button type="primary" class="search-part-left-btn" @click="update">{{$t('text.upgradeNode')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="reset">{{$t('text.reset')}}</el-button>
                     </div>
                 </div>
+        </div>
+        <div class="module-wrapper" style="margin-top: 10px;">
+            <div class="search-table">
+                    <el-table :data="chainList" class="search-table-content" v-loading="loading">
+                        <el-table-column label="链名称" prop="chainName" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="链版本" prop="version" show-overflow-tooltip></el-table-column>
+                        <el-table-column label="链状态" prop="chainStatus" show-overflow-tooltip>
+                            <template slot-scope='scope'>
+                                <span>{{ChainStatus(scope.row.chainStatus)}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="链进度" show-overflow-tooltip>
+                            <template v-if='configData && configData.chainStatus != 3'>
+                                <el-progress v-if='statusNumber || statusNumber == 0' :percentage="statusNumber" status="success" :showText='false'></el-progress>
+                            </template>
+                            <template v-else>
+                                <span>链已部署完成</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+        </div>
+        <div class="module-wrapper" style="margin-top: 10px;">
+            <div class="search-table">
+                
+                
                 <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
                     <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
                         <template slot-scope="scope">
@@ -71,8 +59,11 @@
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='status'">
-                                <span>
+                                <span v-if='configData && configData.chainStatus  == 3'>
                                     <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{Status(scope.row.status)}}
+                                </span>
+                                <span v-else-if='configData'>
+                                    <i style="color: #f00" class="wbs-icon-radio font-6"></i>
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='nodeType'">
@@ -81,24 +72,14 @@
                                     <span v-if='!scope.row.nodeType' class="el-icon-loading"></span>
                                 </span>
                             </template>
-                            <template v-else-if="head.enName ==='chainStatus'">
-                                <span class="el-icon-loading" v-if='(statusNumber == 0 || statusNumber == 100) && (configData && configData.chainStatus  != 5)'></span>
-                                <span class="el-icon-loading" v-if='(!statusNumber && statusNumber != 0) && (configData && configData.chainStatus  != 5)'></span>
-                                <span v-if='statusNumber > 0 && statusNumber < 100 '>
-                                    <el-progress :percentage="statusNumber" ></el-progress>
-                                </span>
-                                <span v-if='statusNumber == 100 && (configData && configData.chainStatus  == 5)'>{{$t('home.run')}} </span>
-                                <span v-if='statusNumber < 0'>{{$t("text.FAIL")}}</span>
-                                 <span v-if='!statusNumber && statusNumber != 0 && scope.row.status == 1 && (configData && configData.chainStatus  == 5)'>{{$t('home.run')}}</span>
-                            </template>
                             <template v-else-if="head.enName ==='operate'">
-                                <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 5)' :disabled="disabled" type="text" size="small" 
+                                <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
-                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 5)' 
+                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 3)' 
                                 :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
-                                <el-button v-if='(scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 5)'  
+                                <el-button v-if='(scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3)'  
                                 :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
-                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 5)'  :disabled="disabled" type="text" size="small" 
+                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)'  :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
                             <template v-else>
@@ -121,26 +102,6 @@
                 <set-config :show='configShow' v-if='configShow' @close='closeConfig' @success='successConfig'></set-config>
             </div>
         </div>
-        <div class="module-wrapper search-table" style="margin-top: 10px;padding: 20px 40px;" v-if='deployShow'>
-            <p class="guide-title">{{$t("nodes.guideTitle")}}</p>
-            <div>
-                <div class="guide-item">
-                    <span class="guide-item-title">1、{{$t("nodes.deployButton")}}</span>
-                    <img class="guide-item-img" :src="guideImg" alt="箭头">
-                    <span class="guide-item-title">2、{{$t("nodes.blockChainButton")}}</span>
-                    <img class="guide-item-img" :src="guideImg" alt="箭头">
-                    <span class="guide-item-title">3、{{$t('text.deploy')}}</span>
-                </div>
-                <div class="guide-content">
-                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 44px">1、{{$t("nodes.deployButton")}}</span>{{$t("nodes.guidetep1")}}</p>
-                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 30px">2、{{$t("nodes.blockChainButton")}}</span>{{$t("nodes.guidetep2")}}</p>
-                    <p class="guide-content-item"><span class="guide-content-title" style="padding-right: 100px">3、{{$t('text.deploy')}}</span>{{$t("nodes.guidetep3")}}</p>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="">
-            <el-progress type="circle" :percentage="10"></el-progress>
-        </div> -->
     </div>
 </template>
 
@@ -148,7 +109,7 @@
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import { getFronts, addnodes, deleteFront, getNodeList, 
-getConsensusNodeId,getGroupsInvalidIncluded,startNode,stopNode,getChainInfo,getProgress } from "@/util/api";
+getConsensusNodeId,getGroupsInvalidIncluded,startNode,stopNode,getChainInfo,getProgress,deleteChain } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
@@ -214,7 +175,8 @@ export default {
             deployShow: false,
             progressInterval: null,
             statusNumber: null,
-            number: 0
+            number: 0,
+            chainList: []
         };
     },
     computed: {
@@ -243,10 +205,6 @@ export default {
                 {
                     enName: "createTime",
                     name: this.$t("home.createTime")
-                },
-                {
-                    enName: "chainStatus",
-                    name: this.$t("nodes.chainStatus"),
                 },
                 {
                     enName: "status",
@@ -317,22 +275,23 @@ export default {
             this.getData();
         })
         this.getConfigList();
-        this.getData()
-        if(localStorage.getItem("config") != 0){
-            this.getProgresses();
-        }
+        this.getData();
+        // if(localStorage.getItem("config") != 0){
+        //     this.getProgresses();
+        // }
     },
     methods: {
         getProgresses: function () {
+            clearInterval(this.progressInterval)
             this.progressInterval = setInterval ( () => {
                 this.getProgressData()
-            },500)
+            },1000)
         },
         getProgressData: function () {
             getProgress().then(res => {
                 if(res.data.code === 0){
                     this.statusNumber = res.data.data
-                    if(this.statusNumber == 100 || this.statusNumber == -1){
+                    if(this.statusNumber == 10 || this.statusNumber == -1){
                         localStorage.setItem("config",0)
                         clearInterval(this.progressInterval)
                     }
@@ -389,10 +348,16 @@ export default {
         getConfigList: function () {
             getChainInfo().then(res => {
                 if(res.data.code === 0) {
+                    
                     this.configData = res.data.data;
                     if(res.data.data){
-                        localStorage.setItem("configData",res.data.data.chainStatus)
+                        this.chainList = [res.data.data]
+                        localStorage.setItem("configData",res.data.data.chainStatus);
+                        if(res.data.data.chainStatus != 3){
+                            this.getProgresses();
+                        }
                     }else{
+                        clearInterval(this.frontInterval)
                         localStorage.setItem("configData",0)
                     }
                     this.getFrontTable();
@@ -479,6 +444,42 @@ export default {
         update: function () {
             this.updateNodeShow = true
         },
+        reset () {
+            this.$confirm(this.$t("text.deleteChain"), this.$t("text.delete"), {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
+                type: 'warning'
+                }).then(() => {
+                    deleteChain().then(res => {
+                        if(res.data.code === 0){
+                            this.$message({
+                                type: "success",
+                                message: this.$t('text.resetSuccess'),
+                                duration: 2000
+                            });
+                            clearInterval(this.frontInterval);
+                            this.getConfigList();
+                        }else{
+                            this.$message({
+                                type: "error",
+                                message: this.$chooseLang(res.data.code),
+                                duration: 2000
+                            }); 
+                        }
+                    }).catch (err => {
+                        this.$message({
+                            message: this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
+                    })
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: '已取消删除'
+                });          
+            });
+        },
         updateNodeClose: function () {
             this.updateNodeShow = false;
             this.getData()
@@ -527,10 +528,10 @@ export default {
                         }else{
                             this.deployShow = false
                         }
-                        for(let i = 0; i < this.frontData.length; i++){
-                            this.$set(this.frontData[i],'nodeType',"")
-                        }
-                        if(this.configData && this.configData.chainStatus == 5){
+                        // for(let i = 0; i < this.frontData.length; i++){
+                        //     this.$set(this.frontData[i],'nodeType',"")
+                        // }
+                        if(this.configData && this.configData.chainStatus == 3){
                             this.getGroupList();
                             this.getConsensus();
                         }
@@ -659,6 +660,26 @@ export default {
                     break;
             }
             return transString;
+        },
+        ChainStatus (val) {
+            let str = ""
+            switch (val) {
+                case 0:
+                    str = this.$t('nodes.initialize');
+                    break;
+                case 1:
+                    str = this.$t('text.deploying');
+                    break;
+                case 2:
+                    str = this.$t('text.deployFail');
+                    break;
+                case 3:
+                    str = this.$t('text.running');
+                    break;
+                case 4:
+                    str = this.$t('text.restarting')
+            }
+            return str;
         },
         nodeText(key) {
             var str = '';
@@ -814,8 +835,14 @@ export default {
                 case 2:
                     return this.$t("text.stop")
                     break;
+                case 3:
+                    return this.$t('text.starting');
+                    break;
+                case 4:
+                    return this.$t("text.adding");
+                    break;
                 default:
-                    return this.$t('nodes.upgrading')
+                    return this.$t("text.addFail")
             }
         }
     },

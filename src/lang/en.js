@@ -110,6 +110,14 @@ export default {
         agreeNodeBtn: "Added as consensus / observation node, continue",
         addNode: "New Node",
         upgradeNode: "Upgrade Node",
+        reset: "Reset",
+        resetSuccess: "Reset successful",
+        deploying: "Deploying",
+        deployFail: "Deploy failure",
+        restarting: "Restarting",
+        deleteChain: "This operation deletes the chain. Do you want to continue?",
+        adding: "Adding",
+        addFail: "Add failed"
     },
     rule: {
         textLong: "1 to 32 characters in length",
