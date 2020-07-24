@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 <template>
-    <div style="height: 100%;">
-        <div style="height: 100%;background-color: #0c1220" class="sidebar-content">
+    <div style="height: 100%;position: relative;">
+        <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
+            <div style="height: calc(100% - 104px);box-sizing: border-box;overflow: auto;">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
@@ -49,7 +50,19 @@
                     </el-menu-item>
                 </template>
             </el-menu>
+            </div>
+            
         </div>
+        <div class="sidebar-version" v-if="menuShowC">
+                <div class="sidebar-version-item">
+                    <span>链版本: </span>
+                    <span>{{$store.state.version}}</span>
+                </div>
+                <div class="sidebar-version-item">
+                    <span>WeBASE版本: </span>
+                    <span>{{$store.state.mgrVersion}}</span>
+                </div>
+            </div>
     </div>
 </template>
 
@@ -253,6 +266,23 @@ export default {
     padding-left: 57px !important;
     height: 46px;
     line-height: 46px;
+}
+.sidebar-content{
+    position: relative;
+}
+.sidebar-version{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    color: #aaa;
+    z-index: 9999;
+    background-color: #0c1220;
+    box-sizing: border-box;
+}
+.sidebar-version-item {
+    line-height: 22px;
 }
 .sidebar-content >>> .el-menu--collapse {
     width: 56px;

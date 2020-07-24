@@ -112,7 +112,9 @@ export default {
         } else {
             this.disabled = true
         }
-        this.getContracts()
+        if(localStorage.getItem("groupId")){
+            this.getContracts()
+        }
     },
     methods: {
         changGroup: function () {
