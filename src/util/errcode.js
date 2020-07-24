@@ -1084,7 +1084,19 @@ let errCode = {
     },
     "205063": {
         "en": "Group need two sealers at least.",
-        zh: "群组至少需要两个共识节点。"
+        "zh": "群组至少需要两个共识节点。"
+    },
+    "205064": {
+        "en": "WebaseSignAddess configuration error in Application.yml",
+        "zh": "application.yml中的webaseSignAddess配置错误"
+    },
+    "205065": {
+        "en": "Error getting docker image mode",
+        "zh": "获取镜像方式错误"
+    },
+    "205066": {
+        "en": "Please pull the Docker image manually",
+        "zh": "请手动拉取 Docker 镜像"
     },
 
     "302000": {
