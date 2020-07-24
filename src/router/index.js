@@ -17,11 +17,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import { getCookie } from '@/util/util'
 
-const main = resolve => require(['@/views/index/main'], resolve);
+const main = resolve => require(['@/views/index/index'], resolve);
 const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
-const front = resolve => require(['@/views/front/front'], resolve);
+const front = resolve => require(['@/views/front/index'], resolve);
 const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
@@ -48,7 +48,7 @@ Vue.use(Router);
 const routes = [
     {
         path: '/',
-        redirect: '/main',
+        redirect: '/login',
     },
     {
         path: '/login',

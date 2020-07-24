@@ -258,15 +258,17 @@ export default {
     },
     mounted: function () {
         this.groupId = localStorage.getItem("groupId");
-        this.getNetworkDetails();
-        this.getNodeTable();
-        this.getBlockList();
-        this.getTransaction();
-        this.$nextTick(function () {
-            this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
-            this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
-            this.getChart();
-        });
+        if(this.groupId && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+            this.getNetworkDetails();
+            this.getNodeTable();
+            this.getBlockList();
+            this.getTransaction();
+             this.$nextTick(function () {
+                this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+                this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+                this.getChart();
+            });
+        }
     },
     destroyed() { },
     methods: {
