@@ -1248,5 +1248,28 @@ export function getProgress () {
     })
 }
 
+//获取链部署方式
+export function getDeployType () {
+    return get ({
+        url: `${url.ORG_LIST}/deploy/type`,
+        methods: "get",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//获取链版本
+export function getVersion () {
+    return get ({
+        url: `${url.ORG_LIST}/version`,
+        methods: "get",
+        responseType: "text",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 
 

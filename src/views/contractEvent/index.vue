@@ -94,7 +94,7 @@ export default {
         Bus.$on("changeGroup", data => {
             this.changeGroup(data)
         })
-        if (this.group && localStorage.getItem("configData") == 3) {
+        if (this.group && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.queryContractEventList()
         }
     },

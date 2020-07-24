@@ -4,21 +4,26 @@
         <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" 
          class="dialog-wrapper" width="500px" :center="true" :show-close='true'>
             <div>
-                <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="100px" class="demo-ruleForm">
+                <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="120px" class="demo-ruleForm">
                     <el-form-item  label='IP' prop='ip'>
-                        <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 250px;" maxlength="16" @blur='ipChange'></el-input>
+                        <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item>
-                    <el-form-item  :label='$t("nodes.selectGroup")'>
+                    <el-form-item  :label='$t("nodes.selectGroup")' prop='groupId'>
                         <el-select v-model="nodeFrom.groupId" :placeholder="$t('nodes.selectGroup')" style="width: 250px;">
                             <el-option :label="item.groupName" :value="item.groupId" v-for='item in groupList'  :key='item.groupId'></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item :label='$t("nodes.agency")' v-if='agencyShow'>
+                    <el-form-item :label='$t("nodes.agency")' prop='agencyName'>
                         <el-input v-model="nodeFrom.agencyName" :placeholder="$t('nodes.inputAgency')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item>
-                    <el-form-item :label='$t("nodes.nodeCount")'>
-                        <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 250px;" maxlength="16"></el-input>
+                    <el-form-item :label="$t('text.imageMode')" prop='dockerImageType'>
+                        <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}</el-radio>
+                        <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}</el-radio>
+                        <el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
                     </el-form-item>
+                    <!-- <el-form-item :label='$t("nodes.nodeCount")'>
+                        <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 250px;" maxlength="16"></el-input>
+                    </el-form-item> -->
                 </el-form>
                 <div class="text-right sure-btn" style="margin-top:10px">
                     <el-button  @click="modelClose">{{this.$t("text.cancel")}}</el-button>
@@ -42,8 +47,8 @@ export default {
             nodeFrom: {
                 ip: "",
                 agencyName: "",
-                num: 1,
-                groupId: ""
+                groupId: "",
+                dockerImageType: 0
             },
             loading: false,
             groupList: [],
@@ -53,10 +58,35 @@ export default {
     },
     computed: {
        rules(){
+           var  validatePass = (rule, value, callback) => {
+            let num = 0;
+            for(let i = 0; i < this.nodeList.length; i++){
+                if(value == this.nodeList[i].frontIp){
+                    num++
+                }
+            }
+                if (value === "") {
+                    callback(new Error(this.$t('rule.ipName')));
+                } else if(num > 0){
+                    callback(new Error(this.$t('rule.ipSame')));
+                } else{
+                    callback();
+                }
+            };
            let data = {
                ip: [
+                    {required: true, validator: validatePass, trigger: 'blur'},
                     {required: true, message: this.$t("rule.ipName"), trigger: 'blur'},
                     {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: this.$t("nodes.ipError"), trigger: 'blur'}
+                ],
+                agencyName: [
+                    {required: true, message: this.$t("rule.agencyName"), trigger: 'blur'},
+                ],
+                groupId: [
+                    {required: true, message: this.$t("rule.selectGroup"), trigger: 'blur'},
+                ],
+                dockerImageType: [
+                    {required: true, message: this.$t("rule.selctDockerImageType"), trigger: 'blur'},
                 ]
             }
             return data
@@ -66,21 +96,21 @@ export default {
        this.getGroupList()
     },
     methods: {
-        ipChange: function() {
-            let num = 0;
-            if(this.nodeList && this.nodeList.length){
-                for(let i = 0; i < this.nodeList.length; i++){
-                    if(this.nodeList[i].frontIp == this.nodeFrom.ip){
-                        num ++;
-                    }
-                }
-            }
-            if(num == 0){
-                this.agencyShow = true
-            }else{
-                this.agencyShow = false
-            }
-        },
+        // ipChange: function() {
+        //     let num = 0;
+        //     if(this.nodeList && this.nodeList.length){
+        //         for(let i = 0; i < this.nodeList.length; i++){
+        //             if(this.nodeList[i].frontIp == this.nodeFrom.ip){
+        //                 num ++;
+        //             }
+        //         }
+        //     }
+        //     if(num == 0){
+        //         this.agencyShow = true
+        //     }else{
+        //         this.agencyShow = false
+        //     }
+        // },
         modelClose () {
             this.$emit("close")
         },
@@ -97,16 +127,22 @@ export default {
         add: function () {
             let reqData = {
                 ip: this.nodeFrom.ip,
+                groupId: this.nodeFrom.groupId,
+                agencyName: this.nodeFrom.agencyName,
+                dockerImageType: this.nodeFrom.dockerImageType
             }
-            if(this.nodeFrom.groupId){
-                reqData.groupId = this.nodeFrom.groupId
-            }
-            if(this.nodeFrom.agencyName){
-                reqData.agencyName = this.nodeFrom.agencyName
-            }
-            if(this.nodeFrom.num){
-                reqData.num = this.nodeFrom.num
-            }
+            // if(this.nodeFrom.groupId){
+            //     reqData.groupId = this.nodeFrom.groupId
+            // }
+            // if(this.nodeFrom.agencyName){
+            //     reqData.agencyName = this.nodeFrom.agencyName
+            // }
+            // if(this.nodeFrom.num){
+            //     reqData.num = this.nodeFrom.num
+            // }
+            // if(this.nodeFrom.dockerImageType){
+            //     reqData.dockerImageType = this.nodeFrom.dockerImageType
+            // }
             addNode(reqData).then(res => {
                 if(res.data.code === 0){
                     this.$message({

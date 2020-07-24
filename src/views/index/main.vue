@@ -53,7 +53,7 @@ import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import setConfig from "./dialog/setConfig"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts,getChainInfo } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts,getChainInfo,getVersion } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
@@ -163,6 +163,20 @@ export default {
         this.getFrontTable();
     },
     methods: {
+        getVersionList () {
+            getVersion().then(res => {
+                if(res.status == 200) {
+                    this.$store.dispatch('set_mgr_version_action',res.data)
+                }
+            }).catch(err => {
+                
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
+        },
         change: function(val) {
             this.menuShow = !val;
             this.menuHide = val;
@@ -227,7 +241,13 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         if(res.data.data.length > 0){
+                            for(let i = 0; i < res.data.data.length; i++){
+                                if(res.data.data[i].clientVersion){
+                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion)
+                                }
+                            }
                             this.accountStatus = sessionStorage.getItem("accountStatus");
+                            this.getVersionList();
                             this.getGroupList()
                         }else{
                             this.accountStatus = sessionStorage.getItem("accountStatus");

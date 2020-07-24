@@ -25,7 +25,9 @@ const state = {
     isLogin: 0,
     loading: false,
     language: getLanguage(),
-    importRivateKey: false
+    importRivateKey: false,
+    version: null,
+    mgrVersion: null
 }
 export default new Vuex.Store({
     state,
@@ -55,6 +57,12 @@ export default new Vuex.Store({
             state.language = language
             Cookies.set('language', language)
         },
+        set_version (state,name){
+            state.version = name
+        },
+        set_mgr_version (state,name) {
+            state.mgrVersion = name
+        }
     },
     actions: {
         switch_creat_user_dialog(context) {
@@ -69,5 +77,11 @@ export default new Vuex.Store({
         setLanguage({ commit }, language) {
             commit('SET_LANGUAGE', language)
         },
+        set_version_action (context,name) {
+            context.commit("set_version",name)
+        },
+        set_mgr_version_action(context,name){
+            context.commit("set_mgr_version",name)
+        }
     }
 })
