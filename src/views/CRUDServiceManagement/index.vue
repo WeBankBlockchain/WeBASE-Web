@@ -115,7 +115,9 @@ export default {
             this.disabled = true
         }
         this.initEditor()
-        this.getUserData()
+        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+            this.getUserData()
+        }
     },
 
     methods: {

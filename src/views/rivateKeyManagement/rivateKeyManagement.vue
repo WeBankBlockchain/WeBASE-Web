@@ -143,7 +143,9 @@ export default {
         } else {
             this.disabled = true
         }
-        this.getUserInfoData();
+        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+            this.getUserInfoData();
+        }
     },
     methods: {
         changGroup() {

@@ -15,6 +15,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+            <p class="info">{{$t('nodes.notice')}}</p>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
@@ -219,5 +220,9 @@ export default {
 <style scoped>
 .sure-btn /deep/ .el-button {
     padding: 9px 16px;
+}
+.info{
+    padding-left: 30px;
+    color: #f00;
 }
 </style>

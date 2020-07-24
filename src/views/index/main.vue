@@ -43,6 +43,7 @@
             <router-view class="bg-f7f7f7" @versionChange='versionChange'></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
+        <set-config :show='configShow' v-if='configShow' @close='closeConfig'></set-config>
         <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
     </div>
 </template>
@@ -50,17 +51,20 @@
 <script>
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
+import setConfig from "./dialog/setConfig"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts } from "@/util/api";
+import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts,getChainInfo,getVersion } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
+import Bus from "@/bus"
 export default {
     name: "mains",
     components: {
         "v-menu": sidebar,
         "set-front": setFront,
-        'v-guide': guide
+        'v-guide': guide,
+        'set-config': setConfig
     },
     data: function() {
         return {
@@ -77,6 +81,8 @@ export default {
                 pass: "",
                 checkPass: ""
             },
+            configType: 1,
+            configShow: false
         };
     },
     computed: {
@@ -155,12 +161,22 @@ export default {
     },
     mounted(){
         this.getEncryption();
-        this.getGroupList();
         this.getFrontTable();
     },
     methods: {
-        versionChange: function () {
-            this.$refs.menu.changeRouter();
+        getVersionList () {
+            getVersion().then(res => {
+                if(res.status == 200) {
+                    this.$store.dispatch('set_mgr_version_action',res.data)
+                }
+            }).catch(err => {
+                
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
         },
         change: function(val) {
             this.menuShow = !val;
@@ -215,6 +231,49 @@ export default {
                     
                 });
         },
+        getConfigData: function () {
+            
+        },
+        getFrontTable() {
+            let reqData = {
+                // frontId: this.frontId
+            }
+            getFronts(reqData)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        if(res.data.data.length > 0){
+                            for(let i = 0; i < res.data.data.length; i++){
+                                if(res.data.data[i].clientVersion){
+                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion)
+                                }
+                            }
+                            this.accountStatus = sessionStorage.getItem("accountStatus");
+                            this.getVersionList();
+                            this.getGroupList()
+                        }else{
+                            this.accountStatus = sessionStorage.getItem("accountStatus");
+                            router.push("/front");  
+                        }
+                        
+                    } else {
+                        router.push("/front");
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                        
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
         getGroupList: function(){
             getGroupsInvalidIncluded().then(res => {
                 if(res.data.code === 0){
@@ -234,25 +293,29 @@ export default {
                             router.push("/home")
                         }
                     }else{
-                        this.guideShow = true
+                        // this.guideShow = true
                     }
                 }else{
-                    this.guideShow = true
+                    this.guideShow = false
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-                    router.push("/login");
+                   
                 }
             }).catch(err => {
-                
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
-                router.push("/login");
+                router.push("/front");
+                if(this.configType !== 1){
+                                this.frontShow = true
+                            }else{
+                                this.configShow = true
+                            }
             })
         },
         getFrontTable() {
@@ -319,8 +382,12 @@ export default {
         },
         closeFront: function(){
             this.frontShow = false;
-            this.getGroupList();
+            this.getFrontTable()
+        },
+        closeConfig: function() {
+            this.configShow = false;
             this.getFrontTable();
+            Bus.$emit("changeConfig")
         },
         closeGuide: function(){
             this.guideShow = false
