@@ -29,8 +29,11 @@
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
         </div>
         <div class="content-head-network">
-           
-            <a target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
+            <!-- <span class="content-head-version" v-if='$store.state.version'>链版本: </span>
+            <span class="content-head-version content-head-version-data">{{$store.state.version}}</span>
+            <span class="content-head-version" v-if='$store.state.mgrVersion'>WeBASE版本: </span>
+            <span class="content-head-version content-head-version-data">{{$store.state.mgrVersion}}</span> -->
+            <a class="content-head-network-link" target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
              <!-- <el-button type='text' size='small' @click='deleteConfig'>删除</el-button> -->
             <span v-if="abnormalList.length>0">
                 <el-tooltip class="item" effect="dark" placement="bottom-end">
@@ -332,6 +335,13 @@ export default {
     padding-right: 10px;
     position: relative;
 }
+.content-head-version{
+    color: #bbb
+}
+.content-head-version-data{
+    display: inline-block;
+    padding-right: 10px;
+}
 .browse-user {
     text-align: center;
     text-decoration: none;
@@ -362,7 +372,7 @@ export default {
     color: #2d5f9e;
     cursor: default;
 }
-.content-head-network a:nth-child(1) {
+.content-head-network-link {
     text-decoration: none;
     outline: none;
     color: #cfd7db;

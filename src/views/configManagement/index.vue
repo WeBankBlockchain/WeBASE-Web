@@ -126,7 +126,7 @@ export default {
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem("groupId") && localStorage.getItem("configData") == 3){
+        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
             this.getUserData()
             this.getSysConfigList()
         }

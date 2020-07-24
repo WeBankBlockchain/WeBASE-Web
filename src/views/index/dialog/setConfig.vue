@@ -21,7 +21,7 @@
         :before-close="modelClose" 
         :close-on-click-modal='false'
         class="dialog-wrapper" 
-        width="750px" 
+        width="500px" 
         :center="true" 
         :show-close='true'>
             <div>
@@ -37,49 +37,34 @@
                                 :value="item.id">
                                 </el-option>
                             </el-select>
-                            <el-button type="primary"  style="margin-left: 20px;" @click='refresh'>{{$t('nodes.newVersion')}}</el-button>
+                            <!-- <el-button type="primary"  style="margin-left: 20px;" @click='refresh'>{{$t('nodes.newVersion')}}</el-button> -->
                     </el-form-item>
-                     
-                       <!-- <div class="config-item-tile">{{$t('nodes.webaseSignAdr')}}</div>
-                      <el-form-item  prop="webaseSignAddr" :rules="[
-                            {required: true, message: $t('alarm.pleaseSlect'), trigger: 'blur'},
-                            {pattern:/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\:([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-5]{2}[0-3][0-5])$/, message: $t('nodes.addressError'), trigger: 'blur'}]">
-                            <el-input v-model="configFrom.webaseSignAddr" :placeholder="$t('nodes.webaseSghAdrInfo')" style="width: 300px;" ></el-input>
-                      </el-form-item>
-                      <hr style="margin: 15px 0;"> -->
-                    <div class="config-item-tile">{{$t('nodes.hostList')}}</div>
+                        <div class="config-item-tile">{{$t('text.imageMode')}} 
+                            <el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                            </div>
+                        <el-radio v-model="configFrom.dockerImageType" :label="0">{{$t("text.manual")}}</el-radio>
+                        <el-radio v-model="configFrom.dockerImageType" :label="1">{{$t("text.automatic")}}</el-radio>
+                      <hr style="margin: 15px 0;">
+                    <div class="config-item-tile">{{$t('nodes.hostList')}}
+                        <el-tooltip class="item" effect="dark" :content="$t('text.hostListInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                    </div>
                     <div v-for="(item,index) in configFrom.data" :key="item.key">
-                        <el-form-item  :prop="'data.' + index + '.ip'" style="display: inline-block;width: 150px;" :rules="[
+                        <el-form-item  :prop="'data.' + index + '.ip'" style="display: inline-block;width: 170px;" :rules="[
                             {required: true, message: $t('nodes.inputHostIp'), trigger: 'blur'},
+                            {required: true, validator: validatePass, trigger: 'blur'},
                             {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: $t('nodes.ipError'), trigger: 'blur'}
                             ]">
-                            <el-input v-model.trim="item.ip" :placeholder="$t('nodes.hostIp')" style="width: 140px;" maxlength="16"></el-input>
+                            <el-input v-model.trim="item.ip" :placeholder="$t('nodes.hostIp')" style="width: 160px;" maxlength="16"></el-input>
                         </el-form-item>
-                        <el-form-item  :prop="'data.' + index + '.number'" style="display: inline-block;width: 150px;" :rules=" [
-                                {required: true, message: $t('nodes.inputNodesNumber'), trigger: 'blur'},
-                                {pattern:/^[1-9]\d*$/,message: $t('nodes.thanOne'), trigger: 'blur'}
-                            ]">
-                                <el-input v-model.trim="item.number"  :placeholder="$t('nodes.NodesNumber')" style="width: 140px;" maxlength="1"></el-input>
-                        </el-form-item>
-                        <el-form-item  :prop="'data.' + index + '.name'" style="display: inline-block;width: 150px;" :rules=" [
+                        <el-form-item  :prop="'data.' + index + '.name'" style="display: inline-block;width: 170px;" :rules=" [
                                 {required: true, message: $t('nodes.inputHostAgency'), trigger: 'blur'},
                                 {pattern:/^[^\s]*$/,message: $t('nodes.noWhitespace'), trigger: 'blur'},
                             ]">
-                            <el-input v-model.trim="item.name" :placeholder="$t('nodes.hostAgency')" style="width: 140px;" maxlength="32"></el-input>
+                            <el-input v-model.trim="item.name" :placeholder="$t('nodes.hostAgency')" style="width: 160px;" maxlength="32"></el-input>
                         </el-form-item>
-                        <!-- <el-form-item  :prop="'data.' + index + '.group'" style="display: inline-block;width: 150px;" :rules=" [
-                                {required: true, message: $t('nodes.nodesGroup'), trigger: 'blur'},
-                            ]">
-                                <el-input v-model="item.group" :placeholder="$t('nodes.nodesGroupInfo')" style="width: 140px;" maxlength="8"></el-input>
-                        </el-form-item> -->
                         <span class="el-icon-plus" style="cursor: pointer;display: inline-block;padding-left: 20px" @click="add()"></span>
-                        <span v-if="configFrom.data.length > 1" class="el-icon-minus" style="cursor: pointer;display: inline-block;padding-left: 10px" @click="delet(item)"></span>
+                        <span v-if="configFrom.data.length > 2" class="el-icon-minus" style="cursor: pointer;display: inline-block;padding-left: 10px" @click="delet(item)"></span>
                     </div>
-                    <div class="config-item-tile">{{$t('nodes.chainDirectory')}}:</div>
-                      <el-form-item  prop="rootDirOnHost" :rules="[
-                            {required: true, message: $t('alarm.pleaseSlect'), trigger: 'blur'},]">
-                            <el-input v-model="configFrom.rootDirOnHost" :placeholder="$t('nodes.inputChainDirectory')" style="width: 300px;" ></el-input>
-                      </el-form-item>
                 </el-form>
             </div>
             <div class="text-right sure-btn" style="margin-top:10px">
@@ -96,6 +81,21 @@ export default {
     name: "setConfig",
     props: ["show", 'showClose'],
     data: function () {
+        var  validatePass = (rule, value, callback) => {
+            let num = 0;
+            for(let i = 0; i < this.configFrom.data.length; i++){
+                if(value == this.configFrom.data[i].ip){
+                    num++
+                }
+            }
+                if (value === "") {
+                    callback(new Error(this.$t('nodes.inputHostIp')));
+                } else if(num > 1){
+                    callback(new Error(this.$t('rule.ipSame')));
+                } else{
+                    callback();
+                }
+            };
         return {
             loading: false,
             dialogVisible: this.show,
@@ -103,17 +103,36 @@ export default {
             configList: [],
             type: 1,
             update: false,
+            validatePass: validatePass,
             configFrom: {
                 tagId: "",
                 rootDirOnHost: "/opt/fisco",
+                dockerImageType: 0,
                 // webaseSignAddr: "",
                 data: [
                     {
                         ip: "",
-                        number: null,
                         name: "",
                         group: 1,
                         key: Date.now()
+                    },
+                    {
+                        ip: "",
+                        name: "",
+                        group: 1,
+                        key: Date.now() + 1
+                    },
+                    {
+                        ip: "",
+                        name: "",
+                        group: 1,
+                        key: Date.now() + 2
+                    },
+                    {
+                        ip: "",
+                        name: "",
+                        group: 1,
+                        key: Date.now() + 3
                     }
                 ]
             },
@@ -158,7 +177,6 @@ export default {
         add: function () {
             let value = {
                     ip: "",
-                    number: null,
                     name: "",
                     group: 1,
                     key: Date.now()
@@ -172,11 +190,11 @@ export default {
                 }
             }
         },
-        refresh: function () {
-            this.configFrom.tagId = "";
-            this.update = true;
-            this.getConfigs('new');
-        },
+        // refresh: function () {
+        //     this.configFrom.tagId = "";
+        //     this.update = true;
+        //     this.getConfigs('new');
+        // },
         submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
@@ -208,6 +226,7 @@ export default {
                 ipconf: array,
                 tagId: this.configFrom.tagId,
                 rootDirOnHost: this.configFrom.rootDirOnHost,
+                dockerImageType: this.configFrom.dockerImageType
                 // webaseSignAddr: this.configFrom.webaseSignAddr
             }
             deployConfig(reqData).then(res => {

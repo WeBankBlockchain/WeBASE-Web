@@ -117,7 +117,12 @@ export default {
         restarting: "Restarting",
         deleteChain: "This operation deletes the chain. Do you want to continue?",
         adding: "Adding",
-        addFail: "Add failed"
+        addFail: "Add failed",
+        imageMode: "Docker Image pull mode",
+        manual: "Manual (recommended)",
+        automatic: "Automatic",
+        imageModeInfo: "Automatic pull: The deployment script automatically pulls the image from docker's official website without additional operation. Due to network reasons, the image may fail to pull, leading to deployment failure;Manual deployment: After obtaining the docker image compression package manually, upload it to the host that needs to be deployed, and then manually extract the image JAR file. This deployment mode is recommended.",
+        hostListInfo: "Operating system requirements: CentOS 7.2 / Ubuntu 16.04 / Debian 9;Configuration requirements: 2 core 4G, 500G hard disk;SSH free login needs to be configured"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -157,7 +162,10 @@ export default {
         number: "Please enter number",
         groupId: "Please enter group ID",
         correctJson: "Invalid input: Unexpected end of JSON input",
-        targetNode: "Please enter target node"
+        targetNode: "Please enter target node",
+        ipSame: "You can't have the same IP",
+        selectGroup: "Please select Groups",
+        selctDockerImageType: "Select the docker image pull mode"
     },
     head: {
         helpText: "Document",

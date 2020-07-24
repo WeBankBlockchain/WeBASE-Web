@@ -117,7 +117,12 @@ export default {
         restarting: "重启中",
         deleteChain: "此操作将删除该链, 是否继续?",
         adding: "添加中",
-        addFail: "添加失败"
+        addFail: "添加失败",
+        imageMode: "Docker拉取方式",
+        manual: "手动 (推荐)",
+        automatic: "自动",
+        imageModeInfo: "自动拉取：部署脚本自动从docker官网拉取镜像，不需要额外操作，由于网络原因，镜像可能会拉取失败，导致部署失败；手动部署：手动获取docker镜像压缩包后，上传到需要部署的主机，再手动解压镜像jar文件，推荐使用这种部署方式。",
+        hostListInfo: "操作系统要求：CentOS 7.2 / Ubuntu 16.04 / Debian 9;配置要求：单机2核4G，500G硬盘；需要配置ssh免密登录"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -157,7 +162,10 @@ export default {
         number: "请输入数字",
         groupId: "请输入群组编号",
         correctJson: "输入正确的JSON",
-        targetNode: "请选择目标节点"
+        targetNode: "请选择目标节点",
+        ipSame: "ip不能相同",
+        selectGroup: "请选择群组",
+        selctDockerImageType: "请选择docker镜像拉取方式"
     },
     head: {
         helpText: "帮助文档",

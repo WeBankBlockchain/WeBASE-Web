@@ -17,11 +17,11 @@
     <div class="front-module">
         <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='head'></v-content-head>
         <div class="module-wrapper" >
-            <div class="search-part" style="padding-top: 20px;">
+            <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
                         <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
                         <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
-                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="reset">{{$t('text.reset')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 4)" @click="reset">{{$t('text.reset')}}</el-button>
                     </div>
                 </div>
         </div>
@@ -77,7 +77,7 @@
                                 :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 3)' 
                                 :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
-                                <el-button v-if='(scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3)'  
+                                <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))'  
                                 :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)'  :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
@@ -89,7 +89,7 @@
 
                     </el-table-column>
                 </el-table>
-                <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
+                <el-pagination v-show='total > 10' class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
                 <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
@@ -109,7 +109,7 @@
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import { getFronts, addnodes, deleteFront, getNodeList, 
-getConsensusNodeId,getGroupsInvalidIncluded,startNode,stopNode,getChainInfo,getProgress,deleteChain } from "@/util/api";
+getConsensusNodeId,getGroupsInvalidIncluded,startNode,stopNode,getChainInfo,getProgress,deleteChain,encryption,getVersion } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
@@ -281,6 +281,31 @@ export default {
         // }
     },
     methods: {
+        getEncryption: function(){
+            encryption().then(res => {
+                if(res.data.code === 0){
+                    // if(res.data.data == 1){
+                    //     this.encryption = 'guomi'
+                    // }else{
+                    //     this.encryption = 'hash'
+                    // }
+                    localStorage.setItem("encryptionId",res.data.data)
+                }else {
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
         getProgresses: function () {
             clearInterval(this.progressInterval)
             this.progressInterval = setInterval ( () => {
@@ -339,11 +364,25 @@ export default {
             this.frontInterval = setInterval(() => {
                 this.getConfigList();
                 this.number++
-                if(this.number == 1000){
+                if(this.number == 400){
                     clearInterval(this.frontInterval);
                     this.number = 0;
                 }
             },10000)
+        },
+        getVersionList () {
+            getVersion().then(res => {
+                if(res.status == 200) {
+                    this.$store.dispatch('set_mgr_version_action',res.data)
+                }
+            }).catch(err => {
+                
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
         },
         getConfigList: function () {
             getChainInfo().then(res => {
@@ -355,8 +394,11 @@ export default {
                         localStorage.setItem("configData",res.data.data.chainStatus);
                         if(res.data.data.chainStatus != 3){
                             this.getProgresses();
+                        }else{
+                            clearInterval(this.progressInterval)
                         }
                     }else{
+                        this.chainList = []
                         clearInterval(this.frontInterval)
                         localStorage.setItem("configData",0)
                     }
@@ -450,6 +492,8 @@ export default {
                 cancelButtonText: this.$t("text.cancel"),
                 type: 'warning'
                 }).then(() => {
+                    this.loadingNodes = true;
+                    this.loading = true;
                     deleteChain().then(res => {
                         if(res.data.code === 0){
                             this.$message({
@@ -458,6 +502,9 @@ export default {
                                 duration: 2000
                             });
                             clearInterval(this.frontInterval);
+                            this.configData = null;
+                            this.loadingNodes = false;
+                            this.loading = true;
                             this.getConfigList();
                         }else{
                             this.$message({
@@ -520,6 +567,11 @@ export default {
             getFronts(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        for(let i = 0; i < res.data.data.length; i++){
+                            if(res.data.data[i].clientVersion){
+                                this.$store.dispatch('set_version_action',res.data.data[i].clientVersion)
+                            }
+                        }
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loadingNodes = false;
@@ -528,12 +580,11 @@ export default {
                         }else{
                             this.deployShow = false
                         }
-                        // for(let i = 0; i < this.frontData.length; i++){
-                        //     this.$set(this.frontData[i],'nodeType',"")
-                        // }
                         if(this.configData && this.configData.chainStatus == 3){
+                            this.getEncryption();
                             this.getGroupList();
                             this.getConsensus();
+                            this.getVersionList()
                         }
                     } else {
                         this.loadingNodes = false;
@@ -631,11 +682,11 @@ export default {
         nodeSizeChange(val) {
             this.nodepageSize = val;
             this.nodecurrentPage = 1;
-            this.getNodeTable();
+            this.getFrontTable();
         },
         nodeCurrentChange(val) {
             this.nodecurrentPage = val;
-            this.getNodeTable()
+            this.getFrontTable()
         },
         textColor(val) {
             let colorString = "";

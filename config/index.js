@@ -13,7 +13,7 @@ module.exports = {
         proxyTable: {
             '/mgr':{
                 
-                target:'http://10.107.105.26:5001/',
+                target:'http://129.204.174.191:5001/',
                 changeOrigin:true,
                 pathRewrite:{
                     '^/mgr':''
