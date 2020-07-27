@@ -113,24 +113,28 @@ export default {
                     {
                         ip: "",
                         name: "",
+                        number: 1,
                         group: 1,
                         key: Date.now()
                     },
                     {
                         ip: "",
                         name: "",
+                        number: 1,
                         group: 1,
                         key: Date.now() + 1
                     },
                     {
                         ip: "",
                         name: "",
+                        number: 1,
                         group: 1,
                         key: Date.now() + 2
                     },
                     {
                         ip: "",
                         name: "",
+                        number: 1,
                         group: 1,
                         key: Date.now() + 3
                     }
@@ -179,6 +183,7 @@ export default {
                     ip: "",
                     name: "",
                     group: 1,
+                    number: 1,
                     key: Date.now()
                 };
                 this.configFrom.data.push(value)

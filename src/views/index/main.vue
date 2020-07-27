@@ -40,7 +40,7 @@
             <v-menu @sidebarChange="change($event)" :minMenu="show" ref='menu'></v-menu>
         </div>
         <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
-            <router-view class="bg-f7f7f7" @versionChange='versionChange'></router-view>
+            <router-view class="bg-f7f7f7"></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
         <set-config :show='configShow' v-if='configShow' @close='closeConfig'></set-config>
@@ -161,9 +161,34 @@ export default {
     },
     mounted(){
         this.getEncryption();
-        this.getFrontTable();
+        this.getConfigList();
     },
     methods: {
+        getConfigList: function () {
+            getChainInfo().then(res => {
+                if(res.data.code === 0) {
+                    if(res.data.data){
+                        localStorage.setItem("configData",res.data.data.chainStatus);
+                    }else{
+                        localStorage.setItem("configData",0)
+                    }
+                    this.getFrontTable();
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
         getVersionList () {
             getVersion().then(res => {
                 if(res.status == 200) {
@@ -178,6 +203,9 @@ export default {
                 });
             })
         },
+        // versionChange: function () {
+        //     this.$refs.menu.changeRouter();
+        // },
         change: function(val) {
             this.menuShow = !val;
             this.menuHide = val;
@@ -318,48 +346,48 @@ export default {
                             }
             })
         },
-        getFrontTable() {
-            let reqData = {}
-            getFronts(reqData)
-                .then(res => {
-                    if (res.data.code === 0) {
-                        let versionKey;
-                        this.frontData = res.data.data || [];
-                        let num = 0;
-                        for(let i = 0; i < this.frontData.length; i++){
-                            if(this.frontData[i].clientVersion){
-                                versionKey = this.frontData[i].clientVersion.substring(2,3)
-                                if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
-                                    num ++
-                                }
-                            }
-                        }
-                        if(num > 0) {
-                            localStorage.setItem("nodeVersionChange",1)
-                        }else{
-                            localStorage.setItem("nodeVersionChange","")
-                        }
-                        if(localStorage.getItem("nodeVersionChange")){
-                            this.$refs.menu.changeRouter();
-                        }
-                    } else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+        // getFrontTable() {
+        //     let reqData = {}
+        //     getFronts(reqData)
+        //         .then(res => {
+        //             if (res.data.code === 0) {
+        //                 let versionKey;
+        //                 this.frontData = res.data.data || [];
+        //                 let num = 0;
+        //                 for(let i = 0; i < this.frontData.length; i++){
+        //                     if(this.frontData[i].clientVersion){
+        //                         versionKey = this.frontData[i].clientVersion.substring(2,3)
+        //                         if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
+        //                             num ++
+        //                         }
+        //                     }
+        //                 }
+        //                 if(num > 0) {
+        //                     localStorage.setItem("nodeVersionChange",1)
+        //                 }else{
+        //                     localStorage.setItem("nodeVersionChange","")
+        //                 }
+        //                 if(localStorage.getItem("nodeVersionChange")){
+        //                     this.$refs.menu.changeRouter();
+        //                 }
+        //             } else {
+        //                 this.$message({
+        //                     message: this.$chooseLang(res.data.code),
+        //                     type: "error",
+        //                     duration: 2000
+        //                 });
                         
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.$message({
+        //                 message: this.$t('text.systemError'),
+        //                 type: "error",
+        //                 duration: 2000
+        //             });
                     
-                });
-        },
+        //         });
+        // },
         getEncryption: function(){
             encryption().then(res => {
                 if(res.data.code === 0){

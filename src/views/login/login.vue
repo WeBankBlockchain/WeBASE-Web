@@ -181,7 +181,6 @@ export default {
                         localStorage.setItem("config",0);
                         localStorage.setItem("nodeVersionChange","")
                         this.getConfigType();
-                        
                     } else {
                         this.changeCode()
                         this.msgErrorContent = this.$chooseLang(res.data.code)
