@@ -16,6 +16,15 @@
 <template>
     <div class="front-module">
         <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='head'></v-content-head>
+        <!-- <div class="module-wrapper" >
+            <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
+                    <div class="search-part-left" v-if='!disabled'>
+                        <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 4)" @click="reset">{{$t('text.reset')}}</el-button>
+                    </div>
+                </div>
+        </div> -->
         <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
@@ -24,8 +33,6 @@
                         <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 4)" @click="reset">{{$t('text.reset')}}</el-button>
                     </div>
                 </div>
-        </div>
-        <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
                     <el-table :data="chainList" class="search-table-content" v-loading="loading">
                         <el-table-column label="链名称" prop="chainName" show-overflow-tooltip></el-table-column>

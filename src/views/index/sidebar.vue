@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 <template>
-    <div style="height: 100%;position: relative;">
+    <div style="height: 100%;position: relative;box-sizing: border-box;">
         <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
-            <div style="height: calc(100% - 104px);box-sizing: border-box;overflow: auto;">
+            <div style="height: calc(100% - 104px);box-sizing: border-box;overflow-y: auto;overflow-x:hidden">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
