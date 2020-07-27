@@ -129,7 +129,8 @@ export default {
                 ip: this.nodeFrom.ip,
                 groupId: this.nodeFrom.groupId,
                 agencyName: this.nodeFrom.agencyName,
-                dockerImageType: this.nodeFrom.dockerImageType
+                dockerImageType: this.nodeFrom.dockerImageType,
+                num: 1
             }
             // if(this.nodeFrom.groupId){
             //     reqData.groupId = this.nodeFrom.groupId
