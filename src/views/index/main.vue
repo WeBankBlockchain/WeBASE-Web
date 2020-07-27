@@ -161,9 +161,34 @@ export default {
     },
     mounted(){
         this.getEncryption();
-        this.getFrontTable();
+        this.getConfigList();
     },
     methods: {
+        getConfigList: function () {
+            getChainInfo().then(res => {
+                if(res.data.code === 0) {
+                    if(res.data.data){
+                        localStorage.setItem("configData",res.data.data.chainStatus);
+                    }else{
+                        localStorage.setItem("configData",0)
+                    }
+                    this.getFrontTable();
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
         getVersionList () {
             getVersion().then(res => {
                 if(res.status == 200) {
