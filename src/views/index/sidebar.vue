@@ -276,7 +276,7 @@ export default {
     left: 0;
     width: 100%;
     padding: 30px;
-    color: #aaa;
+    color: #444;
     z-index: 9999;
     background-color: #0c1220;
     box-sizing: border-box;
