@@ -25,6 +25,7 @@ export default {
         }else{
             this.deployType = 0
         }
+        console.log(this.deployType)
     }
 }
 </script>

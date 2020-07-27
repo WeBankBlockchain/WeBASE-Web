@@ -492,6 +492,7 @@ export default {
                 cancelButtonText: this.$t("text.cancel"),
                 type: 'warning'
                 }).then(() => {
+                    clearInterval(this.frontInterval);
                     this.loadingNodes = true;
                     this.loading = true;
                     deleteChain().then(res => {
@@ -501,10 +502,9 @@ export default {
                                 message: this.$t('text.resetSuccess'),
                                 duration: 2000
                             });
-                            clearInterval(this.frontInterval);
                             this.configData = null;
                             this.loadingNodes = false;
-                            this.loading = true;
+                            this.loading = false;
                             this.getConfigList();
                         }else{
                             this.$message({
