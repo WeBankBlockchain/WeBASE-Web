@@ -30,7 +30,7 @@
                     <div class="search-part-left" v-if='!disabled'>
                         <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
                         <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
-                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 4)" @click="reset">{{$t('text.reset')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 2)" @click="reset">{{$t('text.reset')}}</el-button>
                     </div>
                 </div>
             <div class="search-table">
