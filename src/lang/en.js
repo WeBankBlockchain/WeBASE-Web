@@ -122,7 +122,13 @@ export default {
         manual: "Manual (recommended)",
         automatic: "Automatic",
         imageModeInfo: "Automatic pull: The deployment script automatically pulls the image from docker's official website without additional operation. Due to network reasons, the image may fail to pull, leading to deployment failure;Manual deployment: After obtaining the docker image compression package manually, upload it to the host that needs to be deployed, and then manually extract the image JAR file. This deployment mode is recommended.",
-        hostListInfo: "Operating system requirements: CentOS 7.2 / Ubuntu 16.04 / Debian 9;Configuration requirements: 2 core 4G, 500G hard disk;SSH free login needs to be configured"
+        hostListInfo: "Operating system requirements: CentOS 7.2 / Ubuntu 16.04 / Debian 9;Configuration requirements: 2 core 4G, 500G hard disk;SSH free login needs to be configured",
+        chainName: "Chain Name",
+        chainVersion: "Chain Version",
+        chainStatus: "Chain Status",
+        chainProgress: "Chain Progress",
+        chainDeployed: "The chain has been deployed",
+        cancelDelete: "Undeleted"
     },
     rule: {
         textLong: "1 to 32 characters in length",

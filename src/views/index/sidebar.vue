@@ -269,6 +269,12 @@ export default {
 }
 .sidebar-content{
     position: relative;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    
+}
+.sidebar-content ::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
 }
 .sidebar-version{
     position: absolute;
