@@ -891,8 +891,8 @@ let errCode = {
         "zh":"群组编号格式错误，必须为正整数"
     },
     "205015": {
-        "en":"Login to host through SSH error. Please check SSH configuration.",
-        "zh":"SSH 登录主机失败，请检查 SSH 配置"
+        "en":"Login to host /ip/ through SSH error. Please check SSH configuration.",
+        "zh":"SSH登录主机/ip/失败，请检查 SSH 配置"
     },
     "205016": {
         "en":"Save agency data into DB error.",
@@ -1095,8 +1095,8 @@ let errCode = {
         "zh": "获取镜像方式错误"
     },
     "205066": {
-        "en": "Please pull the Docker image manually",
-        "zh": "请手动拉取 Docker 镜像"
+        "en": "Please pull the Docker image manually in host /ip/",
+        "zh": "主机/ip/请手动拉取 Docker 镜像"
     },
 
     "302000": {
@@ -1225,8 +1225,18 @@ let errCode = {
         zh: '系统异常'
     }
 }
-export function chooseLang(code) {
+export function chooseLang(code,value) {
     let lang = localStorage.getItem('lang')
+    if(value){
+
+    }
     let message = errCode[code][lang];
-    return message
+    if(value){
+        let oldMessage
+        let arry = message.split("/")
+        oldMessage = arry[0] + value + arry[2]
+        return oldMessage
+    }else{
+        return message
+    }
 }
