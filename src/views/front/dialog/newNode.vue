@@ -2,9 +2,9 @@
     <div>
         <div>
         <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" 
-         class="dialog-wrapper" width="500px" :center="true" :show-close='true'>
+         class="dialog-wrapper" width="580px" :center="true" :show-close='true'>
             <div>
-                <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="120px" class="demo-ruleForm">
+                <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="168px" class="demo-ruleForm">
                     <el-form-item  label='IP' prop='ip'>
                         <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item>
@@ -19,7 +19,9 @@
                     <el-form-item :label="$t('text.imageMode')" prop='dockerImageType'>
                         <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}</el-radio>
                         <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}</el-radio>
-                        <el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                        <el-tooltip class="item" effect="dark" placement="top-start">
+                            <div slot="content" style="width: 600px;">{{$t('text.imageModeInfo')}}</div>
+                            <i class="el-icon-info"></i></el-tooltip>
                     </el-form-item>
                     <!-- <el-form-item :label='$t("nodes.nodeCount")'>
                         <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 250px;" maxlength="16"></el-input>
