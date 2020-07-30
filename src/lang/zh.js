@@ -122,7 +122,13 @@ export default {
         manual: "手动 (推荐)",
         automatic: "自动",
         imageModeInfo: "自动拉取：部署脚本自动从docker官网拉取镜像，不需要额外操作，由于网络原因，镜像可能会拉取失败，导致部署失败；手动部署：手动获取docker镜像压缩包后，上传到需要部署的主机，再手动解压镜像jar文件，推荐使用这种部署方式。",
-        hostListInfo: "操作系统要求：CentOS 7.2 / Ubuntu 16.04 / Debian 9;配置要求：单机2核4G，500G硬盘；需要配置ssh免密登录"
+        hostListInfo: "操作系统要求：CentOS 7.2 / Ubuntu 16.04 / Debian 9;配置要求：单机2核4G，500G硬盘；需要配置ssh免密登录",
+        chainName: "链名称",
+        chainVersion: "链版本",
+        chainStatus: "链状态",
+        chainProgress: "链进度",
+        chainDeployed: "链已部署完成",
+        cancelDelete: "已取消删除"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

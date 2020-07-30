@@ -454,12 +454,18 @@ export default {
                         return { error: "File not found" };
                     }
                 } else {
+                    let num1 = 0
                     for (let i = 0; i < this.contractList.length; i++) {
                         if (newpath == this.contractList[i].contractName + ".sol") {
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
+                        }else{
+                            num1 ++
                         }
+                    }
+                    if (num1) {
+                        return { error: "File not found" };
                     }
                 }
             }
@@ -496,7 +502,7 @@ export default {
             try {
                 output = JSON.parse(solc.compileStandard(JSON.stringify(input), this.findImports));
             } catch (error) {
-                this.errorInfo = this.$t("contracts.contractCompileFail");
+                this.errorInfo = error;
                 this.errorMessage = error;
                 this.compileShow = true;
                 this.loading = false;

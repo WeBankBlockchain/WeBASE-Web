@@ -244,7 +244,7 @@ export default {
                     this.$emit('success')
                 }else{
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
+                            message: this.$chooseLang(res.data.code,res.data.attachment),
                             type: "error",
                             duration: 2000
                         });

@@ -35,19 +35,19 @@
                 </div>
             <div class="search-table">
                     <el-table :data="chainList" class="search-table-content" v-loading="loading">
-                        <el-table-column label="链名称" prop="chainName" show-overflow-tooltip></el-table-column>
-                        <el-table-column label="链版本" prop="version" show-overflow-tooltip></el-table-column>
-                        <el-table-column label="链状态" prop="chainStatus" show-overflow-tooltip>
+                        <el-table-column :label="$t('text.chainName')" prop="chainName" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="$t('text.chainVersion')" prop="version" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="$t('text.chainStatus')" prop="chainStatus" show-overflow-tooltip>
                             <template slot-scope='scope'>
                                 <span>{{ChainStatus(scope.row.chainStatus)}}</span>
                             </template>
                         </el-table-column>
-                        <el-table-column label="链进度" show-overflow-tooltip>
+                        <el-table-column :label="$t('text.chainProgress')" show-overflow-tooltip>
                             <template v-if='configData && configData.chainStatus != 3'>
                                 <el-progress v-if='statusNumber || statusNumber == 0' :percentage="statusNumber" status="success" :showText='false'></el-progress>
                             </template>
                             <template v-else>
-                                <span>链已部署完成</span>
+                                <span>{{$t('text.chainDeployed')}}</span>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -530,7 +530,7 @@ export default {
                 }).catch(() => {
                 this.$message({
                     type: 'info',
-                    message: '已取消删除'
+                    message: this.$t('text.cancelDelete')
                 });          
             });
         },
@@ -639,7 +639,6 @@ export default {
                         });
                 }
             }).catch(err => {
-                debugger
                 this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
