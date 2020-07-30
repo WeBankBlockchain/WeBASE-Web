@@ -76,7 +76,8 @@
                             <template v-else-if="head.enName ==='nodeType'">
                                 <span>
                                     {{nodeText(scope.row.nodeType)}}
-                                    <span v-if='!scope.row.nodeType' class="el-icon-loading"></span>
+                                    <span v-if='scope.row.status == 1 && !scope.row.nodeType' class="el-icon-loading"></span>
+                                    <span v-if='scope.row.status == 2 && !scope.row.nodeType'>{{$t("nodes.remove")}}</span>
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='operate'">
