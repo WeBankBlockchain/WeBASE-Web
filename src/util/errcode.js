@@ -1227,9 +1227,6 @@ let errCode = {
 }
 export function chooseLang(code,value) {
     let lang = localStorage.getItem('lang')
-    if(value){
-
-    }
     let message = errCode[code][lang];
     if(value){
         let oldMessage
