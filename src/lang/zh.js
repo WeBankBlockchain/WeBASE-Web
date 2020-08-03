@@ -128,7 +128,11 @@ export default {
         chainStatus: "链状态",
         chainProgress: "链进度",
         chainDeployed: "链已部署完成",
-        cancelDelete: "已取消删除"
+        cancelDelete: "已取消删除",
+        hostStatus: "主机状态",
+        hostTitle: "主机信息",
+        dockerCatalog: "docker目录",
+        errInfo: "查看错误信息"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
