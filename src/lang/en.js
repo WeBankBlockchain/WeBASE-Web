@@ -128,7 +128,11 @@ export default {
         chainStatus: "Chain Status",
         chainProgress: "Chain Progress",
         chainDeployed: "The chain has been deployed",
-        cancelDelete: "Undeleted"
+        cancelDelete: "Undeleted",
+        hostStatus: "Host Status",
+        hostTitle: "Host information",
+        dockerCatalog: "Docker directory",
+        errInfo: "View error messages"
     },
     rule: {
         textLong: "1 to 32 characters in length",
