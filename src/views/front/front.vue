@@ -45,7 +45,8 @@
                         </el-table-column>
                         <el-table-column :label="$t('text.chainProgress')" show-overflow-tooltip>
                             <template v-if='configData && configData.chainStatus != 3'>
-                                <el-progress v-if='statusNumber || statusNumber == 0' :percentage="statusNumber" status="success" :showText='false'></el-progress>
+                                <el-progress v-if='(statusNumber || statusNumber == 0) && statusNumber != -1' :percentage="statusNumber" status="success" :showText='false'></el-progress>
+                                <el-progress v-if='statusNumber == -1' :percentage='10'  status="exception"></el-progress>
                             </template>
                             <template v-else>
                                 <span>{{$t('text.chainDeployed')}}</span>
@@ -99,8 +100,6 @@
 
                     </el-table-column>
                 </el-table>
-                <el-pagination v-show='total > 10' class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-                </el-pagination>
                 <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
@@ -582,7 +581,7 @@ export default {
         },
         getFrontTable() {
             let reqData = {
-                frontId: this.frontId
+                frontId: this.frontId,
             }
             getFronts(reqData)
                 .then(res => {
