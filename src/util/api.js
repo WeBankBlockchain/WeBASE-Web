@@ -1271,5 +1271,15 @@ export function getVersion () {
     })
 }
 
+//获取主机信息
+export function getHostList () {
+    return get ({
+        url: `${url.ORG_LIST}/deploy/host/list`,
+        methods: "get",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 

@@ -39,7 +39,8 @@
                         <el-table-column :label="$t('text.chainVersion')" prop="version" show-overflow-tooltip></el-table-column>
                         <el-table-column :label="$t('text.chainStatus')" prop="chainStatus" show-overflow-tooltip>
                             <template slot-scope='scope'>
-                                <span>{{ChainStatus(scope.row.chainStatus)}}</span>
+                                <span v-if='scope.row.chainStatus != 2'>{{ChainStatus(scope.row.chainStatus)}}</span>
+                                <span v-if='scope.row.chainStatus == 2'>{{ChainStatus(scope.row.chainStatus)}}-<span class='cursor-pointer' style="color: #f00" @click='openHostInfo'>{{$t("text.errInfo")}}</span></span>
                             </template>
                         </el-table-column>
                         <el-table-column :label="$t('text.chainProgress')" show-overflow-tooltip>
@@ -80,6 +81,7 @@
                                     <span v-if='scope.row.status == 2 && !scope.row.nodeType'>{{$t("nodes.remove")}}</span>
                                 </span>
                             </template>
+                            
                             <template v-else-if="head.enName ==='operate'">
                                 <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" 
                                 :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
@@ -108,6 +110,7 @@
                 <update-node v-if='updateNodeShow' :show='updateNodeShow' @close='updateNodeClose' @success='updateNodeSuccess'></update-node>
                 <delete-node v-if='deleteNodeShow' :show='deleteNodeShow' @close='deleteNodeClose' :data='nodeData'></delete-node>
                 <set-config :show='configShow' v-if='configShow' @close='closeConfig' @success='successConfig'></set-config>
+                <host-info v-if='hostInfoShow' :show='hostInfoShow' @close='hostInfoClose'></host-info>
             </div>
         </div>
     </div>
@@ -128,6 +131,7 @@ import updateNode from "./dialog/updateNode"
 import deleteNode from "./dialog/deleteNode"
 import Bus from "@/bus"
 import guideImg from "@/../static/image/guide.69e4d090.png"
+import hostInfo from "./dialog/hostInfo"
 export default {
     name: "node",
     components: {
@@ -138,7 +142,8 @@ export default {
         'new-node': newNode,
         'update-node': updateNode,
         "delete-node": deleteNode,
-        'set-config': setConfig
+        'set-config': setConfig,
+        "host-info": hostInfo
     },
     watch: {
         $route() {
@@ -184,7 +189,8 @@ export default {
             progressInterval: null,
             statusNumber: null,
             number: 0,
-            chainList: []
+            chainList: [],
+            hostInfoShow: false
         };
     },
     computed: {
@@ -289,6 +295,12 @@ export default {
         // }
     },
     methods: {
+        hostInfoClose: function () {
+            this.hostInfoShow = false
+        },
+        openHostInfo: function () {
+            this.hostInfoShow = true
+        },
         getEncryption: function(){
             encryption().then(res => {
                 if(res.data.code === 0){
@@ -904,8 +916,9 @@ export default {
                 default:
                     return this.$t("text.addFail")
             }
-        }
-    },
+        },
+        
+    }
 };
 </script>
 <style scoped>
