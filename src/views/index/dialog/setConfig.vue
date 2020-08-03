@@ -57,8 +57,7 @@
                             <el-input v-model.trim="item.ip" :placeholder="$t('nodes.hostIp')" style="width: 160px;" maxlength="16"></el-input>
                         </el-form-item>
                         <el-form-item  :prop="'data.' + index + '.name'" style="display: inline-block;width: 170px;" :rules=" [
-                                {required: true, message: $t('nodes.inputHostAgency'), trigger: 'blur'},
-                                {pattern:/^[^\s]*$/,message: $t('nodes.noWhitespace'), trigger: 'blur'},
+                                {required: true, message: $t('nodes.inputHostAgency'), trigger: 'blur'}
                             ]">
                             <el-input v-model.trim="item.name" :placeholder="$t('nodes.hostAgency')" style="width: 160px;" maxlength="32"></el-input>
                         </el-form-item>
