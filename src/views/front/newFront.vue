@@ -265,12 +265,15 @@ export default {
                         let versionKey;
                         if(!localStorage.getItem("nodeVersionChange")){
                             for(let i = 0; i < this.frontData.length; i++){
-                                if(this.frontData[i].clientVersion){
-                                    this.$store.dispatch('set_version_action',this.frontData[i].clientVersion)
-                                    versionKey = this.frontData[i].clientVersion.substring(2,3)
-                                    if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
-                                        num ++
-                                    }
+                                if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
+                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
+                                    this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
+                                    if(res.data.data[i].supportVersion){
+                                        versionKey = res.data.data[i].supportVersion.substring(2,3)
+                                        if(versionKey > 4){
+                                            num ++
+                                        }
+                                    } 
                                 }
                             }
                             if(num > 0) {

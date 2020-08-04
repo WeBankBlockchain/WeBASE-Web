@@ -55,12 +55,16 @@
         </div>
         <div class="sidebar-version" v-if="menuShowC">
                 <div class="sidebar-version-item">
-                    <span>链版本: </span>
+                    <span>{{$t("text.chainVersion")}}: </span>
                     <span>{{$store.state.version}}</span>
                 </div>
                 <div class="sidebar-version-item">
-                    <span>WeBASE版本: </span>
+                    <span>{{$t("text.webaseVersion")}}: </span>
                     <span>{{$store.state.mgrVersion}}</span>
+                </div>
+                <div class="sidebar-version-item">
+                    <span>{{$t('text.supportVersion')}}: </span>
+                    <span>{{$store.state.supportVersion}}</span>
                 </div>
             </div>
     </div>
