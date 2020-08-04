@@ -132,7 +132,12 @@ export default {
         hostStatus: "主机状态",
         hostTitle: "主机信息",
         dockerCatalog: "docker目录",
-        errInfo: "查看错误信息"
+        errInfo: "查看错误信息",
+        webaseVersion: "WeBASE版本",
+        supportVersion: "兼容版本",
+        port5002: "默认5002",
+        ip: "主机IP",
+        org: "机构名"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

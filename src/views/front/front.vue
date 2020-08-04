@@ -589,12 +589,15 @@ export default {
                         let num = 0;
                         let versionKey;
                         for(let i = 0; i < res.data.data.length; i++){
-                            if(res.data.data[i].clientVersion){
+                            if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
                                 this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
-                                versionKey = res.data.data[i].clientVersion.substring(2,3)
-                                    if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
+                                this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
+                                if(res.data.data[i].supportVersion){
+                                    versionKey = res.data.data[i].supportVersion.substring(2,3)
+                                    if(versionKey > 4){
                                         num ++
                                     }
+                                } 
                             }
                         }
                         if(num > 0) {
