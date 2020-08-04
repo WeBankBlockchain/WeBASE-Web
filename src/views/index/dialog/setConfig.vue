@@ -45,8 +45,9 @@
                         <el-radio v-model="configFrom.dockerImageType" :label="0">{{$t("text.manual")}}</el-radio>
                         <el-radio v-model="configFrom.dockerImageType" :label="1">{{$t("text.automatic")}}</el-radio>
                       <hr style="margin: 15px 0;">
-                    <div class="config-item-tile">{{$t('nodes.hostList')}}
-                        <el-tooltip class="item" effect="dark" :content="$t('text.hostListInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                    <div class="config-item-tile">{{$t('text.ip')}}
+                        <el-tooltip class="item" effect="dark" :content="$t('text.hostLihostIpstInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                        <span style="dispaly: inline-block;padding-left: 125px;">{{$t("text.org")}}</span>
                     </div>
                     <div v-for="(item,index) in configFrom.data" :key="item.key">
                         <el-form-item  :prop="'data.' + index + '.ip'" style="display: inline-block;width: 170px;" :rules="[
@@ -68,7 +69,7 @@
             </div>
             <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button v-if='closeVisible' @click="modelClose">{{this.$t("text.cancel")}}</el-button>
-                <el-button type="primary" :loading="loading" @click="submit('configFrom')">{{$t('nodes.startDeploy')}}</el-button>
+                <el-button type="primary" :loading="loading" :disabled="disabled" @click="submit('configFrom')">{{$t('nodes.startDeploy')}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -97,6 +98,7 @@ export default {
             };
         return {
             loading: false,
+            disabled: false,
             dialogVisible: this.show,
             closeVisible: this.showClose || false,
             configList: [],
@@ -203,6 +205,7 @@ export default {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.loading = true;
+                    this.disabled = true;
                     this.deploy()
                 } else {
                     return false
@@ -224,6 +227,7 @@ export default {
                     duration: 2000
                 });
                 this.loading = false;
+                this.disabled = false;
                 return
             }
             let reqData = {
@@ -235,6 +239,7 @@ export default {
             }
             deployConfig(reqData).then(res => {
                 this.loading = false;
+                this.disabled = false;
                 if(res.data.code == 0) {
                     this.$message({
                         type: "success",
@@ -242,6 +247,8 @@ export default {
                     })
                     this.$emit('success')
                 }else{
+                    this.loading = false;
+                    this.disabled = false;
                     this.$message({
                             message: this.$chooseLang(res.data.code,res.data.attachment),
                             type: "error",
@@ -251,6 +258,7 @@ export default {
             })
             .catch(err => {
                     this.loading = false;
+                    this.disabled = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
