@@ -22,7 +22,7 @@
                         <el-input v-model="frontFrom.ip"></el-input>
                     </el-form-item>
                     <el-form-item :label="$t('nodes.frontPort')" prop="port" style="width:330px">
-                        <el-input v-model="frontFrom.port"></el-input>
+                        <el-input v-model="frontFrom.port" :placeholder="$t('text.port5002')"></el-input>
                     </el-form-item>
                     <el-form-item :label="$t('nodes.agency')" prop="company" style="width:330px">
                         <el-input v-model="frontFrom.company"></el-input>
@@ -103,7 +103,7 @@ export default {
             dialogVisible: this.show,
             closeVisible: this.showClose || false,
             frontFrom: {
-                ip: "",
+                ip: '127.0.0.1',
                 port: "",
                 company: "",
             },

@@ -132,7 +132,12 @@ export default {
         hostStatus: "Host Status",
         hostTitle: "Host information",
         dockerCatalog: "Docker directory",
-        errInfo: "View error messages"
+        errInfo: "View error messages",
+        webaseVersion: "WeBASE Version",
+        supportVersion: "Support Version",
+        port5002: "The default is 5002",
+        ip: "Host IP",
+        org: "Agency name"
     },
     rule: {
         textLong: "1 to 32 characters in length",

@@ -27,7 +27,8 @@ const state = {
     language: getLanguage(),
     importRivateKey: false,
     version: null,
-    mgrVersion: null
+    mgrVersion: null,
+    supportVersion: null
 }
 export default new Vuex.Store({
     state,
@@ -62,6 +63,9 @@ export default new Vuex.Store({
         },
         set_mgr_version (state,name) {
             state.mgrVersion = name
+        },
+        set_support_version (state,name){
+            state.supportVersion = name
         }
     },
     actions: {
@@ -82,6 +86,9 @@ export default new Vuex.Store({
         },
         set_mgr_version_action(context,name){
             context.commit("set_mgr_version",name)
+        },
+        set_support_version_action(context,name){
+            context.commit("set_support_version",name)
         }
     }
 })

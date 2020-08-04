@@ -195,7 +195,6 @@ export default {
                     this.$store.dispatch('set_mgr_version_action',res.data)
                 }
             }).catch(err => {
-                
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
@@ -203,9 +202,9 @@ export default {
                 });
             })
         },
-        // versionChange: function () {
-        //     this.$refs.menu.changeRouter();
-        // },
+        versionChange: function () {
+            this.$refs.menu.changeRouter();
+        },
         change: function(val) {
             this.menuShow = !val;
             this.menuHide = val;
@@ -270,14 +269,34 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         if(res.data.data.length > 0){
+                            let num = 0;
+                            let versionKey;
                             for(let i = 0; i < res.data.data.length; i++){
-                                if(res.data.data[i].clientVersion){
-                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion)
+                                if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
+                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
+                                    this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
+                                    if(res.data.data[i].supportVersion){
+                                        versionKey = res.data.data[i].supportVersion.substring(2,3)
+                                        if(versionKey > 4){
+                                            num ++
+                                        }
+                                    } 
                                 }
                             }
+                            if(num > 0) {
+                                localStorage.setItem("nodeVersionChange",1)
+                            }else{
+                                localStorage.setItem("nodeVersionChange","")
+                            }
+                            // if(localStorage.getItem("nodeVersionChange")){
+                            //     this.$emit("versionChange")
+                            // }
                             this.accountStatus = sessionStorage.getItem("accountStatus");
                             this.getVersionList();
-                            this.getGroupList()
+                            this.getGroupList();
+                            if(localStorage.getItem("nodeVersionChange")){
+                                this.versionChange();
+                            }
                         }else{
                             this.accountStatus = sessionStorage.getItem("accountStatus");
                             router.push("/front");  

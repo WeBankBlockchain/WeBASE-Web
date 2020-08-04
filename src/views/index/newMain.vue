@@ -168,7 +168,6 @@ export default {
                     this.$store.dispatch('set_mgr_version_action',this.version)
                 }
             }).catch(err => {
-                
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
@@ -177,7 +176,9 @@ export default {
             })
         },
         versionChange: function () {
-            this.$refs.menu.changeRouter();
+            if(this.$refs.menu){
+                this.$refs.menu.changeRouter();
+            }
         },
         change: function(val) {
             this.menuShow = !val;
@@ -263,7 +264,6 @@ export default {
                     router.push("/login");
                 }
             }).catch(err => {
-                
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
@@ -281,12 +281,15 @@ export default {
                         this.frontData = res.data.data;
                         let num = 0;
                         for(let i = 0; i < res.data.data.length; i++){
-                            if(res.data.data[i].clientVersion){
-                                this.$store.dispatch('set_version_action',res.data.data[i].clientVersion)
-                                versionKey = res.data.data[i].clientVersion.substring(2,3)
-                                if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
-                                    num ++
-                                }
+                            if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
+                                this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
+                                this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
+                                if(res.data.data[i].supportVersion){
+                                    versionKey = res.data.data[i].supportVersion.substring(2,3)
+                                    if(versionKey > 4){
+                                        num ++
+                                    }
+                                } 
                             }
                         }
                         if(num > 0) {
@@ -296,7 +299,7 @@ export default {
                         }
                         this.getVersionList();
                         if(localStorage.getItem("nodeVersionChange")){
-                            this.$refs.menu.changeRouter();
+                            this.versionChange();
                         }
                     } else {
                         this.$message({
@@ -308,6 +311,7 @@ export default {
                     }
                 })
                 .catch(err => {
+                    console.log(err)
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
