@@ -270,10 +270,24 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         if(res.data.data.length > 0){
+                            let num = 0;
+                            let versionKey;
                             for(let i = 0; i < res.data.data.length; i++){
                                 if(res.data.data[i].clientVersion){
-                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion)
+                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
+                                    versionKey = res.data.data[i].clientVersion.substring(2,3)
+                                    if(versionKey > 4 && !localStorage.getItem("nodeVersionChange")){
+                                        num ++
+                                    }
                                 }
+                            }
+                            if(num > 0) {
+                                localStorage.setItem("nodeVersionChange",1)
+                            }else{
+                                localStorage.setItem("nodeVersionChange","")
+                            }
+                            if(localStorage.getItem("nodeVersionChange")){
+                                this.$emit("versionChange")
                             }
                             this.accountStatus = sessionStorage.getItem("accountStatus");
                             this.getVersionList();
