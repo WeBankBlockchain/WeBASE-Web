@@ -1098,6 +1098,14 @@ let errCode = {
         "en": "Please pull the Docker image manually in host /ip/",
         "zh": "主机/ip/请手动拉取 Docker 镜像"
     },
+    "205067": {
+        "en": "Max 4 nodes on a single host",
+        "zh": "单个主机最多部署 4 个节点"
+    },
+    "205068": {
+        "en": "Cannot install node on WeBASE-Node-Manager host.",
+        "zh": "无法在WeBASE-Node-Manager主机上安装节点。"
+    },
 
     "302000": {
         en: "user not logged in",
