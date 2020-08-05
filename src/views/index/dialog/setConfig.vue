@@ -63,7 +63,7 @@
                             <el-input v-model.trim="item.name" :placeholder="$t('nodes.hostAgency')" style="width: 160px;" maxlength="32"></el-input>
                         </el-form-item>
                         <span class="el-icon-plus" style="cursor: pointer;display: inline-block;padding-left: 20px" @click="add()"></span>
-                        <span v-if="configFrom.data.length > 2" class="el-icon-minus" style="cursor: pointer;display: inline-block;padding-left: 10px" @click="delet(item)"></span>
+                        <span v-if="configFrom.data.length > 4" class="el-icon-minus" style="cursor: pointer;display: inline-block;padding-left: 10px" @click="delet(item)"></span>
                     </div>
                 </el-form>
             </div>
