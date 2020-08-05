@@ -45,6 +45,10 @@
             <div class="contract-code-mirror" :style="{height:codeHight}" ref="codeContent">
                 <div style="padding-top: 60px;text-align:center;" v-show="!codeShow">
                     <span>{{this.$t("contracts.contractOpenTips")}}</span>
+                    <span>{{this.$t("contracts.createContractTips")}}</span>
+                    <i class="wbs-icon-shangchuan"></i>
+                    <span>{{this.$t("contracts.uploadContractTips")}}</span>
+                    <strong><i class="wbs-icon-Addfile" ></i></strong>
                 </div>
                 <div class="ace-editor" ref="ace" v-show="codeShow"></div>
             </div>
@@ -944,5 +948,18 @@ export default {
 }
 .copy-public-key {
     float: right;
+}
+.contract-font{
+    color: #777;
+    cursor: pointer;
+}
+.contract-font:hover{
+    color: #111
+}
+.contract-font:active{
+    color: #111
+}
+.contract-font:visited{
+    color: #111
 }
 </style>
