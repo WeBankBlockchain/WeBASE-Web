@@ -62,7 +62,7 @@
     </div>
 </template>
 <script>
-import { login, networkList, haveNode, getPictureCheckCode,encryption } from "@/util/api";
+import { login, networkList, haveNode, getPictureCheckCode,encryption,getDeployType } from "@/util/api";
 import url from "@/util/url"
 import router from "@/router";
 import bg from "@/../static/image/banner.png";
@@ -111,6 +111,7 @@ export default {
         }
     },
     mounted: function () {
+        localStorage.setItem("config",0)
         this.changeCode();
         this.getEncryption()
     },
@@ -177,7 +178,9 @@ export default {
                         localStorage.setItem("token", res.data.data.token);
                         sessionStorage.setItem("accountStatus", res.data.data.accountStatus);
                         sessionStorage.setItem("reload", 1);
-                        router.push("/main")
+                        localStorage.setItem("config",0);
+                        localStorage.setItem("nodeVersionChange","")
+                        this.getConfigType();
                     } else {
                         this.changeCode()
                         this.msgErrorContent = this.$chooseLang(res.data.code)
@@ -202,6 +205,27 @@ export default {
                         this.encryption = 'hash'
                     }
                     localStorage.setItem("encryptionId",res.data.data)
+                }else {
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        getConfigType: function () {
+            getDeployType ().then(res => {
+                if(res.data.code == 0){
+                    localStorage.setItem("deployType",res.data.data);
+                    router.push("/main")
                 }else {
                     this.$message({
                             message: this.$chooseLang(res.data.code),

@@ -14,81 +14,102 @@
  * limitations under the License.
  */
 <template>
-    <div>
-        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head>
-        <div class="module-wrapper">
-            <h3 style="padding: 20px 0 0 40px;">{{this.$t("nodes.nodeFront")}}</h3>
-            <div class="search-part" style="padding-top: 20px;">
-                <div class="search-part-left" v-if='!disabled'>
-                    <el-button type="primary" class="search-part-left-btn" @click="createFront">{{this.$t("nodes.addFront")}}</el-button>
+    <div class="front-module">
+        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='head'></v-content-head>
+        <!-- <div class="module-wrapper" >
+            <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
+                    <div class="search-part-left" v-if='!disabled'>
+                        <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 4)" @click="reset">{{$t('text.reset')}}</el-button>
+                    </div>
                 </div>
-            </div>
+        </div> -->
+        <div class="module-wrapper" >
+            <div class="search-part" style="padding-top: 20px;">
+                    <div class="search-part-left" v-if='!disabled'>
+                        <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
+                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 2)" @click="reset">{{$t('text.reset')}}</el-button>
+                    </div>
+                </div>
             <div class="search-table">
-                <el-table :data="frontData" class="search-table-content" v-loading="loading">
-                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip>
-                        <template slot-scope="scope">
-                            <span v-if='head.enName === "frontIp"'>
-                                <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
-                            </span>
-                            <span v-else-if="head.enName === 'nodeId'">
-                                <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else-if="head.enName === 'status'">
-                                <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
-                            </span>
-                            <span v-else>{{scope.row[head.enName]}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
-                        <template slot-scope="scope">
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">{{$t('text.delete')}}</el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-pagination v-show='total > 10' class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-                </el-pagination>
-            </div>
+                    <el-table :data="chainList" class="search-table-content" v-loading="loading">
+                        <el-table-column :label="$t('text.chainName')" prop="chainName" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="$t('text.chainVersion')" prop="version" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="$t('text.chainStatus')" prop="chainStatus" show-overflow-tooltip>
+                            <template slot-scope='scope'>
+                                <span v-if='scope.row.chainStatus != 2'>{{ChainStatus(scope.row.chainStatus)}}</span>
+                                <span v-if='scope.row.chainStatus == 2'>{{ChainStatus(scope.row.chainStatus)}}-<span class='cursor-pointer' style="color: #f00" @click='openHostInfo'>{{$t("text.errInfo")}}</span></span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="$t('text.chainProgress')" show-overflow-tooltip>
+                            <template v-if='configData && configData.chainStatus != 3'>
+                                <el-progress v-if='(statusNumber || statusNumber == 0) && statusNumber != -1' :percentage="statusNumber" status="success" :showText='false'></el-progress>
+                                <el-progress v-if='statusNumber == -1' :percentage='10'  status="exception"></el-progress>
+                            </template>
+                            <template v-else>
+                                <span>{{$t('text.chainDeployed')}}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
         </div>
         <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
-                <h3 style="padding: 20px 0 8px 0;">
-                    {{this.$t("nodes.nodeList")}}
-                    <el-tooltip effect="dark"  placement="top-start">
-                        <div slot="content">{{$t('nodes.nodeDescription')}}</div>
-                        <i class="el-icon-info contract-icon font-15"></i>
-                    </el-tooltip>
-                </h3>
-                <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
-                    <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
+                
+                
+                <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
+                    <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
                         <template slot-scope="scope">
-                            <template v-if="head.enName!='operate'">
-                                <span v-if="head.enName ==='nodeActive'">
-                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{nodesStatus(scope.row[head.enName])}}
+                            <template v-if='head.enName === "frontIp"'>
+                                <span>
+                                    <router-link :to="{'path': 'hostDetail', 'query': {nodeIp: scope.row['frontIp'], nodeId: scope.row['frontId']}}" class="link">{{scope.row[head.enName]}}</router-link>
                                 </span>
-                                <span v-else-if="head.enName === 'nodeId'">
-                                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
-                                    {{scope.row[head.enName]}}
+                            </template>
+                            <template v-else-if="head.enName ==='status'">
+                                <span v-if='configData && configData.chainStatus  == 3'>
+                                    <i :style="{'color': textColor(scope.row[head.enName])}" class="wbs-icon-radio font-6"></i> {{Status(scope.row.status)}}
                                 </span>
-                                <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row[head.enName])}}</span>
-                                <span v-else-if="head.enName==='pbftView'">
-                                    {{scope.row[head.enName]}}
+                                <span v-else-if='configData'>
+                                    <i style="color: #f00" class="wbs-icon-radio font-6"></i>
                                 </span>
-                                <span v-else>{{scope.row[head.enName]}}</span>
+                            </template>
+                            <template v-else-if="head.enName ==='nodeType'">
+                                <span>
+                                    {{nodeText(scope.row.nodeType)}}
+                                    <span v-if='scope.row.status == 1 && !scope.row.nodeType' class="el-icon-loading"></span>
+                                    <span v-if='scope.row.status == 2 && !scope.row.nodeType'>{{$t("nodes.remove")}}</span>
+                                </span>
+                            </template>
+                            
+                            <template v-else-if="head.enName ==='operate'">
+                                <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" 
+                                :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
+                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 3)' 
+                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
+                                <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))'  
+                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
+                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)'  :disabled="disabled" type="text" size="small" 
+                                :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
                             <template v-else>
-                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
+                                <span>{{scope.row[head.enName]}}</span>
                             </template>
                         </template>
 
                     </el-table-column>
                 </el-table>
-                <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
-                </el-pagination>
                 <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
+                <add-node v-if='addNodeShow' :show='addNodeShow' @close='addNodeClose'></add-node>
+                <new-node v-if='newNodeShow' :show='newNodeShow' @close='newNodeClose' :data='frontData'></new-node>
+                <update-node v-if='updateNodeShow' :show='updateNodeShow' @close='updateNodeClose' @success='updateNodeSuccess'></update-node>
+                <delete-node v-if='deleteNodeShow' :show='deleteNodeShow' @close='deleteNodeClose' :data='nodeData'></delete-node>
+                <set-config :show='configShow' v-if='configShow' @close='closeConfig' @success='successConfig'></set-config>
+                <host-info v-if='hostInfoShow' :show='hostInfoShow' @close='hostInfoClose'></host-info>
             </div>
         </div>
     </div>
@@ -97,17 +118,31 @@
 <script>
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
-import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId } from "@/util/api";
+import { getFronts, addnodes, deleteFront, getNodeList, 
+getConsensusNodeId,getGroupsInvalidIncluded,startNode,stopNode,getChainInfo,getProgress,deleteChain,encryption,getVersion } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
+import setConfig from "../index/dialog/setConfig"
+import addNode from "./dialog/addNode"
+import newNode from "./dialog/newNode"
+import updateNode from "./dialog/updateNode"
+import deleteNode from "./dialog/deleteNode"
 import Bus from "@/bus"
+import guideImg from "@/../static/image/guide.69e4d090.png"
+import hostInfo from "./dialog/hostInfo"
 export default {
     name: "node",
     components: {
         "v-content-head": contentHead,
         "v-setFront": setFront,
-        modifyNodeType
+        modifyNodeType,
+        "add-node": addNode,
+        'new-node': newNode,
+        'update-node': updateNode,
+        "delete-node": deleteNode,
+        'set-config': setConfig,
+        "host-info": hostInfo
     },
     watch: {
         $route() {
@@ -137,16 +172,29 @@ export default {
             urlQuery: this.$root.$route.query,
             disabled: false,
             modifyNode: {},
-            modifyDialogVisible: false
+            modifyDialogVisible: false,
+            addNodeShow: false,
+            frontInterval: null,
+            newNodeShow: false,
+            updateNodeShow: false,
+            deleteNodeShow: false,
+            nodeData: null,
+            configData: null,
+            frontIntervar1: null,
+            configShow: false,
+            guideShow: false,
+            guideImg: guideImg,
+            deployShow: false,
+            progressInterval: null,
+            statusNumber: null,
+            number: 0,
+            chainList: [],
+            hostInfoShow: false
         };
     },
     computed: {
         frontHead() {
             let data = [
-                {
-                    enName: "frontId",
-                    name: this.$t("nodes.frontId")
-                },
                 {
                     enName: "frontIp",
                     name: this.$t("nodes.ip")
@@ -172,12 +220,19 @@ export default {
                     name: this.$t("home.createTime")
                 },
                 {
-                    enName: "modifyTime",
-                    name: this.$t("nodes.modifyTime")
+                    enName: "status",
+                    name: this.$t("home.status"),
+                    width: 150
                 },
                 {
-                    enName: "status",
-                    name: this.$t("nodes.status")
+                    enName: "nodeType",
+                    name: this.$t("nodes.nodeStyle"),
+                    width: 180
+                },
+                {
+                    enName: "operate",
+                    name: this.$t("nodes.operation"),
+                    width: 180
                 }
             ];
             return data
@@ -218,19 +273,307 @@ export default {
             return data
         }
     },
+    beforeDestroy: function() {
+        Bus.$off("changeConfig");
+        clearInterval(this.frontInterval);
+        clearInterval(this.progressInterval)
+    },
     mounted() {
         if (localStorage.getItem("root") === "admin") {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        this.getFrontTable();
-        this.getNodeTable();
+        Bus.$on("changeConfig",data => {
+            this.getData();
+        })
+        this.getConfigList();
+        this.getData();
+        // if(localStorage.getItem("config") != 0){
+        //     this.getProgresses();
+        // }
     },
     methods: {
+        hostInfoClose: function () {
+            this.hostInfoShow = false
+        },
+        openHostInfo: function () {
+            this.hostInfoShow = true
+        },
+        getEncryption: function(){
+            encryption().then(res => {
+                if(res.data.code === 0){
+                    // if(res.data.data == 1){
+                    //     this.encryption = 'guomi'
+                    // }else{
+                    //     this.encryption = 'hash'
+                    // }
+                    localStorage.setItem("encryptionId",res.data.data)
+                }else {
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        getProgresses: function () {
+            clearInterval(this.progressInterval)
+            this.progressInterval = setInterval ( () => {
+                this.getProgressData()
+            },1000)
+        },
+        getProgressData: function () {
+            getProgress().then(res => {
+                if(res.data.code === 0){
+                    this.statusNumber = res.data.data
+                    if(this.statusNumber == 10 || this.statusNumber == -1){
+                        localStorage.setItem("config",0)
+                        clearInterval(this.progressInterval)
+                    }
+                }else{
+                    localStorage.setItem("config",0)
+                    clearInterval(this.progressInterval)
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            })
+            .catch(err => {
+                localStorage.setItem("config",0)
+                clearInterval(this.progressInterval)
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
+        deployChain: function () {
+            this.configShow = true
+        },
+        closeConfig: function() {
+            this.configShow = false;
+            this.getData()
+        },
+        successConfig: function() {
+            this.configShow = false;
+            this.getData();
+            localStorage.setItem("config",1)
+            this.getProgresses()
+        },
+        getData: function () {
+            this.number = 0;
+            this.loadingNodes = true;
+            if(this.frontInterval){
+                clearInterval(this.frontInterval)
+            }
+            this.getConfigList()
+            this.frontInterval = setInterval(() => {
+                this.getConfigList();
+                this.number++
+                if(this.number == 400){
+                    clearInterval(this.frontInterval);
+                    this.number = 0;
+                }
+            },10000)
+        },
+        getVersionList () {
+            getVersion().then(res => {
+                if(res.status == 200) {
+                    this.$store.dispatch('set_mgr_version_action',res.data)
+                }
+            }).catch(err => {
+                
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
+        },
+        getConfigList: function () {
+            getChainInfo().then(res => {
+                if(res.data.code === 0) {
+                    
+                    this.configData = res.data.data;
+                    if(res.data.data){
+                        this.chainList = [res.data.data]
+                        localStorage.setItem("configData",res.data.data.chainStatus);
+                        if(res.data.data.chainStatus != 3){
+                            this.getProgresses();
+                        }else{
+                            clearInterval(this.progressInterval)
+                        }
+                    }else{
+                        this.chainList = []
+                        clearInterval(this.frontInterval)
+                        localStorage.setItem("configData",0)
+                    }
+                    this.getFrontTable();
+                }else{
+                    clearInterval(this.frontInterval)
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                    clearInterval(this.frontInterval)
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
+        start: function (val) {
+            this.loadingNodes = true;
+            let reqData = {
+                nodeId: val.nodeId
+            }
+            startNode(reqData).then(res => {
+                this.loadingNodes = false;
+                if(res.data.code === 0){
+                    this.$message({
+                        type: "success",
+                        message: this.$t("nodes.startSuccess")
+                    })
+                    this.getData()
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            })
+            .catch(err => {
+                this.loadingNodes = false;
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
+        stop: function (val) {
+            this.loadingNodes = true;
+            let reqData = {
+                nodeId: val.nodeId
+            }
+            stopNode(reqData).then(res => {
+                this.loadingNodes = false;
+                if(res.data.code === 0){
+                    this.$message({
+                        type: "success",
+                        message: this.$t("nodes.stopSuccess")
+                    })
+                    this.getData()
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            })
+            .catch(err => {
+                this.loadingNodes = false;
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                    
+                });
+        },
+        update: function () {
+            this.updateNodeShow = true
+        },
+        reset () {
+            this.$confirm(this.$t("text.deleteChain"), this.$t("text.delete"), {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
+                type: 'warning'
+                }).then(() => {
+                    clearInterval(this.frontInterval);
+                    this.loadingNodes = true;
+                    this.loading = true;
+                    deleteChain().then(res => {
+                        if(res.data.code === 0){
+                            this.$message({
+                                type: "success",
+                                message: this.$t('text.resetSuccess'),
+                                duration: 2000
+                            });
+                            this.configData = null;
+                            this.loadingNodes = false;
+                            this.loading = false;
+                            this.getConfigList();
+                        }else{
+                            this.$message({
+                                type: "error",
+                                message: this.$chooseLang(res.data.code),
+                                duration: 2000
+                            }); 
+                        }
+                    }).catch (err => {
+                        this.$message({
+                            message: this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
+                    })
+                }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$t('text.cancelDelete')
+                });          
+            });
+        },
+        updateNodeClose: function () {
+            this.updateNodeShow = false;
+            this.getData()
+        },
+        updateNodeSuccess: function () {
+            this.updateNodeShow = false;
+            this.getData();
+        },
+        deleted: function (val) {
+            this.nodeData = val;
+            this.deleteNodeShow = true
+        },
+        deleteNodeClose: function () {
+            this.deleteNodeShow = false;
+            this.getData();
+        },
+        addNodeClose: function() {
+            this.addNodeShow = false;
+            this.getData();
+        },
+        newNodeClose: function() {
+            this.newNodeShow = false;
+            this.getData();
+            // this.getProgresses();
+        },
         changGroup() {
             this.getFrontTable();
-            this.getNodeTable();
+            this.getData();
         },
         search() {
             this.currentPage = 1
@@ -238,16 +581,49 @@ export default {
         },
         getFrontTable() {
             let reqData = {
-                frontId: this.frontId
+                frontId: this.frontId,
             }
             getFronts(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        let num = 0;
+                        let versionKey;
+                        for(let i = 0; i < res.data.data.length; i++){
+                            if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
+                                this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
+                                this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
+                                if(res.data.data[i].supportVersion){
+                                    versionKey = res.data.data[i].supportVersion.substring(2,3)
+                                    if(versionKey > 4){
+                                        num ++
+                                    }
+                                } 
+                            }
+                        }
+                        if(num > 0) {
+                                localStorage.setItem("nodeVersionChange",1)
+                            }else{
+                                localStorage.setItem("nodeVersionChange","")
+                            }
+                            if(localStorage.getItem("nodeVersionChange")){
+                                this.$emit("versionChange")
+                            }
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
-                        this.loading = false;
+                        this.loadingNodes = false;
+                        if(this.frontData.length == 0){
+                            this.deployShow = true 
+                        }else{
+                            this.deployShow = false
+                        }
+                        if(this.configData && this.configData.chainStatus == 3){
+                            this.getEncryption();
+                            this.getGroupList();
+                            this.getConsensus();
+                            this.getVersionList()
+                        }
                     } else {
-                        this.loading = false;
+                        this.loadingNodes = false;
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
@@ -257,7 +633,7 @@ export default {
                     }
                 })
                 .catch(err => {
-                    this.loading = false;
+                    this.loadingNodes = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
@@ -265,6 +641,69 @@ export default {
                     });
                     
                 });
+        },
+        getConsensus: function () {
+            let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                pageNumber: 1,
+                pageSize: 100
+            }
+            getConsensusNodeId(reqData).then(res => {
+                if(res.data.code === 0){
+                    if(res.data.data){
+                        for(let i = 0; i < this.frontData.length; i++){
+                        // this.frontData[i].nodeType = "";
+                            for(let index = 0; index < res.data.data.length; index++){
+                                if(this.frontData[i].nodeId == res.data.data[index].nodeId){
+                                    this.$set(this.frontData[i],'nodeType',res.data.data[index].nodeType)
+                                }
+                            }
+                        }
+                    } 
+                }else{
+                    this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                }
+            }).catch(err => {
+                this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+            })
+        },
+        getGroupList: function(){
+            let _this = this
+            getGroupsInvalidIncluded().then(res => {
+                if(res.data.code === 0){
+                    if(res.data.data && res.data.data.length){
+                        if(!localStorage.getItem("groupId")){
+                            localStorage.setItem("groupId",res.data.data[0].groupId)
+                        }
+                        if(!localStorage.getItem("groupName")){
+                            localStorage.setItem("groupName",res.data.data[0].groupName);
+                        }
+                        if(res.data.data.length > 0){
+                            _this.$refs.head.getGroupList()
+                        }
+                    }
+                }else{
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
         },
         handleSizeChange(val) {
             this.pageSize = val;
@@ -278,11 +717,11 @@ export default {
         nodeSizeChange(val) {
             this.nodepageSize = val;
             this.nodecurrentPage = 1;
-            this.getNodeTable();
+            this.getFrontTable();
         },
         nodeCurrentChange(val) {
             this.nodecurrentPage = val;
-            this.getNodeTable()
+            this.getFrontTable()
         },
         textColor(val) {
             let colorString = "";
@@ -308,6 +747,26 @@ export default {
             }
             return transString;
         },
+        ChainStatus (val) {
+            let str = ""
+            switch (val) {
+                case 0:
+                    str = this.$t('nodes.initialize');
+                    break;
+                case 1:
+                    str = this.$t('text.deploying');
+                    break;
+                case 2:
+                    str = this.$t('text.deployFail');
+                    break;
+                case 3:
+                    str = this.$t('text.running');
+                    break;
+                case 4:
+                    str = this.$t('text.restarting')
+            }
+            return str;
+        },
         nodeText(key) {
             var str = '';
             switch (key) {
@@ -324,7 +783,7 @@ export default {
             return str;
         },
         createFront() {
-            this.frontShow = true;
+            this.newNodeShow = true;
         },
         deleteNodes(val, type) {
             this.nodesDialogOptions = {
@@ -337,7 +796,8 @@ export default {
         close(val) {
             this.frontShow = false;
             Bus.$emit("addFront")
-            this.getFrontTable()
+            this.getFrontTable();
+            this.getNodeTable();
         },
         showDetail(item) {
             if (item.nodeType === 2) return;
@@ -349,7 +809,8 @@ export default {
                     deleteFront(val.frontId).then(res => {
                         if (res.data.code === 0) {
                             // Bus.$emit("deleteFront")
-                            this.getFrontTable()
+                            this.getFrontTable();
+                            this.getNodeTable()
                         } else {
                             this.$message({
                                 message: this.$chooseLang(res.data.code),
@@ -446,11 +907,33 @@ export default {
         },
         nodeModifySuccess() {
             this.modifyDialogVisible = false
-            this.getNodeTable()
+            this.getFrontTable()
         },
         nodeModifyClose() {
             this.modifyDialogVisible = false
-        }
+        },
+        Status(val) {
+            switch (val) {
+                case 0:
+                    return this.$t("nodes.initialize")
+                    break;
+                case 1:
+                    return this.$t("text.running")
+                    break;
+                case 2:
+                    return this.$t("text.stop")
+                    break;
+                case 3:
+                    return this.$t('text.starting');
+                    break;
+                case 4:
+                    return this.$t("text.adding");
+                    break;
+                default:
+                    return this.$t("text.addFail")
+            }
+        },
+        
     }
 };
 </script>
@@ -520,5 +1003,34 @@ export default {
 }
 .grayColor {
     color: #666 !important;
+}
+.guide-title{
+    width: 100%;
+    padding: 30px 0 50px 0;
+    font-size: 24px;
+    color: #000;
+    text-align: center;
+}
+.guide-item{
+   padding-bottom: 60px;
+    text-align: center;
+}
+.guide-item-title{
+    font-size: 24px;
+    color: #000;
+}
+.guide-item-img{
+    margin: 0 60px;
+}
+.guide-content{
+    padding-left: 10%;
+    color: #999;
+}
+.guide-content-item{
+    padding: 20px 0;
+}
+.guide-content-title{
+    display: inline-block;
+    color: #000;
 }
 </style>

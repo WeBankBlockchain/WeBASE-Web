@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 <template>
-    <div style="height: 100%;">
-        <div style="height: 100%;background-color: #0c1220" class="sidebar-content">
+    <div style="height: 100%;position: relative;box-sizing: border-box;">
+        <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
+            <div style="height: calc(100% - 126px);box-sizing: border-box;overflow-y: auto;overflow-x:hidden">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
@@ -49,7 +50,23 @@
                     </el-menu-item>
                 </template>
             </el-menu>
+            </div>
+            
         </div>
+        <div class="sidebar-version" v-if="menuShowC">
+                <div class="sidebar-version-item">
+                    <span>{{$t("text.chainVersion")}}: </span>
+                    <span>{{$store.state.version}}</span>
+                </div>
+                <div class="sidebar-version-item">
+                    <span>{{$t('text.supportVersion')}}: </span>
+                    <span>{{$store.state.supportVersion}}</span>
+                </div>
+                <div class="sidebar-version-item">
+                    <span>{{$t("text.webaseVersion")}}: </span>
+                    <span>{{$store.state.mgrVersion}}</span>
+                </div>
+            </div>
     </div>
 </template>
 
@@ -193,6 +210,17 @@ export default {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
                 }
+                if(item.nameKey == 'systemManager'){
+                    if(item.children){
+                        item.children.forEach(it => {
+                            if(it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")){
+                                it.menuShow = false;
+                            }else{
+                                it.menuShow = true;
+                            }
+                        })
+                    }
+                }
             });
             this.routesList = list;
         },
@@ -242,6 +270,29 @@ export default {
     padding-left: 57px !important;
     height: 46px;
     line-height: 46px;
+}
+.sidebar-content{
+    position: relative;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE 10+ */
+    
+}
+.sidebar-content ::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+.sidebar-version{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 30px;
+    color: rgba(256,256,256,0.1);
+    z-index: 9999;
+    background-color: #0c1220;
+    box-sizing: border-box;
+}
+.sidebar-version-item {
+    line-height: 22px;
 }
 .sidebar-content >>> .el-menu--collapse {
     width: 56px;

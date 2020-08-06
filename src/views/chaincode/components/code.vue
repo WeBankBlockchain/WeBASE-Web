@@ -45,6 +45,10 @@
             <div class="contract-code-mirror" :style="{height:codeHight}" ref="codeContent">
                 <div style="padding-top: 60px;text-align:center;" v-show="!codeShow">
                     <span>{{this.$t("contracts.contractOpenTips")}}</span>
+                    <span>{{this.$t("contracts.createContractTips")}}</span>
+                    <i class="wbs-icon-shangchuan"></i>
+                    <span>{{this.$t("contracts.uploadContractTips")}}</span>
+                    <strong><i class="wbs-icon-Addfile" ></i></strong>
                 </div>
                 <div class="ace-editor" ref="ace" v-show="codeShow"></div>
             </div>
@@ -454,12 +458,18 @@ export default {
                         return { error: "File not found" };
                     }
                 } else {
+                    let num1 = 0
                     for (let i = 0; i < this.contractList.length; i++) {
                         if (newpath == this.contractList[i].contractName + ".sol") {
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
+                        }else{
+                            num1 ++
                         }
+                    }
+                    if (num1) {
+                        return { error: "File not found" };
                     }
                 }
             }
@@ -496,7 +506,7 @@ export default {
             try {
                 output = JSON.parse(solc.compileStandard(JSON.stringify(input), this.findImports));
             } catch (error) {
-                this.errorInfo = this.$t("contracts.contractCompileFail");
+                this.errorInfo = error;
                 this.errorMessage = error;
                 this.compileShow = true;
                 this.loading = false;
@@ -938,5 +948,18 @@ export default {
 }
 .copy-public-key {
     float: right;
+}
+.contract-font{
+    color: #777;
+    cursor: pointer;
+}
+.contract-font:hover{
+    color: #111
+}
+.contract-font:active{
+    color: #111
+}
+.contract-font:visited{
+    color: #111
 }
 </style>

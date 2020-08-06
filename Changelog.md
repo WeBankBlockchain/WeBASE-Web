@@ -1,3 +1,23 @@
+
+**Add**
+- 在原有先部署链，后添加前置方式的基础上，新增可视化部署界面操作；
+- 可视化部署链后，节点的管理操作，包括：新增，启动，停止；
+- 可视化部署链后，重置链后重新部署的功能；
+
+**Optimization & Bugfix**
+- 兼容 FISCO-BCOS v2.5.x 版本
+- 添加前置节点时，增加默认 IP 和 端口提示；
+- 左下角展示 WeBASE-Front 和 FISCO-BCOS 版本号
+
+**兼容性**
+- 支持FISCO-BCOS v2.4.x（推荐）
+- 支持FISCO-BCOS v2.5.x 及以上版本
+- WeBASE-Node-Manager v1.4.0+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
+
+
 ### v1.3.2 (2020-06-22)
 
 支持WeBASE v1.3.2
