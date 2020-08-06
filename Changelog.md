@@ -5,12 +5,13 @@
 - 可视化部署链后，重置链后重新部署的功能；
 
 **Optimization & Bugfix**
-- 兼容 FISCO-BCOS v2.5.0 版本
-- 添加前置节点时，设置默认 IP 和 端口；
+- 兼容 FISCO-BCOS v2.5.x 版本
+- 添加前置节点时，增加默认 IP 和 端口提示；
 - 左下角展示 WeBASE-Front 和 FISCO-BCOS 版本号
 
 **兼容性**
-- 支持FISCO-BCOS v2.5.0 及以上版本
+- 支持FISCO-BCOS v2.4.x（推荐）
+- 支持FISCO-BCOS v2.5.x 及以上版本
 - WeBASE-Node-Manager v1.4.0+
 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
