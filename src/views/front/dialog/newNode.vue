@@ -17,11 +17,8 @@
                         <el-input v-model="nodeFrom.agencyName" :placeholder="$t('nodes.inputAgency')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item>
                     <el-form-item :label="$t('text.imageMode')" prop='dockerImageType'>
-                        <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}</el-radio>
-                        <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}</el-radio>
-                        <el-tooltip class="item" effect="dark" placement="top-start">
-                            <div slot="content" style="width: 600px;">{{$t('text.imageModeInfo')}}</div>
-                            <i class="el-icon-info"></i></el-tooltip>
+                        <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip></el-radio>
+                        <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip></el-radio>
                     </el-form-item>
                     <!-- <el-form-item :label='$t("nodes.nodeCount")'>
                         <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 250px;" maxlength="16"></el-input>

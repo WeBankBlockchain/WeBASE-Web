@@ -40,13 +40,13 @@
                             <!-- <el-button type="primary"  style="margin-left: 20px;" @click='refresh'>{{$t('nodes.newVersion')}}</el-button> -->
                     </el-form-item>
                         <div class="config-item-tile">{{$t('text.imageMode')}} 
-                            <el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                            
                             </div>
-                        <el-radio v-model="configFrom.dockerImageType" :label="0">{{$t("text.manual")}}</el-radio>
-                        <el-radio v-model="configFrom.dockerImageType" :label="1">{{$t("text.automatic")}}</el-radio>
+                        <el-radio v-model="configFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip></el-radio>
+                        <el-radio v-model="configFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip></el-radio>
                       <hr style="margin: 15px 0;">
                     <div class="config-item-tile">{{$t('text.ip')}}
-                        <el-tooltip class="item" effect="dark" :content="$t('text.hostLihostIpstInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
+                        <el-tooltip class="item" effect="dark" :content="$t('text.hostListInfo')" placement="top-start"><i class="el-icon-info"></i></el-tooltip>
                         <span style="dispaly: inline-block;padding-left: 125px;">{{$t("text.org")}}</span>
                     </div>
                     <div v-for="(item,index) in configFrom.data" :key="item.key">
