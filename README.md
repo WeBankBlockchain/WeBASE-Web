@@ -11,7 +11,7 @@
 
 兼容浏览器IE9及以上，360浏览器兼容版（IE9内核），360浏览器极速版，chrome浏览器。
 
-本平台支持群组切换、区块信息浏览、合约管理、私钥管理、交易审计和账号管理等功能。详细介绍请查看[WeBASE-Web在线文档](https://webase-web.readthedocs.io/en/latest/docs/WeBASE-Web/index.html)
+本平台支持群组切换、区块信息浏览、合约管理、私钥管理、交易审计和账号管理等功能。详细介绍请查看[WeBASE-Web在线文档](https://webasedoc.readthedocs.io/zh_CN/latest/docs/WeBASE-Web/index.html)
 
 ## 贡献说明
 
