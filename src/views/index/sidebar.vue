@@ -73,6 +73,7 @@
 <script>
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
+import { versionfunegt } from "@/util/util.js";
 export default {
     name: "sidebar",
     props: ["minMenu"],
@@ -82,7 +83,8 @@ export default {
             activeIndex: 0,
             activeRoute: "",
             userRole: localStorage.getItem("root"),
-            routesList: []
+            routesList: [],
+            versionfunegt: versionfunegt
         };
     },
     computed: {
@@ -178,6 +180,12 @@ export default {
                             case 'contractEvent':
                                 it.name = this.$t('title.contractEvent')
                                 break;
+                            case 'committeeMgmt':
+                                it.name = this.$t('title.committeeMgmt')
+                                break;
+                            case 'developerMgmt':
+                                it.name = this.$t('title.developerMgmt')
+                                break;
                         }
                     })
                 }
@@ -197,6 +205,9 @@ export default {
             localStorage.setItem("sidebarHide", false);
             this.changeRouter();
         });
+        // console.log(versionfunegt(this.$store.state.version, 2.5), 1111)
+        // Boolean(this.$store.state.version > 2.5.0)
+
     },
     methods: {
         changeRouter: function () {
@@ -218,6 +229,7 @@ export default {
                             }else{
                                 it.menuShow = true;
                             }
+                            
                         })
                     }
                 }

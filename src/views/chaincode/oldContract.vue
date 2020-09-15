@@ -32,6 +32,11 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center"></el-table-column>
+                    <el-table-column prop="handleType" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
+                        <template slot-scope="scope">
+                            <span>{{contractStatusZh(scope.row.handleType) }}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="contractAddress" :label="$t('contracts.contractAddress')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('contracts.copyContractAddress')"></i>
@@ -51,21 +56,55 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
+                    <el-table-column :label="$t('nodes.operation')" width="150">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+                <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
+        </div>
+        <div class="module-wrapper" style="padding: 30px 29px 0px;">
+            <p>冻结/解冻记录</p>
+            <el-table :data="contractHistoryList" tooltip-effect="dark">
+                <el-table-column v-for="head in contractHistoryHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+                    <template slot-scope="scope">
+                        <template v-if="head.enName!='operate'">
+                            <span v-if="head.enName == 'status'">
+                                {{handleContractStatusZh(scope.row[head.enName])}}
+                            </span>
+                            <span v-else-if="head.enName == 'modifyAddress'">
+                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.modifyAddress)" :title="$t('privateKey.copy')"></i>
+                                {{scope.row[head.enName]}}
+                            </span>
+                            <span v-else-if="head.enName == 'contractAddress'">
+                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('privateKey.copy')"></i>
+                                {{scope.row[head.enName]}}
+                            </span>
+                            <span v-else>
+                                {{scope.row[head.enName]}}
+                            </span>
+                        </template>
+                        <template v-else>
+                            <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteHistory(scope.row)">{{$t('govCommittee.delete')}}</el-button>
+                        </template>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination class="page" @size-change="historySizeChange" @current-change="historyCurrentChange" :current-page="historyCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="historyPageSize" layout="total, sizes, prev, pager, next, jumper" :total="historyTotal">
+            </el-pagination>
         </div>
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
+        <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
+            <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -73,7 +112,8 @@ import contentHead from "@/components/contentHead";
 import sendTransation from "@/components/sendTransaction";
 import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
-import { getContractList } from "@/util/api"
+import freezeThaw from "./dialog/freezeThaw"
+import { getContractList, getAllContractStatus, contractHistoryStatus, deleteHandleHistory } from "@/util/api"
 import router from '@/router'
 import errcode from "@/util/errcode";
 export default {
@@ -82,7 +122,8 @@ export default {
         "v-contentHead": contentHead,
         "v-editor": editor,
         "abi-dialog": abiDialog,
-        "send-transation": sendTransation
+        "send-transation": sendTransation,
+        freezeThaw
     },
     data: function () {
         return {
@@ -104,6 +145,54 @@ export default {
             disabled: false,
             editorInput: null,
             editorOutput: null,
+            freezeThaw: '',
+            freezeThawVisible: false,
+            contractInfo: {},
+            handleFreezeThawType: '',
+            historyCurrentPage: 1,
+            historyPageSize: 10,
+            historyTotal: 0,  
+            btnIndex: '',
+            btnLoading: false,
+            adminRivateKeyList: [],          
+            contractHistoryList: [],
+            contractHistoryHead: [
+                {
+                    enName: 'id',
+                    name: 'ID',
+                    width: ''
+                },
+                {
+                    enName: 'modifyAddress',
+                    name: this.$t("contracts.userAddress"),
+                    width: ''
+                },
+                {
+                    enName: 'contractAddress',
+                    name: this.$t("contracts.contractAddress"),
+                    width: ''
+                },
+                 {
+                    enName: 'status',
+                    name: this.$t("contracts.status"),
+                    width: ''
+                },
+                {
+                    enName: 'createTime',
+                    name: this.$t("home.createTime"),
+                    width: ''
+                },
+                {
+                    enName: 'modifyTime',
+                    name: this.$t("nodes.createTime"),
+                    width: ''
+                },
+                {
+                    enName: 'operate',
+                    name: this.$t("govCommittee.operate"),
+                    width: ''
+                },
+            ]
         }
     },
     mounted: function () {
@@ -112,8 +201,9 @@ export default {
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem("groupId")){
+        if (localStorage.getItem("groupId")) {
             this.getContracts()
+            this.queryContractHistoryStatus()
         }
     },
     methods: {
@@ -134,22 +224,152 @@ export default {
             }
             getContractList(data).then(res => {
                 if (res.data.code == 0) {
-                    this.contractList = res.data.data || [];
+                    let dataArray = res.data.data || [];
                     this.total = res.data.totalCount || 0;
+                    let contractAddressList = []
+                    dataArray.forEach(item => {
+                        contractAddressList.push(item.contractAddress)
+                    });
+
+                    this.queryAllContractStatus(contractAddressList, dataArray)
                 } else {
-                   this.$message({
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
+        },
+        queryAllContractStatus(contractAddressList, dataArray) {
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                addressList: contractAddressList
+            }
+            getAllContractStatus(data)
+                .then(res => {
+                    if (res.data.code == 0) {
+                        let statusList = res.data.data;
+                        for (let key in statusList) {
+                            dataArray.forEach(item => {
+                                if (key == item.contractAddress) {
+                                    item.handleType = statusList[key]
+                                }
+                            })
+                        }
+                        this.contractList = dataArray;
+                    } else {
+                        this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
-                }
-            }).catch(err => {
-                this.$message({
+                    }
+                }).catch(err => {
+                    this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
+                })
+        },
+        queryContractHistoryStatus() {
+            let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                pageNumber: this.historyCurrentPage,
+                pageSize: this.historyPageSize
+            }
+            contractHistoryStatus(reqData)
+                .then(res => {
+                    if (res.data.code == 0) {
+                        let list = res.data.data
+                        this.contractHistoryList = list
+                        this.historyTotal = res.data.totalCount
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                }).catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                })
+        },
+        getUserData() {
+            let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                pageNumber: 1,
+                pageSize: 1000
+            };
+            getUserList(reqData, {})
+                .then(res => {
+                    if (res.data.code === 0) {
+                        let arr = res.data.data;
+                        this.adminRivateKeyList = arr;
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        deleteHistory(val) {
+            this.$confirm(this.$t("govCommittee.delete") + '?', {
+                center: true
             })
+                .then(_ => {
+                    this.btnIndex = val.id
+                    this.btnLoading = true
+                    deleteHandleHistory(val.id)
+                        .then(res => {
+                            this.btnLoading = false
+                            if (res.data.code === 0) {
+                                this.$message({
+                                    type: 'success',
+                                    message: this.$t('govCommittee.success')
+                                })
+                                this.queryContractHistoryStatus()
+                            } else {
+                                this.$message({
+                                    message: this.$chooseLang(res.data.code),
+                                    type: "error",
+                                    duration: 2000
+                                });
+                            }
+                        })
+                        .catch(err => {
+                            this.btnLoading = false
+                            this.$message({
+                                message: this.$t('text.systemError'),
+                                type: "error",
+                                duration: 2000
+                            });
+                        });
+                })
+                .catch(_ => {
+
+                });
+
         },
         copyPubilcKey: function (val) {
             if (!val) {
@@ -231,6 +451,63 @@ export default {
             this.currentPage = val;
             this.getContracts();
         },
+        historySizeChange: function (val) {
+            this.historyPageSize = val;
+            this.historyCurrentPage = 1;
+            this.queryContractHistoryStatus();
+        },
+        historyCurrentChange: function (val) {
+            this.historyCurrentPage = val;
+            this.queryContractHistoryStatus();
+        },
+        handleStatusBtn(val) {
+            this.freezeThawVisible = true
+            this.contractInfo = val
+            if (val.handleType == 0) {
+                this.handleFreezeThawType = 'freeze'
+            } else if (val.handleType == 1) {
+                this.handleFreezeThawType = 'unfreeze'
+            }
+
+        },
+        freezeThawSuccess() {
+            this.freezeThawVisible = false
+            this.getContracts()
+            this.queryContractHistoryStatus()
+        },
+        freezeThawClose() {
+            this.freezeThawVisible = false
+        },
+        contractStatusZh(val) {
+            switch (val) {
+                case '0':
+                    return this.$t('contracts.normal')
+                    break;
+                case '1':
+                    return this.$t('contracts.freeze')
+                    break;
+            }
+        },
+        handleContractStatusZh(val) {
+            switch (val) {
+                case 0:
+                    return this.$t('contracts.unfreeze')
+                    break;
+                case 1:
+                    return this.$t('contracts.freeze')
+                    break;
+            }
+        },
+        freezeThawBtn(val) {
+            switch (val.handleType) {
+                case '0':
+                    return this.$t('contracts.freeze')
+                    break;
+                case '1':
+                    return this.$t('contracts.unfreeze')
+                    break;
+            }
+        }
     }
 }
 </script>
