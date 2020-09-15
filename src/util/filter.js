@@ -53,3 +53,26 @@ Vue.filter('permissionName', function (value) {
     }
     return name
 });
+
+/**
+ * vote type
+ */
+Vue.filter('voteType', function (value) {
+    let name = ''
+    switch (value) {
+        case 1:
+            name = '增加委员'
+            break;
+        case 2:
+            name = '去除委员'
+            break;
+        case 3:
+            name = '更新委员权重'
+            break;
+        case 4:
+            name = '更新阈值'
+            break;
+
+    }
+    return name
+});

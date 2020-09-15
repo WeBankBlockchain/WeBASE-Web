@@ -32,18 +32,20 @@ const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve)
 const transactionCharts = resolve => require(['@/views/transactionCharts/transactionCharts'], resolve);
 const unusualUser = resolve => require(['@/views/unusualUser/unusualUser'], resolve);
 const unusualContract = resolve => require(['@/views/unusualContract/unusualContract'], resolve);
-const certificate = resolve => require(['@/views/certificate'], resolve); 
+const certificate = resolve => require(['@/views/certificate'], resolve);
 const permission = resolve => require(['@/views/permission'], resolve);
 const configManagement = resolve => require(['@/views/configManagement'], resolve);
 const cnsManagement = resolve => require(['@/views/cnsManagement'], resolve);
 const CRUDServiceManagement = resolve => require(['@/views/CRUDServiceManagement'], resolve);
-const emailAlarm = resolve => require(['@/views/alarm/emailAlarm'], resolve); 
+const emailAlarm = resolve => require(['@/views/alarm/emailAlarm'], resolve);
 const emailAlarmType = resolve => require(['@/views/alarm/emailAlarmType'], resolve);
 const contractEvent = resolve => require(['@/views/contractEvent'], resolve);
-const blockEvent = resolve => require(['@/views/blockEvent'], resolve); 
+const blockEvent = resolve => require(['@/views/blockEvent'], resolve);
 const groupManagement = resolve => require(['@/views/groupManagement'], resolve);
 const abiList = resolve => require(['@/views/abiList'], resolve);
 const parseAbi = resolve => require(['@/views/parseAbi'], resolve);
+const committeeMgmt = resolve => require(['@/views/committeeMgmt'], resolve);
+const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -60,7 +62,7 @@ const routes = [
         name: 'main',
         // redirect: '/home',
         leaf: true,
-        nameKey: "dataOverview",    
+        nameKey: "dataOverview",
         menuShow: true,
         iconCls: 'wbs-icon-gailan sidebar-icon',
         component: main,
@@ -78,8 +80,8 @@ const routes = [
         menuShow: false,
         iconCls: 'wbs-icon-overview sidebar-icon',
         children: [
-            { path: '/blockInfo', component: blockInfo, name: '区块信息',nameKey: "blockTitle", menuShow: true, meta: { requireAuth: true } },
-            { path: '/transactionInfo', component: transactionInfo, name: '交易信息',nameKey: "transactionInfo", menuShow: true, meta: { requireAuth: true } },
+            { path: '/blockInfo', component: blockInfo, name: '区块信息', nameKey: "blockTitle", menuShow: true, meta: { requireAuth: true } },
+            { path: '/transactionInfo', component: transactionInfo, name: '交易信息', nameKey: "transactionInfo", menuShow: true, meta: { requireAuth: true } },
         ]
     },
     {
@@ -105,7 +107,7 @@ const routes = [
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
             { path: '/groupManagement', component: groupManagement, name: '群组管理', nameKey: "groupManagement", menuShow: true, meta: { requireAuth: true } },
-            
+
         ]
     },
     {
@@ -115,7 +117,7 @@ const routes = [
         nameKey: "contractTitle",
         // leaf: true,
         menuShow: true,
-        iconCls: 'wbs-icon-heyueguanli sidebar-icon', 
+        iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
@@ -145,10 +147,12 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
-            { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } }, 
+            { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
-            { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } }
-            
+            { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } },
+            { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },
+            { path: '/developerMgmt', component: developerMgmt, name: '运维账号管理', nameKey: "developerMgmt", menuShow: true, meta: { requireAuth: true } },
+
         ]
     },
     {
@@ -177,7 +181,7 @@ const routes = [
             { path: '/unusualUser', component: unusualUser, name: '异常用户', nameKey: "unusualUser", menuShow: true, meta: { requireAuth: true } },
             { path: '/unusualContract', component: unusualContract, name: '异常合约', nameKey: "unusualContract", menuShow: true, meta: { requireAuth: true } }
         ]
-    }, 
+    },
     {
         path: '/',
         component: main,
@@ -188,9 +192,9 @@ const routes = [
         children: [
             { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractEvent', component: contractEvent, name: '合约Event事件', nameKey: "contractEvent", menuShow: true, meta: { requireAuth: true } },
-            
+
         ]
-    }, 
+    },
     {
         path: '/',
         component: main,
@@ -203,7 +207,7 @@ const routes = [
             { path: '/accountInfo', component: accountInfo, name: '帐号管理', nameKey: "accountManagement", menuShow: true, meta: { requireAuth: true } }
         ]
     }
-    
+
 ]
 const router = new Router({
     routes

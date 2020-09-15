@@ -966,7 +966,7 @@ export function contractEventList(data, list) {
 }
 
 // 新增群组
-export function createGroup(data,nodeId) {
+export function createGroup(data, nodeId) {
     return post({
         url: `${url.ORG_LIST}/group/generate/${nodeId}`,
         method: 'post',
@@ -1119,8 +1119,8 @@ export function groupStatus4(groupStatus) {
 }
 
 //获取 Docker 镜像版本
-export function getConfigList (data) {
-    return get ({
+export function getConfigList(data) {
+    return get({
         url: `${url.ORG_LIST}/config/list`,
         method: "get",
         params: data,
@@ -1131,8 +1131,8 @@ export function getConfigList (data) {
 }
 
 //部署接口
-export function deployConfig (data) {
-    return post ({
+export function deployConfig(data) {
+    return post({
         url: `${url.ORG_LIST}/deploy/init`,
         method: "post",
         data: data,
@@ -1143,8 +1143,8 @@ export function deployConfig (data) {
 }
 
 //新增节点
-export function newNode (data) {
-    return post ({
+export function newNode(data) {
+    return post({
         url: `${url.ORG_LIST}/node/add`,
         method: "post",
         data: data,
@@ -1155,8 +1155,8 @@ export function newNode (data) {
 }
 
 //部署新增节点
-export function addNode (data) {
-    return post ({
+export function addNode(data) {
+    return post({
         url: `${url.ORG_LIST}/deploy/node/add`,
         method: "post",
         data: data,
@@ -1167,12 +1167,12 @@ export function addNode (data) {
 }
 
 //节点升级
-export function upgradeNode (data) {
-    return post ({
+export function upgradeNode(data) {
+    return post({
         url: `${url.ORG_LIST}/deploy/upgrade`,
         method: "post",
         data: data,
-         
+
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -1180,8 +1180,8 @@ export function upgradeNode (data) {
 }
 
 //删除链
-export function deleteChain () {
-    return deleted ({
+export function deleteChain() {
+    return deleted({
         url: `${url.ORG_LIST}/deploy/delete`,
         method: "delete",
         headers: {
@@ -1192,7 +1192,7 @@ export function deleteChain () {
 
 //删除节点
 export function deleteNode(data) {
-    return post ({
+    return post({
         url: `${url.ORG_LIST}/deploy/node/delete`,
         method: "post",
         data: data,
@@ -1203,7 +1203,7 @@ export function deleteNode(data) {
 }
 
 //停止节点
-export function stopNode (data) {
+export function stopNode(data) {
     return post({
         url: `${url.ORG_LIST}/deploy/node/stop`,
         method: "post",
@@ -1215,7 +1215,7 @@ export function stopNode (data) {
 }
 
 //启动节点
-export function startNode (data) {
+export function startNode(data) {
     return post({
         url: `${url.ORG_LIST}/deploy/node/start`,
         method: "post",
@@ -1227,8 +1227,8 @@ export function startNode (data) {
 }
 
 //链信息
-export function getChainInfo () {
-    return get ({
+export function getChainInfo() {
+    return get({
         url: `${url.ORG_LIST}/deploy/chain/info`,
         method: "get",
         headers: {
@@ -1238,8 +1238,8 @@ export function getChainInfo () {
 }
 
 //获取链的部署进度
-export function getProgress () {
-    return get ({
+export function getProgress() {
+    return get({
         url: `${url.ORG_LIST}/deploy/progress`,
         method: "get",
         headers: {
@@ -1249,10 +1249,10 @@ export function getProgress () {
 }
 
 //获取链部署方式
-export function getDeployType () {
-    return get ({
+export function getDeployType() {
+    return get({
         url: `${url.ORG_LIST}/deploy/type`,
-        methods: "get",
+        method: "get",
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -1260,10 +1260,10 @@ export function getDeployType () {
 }
 
 //获取链版本
-export function getVersion () {
-    return get ({
+export function getVersion() {
+    return get({
         url: `${url.ORG_LIST}/version`,
-        methods: "get",
+        method: "get",
         responseType: "text",
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1272,10 +1272,180 @@ export function getVersion () {
 }
 
 //获取主机信息
-export function getHostList () {
-    return get ({
+export function getHostList() {
+    return get({
         url: `${url.ORG_LIST}/deploy/host/list`,
-        methods: "get",
+        method: "get",
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//治理委员会list
+export function committeeList(data) {
+    return get({
+        url: `${url.ORG_LIST}/governance/committee/list/sorted`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//增加链治理委员
+export function addCommittee(data) {
+    return post({
+        url: `${url.ORG_LIST}/governance/committee`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//删除链管理委员 
+export function deleteCommittee(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/governance/committee`,
+        method: 'delete',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//查询阈值
+export function getThreshold(data) {
+    return get({
+        url: `${url.ORG_LIST}/governance/threshold`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//修改阈值
+export function changeThreshold(data) {
+    return put({
+        url: `${url.ORG_LIST}/governance/threshold`,
+        method: "put",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+//修改委员的权重
+export function putCommitteeWeight(data) {
+    console.log(data)
+    return put({
+        url: `${url.ORG_LIST}/governance/committee/weight`,
+        method: "put",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//  投票  
+export function voteRecord(data) {
+    return get({
+        url: `${url.ORG_LIST}/vote/record/list`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//删除投票纪录
+export function deleteVoteRecord(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/vote/record/${data}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//运维列表
+export function operatorList(data) {
+    return get({
+        url: `${url.ORG_LIST}/governance/operator/list`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//增加运维
+export function addDevOps(data) {
+    return post({
+        url: `${url.ORG_LIST}/governance/operator`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//删除运维
+export function deleteDevOps(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/governance/operator`,
+        method: 'delete',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//合约状态管理
+export function getContractStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/precompiled/contract/status`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// 批量查询合约状态
+export function getAllContractStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/precompiled/contract/status/list`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//冻结/解冻合约历史记录
+export function contractHistoryStatus(data) {
+    return get({
+        url: `${url.ORG_LIST}/contract/status/record/list`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function deleteHandleHistory(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/contract/status/record/${data}`,
+        method: 'delete',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
