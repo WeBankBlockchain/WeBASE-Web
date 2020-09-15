@@ -138,7 +138,7 @@ export default {
         }
     },
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true
@@ -161,6 +161,9 @@ export default {
                 reqQuery = {
                     userParam: this.userName.replace(/^\s+|\s+$/g, "")
                 };
+            if(localStorage.getItem('root') === 'developer'){
+                reqQuery.account = localStorage.getItem("user")
+            }
             getUserList(reqData, reqQuery)
                 .then(res => {
                     this.loading = false;

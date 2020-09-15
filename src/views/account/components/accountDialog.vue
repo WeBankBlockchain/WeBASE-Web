@@ -205,6 +205,9 @@ export default {
                                 case 100001:
                                     item.roleNameZh = this.$t('text.normalUsers')
                                     break;
+                                case 100002:
+                                    item.roleNameZh = this.$t('text.developer')
+                                    break;
                             }
                         })
                         this.roleList = res.data.data;
