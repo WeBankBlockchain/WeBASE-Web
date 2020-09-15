@@ -90,8 +90,8 @@
                         <div class="item" v-show="inputButtonShow">
                             <span class="label"></span>
                             <el-button @click="decode" type="primary">{{buttonTitle}}</el-button>
-                        </div>
-                    </div>
+                        </div>                       
+                    </div>                   
                 </div>
             </el-tab-pane>
             <!-- <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
@@ -145,7 +145,42 @@
                         <span class="receipt-field">{{item}}：</span>
                     </el-col>
                     <el-col :xs='24' :sm="24" :md="18" :lg="20" :xl="22">
-                        <template v-if="item == 'logs'">
+                        <template class="item" style="font-size: 0" v-if="item == 'output'">
+                            <!-- <span class="label">Output:</span> -->
+                            <div>
+                                <span v-if="showOutputDecode && txInfoReceiptMap.status == '0x0'">{{txInfoReceiptMap.output || ""}}</span>
+                                <span v-if="txInfoReceiptMap.status != '0x0'">{{decodeOutData}}</span>
+                                <div v-if="!showOutputDecode && txInfoReceiptMap.status == '0x0' && showOutDecode" class="input-data">
+                                    <div class="item">
+                                        <span class="label">function</span>
+                                        <span>{{funcOutData + "(" + abiType + ")"}}</span>
+                                    </div>
+                                    <div class="item">
+                                        <span class="label">methodId</span>
+                                        <span>{{methodId}}</span>
+                                    </div>
+                                    <div class="item">
+                                        <span class="label">data</span>
+                                        <el-table :data="outputData" v-if="outputData.length" style="display:inline-block;width:100%;">
+                                            <el-table-column prop="name" label="name" align="left" v-if="outputData[0].name"></el-table-column>
+                                            <el-table-column prop="type" label="type" align="left"></el-table-column>
+                                            <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
+                                                <template slot-scope="scope">
+                                                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                                                    <span>{{scope.row.data}}</span>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </div>
+                                    
+                                </div>
+                                <div class="item" v-if="txInfoReceiptMap.status == '0x0' && showOutDecode && inputButtonShow">
+                                        <!-- <span class="label"></span> -->
+                                        <el-button @click="decodeOutput" type="primary">{{buttonOutTitle}}</el-button>
+                                    </div>
+                            </div>
+                        </template>
+                        <template v-else-if="item == 'logs'">
                             <span v-if="txInfoReceiptMap[item]&& !txInfoReceiptMap[item].length">{{txInfoReceiptMap[item]}}</span>
                             <div v-for="(item,num) in eventLog" v-if="eventSHow">
                                 <div class="item">
@@ -254,6 +289,15 @@ export default {
             ],
             txInfoReceiptMap: {},
             showReceiptDecode: true,
+            abiOutType: "",
+            funcOutData: "",
+            decodeOutData: "",
+            outputData: [],
+            showOutDecode: false,
+            buttonOutTitle: this.$t('transaction.reduction'),
+            outputShow: false,
+            showOutputDecode: false,
+            transOutputData: ""
         };
     },
     mounted: function () {
@@ -302,12 +346,7 @@ export default {
                         this.transactionData = res.data.data;
                         if (res.data.data) {
                             this.getCreatTime(res.data.data.blockNumber);
-                            this.getAdderss();
-                            if (res.data.data.to && res.data.data.to != "0x0000000000000000000000000000000000000000") {
-                                this.getMethod(res.data.data.input)
-                            } else {
-                                this.getDeloyAbi(res.data.data.input);
-                            }
+                            this.getAdderss(res.data.data.to,res.data.data.input);
                         } else {
                             this.$message({
                                 type: "error",
@@ -329,7 +368,7 @@ export default {
                     
                 });
         },
-        getMethod: function (id) {
+        getMethod: function (id,output) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 data: id.substring(0, 10)
@@ -337,7 +376,13 @@ export default {
             getFunctionAbi(data, {}).then(res => {
 
                 if (res.data.code == 0) {
-                    this.decodefun(id, res.data.data)
+                    this.decodefun(id, res.data.data);
+                    if(output){
+                        this.decodeOutPutfun(output,res.data.data);
+                        this.outputShow = true
+                    } else {
+                        this.outputShow = false
+                    }
                 } else {
                     this.$message({
                         type: "error",
@@ -353,7 +398,7 @@ export default {
                 
             })
         },
-        getDeloyAbi: function (input) {
+        getDeloyAbi: function (input,output) {
             if (input && input != "0x") {
                 let data = {
                     groupId: localStorage.getItem("groupId"),
@@ -361,6 +406,7 @@ export default {
                 }
                 getAbi(data).then(res => {
                     if (res.data.code == 0) {
+                        this.decodeDeployOutput(output,res.data.data)
                         this.decodeDeloy(res.data.data)
                     } else {
                         this.$message({
@@ -445,6 +491,15 @@ export default {
                 this.eventDataShow = true;
             }
         },
+        decodeOutput: function () {
+            if (this.showOutputDecode) {
+                this.buttonOutTitle = this.$t('transaction.reduction');
+                this.showOutputDecode = false;
+            } else {
+                this.buttonOutTitle = this.$t('transaction.decode');
+                this.showOutputDecode = true;
+            }
+        },
         decodeAbi: function (val, list) {
             this.inputButtonShow = true;
             let input = this.transactionData.input;
@@ -457,7 +512,7 @@ export default {
                 this.decodeDeloy(this.bin);
             }
         },
-        getAdderss: function () {
+        getAdderss: function (to,input) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 transHash: this.transHash
@@ -468,6 +523,11 @@ export default {
                     if (res.data.code === 0) {
                         this.txInfoReceiptMap = res.data.data;
                         this.eventLog = res.data.data.logs;
+                        if (to && to != "0x0000000000000000000000000000000000000000") {
+                                this.getMethod(input,res.data.data.output)
+                            } else {
+                                this.getDeloyAbi(input,res.data.data.output);
+                            }
                     } else {
                         this.$message({
                             type: "error",
@@ -615,6 +675,57 @@ export default {
                 }
                 this.showDecode = false;
                 this.buttonTitle = this.$t('transaction.reduction');
+            }
+        },
+        decodeDeployOutput: function(output,data){
+            this.showOutputDecode = true;
+        },
+        //解析uotput
+        decodeOutPutfun: function (output, abiData) {
+            let web3 = new Web3(Web3.givenProvider);
+            if (abiData) {
+                abiData.abiInfo.outputs.forEach((val, index) => {
+                    if (val && index < abiData.abiInfo.outputs.length - 1) {
+                        this.abiOutType = this.abiOutType + val.type + " " + val.name + ",";
+                    } else if (val && index == abiData.abiInfo.outputs.length - 1) {
+                        this.abiOutType = this.abiOutType + val.type + " " + val.name;
+                    }
+                });
+                this.funcOutData = abiData.abiInfo.name;
+                if (abiData.abiInfo.outputs.length) {
+                    this.showOutputDecode = false
+                    this.showOutDecode = true;
+                    this.decodeOutData = web3.eth.abi.decodeParameters(abiData.abiInfo.outputs, output);
+                    console.log(this.decodeOutData)
+                    if (JSON.stringify(this.decodeOutData) != "{}") {
+                        for (const key in this.decodeOutData) {
+                            for (let index = 0; index < abiData.abiInfo.outputs.length; index++) {
+                                this.outputData[index] = {};
+                                this.outputData[index].name = abiData.abiInfo.outputs[index].name;
+                                this.outputData[index].type = abiData.abiInfo.outputs[index].type;
+                                this.outputData[index].data = this.decodeOutData[index];
+                                // console.log(typeof(this.outputData[index].data))
+                                if(typeof(this.outputData[index].data) == 'boolean'){
+                                    this.outputData[index].data = this.outputData[index].data.toString()
+                                }
+                            }
+                        }
+                    }
+                    console.log(this.outputData)
+                }else{
+                    this.showOutDecode = false;
+                    this.showOutputDecode = true;
+                    try {
+                        let data = "0x" + output.substring(10)
+                        this.decodeOutData = web3.eth.abi.decodeParameter('string', data);
+                        console.log(this.decodeOutData)
+                    } catch (error) {
+                        console.log(error)
+                    }
+                    
+                    // console.log(this.decodeOutData)
+                }
+                this.buttonOutTitle = this.$t('transaction.reduction');
             }
         },
         //deloy-contract-transaction-decode

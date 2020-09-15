@@ -150,7 +150,8 @@ export default {
             let reqData = {
                 groupId: this.groupId,
                 userName: this.userForm.name,
-                description: this.userForm.explain || ""
+                description: this.userForm.explain || "",
+                account: localStorage.getItem("user")
             };
             getAddUser(reqData)
                 .then(res => {
@@ -186,7 +187,8 @@ export default {
                 userName: this.userForm.name,
                 publicKey: this.userForm.publicKey,
                 groupId: this.groupId,
-                description: this.userForm.explain || ""
+                description: this.userForm.explain || "",
+                account: localStorage.getItem("user")
             };
             bindUser(reqData)
                 .then(res => {

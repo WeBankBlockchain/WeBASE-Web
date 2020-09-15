@@ -109,7 +109,7 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true
@@ -150,7 +150,11 @@ export default {
                 pageNumber: 1,
                 pageSize: 1000
             };
-            getUserList(reqData, {})
+            let query = {}
+            if(localStorage.getItem('root') === 'developer'){
+                query.account = localStorage.getItem("user")
+            }
+            getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];

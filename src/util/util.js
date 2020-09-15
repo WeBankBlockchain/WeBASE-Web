@@ -334,3 +334,12 @@ export function dataType(type, value) {
 export function substring_0_40(params) {
     return params.substring(0, 40)
 }
+
+export function subStringToNumber (val) {
+    let array = val.split("")
+    let num = "";
+    for(let i = 0; i < array.length; i++){
+        num = num + array[i].charCodeAt(0)
+    }
+    return parseInt(num)
+}

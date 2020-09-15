@@ -137,7 +137,7 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true

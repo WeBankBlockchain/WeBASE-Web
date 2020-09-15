@@ -107,7 +107,7 @@ export default {
         }
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true
@@ -128,6 +128,9 @@ export default {
                 contractName: this.contractName,
                 contractAddress: this.contractAddress,
                 contractStatus: 2
+            }
+            if(localStorage.getItem("root") === 'developer'){
+                data.account = localStorage.getItem("user")
             }
             getContractList(data).then(res => {
                 if (res.data.code == 0) {

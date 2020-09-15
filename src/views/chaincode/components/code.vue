@@ -201,7 +201,7 @@ export default {
         
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true
@@ -504,7 +504,7 @@ export default {
                 content: this.content
             };
             try {
-                output = JSON.parse(solc.compileStandard(JSON.stringify(input), this.findImports));
+                output = JSON.parse(solc.compile(JSON.stringify(input), { import: this.findImports }));
             } catch (error) {
                 this.errorInfo = error;
                 this.errorMessage = error;
@@ -667,7 +667,8 @@ export default {
                 user: val.userId,
                 contractName: this.contractName,
                 contractId: this.data.contractId,
-                contractPath: this.data.contractPath
+                contractPath: this.data.contractPath,
+                account: localStorage.getItem("user")
             };
             this.version = val.version
             if (val.params.length) {

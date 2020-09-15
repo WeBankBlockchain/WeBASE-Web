@@ -17,7 +17,16 @@
     <div class="contract-content">
         <v-content-head  :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;"  @changGroup="changGroup"></v-content-head>
         <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
-            <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide"></v-menu>
+            <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
+                <template #footer>
+                    <div class="version-selector">
+                        <el-select v-model="version" placeholder="ÇëÑ¡Ôñ" @change="onchangeLoadVersion" style="padding-left: 20px;">
+                            <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </template>
+            </v-menu>
             <div class="move" @mousedown="dragDetailWeight($event)"></div>
         </div>
         <div :class="[!menuHide ?  'code-detail-wrapper' : 'code-detail-reset-wrapper']" :style="{width: contentWidth}">
@@ -58,7 +67,12 @@ export default {
             changeWidth: false,
             contractHide: false,
             menuWidth: 240,
-            urlQuery: this.$root.$route.query
+            urlQuery: this.$root.$route.query,
+            allVersion: [],
+            versionList: [],
+            version: localStorage.getItem('solcName') ? localStorage.getItem('solcName') : '',
+            baseURLWasm: './static/js',
+            versionId: localStorage.getItem('versionId') ? localStorage.getItem('versionId') : '',
         };
     },
     computed: {
@@ -71,21 +85,82 @@ export default {
         }
     },
     mounted: function() {
-        this.getEncryption(this.initSolc);
+        this.allVersion = [
+            {
+                solcName: "v0.4.25",
+                versionId: 0,
+                encryptType: 0
+            },
+            {
+                solcName: "v0.4.25-gm",
+                versionId: 1,
+                encryptType: 1
+            },
+            {
+                solcName: "v0.5.1",
+                versionId: 2,
+                encryptType: 0
+            },
+            {
+                solcName: "v0.5.1-gm",
+                versionId: 3,
+                encryptType: 1
+            }
+        ]
+        this.getEncryption(this.querySolcList);
     },
     methods: {
+        querySolcList () {
+            for(let i = 0; i < this.allVersion.length; i++){
+                if(localStorage.getItem("encryptionId") == this.allVersion[i].encryptType){
+                    this.versionList.push(this.allVersion[i])
+                }
+            }
+            if (!localStorage.getItem('solcName')) {
+                this.version = this.versionList[0]['solcName'];
+                this.versionId = this.versionList[0]['id'];
+                localStorage.setItem("solcName", this.versionList[0]['solcName'])
+                localStorage.setItem("versionId", this.versionList[0]['versionId'])
+            }
+            this.initSolc()
+        },
         initSolc() {
             var head = document.head;
             var script = document.createElement("script");
-            if (localStorage.getItem("encryptionId") == 0) {
-                script.src = "./static/js/soljson-v0.4.25+commit.59dbf8f1.js";
-            } else {
-                script.src = "./static/js/soljson-v0.4.25-gm.js";
-            }
+            
+            // if (localStorage.getItem("encryptionId") == 0) {
+            //     script.src = "./static/js/soljson-v0.4.25+commit.59dbf8f1.js";
+            // } else {
+            //     script.src = "./static/js/soljson-v0.4.25-gm.js";
+            // }
+            script.src = `${this.baseURLWasm}/${this.version}.js`;
+            script.setAttribute('id', 'soljson');
             script.setAttribute('id', 'soljson');
             if (!document.getElementById('soljson')) {
                 head.append(script)
             }
+        },
+        initVersion() {
+            localStorage.removeItem('solcName')
+        },
+        changeChain(type) {
+            this.initVersion()
+            this.querySolcList(this.initSolc, 'changeChain')
+            this.$router.go(0)
+            this.$refs.menu.getContracts()
+        },
+        onchangeLoadVersion(version) {
+            localStorage.setItem('solcName', version)
+            var versionId = '';
+            this.versionList.forEach(item => {
+                if (item.solcName == version) {
+                    versionId = item.versionId
+                }
+            });
+            localStorage.setItem('versionId', versionId)
+            this.initSolc(version)
+            this.$router.go(0)
+            this.$refs.menu.getContracts()
         },
         getEncryption: function (callback) {
             encryption().then(res => {
@@ -202,5 +277,20 @@ export default {
     top: 50%;
     background-color: #fff;
     cursor: pointer;
+}
+.version-selector {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    padding: 5px 0;
+    border-top: 1px solid #e8e8e8;
+    /* border-right: 2px solid #e8e8e8; */
+    background-color: #fff;
+    z-index: 999999;
+    box-sizing: border-box;
+}
+.version-selector >>> .el-select {
+    width: 100%;
+    max-width: 200px;
 }
 </style>
