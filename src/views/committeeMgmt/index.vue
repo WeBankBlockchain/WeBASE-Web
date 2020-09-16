@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.committeeMgmt')" @changGroup="changGroup"></v-content-head>
-        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.committeeMgmt')" @changGroup="changGroup"></v-content-head> -->
+        <div style="padding: 10px 20px 0 20px;">
             <div class="">
                 <el-button type="primary" :disabled="disabled" @click="addCommittee">{{this.$t('govCommittee.addCommittee')}}</el-button>
                 <el-button type="primary" :disabled="disabled" @click="deleteCommittee">{{this.$t('govCommittee.deleteCommittee')}}</el-button>
@@ -137,8 +137,10 @@
             </div>
 
         </div>
-        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
-            <p>{{this.$t('govCommittee.votingList')}} ({{this.$t('govCommittee.blockNum')}}：<span style="color: #e6a23c">{{currentBlock}}</span>)</p>
+        <div style="padding: 60px 20px 0 20px;">
+            <p>
+                <span style="font-weight: bold">{{this.$t('govCommittee.votingList')}}</span> 
+                <span style="float: right">({{this.$t('govCommittee.blockNum')}}：<span style="color: #e6a23c">{{currentBlock}}</span>)</span></p>
             <el-table :data="voteList" tooltip-effect="dark" v-loading="loading">
                 <el-table-column v-for="head in voteHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                     <template slot-scope="scope">

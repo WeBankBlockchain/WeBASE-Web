@@ -46,14 +46,17 @@ const abiList = resolve => require(['@/views/abiList'], resolve);
 const parseAbi = resolve => require(['@/views/parseAbi'], resolve);
 const committeeMgmt = resolve => require(['@/views/committeeMgmt'], resolve);
 const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
+const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
 Vue.use(Router);
 const routes = [
     {
         path: '/',
+        nameKey: "main",
         redirect: '/login',
     },
     {
         path: '/login',
+        nameKey: "login",
         name: 'login',
         component: resolve => require(['@/views/login/login'], resolve),
     },
@@ -147,11 +150,12 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
+            { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: true, meta: { requireAuth: true } },
             { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
             { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } },
-            { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },
-            { path: '/developerMgmt', component: developerMgmt, name: '运维账号管理', nameKey: "developerMgmt", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/developerMgmt', component: developerMgmt, name: '运维账号管理', nameKey: "developerMgmt", menuShow: true, meta: { requireAuth: true } },
 
         ]
     },

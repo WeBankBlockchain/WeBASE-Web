@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.developerMgmt')" @changGroup="changGroup"></v-content-head>
-        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.developerMgmt')" @changGroup="changGroup"></v-content-head> -->
+        <div>
             <div>
                 <el-button type="primary" :disabled="disabled" @click="addDeveloper('add')">{{this.$t('devOpsMgmt.addDeveloper')}}</el-button>
             </div>

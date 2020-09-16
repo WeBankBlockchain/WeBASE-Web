@@ -138,7 +138,8 @@ export default {
         supportVersion: "Support Version",
         port5002: "The default is 5002",
         ip: "Host IP",
-        org: "Agency name"
+        org: "Agency name",
+        developer: "Developer"
     },
     rule: {
         textLong: "1 to 32 characters in length",

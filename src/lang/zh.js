@@ -138,7 +138,8 @@ export default {
         supportVersion: "兼容版本",
         port5002: "默认5002",
         ip: "主机IP",
-        org: "机构名"
+        org: "机构名",
+        developer: "开发者"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
