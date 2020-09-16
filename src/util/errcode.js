@@ -26,6 +26,14 @@ let errCode = {
         en: "system exception",
         zh: '系统异常'
     },
+    "102001": {
+        en: "system exception: please check front",
+        zh: "系统错误，请检查front"
+    },
+    "102002": {
+        en: "No group belongs to this groupId(node not belongs to this group)",
+        zh: "没有群组属于这个群组id（节点不属于这个群组）"
+    },
     "101003": {
         en: "web3j instance of current group is null",
         zh: '当前群组的web3j为空'
@@ -800,6 +808,32 @@ let errCode = {
         en: "User's signUserId not exist",
         zh: "用户的signUserId不存在"
     },
+
+    "202121": {
+        en: "Cert file not found, please check cert path in config",
+        zh: "找不到证书文件，请检查配置中的证书路径"
+    },
+    "202122": {
+        en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
+        zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY-----"
+    },
+    "202123": {
+        en: "Pem file content error",
+        zh: "Pem文件内容错误"
+    },
+    "202124": {
+        en: "p12's password cannot be chinese",
+        zh: "P12的密码不能为中文"
+    },
+    "202125": {
+        en: "p12's password not match",
+        zh: "P12的密码错误"
+    },
+    "202126": {
+        en: "p12 file content error",
+        zh: "P12文件内容错误"
+    },
+
     "201232": {
         en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
         zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY----- "
@@ -818,18 +852,13 @@ let errCode = {
         zh: "节点前置不存在"
     },
     "202310": {
-        en: "contract status record not exist",
-        zh: "合约状态记录不存在"
+        en: "govern vote record not exist",
+        zh: "投票记录不存在"
     },
     "202311": {
-        en: "govern vote record not exist",
-        zh: "投票记录已存在"
+        en: "permission denied on chain",
+        zh: "链上权限被禁止"
     },
-    "202312": {
-        en: "committee member already exist",
-        zh: "委员会成员已存在"
-    },
-
     "203003": {
         en: "Param exception",
         zh: "参数异常"

@@ -67,7 +67,7 @@
                 </el-pagination>
             </div>
         </div>
-        <div class="module-wrapper" style="padding: 30px 29px 0px;">
+        <!-- <div class="module-wrapper" style="padding: 30px 29px 0px;">
             <p>冻结/解冻记录</p>
             <el-table :data="contractHistoryList" tooltip-effect="dark">
                 <el-table-column v-for="head in contractHistoryHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
@@ -96,7 +96,7 @@
             </el-table>
             <el-pagination class="page" @size-change="historySizeChange" @current-change="historyCurrentChange" :current-page="historyCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="historyPageSize" layout="total, sizes, prev, pager, next, jumper" :total="historyTotal">
             </el-pagination>
-        </div>
+        </div> -->
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
@@ -203,7 +203,7 @@ export default {
         }
         if (localStorage.getItem("groupId")) {
             this.getContracts()
-            this.queryContractHistoryStatus()
+            // this.queryContractHistoryStatus()
         }
     },
     methods: {

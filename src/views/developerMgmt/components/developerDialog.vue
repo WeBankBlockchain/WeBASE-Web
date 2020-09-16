@@ -3,7 +3,7 @@
         <el-form :model="addDevForm" :rules="rules" ref="addDevForm" label-width="110px" class="demo-ruleForm">
             <el-form-item :label="$t('devOpsMgmt.fromUser')" prop="fromAddress">
                 <el-select v-model="addDevForm.fromAddress" :placeholder="$t('text.select')">
-                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+                    <el-option v-for="item in permissionAdminList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { addDevOps, getUserList, deleteDevOps } from "@/util/api";
+import { addDevOps, getUserList, deleteDevOps,committeeList } from "@/util/api";
 export default {
     name: 'developerDialog',
 
@@ -42,6 +42,9 @@ export default {
         return {
             loading: false,
             adminRivateKeyList: [],
+            permissionAdminList: [],
+            fullList: [],
+
             addDevForm: {
                 fromAddress: '',
                 address: ''
@@ -79,7 +82,8 @@ export default {
     },
 
     mounted() {
-        this.getUserData()
+        this.getUserData();
+        this.getAdminAddress()
     },
 
     methods: {
@@ -202,6 +206,44 @@ export default {
                     });
                 });
         },
+        getAdminAddress() {
+            let reqAdminData = {
+                groupId: localStorage.getItem("groupId"),
+                permissionType: this.authorType
+            };
+            let reqUserData = {
+                groupId: localStorage.getItem("groupId"),
+                pageNumber: 1,
+                pageSize: 1000
+            };
+            this.$axios.all([committeeList(reqAdminData), getUserList(reqUserData, {})])
+                .then(this.$axios.spread((acct, perms) => {
+                    var fullList = acct.data.data, userList = perms.data.data, userRivateKeyList = [];
+                    userList.map(value => {
+                        // if (value.hasPk === 1) {
+                            userRivateKeyList.push(value)
+                        // }
+                    });
+                    this.permissionAdminList = []
+                    if (fullList.length) {
+                        userRivateKeyList.forEach(item => {
+                            fullList.forEach(it => {
+                                if (it.address === item.address) {
+                                    this.permissionAdminList.push(item)
+                                }
+                            })
+                        })
+                        // if (this.permissionAdminList.length) {
+                        //     this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
+                        // } else {
+                        //     this.permissionForm.adminRivateKeyAddress = "";
+                        // }
+                    } else {
+                        this.permissionAdminList = userList;
+                        // this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
+                    }
+                }));
+        }
     }
 }
 </script>

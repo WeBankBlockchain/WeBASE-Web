@@ -187,7 +187,7 @@ export default {
                     str = this.$t('text.normalUsers')
                     break;
                 case 100002:
-                    str = this.$t('text.deverloper')
+                    str = this.$t('text.developer')
                     break;
             }
             return str;

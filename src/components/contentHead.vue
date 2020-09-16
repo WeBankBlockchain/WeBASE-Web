@@ -66,8 +66,8 @@
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
                     <span class="change-password" @click="changePassword">{{this.$t("head.changePassword")}}</span><br>
-                    <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span><br>
-                    <span class="change-password" @click="lookVersion">版本信息</span>
+                    <span class="change-password" @click="lookVersion">版本信息</span><br>
+                    <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span>
                 </div>
                 <a class="browse-user" slot="reference">
                     <i class="wbs-icon-user-icon"></i>
