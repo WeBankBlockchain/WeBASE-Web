@@ -16,7 +16,6 @@
 <template>
     <div style="height: 100%;position: relative;box-sizing: border-box;">
         <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
-            <div style="height: calc(100% - 126px);box-sizing: border-box;overflow-y: auto;overflow-x:hidden">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
@@ -53,26 +52,13 @@
             </div>
             
         </div>
-        <div class="sidebar-version" v-if="menuShowC">
-                <div class="sidebar-version-item">
-                    <span>{{$t("text.chainVersion")}}: </span>
-                    <span>{{$store.state.version}}</span>
-                </div>
-                <div class="sidebar-version-item">
-                    <span>{{$t('text.supportVersion')}}: </span>
-                    <span>{{$store.state.supportVersion}}</span>
-                </div>
-                <div class="sidebar-version-item">
-                    <span>{{$t("text.webaseVersion")}}: </span>
-                    <span>{{$store.state.mgrVersion}}</span>
-                </div>
-            </div>
     </div>
 </template>
 
 <script>
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
+import { versionfunegt } from "@/util/util.js";
 export default {
     name: "sidebar",
     props: ["minMenu"],
@@ -82,7 +68,8 @@ export default {
             activeIndex: 0,
             activeRoute: "",
             userRole: localStorage.getItem("root"),
-            routesList: []
+            routesList: [],
+            versionfunegt: versionfunegt
         };
     },
     computed: {
@@ -178,6 +165,12 @@ export default {
                             case 'contractEvent':
                                 it.name = this.$t('title.contractEvent')
                                 break;
+                            case 'committeeMgmt':
+                                it.name = this.$t('title.committeeMgmt')
+                                break;
+                            case 'developerMgmt':
+                                it.name = this.$t('title.developerMgmt')
+                                break;
                         }
                     })
                 }
@@ -197,6 +190,8 @@ export default {
             localStorage.setItem("sidebarHide", false);
             this.changeRouter();
         });
+        console.log(this.$store.state.version)
+        // console.log(versionfunegt(this.$store.state.version, '2.5.0'), 1111)
     },
     methods: {
         changeRouter: function () {

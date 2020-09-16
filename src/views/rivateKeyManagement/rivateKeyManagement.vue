@@ -55,6 +55,7 @@
                             </template>
                             <template v-else>
                                 <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
+                                <!-- <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="freezeThaw(scope.row)">{{freezeOrThawBtn(1)}}</el-button> -->
                             </template>
                         </template>
 
@@ -161,9 +162,9 @@ export default {
                 reqQuery = {
                     userParam: this.userName.replace(/^\s+|\s+$/g, "")
                 };
-            if(localStorage.getItem('root') === 'developer'){
-                reqQuery.account = localStorage.getItem("user")
-            }
+                if(localStorage.getItem('root') === 'developer'){
+                    reqQuery.account = localStorage.getItem("user")
+                }
             getUserList(reqData, reqQuery)
                 .then(res => {
                     this.loading = false;
@@ -257,6 +258,9 @@ export default {
                     });
                 });
         },
+        freezeThaw(val){
+            console.log(val)
+        },
         copyPubilcKey(val) {
             if (!val) {
                 this.$message({
@@ -305,7 +309,19 @@ export default {
                     break;
             }
             return color;
-        }
+        },
+        freezeOrThawBtn(val) {
+            let str = "";
+            switch (val) {
+                case 1:
+                    str = this.$t("privateKey.freeze");
+                    break;
+                case 2:
+                    str = this.$t("privateKey.thaw");
+                    break;
+            }
+            return str;
+        },
     }
 };
 </script>

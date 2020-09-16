@@ -34,7 +34,7 @@
             <span class="content-head-version" v-if='$store.state.mgrVersion'>WeBASE版本: </span>
             <span class="content-head-version content-head-version-data">{{$store.state.mgrVersion}}</span> -->
             <a class="content-head-network-link" target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
-             <!-- <el-button type='text' size='small' @click='deleteConfig'>删除</el-button> -->
+            <!-- <el-button type='text' size='small' @click='deleteConfig'>删除</el-button> -->
             <span v-if="abnormalList.length>0">
                 <el-tooltip class="item" effect="dark" placement="bottom-end">
                     <div slot="content">
@@ -66,7 +66,8 @@
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
                     <span class="change-password" @click="changePassword">{{this.$t("head.changePassword")}}</span><br>
-                    <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span>
+                    <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span><br>
+                    <span class="change-password" @click="lookVersion">版本信息</span>
                 </div>
                 <a class="browse-user" slot="reference">
                     <i class="wbs-icon-user-icon"></i>
@@ -77,14 +78,27 @@
         <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
-
+        <el-dialog title="版本信息" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">
+            <p class="version-item">
+                <span>{{$t("text.chainVersion")}}: </span>
+                <span>{{$store.state.version}}</span>
+            </p>
+            <p class="version-item">
+                <span>{{$t('text.supportVersion')}}: </span>
+                <span>{{$store.state.supportVersion}}</span>
+            </p>
+            <p class="version-item">
+                <span>{{$t("text.webaseVersion")}}: </span>
+                <span>{{$store.state.mgrVersion}}</span>
+            </p>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
-import { loginOut, groupStatus4, getGroupsInvalidIncluded,deleteChain } from "@/util/api";
+import { loginOut, groupStatus4, getGroupsInvalidIncluded, deleteChain } from "@/util/api";
 import { delCookie } from '@/util/util'
 import Bus from "@/bus"
 export default {
@@ -140,7 +154,8 @@ export default {
             groupList: [],
             abnormalList: [],
             root: localStorage.getItem('root'),
-            groupVisible: false
+            groupVisible: false,
+            versionInfoVisible: false
         };
     },
     beforeDestroy: function () {
@@ -251,6 +266,9 @@ export default {
         changePassword: function () {
             this.changePasswordDialogVisible = true;
         },
+        lookVersion: function () {
+            this.versionInfoVisible = true
+        },
         success: function (val) {
             this.changePasswordDialogVisible = false;
         },
@@ -335,10 +353,10 @@ export default {
     padding-right: 10px;
     position: relative;
 }
-.content-head-version{
-    color: #bbb
+.content-head-version {
+    color: #bbb;
 }
-.content-head-version-data{
+.content-head-version-data {
     display: inline-block;
     padding-right: 10px;
 }
@@ -427,5 +445,8 @@ export default {
     /* background-color: #fff; */
     right: 350px;
     top: 0px;
+}
+.version-item {
+    line-height: 22px;
 }
 </style>
