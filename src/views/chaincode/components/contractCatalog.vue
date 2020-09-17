@@ -28,13 +28,14 @@
                         <input multiple title="" type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
                     </i>
                 </el-tooltip>
-                <el-tooltip effect="dark" :content="$t('contracts.contractTips')" placement="top-start">
+                <!-- <el-tooltip effect="dark" :content="$t('contracts.contractTips')" placement="top-start">
                     <i class="el-icon-info contract-icon font-15" style="cursor: default;"></i>
-                </el-tooltip>
+                </el-tooltip> -->
+                <div>
+                    <slot name="footer"></slot>
+                </div>
             </div>
-            <div>
-                <slot name="footer"></slot>
-            </div>
+            
         </div>
        
 

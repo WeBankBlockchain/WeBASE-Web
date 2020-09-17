@@ -66,7 +66,7 @@
                             <div v-if="!showDecode" class="input-data">
                                 <div class="input-label">
                                     <span class="label">function</span>
-                                    <span>{{funcData + "(" + abiType + ")"}}</span>
+                                    <span>{{funcData + "(" + abiType + outputType + ")"}}</span>
                                 </div>
                                 <div class="input-label">
                                     <span class="label">methodId</span>
@@ -153,7 +153,7 @@
                                 <div v-if="!showOutputDecode && txInfoReceiptMap.status == '0x0' && showOutDecode" class="input-data">
                                     <div class="item">
                                         <span class="label">function</span>
-                                        <span>{{funcOutData + "(" + abiType + ")"}}</span>
+                                        <span>{{funcOutData + "(" + abiType + outputType + ")"}}</span>
                                     </div>
                                     <div class="item">
                                         <span class="label">methodId</span>
@@ -297,7 +297,8 @@ export default {
             buttonOutTitle: this.$t('transaction.reduction'),
             outputShow: false,
             showOutputDecode: false,
-            transOutputData: ""
+            transOutputData: "",
+            outputType: null
         };
     },
     mounted: function () {
@@ -649,6 +650,27 @@ export default {
                         this.abiType[index] = val;
                     }
                 });
+                console.log(this.abiType)
+                if(abiData.abiInfo.outputs && abiData.abiInfo.outputs.length) {
+                    let outputType = []
+                    abiData.abiInfo.outputs.forEach((val, index) => {
+                        if (val && val.type && val.name) {
+                            outputType[index] = val.type + " " + val.name;
+                        } else if (val && val.name) {
+                            outputType[index] = val.name;
+                        } else if (val && val.type) {
+                            outputType[index] = val.type;
+                        } else if (val) {
+                            outputType[index] = val;
+                        }
+                    });
+                    this.outputType = " returns "
+                    for(let i = 0; i < outputType.length; i++){
+                        this.outputType = this.outputType + outputType[i]
+                    }
+                }else{
+                    this.outputType = ""
+                }
                 this.funcData = abiData.abiInfo.name;
                 if (abiData.abiInfo.inputs.length) {
                     this.decodeData = Web3EthAbi.decodeParameters(abiData.abiInfo.inputs, inputDatas);

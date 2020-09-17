@@ -15,10 +15,12 @@
  */
 <template>
     <div>
-        <el-dialog :title="$t('contracts.createFolder')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true">
+        <el-dialog :title="$t('contracts.createFolder')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="450px" :center="true">
             <div>
                 <el-form :model="folderFrom" :rules="rules" ref="folderFrom" label-width="110px" class="demo-ruleForm">
-                    <el-form-item :label="$t('contracts.folderName')" prop="folderName" style="width:330px">
+                    
+                    <el-form-item :label="$t('contracts.folderName')" prop="folderName" style="width:400px" class="add-folder">
+                        <span style="color: #a3a3a3">{{userFolader}}</span>
                         <el-input v-model="folderFrom.folderName" @keyup.enter.native="handleFolder"></el-input>
                     </el-form-item>
                 </el-form>
@@ -65,10 +67,16 @@ export default {
                 folderName: ""
             },
             dialogVisible: this.foldershow,
-            folderList: []
+            folderList: [],
+            userFolader: ""
         }
     },
     mounted: function(){
+        if(localStorage.getItem("root") === 'developer'){
+            this.userFolader = localStorage.getItem("user") + "_"
+        }else{
+            this.userFolader = ""
+        }
         if(localStorage.getItem("folderList")){
             this.folderList = JSON.parse(localStorage.getItem("folderList")) 
         }
@@ -89,7 +97,7 @@ export default {
                     })
                     if(num == 0){
                         let data = {
-                                folderName: this.folderFrom.folderName,
+                                folderName: this.userFolader + this.folderFrom.folderName,
                                 folderId: (new Date()).getTime(),
                                 folderActive: false,
                                 groupId: localStorage.getItem("groupId")
@@ -112,4 +120,9 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .add-folder >>> .el-input {
+        width: 65% !important;
+    }
+</style>
 
