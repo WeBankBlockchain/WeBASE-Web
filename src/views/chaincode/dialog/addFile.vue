@@ -95,7 +95,15 @@ export default {
             if(localStorage.getItem("root") === 'developer'){
                 let num = 0;
                 let index = subStringToNumber(localStorage.getItem("user"))
-                let arry = JSON.parse(localStorage.getItem("folderList"));
+                let arry = []
+                if(localStorage.getItem("folderList")){
+                    let data = JSON.parse(localStorage.getItem("folderList"))
+                    for(let i = 0; i < data.length; i++){
+                        if(data[i].groupId == localStorage.getItem("groupId")){
+                            arry.push(data[i])
+                        }
+                    }
+                }
                 for (let i = 0; i < arry.length; i++) {
                     if(arry[i].folderId == index){
                         num = num + 1
@@ -106,7 +114,7 @@ export default {
                 }else{
                     this.options = [{
                         folderName: localStorage.getItem("user"),
-                        folderId: subStringToNumber(localStorage.getItem("user")),
+                        folderId: subStringToNumber(localStorage.getItem("user")) + localStorage.getItem("groupId"),
                     }];
                 }
                

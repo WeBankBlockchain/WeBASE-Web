@@ -20,7 +20,7 @@
             <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
                 <template #footer>
                     <div class="version-selector">
-                        <el-select v-model="version" placeholder="ÇëÑ¡Ôñ" @change="onchangeLoadVersion" style="padding-left: 20px;">
+                        <el-select v-model="version" placeholder="è¯·é€‰æ‹©" @change="onchangeLoadVersion" style="padding-left: 20px;">
                             <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
                             </el-option>
                         </el-select>
@@ -280,17 +280,18 @@ export default {
 }
 .version-selector {
     position: absolute;
-    width: 100%;
-    bottom: 0;
-    padding: 5px 0;
-    border-top: 1px solid #e8e8e8;
+    /* width: 100%; */
+    top: 1px;
+    right: 5px;
+    /* padding: 5px 0; */
+    /* border-top: 1px solid #e8e8e8; */
     /* border-right: 2px solid #e8e8e8; */
-    background-color: #fff;
+    /* background-color: #fff; */
     z-index: 999999;
     box-sizing: border-box;
 }
 .version-selector >>> .el-select {
     width: 100%;
-    max-width: 200px;
+    max-width: 118px;
 }
 </style>

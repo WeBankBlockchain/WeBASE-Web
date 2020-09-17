@@ -30,9 +30,9 @@
                             <template slot-scope="scope">
                                 <el-button type="text" size="small" @click="queryCrudGroup(scope.row)">{{$t('text.update')}}</el-button>
                                 <el-button type="text" size="small" :loading="dropLoading&&dropIndex===scope.row.groupId" @click="queryDeleteGroupData(scope.row)">{{$t('text.dropGroupData')}}</el-button>
-                                <el-button type="text" size="small" :disabled="scope.row.groupType===1 ? true : false" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
+                                <el-button type="text" size="small" v-if='scope.row.groupType!==1' :disabled="scope.row.groupType===1 ? true : false" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
                                 <el-tooltip effect="light" :content="$t('text.noExportGroup')" placement="bottom-end">
-                                    <i v-show="scope.row.groupType===1 ? true : false" class="el-icon-warning"></i>
+                                    <i v-if="scope.row.groupType!==1" class="el-icon-warning"></i>
                                 </el-tooltip>
                             </template>
                         </el-table-column>

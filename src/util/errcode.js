@@ -786,7 +786,7 @@ let errCode = {
     },
     "202096": {
         en: "Contract address already exists",
-        zh: "合同地址已存在"
+        zh: "合约地址已存在"
     },
     "202097": {
         en: "Abi info of this id not exists",
@@ -794,19 +794,23 @@ let errCode = {
     },
     "202098": {
         en: "Contract abi invalid, please check abi",
-        zh: "合同ABI无效，请检查ABI"
+        zh: "合约ABI无效，请检查ABI"
     },
     "202099": {
         en: "Abi Id cannot be empty",
-        zh: "此ID的ABI信息不存在"
+        zh: "此ID的ABI信息为空"
     },
     "202100": {
-        en: "ABI info of this id not exists",
-        zh: "Abi Id不能为空"
+        en: "contractAddress is null",
+        zh: "合约地址为空"
     },
     "202110": {
         en: "User's signUserId not exist",
         zh: "用户的signUserId不存在"
+    },
+    "202111": {
+        en: "Fail to parse json",
+        zh: "解析json错误"
     },
 
     "202121": {
@@ -1122,7 +1126,7 @@ let errCode = {
     },
     "202459":{
         "en":"Init host with shell script error.",
-        "zh":"只是主机初始化脚本失败"
+        "zh":"通过脚本初始化主机失败"
     },
     "202460":{
         "en":"Sync files error.",
