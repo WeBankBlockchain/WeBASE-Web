@@ -259,6 +259,7 @@ export default {
                         type: "error",
                         message: this.$t('account.emailTypeError')
                     });
+                    this.loading = false;
                     return
                 } else {
                     reqData.email = this.accountForm.email

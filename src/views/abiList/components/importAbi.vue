@@ -96,7 +96,7 @@ export default {
     created() {
     },
 
-    mounted() {
+    mounted() {      
     },
 
     methods: {
@@ -116,7 +116,8 @@ export default {
                 contractName: this.abiForm.contractName,
                 contractAddress: this.abiForm.contractAddress,
                 contractAbi: JSON.parse(this.abiForm.contractAbi),
-                groupId: localStorage.getItem('groupId')
+                groupId: localStorage.getItem('groupId'),
+                account: localStorage.getItem('user')
             }
             importAbi(data)
                 .then(res => {

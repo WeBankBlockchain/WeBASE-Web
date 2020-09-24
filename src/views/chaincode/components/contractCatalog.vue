@@ -405,10 +405,11 @@ export default {
                     };
                 }
             }
-            this.$refs.file.value = "";
+            this.$refs.file.value = null;
             this.catalogClose();
         },
         catalogClose: function () {
+            this.$refs.file.value = null;
             this.cataLogShow = false
         },
         folderClose: function () {
