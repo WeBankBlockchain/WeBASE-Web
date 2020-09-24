@@ -190,8 +190,6 @@ export default {
             localStorage.setItem("sidebarHide", false);
             this.changeRouter();
         });
-        console.log(this.$store.state.version)
-        // console.log(versionfunegt(this.$store.state.version, '2.5.0'), 1111)
     },
     methods: {
         changeRouter: function () {
@@ -281,7 +279,6 @@ export default {
                         })
                     }
                 }
-                console.log(list)
                 // list.forEach(item => {
                 //     if (item.name === "帐号管理") {
                 //         item.menuShow = false;

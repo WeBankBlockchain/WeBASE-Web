@@ -1046,6 +1046,7 @@ export function getAbiList(data, list) {
     return get({
         url: `${url.ORG_LIST}/abi/list/${params.str}`,
         method: 'GET',
+        params: list,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

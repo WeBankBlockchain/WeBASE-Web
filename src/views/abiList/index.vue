@@ -168,7 +168,9 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             },
-                reqQuery = {};
+                reqQuery = {
+                    account: ""
+                };
             getAbiList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
