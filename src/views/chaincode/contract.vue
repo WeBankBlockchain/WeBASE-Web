@@ -127,14 +127,7 @@ export default {
         initSolc() {
             var head = document.head;
             var script = document.createElement("script");
-            
-            // if (localStorage.getItem("encryptionId") == 0) {
-            //     script.src = "./static/js/soljson-v0.4.25+commit.59dbf8f1.js";
-            // } else {
-            //     script.src = "./static/js/soljson-v0.4.25-gm.js";
-            // }
             script.src = `${this.baseURLWasm}/${this.version}.js`;
-            script.setAttribute('id', 'soljson');
             script.setAttribute('id', 'soljson');
             if (!document.getElementById('soljson')) {
                 head.append(script)
@@ -280,14 +273,9 @@ export default {
 }
 .version-selector {
     position: absolute;
-    /* width: 100%; */
     top: 1px;
     right: 5px;
-    /* padding: 5px 0; */
-    /* border-top: 1px solid #e8e8e8; */
-    /* border-right: 2px solid #e8e8e8; */
-    /* background-color: #fff; */
-    z-index: 999999;
+    z-index: 1;
     box-sizing: border-box;
 }
 .version-selector >>> .el-select {
