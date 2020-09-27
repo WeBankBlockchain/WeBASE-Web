@@ -172,7 +172,7 @@
                                 </span>
                             </span>
                             <span v-else-if="head.enName=='newValue'">
-                                <span v-if="scope.row[head.enName]">
+                                <span v-if="scope.row['detail']">
                                     {{changValueZh(scope.row['detail'])}}
                                 </span>
                                 <span v-else>
@@ -823,6 +823,7 @@ export default {
             return name
         },
         changValueZh(val) {
+            console.log('==================:', val)
             if (!val) return
             return val
         },
