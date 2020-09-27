@@ -1323,7 +1323,7 @@ let errCode = {
     },
     "-52004": {
         en: "OPERATOR_CANNOT_BE_COMMITTEE_MEMBER",
-        zh: "操作员不能是委员会成员"
+        zh: "运维员不能是委员会成员"
     },
     "-52005": {
         en: "COMMITTEE_MEMBER_CANNOT_BE_OPERATOR",
@@ -1331,11 +1331,11 @@ let errCode = {
     },
     "-52006": {
         en: "OPERATOR_EXIST",
-        zh: "操作员已存在"
+        zh: "运维员已存在"
     },
     "-52007": {
         en: "OPERATOR_NOT_EXIST",
-        zh: "无效操作员"
+        zh: "无效运维员"
     },
     "-52008": {
         en: "ACCOUNT_NOT_EXIST",

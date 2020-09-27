@@ -35,7 +35,7 @@
                     <div v-if="!showDecode" class="transation-data" style="width: 500px">
                         <div class="input-label">
                             <span class="label">function:</span>
-                            <span>{{funcData + "(" + abiType + ")"}}</span>
+                            <span>{{funcData + "(" + abiType + outputType +")"}}</span>
                         </div>
                         <div class="input-label">
                             <span class="label">data:</span>
@@ -145,7 +145,8 @@
                             </div>
                             <div>}</div>
                         </div>
-                        ]</span>
+                        ]
+                    </span>
                 </div>
             </div>
             <div>}</div>
@@ -176,7 +177,8 @@ export default {
             buttonTitle: this.$t('transaction.decode'),
             typesArray: this.input,
             inputButtonShow: true,
-            editorHeight: ''
+            editorHeight: '',
+            outputType: null
         }
     },
     mounted: function () {
@@ -225,10 +227,28 @@ export default {
                                 this.inputData[index].name = this.editorOutput[index].name;
                                 this.inputData[index].type = this.editorOutput[index].type;
                                 this.inputData[index].data = this.decodeData[index];
-                                
+
                             }
                         }
                     }
+                    let outputType = []
+                    this.editorOutput.forEach((val, index) => {
+                        if (val && val.type && val.name) {
+                            outputType[index] = val.type + " " + val.name;
+                        } else if (val && val.name) {
+                            outputType[index] = val.name;
+                        } else if (val && val.type) {
+                            outputType[index] = val.type;
+                        } else if (val) {
+                            outputType[index] = val;
+                        }
+                    });
+                    this.outputType = " returns "
+                    for (let i = 0; i < outputType.length; i++) {
+                        this.outputType = this.outputType + outputType[i]
+                    }
+                } else {
+                    this.outputType = ""
                 }
                 this.showDecode = false;
                 this.buttonTitle = this.$t('transaction.reduction');
