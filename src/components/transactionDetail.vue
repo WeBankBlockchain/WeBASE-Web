@@ -218,6 +218,10 @@
                                 </div>
                             </div>
                         </template>
+                        <template v-else-if="item == 'status'">
+                            <p class="base-p" :style="{'color': txStatusColor(txInfoReceiptMap[item])}">{{txInfoReceiptMap[item]}}</p>
+                            
+                        </template>
                         <template v-else>
                             <p class="base-p">{{txInfoReceiptMap[item]}}</p>
                         </template>
@@ -782,6 +786,13 @@ export default {
             } else {
                 this.buttonSHow = false;
                 this.showDecode = false;
+            }
+        },
+        txStatusColor(val) {
+            if(val =='0x0'){
+                return '#67C23A'
+            }else {
+                return '#F56C6C'
             }
         }
     }
