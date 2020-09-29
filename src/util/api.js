@@ -1339,7 +1339,17 @@ export function changeThreshold(data) {
         }
     })
 }
-
+//获取链委员权重
+export function getCommitteeWeight(data) {
+    return get({
+        url: `${url.ORG_LIST}/governance/committee/weight`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 //修改委员的权重
 export function putCommitteeWeight(data) {

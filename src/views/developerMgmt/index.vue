@@ -67,11 +67,11 @@ export default {
                     name: this.$t("devOpsMgmt.address"),
                     width: ''
                 },
-                {
-                    enName: 'enable_num',
-                    name: this.$t("devOpsMgmt.enableNum"),
-                    width: ''
-                },
+                // {
+                //     enName: 'enable_num',
+                //     name: this.$t("devOpsMgmt.enableNum"),
+                //     width: ''
+                // },
                 {
                     enName: "operate",
                     name: this.$t("devOpsMgmt.operate"),

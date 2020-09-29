@@ -107,7 +107,7 @@
         <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
     </div>
 </template>
@@ -190,7 +190,8 @@ export default {
             complieAbiTextHeight: false,
             complieBinTextHeight: false,
             mouseHover: false,
-            showCompileText: true
+            showCompileText: true,
+            sendConstant: null
         };
     },
     beforeDestroy: function () {
@@ -377,6 +378,7 @@ export default {
             this.uploadAddress = val
         },
         sendSuccess: function (val) {
+            this.sendConstant = val.constant;
             this.uploadAddress = "";
             this.dialogVisible = false;
             this.editorShow = true;

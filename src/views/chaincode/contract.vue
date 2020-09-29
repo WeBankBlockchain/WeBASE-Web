@@ -84,6 +84,12 @@ export default {
             }
         }
     },
+    beforeCreate(){
+        localStorage.removeItem('solcName')
+        localStorage.removeItem('versionId')
+        console.log('编译', localStorage.getItem('encryptionId'))
+
+    },
     mounted: function() {
         this.allVersion = [
             {
