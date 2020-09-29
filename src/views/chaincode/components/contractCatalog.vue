@@ -16,21 +16,28 @@
 <template>
     <div class="contract-menu" style="position: relative;height: 100% ;">
         <div class="contract-menu-header">
-            <el-tooltip class="item" effect="dark" :content="$t('contracts.createFile')" v-if="!disabled" placement="top-start">
-                <i class="wbs-icon-Addfile icon contract-icon" @click='addFile'></i>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" v-if="!disabled" :content="$t('contracts.createFolder')" placement="top-start">
-                <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
-            </el-tooltip>
-            <el-tooltip class="item" effect="dark" :content="$t('contracts.upLoadFile')" v-if="!disabled" placement="top-start">
-                <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
-                    <input multiple title="" type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
-                </i>
-            </el-tooltip>
-            <el-tooltip effect="dark" :content="$t('contracts.contractTips')" placement="top-start">
-                <i class="el-icon-info contract-icon font-15" style="cursor: default;"></i>
-            </el-tooltip>
+            <div style="padding-left: 20px;">
+                <el-tooltip class="item" effect="dark" :content="$t('contracts.createFile')" v-if="!disabled" placement="top-start">
+                    <i class="wbs-icon-Addfile icon contract-icon" @click='addFile'></i>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" v-if="!disabled" :content="$t('contracts.createFolder')" placement="top-start">
+                    <i class="wbs-icon-Addfolder icon contract-icon" @click='addFolder'></i>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" :content="$t('contracts.upLoadFile')" v-if="!disabled" placement="top-start">
+                    <i class="wbs-icon-shangchuan contract-icon" style="position:relative;">
+                        <input multiple title="" type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
+                    </i>
+                </el-tooltip>
+                <!-- <el-tooltip effect="dark" :content="$t('contracts.contractTips')" placement="top-start">
+                    <i class="el-icon-info contract-icon font-15" style="cursor: default;"></i>
+                </el-tooltip> -->
+                <div>
+                    <slot name="footer"></slot>
+                </div>
+            </div>
+            
         </div>
+       
 
         <div class="contract-menu-content">
             <ul>
@@ -87,6 +94,7 @@ import { getContractList, saveChaincode, deleteCode } from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
 import Clickoutside from 'element-ui/src/utils/clickoutside'
+import { subStringToNumber } from "@/util/util"
 export default {
     name: "contractCatalog",
     components: {
@@ -124,7 +132,7 @@ export default {
         Bus.$off("save")
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true
@@ -397,10 +405,11 @@ export default {
                     };
                 }
             }
-            this.$refs.file.value = "";
+            this.$refs.file.value = null;
             this.catalogClose();
         },
         catalogClose: function () {
+            this.$refs.file.value = null;
             this.cataLogShow = false
         },
         folderClose: function () {
@@ -455,6 +464,7 @@ export default {
                 contractAbi: data.contractAbi,
                 contractBin: data.contractBin,
                 bytecodeBin: data.bytecodeBin,
+                account: localStorage.getItem("user")
             }
             if (data.contractId) {
                 reqData.contractId = data.contractId
@@ -491,6 +501,9 @@ export default {
                 pageNumber: 1,
                 pageSize: 500,
             }
+            if(localStorage.getItem("root") === 'developer'){
+                data.account = localStorage.getItem("user")
+            }
             getContractList(data).then(res => {
                 if (res.data.code == 0) {
                     this.contractList = res.data.data || [];
@@ -502,10 +515,18 @@ export default {
                             this.folderList = []
                         }
                         this.contractList.forEach(value => {
-                            if (value.contractPath != "/") {
+                            if (value.contractPath != "/" && value.contractPath != localStorage.getItem("user")) {
                                 let item = {
                                     folderName: value.contractPath,
-                                    folderId: (new Date()).getTime() + + `${value.contractPath}`,
+                                    folderId: (new Date()).getTime() + `${value.contractPath}`,
+                                    folderActive: false,
+                                    groupId: localStorage.getItem("groupId")
+                                }
+                                this.folderList.push(item)
+                            }else if(value.contractPath == localStorage.getItem("user")){
+                                let item = {
+                                    folderName: value.contractPath,
+                                    folderId: subStringToNumber(localStorage.getItem("user")),
                                     folderActive: false,
                                     groupId: localStorage.getItem("groupId")
                                 }
@@ -733,11 +754,12 @@ export default {
     font-weight: bold;
 }
 .contract-menu-header {
+    /* position: relative; */
     width: calc(100% + 1px);
     height: 48px;
     line-height: 48px;
     border-bottom: 2px solid #e7ebf0;
-    padding-left: 20px;
+    
 }
 .contract-icon {
     vertical-align: middle;
@@ -802,7 +824,8 @@ export default {
 }
 .contract-menu-content {
     overflow: auto;
-    height: calc(100% - 50px);
+    height: calc(100% - 110px);
+    padding-bottom: 60px;
 }
 .contract-menu-content >>> .el-input__inner {
     width: 100px;

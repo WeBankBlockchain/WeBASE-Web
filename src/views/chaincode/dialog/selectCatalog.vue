@@ -38,6 +38,7 @@
     </div>
 </template>
 <script>
+import { subStringToNumber } from "@/util/util"
 export default {
     name: "selectCatalog",
     props: ['show'],
@@ -68,6 +69,38 @@ export default {
                 folderName: "/",
                 folderId: 1,
             }];
+            if(localStorage.getItem("root") === 'developer'){
+                let num = 0;
+                let index = subStringToNumber(localStorage.getItem("user"))
+                let arry = []
+                if(localStorage.getItem("folderList")){
+                    let data = JSON.parse(localStorage.getItem("folderList"))
+                    for(let i = 0; i < data.length; i++){
+                        if(data[i].groupId == localStorage.getItem("groupId")){
+                            arry.push(data[i])
+                        }
+                    }
+                }
+                for (let i = 0; i < arry.length; i++) {
+                    if(arry[i].folderId == index){
+                        num = num + 1
+                    }
+                }
+                if(num > 0){
+                    this.options = []
+                }else{
+                    this.options = [{
+                        folderName: localStorage.getItem("user"),
+                        folderId: subStringToNumber(localStorage.getItem("user")) + localStorage.getItem("groupId"),
+                    }];
+                }
+               
+            }else{
+                this.options = [{
+                    folderName: "/",
+                    folderId: 1,
+                }];
+            }
             if(localStorage.getItem("folderList")){
                 let arry = JSON.parse(localStorage.getItem("folderList"));
                 for(let i = 0; i < arry.length; i++){

@@ -201,6 +201,9 @@ export default {
                 pageSize: 1,
                 pageNumber: 1000
             };
+            // if(localStorage.getItem("root") === 'developer'){
+            //     data.account = localStorage.getItem("user")
+            // }
             getContractList(reqdata, {})
                 .then(res => {
                     if (res.data.code === 0) {

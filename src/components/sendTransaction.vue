@@ -156,7 +156,11 @@ export default {
                 pageNumber: 1,
                 pageSize: 1000
             };
-            getUserList(reqData, {})
+            let query = {}
+            if(localStorage.getItem('root') === 'developer'){
+                query.account = localStorage.getItem("user")
+            }
+            getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
                         res.data.data.forEach(value => {
@@ -245,7 +249,9 @@ export default {
                         if (this.contractAddress && !this.data.contractAddress) {
                             successData.contractAddress = this.contractAddress
                         }
-                        this.$emit("success", successData);
+                        this.$emit("success", Object.assign({},successData,{
+                            constant: this.constant
+                        }) );
                         if (this.constant) {
                             this.$message({
                                 type: "success",

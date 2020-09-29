@@ -138,7 +138,8 @@ export default {
         supportVersion: "兼容版本",
         port5002: "默认5002",
         ip: "主机IP",
-        org: "机构名"
+        org: "机构名",
+        developer: "开发者"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -181,7 +182,11 @@ export default {
         targetNode: "请选择目标节点",
         ipSame: "ip不能相同",
         selectGroup: "请选择群组",
-        selctDockerImageType: "请选择docker镜像拉取方式"
+        selctDockerImageType: "请选择docker镜像拉取方式",
+        fromUserRule: "请选择账号",
+        userRule: "请选择账号",
+        thresholdRule: "请输入阈值",
+        weightRule: "请输入权重",
     },
     head: {
         helpText: "帮助文档",
@@ -231,7 +236,9 @@ export default {
         abiList: 'ABI列表',
         parseAbi: 'ABI编码',
         uploadSolc: '上传不同版本编译器',
-        otherUser: '无用户名的用户或公钥用户为外部管理员账户'
+        otherUser: '无用户名的用户或公钥用户为外部管理员账户',
+        committeeMgmt: '委员会管理',
+        developerMgmt: '运维账号管理',
     },
     home: {
         nodes: "节点个数",
@@ -404,7 +411,14 @@ export default {
         updateAbi: "更新",
         deleteAbi: "删除",
         limit_1: "每次最多只能上传一个文件",
-        txResult: "交易内容"
+        txResult: "交易内容",
+        freeze: '冻结',
+        unfreeze: '解冻',
+        contractStatus: '合约状态',
+        normal: "正常",
+        freezeDes: '链委员和部署的用户才能冻结/解冻',
+        userAddress: '用户地址',
+        status: '状态'
     },
     privateKey: {
         addUser: "新增用户",
@@ -443,7 +457,9 @@ export default {
         password: "密码",
         placeholderPassword: "请输入密码",
         passwordError: "密码不能是汉字",
-        file: "文件"
+        file: "文件",
+        thaw: "解冻",
+        freeze: "冻结"
     },
     system: {
         chainManager: "链管理权限",
@@ -692,5 +708,46 @@ export default {
         frontInfo: '所属前置',
         transactionReceipt: '交易回执',
         transactionInfo: '交易信息',
+    },
+    govCommittee: {
+        addCommittee: '新增委员投票',
+        modifyThreshold: '修改阈值投票',
+        fromUser: '链委员',
+        user: '新委员',
+        address: '账户地址',
+        weight: '权重',
+        weightRatio: '权重比(%)',
+        enableNum: '生效区块高度',
+        modifyWeight: '修改权重投票',
+        deleteCommittee: '撤销委员投票',
+        votingList: '投票记录列表',
+        id: '提议ID',
+        governUserId: '发起账户',
+        modifyUserId: '待修改账户',
+        modifyUserAddress: '待修改地址',
+        newValue: '更改值',
+        voteType: '投票类型',
+        voteStatus: '投票状态',
+        updatetime: '发起时间',
+        threshold: '阈值%',
+        isDelete: '是否确认发起删除投票?',
+        operate: '操作',
+        agree: '同意',
+        refuse: '拒绝',
+        success: '成功',
+        delete: '删除',
+        blockNum: '当前块高',
+        toCommittee:'待修改委员',
+        revokeCommittee: '待撤销委员',
+    },
+    devOpsMgmt: {
+        addDeveloper: '新增运维',
+        deleteDeveloper: '删除',
+        user: '账户',
+        address: '账户地址',
+        enableNum: '生效区块高度',
+        operate: '操作',
+        fromUser: '链委员',
+        devAddress: '运维地址'
     }
 }

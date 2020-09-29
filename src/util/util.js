@@ -334,3 +334,29 @@ export function dataType(type, value) {
 export function substring_0_40(params) {
     return params.substring(0, 40)
 }
+export function versionfunegt(ver1, ver2) {
+    var version1pre = parseFloat(ver1);
+    var version2pre = parseFloat(ver2);
+    var version1next = ver1.replace(version1pre + ".", "");
+    var version2next = ver2.replace(version2pre + ".", "");
+    if (version1pre > version2pre) {
+        return true;
+    } else if (version1pre < version2pre) {
+        return false;
+    } else {
+        if (version1next >= version2next) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+}
+export function subStringToNumber (val) {
+    let array = val.split("")
+    let num = "";
+    for(let i = 0; i < array.length; i++){
+        num = num + array[i].charCodeAt(0)
+    }
+    return parseInt(num)
+}

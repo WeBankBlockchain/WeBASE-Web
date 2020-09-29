@@ -107,7 +107,7 @@
         <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="500px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
     </div>
 </template>
@@ -190,7 +190,8 @@ export default {
             complieAbiTextHeight: false,
             complieBinTextHeight: false,
             mouseHover: false,
-            showCompileText: true
+            showCompileText: true,
+            sendConstant: null
         };
     },
     beforeDestroy: function () {
@@ -201,7 +202,7 @@ export default {
         
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
             this.disabled = false
         } else {
             this.disabled = true
@@ -377,6 +378,7 @@ export default {
             this.uploadAddress = val
         },
         sendSuccess: function (val) {
+            this.sendConstant = val.constant;
             this.uploadAddress = "";
             this.dialogVisible = false;
             this.editorShow = true;
@@ -504,7 +506,7 @@ export default {
                 content: this.content
             };
             try {
-                output = JSON.parse(solc.compileStandard(JSON.stringify(input), this.findImports));
+                output = JSON.parse(solc.compile(JSON.stringify(input), { import: this.findImports }));
             } catch (error) {
                 this.errorInfo = error;
                 this.errorMessage = error;
@@ -667,7 +669,8 @@ export default {
                 user: val.userId,
                 contractName: this.contractName,
                 contractId: this.data.contractId,
-                contractPath: this.data.contractPath
+                contractPath: this.data.contractPath,
+                account: localStorage.getItem("user")
             };
             this.version = val.version
             if (val.params.length) {

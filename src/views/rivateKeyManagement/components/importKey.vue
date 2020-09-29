@@ -182,6 +182,7 @@ export default {
                 userName: this.keyForm.fileName,
                 groupId: localStorage.getItem("groupId"),
                 description: this.keyForm.description,
+                account: localStorage.getItem("user")
             };
             queryImportPrivateKey(reqQuery)
                 .then(res => {
@@ -213,6 +214,7 @@ export default {
                 userName: this.keyForm.fileName,
                 groupId: localStorage.getItem("groupId"),
                 description: this.keyForm.description,
+                account: localStorage.getItem("user")
             };
             ImportPemPrivateKey(reqQuery)
                 .then(res => {
@@ -247,6 +249,7 @@ export default {
             form.append('p12Password', this.keyForm.password)
             form.append('groupId', localStorage.getItem("groupId"))
             form.append('description', this.keyForm.description)
+            form.append('account', localStorage.getItem("user"))
             ImportP12PrivateKey(form)
                 .then(res => {
                     const { data, status } = res;

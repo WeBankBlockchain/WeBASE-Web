@@ -26,6 +26,14 @@ let errCode = {
         en: "system exception",
         zh: '系统异常'
     },
+    "102001": {
+        en: "system exception: please check front",
+        zh: "系统错误，请检查front"
+    },
+    "102002": {
+        en: "No group belongs to this groupId(node not belongs to this group)",
+        zh: "没有群组属于这个群组id（节点不属于这个群组）"
+    },
     "101003": {
         en: "web3j instance of current group is null",
         zh: '当前群组的web3j为空'
@@ -117,7 +125,7 @@ let errCode = {
     },
     "201021": {
         en: "transaction send to chain failed",
-        zh: '事务发送到链失败'
+        zh: '交易上链超时'
     },
     "201022": {
         en: "node request failed",
@@ -475,6 +483,18 @@ let errCode = {
         en: "Contract abi invalid, please check abi",
         zh: '合约ABI校验错误，请检查ABI参数格式'
     },
+    "201301": {
+        en: "threshold must be greater than zero",
+        zh: '阈值必须大于零'
+    },
+    "201302": {
+        en: "committee weight must be greater than zero",
+        zh: '权重必须大于零'
+    },
+    "201303": {
+        en: "chain governance address cannot be blank",
+        zh: '链治理地址不能为空'
+    },
     "202000": {
         en: "invalid front info",
         zh: '无效的节点id'
@@ -766,7 +786,7 @@ let errCode = {
     },
     "202096": {
         en: "Contract address already exists",
-        zh: "合同地址已存在"
+        zh: "合约地址已存在"
     },
     "202097": {
         en: "Abi info of this id not exists",
@@ -774,20 +794,50 @@ let errCode = {
     },
     "202098": {
         en: "Contract abi invalid, please check abi",
-        zh: "合同ABI无效，请检查ABI"
+        zh: "合约ABI无效，请检查ABI"
     },
     "202099": {
         en: "Abi Id cannot be empty",
-        zh: "此ID的ABI信息不存在"
+        zh: "此ID的ABI信息为空"
     },
     "202100": {
-        en: "ABI info of this id not exists",
-        zh: "Abi Id不能为空"
+        en: "contractAddress is null",
+        zh: "合约地址为空"
     },
     "202110": {
         en: "User's signUserId not exist",
         zh: "用户的signUserId不存在"
     },
+    "202111": {
+        en: "Fail to parse json",
+        zh: "解析json错误"
+    },
+
+    "202121": {
+        en: "Cert file not found, please check cert path in config",
+        zh: "找不到证书文件，请检查配置中的证书路径"
+    },
+    "202122": {
+        en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
+        zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY-----"
+    },
+    "202123": {
+        en: "Pem file content error",
+        zh: "Pem文件内容错误"
+    },
+    "202124": {
+        en: "p12's password cannot be chinese",
+        zh: "P12的密码不能为中文"
+    },
+    "202125": {
+        en: "p12's password not match",
+        zh: "P12的密码错误"
+    },
+    "202126": {
+        en: "p12 file content error",
+        zh: "P12文件内容错误"
+    },
+
     "201232": {
         en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
         zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY----- "
@@ -804,6 +854,14 @@ let errCode = {
     "202301": {
         en: "Node's front not exists",
         zh: "节点前置不存在"
+    },
+    "202310": {
+        en: "govern vote record not exist",
+        zh: "投票记录不存在"
+    },
+    "202311": {
+        en: "permission denied on chain",
+        zh: "链上权限被禁止"
     },
     "203003": {
         en: "Param exception",
@@ -834,275 +892,275 @@ let errCode = {
         zh: "编码的数据字符串必须是十六进制字符串"
     },
 
-    "205001": {
+    "202401": {
         "en":"No configured of docker registry url.",
         "zh":"没有配置 Docker 镜像更新 URL 地址"
     },
-    "205002": {
+    "202402": {
         "en":"Fetch image tag from docker registry error.",
         "zh":"从 Docker 源更新镜像版本失败"
     },
-    "205003": {
+    "202403": {
         "en":"Fetch Docker image tag list error, unknown config type.",
         "zh":"查询 Docker 镜像版本失败（未知类型）"
     },
-    "205004": {
+    "202404": {
         "en":"Save chain's configuration to file error.",
         "zh":"保存链配置信息文件失败"
     },
-    "205005": {
+    "202405": {
         "en":"Docker image tag invalid.",
         "zh":"错误的镜像版本"
     },
-    "205006": {
+    "202406": {
         "en":"Configuration of host is empty.",
         "zh":"主机配置参数为空"
     },
-    "205007": {
+    "202407": {
         "en":"Chain exists, deploy failed.",
         "zh":"链已存在，部署失败"
     },
-    "205008": {
+    "202408": {
         "en":"Save chain data to DB error.",
         "zh":"插入链信息到数据库失败"
     },
-    "205009": {
+    "202409": {
         "en":"Generate host, agency, group configuration error.",
         "zh":"生成主机，机构，群组配置信息文件失败"
     },
-    "205010": {
+    "202410": {
         "en":"Execute build_chain.sh script error.",
         "zh":"执行 build_chain.sh 链生成脚本失败"
     },
-    "205011": {
+    "202411": {
         "en":"Host, agency, group configuration error.",
         "zh":"主机，机构，群组配置信息错误"
     },
-    "205012": {
+    "202412": {
         "en":"Host ip and num error.",
         "zh":"主机 IP，节点数量配置错误"
     },
-    "205013": {
+    "202413": {
         "en":"Agency name invalid, only [a-zA-Z0-9_] is valid.",
         "zh":"机构名称格式错误，只能包含大小写字母，数字，下划线"
     },
-    "205014": {
+    "202414": {
         "en":"Group id error, only positive integer is valid.",
         "zh":"群组编号格式错误，必须为正整数"
     },
-    "205015": {
+    "202415": {
         "en":"Login to host /ip/ through SSH error. Please check SSH configuration.",
         "zh":"SSH登录主机/ip/失败，请检查 SSH 配置"
     },
-    "205016": {
+    "202416": {
         "en":"Save agency data into DB error.",
         "zh":"插入新机构信息到数据库失败"
     },
-    "205017": {
+    "202417": {
         "en":"Save group data into DB error.",
         "zh":"插入新群组信息到数据库失败"
     },
-    "205018": {
+    "202418": {
         "en":"Save host data into DB error.",
         "zh":"插入主机信息到数据库失败"
     },
-    "205019": {
+    "202419": {
         "en":"Save front data into DB error.",
         "zh":"插入前置信息到数据库失败"
     },
-    "205020": {
+    "202420": {
         "en":"Save node data into DB error.",
         "zh":"插入节点信息到数据库失败"
     },
-    "205021": {
+    "202421": {
         "en":"Save node and front mapping data into DB error.",
         "zh":"插入前置和群组映射关系到数据库失败"
     },
-    "205022": {
+    "202422": {
         "en":"Parse node index from directory error.",
         "zh":"从目录获取节点序号失败"
     },
-    "205023": {
+    "202423": {
         "en":"A single host IP only belongs to one agency.",
         "zh":"一个 IP 主机，只能属于一个机构"
     },
-    "205024": {
+    "202424": {
         "en":"Unknown error during deploying.",
         "zh":"部署时发生未知错误"
     },
-    "205025": {
+    "202425": {
         "en":"SSH login through username and password is unsupported yet.",
         "zh":"不支持使用 SSH 密码登录主机"
     },
-    "205026": {
+    "202426": {
         "en":"Chain has no agency.",
         "zh":"当前链没有所属机构"
     },
-    "205027":{
+    "202427":{
         "en":"No deployed chain,",
         "zh":"链不存在"
     },
-    "205028":{
+    "202428":{
         "en":"IP format error.",
         "zh":"IP 格式错误"
     },
-    "205029":{
+    "202429":{
         "en":"Agency name cannot be blank when IP is new.",
         "zh":"主机 IP 是新 IP 时，机构名称不能为空"
     },
-    "205030":{
+    "202430":{
         "en":"Agency name already exists.",
         "zh":"存在同名机构"
     },
-    "205031":{
+    "202431":{
         "en":"Add new node error.",
         "zh":"新增节点错误"
     },
-    "205032":{
+    "202432":{
         "en":"No valid chain certification.",
         "zh":"链证书无效"
     },
-    "205033":{
+    "202433":{
         "en":"Generate agency private key and crt file error.",
         "zh":"生成机构私钥和证书失败"
     },
-    "205034":{
+    "202434":{
         "en":"Host without agency error.",
         "zh":"主机所属机构为空"
     },
-    "205035":{
+    "202435":{
         "en":"Node num should be positive integer, and less then 10.",
         "zh":"主机数量格式错误，正整数，并且小于 10"
     },
-    "205036":{
+    "202436":{
         "en":"Generate sdk ",
         "zh":"生成主机 SDK 私钥和证书失败"
     },
-    "205037":{
+    "202437":{
         "en":"Generate node private key and crt files error.",
         "zh":"生成新节点私钥和证书失败"
     },
-    "205038":{
+    "202438":{
         "en":"Copy SDK files error.",
         "zh":"拷贝 SDK 证书和私钥失败"
     },
-    "205039":{
+    "202439":{
         "en":"Upload SDK files error.",
         "zh":"上传 SDK 证书和私钥失败"
     },
-    "205040":{
+    "202440":{
         "en":"Upload node config files error.",
         "zh":"上传节点证书和私钥失败"
     },
-    "205041":{
+    "202441":{
         "en":"Copy group config files from original node error.",
         "zh":"从旧节点复制群组配置文件失败"
     },
-    "205042":{
+    "202442":{
         "en":"Delete tmp directory of agency error.",
         "zh":"删除机构临时目录失败"
     },
-    "205043":{
+    "202443":{
         "en":"Delete tmp directory of SDK error.",
         "zh":"删除 SDK 临时目录失败"
     },
-    "205044":{
+    "202444":{
         "en":"Delete tmp directory of node error.",
         "zh":"删除节点临时目录失败"
     },
-    "205045":{
+    "202445":{
         "en":"Unknown nodeid.",
         "zh":"未知节点编号（nodeid）"
     },
-    "205046":{
+    "202446":{
         "en":"Stop node error.",
         "zh":"停止节点失败（停止容器）"
     },
-    "205047":{
+    "202447":{
         "en":"Start node error.",
         "zh":"启动节点失败（启动容器）"
     },
-    "205048":{
+    "202448":{
         "en":"Both new image tag and old are the same.",
         "zh":"链升级的新版本和链的现有版本相同"
     },
-    "205049":{
+    "202449":{
         "en":"Upgrade chain to new image tag error.",
         "zh":"链升级失败"
     },
-    "205050":{
+    "202450":{
         "en":"Delete node failed, node is still in group.",
         "zh":"节点仍属于群组，删除失败"
     },
-    "205051":{
+    "202451":{
         "en":"Parse node's config files error.",
         "zh":"读取节点配置文件失败"
     },
-    "205052":{
+    "202452":{
         "en":"Delete node's config error.",
         "zh":"删除节点配置文件失败"
     },
-    "205053":{
+    "202453":{
         "en":"Stop node before deleting.",
         "zh":"节点正在运行，删除失败，请先停止节点"
     },
-    "205054":{
+    "202454":{
         "en":"Update p2p part of related nodes error.",
         "zh":"更新关联节点 P2P 配置失败"
     },
-    "205055":{
+    "202455":{
         "en":"Delete chain error.",
         "zh":"删除链失败"
     },
-    "205056":{
+    "202456":{
         "en":"Node is still a sealer or observer, delete failed.",
         "zh":"节点处于观察或共识状态，删除失败"
     },
-    "205057":{
+    "202457":{
         "en":"Fetch node list from host's configuration files.",
         "zh":"从主机配置文件获取节点列表失败"
     },
-    "205058":{
+    "202458":{
         "en":"Generate application.yml for front error.",
         "zh":"生成前置 application.yml 配置文件失败"
     },
-    "205059":{
+    "202459":{
         "en":"Init host with shell script error.",
-        "zh":"只是主机初始化脚本失败"
+        "zh":"通过脚本初始化主机失败"
     },
-    "205060":{
+    "202460":{
         "en":"Sync files error.",
         "zh":"传输文件失败"
     },
-    "205061":{
+    "202461":{
         "en":"Control container through Docker api error.",
         "zh":"Docker 容器操作失败"
     },
-    "205062": {
+    "202462": {
         "en": "Two nodes at least.",
         "zh": "至少两个节点。"
     },
-    "205063": {
+    "202463": {
         "en": "Group need two sealers at least.",
         "zh": "群组至少需要两个共识节点。"
     },
-    "205064": {
+    "202464": {
         "en": "WebaseSignAddess configuration error in Application.yml",
         "zh": "application.yml中的webaseSignAddess配置错误"
     },
-    "205065": {
+    "202465": {
         "en": "Error getting docker image mode",
         "zh": "获取镜像方式错误"
     },
-    "205066": {
+    "202466": {
         "en": "Please pull the Docker image manually in host /ip/",
         "zh": "主机/ip/请手动拉取 Docker 镜像"
     },
-    "205067": {
+    "202467": {
         "en": "Max 4 nodes on a single host",
         "zh": "单个主机最多部署 4 个节点"
     },
-    "205068": {
+    "202468": {
         "en": "Cannot install node on WeBASE-Node-Manager host.",
         "zh": "无法在WeBASE-Node-Manager主机上安装节点。"
     },
@@ -1222,6 +1280,82 @@ let errCode = {
     "-51503": {
         en: "Please provide field 'in field list",
         zh: "请在字段列表中提供字段。"
+    },
+    "-51900": {
+        en: "contract frozen",
+        zh: "合约冻结"
+    },
+    "-51901": {
+        en: "contract available",
+        zh: "合约为空"
+    },
+    "-51902": {
+        en: "CONTRACT_REPEAT_AUTHORIZATIO",
+        zh: "重复权限"
+    },
+    "-51903": {
+        en: "INVALID_CONTRACT_ADDRESS",
+        zh: "无效的合约地址"
+    },
+    "-51904": {
+        en: "TABLE_NOT_EXIST",
+        zh: "表不存在"
+    },
+    "-51905": {
+        en: "NO_AUTHORIZED",
+        zh: "链上没有权限"
+    },
+    "-52000": {
+        en: "COMMITTEE_MEMBER_EXIST",
+        zh: "链委员已存在"
+    },
+    "-52001": {
+        en: "COMMITTEE_MEMBER_NOT_EXIST",
+        zh: "该链委员不存在"
+    },
+    "-52002": {
+        en: "INVALID_REQUEST_PERMISSION_DENIED",
+        zh: "无效的请求，链上权限拒绝"
+    },
+    "-52003": {
+        en: "INVALID_THRESHOLD",
+        zh: "无效阈值"
+    },
+    "-52004": {
+        en: "OPERATOR_CANNOT_BE_COMMITTEE_MEMBER",
+        zh: "运维不能同时成为链委员"
+    },
+    "-52005": {
+        en: "COMMITTEE_MEMBER_CANNOT_BE_OPERATOR",
+        zh: "链委员不能同时成为运维"
+    },
+    "-52006": {
+        en: "OPERATOR_EXIST",
+        zh: "运维员已存在"
+    },
+    "-52007": {
+        en: "OPERATOR_NOT_EXIST",
+        zh: "无效运维员"
+    },
+    "-52008": {
+        en: "ACCOUNT_NOT_EXIST",
+        zh: "无效账户"
+    },
+    "-52009": {
+        en: "INVALID_ACCOUNT_ADDRESS",
+        zh: "无效账户地址"
+    },
+    "-52010": {
+        en: "ACCOUNT_ALREADY_AVAILABLE",
+        zh: "账户已经在用"
+    },
+    "-52011": {
+        en: "ACCOUNT_FROZEN",
+        zh: "账户冻结"
+    },
+    "-52012": {
+        en: "CURRENT_VALUE_IS_EXPECTED_VALUE",
+        zh: "当前值是预期值"
     },
     
     "422": {

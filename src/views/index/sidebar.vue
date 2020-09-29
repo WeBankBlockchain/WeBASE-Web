@@ -16,7 +16,6 @@
 <template>
     <div style="height: 100%;position: relative;box-sizing: border-box;">
         <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
-            <div style="height: calc(100% - 126px);box-sizing: border-box;overflow-y: auto;overflow-x:hidden">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
@@ -53,26 +52,13 @@
             </div>
             
         </div>
-        <div class="sidebar-version" v-if="menuShowC">
-                <div class="sidebar-version-item">
-                    <span>{{$t("text.chainVersion")}}: </span>
-                    <span>{{$store.state.version}}</span>
-                </div>
-                <div class="sidebar-version-item">
-                    <span>{{$t('text.supportVersion')}}: </span>
-                    <span>{{$store.state.supportVersion}}</span>
-                </div>
-                <div class="sidebar-version-item">
-                    <span>{{$t("text.webaseVersion")}}: </span>
-                    <span>{{$store.state.mgrVersion}}</span>
-                </div>
-            </div>
     </div>
 </template>
 
 <script>
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
+import { versionfunegt } from "@/util/util.js";
 export default {
     name: "sidebar",
     props: ["minMenu"],
@@ -82,7 +68,8 @@ export default {
             activeIndex: 0,
             activeRoute: "",
             userRole: localStorage.getItem("root"),
-            routesList: []
+            routesList: [],
+            versionfunegt: versionfunegt
         };
     },
     computed: {
@@ -178,6 +165,12 @@ export default {
                             case 'contractEvent':
                                 it.name = this.$t('title.contractEvent')
                                 break;
+                            case 'newPermission':
+                                it.name = this.$t('title.permission')
+                                break;
+                            // case 'developerMgmt':
+                            //     it.name = this.$t('title.developerMgmt')
+                            //     break;
                         }
                     })
                 }
@@ -201,11 +194,7 @@ export default {
     methods: {
         changeRouter: function () {
             let list = this.$router.options.routes;
-            list.forEach(item => {
-                if (item.name === "帐号管理") {
-                    item.menuShow = false;
-                }
-            });
+            
             list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
@@ -215,13 +204,115 @@ export default {
                         item.children.forEach(it => {
                             if(it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")){
                                 it.menuShow = false;
+                            }else if(it.nameKey == 'newPermission'){
+                                it.menuShow = true;
                             }else{
                                 it.menuShow = true;
+                            }
+                            if(it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")){
+                                it.menuShow = false;
                             }
                         })
                     }
                 }
             });
+            if(localStorage.getItem("root") === "developer"){
+                list.forEach(item => {
+                    item.menuShow = false;
+                    if (item.nameKey === 'contractTitle') {
+                        item.menuShow = true;
+                    }
+                    if (item.nameKey === 'dataOverview') {
+                        item.menuShow = true;
+                    }
+                    if (item.nameKey === 'PrivateKey') {
+                        item.menuShow = true;
+                    }
+                    if (item.children) {
+                        item.children.forEach((it) => {
+                            it.menuShow = false;
+                            if(it.nameKey == 'permission' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'blockTitle' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'transactionInfo' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'contractIDE' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'contractList' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'abiList' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'parseAbi' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'CNSmanager' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'CRUDServiceManagement' ){
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'PrivateKey' ){
+                                it.menuShow = true;
+                            }
+                        })
+                    }
+                });
+            }else{
+                for(let i = 0; i < list.length; i++) {
+                    if(list[i].name == '帐号管理'){
+                        list[i].menuShow =false
+                    }else if(list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' ){
+                        list[i].menuShow = false;
+                    }else{
+                        list[i].menuShow = true;
+                    }
+                    if(list[i].children){
+                        list[i].children.forEach(it => {
+                            it.menuShow = true;
+                        })
+                    }
+                }
+                // list.forEach(item => {
+                //     if (item.name === "帐号管理") {
+                //         item.menuShow = false;
+                //     }else if(item.path !='/' && item.path != '/login'){
+                //         item.menuShow = true;
+                //     }
+                //     if(item.children){
+                //         item.children.forEach(it => {
+                //             it.menuShow = true;
+                //         })
+                //     }
+                // });
+                list.forEach(item => {
+                if (this.userRole === "admin" && item.name === "帐号管理") {
+                    item.menuShow = true;
+                }
+                if(item.nameKey == 'systemManager'){
+                    if(item.children){
+                        item.children.forEach(it => {
+                            if(it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")){
+                                it.menuShow = false;
+                            }else if(it.nameKey == 'newPermission'){
+                                it.menuShow = true;
+                            }else{
+                                it.menuShow = true;
+                            }
+                            if(it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")){
+                                it.menuShow = false;
+                            }
+                        })
+                    }
+                }
+            });
+            }
             this.routesList = list;
         },
         select: function (index, indexPath) {

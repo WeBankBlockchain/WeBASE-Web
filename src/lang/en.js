@@ -138,7 +138,8 @@ export default {
         supportVersion: "Support Version",
         port5002: "The default is 5002",
         ip: "Host IP",
-        org: "Agency name"
+        org: "Agency name",
+        developer: "Developer"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -181,7 +182,10 @@ export default {
         targetNode: "Please enter target node",
         ipSame: "You can't have the same IP",
         selectGroup: "Please select Groups",
-        selctDockerImageType: "Select the docker image pull mode"
+        selctDockerImageType: "Select the docker image pull mode",
+        userRule: "Please enter user",
+        thresholdRule: "Please enter threshold",
+        weightRule: "Please enter weight",
     },
     head: {
         helpText: "Document",
@@ -231,7 +235,9 @@ export default {
         abiList: 'ABI List',
         parseAbi: 'ABI Encode',
         uploadSolc: 'Upload different versions of compiler',
-        otherUser: 'Users without user name or public key users are external administrator accounts'
+        otherUser: 'Users without user name or public key users are external administrator accounts',
+        committeeMgmt: 'Committee Mgmt',
+        developerMgmt: 'Developer Mgmt',
     },
     home: {
         nodes: "Nodes",
@@ -404,7 +410,14 @@ export default {
         updateAbi: "Update",
         deleteAbi: "Delete",
         limit_1: "Only one file can be uploaded at a time",
-        txResult: "Trading content"
+        txResult: "Trading content",
+        freeze: 'Freeze',
+        unfreeze: 'Unfreeze',
+        contractStatus: 'Contract Status',
+        normal: "Normal",
+        freezeDes: 'members of the chain and deployment of user to freeze / thaw',
+        userAddress: 'User Address',
+        status: 'Status'
     },
     privateKey: {
         addUser: "Add Users",
@@ -443,7 +456,9 @@ export default {
         password: "Password",
         placeholderPassword: "Please enter password",
         passwordError: "Password cannot be Chinese",
-        file: "File"
+        file: "File",
+        thaw: "Thaw",
+        freeze: "Freeze"
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -691,5 +706,44 @@ export default {
         frontInfo: 'Front Info',
         transactionReceipt: 'Transaction Receipt',
         transactionInfo: 'Transaction Info',
+    },
+    govCommittee: {
+        addCommittee: 'Grant Committee Vote',
+        modifyThreshold: 'Modify Threshold Vote',
+        fromUser: 'Chain Committee',
+        user: 'New Committee',
+        address: 'Address',
+        weight: 'Weight',
+        weightRatio: 'Weight Ratio(%)',
+        enableNum: 'Enable Num',
+        modifyWeight: 'Modify Weight Vote',
+        deleteCommittee: 'Revoke Committee Vote',
+        votingList: 'Voting Record List',
+        id: 'ID',
+        governUserId: 'Govern User',
+        modifyUserId: 'Modify User',
+        modifyUserAddress: 'Modify Address',
+        newValue: 'New Value',
+        voteType: 'Vote Type',
+        voteStatus: 'Vote Status',
+        updatetime: 'Update Time',
+        threshold: 'Threshold%',
+        isDelete: 'Are you sure to initiate deletion voting?',
+        operate: 'Operate',
+        success: 'Success',
+        delete: 'Delete',
+        blockNum: 'Block Number',
+        toCommittee: 'To Committee',
+        revokeCommittee: 'Revoke Committee',
+    },
+    devOpsMgmt: {
+        addDeveloper: 'Add Developer',
+        deleteDeveloper: 'Delete',
+        user: 'User',
+        address: 'Address',
+        enableNum: 'Enable Num',
+        operate: 'Operate',
+        fromUser: 'Chain Committee',
+        devAddress: 'Developer Address'
     }
 }
