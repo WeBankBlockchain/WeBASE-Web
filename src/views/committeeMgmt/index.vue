@@ -30,7 +30,7 @@
                 </el-table>
                 <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="410px" v-if="addCommitteeVisible" center>
+                <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="410px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <template v-if="chainCommitteeList.length > 0">
@@ -64,7 +64,7 @@
                         <el-button type="primary" @click="sureAddCommittee">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="410px" v-if="deleteCommitteeVisible" center>
+                <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="410px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -88,7 +88,7 @@
                         <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="410px" v-if="modifyThresholdVisible" center>
+                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="410px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -107,7 +107,7 @@
                         <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="410px" v-if="modifyWeightVisible" center>
+                <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="410px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -118,7 +118,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="address">
-                            <el-select v-model="governForm.address" :placeholder="$t('text.select')">
+                            <el-select v-model="governForm.address" :placeholder="$t('text.select')" @change="changeAddress">
                                 <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
                                     <span>{{item.userName}}</span>
                                     <span class="font-12">{{item.address | splitString}}...</span>
@@ -140,7 +140,8 @@
         <div style="padding: 60px 20px 0 20px;">
             <p>
                 <span style="font-weight: bold">{{this.$t('govCommittee.votingList')}}</span> 
-                <span style="float: right">({{this.$t('govCommittee.blockNum')}}：<span style="color: #e6a23c">{{currentBlock}}</span>)</span></p>
+                <!-- <span style="float: right">({{this.$t('govCommittee.blockNum')}}：<span style="color: #e6a23c">{{currentBlock}}</span>)</span> -->
+            </p>
             <el-table :data="voteList" tooltip-effect="dark" v-loading="loading">
                 <el-table-column v-for="head in voteHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
@@ -210,7 +211,7 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import { addCommittee, getUserList, committeeList, deleteCommittee, putCommitteeWeight, voteRecord, deleteVoteRecord, changeThreshold, getThreshold, getNetworkStatistics } from "@/util/api";
+import { addCommittee, getUserList, committeeList, deleteCommittee, putCommitteeWeight, voteRecord, deleteVoteRecord, changeThreshold, getThreshold, getNetworkStatistics, getCommitteeWeight } from "@/util/api";
 export default {
     name: 'committeeMgmt',
 
@@ -282,6 +283,11 @@ export default {
                     width: ''
                 },
                 {
+                    enName: 'type',
+                    name: this.$t("govCommittee.voteType"),
+                    width: ''
+                },
+                {
                     enName: 'fromAddress',
                     name: this.$t("govCommittee.governUserId"),
                     width: ''
@@ -301,26 +307,21 @@ export default {
                     name: this.$t("govCommittee.newValue"),
                     width: ''
                 },
-                {
-                    enName: 'type',
-                    name: this.$t("govCommittee.voteType"),
-                    width: ''
-                },
-                {
-                    enName: 'timeLimit',
-                    name: this.$t("govCommittee.voteStatus"),
-                    width: ''
-                },
+                // {
+                //     enName: 'timeLimit',
+                //     name: this.$t("govCommittee.voteStatus"),
+                //     width: ''
+                // },
                 {
                     enName: 'createTime',
                     name: this.$t("govCommittee.updatetime"),
                     width: ''
                 },
-                {
-                    enName: "operate",
-                    name: this.$t("govCommittee.operate"),
-                    width: '80'
-                }
+                // {
+                //     enName: "operate",
+                //     name: this.$t("govCommittee.operate"),
+                //     width: '80'
+                // }
             ],
             voteList: [
                 {
@@ -823,7 +824,6 @@ export default {
             return name
         },
         changValueZh(val) {
-            console.log('==================:', val)
             if (!val) return
             return val
         },
@@ -852,6 +852,32 @@ export default {
             }else {
                 return '正常'
             }
+        },
+        changeAddress(val){
+            let reqData = {
+                groupId: localStorage.getItem('groupId'),
+                address: val
+            }
+            getCommitteeWeight(reqData)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        this.$set(this.governForm, 'weight', res.data.data)
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
         }
     }
 }

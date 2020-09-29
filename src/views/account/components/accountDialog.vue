@@ -66,7 +66,7 @@ export default {
                         this.accountForm = {
                             name: "",
                             password: "",
-                            role: 100001,
+                            role: 100000,
                             disabled: false,
                             mDisabled: false,
                             dShow: true,
@@ -196,21 +196,25 @@ export default {
             roleList({}, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
-                        res.data.data.forEach(item => {
+                        let list = res.data.data;
+                        var item = list[2];
+                        list[2] = list[1];
+                        list[1] = item;
+                        list.forEach(item => {
                             switch (item.roleId) {
                                 case 100000:
                                     item.roleNameZh = this.$t('text.Administrator')
                                     break;
-
-                                case 100001:
-                                    item.roleNameZh = this.$t('text.normalUsers')
-                                    break;
                                 case 100002:
                                     item.roleNameZh = this.$t('text.developer')
                                     break;
+                                case 100001:
+                                    item.roleNameZh = this.$t('text.normalUsers')
+                                    break;
+
                             }
                         })
-                        this.roleList = res.data.data;
+                        this.roleList = list;
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -252,7 +256,7 @@ export default {
             // }else{
             //     reqData.accountPwd = sha256(this.accountForm.password);
             // }
-            if(this.accountForm.email){
+            if (this.accountForm.email) {
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if (!pattern.test(this.accountForm.email)) {
                     this.$message({
@@ -304,7 +308,7 @@ export default {
             // }else{
             //     reqData.accountPwd = sha256(this.accountForm.password)
             // }
-            if(this.accountForm.email){
+            if (this.accountForm.email) {
                 let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
                 if (!pattern.test(this.accountForm.email)) {
                     this.$message({

@@ -249,7 +249,9 @@ export default {
                         if (this.contractAddress && !this.data.contractAddress) {
                             successData.contractAddress = this.contractAddress
                         }
-                        this.$emit("success", successData);
+                        this.$emit("success", Object.assign({},successData,{
+                            constant: this.constant
+                        }) );
                         if (this.constant) {
                             this.$message({
                                 type: "success",

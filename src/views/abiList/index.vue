@@ -168,9 +168,13 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             },
+                
                 reqQuery = {
                     account: ""
                 };
+                if(localStorage.getItem("root") === 'developer'){
+                    reqQuery.account = localStorage.getItem('user')
+                }
             getAbiList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
