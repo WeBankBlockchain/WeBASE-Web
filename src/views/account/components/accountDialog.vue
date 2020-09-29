@@ -197,9 +197,9 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         let list = res.data.data;
-                        var item = list[2];
-                        list[2] = list[1];
-                        list[1] = item;
+                        // var item = list[2];
+                        // list[2] = list[1];
+                        // list[1] = item;
                         list.forEach(item => {
                             switch (item.roleId) {
                                 case 100000:
