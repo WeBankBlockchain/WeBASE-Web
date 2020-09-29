@@ -5,8 +5,8 @@
             <div class="">
                 <el-button type="primary" :disabled="disabled" @click="addCommittee">{{this.$t('govCommittee.addCommittee')}}</el-button>
                 <el-button type="primary" :disabled="disabled" @click="deleteCommittee">{{this.$t('govCommittee.deleteCommittee')}}</el-button>
-                <el-button type="primary" :disabled="disabled" @click="modifyThreshold">{{this.$t('govCommittee.modifyThreshold')}}({{currentThreshold}})</el-button>
                 <el-button type="primary" :disabled="disabled" @click="modifyWeight">{{this.$t('govCommittee.modifyWeight')}}</el-button>
+                <el-button type="primary" :disabled="disabled" @click="modifyThreshold">{{this.$t('govCommittee.modifyThreshold')}}({{currentThreshold}})</el-button>
             </div>
             <div>
                 <el-table :data="chainCommitteeList" tooltip-effect="dark" v-loading="loading">
@@ -74,7 +74,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="$t('govCommittee.fromUser')" prop="address">
+                        <el-form-item :label="$t('govCommittee.revokeCommittee')" prop="address">
                             <el-select v-model="governForm.address" :placeholder="$t('text.select')">
                                 <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
                                     <span>{{item.userName}}</span>
@@ -88,25 +88,6 @@
                         <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="410px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
-                    <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
-                        <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
-                            <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
-                                <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
-                                    <span>{{item.userName}}</span>
-                                    <span class="font-12">{{item.address | splitString}}...</span>
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                        <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
-                            <el-input v-model="governForm.threshold" class="form-item-input"></el-input>
-                        </el-form-item>
-                    </el-form>
-                    <div class="text-right sure-btn" style="margin-top:10px">
-                        <el-button @click="closeModifyThreshold">{{this.$t('text.cancel')}}</el-button>
-                        <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>
-                    </div>
-                </el-dialog>
                 <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="410px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
@@ -117,7 +98,7 @@
                                 </el-option>
                             </el-select>
                         </el-form-item>
-                        <el-form-item :label="$t('govCommittee.fromUser')" prop="address">
+                        <el-form-item :label="$t('govCommittee.toCommittee')" prop="address">
                             <el-select v-model="governForm.address" :placeholder="$t('text.select')" @change="changeAddress">
                                 <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
                                     <span>{{item.userName}}</span>
@@ -126,7 +107,7 @@
                             </el-select>
                         </el-form-item>
                         <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-                            <el-input v-model="governForm.weight" class="form-item-input"></el-input>
+                            <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" class="form-item-input"></el-input>
                         </el-form-item>
                     </el-form>
                     <div class="text-right sure-btn" style="margin-top:10px">
@@ -134,12 +115,31 @@
                         <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
+                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="410px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold"> 
+                    <el-form :model="governForm" :rules="rules" ref="governForm" label-width="110px" class="demo-ruleForm">
+                        <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
+                            <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
+                                <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
+                                    <span>{{item.userName}}</span>
+                                    <span class="font-12">{{item.address | splitString}}...</span>
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
+                            <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" class="form-item-input"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <div class="text-right sure-btn" style="margin-top:10px">
+                        <el-button @click="closeModifyThreshold">{{this.$t('text.cancel')}}</el-button>
+                        <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>
+                    </div>
+                </el-dialog>
             </div>
 
         </div>
         <div style="padding: 60px 20px 0 20px;">
             <p>
-                <span style="font-weight: bold">{{this.$t('govCommittee.votingList')}}</span> 
+                <span style="font-weight: bold">{{this.$t('govCommittee.votingList')}}</span>
                 <!-- <span style="float: right">({{this.$t('govCommittee.blockNum')}}：<span style="color: #e6a23c">{{currentBlock}}</span>)</span> -->
             </p>
             <el-table :data="voteList" tooltip-effect="dark" v-loading="loading">
@@ -273,7 +273,7 @@ export default {
             governForm: {
                 fromAddress: '',
                 address: '',
-                threshold: '60',
+                threshold: '',
                 weight: '',
             },
             voteHead: [
@@ -406,7 +406,7 @@ export default {
             this.queryCommitteeList()
             this.queryVoteRecordList()
             this.getUserData()
-            
+
         }
     },
 
@@ -417,7 +417,7 @@ export default {
             this.getUserData()
             this.queryCommitteeList()
             this.queryVoteRecordList()
-            
+
         },
         initGovernForm() {
             this.governForm.fromAddress = ""
@@ -432,7 +432,7 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.currentThreshold = res.data.data
-
+                        this.$set(this.governForm, 'threshold', this.currentThreshold)
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -524,6 +524,7 @@ export default {
         },
         modifyThreshold() {
             this.modifyThresholdVisible = true
+            this.queryGetThreshold()
         },
         sureModifyThreshold() {
             this.$refs['governForm'].validate((valid) => {
@@ -846,14 +847,14 @@ export default {
                 });
             }
         },
-        voteTimeZh(val){
-            if(val < this.currentBlock){
+        voteTimeZh(val) {
+            if (val < this.currentBlock) {
                 return '过期'
-            }else {
+            } else {
                 return '正常'
             }
         },
-        changeAddress(val){
+        changeAddress(val) {
             let reqData = {
                 groupId: localStorage.getItem('groupId'),
                 address: val
@@ -878,7 +879,12 @@ export default {
                     });
 
                 });
-        }
+        },
+        isnumber(val) {
+            val = val.replace(/[^0-9]/gi, "");
+            // 此处还可以限制位数以及大小
+            return val;
+        },
     }
 }
 </script>

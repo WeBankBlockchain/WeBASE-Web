@@ -1303,19 +1303,19 @@ let errCode = {
     },
     "-51905": {
         en: "NO_AUTHORIZED",
-        zh: "没有权限"
+        zh: "链上没有权限"
     },
     "-52000": {
         en: "COMMITTEE_MEMBER_EXIST",
-        zh: "委员会成员存在"
+        zh: "链委员已存在"
     },
     "-52001": {
         en: "COMMITTEE_MEMBER_NOT_EXIST",
-        zh: "委员会成员不存在"
+        zh: "该链委员不存在"
     },
     "-52002": {
         en: "INVALID_REQUEST_PERMISSION_DENIED",
-        zh: "无效的请求，权限拒绝"
+        zh: "无效的请求，链上权限拒绝"
     },
     "-52003": {
         en: "INVALID_THRESHOLD",
@@ -1323,11 +1323,11 @@ let errCode = {
     },
     "-52004": {
         en: "OPERATOR_CANNOT_BE_COMMITTEE_MEMBER",
-        zh: "运维员不能是委员会成员"
+        zh: "运维不能同时成为链委员"
     },
     "-52005": {
         en: "COMMITTEE_MEMBER_CANNOT_BE_OPERATOR",
-        zh: "委员会成员不能操作"
+        zh: "链委员不能同时成为运维"
     },
     "-52006": {
         en: "OPERATOR_EXIST",
