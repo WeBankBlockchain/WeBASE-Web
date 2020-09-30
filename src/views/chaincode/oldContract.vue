@@ -102,7 +102,7 @@
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
-        <el-dialog title="" :visible.sync="freezeThawVisible" width="440px" v-if="freezeThawVisible" center>
+        <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
             <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
         </el-dialog>
     </div>

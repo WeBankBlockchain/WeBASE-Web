@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="120px" class="demo-ruleForm">
+        <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="165px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
                     <el-option v-for="item in committeeAndDeploy" :key="item.address" :label="item.userName" :value="item.address">
