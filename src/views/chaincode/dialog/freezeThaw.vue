@@ -1,9 +1,9 @@
 <template>
     <div>
-        <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="110px" class="demo-ruleForm">
-            <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
+        <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="120px" class="demo-ruleForm">
+            <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
-                    <el-option v-for="item in chainCommitteeList" :key="item.address" :label="item.userName" :value="item.address">
+                    <el-option v-for="item in committeeAndDeploy" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getContractStatus, committeeList,  getUserList} from "@/util/api"
+import { getContractStatus, committeeList, getUserList } from "@/util/api"
 export default {
     name: 'freezeThaw',
 
@@ -35,15 +35,18 @@ export default {
         return {
             loading: false,
             chainCommitteeList: [],
+            adminRivateKeyList: [],
             freezeThawFrom: {
                 fromAddress: '',
             },
             contractAddress: this.contractInfo.contractAddress,
+            deployAddress: this.contractInfo.deployAddress,
+            deployUserName: this.contractInfo.deployUserName,
         }
     },
 
     computed: {
-        rules(){
+        rules() {
             let data = {
                 fromAddress: [
                     {
@@ -54,6 +57,20 @@ export default {
                 ]
             }
             return data
+        },
+        committeeAndDeploy() {
+            var committeeList = [];
+            let privateKeyList = this.adminRivateKeyList
+            committeeList = this.chainCommitteeList
+            privateKeyList.forEach(item => {
+                committeeList.forEach(it => {
+                    if (item.address == it.address) {
+                        it.userName = item.userName
+                    }
+                })
+            })
+
+            return committeeList
         }
     },
 
@@ -64,7 +81,7 @@ export default {
     },
 
     mounted() {
-        // this.queryCommitteeList()
+        this.queryCommitteeList()
         this.getUserData()
     },
 
@@ -82,7 +99,7 @@ export default {
             });
 
         },
-        queryContractStatus(){
+        queryContractStatus() {
             this.loading = true
             let reqData = {
                 groupId: localStorage.getItem('groupId'),
@@ -92,6 +109,7 @@ export default {
             }
             getContractStatus(reqData)
                 .then(res => {
+                    console.log(res.data)
                     this.loading = false
                     if (res.data.code === 0) {
                         this.$message({
@@ -125,8 +143,14 @@ export default {
             committeeList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
-                        let data = res.data.data
-                        this.getUserData(data)
+                        let data = res.data.data;
+                        let deployList = []
+                        deployList.push({
+                            userName: this.deployUserName,
+                            address: this.deployAddress,
+                        })
+                        this.chainCommitteeList = []
+                        this.chainCommitteeList = data.concat(deployList);
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -153,14 +177,8 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         let arr = res.data.data;
-                        // arr.forEach(item => {
-                        //     data.forEach(it=>{
-                        //         if(item.address == it.address){
-                        //             it.userName = item.userName
-                        //         }
-                        //     })
-                        // });
-                        this.chainCommitteeList = arr;
+                        this.adminRivateKeyList = []
+                        this.adminRivateKeyList = arr;
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -182,7 +200,7 @@ export default {
 </script>
 
 <style scoped>
-.contract-address>>>.el-input__inner {
+.contract-address >>> .el-input__inner {
     width: 214px;
 }
 </style>

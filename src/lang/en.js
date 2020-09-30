@@ -735,6 +735,7 @@ export default {
         blockNum: 'Block Number',
         toCommittee: 'To Committee',
         revokeCommittee: 'Revoke Committee',
+        committeeAndDeploy: 'Committee&&Deployer'
     },
     devOpsMgmt: {
         addDeveloper: 'Add Developer',
