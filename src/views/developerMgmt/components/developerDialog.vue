@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form :model="addDevForm" :rules="rules" ref="addDevForm" label-width="110px" class="demo-ruleForm">
+        <el-form :model="addDevForm" :rules="rules" ref="addDevForm" label-width="142px" class="demo-ruleForm">
             <el-form-item :label="$t('devOpsMgmt.fromUser')" prop="fromAddress">
                 <el-select v-model="addDevForm.fromAddress" :placeholder="$t('text.select')">
                     <el-option v-for="item in permissionAdminList" :key="item.address" :label="item.userName" :value="item.address">
