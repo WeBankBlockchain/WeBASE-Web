@@ -739,6 +739,7 @@ export default {
         blockNum: '当前块高',
         toCommittee:'待修改委员',
         revokeCommittee: '待撤销委员',
+        committeeAndDeploy: '链委员和部署者'
     },
     devOpsMgmt: {
         addDeveloper: '新增运维',

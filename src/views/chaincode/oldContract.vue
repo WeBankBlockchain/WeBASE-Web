@@ -113,7 +113,7 @@ import sendTransation from "@/components/sendTransaction";
 import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
 import freezeThaw from "./dialog/freezeThaw"
-import { getContractList, getAllContractStatus, contractHistoryStatus, deleteHandleHistory } from "@/util/api"
+import { getContractList, getAllContractStatus, deleteHandleHistory } from "@/util/api"
 import router from '@/router'
 import errcode from "@/util/errcode";
 export default {
@@ -203,7 +203,6 @@ export default {
         }
         if (localStorage.getItem("groupId")) {
             this.getContracts()
-            // this.queryContractHistoryStatus()
         }
     },
     methods: {
@@ -279,33 +278,6 @@ export default {
                     });
                 })
         },
-        queryContractHistoryStatus() {
-            let reqData = {
-                groupId: localStorage.getItem("groupId"),
-                pageNumber: this.historyCurrentPage,
-                pageSize: this.historyPageSize
-            }
-            contractHistoryStatus(reqData)
-                .then(res => {
-                    if (res.data.code == 0) {
-                        let list = res.data.data
-                        this.contractHistoryList = list
-                        this.historyTotal = res.data.totalCount
-                    } else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                }).catch(err => {
-                    this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
-                })
-        },
         getUserData() {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
@@ -348,7 +320,7 @@ export default {
                                     type: 'success',
                                     message: this.$t('govCommittee.success')
                                 })
-                                this.queryContractHistoryStatus()
+                                
                             } else {
                                 this.$message({
                                     message: this.$chooseLang(res.data.code),
@@ -454,11 +426,11 @@ export default {
         historySizeChange: function (val) {
             this.historyPageSize = val;
             this.historyCurrentPage = 1;
-            this.queryContractHistoryStatus();
+            ;
         },
         historyCurrentChange: function (val) {
             this.historyCurrentPage = val;
-            this.queryContractHistoryStatus();
+            ;
         },
         handleStatusBtn(val) {
             this.freezeThawVisible = true
@@ -473,7 +445,7 @@ export default {
         freezeThawSuccess() {
             this.freezeThawVisible = false
             this.getContracts()
-            this.queryContractHistoryStatus()
+            
         },
         freezeThawClose() {
             this.freezeThawVisible = false

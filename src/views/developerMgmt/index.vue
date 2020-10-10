@@ -22,7 +22,7 @@
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
-            <el-dialog :visible.sync="devOpsVisible" :title="$t('devOpsMgmt.addDeveloper')" width="410px" v-if='devOpsVisible' center>
+            <el-dialog :visible.sync="devOpsVisible" :title="$t('devOpsMgmt.addDeveloper')" width="510px" v-if='devOpsVisible' center>
                 <developer-dialog @close="close" @addSuccess="addSuccess" :handleType="handleType" :devOpsAddress="devOpsAddress"></developer-dialog>
             </el-dialog>
         </div>
