@@ -401,7 +401,9 @@ export default {
         },
 
         findImports: function (path) {
-            this.contractList = this.$store.state.contractDataList
+            this.contractList = JSON.parse(
+                localStorage.getItem("contractList")
+            );
             let arry = path.split("/");
             let newpath = arry[arry.length - 1];
             let num = 0;
@@ -474,84 +476,17 @@ export default {
                 }
             }
         },
-        compile () {
-            let version = this.$store.state.versionData;
-            if(version && version.net !== 0){
-                this.compileHighVersion()
-            }else{
-                this.compileLowVersion()
-            }
-        },
-        compileHighVersion () {
-            let that = this
-            this.loading = true;
-            this.refreshMessage();
-             this.contractList = this.$store.state.contractDataList
-            let content = "";
-            let output;
-            let input = {
-                language: "Solidity",
-                settings: {
-                    outputSelection: {
-                        "*": {
-                            "*": ["*"]
-                        }
-                    }
-                }
-            };
-            input.sources = {};
-            input.sources[this.contractName + ".sol"] = {};
-            let libs = [];
-            input.sources[this.contractName + ".sol"] = {
-                content: this.content
-            };
-            let w = this.$store.state.worker;
-            w.postMessage({
-                cmd: "compile",
-                input: JSON.stringify(input),
-                list: this.$store.state.contractDataList,
-                path: this.data.contractPath
-            });
-            w.addEventListener('message', function (ev) {
-                    if(ev.data.cmd == 'compiled'){
-                        that.loading =false
-                        output = JSON.parse(ev.data.data);
-                        setTimeout(() => {
-                            if (output && JSON.stringify(output.contracts) != "{}") {
-                                that.status = 1;
-                                if (output.contracts[that.contractName + ".sol"]) {
-                                    that.changeOutput(
-                                        output.contracts[that.contractName + ".sol"]
-                                    );
-                                }
-                            } else {
-                                that.errorMessage = output.errors;
-                                that.errorInfo = this.$t("contracts.contractCompileFail");
-                                that.loading = false;
-                            }
-                            console.log(output)
-                        }, 500)
-                    }else{
-                        console.log(ev.data);
-                        console.log(JSON.parse(ev.data.data))
-                    }
-                });
-                w.addEventListener("error", function (ev) {
-                     that.errorInfo = ev;
-                    that.errorMessage = ev;
-                    that.compileShow = true;
-                    that.loading = false;
-                })
-        },
-        compileLowVersion: function () {
-            this.loading = true;
+        compile: function () {
             let wrapper = require("solc/wrapper");
             let solc = wrapper(window.Module);
+            this.loading = true;
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
                 this.compileinfo = this.compileinfo + constant.COMPILE_INFO[i];
             }
-            this.contractList = this.$store.state.contractDataList
+            this.contractList = JSON.parse(
+                localStorage.getItem("contractList")
+            );
             let content = "";
             let output;
             let input = {
