@@ -39,6 +39,7 @@
 </template>
 <script>
 import { subStringToNumber } from "@/util/util"
+import { getContractPathList } from "@/util/api"
 export default {
     name: "selectCatalog",
     props: ['show'],
@@ -57,59 +58,115 @@ export default {
                     }
                 ]
             },
-            dialogVisible: this.show
+            dialogVisible: this.show,
+            pathList: [],
+            folderList: [],
+            userFolader: ""
         }
     },
     mounted: function(){
-        this.changeOptions();
+       if(localStorage.getItem("root") === 'developer'){
+            this.userFolader = localStorage.getItem("user")
+        }
+        this.getContractPaths()
     },
     methods: {
-         changeOptions: function(){
-            this.options = [{
-                folderName: "/",
-                folderId: 1,
-            }];
-            if(localStorage.getItem("root") === 'developer'){
-                let num = 0;
-                let index = subStringToNumber(localStorage.getItem("user"))
-                let arry = []
-                if(localStorage.getItem("folderList")){
-                    let data = JSON.parse(localStorage.getItem("folderList"))
-                    for(let i = 0; i < data.length; i++){
-                        if(data[i].groupId == localStorage.getItem("groupId")){
-                            arry.push(data[i])
+        addPath () {
+            let reqData = {
+                contractPath: this.userFolader,
+                groupId: localStorage.getItem("groupId")
+            }
+            addContractPath(reqData).then(res=> {
+                if(res.data.code === 0){
+                    this.getContractPaths()
+                }else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.systemError')
+                    });
+                });
+        },
+        getContractPaths () {
+            getContractPathList(localStorage.getItem("groupId")).then(res => {
+                if(res.data.code == 0){
+                     this.pathList = res.data.data;
+                     let num = 0;
+                     this.folderList = []
+                    if(localStorage.getItem("root") === 'developer'){
+                        for(let i = 0;i < this.pathList.length; i++){
+                            if (this.pathList[i].contractPath != "/") {
+                                let item = {
+                                    folderName: this.pathList[i].contractPath,
+                                    folderId: new Date().getTime() + this.pathList[i].contractPath,
+                                    folderActive: false,
+                                    groupId: localStorage.getItem("groupId"),
+                                    modifyTime: this.pathList[i].modifyTime
+                                };
+                                this.folderList.push(item)
+                            }
+                            if(this.pathList[i].contractPath == this.userFolader){
+                                num++
+                            }
+                        }
+                    }else{
+                        for(let i = 0;i < this.pathList.length; i++){
+                                let item = {
+                                    folderName: this.pathList[i].contractPath,
+                                    folderId: new Date().getTime() + this.pathList[i].contractPath,
+                                    folderActive: false,
+                                    groupId: localStorage.getItem("groupId"),
+                                    modifyTime: this.pathList[i].modifyTime
+                                };
+                                this.folderList.push(item)
+                            if(this.pathList[i].contractPath == this.userFolader){
+                                num++
+                            }
                         }
                     }
-                }
-                for (let i = 0; i < arry.length; i++) {
-                    if(arry[i].folderId == index){
-                        num = num + 1
+                    if(num == 0 && localStorage.getItem("root") === 'developer'){
+                        this.addPath()
                     }
+                    this.changeOptions();
+                }else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.systemError')
+                    });
+                });
+        },
+        changeOptions: function(){
+            console.log(this.folderList)
+            for(let i = 0; i < this.folderList.length; i++){
+                if((!this.folderList[i].folderName || this.folderList[i].folderName == "/") && localStorage.getItem("root") === 'developer'){
+                    this.folderList.splice(i,1)
                 }
-                if(num > 0){
-                    this.options = []
-                }else{
-                    this.options = [{
-                        folderName: localStorage.getItem("user"),
-                        folderId: subStringToNumber(localStorage.getItem("user")) + localStorage.getItem("groupId"),
-                    }];
-                }
-               
-            }else{
+            }
+            this.options = this.folderList;
+            if(this.folderList.length === 0 && localStorage.getItem("root") !== 'developer'){
                 this.options = [{
                     folderName: "/",
-                    folderId: 1,
-                }];
+                    folderId: (new Date()).getTime()
+                }]
+            }else if(this.folderList.length === 0 && localStorage.getItem("root") === 'developer'){
+                this.options = [{
+                    folderName:  this.userFolader,
+                    folderId: (new Date()).getTime()
+                }]
             }
-            if(localStorage.getItem("folderList")){
-                let arry = JSON.parse(localStorage.getItem("folderList"));
-                for(let i = 0; i < arry.length; i++){
-                    if(arry[i].groupId == localStorage.getItem("groupId")){
-                        this.options.push(arry[i])
-                    }
-                }
-            }
-            this.folderFrom.folderName = this.options[0].folderName
         },
         submit: function(formName){
             this.$refs[formName].validate(valid => {

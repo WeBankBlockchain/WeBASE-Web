@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 <template>
-    <div class="contract-content">
+    <div class="contract-content" >
         <v-content-head  :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;"  @changGroup="changGroup"></v-content-head>
-        <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
+        <div style="height: calc(100% - 56px)" v-loading='loading'>
+        <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}" >
             <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
                 <template #footer>
                     <div class="version-selector">
@@ -32,6 +33,7 @@
         <div :class="[!menuHide ?  'code-detail-wrapper' : 'code-detail-reset-wrapper']" :style="{width: contentWidth}">
             <v-code :changeStyle="changeWidth" :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)" @deploy="deploy($event)"></v-code>
         </div>
+        </div>
     </div>
 </template>
 
@@ -40,6 +42,7 @@ import menu from "./components/contractCatalog";
 import codes from "./components/code";
 import contentHead from "@/components/contentHead";
 import { encryption } from "@/util/api";
+import webworkify from 'webworkify-webpack'
 export default {
     name: "contract",
     components: {
@@ -73,6 +76,8 @@ export default {
             version: localStorage.getItem('solcName') ? localStorage.getItem('solcName') : '',
             baseURLWasm: './static/js',
             versionId: localStorage.getItem('versionId') ? localStorage.getItem('versionId') : '',
+            versionData: null,
+            loading: false
         };
     },
     computed: {
@@ -88,28 +93,55 @@ export default {
         this.allVersion = [
             {
                 solcName: "v0.4.25",
+                url: "http://127.0.0.1:5000/static/js/v0.4.25.js",
                 versionId: 0,
-                encryptType: 0
+                encryptType: 0,
+                net: 0
             },
             {
                 solcName: "v0.4.25-gm",
+                url: "http://127.0.0.1:5000/static/js/v0.4.25-gm.js",
                 versionId: 1,
-                encryptType: 1
+                encryptType: 1,
+                net: 0
             },
             {
                 solcName: "v0.5.1",
                 versionId: 2,
-                encryptType: 0
+                url: "http://127.0.0.1:5000/static/js/v0.5.1.js",
+                encryptType: 0,
+                net: 0
             },
             {
                 solcName: "v0.5.1-gm",
                 versionId: 3,
-                encryptType: 1
+                url: "http://127.0.0.1:5000/static/js/v0.5.1-gm.js",
+                encryptType: 1,
+                net: 0
+            },
+            {
+                solcName: "v0.6.10",
+                versionId: 4,
+                url: "http://127.0.0.1:5000/static/js/v0.6.10.js",
+                encryptType: 0,
+                net: 1
+            },
+            {
+                solcName: "v0.6.10-gm",
+                versionId: 5,
+                url: "http://127.0.0.1:5000/static/js/v0.6.10-gm.js",
+                encryptType: 1,
+                net: 1
             }
-        ]
+        ];
+        this.initWorker()
         this.getEncryption(this.querySolcList);
     },
     methods: {
+        initWorker () {
+                let w = webworkify(require.resolve('@/util/file.worker'));
+                this.$store.state.worker = w
+        },
         querySolcList () {
             for(let i = 0; i < this.allVersion.length; i++){
                 if(localStorage.getItem("encryptionId") == this.allVersion[i].encryptType){
@@ -122,27 +154,58 @@ export default {
                 localStorage.setItem("solcName", this.versionList[0]['solcName'])
                 localStorage.setItem("versionId", this.versionList[0]['versionId'])
             }
-            this.initSolc()
+            this.initSolc(localStorage.getItem("versionId"))
         },
-        initSolc() {
-            var head = document.head;
-            var script = document.createElement("script");
-            script.src = `${this.baseURLWasm}/${this.version}.js`;
-            script.setAttribute('id', 'soljson');
-            if (!document.getElementById('soljson')) {
-                head.append(script)
+        initSolc(versionId) {
+            let that = this
+            // let w = webworkify(require.resolve('@/util/file.worker'));
+            for(let i = 0; i < this.versionList.length; i++){
+                if(this.versionList[i].versionId == versionId){
+                    this.versionData = this.versionList[i];
+                    this.version = this.versionList[i]['solcName'];
+                    this.$store.dispatch("set_version_data_action",this.versionData)
+                }
             }
+            if(this.versionData.net){
+               let w = webworkify(require.resolve('@/util/file.worker'));
+                this.$store.state.worker = w
+                w.addEventListener('message', function (ev) {
+                    if(ev.data.cmd == 'versionLoaded'){
+                        console.log(ev.data,that);
+                        that.loading =false
+                    }else{
+                        console.log(ev.data);
+                        console.log(JSON.parse(ev.data.data))
+                    }
+                });
+                w.postMessage({
+                    cmd: "loadVersion",
+                    data: this.versionData.url
+                });
+            }else{
+                var head = document.head;
+                var script = document.createElement("script");
+                script.src = `${this.baseURLWasm}/${this.version}.js`;
+                script.setAttribute('id', 'soljson');
+                if (!document.getElementById('soljson')) {
+                    head.append(script)
+                }
+                that.loading =false
+            }
+            
+            
         },
         initVersion() {
             localStorage.removeItem('solcName')
         },
-        changeChain(type) {
-            this.initVersion()
-            this.querySolcList(this.initSolc, 'changeChain')
-            this.$router.go(0)
-            this.$refs.menu.getContracts()
-        },
+        // changeChain(type) {
+        //     this.initVersion()
+        //     this.querySolcList(this.initSolc, 'changeChain')
+        //     this.$router.go(0)
+        //     this.$refs.menu.getContracts()
+        // },
         onchangeLoadVersion(version) {
+            this.loading = true
             localStorage.setItem('solcName', version)
             var versionId = '';
             this.versionList.forEach(item => {
@@ -151,11 +214,15 @@ export default {
                 }
             });
             localStorage.setItem('versionId', versionId)
-            this.initSolc(version)
-            this.$router.go(0)
+            this.initSolc(versionId)
+            if(this.$store.state.versionData && this.$store.state.versionData.net == 0){
+                this.$router.go(0)
+            }
+            
             this.$refs.menu.getContracts()
         },
         getEncryption: function (callback) {
+            this.loading = true
             encryption().then(res => {
                 if (res.status == 200) {
                     localStorage.setItem("encryptionId", res.data.data)
@@ -222,7 +289,7 @@ export default {
 .code-menu-wrapper {
     float: left;
     position: relative;
-    height: calc(100% - 57px);
+    height: 100%;
     font-size: 12px;
     box-sizing: border-box;
 }
@@ -252,12 +319,12 @@ export default {
 }
 .code-detail-wrapper {
     float: left;
-    height: calc(100% - 57px);
+    height: 100%;
     font-size: 12px;
 }
 .code-detail-reset-wrapper {
     float: left;
-    height: calc(100% - 57px);
+    height: 100%;
     font-size: 12px;
 }
 .menu-drag {
