@@ -192,7 +192,7 @@ export default {
             }
             this.fileFrom.contractType = this.options[0].folderName
             for(let i = 0; i < this.options.length; i++){
-                if(this.options[i].folderName == this.data.contractName){
+                if(this.data && this.options[i].folderName == this.data.contractName){
                     this.fileFrom.contractType = this.options[i].folderName
                 }
             }
