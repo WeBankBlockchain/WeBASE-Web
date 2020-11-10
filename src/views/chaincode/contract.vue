@@ -77,7 +77,8 @@ export default {
             baseURLWasm: './static/js',
             versionId: localStorage.getItem('versionId') ? localStorage.getItem('versionId') : '',
             versionData: null,
-            loading: false
+            loading: false,
+            host: location.host,
         };
     },
     computed: {
@@ -93,14 +94,14 @@ export default {
         this.allVersion = [
             {
                 solcName: "v0.4.25",
-                url: "http://127.0.0.1:5000/static/js/v0.4.25.js",
+                url: `http://${this.host}/static/js/v0.4.25.js`,
                 versionId: 0,
                 encryptType: 0,
                 net: 0
             },
             {
                 solcName: "v0.4.25-gm",
-                url: "http://127.0.0.1:5000/static/js/v0.4.25-gm.js",
+                url: `http://${this.host}/static/js/v0.4.25-gm.js`,
                 versionId: 1,
                 encryptType: 1,
                 net: 0
@@ -108,28 +109,28 @@ export default {
             {
                 solcName: "v0.5.1",
                 versionId: 2,
-                url: "http://127.0.0.1:5000/static/js/v0.5.1.js",
+                url: `http://${this.host}/static/js/v0.5.1.js`,
                 encryptType: 0,
                 net: 0
             },
             {
                 solcName: "v0.5.1-gm",
                 versionId: 3,
-                url: "http://127.0.0.1:5000/static/js/v0.5.1-gm.js",
+                url: `http://${this.host}/static/js/v0.5.1-gm.js`,
                 encryptType: 1,
                 net: 0
             },
             {
                 solcName: "v0.6.10",
                 versionId: 4,
-                url: "http://127.0.0.1:5000/static/js/v0.6.10.js",
+                url: `http://${this.host}/static/js/v0.6.10.js`,
                 encryptType: 0,
                 net: 1
             },
             {
                 solcName: "v0.6.10-gm",
                 versionId: 5,
-                url: "http://127.0.0.1:5000/static/js/v0.6.10-gm.js",
+                url: `http://${this.host}/static/js/v0.6.10-gm.js`,
                 encryptType: 1,
                 net: 1
             }
