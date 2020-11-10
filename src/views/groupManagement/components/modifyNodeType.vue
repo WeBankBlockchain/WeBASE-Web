@@ -194,7 +194,7 @@ export default {
 </script>
 
 <style scoped>
-.sure-btn /deep/ .el-button {
+.sure-btn >>> .el-button {
     padding: 9px 16px;
 }
 </style>

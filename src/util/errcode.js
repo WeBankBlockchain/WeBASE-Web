@@ -499,6 +499,14 @@ let errCode = {
         en: "chain governance address cannot be blank",
         zh: '链治理地址不能为空'
     },
+    "201311": {
+        en: "get event callback fail for time out",
+        zh: '获取事件回调超时失败'
+    },
+    "201312": {
+        en: "get event callback error",
+        zh: '获取事件回调错误'
+    },
     "201501": {
         en: "web3sdk create key pair fail and return null",
         zh: 'sdk创建私钥对失败并返回Null'

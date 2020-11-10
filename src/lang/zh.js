@@ -139,7 +139,9 @@ export default {
         port5002: "默认5002",
         ip: "主机IP",
         org: "机构名",
-        developer: "开发者"
+        developer: "开发者",
+        goCreatPrivateKey: "请先到私钥管理创建私钥",
+
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -187,12 +189,14 @@ export default {
         userRule: "请选择账号",
         thresholdRule: "请输入阈值",
         weightRule: "请输入权重",
+        eventName: '请选择事件名'
     },
     head: {
         helpText: "帮助文档",
         group: "群组",
         changePassword: "修改密码",
-        exit: "退出"
+        exit: "退出",
+        versionInfo: "版本信息",
     },
     title: {
         dataOverview: "数据概览",
@@ -239,6 +243,9 @@ export default {
         otherUser: '无用户名的用户或公钥用户为外部管理员账户',
         committeeMgmt: '委员会管理',
         developerMgmt: '运维账号管理',
+        checkEvent: 'Event 查看',
+        checkEventResult: 'Event',
+        eventName: '合约event名'
     },
     home: {
         nodes: "节点个数",
@@ -418,7 +425,10 @@ export default {
         normal: "正常",
         freezeDes: '链委员和部署的用户才能冻结/解冻',
         userAddress: '用户地址',
-        status: '状态'
+        status: '状态',
+        eventParam: '请严格按照event参数类型提示输入;例如 byte类型输入"0x"',
+        exportSol: '导出合约',
+        sureExport: '确认导出',
     },
     privateKey: {
         addUser: "新增用户",
@@ -692,22 +702,28 @@ export default {
 
     },
     placeholder: {
-        contractListSearch: '输入合约名或合约地址'
+        contractListSearch: '输入合约名或合约地址',
+        selected: '请选择',
     },
     table: {
         contractAddress: '合约地址',
-        contractAbi: '合约abi',
+        contractAbi: '合约ABI',
         appId: "应用编号",
         exchangeName: "Exchange",
         queueName: "队列名",
         routingKey: "routingKey",
         groupId: "所属群组",
-        fromBlock: 'event起始区块',
-        toBlock: 'event末区块',
+        fromBlock: '起始区块',
+        toBlock: '末区块',
         topicList: '合约event',
         frontInfo: '所属前置',
         transactionReceipt: '交易回执',
         transactionInfo: '交易信息',
+        checkEvent: 'Event 查看',
+        checkEventResult: 'Event',
+        eventName: 'Event名',
+        blockHeight: '块高',
+        eventValue: 'Event',
     },
     govCommittee: {
         addCommittee: '新增委员投票',

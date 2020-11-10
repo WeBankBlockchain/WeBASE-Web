@@ -25,7 +25,7 @@ const front = resolve => require(['@/views/front/index'], resolve);
 const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
-const rivateKeyManagement = resolve => require(['@/views/rivateKeyManagement/rivateKeyManagement'], resolve);
+const privateKeyManagement = resolve => require(['@/views/privateKeyManagement/privateKeyManagement'], resolve);
 const hostMetric = resolve => require(['@/views/hostMetric'], resolve);
 const nodesMetric = resolve => require(['@/views/nodesMetric'], resolve);
 const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve);
@@ -47,6 +47,7 @@ const parseAbi = resolve => require(['@/views/parseAbi'], resolve);
 const committeeMgmt = resolve => require(['@/views/committeeMgmt'], resolve);
 const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
+const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -127,7 +128,8 @@ const routes = [
             { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: true, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: true, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
-            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } }
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
+            { path: '/eventCheck', component: eventCheck, name: 'Event 查看', enName: 'eventCheck', menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {
@@ -139,7 +141,7 @@ const routes = [
         menuShow: true,
         iconCls: 'wbs-icon-lock sidebar-icon',
         children: [
-            { path: '/privateKeyManagement', component: rivateKeyManagement, name: '私钥管理', nameKey: "PrivateKey", menuShow: true, meta: { requireAuth: true } }
+            { path: '/privateKeyManagement', component: privateKeyManagement, name: '私钥管理', nameKey: "PrivateKey", menuShow: true, meta: { requireAuth: true } }
         ]
     },
     {

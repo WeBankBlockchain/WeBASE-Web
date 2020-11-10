@@ -48,7 +48,7 @@
                     <span>{{this.$t("contracts.createContractTips")}}</span>
                     <i class="wbs-icon-shangchuan"></i>
                     <span>{{this.$t("contracts.uploadContractTips")}}</span>
-                    <strong><i class="wbs-icon-Addfile" ></i></strong>
+                    <strong><i class="wbs-icon-Addfile"></i></strong>
                 </div>
                 <div class="ace-editor" ref="ace" v-show="codeShow"></div>
             </div>
@@ -70,7 +70,7 @@
                     </div>
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
-                        <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress 
+                        <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" :title="$t('text.copy')"></i>
                         </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractAddress}}</span>
@@ -114,7 +114,7 @@
 
 <script>
 import ace from "ace-builds";
-// import "ace-builds/webpack-resolver";
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -199,7 +199,7 @@ export default {
         Bus.$off("noData")
     },
     beforeMount() {
-        
+
     },
     mounted: function () {
         if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
@@ -319,13 +319,40 @@ export default {
                 copyWithEmptySelection: true
             });
             this.aceEditor.commands.addCommand({
-                name: 'myCommand',
+                name: 'save',
                 bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
                 exec: function (editor) {
                     if (_this.data.contractStatus != 2) {
                         _this.saveCode()
                     }
                 },
+            });
+            this.aceEditor.commands.addCommand({
+                name: 'compile',
+                bindKey: { win: "Alt-C", mac: "Option-C" },
+                exec: function (editor) {
+                    if (!_this.contractAddress && !_this.disabled) {
+                        _this.compile();
+                    }
+                }
+            });
+            this.aceEditor.commands.addCommand({
+                name: 'deploying',
+                bindKey: { win: "Alt-D", mac: "Option-D" },
+                exec: function (editor) {
+                    if (!_this.contractAddress && _this.abiFile && _this.bin && !_this.disabled) {
+                        _this.deploying();
+                    }
+                }
+            });
+            this.aceEditor.commands.addCommand({
+                name: 'send',
+                bindKey: { win: "Alt-T", mac: "Option-T" },
+                exec: function (editor) {
+                    if (_this.abiFile && _this.bin && !_this.disabled) {
+                        _this.send();
+                    }
+                }
             });
             let editor = this.aceEditor.alignCursors();
             this.aceEditor.getSession().setUseWrapMode(true);
@@ -464,8 +491,8 @@ export default {
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
-                        }else{
-                            num1 ++
+                        } else {
+                            num1++
                         }
                     }
                     if (num1) {
@@ -474,19 +501,19 @@ export default {
                 }
             }
         },
-        compile () {
+        compile() {
             let version = this.$store.state.versionData;
-            if(version && version.net !== 0){
+            if (version && version.net !== 0) {
                 this.compileHighVersion()
-            }else{
+            } else {
                 this.compileLowVersion()
             }
         },
-        compileHighVersion () {
+        compileHighVersion() {
             let that = this
             this.loading = true;
             this.refreshMessage();
-             this.contractList = this.$store.state.contractDataList
+            this.contractList = this.$store.state.contractDataList
             let content = "";
             let output;
             let input = {
@@ -513,35 +540,33 @@ export default {
                 path: this.data.contractPath
             });
             w.addEventListener('message', function (ev) {
-                    if(ev.data.cmd == 'compiled'){
-                        that.loading =false
-                        output = JSON.parse(ev.data.data);
-                        setTimeout(() => {
-                            if (output && JSON.stringify(output.contracts) != "{}") {
-                                that.status = 1;
-                                if (output.contracts[that.contractName + ".sol"]) {
-                                    that.changeOutput(
-                                        output.contracts[that.contractName + ".sol"]
-                                    );
-                                }
-                            } else {
-                                that.errorMessage = output.errors;
-                                that.errorInfo = this.$t("contracts.contractCompileFail");
-                                that.loading = false;
-                            }
-                            console.log(output)
-                        }, 500)
-                    }else{
-                        console.log(ev.data);
-                        console.log(JSON.parse(ev.data.data))
+                if (ev.data.cmd == 'compiled') {
+                    that.loading = false
+                    output = JSON.parse(ev.data.data);
+                    if (output && output.contracts && JSON.stringify(output.contracts) != "{}") {
+                        that.status = 1;
+                        if (output.contracts[that.contractName + ".sol"]) {
+                            that.changeOutput(
+                                output.contracts[that.contractName + ".sol"]
+                            );
+                        }
+                    } else {
+                        that.errorMessage = output.errors;
+                        that.errorInfo = that.$t("contracts.contractCompileFail");
+                        that.loading = false;
                     }
-                });
-                w.addEventListener("error", function (ev) {
-                     that.errorInfo = ev;
-                    that.errorMessage = ev;
-                    that.compileShow = true;
-                    that.loading = false;
-                })
+                    console.log(output)
+                } else {
+                    console.log(ev.data);
+                    console.log(JSON.parse(ev.data.data))
+                }
+            });
+            w.addEventListener("error", function (ev) {
+                that.errorInfo = ev;
+                that.errorMessage = ev;
+                that.compileShow = true;
+                that.loading = false;
+            })
         },
         compileLowVersion: function () {
             this.loading = true;
@@ -648,13 +673,13 @@ export default {
                     if (value.name && value.type == 'function') {
                         let data = {}
                         let methodId;
-                        if(localStorage.getItem("encryptionId") == 1){
+                        if (localStorage.getItem("encryptionId") == 1) {
                             methodId = Web3EthAbi.smEncodeFunctionSignature({
                                 name: value.name,
                                 type: value.type,
                                 inputs: value.inputs
                             });
-                        }else{
+                        } else {
                             methodId = Web3EthAbi.encodeFunctionSignature({
                                 name: value.name,
                                 type: value.type,
@@ -668,13 +693,13 @@ export default {
                     } else if (value.name && value.type == 'event') {
                         let data = {}
                         let methodId;
-                        if(localStorage.getItem("encryptionId") == 1){
+                        if (localStorage.getItem("encryptionId") == 1) {
                             methodId = Web3EthAbi.smEncodeEventSignature({
                                 name: value.name,
                                 type: value.type,
                                 inputs: value.inputs
                             });
-                        }else{
+                        } else {
                             methodId = Web3EthAbi.encodeEventSignature({
                                 name: value.name,
                                 type: value.type,
@@ -702,21 +727,21 @@ export default {
                     console.log("method 保存成功！")
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            }).catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
         deployContract(val) {
-            if(val && !val.userId){
+            if (val && !val.userId) {
                 this.$message({
                     type: "info",
                     message: this.$t('contracts.addPrivateKeyInfo')
@@ -1000,7 +1025,7 @@ export default {
 .titleActive {
     padding-left: 40px;
 }
-.send-dialog /deep/ .el-dialog--center .el-dialog__body {
+.send-dialog >>> .el-dialog--center .el-dialog__body {
     padding: 5px 25px 20px;
 }
 .showText {
@@ -1017,17 +1042,17 @@ export default {
 .copy-public-key {
     float: right;
 }
-.contract-font{
+.contract-font {
     color: #777;
     cursor: pointer;
 }
-.contract-font:hover{
-    color: #111
+.contract-font:hover {
+    color: #111;
 }
-.contract-font:active{
-    color: #111
+.contract-font:active {
+    color: #111;
 }
-.contract-font:visited{
-    color: #111
+.contract-font:visited {
+    color: #111;
 }
 </style>

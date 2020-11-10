@@ -67,7 +67,7 @@
             <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
                 <div class="sign-out-wrapper">
                     <span class="change-password" @click="changePassword">{{this.$t("head.changePassword")}}</span><br>
-                    <span class="change-password" @click="lookVersion">版本信息</span><br>
+                    <span class="change-password" @click="lookVersion">{{this.$t("head.versionInfo")}}</span><br>
                     <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span>
                 </div>
                 <a class="browse-user" slot="reference">
@@ -79,7 +79,7 @@
         <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
-        <el-dialog title="版本信息" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">
+        <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">
             <p class="version-item">
                 <span>{{$t("text.chainVersion")}}: </span>
                 <span>{{$store.state.version}}</span>

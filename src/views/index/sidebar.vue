@@ -268,7 +268,7 @@ export default {
                 for(let i = 0; i < list.length; i++) {
                     if(list[i].name == '帐号管理'){
                         list[i].menuShow =false
-                    }else if(list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' ){
+                    }else if(list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' || list[i].nameKey =='groupManagement'){
                         list[i].menuShow = false;
                     }else{
                         list[i].menuShow = true;
