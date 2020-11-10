@@ -1463,4 +1463,66 @@ export function deleteHandleHistory(data) {
     })
 }
 
+//event check 
+export function checkEvent(data) {
+    return post({
+        url: `${ url.ORG_LIST }/event/eventLogs/list`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
+export function contractFindOne(contractId) {
+    return get({
+        url: `${url.ORG_LIST}/contract/findOne/${contractId}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function contractListAll(data) {
+    return get({
+        url: `${url.ORG_LIST}/contract/contractList/all/light`,
+        method: 'GET',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// 
+export function listAddress(groupId) {
+    return get({
+        url: `${url.ORG_LIST}/event/listAddress/${groupId}`,
+        method: 'GET',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function contractInfo(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/event/contractInfo/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function eventContractInfo(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/event/contractInfo/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}

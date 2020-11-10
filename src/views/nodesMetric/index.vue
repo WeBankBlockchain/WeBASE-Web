@@ -313,11 +313,11 @@ export default {
 .serch-nodes > span {
     margin-right: 5px;
 }
-.serch-nodes /deep/ .el-input__inner {
+.serch-nodes >>> .el-input__inner {
     height: 32px;
     line-height: 32px;
 }
-.serch-nodes /deep/ .el-input__icon {
+.serch-nodes >>> .el-input__icon {
     line-height: 32px;
 }
 .search-item {

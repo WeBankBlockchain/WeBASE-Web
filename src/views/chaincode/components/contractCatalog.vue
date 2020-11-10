@@ -50,6 +50,7 @@
                             <ul v-if="contractFile">
                                 <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
                                 <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li>
+                                <li class="contract-menu-handle-list" @click="exportFile(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
                     </div>
@@ -61,6 +62,7 @@
                             <ul>
                                 <li class="contract-menu-handle-list" @click="addFiles">{{$t('contracts.createFile')}}</li>
                                 <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
+                                <li class="contract-menu-handle-list" @click="exportFolder(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
                         <br>
@@ -73,6 +75,7 @@
                                     <ul v-if="contractFile">
                                         <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
                                         <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li>
+                                        <li class="contract-menu-handle-list" @click="exportFile(list)">{{$t('contracts.exportSol')}}</li>
                                     </ul>
                                 </div>
                             </li>
@@ -95,6 +98,8 @@ import Bus from '@/bus'
 import errcode from "@/util/errcode";
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import { subStringToNumber } from "@/util/util"
+let Base64 = require("js-base64").Base64;
+const FileSaver = require("file-saver");
 export default {
     name: "contractCatalog",
     components: {
@@ -744,6 +749,41 @@ export default {
                 })
                 localStorage.setItem("folderList", JSON.stringify(this.folderList))
                 this.getContracts()
+            }
+        },
+        exportFile(val) {
+            this.$confirm(`${this.$t('contracts.sureExport')}？`)
+                .then(_ => {
+                    this.sureExportSol(val);
+                })
+                .catch(_ => { });
+        },
+        sureExportSol(val){
+            let contractSource = Base64.decode(val.contractSource);
+            let contractAbi = val.contractAbi;
+            let contractBin = val.contractBin;
+            var blobContractSource = new Blob([contractSource], { type: "text;charset=utf-8" });
+            var blobContractAbi = new Blob([contractAbi], { type: "text;charset=utf-8" });
+            var blobContractBin = new Blob([contractBin], { type: "text;charset=utf-8" });
+            FileSaver.saveAs(blobContractSource, `${val.contractName}.sol`);
+            FileSaver.saveAs(blobContractAbi, `${val.contractName}-abi`);
+            FileSaver.saveAs(blobContractBin, `${val.contractName}-bin`);
+        },
+        exportFolder(val){
+            this.$confirm(`${this.$t('dialog.sureExport')}？`)
+                .then(_ => {
+                    this.sureExportFolderSol(val);
+                })
+                .catch(_ => { });
+        },
+        sureExportFolderSol(val){
+            let folderInfo = val;
+            var contractList = []
+            if(folderInfo.child.length > 0) {
+                contractList = folderInfo.child
+                contractList.forEach(item => {
+                    this.sureExportSol(item)
+                });
             }
         }
     }

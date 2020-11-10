@@ -24,9 +24,10 @@
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="200">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="280">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
+                            <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
                         </template>
@@ -92,6 +93,7 @@ export default {
             updateItem: {},
             editorInput: null,
             editorOutput: null,
+            groupId: localStorage.getItem('groupId')
         }
     },
 
@@ -142,7 +144,8 @@ export default {
     },
 
     methods: {
-        changGroup() {
+        changGroup(data) {
+            this.groupId = data
             this.queryAbiList()
         },
         closeImport() {
@@ -178,7 +181,24 @@ export default {
             getAbiList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
-                        this.abiList = res.data.data;
+                        var dataArray = [];
+                        dataArray = res.data.data;
+                        console.time("耗时");
+                        dataArray.forEach(item => {
+                            item.haveEvent = false
+                            if (item.contractAbi) {
+                                let contractAbi = JSON.parse(item.contractAbi)
+                                for (let index = 0; index < contractAbi.length; index++) {
+                                    if (contractAbi[index]['type'] === "event") {
+                                        item.haveEvent = true
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                        console.timeEnd("耗时");
+                        this.abiList = dataArray;
+                        this.total = res.data.totalCount;
                         this.total = res.data.totalCount;
                     } else {
                         this.$message({
@@ -287,7 +307,17 @@ export default {
                         message: this.$t('text.systemError')
                     })
                 })
-        }
+        },
+        checkEvent: function (val) {
+            this.$router.push({
+                path: '/eventCheck',
+                query: {
+                    groupId: this.groupId,
+                    type: 'abi',
+                    contractAddress: val.contractAddress
+                }
+            })
+        },
 
     }
 }

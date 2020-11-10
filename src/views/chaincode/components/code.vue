@@ -114,7 +114,7 @@
 
 <script>
 import ace from "ace-builds";
-// import "ace-builds/webpack-resolver";
+import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/mode-javascript";
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -319,13 +319,40 @@ export default {
                 copyWithEmptySelection: true
             });
             this.aceEditor.commands.addCommand({
-                name: 'myCommand',
+                name: 'save',
                 bindKey: { win: 'Ctrl-S', mac: 'Command-S' },
                 exec: function (editor) {
                     if (_this.data.contractStatus != 2) {
                         _this.saveCode()
                     }
                 },
+            });
+            this.aceEditor.commands.addCommand({
+                name: 'compile',
+                bindKey: { win: "Alt-C", mac: "Option-C" },
+                exec: function (editor) {
+                    if(!_this.contractAddress && !_this.disabled){
+                        _this.compile();
+                    }
+                }
+            });
+            this.aceEditor.commands.addCommand({
+                name: 'deploying',
+                bindKey: { win: "Alt-D", mac: "Option-D" },
+                exec: function (editor) {
+                    if(!_this.contractAddress && _this.abiFile && _this.bin && !_this.disabled){
+                        _this.deploying();
+                    }
+                }
+            });
+            this.aceEditor.commands.addCommand({
+                name: 'send',
+                bindKey: { win: "Alt-T", mac: "Option-T" },
+                exec: function (editor) {
+                    if(_this.abiFile && _this.bin && !_this.disabled){
+                        _this.send();
+                    }
+                }
             });
             let editor = this.aceEditor.alignCursors();
             this.aceEditor.getSession().setUseWrapMode(true);
@@ -935,7 +962,7 @@ export default {
 .titleActive {
     padding-left: 40px;
 }
-.send-dialog /deep/ .el-dialog--center .el-dialog__body {
+.send-dialog >>> .el-dialog--center .el-dialog__body {
     padding: 5px 25px 20px;
 }
 .showText {

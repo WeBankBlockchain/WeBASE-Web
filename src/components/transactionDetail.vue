@@ -589,13 +589,25 @@ export default {
             list.eventButtonShow = true;
             list.eventName = eventData.abiInfo.name + "(";
             for (let i = 0; i < eventData.abiInfo.inputs.length; i++) {
+                console.log(eventData.abiInfo.inputs[i]);
                 if (i == eventData.abiInfo.inputs.length - 1) {
-                    list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name;
+                    if(eventData.abiInfo.inputs[i]){
+                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" +" "+ eventData.abiInfo.inputs[i].name;
+                    }else {
+                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name;
+                    }
+                    
                 } else {
-                    list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";
+                    if (eventData.abiInfo.inputs[i]) {
+                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" + " " + eventData.abiInfo.inputs[i].name + ",";
+                    }else {
+                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";
+                    }
+                    
                 }
             }
             list.eventName = list.eventName + ")";
+            console.log(eventData.abiInfo.inputs,'=====');
             let eventResult = Web3EthAbi.decodeLog(eventData.abiInfo.inputs, list.data, list.topics.slice(1));
             list.outData = {};
             list.eventLgData = [];

@@ -139,7 +139,8 @@ export default {
         port5002: "The default is 5002",
         ip: "Host IP",
         org: "Agency name",
-        developer: "Developer"
+        developer: "Developer", 
+        goCreatPrivateKey: "Please create a private key",
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -186,12 +187,14 @@ export default {
         userRule: "Please enter user",
         thresholdRule: "Please enter threshold",
         weightRule: "Please enter weight",
+        eventName: 'Please enter event name'
     },
     head: {
         helpText: "Document",
         group: "Groups",
         changePassword: "Change Password",
-        exit: "Exit"
+        exit: "Exit",
+        versionInfo: "Version",
     },
     title: {
         dataOverview: "Overview",
@@ -238,6 +241,9 @@ export default {
         otherUser: 'Users without user name or public key users are external administrator accounts',
         committeeMgmt: 'Committee Mgmt',
         developerMgmt: 'Developer Mgmt',
+        checkEvent: 'Event Check',
+        checkEventResult: 'Event',
+        eventName: 'Event Name'
     },
     home: {
         nodes: "Nodes",
@@ -392,10 +398,10 @@ export default {
         methodName: "Method Name",
         contractCatalogue: "Location",
         copyContractAddress: "Copy Contract Address",
-        contractAbi: "Abi",
+        contractAbi: "ABI",
         contractBin: "Bin",
         runtimeBin: "Runtime-bin",
-        copyContractAbi: "Copy Contract Abi",
+        copyContractAbi: "Copy Contract ABI",
         copyContractBin: "Copy Contract Bin",
         abiInfo: "ABI Details",
         contractVersion: "Version",
@@ -417,7 +423,10 @@ export default {
         normal: "Normal",
         freezeDes: 'members of the chain and deployment of user to freeze / thaw',
         userAddress: 'User Address',
-        status: 'Status'
+        status: 'Status',
+        eventParam: 'Please follow the prompt of event parameter type strictly',
+        exportSol: 'Export Contract',
+        sureExport: 'Sure Export',
     },
     privateKey: {
         addUser: "Add Users",
@@ -690,22 +699,28 @@ export default {
         updatePsdError: "Password change failed!"
     },
     placeholder: {
-        contractListSearch: 'Search by Name / Address'
+        contractListSearch: 'Search by Name / Address',
+        selected: 'Please select',
     },
     table: {
         contractAddress: 'Address',
-        contractAbi: 'Abi',
+        contractAbi: 'ABI',
         appId: "App Id",
         exchangeName: "Exchange",
         queueName: "Queue Name",
         routingKey: "RoutingKey",
         groupId: "Group Id",
-        fromBlock: 'From Block',
-        toBlock: 'To Block',
+        fromBlock: 'From',
+        toBlock: 'To',
         topicList: 'Contract Event',
         frontInfo: 'Front Info',
         transactionReceipt: 'Transaction Receipt',
         transactionInfo: 'Transaction Info',
+        checkEvent: 'Check Event',
+        checkEventResult: 'Event',
+        eventName: 'Event Name',
+        blockHeight: 'Block',
+        eventValue: 'Event',
     },
     govCommittee: {
         addCommittee: 'Grant Committee Vote',
