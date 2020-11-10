@@ -591,14 +591,14 @@ export default {
             for (let i = 0; i < eventData.abiInfo.inputs.length; i++) {
                 console.log(eventData.abiInfo.inputs[i]);
                 if (i == eventData.abiInfo.inputs.length - 1) {
-                    if(eventData.abiInfo.inputs[i]){
+                    if(eventData.abiInfo.inputs[i]['indexed']){
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" +" "+ eventData.abiInfo.inputs[i].name;
                     }else {
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name;
                     }
                     
                 } else {
-                    if (eventData.abiInfo.inputs[i]) {
+                    if (eventData.abiInfo.inputs[i]['indexed']) {
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" + " " + eventData.abiInfo.inputs[i].name + ",";
                     }else {
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";

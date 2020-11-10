@@ -48,7 +48,7 @@
                     <span>{{this.$t("contracts.createContractTips")}}</span>
                     <i class="wbs-icon-shangchuan"></i>
                     <span>{{this.$t("contracts.uploadContractTips")}}</span>
-                    <strong><i class="wbs-icon-Addfile" ></i></strong>
+                    <strong><i class="wbs-icon-Addfile"></i></strong>
                 </div>
                 <div class="ace-editor" ref="ace" v-show="codeShow"></div>
             </div>
@@ -70,7 +70,7 @@
                     </div>
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
-                        <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress 
+                        <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" :title="$t('text.copy')"></i>
                         </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractAddress}}</span>
@@ -199,7 +199,7 @@ export default {
         Bus.$off("noData")
     },
     beforeMount() {
-        
+
     },
     mounted: function () {
         if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
@@ -331,7 +331,7 @@ export default {
                 name: 'compile',
                 bindKey: { win: "Alt-C", mac: "Option-C" },
                 exec: function (editor) {
-                    if(!_this.contractAddress && !_this.disabled){
+                    if (!_this.contractAddress && !_this.disabled) {
                         _this.compile();
                     }
                 }
@@ -340,7 +340,7 @@ export default {
                 name: 'deploying',
                 bindKey: { win: "Alt-D", mac: "Option-D" },
                 exec: function (editor) {
-                    if(!_this.contractAddress && _this.abiFile && _this.bin && !_this.disabled){
+                    if (!_this.contractAddress && _this.abiFile && _this.bin && !_this.disabled) {
                         _this.deploying();
                     }
                 }
@@ -349,7 +349,7 @@ export default {
                 name: 'send',
                 bindKey: { win: "Alt-T", mac: "Option-T" },
                 exec: function (editor) {
-                    if(_this.abiFile && _this.bin && !_this.disabled){
+                    if (_this.abiFile && _this.bin && !_this.disabled) {
                         _this.send();
                     }
                 }
@@ -428,9 +428,7 @@ export default {
         },
 
         findImports: function (path) {
-            this.contractList = JSON.parse(
-                localStorage.getItem("contractList")
-            );
+            this.contractList = this.$store.state.contractDataList
             let arry = path.split("/");
             let newpath = arry[arry.length - 1];
             let num = 0;
@@ -493,8 +491,8 @@ export default {
                             return {
                                 contents: Base64.decode(this.contractList[i].contractSource)
                             };
-                        }else{
-                            num1 ++
+                        } else {
+                            num1++
                         }
                     }
                     if (num1) {
@@ -503,17 +501,82 @@ export default {
                 }
             }
         },
-        compile: function () {
+        compile() {
+            let version = this.$store.state.versionData;
+            if (version && version.net !== 0) {
+                this.compileHighVersion()
+            } else {
+                this.compileLowVersion()
+            }
+        },
+        compileHighVersion() {
+            let that = this
+            this.loading = true;
+            this.refreshMessage();
+            this.contractList = this.$store.state.contractDataList
+            let content = "";
+            let output;
+            let input = {
+                language: "Solidity",
+                settings: {
+                    outputSelection: {
+                        "*": {
+                            "*": ["*"]
+                        }
+                    }
+                }
+            };
+            input.sources = {};
+            input.sources[this.contractName + ".sol"] = {};
+            let libs = [];
+            input.sources[this.contractName + ".sol"] = {
+                content: this.content
+            };
+            let w = this.$store.state.worker;
+            w.postMessage({
+                cmd: "compile",
+                input: JSON.stringify(input),
+                list: this.$store.state.contractDataList,
+                path: this.data.contractPath
+            });
+            w.addEventListener('message', function (ev) {
+                if (ev.data.cmd == 'compiled') {
+                    that.loading = false
+                    output = JSON.parse(ev.data.data);
+                    if (output && output.contracts && JSON.stringify(output.contracts) != "{}") {
+                        that.status = 1;
+                        if (output.contracts[that.contractName + ".sol"]) {
+                            that.changeOutput(
+                                output.contracts[that.contractName + ".sol"]
+                            );
+                        }
+                    } else {
+                        that.errorMessage = output.errors;
+                        that.errorInfo = that.$t("contracts.contractCompileFail");
+                        that.loading = false;
+                    }
+                    console.log(output)
+                } else {
+                    console.log(ev.data);
+                    console.log(JSON.parse(ev.data.data))
+                }
+            });
+            w.addEventListener("error", function (ev) {
+                that.errorInfo = ev;
+                that.errorMessage = ev;
+                that.compileShow = true;
+                that.loading = false;
+            })
+        },
+        compileLowVersion: function () {
+            this.loading = true;
             let wrapper = require("solc/wrapper");
             let solc = wrapper(window.Module);
-            this.loading = true;
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
                 this.compileinfo = this.compileinfo + constant.COMPILE_INFO[i];
             }
-            this.contractList = JSON.parse(
-                localStorage.getItem("contractList")
-            );
+            this.contractList = this.$store.state.contractDataList
             let content = "";
             let output;
             let input = {
@@ -610,13 +673,13 @@ export default {
                     if (value.name && value.type == 'function') {
                         let data = {}
                         let methodId;
-                        if(localStorage.getItem("encryptionId") == 1){
+                        if (localStorage.getItem("encryptionId") == 1) {
                             methodId = Web3EthAbi.smEncodeFunctionSignature({
                                 name: value.name,
                                 type: value.type,
                                 inputs: value.inputs
                             });
-                        }else{
+                        } else {
                             methodId = Web3EthAbi.encodeFunctionSignature({
                                 name: value.name,
                                 type: value.type,
@@ -630,13 +693,13 @@ export default {
                     } else if (value.name && value.type == 'event') {
                         let data = {}
                         let methodId;
-                        if(localStorage.getItem("encryptionId") == 1){
+                        if (localStorage.getItem("encryptionId") == 1) {
                             methodId = Web3EthAbi.smEncodeEventSignature({
                                 name: value.name,
                                 type: value.type,
                                 inputs: value.inputs
                             });
-                        }else{
+                        } else {
                             methodId = Web3EthAbi.encodeEventSignature({
                                 name: value.name,
                                 type: value.type,
@@ -664,21 +727,21 @@ export default {
                     console.log("method 保存成功！")
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            }).catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
         deployContract(val) {
-            if(val && !val.userId){
+            if (val && !val.userId) {
                 this.$message({
                     type: "info",
                     message: this.$t('contracts.addPrivateKeyInfo')
@@ -979,17 +1042,17 @@ export default {
 .copy-public-key {
     float: right;
 }
-.contract-font{
+.contract-font {
     color: #777;
     cursor: pointer;
 }
-.contract-font:hover{
-    color: #111
+.contract-font:hover {
+    color: #111;
 }
-.contract-font:active{
-    color: #111
+.contract-font:active {
+    color: #111;
 }
-.contract-font:visited{
-    color: #111
+.contract-font:visited {
+    color: #111;
 }
 </style>

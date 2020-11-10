@@ -1462,6 +1462,39 @@ export function deleteHandleHistory(data) {
         }
     })
 }
+// coantarct path list
+export function getContractPathList(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/contractPath/list/${data}`,
+        method: 'post',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//add contract path
+export function addContractPath(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/contractPath`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//delete contract path
+export function deletePath(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/contract/batch/path`,
+        method: 'delete',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 //event check 
 export function checkEvent(data) {

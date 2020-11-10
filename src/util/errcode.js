@@ -913,7 +913,22 @@ let errCode = {
         en: "p12 file content error",
         zh: "P12文件内容错误"
     },
-
+    "202321": {
+        en: "path contains deployed contract, please delete one by one.",
+        zh: "路径包含已部署的协定，请逐个删除。"
+    },
+    "202322": {
+        en: "contract path cannot be blank(use '/\' instead)",
+        zh: "合同路径不能为空（请改用“/\”）"
+    },
+    "202323": {
+        en: "privateKey decode fail",
+        zh: "私钥解码失败"
+    },
+    "202324": {
+        en: "password decode fail",
+        zh: "密码解码错误"
+    },
     "201232": {
         en: "Pem file format error, must surrounded by -----XXXXX PRIVATE KEY-----",
         zh: "Pem文件格式错误，必须包含-----XXXXX PRIVATE KEY----- "
