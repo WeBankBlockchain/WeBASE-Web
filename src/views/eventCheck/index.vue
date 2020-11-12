@@ -27,10 +27,7 @@
                             <el-option v-for="item in eventNameList" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
-                        <!-- <el-tooltip class="item" effect="dark" :content="$t('text.eventParam')" placement="right">
-                            <i class="el-icon-info"></i>
-                        </el-tooltip> -->
-                        <li v-for="item in inputList" class="event-info">
+                        <li v-for="item in inputList">
                             <div v-if="item.indexed">
                                 <div>{{item.name}}:</div>
                                 <el-input v-model="item.value" :placeholder="item.type" style="width: 500px;" @input="e => (item.msgObj = isType(e,item.type))"></el-input>
@@ -50,13 +47,8 @@
 
         </div>
         <div class="module-wrapper">
-            <div class="search-table" v-if="eventList.length > 0">
+            <div class="search-table" v-if="eventList.length > 0" style="padding-bottom: 13px;">
                 <el-table :data="eventList" tooltip-effect="dark" v-loading="loading">
-                    <!-- <el-table-column type="expand" align="center">
-                        <template slot-scope="scope">
-                            <decode-log :logInfo="logInfo(scope.row)"></decode-log>
-                        </template>
-                    </el-table-column> -->
                     <el-table-column prop="blockNumber" :label="$t('table.blockHeight')" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
                             <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
@@ -64,6 +56,9 @@
                     </el-table-column>
                     <el-table-column prop="eventVal" :label="$t('table.eventValue')" show-overflow-tooltip align="center"></el-table-column>
                 </el-table>
+            </div>
+            <div v-if="isSearch&&eventList.length==0" class="text-center" style="padding: 10px 0;">
+                <span class="font-color-333">{{$t('text.noData')}}</span>
             </div>
         </div>
     </div>
@@ -106,7 +101,8 @@ export default {
             abiId: '',
             eventList: [],
             restaurants: [],
-            queryTypeParam: {}
+            queryTypeParam: {},
+            isSearch: false
         }
     },
 
@@ -357,6 +353,7 @@ export default {
             checkEvent(param)
                 .then(res => {
                     this.loading = false;
+                    this.isSearch = true
                     if (res.data.code === 0) {
                         var eventList = res.data.data;
                         var newEventList = [];
@@ -513,6 +510,7 @@ export default {
                 type: item.type,
                 contractAddress: item.contractAddress
             }
+            this.contractEventForm.eventName = ''
             this.queryContractAbi(queryParam)
         },
         link(val) {

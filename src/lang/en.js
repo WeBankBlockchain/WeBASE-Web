@@ -241,7 +241,7 @@ export default {
         otherUser: 'Users without user name or public key users are external administrator accounts',
         committeeMgmt: 'Committee Mgmt',
         developerMgmt: 'Developer Mgmt',
-        checkEvent: 'Event Check',
+        checkEvent: 'Event Search',
         checkEventResult: 'Event',
         eventName: 'Event Name'
     },
@@ -427,6 +427,7 @@ export default {
         eventParam: 'Please follow the prompt of event parameter type strictly',
         exportSol: 'Export Contract',
         sureExport: 'Sure Export',
+        transactionReceipt: 'Transaction Receipt'
     },
     privateKey: {
         addUser: "Add Users",
@@ -716,10 +717,10 @@ export default {
         frontInfo: 'Front Info',
         transactionReceipt: 'Transaction Receipt',
         transactionInfo: 'Transaction Info',
-        checkEvent: 'Check Event',
+        checkEvent: 'Check Search',
         checkEventResult: 'Event',
         eventName: 'Event Name',
-        blockHeight: 'Block',
+        blockHeight: 'Block Height',
         eventValue: 'Event',
     },
     govCommittee: {

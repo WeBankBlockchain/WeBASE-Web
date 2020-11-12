@@ -418,7 +418,6 @@ export default {
                 this.data.contractAddress = val.contractAddress;
                 Bus.$emit("send", this.data)
             }
-
         },
         editorClose: function () {
             this.editorShow = false;
@@ -555,7 +554,6 @@ export default {
                         that.errorInfo = that.$t("contracts.contractCompileFail");
                         that.loading = false;
                     }
-                    console.log(output)
                 } else {
                     console.log(ev.data);
                     console.log(JSON.parse(ev.data.data))
@@ -616,7 +614,6 @@ export default {
                     this.errorInfo = this.$t("contracts.contractCompileFail");
                     this.loading = false;
                 }
-                console.log(output)
             }, 500)
         },
         changeOutput: function (obj) {
@@ -837,7 +834,7 @@ export default {
 
         },
         hiddenHover() {
-            // console.log('yinchu ')
+            
         },
         collapse() {
             this.showCompileText = !this.showCompileText

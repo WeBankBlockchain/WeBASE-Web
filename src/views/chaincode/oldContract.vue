@@ -102,7 +102,7 @@
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
             <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
         </el-dialog>
@@ -395,7 +395,8 @@ export default {
             router.push({
                 path: "/contract",
                 query: {
-                    contractId: val.contractId
+                    contractId: val.contractId,
+                    contractPath: val.contractPath
                 }
             })
         },
@@ -437,6 +438,7 @@ export default {
             this.dialogVisible = false
         },
         sendSuccess: function (val) {
+            this.sendConstant = val.constant;
             this.dialogVisible = false;
             this.editorShow = true;
             this.editorData = val.resData;

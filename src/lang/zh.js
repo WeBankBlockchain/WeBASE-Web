@@ -243,7 +243,7 @@ export default {
         otherUser: '无用户名的用户或公钥用户为外部管理员账户',
         committeeMgmt: '委员会管理',
         developerMgmt: '运维账号管理',
-        checkEvent: 'Event 查看',
+        checkEvent: 'Event查看',
         checkEventResult: 'Event',
         eventName: '合约event名'
     },
@@ -429,6 +429,7 @@ export default {
         eventParam: '请严格按照event参数类型提示输入;例如 byte类型输入"0x"',
         exportSol: '导出合约',
         sureExport: '确认导出',
+        transactionReceipt: '交易回执'
     },
     privateKey: {
         addUser: "新增用户",
