@@ -420,7 +420,7 @@ let errCode = {
     },
     "201218": {
         en: "Set node consensus type fail, check permission or node's group config file",
-        zh: '设置节点一致性类型失败，请检查权限或节点的组配置文件'
+        zh: '设置节点共识类型失败，请检查权限或节点的组配置文件'
     },
     "201221": {
         en: "Contract version should only contains 'A-Z' or 'a-z' or '0-9' or dot mark ",

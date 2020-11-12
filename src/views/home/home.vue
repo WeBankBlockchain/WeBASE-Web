@@ -785,6 +785,7 @@ export default {
 .overview-item-title {
     width: 100%;
     color: #fff;
+    min-width: 113px;
 }
 .overview-item-svg {
     width: 50px;

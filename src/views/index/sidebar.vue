@@ -168,9 +168,9 @@ export default {
                             case 'newPermission':
                                 it.name = this.$t('title.permission')
                                 break;
-                            // case 'developerMgmt':
-                            //     it.name = this.$t('title.developerMgmt')
-                            //     break;
+                            case 'checkEvent':
+                                it.name = this.$t('title.checkEvent')
+                                break;
                         }
                     })
                 }
@@ -279,18 +279,6 @@ export default {
                         })
                     }
                 }
-                // list.forEach(item => {
-                //     if (item.name === "帐号管理") {
-                //         item.menuShow = false;
-                //     }else if(item.path !='/' && item.path != '/login'){
-                //         item.menuShow = true;
-                //     }
-                //     if(item.children){
-                //         item.children.forEach(it => {
-                //             it.menuShow = true;
-                //         })
-                //     }
-                // });
                 list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
