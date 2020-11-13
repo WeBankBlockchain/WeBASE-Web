@@ -366,7 +366,8 @@ export default {
             router.push({
                 path: "/contract",
                 query: {
-                    contractId: val.contractId
+                    contractId: val.contractId,
+                    contractPath: val.contractPath
                 }
             })
         },

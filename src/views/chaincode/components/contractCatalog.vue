@@ -538,6 +538,8 @@ export default {
             }
             if(path){
                 data.contractPath = path
+            }else if(this.$route.query.contractPath){
+                data.contractPath = this.$route.query.contractPath
             }else{
                 data.contractPath = "/"
             }
