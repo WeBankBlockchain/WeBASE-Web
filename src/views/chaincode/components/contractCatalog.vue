@@ -96,6 +96,7 @@ import Clickoutside from 'element-ui/src/utils/clickoutside'
 import { subStringToNumber } from "@/util/util"
 let Base64 = require("js-base64").Base64;
 const FileSaver = require("file-saver");
+import JSZip from "jszip";
 export default {
     name: "contractCatalog",
     components: {
@@ -835,15 +836,19 @@ export default {
                 .catch(_ => { });
         },
         sureExportSol(val) {
+            const zip = new JSZip();
             let contractSource = Base64.decode(val.contractSource);
             let contractAbi = val.contractAbi;
             let contractBin = val.contractBin;
             var blobContractSource = new Blob([contractSource], { type: "text;charset=utf-8" });
             var blobContractAbi = new Blob([contractAbi], { type: "text;charset=utf-8" });
             var blobContractBin = new Blob([contractBin], { type: "text;charset=utf-8" });
-            FileSaver.saveAs(blobContractSource, `${val.contractName}.sol`);
-            FileSaver.saveAs(blobContractAbi, `${val.contractName}-abi`);
-            FileSaver.saveAs(blobContractBin, `${val.contractName}-bin`);
+            zip.file(`${val.contractName}.sol`, blobContractSource, { binary: true })
+            zip.file(`${val.contractName}.abi`, blobContractAbi, { binary: true })
+            zip.file(`${val.contractName}.bin`, blobContractBin, { binary: true })
+            zip.generateAsync({ type: "blob" }).then(content => {
+                FileSaver.saveAs(content, `${val.contractName}`);
+            });
         },
         exportFolder(val) {
             this.$confirm(`${this.$t('contracts.sureExport')}？`)
@@ -855,10 +860,19 @@ export default {
         sureExportFolderSol(val) {
             let folderInfo = val;
             var contractList = []
+            const zip = new JSZip();
             if (folderInfo.child.length > 0) {
                 contractList = folderInfo.child
                 contractList.forEach(item => {
-                    this.sureExportSol(item)
+                    var blobContractSource = new Blob([Base64.decode(item.contractSource)], { type: "text;charset=utf-8" });
+                    var blobContractAbi = new Blob([item.contractAbi], { type: "text;charset=utf-8" });
+                    var blobContractBin = new Blob([item.contractBin], { type: "text;charset=utf-8" });
+                    zip.file(`${item.contractName}.sol`, blobContractSource, { binary: true })
+                    zip.file(`${item.contractName}.abi`, blobContractAbi, { binary: true })
+                    zip.file(`${item.contractName}.bin`, blobContractBin, { binary: true })
+                });
+                zip.generateAsync({ type: "blob" }).then(content => {
+                    FileSaver.saveAs(content, `${folderInfo.contractName}`);
                 });
             }
         }
