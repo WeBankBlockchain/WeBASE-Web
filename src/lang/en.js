@@ -425,7 +425,7 @@ export default {
         userAddress: 'User Address',
         status: 'Status',
         eventParam: 'Please follow the prompt of event parameter type strictly',
-        exportSol: 'Export Contract',
+        exportSol: 'Export',
         sureExport: 'Sure Export',
         transactionReceipt: 'Transaction Receipt'
     },
