@@ -312,13 +312,13 @@ export default {
 .send-item-params {
     display: inline-block;
 }
-.send-item /deep/.el-input__inner {
+.send-item >>>.el-input__inner {
     height: 32px;
     line-height: 32px;
 }
 .send-btn {
 }
-.send-btn /deep/ .el-button {
+.send-btn >>> .el-button {
     padding: 9px 16px;
 }
 </style>

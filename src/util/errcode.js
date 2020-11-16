@@ -420,7 +420,7 @@ let errCode = {
     },
     "201218": {
         en: "Set node consensus type fail, check permission or node's group config file",
-        zh: '设置节点一致性类型失败，请检查权限或节点的组配置文件'
+        zh: '设置节点共识类型失败，请检查权限或节点的组配置文件'
     },
     "201221": {
         en: "Contract version should only contains 'A-Z' or 'a-z' or '0-9' or dot mark ",
@@ -498,6 +498,14 @@ let errCode = {
     "201303": {
         en: "chain governance address cannot be blank",
         zh: '链治理地址不能为空'
+    },
+    "201311": {
+        en: "get event callback fail for time out",
+        zh: '获取事件回调超时失败'
+    },
+    "201312": {
+        en: "get event callback error",
+        zh: '获取事件回调错误'
     },
     "201501": {
         en: "web3sdk create key pair fail and return null",

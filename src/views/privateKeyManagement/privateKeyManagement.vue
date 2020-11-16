@@ -83,7 +83,7 @@ import importKey from "./components/importKey.vue";
 import { getUserList, getUserDescription } from "@/util/api";
 import errcode from "@/util/errcode";
 export default {
-    name: "RivateKeyManagement",
+    name: "privateKeyManagement",
     components: {
         "v-contentHead": contentHead,
         "v-creatUser": creatUser,
@@ -326,5 +326,5 @@ export default {
 };
 </script>
 <style scoped>
-@import "./rivateKeyManagement.css";
+@import "./privateKeyManagement.css";
 </style>

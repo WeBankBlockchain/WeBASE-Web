@@ -168,9 +168,9 @@ export default {
                             case 'newPermission':
                                 it.name = this.$t('title.permission')
                                 break;
-                            // case 'developerMgmt':
-                            //     it.name = this.$t('title.developerMgmt')
-                            //     break;
+                            case 'checkEvent':
+                                it.name = this.$t('title.checkEvent')
+                                break;
                         }
                     })
                 }
@@ -268,7 +268,7 @@ export default {
                 for(let i = 0; i < list.length; i++) {
                     if(list[i].name == '帐号管理'){
                         list[i].menuShow =false
-                    }else if(list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' ){
+                    }else if(list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' || list[i].nameKey =='groupManagement'){
                         list[i].menuShow = false;
                     }else{
                         list[i].menuShow = true;
@@ -279,18 +279,6 @@ export default {
                         })
                     }
                 }
-                // list.forEach(item => {
-                //     if (item.name === "帐号管理") {
-                //         item.menuShow = false;
-                //     }else if(item.path !='/' && item.path != '/login'){
-                //         item.menuShow = true;
-                //     }
-                //     if(item.children){
-                //         item.children.forEach(it => {
-                //             it.menuShow = true;
-                //         })
-                //     }
-                // });
                 list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;

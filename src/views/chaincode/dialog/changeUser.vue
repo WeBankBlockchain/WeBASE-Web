@@ -19,7 +19,7 @@
             <tr>
                 <td style="width: 40px;">{{this.$t('contracts.user')}}：</td>
                 <td>
-                    <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 100%">
+                    <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 100%" :no-data-text="$t('text.goCreatPrivateKey')">
                         <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
                     </el-select>
                 </td>
@@ -128,7 +128,6 @@ export default {
                         });
                         if (this.userList.length) {
                             this.userName = this.userList[0].address;
-                            // this.userId = this.userList[0].userId;
                         }
                     } else {
                         this.$message({
@@ -155,18 +154,18 @@ export default {
     margin-top: 15px;
 }
 
-.chang-wrapper /deep/ .el-input__inner {
+.chang-wrapper >>> .el-input__inner {
     height: 32px;
     line-height: 32px;
 }
-.chang-wrapper /deep/ .el-input__icon {
+.chang-wrapper >>> .el-input__icon {
     line-height: 32px;
 }
 .opt-wrapper tr td {
     padding-top: 0;
     padding-bottom: 10px;
 }
-.send-btn /deep/ .el-button {
+.send-btn >>> .el-button {
     padding: 9px 16px;
 }
 .params-input >>> .el-input-group__prepend {

@@ -45,26 +45,6 @@ export default {
                 adminRivateKey: '',
                 configValue: ''
             },
-            rules: {
-                adminRivateKey: [
-                    {
-                        required: true,
-                        message: "请选择管理员账号",
-                        trigger: "blur"
-                    }
-                ],
-                configValue: [
-                    {
-                        required: true,
-                        message: "请输入配置值",
-                        trigger: "blur"
-                    },
-                    {
-                        type: 'number',
-                        message: '配置值必须为数字'
-                    }
-                ]
-            }
         }
     },
 
@@ -200,7 +180,7 @@ export default {
 </script>
 
 <style scoped>
-.sure-btn /deep/ .el-button {
+.sure-btn >>> .el-button {
     padding: 9px 16px;
 }
 </style>

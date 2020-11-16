@@ -179,7 +179,8 @@ export default {
                         sessionStorage.setItem("accountStatus", res.data.data.accountStatus);
                         sessionStorage.setItem("reload", 1);
                         localStorage.setItem("config",0);
-                        localStorage.setItem("nodeVersionChange","")
+                        localStorage.setItem("nodeVersionChange","");
+                        localStorage.setItem("selectData","")
                         this.getConfigType();
                     } else {
                         this.changeCode()
