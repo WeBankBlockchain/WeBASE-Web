@@ -11,12 +11,12 @@ module.exports = {
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/mgr':{
-                
-                target:'http://127.0.0.1/',
-                changeOrigin:true,
-                pathRewrite:{
-                    '^/mgr':''
+            '/mgr': {
+
+                target: 'http://127.0.0.1/',
+                changeOrigin: true,
+                pathRewrite: {
+                    '^/mgr': ''
                 }
             },
         },
@@ -46,7 +46,7 @@ module.exports = {
     },
 
     build: {
-        env: require('./prod.env'), 
+        env: require('./prod.env'),
 
         // Template for index.html
         index: path.resolve(__dirname, '../dist/index.html'),
