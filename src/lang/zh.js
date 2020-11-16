@@ -359,7 +359,7 @@ export default {
         notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。",
     },
     contracts: {
-        createFile: "新建文件",
+        createFile: "新建",
         createFolder: "新建文件夹",
         upLoadFile: "上传文件",
         contractTips: "群组内部署的合约都需要在合约管理里添加，编译保存，否则会判断为异常合约。",
