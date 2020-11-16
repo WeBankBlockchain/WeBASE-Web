@@ -141,6 +141,19 @@ export function getContractList(data) {
         }
     })
 }
+
+// search contract list for contract path
+export function searchContract (data) {
+    return get({
+        url: `${url.ORG_LIST}/contract/contractList/multiPath`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 /**Add node */
 export function addnodes(data) {
     return post({
