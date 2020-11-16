@@ -427,7 +427,7 @@ export default {
         userAddress: '用户地址',
         status: '状态',
         eventParam: '请严格按照event参数类型提示输入;例如 byte类型输入"0x"',
-        exportSol: '导出合约',
+        exportSol: '导出',
         sureExport: '确认导出',
         transactionReceipt: '交易回执'
     },
