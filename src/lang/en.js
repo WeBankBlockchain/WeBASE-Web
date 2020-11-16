@@ -357,7 +357,7 @@ export default {
         notice: "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported."
     },
     contracts: {
-        createFile: "Create File",
+        createFile: "Create",
         createFolder: "Create Folder",
         upLoadFile: "Upload File",
         contractTips: "All contracts deployed within the group need to be added in contract management, compiled and saved, otherwise it will be judged as abnormal contracts.",
