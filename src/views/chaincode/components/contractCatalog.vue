@@ -89,7 +89,7 @@
 import addFolder from "../dialog/addFolder"
 import addFile from "../dialog/addFile"
 import selectCatalog from "../dialog/selectCatalog"
-import { getContractList, saveChaincode, deleteCode, getContractPathList, deletePath } from "@/util/api"
+import { searchContract, saveChaincode, deleteCode, getContractPathList, deletePath } from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
 import Clickoutside from 'element-ui/src/utils/clickoutside'
@@ -535,20 +535,33 @@ export default {
         getContracts: function (path, list) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                pageNumber: 1,
-                pageSize: 500,
             }
             if (localStorage.getItem("root") === 'developer') {
                 data.account = localStorage.getItem("user")
             }
             if (path) {
-                data.contractPath = path
+                data.contractPathList = [path]
             } else if (this.$route.query.contractPath) {
-                data.contractPath = this.$route.query.contractPath
-            } else {
-                data.contractPath = "/"
+                if(this.$route.query.contractPath == "/"){
+                    data.contractPathList = [this.$route.query.contractPath]
+                }else{
+                    data.contractPathList = [this.$route.query.contractPath,"/"]
+                }
+            } 
+            else if(localStorage.getItem("selectData")){
+                if(JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractPath){
+                    if(JSON.parse(localStorage.getItem("selectData")).contractPath == "/"){
+                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath]
+                    }else{
+                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath,"/"]
+                    }
+                    
+                }
+            } 
+            else{
+                data.contractPathList = ["/"]
             }
-            getContractList(data).then(res => {
+            searchContract(data).then(res => {
                 if (res.data.code == 0) {
                     this.contractList = []
                     let contractList = res.data.data || [];
@@ -577,11 +590,26 @@ export default {
                                     num++
                                     this.getContractArry(value);
                                 }
-                                if (!num) {
+                               
+                            })
+                            if (!num) {
+                                this.getContractArry()
+                            }
+                        } 
+                        else if (localStorage.getItem("selectData") && JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractId) {
+                            let num = 0;
+                            this.contractList.forEach(value => {
+                                if (value.contractId == JSON.parse(localStorage.getItem("selectData")).contractId) {
+                                    num++
+                                    this.getContractArry(value);
+                                }
+                               
+                            })
+                             if (!num) {
                                     this.getContractArry()
                                 }
-                            })
-                        } else {
+                        } 
+                        else {
                             this.getContractArry()
                         }
                     } else {
@@ -711,6 +739,7 @@ export default {
                     this.$set(value, 'contractActive', false)
                 }
             })
+            localStorage.setItem("selectData",JSON.stringify(val))
             Bus.$emit('select', val)
         },
         deleteFile: function (val) {
