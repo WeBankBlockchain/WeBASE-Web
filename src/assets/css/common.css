@@ -264,12 +264,12 @@
     color: #00c1d4;
 } */
 
-.select-32 /deep/ .el-input__inner {
+.select-32 >>> .el-input__inner {
     height: 32px;
     line-height: 32px;
 }
 
-.select-32 /deep/ .el-input__icon {
+.select-32 >>> .el-input__icon {
     line-height: 32px;
 }
 

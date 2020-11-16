@@ -32,9 +32,8 @@
                     <slot name="footer"></slot>
                 </div>
             </div>
-            
+
         </div>
-       
 
         <div class="contract-menu-content">
             <ul>
@@ -47,6 +46,7 @@
                             <ul v-if="contractFile">
                                 <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
                                 <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li>
+                                <li class="contract-menu-handle-list" @click="exportFile(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
                     </div>
@@ -58,6 +58,7 @@
                             <ul>
                                 <li class="contract-menu-handle-list" @click="addFiles(item)">{{$t('contracts.createFile')}}</li>
                                 <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
+                                <li class="contract-menu-handle-list" @click="exportFolder(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
                         <br>
@@ -70,6 +71,7 @@
                                     <ul v-if="contractFile">
                                         <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
                                         <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li>
+                                        <li class="contract-menu-handle-list" @click="exportFile(list)">{{$t('contracts.exportSol')}}</li>
                                     </ul>
                                 </div>
                             </li>
@@ -87,11 +89,13 @@
 import addFolder from "../dialog/addFolder"
 import addFile from "../dialog/addFile"
 import selectCatalog from "../dialog/selectCatalog"
-import { getContractList, saveChaincode, deleteCode,getContractPathList,deletePath } from "@/util/api"
+import { searchContract, saveChaincode, deleteCode, getContractPathList, deletePath } from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
 import Clickoutside from 'element-ui/src/utils/clickoutside'
 import { subStringToNumber } from "@/util/util"
+let Base64 = require("js-base64").Base64;
+const FileSaver = require("file-saver");
 export default {
     name: "contractCatalog",
     components: {
@@ -136,7 +140,7 @@ export default {
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.$nextTick(function () {
                 this.getContractPaths()
             })
@@ -148,7 +152,7 @@ export default {
             this.saveContract(data)
         })
         Bus.$on("deploy", data => {
-            this.getContracts("",data);
+            this.getContracts("", data);
         })
         Bus.$on("open", data => {
             this.contractArry.forEach(value => {
@@ -376,7 +380,7 @@ export default {
                 filename = this.uploadFiles[i].name.split(".")[0];
                 let num = 0;
                 this.contractList.forEach(value => {
-                    if (value.contractName == filename && value.contractPath == val&& num===0) {
+                    if (value.contractName == filename && value.contractPath == val && num === 0) {
                         this.$message({
                             type: "error",
                             message: this.$t("contracts.contractNameSameFail")
@@ -424,12 +428,12 @@ export default {
             this.folderId = ""
             this.ID = ""
         },
-        getContractPaths () {
+        getContractPaths() {
             getContractPathList(localStorage.getItem("groupId")).then(res => {
-                if(res.data.code == 0){
+                if (res.data.code == 0) {
                     this.pathList = res.data.data;
                     this.folderList = []
-                    for(let i = 0;i < this.pathList.length; i++){
+                    for (let i = 0; i < this.pathList.length; i++) {
                         if (this.pathList[i].contractPath != "/") {
                             let item = {
                                 folderName: this.pathList[i].contractPath,
@@ -442,13 +446,13 @@ export default {
                         }
                     }
                     this.getContracts()
-                }else {
-                        this.$message({
-                            type: "error",
-                            message: this.$chooseLang(res.data.code)
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: this.$chooseLang(res.data.code)
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
                         type: "error",
@@ -503,7 +507,7 @@ export default {
             }
             saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
-                    this.getContracts(data.contractPath,res.data.data);
+                    this.getContracts(data.contractPath, res.data.data);
                     if (data.contractId) {
                         this.$message({
                             type: "success",
@@ -512,10 +516,10 @@ export default {
                     }
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
                 .catch(err => {
@@ -524,40 +528,52 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
-        getContracts: function (path,list) {
+        getContracts: function (path, list) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                pageNumber: 1,
-                pageSize: 500,
             }
-            if(localStorage.getItem("root") === 'developer'){
+            if (localStorage.getItem("root") === 'developer') {
                 data.account = localStorage.getItem("user")
             }
-            if(path){
-                data.contractPath = path
-            }else if(this.$route.query.contractPath){
-                data.contractPath = this.$route.query.contractPath
-            }else{
-                data.contractPath = "/"
+            if (path) {
+                data.contractPathList = [path]
+            } else if (this.$route.query.contractPath) {
+                if(this.$route.query.contractPath == "/"){
+                    data.contractPathList = [this.$route.query.contractPath]
+                }else{
+                    data.contractPathList = [this.$route.query.contractPath,"/"]
+                }
+            } 
+            else if(localStorage.getItem("selectData")){
+                if(JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractPath){
+                    if(JSON.parse(localStorage.getItem("selectData")).contractPath == "/"){
+                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath]
+                    }else{
+                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath,"/"]
+                    }
+                    
+                }
+            } 
+            else{
+                data.contractPathList = ["/"]
             }
-            getContractList(data).then(res => {
+            searchContract(data).then(res => {
                 if (res.data.code == 0) {
                     this.contractList = []
-                   let contractList = res.data.data || [];
+                    let contractList = res.data.data || [];
                     let contractDataList = this.$store.state.contractDataList;
-                    console.log(contractDataList,contractList)
-                    this.contractList = this.changeContractData(contractDataList,contractList,data.contractPath)
-                    this.$store.dispatch('set_contract_dataList_action',this.contractList);
+                    this.contractList = this.changeContractData(contractDataList, contractList, data.contractPath)
+                    this.$store.dispatch('set_contract_dataList_action', this.contractList);
                     localStorage.setItem("contractList", JSON.stringify(this.contractList))
                     if (res.data.data.length) {
-                       
+
                         let result = [];
                         let arrry = []
                         let obj = {};
-                       
+
                         this.contractList.forEach(value => {
                             this.$set(value, "contractType", 'file')
                             this.$set(value, "contractActive", false)
@@ -573,25 +589,37 @@ export default {
                                     num++
                                     this.getContractArry(value);
                                 }
-                                if (!num) {
+                               
+                            })
+                            if (!num) {
+                                this.getContractArry()
+                            }
+                        } 
+                        else if (JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractId) {
+                            let num = 0;
+                            this.contractList.forEach(value => {
+                                if (value.contractId == JSON.parse(localStorage.getItem("selectData")).contractId) {
+                                    num++
+                                    this.getContractArry(value);
+                                }
+                               
+                            })
+                             if (!num) {
                                     this.getContractArry()
                                 }
-                            })
-                        } else {
+                        } 
+                        else {
                             this.getContractArry()
                         }
                     } else {
-                        // if (localStorage.getItem("folderList")) {
-                        //     this.folderList = JSON.parse(localStorage.getItem("folderList"))
-                            this.getContractArry()
-                        // }
+                        this.getContractArry()
                     }
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
                 .catch(err => {
@@ -602,17 +630,17 @@ export default {
                     });
                 });
         },
-        changeContractData(list1,list2,path){
+        changeContractData(list1, list2, path) {
             let arry = [];
             let obj = {}
             let list = list1.concat(list2);
-                list = list.reduce(function(item, next) {
+            list = list.reduce(function (item, next) {
                 obj[next.contractId] ? '' : obj[next.contractId] = true && item.push(next);
                 return item;
             }, []);
-            for(let i = 0; i < list.length; i++){
-                for(let j = 0; j < list2.length; j++){
-                    if(list[i].contractId === list2[j].contractId){
+            for (let i = 0; i < list.length; i++) {
+                for (let j = 0; j < list2.length; j++) {
+                    if (list[i].contractId === list2[j].contractId) {
                         list[i].contractName = list2[j].contractName;
                         list[i].contractPath = list2[j].contractPath;
                         list[i].contractSource = list2[j].contractSource;
@@ -622,11 +650,6 @@ export default {
                     }
                 }
             }
-            // for(let i = 0; i < list.length; i++){
-            //     if(!list[i].contractReal && list[i].contractPath == path){
-            //         list.splice(i,1)
-            //     }
-            // }
             return list
         },
         fileSucccess: function (val) {
@@ -645,58 +668,38 @@ export default {
             }
             this.fileClose()
         },
-        // contactFolderPath (list1,list2) {
-        //     let arry = [];
-        //     let obj = {}
-        //     let list = list1.concat(list2);
-        //         list = list.reduce(function(item, next) {
-        //         obj[next.folderName] ? '' : obj[next.folderName] = true && item.push(next);
-        //         return item;
-        //     }, []);
-        //     console.log(list)
-        //     for(let i = 0; i < list.length; i++){
-        //         if(list[i].folderName == "/"){
-        //             list.splice(i,1)
-        //         }
-        //     }
-        //     return list
-            
-        // },
         createFolder: function (val) {
             let result = []
-           
-            // this.folderList = this.contactFolderPath(this.pathList,this.$store.state.folders)
             this.folderList.forEach(value => {
                 let num = 0
-                    let data = {
-                        contractName: value.folderName,
-                        folderId: value.folderId,
-                        contractActive: false,
-                        contractType: 'folder',
-                        folderIcon: "el-icon-caret-right",
-                        folderActive: false,
-                        renameShow: false,
-                        inputShow: false
+                let data = {
+                    contractName: value.folderName,
+                    folderId: value.folderId,
+                    contractActive: false,
+                    contractType: 'folder',
+                    folderIcon: "el-icon-caret-right",
+                    folderActive: false,
+                    renameShow: false,
+                    inputShow: false
+                }
+                this.contractArry.forEach(item => {
+                    if (item.contractType == 'folder' && item.contractName == data.contractName) {
+                        data.folderIcon = item.folderIcon;
+                        data.folderActive = item.folderActive;
                     }
-                    this.contractArry.forEach(item => {
-                        if (item.contractType == 'folder' && item.contractPath == value.contractPath) {
-                            data.folderIcon = item.folderIcon;
-                            data.folderActive = item.folderActive;
-                        }
-                    })
-                    if(val && val.contractPath && val.contractPath != "/"){
-                        if(data.contractName == val.contractPath){
-                            data.folderIcon = "el-icon-caret-bottom";
-                            data.folderActive = true;
-                        }
+                })
+                if (val && val.contractPath && val.contractPath != "/") {
+                    if (data.contractName == val.contractPath) {
+                        data.folderIcon = "el-icon-caret-bottom";
+                        data.folderActive = true;
                     }
-                    result.push(data);
+                }
+                result.push(data);
             })
             return result
         },
         open: function (val) {
-            console.log(val);
-             if(val.contractName != "/" && val.contractPath != "/"){
+            if (val.contractName != "/" && val.contractPath != "/") {
                 this.getContracts(val.contractName);
             }
             this.contractArry.forEach(value => {
@@ -718,7 +721,7 @@ export default {
         },
         select: function (val) {
             let num = 0;
-           
+
             this.contractArry.forEach(value => {
                 if (value.contractId == val.contractId) {
                     this.$set(value, 'contractActive', true)
@@ -735,6 +738,7 @@ export default {
                     this.$set(value, 'contractActive', false)
                 }
             })
+            localStorage.setItem("selectData",JSON.stringify(val))
             Bus.$emit('select', val)
         },
         deleteFile: function (val) {
@@ -753,20 +757,20 @@ export default {
             deleteCode(data, {}).then(res => {
                 if (res.data.code === 0) {
                     let allContractList = this.$store.state.contractDataList;
-                    for(let i = 0; i < allContractList.length; i++){
-                        if(allContractList[i].contractId == val.contractId){
-                            allContractList.splice(i,1)
+                    for (let i = 0; i < allContractList.length; i++) {
+                        if (allContractList[i].contractId == val.contractId) {
+                            allContractList.splice(i, 1)
                         }
                     }
-                    this.$store.dispatch('set_contract_dataList_action',allContractList);
+                    this.$store.dispatch('set_contract_dataList_action', allContractList);
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContractPaths(val.contractPath)
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
                 .catch(err => {
@@ -786,34 +790,33 @@ export default {
                 .catch(_ => { });
         },
         deleteFolderData: function (val) {
-            console.log(val)
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 contractPath: val.contractName
             }
-            deletePath(reqData).then(res=> {
-                if(res.data.code === 0){
+            deletePath(reqData).then(res => {
+                if (res.data.code === 0) {
                     let allContractList = this.$store.state.contractDataList;
                     let contractList = []
-                    for(let i = 0; i < allContractList.length; i++){
-                        if(allContractList[i].contractPath == val.folderName){
+                    for (let i = 0; i < allContractList.length; i++) {
+                        if (allContractList[i].contractPath == val.folderName) {
                             allContractList.srue = true
                         }
                     }
-                    for(let i = 0; i < allContractList.length; i++){
-                        if(!allContractList.srue){
+                    for (let i = 0; i < allContractList.length; i++) {
+                        if (!allContractList.srue) {
                             contractList.push(allContractList[i])
                         }
                     }
-                    this.$store.dispatch('set_contract_dataList_action',contractList);
+                    this.$store.dispatch('set_contract_dataList_action', contractList);
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContractPaths(val.contractPath)
-                }else {
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
                 .catch(err => {
@@ -823,6 +826,41 @@ export default {
                         duration: 2000
                     });
                 });
+        },
+        exportFile(val) {
+            this.$confirm(`${this.$t('contracts.sureExport')}？`)
+                .then(_ => {
+                    this.sureExportSol(val);
+                })
+                .catch(_ => { });
+        },
+        sureExportSol(val) {
+            let contractSource = Base64.decode(val.contractSource);
+            let contractAbi = val.contractAbi;
+            let contractBin = val.contractBin;
+            var blobContractSource = new Blob([contractSource], { type: "text;charset=utf-8" });
+            var blobContractAbi = new Blob([contractAbi], { type: "text;charset=utf-8" });
+            var blobContractBin = new Blob([contractBin], { type: "text;charset=utf-8" });
+            FileSaver.saveAs(blobContractSource, `${val.contractName}.sol`);
+            FileSaver.saveAs(blobContractAbi, `${val.contractName}-abi`);
+            FileSaver.saveAs(blobContractBin, `${val.contractName}-bin`);
+        },
+        exportFolder(val) {
+            this.$confirm(`${this.$t('contracts.sureExport')}？`)
+                .then(_ => {
+                    this.sureExportFolderSol(val);
+                })
+                .catch(_ => { });
+        },
+        sureExportFolderSol(val) {
+            let folderInfo = val;
+            var contractList = []
+            if (folderInfo.child.length > 0) {
+                contractList = folderInfo.child
+                contractList.forEach(item => {
+                    this.sureExportSol(item)
+                });
+            }
         }
     }
 }
@@ -837,7 +875,6 @@ export default {
     height: 48px;
     line-height: 48px;
     border-bottom: 2px solid #e7ebf0;
-    
 }
 .contract-icon {
     vertical-align: middle;
@@ -852,7 +889,6 @@ export default {
     margin-top: -30px;
     width: 100%;
     opacity: 0;
-    /* -ms-filter: "alpha(opacity=0)"; */
     z-index: 9;
     cursor: pointer;
 }

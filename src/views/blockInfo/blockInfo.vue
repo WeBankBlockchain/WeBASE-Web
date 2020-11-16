@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.blockTitle')" :icon="true" :route="'home'" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.blockTitle')" :icon="true" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
@@ -241,7 +241,7 @@ export default {
     padding-bottom: 16px;
     font-size: 12px;
 }
-.block-table-content /deep/ .el-table__row {
+.block-table-content >>> .el-table__row {
     cursor: pointer;
 }
 </style>
