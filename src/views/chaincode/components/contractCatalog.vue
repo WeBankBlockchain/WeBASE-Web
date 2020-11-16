@@ -596,7 +596,7 @@ export default {
                                 this.getContractArry()
                             }
                         } 
-                        else if (JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractId) {
+                        else if (localStorage.getItem("selectData") && JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractId) {
                             let num = 0;
                             this.contractList.forEach(value => {
                                 if (value.contractId == JSON.parse(localStorage.getItem("selectData")).contractId) {
