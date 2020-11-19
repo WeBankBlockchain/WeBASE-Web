@@ -1,3 +1,18 @@
+### v1.4.2(2020-11-19)
+
+**Add**
+- 支持solidity v0.6.10
+- 新增EventLog查询功能
+
+**Fix**
+- 优化合约IDE合约加载，支持按路径导出合约
+
+**兼容性**
+- 支持FISCO-BCOS v2.4.x 及以上版本
+- WeBASE-Node-Manager v1.4.2+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 ### v1.4.1(2020-09-18)
 
 **Add**
