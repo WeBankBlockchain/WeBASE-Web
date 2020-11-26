@@ -323,8 +323,10 @@ export default {
         getEncryption: function(){
             encryption().then(res => {
                 if(res.data.code === 0){
-                    localStorage.removeItem('solcName')
-                    localStorage.removeItem('versionId')
+                    if(res.data.data != localStorage.getItem("encryptionId")){
+                        localStorage.removeItem('solcName')
+                        localStorage.removeItem('versionId');
+                    }
                     localStorage.setItem("encryptionId",res.data.data)
                 }else {
                     this.$message({
