@@ -15,38 +15,12 @@
  */
 <template>
     <div>
-        <el-dialog
-            title="选择目录"
-            :visible.sync="dialogVisible"
-            :before-close="close"
-            class="dialog-wrapper"
-            width="433px"
-            :center="true"
-        >
+        <el-dialog title="选择目录" :visible.sync="dialogVisible" :before-close="close" class="dialog-wrapper" width="433px" :center="true">
             <div>
-                <el-form
-                    :model="folderFrom"
-                    :rules="rules"
-                    ref="folderFrom"
-                    label-width="100px"
-                    class="demo-ruleForm"
-                >
-                    <el-form-item
-                        label="文件夹名称"
-                        prop="folderName"
-                        style="width: 330px"
-                    >
-                        <el-select
-                            v-model="folderFrom.folderName"
-                            placeholder="请选择"
-                            class="block-network"
-                        >
-                            <el-option
-                                v-for="item in options"
-                                :key="item.folderName"
-                                :label="item.folderName"
-                                :value="item.folderName"
-                            >
+                <el-form :model="folderFrom" :rules="rules" ref="folderFrom" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="文件夹名称" prop="folderName" style="width: 330px">
+                        <el-select v-model="folderFrom.folderName" placeholder="请选择" class="block-network">
+                            <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -54,9 +28,7 @@
             </div>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="close">取 消</el-button>
-                <el-button type="primary" @click="submit('folderFrom')"
-                    >确 定</el-button
-                >
+                <el-button type="primary" @click="submit('folderFrom')">确 定</el-button>
             </div>
         </el-dialog>
     </div>
@@ -129,23 +101,15 @@ export default {
                             for (let i = 0; i < this.pathList.length; i++) {
                                 if (this.pathList[i].contractPath != "/") {
                                     let item = {
-                                        folderName: this.pathList[i]
-                                            .contractPath,
-                                        folderId:
-                                            new Date().getTime() +
-                                            this.pathList[i].contractPath,
+                                        folderName: this.pathList[i].contractPath,
+                                        folderId: new Date().getTime() + this.pathList[i].contractPath,
                                         folderActive: false,
-                                        groupId: localStorage.getItem(
-                                            "groupId"
-                                        ),
+                                        groupId: localStorage.getItem("groupId"),
                                         modifyTime: this.pathList[i].modifyTime,
                                     };
                                     this.folderList.push(item);
                                 }
-                                if (
-                                    this.pathList[i].contractPath ==
-                                    this.userFolader
-                                ) {
+                                if (this.pathList[i].contractPath == this.userFolader) {
                                     num++;
                                 }
                             }
@@ -153,26 +117,18 @@ export default {
                             for (let i = 0; i < this.pathList.length; i++) {
                                 let item = {
                                     folderName: this.pathList[i].contractPath,
-                                    folderId:
-                                        new Date().getTime() +
-                                        this.pathList[i].contractPath,
+                                    folderId: new Date().getTime() + this.pathList[i].contractPath,
                                     folderActive: false,
                                     groupId: localStorage.getItem("groupId"),
                                     modifyTime: this.pathList[i].modifyTime,
                                 };
                                 this.folderList.push(item);
-                                if (
-                                    this.pathList[i].contractPath ==
-                                    this.userFolader
-                                ) {
+                                if (this.pathList[i].contractPath == this.userFolader) {
                                     num++;
                                 }
                             }
                         }
-                        if (
-                            num == 0 &&
-                            localStorage.getItem("root") === "developer"
-                        ) {
+                        if (num == 0 && localStorage.getItem("root") === "developer") {
                             this.addPath();
                         }
                         this.changeOptions();
@@ -193,35 +149,39 @@ export default {
         changeOptions: function () {
             console.log(this.folderList);
             for (let i = 0; i < this.folderList.length; i++) {
-                if (
-                    (!this.folderList[i].folderName ||
-                        this.folderList[i].folderName == "/") &&
-                    localStorage.getItem("root") === "developer"
-                ) {
+                if ((!this.folderList[i].folderName || this.folderList[i].folderName == "/") && localStorage.getItem("root") === "developer") {
                     this.folderList.splice(i, 1);
                 }
             }
             this.options = this.folderList;
-            if (
-                this.folderList.length === 0 &&
-                localStorage.getItem("root") !== "developer"
-            ) {
+            if (this.folderList.length === 0 && localStorage.getItem("root") !== "developer") {
                 this.options = [
                     {
                         folderName: "/",
                         folderId: new Date().getTime(),
                     },
                 ];
-            } else if (
-                this.folderList.length === 0 &&
-                localStorage.getItem("root") === "developer"
-            ) {
+            } else if (this.folderList.length === 0 && localStorage.getItem("root") === "developer") {
                 this.options = [
                     {
                         folderName: this.userFolader,
                         folderId: new Date().getTime(),
                     },
                 ];
+            }
+            let num = 0
+            for (let i = 0; i < this.options.length; i++) {
+                if (this.options[i].folderName == "/") {
+                    num++
+                }
+            }
+            if (num == 0 && localStorage.getItem("root") !== "developer") {
+                this.options.unshift(
+                    {
+                        folderName: "/",
+                        folderId: new Date().getTime(),
+                    }
+                )
             }
         },
         submit: function (formName) {

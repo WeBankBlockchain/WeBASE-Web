@@ -41,7 +41,7 @@
                     <div v-if='item.contractType == "file"' class="contract-file" :id='item.contractId'>
                         <i class="wbs-icon-file" @click='select(item)' v-if='!item.renameShow' :id='item.contractId'></i>
                         <span @contextmenu.prevent="handle($event,item)" @click='select(item)' :id='item.contractId' v-if='!item.renameShow' :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
-                        <el-input v-model="contractName" v-focus="true" autofocus='autofocus' maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
+                        <el-input v-model="contractName" v-focus maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
                         <div class="contract-menu-handle" v-if='!disabled &&item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul v-if="contractFile">
                                 <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
-                        <i :class="item.folderIcon" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
+                        <i :class="item.folderIcon" @contextmenu.prevent="handle($event,item)" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
                         <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
                         <span @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
@@ -66,7 +66,7 @@
                             <li class="contract-file" v-for='list in item.child' :key="list.contractId">
                                 <i class="wbs-icon-file" v-if='!list.renameShow' @click='select(list)'></i>
                                 <span @click='select(list)' @contextmenu.prevent="handle($event,list)" :id='list.contractId' v-if='!list.renameShow' :class="{'colorActive': list.contractActive}">{{list.contractName}}</span>
-                                <el-input v-model="contractName" autofocus='autofocus' maxlength="32" @blur="changeName(list)" v-if="list.renameShow"></el-input>
+                                <el-input v-model="contractName" v-focus maxlength="32" @blur="changeName(list)" v-if="list.renameShow"></el-input>
                                 <div class="contract-menu-handle" v-if='!disabled &&list.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                                     <ul v-if="contractFile">
                                         <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
@@ -127,6 +127,7 @@ export default {
             folderId: null,
             disabled: false,
             selectFolderData: null,
+            folderData: null,
             loading: false
         }
     },
@@ -182,10 +183,9 @@ export default {
     directives: {
         Clickoutside,
         focus: {
-            update: function (el, { value }) {
-                if (value) {
-                    el.focus()
-                }
+            inserted: function (el, { value }) {
+                let dom = el.getElementsByClassName('el-input__inner')[0];
+                dom.focus();
             }
         }
     },
@@ -207,12 +207,12 @@ export default {
         handle: function (e, list) {
             this.checkNull();
             list.handleModel = true
-            if (e.clientX > 201) {
-                this.clentX = e.clientX - 200 + 'px';
-            } else {
-                this.clentX = e.clientX + 'px';
-            }
-            this.clentY = 20 + 'px';
+            // if (e.clientX > 201) {
+            //     this.clentX = e.clientX - 200 + 'px';
+            // } else {
+            this.clentX = e.clientX + 'px';
+            // }
+            this.clentY = e.clientY;
             this.ID = e.target.id;
             let item = {};
             if (this.ID) {
@@ -487,7 +487,33 @@ export default {
             this.contractArry = result;
             if (this.contractList.length && !val) {
                 this.select(this.contractList[0])
-            } else if (val && this.contractList.length) {
+            }
+            else if (val && val.contractType == "folder") {
+                // let num = 0
+                // for (let i = 0; i < this.contractArry.length; i++) {
+                //     if (val.contractName === this.contractArry[i].contractName) {
+                //         if (this.contractArry[i].child.length) {
+                //             this.select(this.contractArry[i].child[0]);
+                //             num++;
+                //         }
+                //     }
+                // }
+                // if (num == 0) {
+                //     let index = 0;
+                //     for (let i = 0; i < this.contractList.length; i++) {
+                //         if (this.contractList[i] && this.contractList[i].contractPath == "/") {
+                //             this.select(this.contractList[i]);
+                //             index++;
+                //             console.log("*")
+                //             continue;
+                //         }
+                //     }
+                //     if (index == 0) {
+                //         this.select(this.contractList[0]);
+                //     }
+                // }
+                this.select(val, 'title')
+            } else if (val && val.contractType !== "folder" && this.contractList.length) {
                 this.select(val)
             } else {
                 Bus.$emit("noData", true)
@@ -543,23 +569,24 @@ export default {
             if (path) {
                 data.contractPathList = [path]
             } else if (this.$route.query.contractPath) {
-                if(this.$route.query.contractPath == "/"){
+                if (this.$route.query.contractPath == "/") {
                     data.contractPathList = [this.$route.query.contractPath]
-                }else{
-                    data.contractPathList = [this.$route.query.contractPath,"/"]
+                } else {
+                    data.contractPathList = [this.$route.query.contractPath, "/"]
                 }
-            } 
-            else if(localStorage.getItem("selectData")){
-                if(JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractPath){
-                    if(JSON.parse(localStorage.getItem("selectData")).contractPath == "/"){
+            }
+            else if (localStorage.getItem("selectData")) {
+                if (JSON.parse(localStorage.getItem("selectData"))) {
+                    if (JSON.parse(localStorage.getItem("selectData")).contractPath && JSON.parse(localStorage.getItem("selectData")).contractPath == "/") {
                         data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath]
-                    }else{
-                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath,"/"]
+                    } else if (JSON.parse(localStorage.getItem("selectData")).contractType == 'folder') {
+                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractName, "/"]
+                    } else {
+                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath, "/"]
                     }
-                    
                 }
-            } 
-            else{
+            }
+            else {
                 data.contractPathList = ["/"]
             }
             this.loading = true
@@ -593,12 +620,12 @@ export default {
                                     num++
                                     this.getContractArry(value);
                                 }
-                               
+
                             })
                             if (!num) {
                                 this.getContractArry()
                             }
-                        } 
+                        }
                         else if (localStorage.getItem("selectData") && JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractId) {
                             let num = 0;
                             this.contractList.forEach(value => {
@@ -606,17 +633,22 @@ export default {
                                     num++
                                     this.getContractArry(value);
                                 }
-                               
+
                             })
-                             if (!num) {
-                                    this.getContractArry()
-                                }
-                        } 
+                            if (!num) {
+                                this.getContractArry()
+                            }
+                        }
                         else {
                             this.getContractArry()
                         }
                     } else {
-                        this.getContractArry()
+                        if (list) {
+                            this.getContractArry(list)
+                        } else {
+                            this.getContractArry()
+                        }
+
                     }
                 } else {
                     this.$message({
@@ -637,11 +669,17 @@ export default {
         changeContractData(list1, list2, path) {
             let arry = [];
             let obj = {}
-            let list = list1.concat(list2);
-            list = list.reduce(function (item, next) {
+            let list3 = list1.concat(list2);
+            let list = []
+            list3 = list3.reduce(function (item, next) {
                 obj[next.contractId] ? '' : obj[next.contractId] = true && item.push(next);
                 return item;
             }, []);
+            for (let i = 0; i < list3.length; i++) {
+                if (list3[i].groupId == localStorage.getItem("groupId")) {
+                    list.push(list3[i])
+                }
+            }
             for (let i = 0; i < list.length; i++) {
                 for (let j = 0; j < list2.length; j++) {
                     if (list[i].contractId === list2[j].contractId) {
@@ -690,12 +728,14 @@ export default {
                     if (item.contractType == 'folder' && item.contractName == data.contractName) {
                         data.folderIcon = item.folderIcon;
                         data.folderActive = item.folderActive;
+                        this.$set(data, "contractActive", data.contractActive)
                     }
                 })
                 if (val && val.contractPath && val.contractPath != "/") {
                     if (data.contractName == val.contractPath) {
                         data.folderIcon = "el-icon-caret-bottom";
                         data.folderActive = true;
+                        data.contractActive = true
                     }
                 }
                 result.push(data);
@@ -704,7 +744,7 @@ export default {
         },
         open: function (val) {
             if (val.contractName != "/" && val.contractPath != "/") {
-                this.getContracts(val.contractName);
+                this.getContracts(val.contractName, val);
             }
             this.contractArry.forEach(value => {
                 this.$set(value, 'contractActive', false)
@@ -712,6 +752,9 @@ export default {
                     value.child.forEach(item => {
                         this.$set(item, 'contractActive', false)
                     })
+                }
+                if (value.contractName === val.contractName && value.contractType == "folder") {
+                    this.$set(value, "contractActive", true);
                 }
             })
             if (val.folderActive) {
@@ -721,16 +764,22 @@ export default {
                 this.$set(val, 'folderActive', true)
                 this.$set(val, 'folderIcon', 'el-icon-caret-bottom')
             }
-            this.$set(val, 'contractActive', true)
+            this.$set(val, 'contractActive', true);
+            this.folderData = val
         },
-        select: function (val) {
+        select: function (val, type) {
             let num = 0;
 
             this.contractArry.forEach(value => {
-                if (value.contractId == val.contractId) {
+                if (val && val.contractId && value.contractId == val.contractId) {
                     this.$set(value, 'contractActive', true)
                 } else if (value.contractType == 'folder') {
-                    this.$set(value, 'contractActive', false)
+                    if (this.folderData && this.folderData.contractName === value.contractName) {
+
+                        this.$set(value, "contractActive", this.folderData.contractActive);
+                    } else {
+                        this.$set(value, "contractActive", false);
+                    }
                     value.child.forEach(item => {
                         if (item.contractId == val.contractId) {
                             this.$set(item, 'contractActive', true)
@@ -742,8 +791,12 @@ export default {
                     this.$set(value, 'contractActive', false)
                 }
             })
-            localStorage.setItem("selectData",JSON.stringify(val))
-            Bus.$emit('select', val)
+            this.folderData = null;
+            if (!type) {
+                localStorage.setItem("selectData", JSON.stringify(val))
+                Bus.$emit('select', val)
+            }
+
         },
         deleteFile: function (val) {
             this.$confirm(this.$t("text.confirmDelete"))
@@ -880,7 +933,7 @@ export default {
                 zip.generateAsync({ type: "blob" }).then(content => {
                     FileSaver.saveAs(content, `${folderInfo.contractName}`);
                 });
-            }else {
+            } else {
                 this.$message({
                     type: 'warning',
                     message: this.$t('text.emptyFolder'),
@@ -974,7 +1027,7 @@ export default {
     padding: 0 5px;
 }
 .contract-menu-handle {
-    position: absolute;
+    position: fixed;
     font-size: 0;
     width: 100px;
     /* top: 0; */

@@ -15,43 +15,15 @@
  */
 <template>
     <div>
-        <el-dialog
-            :title="$t('contracts.createFile')"
-            :visible.sync="dialogVisible"
-            :before-close="modelClose"
-            class="dialog-wrapper"
-            width="433px"
-            :center="true"
-        >
+        <el-dialog :title="$t('contracts.createFile')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true">
             <div>
-                <el-form
-                    :model="fileFrom"
-                    :rules="rules"
-                    ref="fileFrom"
-                    label-width="116px"
-                    class="demo-ruleForm"
-                >
-                    <el-form-item
-                        :label="$t('contracts.contractName')"
-                        prop="contractName"
-                    >
-                        <el-input
-                            v-model="fileFrom.contractName"
-                            style="width: 210px"
-                        ></el-input>
+                <el-form :model="fileFrom" :rules="rules" ref="fileFrom" label-width="116px" class="demo-ruleForm">
+                    <el-form-item :label="$t('contracts.contractName')" prop="contractName">
+                        <el-input v-model="fileFrom.contractName" style="width: 210px"></el-input>
                     </el-form-item>
                     <el-form-item :label="$t('contracts.filePath')">
-                        <el-select
-                            v-model="fileFrom.contractType"
-                            :disabled="disabled"
-                            placeholder="请选择"
-                        >
-                            <el-option
-                                v-for="item in options"
-                                :key="item.folderName"
-                                :label="item.folderName"
-                                :value="item.folderName"
-                            >
+                        <el-select v-model="fileFrom.contractType" :disabled="disabled" placeholder="请选择">
+                            <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -251,12 +223,21 @@ export default {
             }
             this.fileFrom.contractType = this.options[0].folderName;
             for (let i = 0; i < this.options.length; i++) {
-                if (
-                    this.data &&
-                    this.options[i].folderName == this.data.contractName
-                ) {
+                if (this.data && this.options[i].folderName == this.data.contractName) {
                     this.fileFrom.contractType = this.options[i].folderName;
                 }
+            }
+            let num = 0;
+            for (let i = 0; i < this.options.length; i++) {
+                if (this.options[i].folderName == "/") {
+                    num++;
+                }
+            }
+            if (num == 0 && localStorage.getItem("root") !== "developer") {
+                this.options.unshift({
+                    folderName: "/",
+                    folderId: new Date().getTime(),
+                });
             }
         },
         submit: function (formName) {
