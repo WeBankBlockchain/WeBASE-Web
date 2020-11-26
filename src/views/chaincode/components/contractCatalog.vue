@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div class="contract-menu" style="position: relative;height: 100% ;">
+    <div class="contract-menu" style="position: relative;height: 100% ;" v-loading="loading">
         <div class="contract-menu-header">
             <div style="padding-left: 20px;">
                 <el-tooltip class="item" effect="dark" :content="$t('contracts.createFile')" v-if="!disabled" placement="top-start">
@@ -127,7 +127,8 @@ export default {
             folderId: null,
             disabled: false,
             selectFolderData: null,
-            folderData: null
+            folderData: null,
+            loading: false
         }
     },
     beforeDestroy: function () {
@@ -588,7 +589,9 @@ export default {
             else {
                 data.contractPathList = ["/"]
             }
+            this.loading = true
             searchContract(data).then(res => {
+                this.loading = false;
                 if (res.data.code == 0) {
                     this.contractList = []
                     let contractList = res.data.data || [];
@@ -804,6 +807,7 @@ export default {
 
         },
         deleteData: function (val) {
+            this.loading = true;
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 contractId: val.contractId
@@ -844,11 +848,13 @@ export default {
                 .catch(_ => { });
         },
         deleteFolderData: function (val) {
+            this.loading = true
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 contractPath: val.contractName
             }
             deletePath(reqData).then(res => {
+                this.loading = false
                 if (res.data.code === 0) {
                     let allContractList = this.$store.state.contractDataList;
                     let contractList = []
@@ -927,6 +933,12 @@ export default {
                 zip.generateAsync({ type: "blob" }).then(content => {
                     FileSaver.saveAs(content, `${folderInfo.contractName}`);
                 });
+            } else {
+                this.$message({
+                    type: 'warning',
+                    message: this.$t('text.emptyFolder'),
+                    duration: 2000
+                })
             }
         }
     }
