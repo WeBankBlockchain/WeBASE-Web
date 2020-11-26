@@ -141,6 +141,8 @@ export default {
         org: "Agency name",
         developer: "Developer", 
         goCreatPrivateKey: "Please create a private key",
+        searchMessage: "Request Success",
+        emptyFolder: "Empty Folder",
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -187,7 +189,9 @@ export default {
         userRule: "Please enter user",
         thresholdRule: "Please enter threshold",
         weightRule: "Please enter weight",
-        eventName: 'Please enter event name'
+        eventName: 'Please enter event name',
+        fromBlock: "Please enter from block",
+        toBlock: "Please enter to block",
     },
     head: {
         helpText: "Document",
