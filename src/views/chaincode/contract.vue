@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 <template>
-    <div class="contract-content" >
-        <v-content-head  :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;"  @changGroup="changGroup"></v-content-head>
+    <div class="contract-content">
+        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head>
         <div style="height: calc(100% - 56px)" v-loading='loading'>
-        <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}" >
-            <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
-                <template #footer>
-                    <div class="version-selector">
-                        <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion" style="padding-left: 20px;">
-                            <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
-                            </el-option>
-                        </el-select>
-                    </div>
-                </template>
-            </v-menu>
-            <div class="move" @mousedown="dragDetailWeight($event)"></div>
-        </div>
-        <div :class="[!menuHide ?  'code-detail-wrapper' : 'code-detail-reset-wrapper']" :style="{width: contentWidth}">
-            <v-code :changeStyle="changeWidth" :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)" @deploy="deploy($event)"></v-code>
-        </div>
+            <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
+                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
+                    <template #footer>
+                        <div class="version-selector">
+                            <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion" style="padding-left: 20px;">
+                                <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
+                                </el-option>
+                            </el-select>
+                        </div>
+                    </template>
+                </v-menu>
+                <div class="move" @mousedown="dragDetailWeight($event)"></div>
+            </div>
+            <div :class="[!menuHide ?  'code-detail-wrapper' : 'code-detail-reset-wrapper']" :style="{width: contentWidth}">
+                <v-code :changeStyle="changeWidth" :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)" @deploy="deploy($event)"></v-code>
+            </div>
         </div>
     </div>
 </template>
@@ -51,10 +51,10 @@ export default {
         "v-content-head": contentHead
     },
     watch: {
-        $route: function() {
+        $route: function () {
             this.urlQuery = this.$root.$route.query;
         },
-        menuHide: function(val) {
+        menuHide: function (val) {
             if (val) {
                 this.menuWidth = 180;
             } else {
@@ -62,7 +62,7 @@ export default {
             }
         }
     },
-    data: function() {
+    data: function () {
         return {
             contractData: {},
             showCode: false,
@@ -82,7 +82,7 @@ export default {
         };
     },
     computed: {
-        contentWidth: function() {
+        contentWidth: function () {
             if (this.menuWidth) {
                 return `calc(100% - ${this.menuWidth}px)`;
             } else {
@@ -90,7 +90,7 @@ export default {
             }
         }
     },
-    mounted: function() {
+    mounted: function () {
         this.allVersion = [
             {
                 solcName: "v0.4.25",
@@ -139,13 +139,13 @@ export default {
         this.getEncryption(this.querySolcList);
     },
     methods: {
-        initWorker () {
-                let w = webworkify(require.resolve('@/util/file.worker'));
-                this.$store.state.worker = w
+        initWorker() {
+            let w = webworkify(require.resolve('@/util/file.worker'));
+            this.$store.state.worker = w
         },
-        querySolcList () {
-            for(let i = 0; i < this.allVersion.length; i++){
-                if(localStorage.getItem("encryptionId") == this.allVersion[i].encryptType){
+        querySolcList() {
+            for (let i = 0; i < this.allVersion.length; i++) {
+                if (localStorage.getItem("encryptionId") == this.allVersion[i].encryptType) {
                     this.versionList.push(this.allVersion[i])
                 }
             }
@@ -160,21 +160,28 @@ export default {
         initSolc(versionId) {
             let that = this
             // let w = webworkify(require.resolve('@/util/file.worker'));
-            for(let i = 0; i < this.versionList.length; i++){
-                if(this.versionList[i].versionId == versionId){
-                    this.versionData = this.versionList[i];
-                    this.version = this.versionList[i]['solcName'];
-                    this.$store.dispatch("set_version_data_action",this.versionData)
+            if (versionId) {
+                for (let i = 0; i < this.versionList.length; i++) {
+                    if (this.versionList[i].versionId == versionId) {
+                        this.versionData = this.versionList[i];
+                        this.version = this.versionList[i]['solcName'];
+                        this.$store.dispatch("set_version_data_action", this.versionData)
+                    }
                 }
+            } else {
+                this.versionData = this.versionList[0];
+                this.version = this.versionList[0]['solcName'];
+                this.$store.dispatch("set_version_data_action", this.versionData)
             }
-            if(this.versionData.net){
-               let w = webworkify(require.resolve('@/util/file.worker'));
+
+            if (this.versionData.net) {
+                let w = webworkify(require.resolve('@/util/file.worker'));
                 this.$store.state.worker = w
                 w.addEventListener('message', function (ev) {
-                    if(ev.data.cmd == 'versionLoaded'){
-                        console.log(ev.data,that);
-                        that.loading =false
-                    }else{
+                    if (ev.data.cmd == 'versionLoaded') {
+                        console.log(ev.data, that);
+                        that.loading = false
+                    } else {
                         console.log(ev.data);
                         console.log(JSON.parse(ev.data.data))
                     }
@@ -183,7 +190,7 @@ export default {
                     cmd: "loadVersion",
                     data: this.versionData.url
                 });
-            }else{
+            } else {
                 var head = document.head;
                 var script = document.createElement("script");
                 script.src = `${this.baseURLWasm}/${this.version}.js`;
@@ -191,10 +198,10 @@ export default {
                 if (!document.getElementById('soljson')) {
                     head.appendChild(script)
                 }
-                that.loading =false
+                that.loading = false
             }
-            
-            
+
+
         },
         initVersion() {
             localStorage.removeItem('solcName')
@@ -216,11 +223,11 @@ export default {
             });
             localStorage.setItem('versionId', versionId)
             this.initSolc(versionId)
-            if(this.$store.state.versionData && this.$store.state.versionData.net == 0){
+            if (this.$store.state.versionData && this.$store.state.versionData.net == 0) {
                 this.$router.go(0)
             }
-            
-            this.$refs.menu.getContracts()
+
+            this.$refs.menu.getContractPaths()
         },
         getEncryption: function (callback) {
             this.loading = true
@@ -242,10 +249,10 @@ export default {
                     });
                 });
         },
-        changGroup: function(){
-            this.$refs.menu.getContracts()
+        changGroup: function () {
+            this.$refs.menu.getContractPaths()
         },
-        dragDetailWeight: function(e) {
+        dragDetailWeight: function (e) {
             let startX = e.clientX,
                 menuWidth = this.menuWidth;
             document.onmousemove = e => {
@@ -260,17 +267,17 @@ export default {
                 document.onmouseup = null;
             };
         },
-        changeCode: function(val) {
+        changeCode: function (val) {
             this.contractData = val;
             this.showCode = true;
         },
-        add: function(val) {
+        add: function (val) {
             this.$refs.menu.saveContact(val);
         },
-        compile: function(val) {
+        compile: function (val) {
             this.$refs.menu.saveContact(val);
         },
-        deploy: function(val) {
+        deploy: function (val) {
             this.$refs.menu.saveContact(val);
         }
     }
