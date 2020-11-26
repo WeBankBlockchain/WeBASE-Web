@@ -190,8 +190,16 @@ export default {
                 script.setAttribute('id', 'soljson');
                 if (!document.getElementById('soljson')) {
                     head.appendChild(script)
+                    console.time("耗时");
+                    script.onload = function () {
+                        console.log('加载成功.');
+                        console.timeEnd("耗时");
+                        that.loading = false
+                    }
+                }else {
+                    that.loading =false
                 }
-                that.loading =false
+                
             }
             
             

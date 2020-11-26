@@ -28,10 +28,10 @@
                             </el-option>
                         </el-select>
                         <li v-for="item in inputList">
-                            <div v-if="item.indexed">
-                                <div>{{item.name}}:</div>
+                            <div v-if="item.indexed" style="position: relative;">
+                                <div class="param-name">{{item.name}}:</div>
                                 <el-input v-model="item.value" :placeholder="item.type" style="width: 500px;" @input="e => (item.msgObj = isType(e,item.type))"></el-input>
-                                <span v-if="item.msgObj&&!item.msgObj.is" class="font-color-ed5454 font-12" style="display:inline-block">
+                                <span v-if="item.msgObj&&!item.msgObj.is" class="font-color-ed5454 font-12 form-error" style="display:inline-block">
                                     {{item.msgObj.msg}}
                                 </span>
                             </div>
@@ -40,6 +40,7 @@
                     <el-form-item>
                         <div class="text-center" style="width: 500px;">
                             <el-button type="primary" @click="submit('contractEventForm')" :loading="loading">{{$t('text.search')}}</el-button>
+                            <span v-text="searchMessage"></span>
                         </div>
                     </el-form-item>
                 </el-form>
@@ -102,7 +103,8 @@ export default {
             eventList: [],
             restaurants: [],
             queryTypeParam: {},
-            isSearch: false
+            isSearch: false,
+            searchMessage: ''
         }
     },
 
@@ -354,6 +356,10 @@ export default {
                 .then(res => {
                     this.loading = false;
                     this.isSearch = true
+                    this.searchMessage = this.$t('text.searchMessage')
+                    setTimeout(() => {
+                        this.searchMessage = ''
+                    }, 3000);
                     if (res.data.code === 0) {
                         var eventList = res.data.data;
                         var newEventList = [];
@@ -537,5 +543,17 @@ export default {
 }
 .block-wrapper {
     display: flex;
+}
+.param-name {
+    height: 42px;
+    line-height: 42px;
+}
+.form-error {
+    font-size: 12px;
+    line-height: 1;
+    padding-top: 4px;
+    position: absolute;
+    top: 100%;
+    left: 0;
 }
 </style>
