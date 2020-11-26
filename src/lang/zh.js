@@ -141,7 +141,8 @@ export default {
         org: "机构名",
         developer: "开发者",
         goCreatPrivateKey: "请先到私钥管理创建私钥",
-
+        searchMessage: "查询成功",
+        emptyFolder: "空文件夹",
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -189,7 +190,9 @@ export default {
         userRule: "请选择账号",
         thresholdRule: "请输入阈值",
         weightRule: "请输入权重",
-        eventName: '请选择事件名'
+        eventName: '请选择事件名',
+        fromBlock: "请输入起始区块",
+        toBlock: "请输入末区块",
     },
     head: {
         helpText: "帮助文档",

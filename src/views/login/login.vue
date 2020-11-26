@@ -20,7 +20,7 @@
         </div>
         <div class="login">
             <div>
-                <svg class="icon" aria-hidden="true">
+                <svg style="width: 142px;height: 142px;fill: currentColor;overflow: hidden;" aria-hidden="true">
                     <use xlink:href="#wbs-icon-WeBASE"></use>
                 </svg>
                 <p class="logo-content">
@@ -177,6 +177,11 @@ export default {
         localStorage.setItem("config", 0);
         this.changeCode();
         this.getEncryption();
+        // let soljson = document.getElementById('soljson')
+        // if(soljson){
+        //     soljson.remove()
+        //     location.reload()
+        // }
     },
     methods: {
         handleEncryption: function () {
@@ -392,12 +397,6 @@ export default {
     height: 45px;
     margin-top: 10px;
     font-size: 14px;
-}
-.icon {
-    width: 142px;
-    height: 142px;
-    fill: currentColor;
-    overflow: hidden;
 }
 .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
     content: "";
