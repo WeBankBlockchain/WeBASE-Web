@@ -205,6 +205,7 @@ export default {
             this.handleModel = false;
         },
         handle: function (e, list) {
+            console.log(e)
             this.checkNull();
             list.handleModel = true
             // if (e.clientX > 201) {
@@ -212,7 +213,7 @@ export default {
             // } else {
             this.clentX = e.clientX + 'px';
             // }
-            this.clentY = e.clientY;
+            this.clentY = e.clientY + 'px';
             this.ID = e.target.id;
             let item = {};
             if (this.ID) {
@@ -354,7 +355,8 @@ export default {
 
             for (let i = 0; i < this.uploadFiles.length; i++) {
                 let filessize = Math.ceil(this.uploadFiles[i].size / 1024);
-                let filetype = this.uploadFiles[i].name.split(".")[1];
+                let files = this.uploadFiles[i].name.split(".");
+                let filetype = files[files.length - 1];
                 if (filessize > 400) {
                     this.$message({
                         message: this.$t("contracts.contractSize"),
@@ -379,7 +381,11 @@ export default {
                 let reader = new FileReader(); //新建一个FileReader
                 reader.readAsText(this.uploadFiles[i], "UTF-8"); //读取文件
                 let filename = "", _this = this;
-                filename = this.uploadFiles[i].name.split(".")[0];
+                // let files = this.uploadFiles[i].name.split(".");
+                // for (let i = 0; i < files.length - 1; i++) {
+                //     filename = filename + files[i]
+                // }
+                filename = this.uploadFiles[i].name.slice(0, this.uploadFiles[i].name.length - 4)
                 let num = 0;
                 this.contractList.forEach(value => {
                     if (value.contractName == filename && value.contractPath == val && num === 0) {
@@ -566,9 +572,12 @@ export default {
             if (localStorage.getItem("root") === 'developer') {
                 data.account = localStorage.getItem("user")
             }
-            if (path) {
+            if (path && this.$store.state.contractDataList.length > 0) {
                 data.contractPathList = [path]
-            } else if (this.$route.query.contractPath) {
+            } else if (path && this.$store.state.contractDataList.length == 0) {
+                data.contractPathList = [path, "/"]
+            }
+            else if (this.$route.query.contractPath) {
                 if (this.$route.query.contractPath == "/") {
                     data.contractPathList = [this.$route.query.contractPath]
                 } else {
@@ -586,6 +595,7 @@ export default {
                     }
                 }
             }
+
             else {
                 data.contractPathList = ["/"]
             }
@@ -684,6 +694,7 @@ export default {
                 for (let j = 0; j < list2.length; j++) {
                     if (list[i].contractId === list2[j].contractId) {
                         list[i].contractName = list2[j].contractName;
+                        list[i].contractAddress = list2[j].contractAddress;
                         list[i].contractPath = list2[j].contractPath;
                         list[i].contractSource = list2[j].contractSource;
                         list[i].contractAbi = list2[j].contractAbi;
@@ -820,9 +831,9 @@ export default {
                             allContractList.splice(i, 1)
                         }
                     }
-                    this.$store.dispatch('set_contract_dataList_action', allContractList);
+                    this.$store.dispatch('set_contract_dataList_action', []);
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
-                    this.getContractPaths(val.contractPath)
+                    this.getContracts(val.contractPath)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -868,7 +879,7 @@ export default {
                             contractList.push(allContractList[i])
                         }
                     }
-                    this.$store.dispatch('set_contract_dataList_action', contractList);
+                    this.$store.dispatch('set_contract_dataList_action', []);
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContractPaths(val.contractPath)
                 } else {

@@ -276,8 +276,8 @@ let errCode = {
         zh: '权限状态不能全部为空'
     },
     "201116": {
-        en: "This operation has no permissions",
-        zh: '此操作没有权限'
+        en: "Contract status handle fail",
+        zh: '合约状态修改失败'
     },
     "201112": {
         en: "sql syntax error",
@@ -361,7 +361,7 @@ let errCode = {
         en: "Unable to create instance of type, check input params",
         zh: '无法创建类型的实例，请检查输入参数'
     },
-    
+
     "201213": {
         en: "address is invalid",
         zh: '地址无效'
@@ -554,7 +554,7 @@ let errCode = {
     "201517": {
         en: "call contract constant method fail",
         zh: '合约状态异常，调用合约constant方法失败'
-    }, 
+    },
     "201521": {
         en: "get list of manager on chain fail",
         zh: '获取链上管理员列表失败'
@@ -937,7 +937,7 @@ let errCode = {
         en: "Pem file content error",
         zh: "Pem文件内容错误"
     },
-    
+
     "202300": {
         en: "Group id already exists",
         zh: "群组id已存在"
@@ -984,248 +984,248 @@ let errCode = {
     },
 
     "202401": {
-        "en":"No configured of docker registry url.",
-        "zh":"没有配置 Docker 镜像更新 URL 地址"
+        "en": "No configured of docker registry url.",
+        "zh": "没有配置 Docker 镜像更新 URL 地址"
     },
     "202402": {
-        "en":"Fetch image tag from docker registry error.",
-        "zh":"从 Docker 源更新镜像版本失败"
+        "en": "Fetch image tag from docker registry error.",
+        "zh": "从 Docker 源更新镜像版本失败"
     },
     "202403": {
-        "en":"Fetch Docker image tag list error, unknown config type.",
-        "zh":"查询 Docker 镜像版本失败（未知类型）"
+        "en": "Fetch Docker image tag list error, unknown config type.",
+        "zh": "查询 Docker 镜像版本失败（未知类型）"
     },
     "202404": {
-        "en":"Save chain's configuration to file error.",
-        "zh":"保存链配置信息文件失败"
+        "en": "Save chain's configuration to file error.",
+        "zh": "保存链配置信息文件失败"
     },
     "202405": {
-        "en":"Docker image tag invalid.",
-        "zh":"错误的镜像版本"
+        "en": "Docker image tag invalid.",
+        "zh": "错误的镜像版本"
     },
     "202406": {
-        "en":"Configuration of host is empty.",
-        "zh":"主机配置参数为空"
+        "en": "Configuration of host is empty.",
+        "zh": "主机配置参数为空"
     },
     "202407": {
-        "en":"Chain exists, deploy failed.",
-        "zh":"链已存在，部署失败"
+        "en": "Chain exists, deploy failed.",
+        "zh": "链已存在，部署失败"
     },
     "202408": {
-        "en":"Save chain data to DB error.",
-        "zh":"插入链信息到数据库失败"
+        "en": "Save chain data to DB error.",
+        "zh": "插入链信息到数据库失败"
     },
     "202409": {
-        "en":"Generate host, agency, group configuration error.",
-        "zh":"生成主机，机构，群组配置信息文件失败"
+        "en": "Generate host, agency, group configuration error.",
+        "zh": "生成主机，机构，群组配置信息文件失败"
     },
     "202410": {
-        "en":"Execute build_chain.sh script error.",
-        "zh":"执行 build_chain.sh 链生成脚本失败"
+        "en": "Execute build_chain.sh script error.",
+        "zh": "执行 build_chain.sh 链生成脚本失败"
     },
     "202411": {
-        "en":"Host, agency, group configuration error.",
-        "zh":"主机，机构，群组配置信息错误"
+        "en": "Host, agency, group configuration error.",
+        "zh": "主机，机构，群组配置信息错误"
     },
     "202412": {
-        "en":"Host ip and num error.",
-        "zh":"主机 IP，节点数量配置错误"
+        "en": "Host ip and num error.",
+        "zh": "主机 IP，节点数量配置错误"
     },
     "202413": {
-        "en":"Agency name invalid, only [a-zA-Z0-9_] is valid.",
-        "zh":"机构名称格式错误，只能包含大小写字母，数字，下划线"
+        "en": "Agency name invalid, only [a-zA-Z0-9_] is valid.",
+        "zh": "机构名称格式错误，只能包含大小写字母，数字，下划线"
     },
     "202414": {
-        "en":"Group id error, only positive integer is valid.",
-        "zh":"群组编号格式错误，必须为正整数"
+        "en": "Group id error, only positive integer is valid.",
+        "zh": "群组编号格式错误，必须为正整数"
     },
     "202415": {
-        "en":"Login to host /ip/ through SSH error. Please check SSH configuration.",
-        "zh":"SSH登录主机/ip/失败，请检查 SSH 配置"
+        "en": "Login to host /ip/ through SSH error. Please check SSH configuration.",
+        "zh": "SSH登录主机/ip/失败，请检查 SSH 配置"
     },
     "202416": {
-        "en":"Save agency data into DB error.",
-        "zh":"插入新机构信息到数据库失败"
+        "en": "Save agency data into DB error.",
+        "zh": "插入新机构信息到数据库失败"
     },
     "202417": {
-        "en":"Save group data into DB error.",
-        "zh":"插入新群组信息到数据库失败"
+        "en": "Save group data into DB error.",
+        "zh": "插入新群组信息到数据库失败"
     },
     "202418": {
-        "en":"Save host data into DB error.",
-        "zh":"插入主机信息到数据库失败"
+        "en": "Save host data into DB error.",
+        "zh": "插入主机信息到数据库失败"
     },
     "202419": {
-        "en":"Save front data into DB error.",
-        "zh":"插入前置信息到数据库失败"
+        "en": "Save front data into DB error.",
+        "zh": "插入前置信息到数据库失败"
     },
     "202420": {
-        "en":"Save node data into DB error.",
-        "zh":"插入节点信息到数据库失败"
+        "en": "Save node data into DB error.",
+        "zh": "插入节点信息到数据库失败"
     },
     "202421": {
-        "en":"Save node and front mapping data into DB error.",
-        "zh":"插入前置和群组映射关系到数据库失败"
+        "en": "Save node and front mapping data into DB error.",
+        "zh": "插入前置和群组映射关系到数据库失败"
     },
     "202422": {
-        "en":"Parse node index from directory error.",
-        "zh":"从目录获取节点序号失败"
+        "en": "Parse node index from directory error.",
+        "zh": "从目录获取节点序号失败"
     },
     "202423": {
-        "en":"A single host IP only belongs to one agency.",
-        "zh":"一个 IP 主机，只能属于一个机构"
+        "en": "A single host IP only belongs to one agency.",
+        "zh": "一个 IP 主机，只能属于一个机构"
     },
     "202424": {
-        "en":"Unknown error during deploying.",
-        "zh":"部署时发生未知错误"
+        "en": "Unknown error during deploying.",
+        "zh": "部署时发生未知错误"
     },
     "202425": {
-        "en":"SSH login through username and password is unsupported yet.",
-        "zh":"不支持使用 SSH 密码登录主机"
+        "en": "SSH login through username and password is unsupported yet.",
+        "zh": "不支持使用 SSH 密码登录主机"
     },
     "202426": {
-        "en":"Chain has no agency.",
-        "zh":"当前链没有所属机构"
+        "en": "Chain has no agency.",
+        "zh": "当前链没有所属机构"
     },
-    "202427":{
-        "en":"No deployed chain,",
-        "zh":"链不存在"
+    "202427": {
+        "en": "No deployed chain,",
+        "zh": "链不存在"
     },
-    "202428":{
-        "en":"IP format error.",
-        "zh":"IP 格式错误"
+    "202428": {
+        "en": "IP format error.",
+        "zh": "IP 格式错误"
     },
-    "202429":{
-        "en":"Agency name cannot be blank when IP is new.",
-        "zh":"主机 IP 是新 IP 时，机构名称不能为空"
+    "202429": {
+        "en": "Agency name cannot be blank when IP is new.",
+        "zh": "主机 IP 是新 IP 时，机构名称不能为空"
     },
-    "202430":{
-        "en":"Agency name already exists.",
-        "zh":"存在同名机构"
+    "202430": {
+        "en": "Agency name already exists.",
+        "zh": "存在同名机构"
     },
-    "202431":{
-        "en":"Add new node error.",
-        "zh":"新增节点错误"
+    "202431": {
+        "en": "Add new node error.",
+        "zh": "新增节点错误"
     },
-    "202432":{
-        "en":"No valid chain certification.",
-        "zh":"链证书无效"
+    "202432": {
+        "en": "No valid chain certification.",
+        "zh": "链证书无效"
     },
-    "202433":{
-        "en":"Generate agency private key and crt file error.",
-        "zh":"生成机构私钥和证书失败"
+    "202433": {
+        "en": "Generate agency private key and crt file error.",
+        "zh": "生成机构私钥和证书失败"
     },
-    "202434":{
-        "en":"Host without agency error.",
-        "zh":"主机所属机构为空"
+    "202434": {
+        "en": "Host without agency error.",
+        "zh": "主机所属机构为空"
     },
-    "202435":{
-        "en":"Node num should be positive integer, and less then 10.",
-        "zh":"主机数量格式错误，正整数，并且小于 10"
+    "202435": {
+        "en": "Node num should be positive integer, and less then 10.",
+        "zh": "主机数量格式错误，正整数，并且小于 10"
     },
-    "202436":{
-        "en":"Generate sdk ",
-        "zh":"生成主机 SDK 私钥和证书失败"
+    "202436": {
+        "en": "Generate sdk ",
+        "zh": "生成主机 SDK 私钥和证书失败"
     },
-    "202437":{
-        "en":"Generate node private key and crt files error.",
-        "zh":"生成新节点私钥和证书失败"
+    "202437": {
+        "en": "Generate node private key and crt files error.",
+        "zh": "生成新节点私钥和证书失败"
     },
-    "202438":{
-        "en":"Copy SDK files error.",
-        "zh":"拷贝 SDK 证书和私钥失败"
+    "202438": {
+        "en": "Copy SDK files error.",
+        "zh": "拷贝 SDK 证书和私钥失败"
     },
-    "202439":{
-        "en":"Upload SDK files error.",
-        "zh":"上传 SDK 证书和私钥失败"
+    "202439": {
+        "en": "Upload SDK files error.",
+        "zh": "上传 SDK 证书和私钥失败"
     },
-    "202440":{
-        "en":"Upload node config files error.",
-        "zh":"上传节点证书和私钥失败"
+    "202440": {
+        "en": "Upload node config files error.",
+        "zh": "上传节点证书和私钥失败"
     },
-    "202441":{
-        "en":"Copy group config files from original node error.",
-        "zh":"从旧节点复制群组配置文件失败"
+    "202441": {
+        "en": "Copy group config files from original node error.",
+        "zh": "从旧节点复制群组配置文件失败"
     },
-    "202442":{
-        "en":"Delete tmp directory of agency error.",
-        "zh":"删除机构临时目录失败"
+    "202442": {
+        "en": "Delete tmp directory of agency error.",
+        "zh": "删除机构临时目录失败"
     },
-    "202443":{
-        "en":"Delete tmp directory of SDK error.",
-        "zh":"删除 SDK 临时目录失败"
+    "202443": {
+        "en": "Delete tmp directory of SDK error.",
+        "zh": "删除 SDK 临时目录失败"
     },
-    "202444":{
-        "en":"Delete tmp directory of node error.",
-        "zh":"删除节点临时目录失败"
+    "202444": {
+        "en": "Delete tmp directory of node error.",
+        "zh": "删除节点临时目录失败"
     },
-    "202445":{
-        "en":"Unknown nodeid.",
-        "zh":"未知节点编号（nodeid）"
+    "202445": {
+        "en": "Unknown nodeid.",
+        "zh": "未知节点编号（nodeid）"
     },
-    "202446":{
-        "en":"Stop node error.",
-        "zh":"停止节点失败（停止容器）"
+    "202446": {
+        "en": "Stop node error.",
+        "zh": "停止节点失败（停止容器）"
     },
-    "202447":{
-        "en":"Start node error.",
-        "zh":"启动节点失败（启动容器）"
+    "202447": {
+        "en": "Start node error.",
+        "zh": "启动节点失败（启动容器）"
     },
-    "202448":{
-        "en":"Both new image tag and old are the same.",
-        "zh":"链升级的新版本和链的现有版本相同"
+    "202448": {
+        "en": "Both new image tag and old are the same.",
+        "zh": "链升级的新版本和链的现有版本相同"
     },
-    "202449":{
-        "en":"Upgrade chain to new image tag error.",
-        "zh":"链升级失败"
+    "202449": {
+        "en": "Upgrade chain to new image tag error.",
+        "zh": "链升级失败"
     },
-    "202450":{
-        "en":"Delete node failed, node is still in group.",
-        "zh":"节点仍属于群组，删除失败"
+    "202450": {
+        "en": "Delete node failed, node is still in group.",
+        "zh": "节点仍属于群组，删除失败"
     },
-    "202451":{
-        "en":"Parse node's config files error.",
-        "zh":"读取节点配置文件失败"
+    "202451": {
+        "en": "Parse node's config files error.",
+        "zh": "读取节点配置文件失败"
     },
-    "202452":{
-        "en":"Delete node's config error.",
-        "zh":"删除节点配置文件失败"
+    "202452": {
+        "en": "Delete node's config error.",
+        "zh": "删除节点配置文件失败"
     },
-    "202453":{
-        "en":"Stop node before deleting.",
-        "zh":"节点正在运行，删除失败，请先停止节点"
+    "202453": {
+        "en": "Stop node before deleting.",
+        "zh": "节点正在运行，删除失败，请先停止节点"
     },
-    "202454":{
-        "en":"Update p2p part of related nodes error.",
-        "zh":"更新关联节点 P2P 配置失败"
+    "202454": {
+        "en": "Update p2p part of related nodes error.",
+        "zh": "更新关联节点 P2P 配置失败"
     },
-    "202455":{
-        "en":"Delete chain error.",
-        "zh":"删除链失败"
+    "202455": {
+        "en": "Delete chain error.",
+        "zh": "删除链失败"
     },
-    "202456":{
-        "en":"Node is still a sealer or observer, delete failed.",
-        "zh":"节点处于观察或共识状态，删除失败"
+    "202456": {
+        "en": "Node is still a sealer or observer, delete failed.",
+        "zh": "节点处于观察或共识状态，删除失败"
     },
-    "202457":{
-        "en":"Fetch node list from host's configuration files.",
-        "zh":"从主机配置文件获取节点列表失败"
+    "202457": {
+        "en": "Fetch node list from host's configuration files.",
+        "zh": "从主机配置文件获取节点列表失败"
     },
-    "202458":{
-        "en":"Generate application.yml for front error.",
-        "zh":"生成前置 application.yml 配置文件失败"
+    "202458": {
+        "en": "Generate application.yml for front error.",
+        "zh": "生成前置 application.yml 配置文件失败"
     },
-    "202459":{
-        "en":"Init host with shell script error.",
-        "zh":"通过脚本初始化主机失败"
+    "202459": {
+        "en": "Init host with shell script error.",
+        "zh": "通过脚本初始化主机失败"
     },
-    "202460":{
-        "en":"Sync files error.",
-        "zh":"传输文件失败"
+    "202460": {
+        "en": "Sync files error.",
+        "zh": "传输文件失败"
     },
-    "202461":{
-        "en":"Control container through Docker api error.",
-        "zh":"Docker 容器操作失败"
+    "202461": {
+        "en": "Control container through Docker api error.",
+        "zh": "Docker 容器操作失败"
     },
     "202462": {
         "en": "Two nodes at least.",
@@ -1448,7 +1448,7 @@ let errCode = {
         en: "CURRENT_VALUE_IS_EXPECTED_VALUE",
         zh: "当前值是预期值"
     },
-    
+
     "422": {
         en: "param error",
         zh: "参数错误"
@@ -1458,15 +1458,15 @@ let errCode = {
         zh: '系统异常'
     }
 }
-export function chooseLang(code,value) {
+export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')
     let message = errCode[code][lang];
-    if(value){
+    if (value) {
         let oldMessage
         let arry = message.split("/")
         oldMessage = arry[0] + value + arry[2]
         return oldMessage
-    }else{
+    } else {
         return message
     }
 }
