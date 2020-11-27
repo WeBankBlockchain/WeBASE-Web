@@ -93,15 +93,15 @@ export default {
     mounted: function () {
         this.allVersion = [
             {
-                solcName: "v0.4.25",
-                url: `http://${this.host}/static/js/v0.4.25.js`,
+                solcName: "v0.4.24",
+                url: `http://${this.host}/static/js/v0.4.24.js`,
                 versionId: 0,
                 encryptType: 0,
                 net: 0
             },
             {
-                solcName: "v0.4.25-gm",
-                url: `http://${this.host}/static/js/v0.4.25-gm.js`,
+                solcName: "v0.4.24-gm",
+                url: `http://${this.host}/static/js/v0.4.24-gm.js`,
                 versionId: 1,
                 encryptType: 1,
                 net: 0

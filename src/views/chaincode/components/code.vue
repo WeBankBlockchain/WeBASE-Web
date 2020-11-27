@@ -27,7 +27,7 @@
                     </el-tooltip>
                     <span>{{this.$t("text.save")}}</span>
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="!contractAddress && !disabled">
+                <span class="contract-code-done" @click="compile" v-if="!contractAddress && !disabled && !loading">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>{{this.$t("text.compile")}}</span>
                 </span>
@@ -501,16 +501,20 @@ export default {
             }
         },
         compile() {
+            this.loading = true;
             let version = this.$store.state.versionData;
             if (version && version.net !== 0) {
                 this.compileHighVersion()
             } else {
-                this.compileLowVersion()
+                setTimeout(() => {
+                    this.compileLowVersion()
+                }, 500)
+
             }
         },
         compileHighVersion() {
             let that = this
-            this.loading = true;
+
             this.refreshMessage();
             this.contractList = this.$store.state.contractDataList
             let content = "";
@@ -567,7 +571,7 @@ export default {
             })
         },
         compileLowVersion: function () {
-            this.loading = true;
+            // this.loading = true;
             let wrapper = require("solc/wrapper");
             let solc = wrapper(window.Module);
             this.refreshMessage();
@@ -834,7 +838,7 @@ export default {
 
         },
         hiddenHover() {
-            
+
         },
         collapse() {
             this.showCompileText = !this.showCompileText
