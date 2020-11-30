@@ -192,6 +192,7 @@ export default {
         eventName: 'Please enter event name',
         fromBlock: "Please enter from block",
         toBlock: "Please enter to block",
+        blockNumber: "Greater than 0",
     },
     head: {
         helpText: "Document",
