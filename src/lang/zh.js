@@ -193,6 +193,7 @@ export default {
         eventName: '请选择事件名',
         fromBlock: "请输入起始区块",
         toBlock: "请输入末区块",
+        blockNumber: "值需要大于0",
     },
     head: {
         helpText: "帮助文档",
