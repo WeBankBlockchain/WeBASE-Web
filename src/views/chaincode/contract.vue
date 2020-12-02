@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 <template>
-    <div class="contract-content">
+    <div class="contract-content" v-loading='loading'>
         <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head>
-        <div style="height: calc(100% - 56px)" v-loading='loading'>
+        <div style="height: calc(100% - 56px)">
             <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
                 <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
                     <template #footer>

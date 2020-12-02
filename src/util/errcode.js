@@ -1255,7 +1255,10 @@ let errCode = {
         "en": "Cannot install node on WeBASE-Node-Manager host.",
         "zh": "无法在WeBASE-Node-Manager主机上安装节点。"
     },
-
+    "202501": {
+        "en": "Contract path is exists.",
+        "zh": "目录已存在。"
+    },
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
