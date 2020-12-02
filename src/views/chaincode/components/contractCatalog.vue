@@ -580,7 +580,12 @@ export default {
                 if (path && this.$store.state.contractDataList.length > 0) {
                     data.contractPathList = [path]
                 } else if (path && this.$store.state.contractDataList.length == 0) {
-                    path.push("/")
+                    if (typeof (path) == 'object') {
+                        path.push("/")
+                    } else {
+                        path = [path, "/"]
+                    }
+
                     data.contractPathList = path;
                 }
                 else if (this.$route.query.contractPath) {
@@ -765,6 +770,7 @@ export default {
             return result
         },
         open: function (val) {
+            console.log(val)
             if (val.contractName != "/" && val.contractPath != "/") {
                 this.getContracts(val.contractName, val);
             }
@@ -861,7 +867,7 @@ export default {
                 }
             })
                 .catch(err => {
-                    this.loading = false;
+                    // this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
@@ -883,7 +889,7 @@ export default {
                 contractPath: val.contractName
             }
             deletePath(reqData).then(res => {
-                this.loading = false
+                // this.loading = false
                 if (res.data.code === 0) {
                     let allContractList = this.$store.state.contractDataList;
                     let contractList = []
