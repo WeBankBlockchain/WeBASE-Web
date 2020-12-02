@@ -436,7 +436,7 @@ export default {
             this.folderId = ""
             this.ID = ""
         },
-        getContractPaths() {
+        getContractPaths(val) {
             getContractPathList(localStorage.getItem("groupId")).then(res => {
                 if (res.data.code == 0) {
                     this.pathList = res.data.data;
@@ -453,7 +453,11 @@ export default {
                             this.folderList.push(item)
                         }
                     }
-                    this.getContracts()
+                    if (val) {
+                        this.getContracts(val)
+                    } else {
+                        this.getContracts()
+                    }
                 } else {
                     this.$message({
                         type: "error",
@@ -569,36 +573,47 @@ export default {
             let data = {
                 groupId: localStorage.getItem("groupId"),
             }
-            if (localStorage.getItem("root") === 'developer') {
-                data.account = localStorage.getItem("user")
-            }
-            if (path && this.$store.state.contractDataList.length > 0) {
-                data.contractPathList = [path]
-            } else if (path && this.$store.state.contractDataList.length == 0) {
-                data.contractPathList = [path, "/"]
-            }
-            else if (this.$route.query.contractPath) {
-                if (this.$route.query.contractPath == "/") {
-                    data.contractPathList = [this.$route.query.contractPath]
-                } else {
-                    data.contractPathList = [this.$route.query.contractPath, "/"]
+            try {
+                if (localStorage.getItem("root") === 'developer') {
+                    data.account = localStorage.getItem("user")
                 }
-            }
-            else if (localStorage.getItem("selectData")) {
-                if (JSON.parse(localStorage.getItem("selectData"))) {
-                    if (JSON.parse(localStorage.getItem("selectData")).contractPath && JSON.parse(localStorage.getItem("selectData")).contractPath == "/") {
-                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath]
-                    } else if (JSON.parse(localStorage.getItem("selectData")).contractType == 'folder') {
-                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractName, "/"]
+                if (path && this.$store.state.contractDataList.length > 0) {
+                    data.contractPathList = [path]
+                } else if (path && this.$store.state.contractDataList.length == 0) {
+                    if (typeof (path) == 'object') {
+                        path.push("/")
                     } else {
-                        data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath, "/"]
+                        path = [path, "/"]
+                    }
+
+                    data.contractPathList = path;
+                }
+                else if (this.$route.query.contractPath) {
+                    if (this.$route.query.contractPath == "/") {
+                        data.contractPathList = [this.$route.query.contractPath]
+                    } else {
+                        data.contractPathList = [this.$route.query.contractPath, "/"]
                     }
                 }
+                else if (localStorage.getItem("selectData")) {
+                    if (JSON.parse(localStorage.getItem("selectData"))) {
+                        if (JSON.parse(localStorage.getItem("selectData")).contractPath && JSON.parse(localStorage.getItem("selectData")).contractPath == "/") {
+                            data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath]
+                        } else if (JSON.parse(localStorage.getItem("selectData")).contractType == 'folder') {
+                            data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractName, "/"]
+                        } else {
+                            data.contractPathList = [JSON.parse(localStorage.getItem("selectData")).contractPath, "/"]
+                        }
+                    }
+                }
+
+                else {
+                    data.contractPathList = ["/"]
+                }
+            } catch (error) {
+                console.log(error)
             }
 
-            else {
-                data.contractPathList = ["/"]
-            }
             this.loading = true
             searchContract(data).then(res => {
                 this.loading = false;
@@ -668,6 +683,7 @@ export default {
                     });
                 }
             })
+
                 .catch(err => {
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -754,6 +770,7 @@ export default {
             return result
         },
         open: function (val) {
+            console.log(val)
             if (val.contractName != "/" && val.contractPath != "/") {
                 this.getContracts(val.contractName, val);
             }
@@ -832,8 +849,15 @@ export default {
                         }
                     }
                     this.$store.dispatch('set_contract_dataList_action', []);
+                    let arry = []
+
+                    for (let i = 0; i < this.contractArry.length; i++) {
+                        if (this.contractArry[i].contractType == 'folder' && this.contractArry[i].folderActive) {
+                            arry.push(this.contractArry[i].contractName)
+                        }
+                    }
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
-                    this.getContracts(val.contractPath)
+                    this.getContracts(arry)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -843,7 +867,7 @@ export default {
                 }
             })
                 .catch(err => {
-                    this.loading = false;
+                    // this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
@@ -865,7 +889,7 @@ export default {
                 contractPath: val.contractName
             }
             deletePath(reqData).then(res => {
-                this.loading = false
+                // this.loading = false
                 if (res.data.code === 0) {
                     let allContractList = this.$store.state.contractDataList;
                     let contractList = []
@@ -880,8 +904,15 @@ export default {
                         }
                     }
                     this.$store.dispatch('set_contract_dataList_action', []);
+                    let arry = []
+
+                    for (let i = 0; i < this.contractArry.length; i++) {
+                        if (this.contractArry[i].contractType == 'folder' && this.contractArry[i].folderActive) {
+                            arry.push(this.contractArry[i].contractName)
+                        }
+                    }
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
-                    this.getContractPaths(val.contractPath)
+                    this.getContractPaths(arry)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
