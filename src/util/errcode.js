@@ -293,7 +293,7 @@ let errCode = {
     },
     "201122": {
         en: "Group already exists",
-        zh: '群组已存在'
+        zh: '已存在群组'
     },
     "201123": {
         en: "Group already running",
@@ -788,8 +788,8 @@ let errCode = {
         zh: "token过期"
     },
     "202054": {
-        en: "contract had not deploy",
-        zh: "合约尚未部署"
+        en: "Available front url is empty, check front status",
+        zh: "没有有效前置，请检查前置状态"
     },
     "202055": {
         en: "invalid contract",
