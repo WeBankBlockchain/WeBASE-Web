@@ -928,29 +928,44 @@ export default {
                 .catch(_ => { });
         },
         sureExportFolderSol(val) {
-            let folderInfo = val;
-            var contractList = []
-            const zip = new JSZip();
-            if (folderInfo.child.length > 0) {
-                contractList = folderInfo.child
-                contractList.forEach(item => {
-                    var blobContractSource = new Blob([Base64.decode(item.contractSource)], { type: "text;charset=utf-8" });
-                    var blobContractAbi = new Blob([item.contractAbi], { type: "text;charset=utf-8" });
-                    var blobContractBin = new Blob([item.contractBin], { type: "text;charset=utf-8" });
-                    zip.file(`${item.contractName}.sol`, blobContractSource, { binary: true })
-                    zip.file(`${item.contractName}.abi`, blobContractAbi, { binary: true })
-                    zip.file(`${item.contractName}.bin`, blobContractBin, { binary: true })
-                });
-                zip.generateAsync({ type: "blob" }).then(content => {
-                    FileSaver.saveAs(content, `${folderInfo.contractName}`);
-                });
-            } else {
-                this.$message({
-                    type: 'warning',
-                    message: this.$t('text.emptyFolder'),
-                    duration: 2000
-                })
+            this.loading = true
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                contractPathList: [val.contractName]
             }
+            searchContract(data).then(res => {
+                if (res.data.code == 0) {
+                    this.loading = false
+                    var contractList = res.data.data
+                    const zip = new JSZip();
+                    if (contractList.length > 0) {
+                        contractList.forEach(item => {
+                            var blobContractSource = new Blob([Base64.decode(item.contractSource)], { type: "text;charset=utf-8" });
+                            var blobContractAbi = new Blob([item.contractAbi], { type: "text;charset=utf-8" });
+                            var blobContractBin = new Blob([item.contractBin], { type: "text;charset=utf-8" });
+                            zip.file(`${item.contractName}.sol`, blobContractSource, { binary: true })
+                            zip.file(`${item.contractName}.abi`, blobContractAbi, { binary: true })
+                            zip.file(`${item.contractName}.bin`, blobContractBin, { binary: true })
+                        });
+                        zip.generateAsync({ type: "blob" }).then(content => {
+                            FileSaver.saveAs(content, `${val.contractName}`);
+                        });
+                    } else {
+                        this.$message({
+                            type: 'warning',
+                            message: this.$t('text.emptyFolder'),
+                            duration: 2000
+                        })
+                    }
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+
         }
     }
 }

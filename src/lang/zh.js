@@ -194,6 +194,9 @@ export default {
         fromBlock: "请输入起始区块",
         toBlock: "请输入末区块",
         blockNumber: "值需要大于0",
+        inputIsNumber: '输入不是数字',
+        inputIsAddress: '输入不是Address',
+        inputIsJson: '输入不是JSON',
     },
     head: {
         helpText: "帮助文档",
