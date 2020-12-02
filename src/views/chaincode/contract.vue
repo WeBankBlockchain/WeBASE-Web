@@ -174,7 +174,7 @@ export default {
                 this.$store.dispatch("set_version_data_action", this.versionData)
             }
 
-            if (this.versionData.net) {
+            if (this.versionData && this.versionData.net) {
                 let w = webworkify(require.resolve('@/util/file.worker'));
                 this.$store.state.worker = w
                 w.addEventListener('message', function (ev) {
@@ -250,6 +250,7 @@ export default {
                     });
                 }
             })
+
                 .catch(err => {
                     this.$message({
                         type: "error",
