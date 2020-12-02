@@ -193,6 +193,9 @@ export default {
         fromBlock: "Please enter from block",
         toBlock: "Please enter to block",
         blockNumber: "Greater than 0",
+        inputIsNumber: 'Input is not a number',
+        inputIsAddress: 'Input is not address',
+        inputIsJson: 'Input is not JSON',
     },
     head: {
         helpText: "Document",
