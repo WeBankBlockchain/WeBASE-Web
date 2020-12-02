@@ -252,8 +252,6 @@ export default {
             })
 
                 .catch(err => {
-                    console.log(err)
-                    alert(1)
                     this.$message({
                         type: "error",
                         message: this.$t('text.systemError')
