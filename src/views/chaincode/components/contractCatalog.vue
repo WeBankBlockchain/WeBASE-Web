@@ -880,8 +880,14 @@ export default {
                         }
                     }
                     this.$store.dispatch('set_contract_dataList_action', []);
+                    let arry = []
+                    for (let i = 0; i < this.contractArry.length; i++) {
+                        if (this.contractArry[i].contractType === 'folder' && this.contractArry[i].contractActive) {
+                            arry.push(this.contractArry[i].contractName)
+                        }
+                    }
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
-                    this.getContractPaths(val.contractPath)
+                    this.getContractPaths(arry)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
