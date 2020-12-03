@@ -293,7 +293,7 @@ let errCode = {
     },
     "201122": {
         en: "Group already exists",
-        zh: '已存在群组'
+        zh: '已存在该群组'
     },
     "201123": {
         en: "Group already running",
