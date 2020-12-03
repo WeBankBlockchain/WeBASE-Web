@@ -30,7 +30,7 @@
                     <el-input v-model="emailForm.email" style="width: 250px;" :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item>
                 <el-form-item :label="$t('alarm.password')" prop="password" style="width: 420px;display: inline-block">
-                    <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password :disabled="authDisabled" @change='dataChange'></el-input>
+                    <el-input type='password' v-model="emailForm.password" style="width: 250px;" show-password9 :disabled="authDisabled" @change='dataChange'></el-input>
                 </el-form-item><br>
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item>
@@ -47,7 +47,6 @@
 import { getEmailList,changeEmailConfig,testEmail } from "@/util/api"
 import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
-let Base64 = require("js-base64").Base64;
 export default {
     name: "emailAlarm",
     components: {
@@ -177,7 +176,7 @@ export default {
                 host: this.emailForm.address,
                 port: this.emailForm.port,
                 username: this.emailForm.email,
-                password: Base64.encode(this.emailForm.password),
+                password: this.emailForm.password,
                 protocol: this.emailForm.serverType,
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,
@@ -212,7 +211,7 @@ export default {
                         this.emailForm.address = res.data.data[0].host;
                         this.emailForm.port = res.data.data[0].port;
                         this.emailForm.email = res.data.data[0].username;
-                        this.emailForm.password = Base64.decode(res.data.data[0].password);
+                        this.emailForm.password = res.data.data[0].password;
                         this.emailForm.format = res.data.data[0].defaultEncoding;
                         this.emailForm.authentication = res.data.data[0].authentication;
                         this.emailData = res.data.data[0];
@@ -252,7 +251,7 @@ export default {
                 host: this.emailForm.address,
                 port: this.emailForm.port,
                 username: this.emailForm.email,
-                password: Base64.encode(this.emailForm.password),
+                password: this.emailForm.password,
                 protocol: this.emailForm.serverType,
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,

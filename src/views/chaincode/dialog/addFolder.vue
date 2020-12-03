@@ -33,7 +33,6 @@
     </div>
 </template>
 <script>
-import { addContractPath } from "@/util/api"
 export default {
     name: "addFolder",
     props: ['foldershow'],
@@ -69,8 +68,7 @@ export default {
             },
             dialogVisible: this.foldershow,
             folderList: [],
-            userFolader: "",
-            pathList: []
+            userFolader: ""
         }
     },
     mounted: function(){
@@ -79,40 +77,39 @@ export default {
         }else{
             this.userFolader = ""
         }
+        if(localStorage.getItem("folderList")){
+            this.folderList = JSON.parse(localStorage.getItem("folderList")) 
+        }
     },
     methods: {
-        
-        
         submit: function(formName){
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.add()
+                    let num = 0
+                    this.folderList.forEach(value => {
+                        if(value.folderName == this.folderFrom.folderName && value.groupId == localStorage.getItem("groupId")){
+                            num ++
+                            this.$message({
+                                message: this.$t("contracts.folderSameFail"),
+                                type: "error"
+                            });
+                        }
+                    })
+                    if(num == 0){
+                        let data = {
+                                folderName: this.userFolader + this.folderFrom.folderName,
+                                folderId: (new Date()).getTime(),
+                                folderActive: false,
+                                groupId: localStorage.getItem("groupId")
+                            }
+                        this.folderList.push(data)
+                        localStorage.setItem('folderList',JSON.stringify(this.folderList))
+                        this.$emit("success")
+                    }
                 }else{
                     return false;
                 }
             })
-        },
-        add: function () {
-            let reqData = {
-                contractPath: this.userFolader + this.folderFrom.folderName,
-                groupId: localStorage.getItem("groupId")
-            }
-            addContractPath(reqData).then(res => {
-                if(res.data.code === 0){
-                    this.$emit("success")
-                }else {
-                        this.$message({
-                            type: "error",
-                            message: this.$chooseLang(res.data.code)
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: this.$t('text.systemError')
-                    });
-                });
         },
         modelClose: function(){
             this.$emit("close")
