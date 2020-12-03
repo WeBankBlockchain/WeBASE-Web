@@ -15,7 +15,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <p class="info" v-if='deployType == 1'>{{$t('nodes.notice')}}</p>
+            <p class="info">{{$t('nodes.notice')}}</p>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
@@ -60,7 +60,6 @@ export default {
                 adminRivateKey: '',
                 nodeType: ''
             },
-            deployType: null
         }
     },
 
@@ -95,12 +94,7 @@ export default {
     },
 
     mounted() {
-        if(localStorage.getItem("deployType")){
-            this.deployType = localStorage.getItem("deployType")
-        }else{
-            this.deployType = 0
-        }
-        this.getUserData();
+        this.getUserData()
     },
 
     methods: {

@@ -28,11 +28,7 @@ const state = {
     importRivateKey: false,
     version: null,
     mgrVersion: null,
-    supportVersion: null,
-    folders: [],
-    contractDataList: [],
-    worker: null,
-    versionData: null
+    supportVersion: null
 }
 export default new Vuex.Store({
     state,
@@ -70,18 +66,6 @@ export default new Vuex.Store({
         },
         set_support_version (state,name){
             state.supportVersion = name
-        },
-        set_folders (state,data){
-            state.folders = data
-        },
-        set_contract_dataList(state,data){
-            state.contractDataList = data
-        },
-        set_worker(state,data) {
-            state.worker = data
-        },
-        set_version_data (state,data){
-            state.versionData = data
         }
     },
     actions: {
@@ -105,18 +89,6 @@ export default new Vuex.Store({
         },
         set_support_version_action(context,name){
             context.commit("set_support_version",name)
-        },
-        set_folders_action (context,data) {
-            context.commit ("set_folders",data)
-        },
-        set_contract_dataList_action(context,data){
-            context.commit('set_contract_dataList',data)
-        },
-        set_worker_action(context,data) {
-            context.commit("set_worker",data)
-        },
-        set_version_data_action(context,data){
-            context.commit("set_version_data",data)
         }
     }
 })

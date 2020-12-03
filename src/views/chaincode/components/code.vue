@@ -427,7 +427,9 @@ export default {
         },
 
         findImports: function (path) {
-            this.contractList = this.$store.state.contractDataList
+            this.contractList = JSON.parse(
+                localStorage.getItem("contractList")
+            );
             let arry = path.split("/");
             let newpath = arry[arry.length - 1];
             let num = 0;
@@ -574,11 +576,14 @@ export default {
             // this.loading = true;
             let wrapper = require("solc/wrapper");
             let solc = wrapper(window.Module);
+            this.loading = true;
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
                 this.compileinfo = this.compileinfo + constant.COMPILE_INFO[i];
             }
-            this.contractList = this.$store.state.contractDataList
+            this.contractList = JSON.parse(
+                localStorage.getItem("contractList")
+            );
             let content = "";
             let output;
             let input = {
