@@ -208,7 +208,7 @@ export default {
                 } else {
                     this.$message({
                         type: "error",
-                        message: `${this.$t('nodes.frontId')}${frontId}${this.$chooseLang(res.data.code)}`,
+                        message: `${this.$t('nodes.targetNode')}${frontId}${this.$chooseLang(res.data.code)}`,
                         duration: 4500
                     })
                 }
