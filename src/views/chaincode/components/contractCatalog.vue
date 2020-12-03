@@ -712,6 +712,7 @@ export default {
                         list[i].contractName = list2[j].contractName;
                         list[i].contractAddress = list2[j].contractAddress;
                         list[i].contractPath = list2[j].contractPath;
+                        list[i].contractStatus = list2[j].contractStatus;
                         list[i].contractSource = list2[j].contractSource;
                         list[i].contractAbi = list2[j].contractAbi;
                         list[i].contractBin = list2[j].contractBin;
