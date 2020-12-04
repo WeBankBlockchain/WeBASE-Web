@@ -28,9 +28,6 @@
                         <input multiple title="" type="file" id="file" ref='file' name="chaincodes" class="uploads" @change="upload($event)" />
                     </i>
                 </el-tooltip>
-                <!-- <el-tooltip effect="dark" :content="$t('contracts.contractTips')" placement="top-start">
-                    <i class="el-icon-info contract-icon font-15" style="cursor: default;"></i>
-                </el-tooltip> -->
                 <div>
                     <slot name="footer"></slot>
                 </div>
@@ -59,7 +56,7 @@
                         <span @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
-                                <li class="contract-menu-handle-list" @click="addFiles">{{$t('contracts.createFile')}}</li>
+                                <li class="contract-menu-handle-list" @click="addFiles(item)">{{$t('contracts.createFile')}}</li>
                                 <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
                                 <li class="contract-menu-handle-list" @click="exportFolder(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
@@ -84,7 +81,7 @@
             </ul>
         </div>
         <add-folder v-if="foldershow" :foldershow="foldershow" @close='folderClose' @success='folderSuccess'></add-folder>
-        <add-file v-if="fileshow" :fileshow="fileshow" @close='fileClose' @success='fileSucccess($event)' :id='folderId'></add-file>
+        <add-file v-if="fileshow" :data='selectFolderData' :fileshow="fileshow" @close='fileClose' @success='fileSucccess($event)' :id='folderId'></add-file>
         <select-catalog v-if='cataLogShow' :show='cataLogShow' @success='catalogSuccess($event)' @close='catalogClose'></select-catalog>
     </div>
 </template>
@@ -109,6 +106,7 @@ export default {
     },
     data: function () {
         return {
+            pathList: [],
             foldershow: false,
             fileshow: false,
             filename: "",
@@ -147,7 +145,7 @@ export default {
         }
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.$nextTick(function () {
-                this.getContracts()
+                this.getContractPaths()
             })
         }
         Bus.$on("compile", data => {
@@ -339,7 +337,8 @@ export default {
             this.checkNull();
             this.fileshow = true
         },
-        addFiles: function () {
+        addFiles: function (val) {
+            this.selectFolderData = val
             this.fileshow = true;
             this.folderId = this.ID;
             this.ID = "";
@@ -430,7 +429,7 @@ export default {
         },
         folderSuccess: function () {
             this.folderClose()
-            this.getContractArry();
+            this.getContractPaths();
         },
         fileClose: function () {
             this.fileshow = false
@@ -476,7 +475,7 @@ export default {
         getContractArry: function (val) {
             let result = [];
             let list = [];
-            let folderArry = this.createFolder();
+            let folderArry = this.createFolder(val);
             let newFileList = [];
             list = this.contractList || []
             list.forEach(value => {
@@ -799,10 +798,7 @@ export default {
         },
         select: function (val, type) {
             let num = 0;
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/master
             this.contractArry.forEach(value => {
                 if (val && val.contractId && value.contractId == val.contractId) {
                     this.$set(value, 'contractActive', true)
@@ -864,6 +860,7 @@ export default {
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContracts(arry)
                 } else {
+                    this.loading = false;
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -872,7 +869,7 @@ export default {
                 }
             })
                 .catch(err => {
-                    // this.loading = false;
+                    this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
@@ -919,6 +916,7 @@ export default {
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContractPaths(arry)
                 } else {
+                    this.loading = false;
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -927,7 +925,9 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading = false;
                     this.$message({
+                        message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
