@@ -47,6 +47,7 @@
 import { getEmailList,changeEmailConfig,testEmail } from "@/util/api"
 import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
+let Base64 = require("js-base64").Base64;
 export default {
     name: "emailAlarm",
     components: {
@@ -176,7 +177,7 @@ export default {
                 host: this.emailForm.address,
                 port: this.emailForm.port,
                 username: this.emailForm.email,
-                password: this.emailForm.password,
+                password: Base64.encode(this.emailForm.password),
                 protocol: this.emailForm.serverType,
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,
@@ -211,7 +212,7 @@ export default {
                         this.emailForm.address = res.data.data[0].host;
                         this.emailForm.port = res.data.data[0].port;
                         this.emailForm.email = res.data.data[0].username;
-                        this.emailForm.password = res.data.data[0].password;
+                        this.emailForm.password = Base64.decode(res.data.data[0].password);
                         this.emailForm.format = res.data.data[0].defaultEncoding;
                         this.emailForm.authentication = res.data.data[0].authentication;
                         this.emailData = res.data.data[0];
@@ -251,7 +252,7 @@ export default {
                 host: this.emailForm.address,
                 port: this.emailForm.port,
                 username: this.emailForm.email,
-                password: this.emailForm.password,
+                password: Base64.encode(this.emailForm.password),
                 protocol: this.emailForm.serverType,
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,
