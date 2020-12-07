@@ -14,13 +14,7 @@
                 </el-form-item><br>
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item :label="$t('alarm.authentication')" style="width: 420px;display: inline-block">
-                    <el-switch
-                        v-model="emailForm.authentication"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        :active-value="1"
-                        :inactive-value="0"
-                        @change='authChange'>
+                    <el-switch v-model="emailForm.authentication" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="0" @change='authChange'>
                     </el-switch>
                     <el-tooltip class="item" effect="dark" :content="$t('alarm.authenticationTips')" placement="top-start">
                         <i class="el-icon-info"></i>
@@ -35,7 +29,7 @@
                 <hr style="margin-bottom: 30px;color: red;">
                 <el-form-item>
                     <el-button type="primary" @click="submitForm('emailForm')">{{$t('alarm.save')}}</el-button>
-                    <el-button  @click="sendEmail">{{$t('alarm.test')}}</el-button><br>
+                    <el-button @click="sendEmail">{{$t('alarm.test')}}</el-button><br>
                     <span v-if='tipShow' style="color: #f00">{{$t('alarm.saveTips')}}</span>
                 </el-form-item>
             </el-form>
@@ -44,7 +38,7 @@
 </template>
 
 <script>
-import { getEmailList,changeEmailConfig,testEmail } from "@/util/api"
+import { getEmailList, changeEmailConfig, testEmail } from "@/util/api"
 import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
 let Base64 = require("js-base64").Base64;
@@ -53,7 +47,7 @@ export default {
     components: {
         "v-content-head": contentHead,
     },
-    data: function(){
+    data: function () {
         return {
             emailForm: {
                 serverType: "",
@@ -122,7 +116,7 @@ export default {
                     },
                 ],
                 format: [
-                     {
+                    {
                         required: true,
                         message: this.$t("alarm.enterFormat"),
                         trigger: "blur"
@@ -132,46 +126,46 @@ export default {
             return data
         }
     },
-    mounted: function(){
+    mounted: function () {
         this.getEmailConfig();
     },
     methods: {
-        changGroup: function(){
+        changGroup: function () {
 
         },
-        dataChange: function(){
-            if(this.emailForm.serverType == this.emailData.protocol && this.emailForm.address == this.emailData.host &&
-            this.emailForm.port == this.emailData.port && this.emailForm.email == this.emailData.username &&
-            this.emailForm.password == this.emailData.password && this.emailForm.authentication == this.emailData.authentication){
+        dataChange: function () {
+            if (this.emailForm.serverType == this.emailData.protocol && this.emailForm.address == this.emailData.host &&
+                this.emailForm.port == this.emailData.port && this.emailForm.email == this.emailData.username &&
+                this.emailForm.password == this.emailData.password && this.emailForm.authentication == this.emailData.authentication) {
                 this.tipShow = false
-            }else{
+            } else {
                 this.tipShow = true
             }
         },
-        authChange: function(val){
+        authChange: function (val) {
             this.dataChange()
-            if(!val){
+            if (!val) {
                 this.authDisabled = true
-            }else{
+            } else {
                 this.authDisabled = false
             }
         },
-        sendEmail: function(){
+        sendEmail: function () {
             this.$prompt(this.$t("alarm.enterEmail"), this.$t("alarm.tip"), {
                 confirmButtonText: this.$t("alarm.send"),
                 cancelButtonText: this.$t("alarm.cancel"),
                 inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
                 inputErrorMessage: this.$t("alarm.emailTypeErr"),
-                }).then(({ value }) => {
-                    this.testEamilData(value)
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: this.$t("alarm.cancelEnter"),
-                    });       
+            }).then(({ value }) => {
+                this.testEamilData(value)
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$t("alarm.cancelEnter"),
                 });
+            });
         },
-        testEamilData: function(val){
+        testEamilData: function (val) {
             let data = {
                 serverId: this.emailData.serverId,
                 host: this.emailForm.address,
@@ -182,20 +176,20 @@ export default {
                 defaultEncoding: this.emailForm.format,
                 authentication: this.emailForm.authentication,
             };
-            testEmail(val,data).then(res => {
-                if(res.data.code === 0){
+            testEmail(val, data).then(res => {
+                if (res.data.code === 0) {
                     this.$message({
-                            type: "success",
-                            message: this.$t("alarm.sendEmailSuccess"),
-                        });
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                        type: "success",
+                        message: this.$t("alarm.sendEmailSuccess"),
+                    });
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -204,10 +198,10 @@ export default {
                     });
                 });
         },
-        getEmailConfig: function(){
+        getEmailConfig: function () {
             getEmailList().then(res => {
-                if(res.data && res.data.code === 0){
-                    if(res.data.data.length) {
+                if (res.data && res.data.code === 0) {
+                    if (res.data.data.length) {
                         this.emailForm.serverType = res.data.data[0].protocol;
                         this.emailForm.address = res.data.data[0].host;
                         this.emailForm.port = res.data.data[0].port;
@@ -216,18 +210,18 @@ export default {
                         this.emailForm.format = res.data.data[0].defaultEncoding;
                         this.emailForm.authentication = res.data.data[0].authentication;
                         this.emailData = res.data.data[0];
-                        if(!res.data.data[0].authentication){
+                        if (!res.data.data[0].authentication) {
                             this.authDisabled = true
                         }
                     }
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -236,7 +230,7 @@ export default {
                     });
                 });
         },
-        submitForm: function(formName){
+        submitForm: function (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.modifyEmail()
@@ -246,7 +240,7 @@ export default {
                 }
             });
         },
-        modifyEmail: function(){
+        modifyEmail: function () {
             let data = {
                 serverId: this.emailData.serverId,
                 host: this.emailForm.address,
@@ -259,20 +253,20 @@ export default {
             }
             changeEmailConfig(data).then(res => {
                 this.tipShow = false
-                if(res.data && res.data.code === 0){
+                if (res.data && res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t("alarm.updateEmailAlarmConfigSuccess")
                     });
                     this.getEmailConfig();
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.tipShow = false
                     this.$message({
@@ -283,19 +277,18 @@ export default {
                 });
         }
     },
-    beforeRouteLeave: function(to,from,next){
-        if(this.tipShow){
+    beforeRouteLeave: function (to, from, next) {
+        if (this.tipShow) {
             this.$message({
                 type: "error",
                 message: this.$t("alarm.enterSaveInfo")
             });
-        }else{
+        } else {
             next()
-        }  
+        }
     }
 }
 </script>
 
 <style>
-
 </style>

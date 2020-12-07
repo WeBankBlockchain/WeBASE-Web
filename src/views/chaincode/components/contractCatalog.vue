@@ -860,6 +860,7 @@ export default {
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContracts(arry)
                 } else {
+                    this.loading = false;
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -868,7 +869,7 @@ export default {
                 }
             })
                 .catch(err => {
-                    // this.loading = false;
+                    this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
@@ -915,6 +916,7 @@ export default {
                     // localStorage.setItem("contractList", JSON.stringify(allContractList))
                     this.getContractPaths(arry)
                 } else {
+                    this.loading = false;
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -923,6 +925,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
