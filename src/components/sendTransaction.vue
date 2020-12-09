@@ -26,7 +26,7 @@
                 <i class="el-icon-info"></i>
             </el-tooltip>
         </div>
-        <div class="send-item" v-show="!constant">
+        <div class="send-item" v-show="showUser">
             <span class="send-item-title">{{this.$t('contracts.user')}}:</span>
             <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width:260px">
                 <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
@@ -88,8 +88,18 @@ export default {
             contractVersion: this.version,
             contractAddress: this.data.contractAddress || "",
             constant: false,
-            pramasObj: null
+            pramasObj: null,
+            stateMutability: ''
         };
+    },
+    computed: {
+        showUser(){
+            let showUser = true;
+            if(this.constant || this.stateMutability==='view' || this.stateMutability==='pure'){
+                showUser = false
+            }
+            return showUser
+        }
     },
     mounted: function () {
         this.getUserData();
@@ -143,7 +153,8 @@ export default {
                 if (value.funcId === this.transation.funcName) {
                     this.pramasData = value.inputs;
                     this.constant = value.constant;
-                    this.pramasObj = value
+                    this.pramasObj = value;
+                    this.stateMutability = value.stateMutability;
                 }
             });
             this.funcList.sort(function (a, b) {
@@ -222,7 +233,7 @@ export default {
             
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                user: this.constant ? ' ' : this.transation.userName,
+                user: this.constant || this.stateMutability==='view' || this.stateMutability==='pure' ? '' : this.transation.userName,
                 contractName: this.data.contractName,
                 funcName: functionName || "",
                 funcParam: this.transation.funcValue,
@@ -252,7 +263,7 @@ export default {
                         this.$emit("success", Object.assign({},successData,{
                             constant: this.constant
                         }) );
-                        if (this.constant) {
+                        if (this.constant || this.stateMutability==='view' || this.stateMutability==='pure') {
                             this.$message({
                                 type: "success",
                                 message: this.$t("text.selectSuccess")
