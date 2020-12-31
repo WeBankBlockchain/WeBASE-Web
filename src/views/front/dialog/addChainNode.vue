@@ -141,6 +141,7 @@ export default {
             }
             this.portAbs()
             if (this.nodeFrom.nodecount > 1) {
+                //判断各个端口加上节点数量后  在不在已添加的节点列表内
                 for (let i = 0; i < list.length; i++) {
                     if ((this.nodeFrom.frontPort < list[i].frontPort &&
                         (parseInt(this.nodeFrom.frontPort) + parseInt(this.nodeFrom.nodecount)) > list[i].frontPort) || this.nodeFrom.frontPort == list[i].frontPort ||

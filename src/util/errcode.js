@@ -1273,15 +1273,15 @@ let errCode = {
     },
     "202473": {
         "en": "Host check fail for inpurt param.",
-        "zh": "输入参数的主机检查失败。"
+        "zh": "检测主机参数错误"
     },
     "202475": {
         "en": "Fail to generate chain and front config locally.",
-        "zh": "本地生成链和前端配置失败。"
+        "zh": "本地生成链和前置配置失败。"
     },
     "202476": {
         "en": "Not all host init success.",
-        "zh": "并非所有主机初始化都成功。"
+        "zh": "部分主机初始化失败。"
     },
     "202477": {
         "en": "Ipconf's node port config error.",
@@ -1293,7 +1293,7 @@ let errCode = {
     },
     "202479": {
         "en": "Delete host fail for host contains node(front).",
-        "zh": "删除主机包含节点的主机失败（前置）。"
+        "zh": "删除前置包含节点的主机失败。"
     },
 
     "202480": {
@@ -1302,11 +1302,11 @@ let errCode = {
     },
     "202481": {
         "en": "Ansible fetch not support fetch directory.",
-        "zh": "Ansible fetch不支持fetch目录。"
+        "zh": "Ansible fetch不支持拉取目录。"
     },
     "202482": {
         "en": "Ansible ping cannot reach target ip.",
-        "zh": "Ansible ping无法到达目标ip。"
+        "zh": "主机节点无法连通，请见ansible或网络配置。"
     },
     "202483": {
         "en": "Ansible init host of image and scp config not all success.",
@@ -1326,23 +1326,23 @@ let errCode = {
     },
     "202487": {
         "en": "Ansible exec command error.",
-        "zh": "Ansible exec命令错误。"
+        "zh": "Ansible 执行远端命令失败。"
     },
     "202488": {
         "en": "Ansible exec scp(copy) error.",
-        "zh": "Ansible exec scp（复制）错误。"
+        "zh": "Ansible 执行 scp（复制）错误。"
     },
     "202489": {
         "en": "Ansible exec scp(fetch) error",
-        "zh": "Ansible exec scp (fetch)错误。"
+        "zh": "Ansible 执行 scp (拉取)错误。"
     },
     "202491": {
         "en": "Ansible check image exist error for param.",
-        "zh": "Ansible检查镜像存在错误的参数。"
+        "zh": "Ansible检查镜像的参数错误。"
     },
     "202492": {
         "en": "Ansible check docker container exist error for param.",
-        "zh": "Ansible检查docker容器是否存在错误。"
+        "zh": "Ansible检查docker容器的参数错误。"
     },
     "202493": {
         "en": "Host already exist.",
@@ -1350,7 +1350,7 @@ let errCode = {
     },
     "202494": {
         "en": "Host root dir access denied.",
-        "zh": "主机根目录访问被拒绝。"
+        "zh": "主机安装目录无法访问，请检查目录权限。"
     },
 
 
@@ -1552,7 +1552,7 @@ let errCode = {
     },
     "-1": {
         en: "no active connection available with node, please check node status",
-        zh: "节点没有可用的活动连接，请检查节点状态"
+        zh: "节点与前置断开连接，请检查节点状态"
     },
 
     "422": {
