@@ -16,7 +16,7 @@
 import Axios from 'axios'
 import router from '../router'
 let axiosIns = Axios.create({
-    timeout: 30 * 1000
+    timeout: 60 * 1000
 });
 // axiosIns.defaults.baseURL = 'http://127.0.0.1:8081';
 axiosIns.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
@@ -29,10 +29,10 @@ axiosIns.defaults.validateStatus = function () {
 // http response interceptor
 axiosIns.interceptors.response.use(
     response => {
-        if(response.data && response.data.code === 302000) {
+        if (response.data && response.data.code === 302000) {
             router.push({
                 path: '/login',
-                query: {redirect: router.currentRoute.fullPath}
+                query: { redirect: router.currentRoute.fullPath }
             })
         }
         if (response.data && (response.data.code === 202052 || response.data.code === 202053)) {

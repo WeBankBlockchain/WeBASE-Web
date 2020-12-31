@@ -21,6 +21,9 @@ const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
 const front = resolve => require(['@/views/front/index'], resolve);
+const host = resolve => require(['@/views/front/host'], resolve);
+const node = resolve => require(['@/views/front/node'], resolve);
+const newFront = resolve => require(['@/views/front/front'], resolve);
 const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
@@ -71,7 +74,7 @@ const routes = [
         component: main,
         children: [
             {
-                path: '/home', component: home, name: '数据概览',nameKey: "dataOverview", menuShow: true, meta: { requireAuth: true }
+                path: '/home', component: home, name: '数据概览', nameKey: "dataOverview", menuShow: true, meta: { requireAuth: true }
             }
         ]
     },
@@ -90,14 +93,19 @@ const routes = [
     {
         path: '/',
         component: main,
-        name: '节点管理',
-        nameKey: "nodeTitle",
-        leaf: true,
+        name: '链管理',
+        nameKey: "chainTitle",
+        // leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
+            { path: '/host', component: host, name: '主机管理', nameKey: "hostMgrTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
-            { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", menuShow: true, meta: { requireAuth: true } }
+            { path: '/node', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
+            { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
+
+
+            { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", leaf: false, menuShow: false, meta: { requireAuth: true } }
         ]
     },
     {

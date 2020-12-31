@@ -1255,6 +1255,105 @@ let errCode = {
         "en": "Cannot install node on WeBASE-Node-Manager host.",
         "zh": "无法在WeBASE-Node-Manager主机上安装节点。"
     },
+    "202469": {
+        "en": "Check docker installed and running of host.",
+        "zh": "检查docker主机的安装和运行情况。"
+    },
+    "202470": {
+        "en": "Check host memory not enough for nodes(s).",
+        "zh": "检查主机内存不足，无法容纳节点。"
+    },
+    "202471": {
+        "en": "Check host cpu core count not enough for node.",
+        "zh": "检查节点的主机cpu核心数不足。"
+    },
+    "202472": {
+        "en": "Host check had been interrupt.",
+        "zh": "主机检查被中断。"
+    },
+    "202473": {
+        "en": "Host check fail for inpurt param.",
+        "zh": "输入参数的主机检查失败。"
+    },
+    "202475": {
+        "en": "Fail to generate chain and front config locally.",
+        "zh": "本地生成链和前端配置失败。"
+    },
+    "202476": {
+        "en": "Not all host init success.",
+        "zh": "并非所有主机初始化都成功。"
+    },
+    "202477": {
+        "en": "Ipconf's node port config error.",
+        "zh": "Ipconf的节点端口配置错误。"
+    },
+    "202478": {
+        "en": "Ipconf not match with deploy info list.",
+        "zh": "Ipconf与部署信息列表不匹配。"
+    },
+    "202479": {
+        "en": "Delete host fail for host contains node(front).",
+        "zh": "删除主机包含节点的主机失败（前置）。"
+    },
+
+    "202480": {
+        "en": "Ansible not installed!",
+        "zh": "Ansible未安装！"
+    },
+    "202481": {
+        "en": "Ansible fetch not support fetch directory.",
+        "zh": "Ansible fetch不支持fetch目录。"
+    },
+    "202482": {
+        "en": "Ansible ping cannot reach target ip.",
+        "zh": "Ansible ping无法到达目标ip。"
+    },
+    "202483": {
+        "en": "Ansible init host of image and scp config not all success.",
+        "zh": "Ansible 初始化主机镜像和scp配置没有全部成功。"
+    },
+    "202484": {
+        "en": "Ansible pull docker hub fail.",
+        "zh": "Ansible连接docker hub错误。"
+    },
+    "202485": {
+        "en": "Ansible pull docker cdn fail.",
+        "zh": "Ansible连接docker cdn错误。"
+    },
+    "202486": {
+        "en": "Ansible run docker command fail.",
+        "zh": "Ansible run docker命令失败。"
+    },
+    "202487": {
+        "en": "Ansible exec command error.",
+        "zh": "Ansible exec命令错误。"
+    },
+    "202488": {
+        "en": "Ansible exec scp(copy) error.",
+        "zh": "Ansible exec scp（复制）错误。"
+    },
+    "202489": {
+        "en": "Ansible exec scp(fetch) error",
+        "zh": "Ansible exec scp (fetch)错误。"
+    },
+    "202491": {
+        "en": "Ansible check image exist error for param.",
+        "zh": "Ansible检查镜像存在错误的参数。"
+    },
+    "202492": {
+        "en": "Ansible check docker container exist error for param.",
+        "zh": "Ansible检查docker容器是否存在错误。"
+    },
+    "202493": {
+        "en": "Host already exist.",
+        "zh": "主机已存在。"
+    },
+    "202494": {
+        "en": "Host root dir access denied.",
+        "zh": "主机根目录访问被拒绝。"
+    },
+
+
     "202501": {
         "en": "Contract path is exists.",
         "zh": "目录已存在。"
@@ -1450,6 +1549,10 @@ let errCode = {
     "-52012": {
         en: "CURRENT_VALUE_IS_EXPECTED_VALUE",
         zh: "当前值是预期值"
+    },
+    "-1": {
+        en: "no active connection available with node, please check node status",
+        zh: "节点没有可用的活动连接，请检查节点状态"
     },
 
     "422": {
