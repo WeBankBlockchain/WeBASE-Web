@@ -141,7 +141,8 @@ export default {
             }
             this.portAbs()
             if (this.nodeFrom.nodecount > 1) {
-                //判断各个端口加上节点数量后  在不在已添加的节点列表内
+                //判断各个端口加上节点数量后  与已添加的节点列表的各个端口是否存在冲突，
+                //判断依据是添加的端口小于或等于已添加的节点端口，添加的端口加上节点个数后大于或等于已添加的节点端口（存在冲突)
                 for (let i = 0; i < list.length; i++) {
                     if ((this.nodeFrom.frontPort < list[i].frontPort &&
                         (parseInt(this.nodeFrom.frontPort) + parseInt(this.nodeFrom.nodecount)) > list[i].frontPort) || this.nodeFrom.frontPort == list[i].frontPort ||

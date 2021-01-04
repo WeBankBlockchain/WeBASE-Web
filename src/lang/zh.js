@@ -303,7 +303,7 @@ export default {
         chartTransactions: "交易量",
         blockHash: "区块哈希",
         createTime: "创建时间",
-        portConflict: "存在端口冲突",
+        portConflict: "端口冲突",
         used: "已被使用"
     },
     nodes: {

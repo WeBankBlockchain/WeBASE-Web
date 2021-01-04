@@ -377,7 +377,7 @@ export default {
     left: 0;
     width: 100%;
     padding: 30px;
-    color: rgba(256, 256, 256, 0.1);
+    color: rgba(255, 255, 255, 0.1);
     z-index: 9999;
     background-color: #0c1220;
     box-sizing: border-box;

@@ -1314,11 +1314,11 @@ let errCode = {
     },
     "202484": {
         "en": "Ansible pull docker hub fail.",
-        "zh": "Ansible连接docker hub错误。"
+        "zh": "Ansible连接DockerHub错误。"
     },
     "202485": {
         "en": "Ansible pull docker cdn fail.",
-        "zh": "Ansible连接docker cdn错误。"
+        "zh": "Ansible连接CDN错误。"
     },
     "202486": {
         "en": "Ansible run docker command fail.",
