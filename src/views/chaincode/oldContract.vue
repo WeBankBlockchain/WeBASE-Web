@@ -31,7 +31,11 @@
                             <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center"></el-table-column>
+                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center">
+                        <template slot-scope="scope">
+                            <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="handleType" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
                         <template slot-scope="scope">
                             <span>{{contractStatusZh(scope.row.handleType) }}</span>
@@ -162,10 +166,10 @@ export default {
             handleFreezeThawType: '',
             historyCurrentPage: 1,
             historyPageSize: 10,
-            historyTotal: 0,  
+            historyTotal: 0,
             btnIndex: '',
             btnLoading: false,
-            adminRivateKeyList: [],          
+            adminRivateKeyList: [],
             contractHistoryList: [],
             contractHistoryHead: [
                 {
@@ -183,7 +187,7 @@ export default {
                     name: this.$t("contracts.contractAddress"),
                     width: ''
                 },
-                 {
+                {
                     enName: 'status',
                     name: this.$t("contracts.status"),
                     width: ''
@@ -235,7 +239,7 @@ export default {
                 contractAddress: this.contractAddress,
                 contractStatus: 2
             }
-            if(localStorage.getItem("root") === 'developer'){
+            if (localStorage.getItem("root") === 'developer') {
                 data.account = localStorage.getItem("user")
             }
             getContractList(data).then(res => {
@@ -248,17 +252,17 @@ export default {
                     });
                     dataArray.forEach(item => {
                         item.haveEvent = false
-                        if(item.contractAbi) {
-                            let contractAbi  = JSON.parse(item.contractAbi)
+                        if (item.contractAbi) {
+                            let contractAbi = JSON.parse(item.contractAbi)
                             for (let index = 0; index < contractAbi.length; index++) {
-                                if(contractAbi[index]['type'] === "event") {
+                                if (contractAbi[index]['type'] === "event") {
                                     item.haveEvent = true
                                     break;
                                 }
                             }
                         }
                     });
-                        console.log(dataArray);
+                    console.log(dataArray);
                     this.queryAllContractStatus(contractAddressList, dataArray)
                 } else {
                     this.$message({
@@ -349,7 +353,7 @@ export default {
                                     type: 'success',
                                     message: this.$t('govCommittee.success')
                                 })
-                                
+
                             } else {
                                 this.$message({
                                     message: this.$chooseLang(res.data.code),
@@ -396,6 +400,14 @@ export default {
                 path: "/contract",
                 query: {
                     contractId: val.contractId,
+                    contractPath: val.contractPath
+                }
+            })
+        },
+        openPath(val) {
+            router.push({
+                path: "/contract",
+                query: {
                     contractPath: val.contractPath
                 }
             })
@@ -476,7 +488,7 @@ export default {
         freezeThawSuccess() {
             this.freezeThawVisible = false
             this.getContracts()
-            
+
         },
         freezeThawClose() {
             this.freezeThawVisible = false
@@ -514,7 +526,7 @@ export default {
         checkEvent: function (val) {
             this.contractInfo = val;
             this.$router.push({
-                path:'/eventCheck',
+                path: '/eventCheck',
                 query: {
                     groupId: this.groupId,
                     type: 'contract',
@@ -529,10 +541,10 @@ export default {
         checkEventClose() {
             this.checkEventVisible = false;
         },
-        checkEventResultSuccess(){
+        checkEventResultSuccess() {
             this.checkEventResultVisible = false
         },
-        checkEventResultClose(){
+        checkEventResultClose() {
             this.checkEventResultVisible = false
         },
     }
