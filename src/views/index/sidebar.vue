@@ -49,9 +49,9 @@
                     </el-menu-item>
                 </template>
             </el-menu>
-            </div>
-            
         </div>
+
+    </div>
     </div>
 </template>
 
@@ -171,6 +171,9 @@ export default {
                             case 'checkEvent':
                                 it.name = this.$t('title.checkEvent')
                                 break;
+                            case 'onlineTools':
+                                it.name = this.$t('title.onlineTools')
+                                break;
                         }
                     })
                 }
@@ -194,29 +197,29 @@ export default {
     methods: {
         changeRouter: function () {
             let list = this.$router.options.routes;
-            
+
             list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
                 }
-                if(item.nameKey == 'systemManager'){
-                    if(item.children){
+                if (item.nameKey == 'systemManager') {
+                    if (item.children) {
                         item.children.forEach(it => {
-                            if(it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")){
+                            if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
                                 it.menuShow = false;
-                            }else if(it.nameKey == 'newPermission'){
+                            } else if (it.nameKey == 'newPermission') {
                                 it.menuShow = true;
-                            }else{
+                            } else {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")){
+                            if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
                                 it.menuShow = false;
                             }
                         })
                     }
                 }
             });
-            if(localStorage.getItem("root") === "developer"){
+            if (localStorage.getItem("root") === "developer") {
                 list.forEach(item => {
                     item.menuShow = false;
                     if (item.nameKey === 'contractTitle') {
@@ -231,75 +234,75 @@ export default {
                     if (item.children) {
                         item.children.forEach((it) => {
                             it.menuShow = false;
-                            if(it.nameKey == 'permission' ){
+                            if (it.nameKey == 'permission') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'blockTitle' ){
+                            if (it.nameKey == 'blockTitle') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'transactionInfo' ){
+                            if (it.nameKey == 'transactionInfo') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'contractIDE' ){
+                            if (it.nameKey == 'contractIDE') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'contractList' ){
+                            if (it.nameKey == 'contractList') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'abiList' ){
+                            if (it.nameKey == 'abiList') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'parseAbi' ){
+                            if (it.nameKey == 'parseAbi') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'CNSmanager' ){
+                            if (it.nameKey == 'CNSmanager') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'CRUDServiceManagement' ){
+                            if (it.nameKey == 'CRUDServiceManagement') {
                                 it.menuShow = true;
                             }
-                            if(it.nameKey == 'PrivateKey' ){
+                            if (it.nameKey == 'PrivateKey') {
                                 it.menuShow = true;
                             }
                         })
                     }
                 });
-            }else{
-                for(let i = 0; i < list.length; i++) {
-                    if(list[i].name == '帐号管理'){
-                        list[i].menuShow =false
-                    }else if(list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' || list[i].nameKey =='groupManagement'){
+            } else {
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].name == '帐号管理') {
+                        list[i].menuShow = false
+                    } else if (list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' || list[i].nameKey == 'groupManagement') {
                         list[i].menuShow = false;
-                    }else{
+                    } else {
                         list[i].menuShow = true;
                     }
-                    if(list[i].children){
+                    if (list[i].children) {
                         list[i].children.forEach(it => {
                             it.menuShow = true;
                         })
                     }
                 }
                 list.forEach(item => {
-                if (this.userRole === "admin" && item.name === "帐号管理") {
-                    item.menuShow = true;
-                }
-                if(item.nameKey == 'systemManager'){
-                    if(item.children){
-                        item.children.forEach(it => {
-                            if(it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")){
-                                it.menuShow = false;
-                            }else if(it.nameKey == 'newPermission'){
-                                it.menuShow = true;
-                            }else{
-                                it.menuShow = true;
-                            }
-                            if(it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")){
-                                it.menuShow = false;
-                            }
-                        })
+                    if (this.userRole === "admin" && item.name === "帐号管理") {
+                        item.menuShow = true;
                     }
-                }
-            });
+                    if (item.nameKey == 'systemManager') {
+                        if (item.children) {
+                            item.children.forEach(it => {
+                                if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
+                                    it.menuShow = false;
+                                } else if (it.nameKey == 'newPermission') {
+                                    it.menuShow = true;
+                                } else {
+                                    it.menuShow = true;
+                                }
+                                if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
+                                    it.menuShow = false;
+                                }
+                            })
+                        }
+                    }
+                });
             }
             this.routesList = list;
         },
@@ -350,22 +353,21 @@ export default {
     height: 46px;
     line-height: 46px;
 }
-.sidebar-content{
+.sidebar-content {
     position: relative;
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none; /* IE 10+ */
-    
 }
 .sidebar-content ::-webkit-scrollbar {
-  display: none; /* Chrome Safari */
+    display: none; /* Chrome Safari */
 }
-.sidebar-version{
+.sidebar-version {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     padding: 30px;
-    color: rgba(256,256,256,0.1);
+    color: rgba(256, 256, 256, 0.1);
     z-index: 9999;
     background-color: #0c1220;
     box-sizing: border-box;

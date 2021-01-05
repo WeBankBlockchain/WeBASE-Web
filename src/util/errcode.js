@@ -1259,6 +1259,18 @@ let errCode = {
         "en": "Contract path is exists.",
         "zh": "目录已存在。"
     },
+    "202502": {
+        "en": "version cannot be empty.",
+        "zh": "版本不能为空"
+    },
+    "202503": {
+        "en": "cns name cannot be empty.",
+        "zh": "CNS 名不能为空"
+    },
+    "202504": {
+        "en": "contract version not exists.",
+        "zh": "合约版本不存在"
+    },
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'

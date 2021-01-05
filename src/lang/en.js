@@ -16,6 +16,7 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        noStoreContract: 'Please open a contract in the left panel',
         reqOvertime: "Request Timeout",
         loginFail: "Login Failed",
         systemError: "System Error",
@@ -143,6 +144,24 @@ export default {
         goCreatPrivateKey: "Please create a private key",
         searchMessage: "Request Success",
         emptyFolder: "Empty Folder",
+        folderIsExists: "Contract path is exists",
+        folder: "Folder",
+        previewAndDescription: "Preview And Description",
+        developing: "Application development, please look forward to...",
+        appIntroduction: "Contract warehouse",
+        warehouseDes: "The contract warehouse provides common tool contracts and recommended application contract templates. Users can import contracts into their own directory.",
+        fileSize: "The upload file size cannot exceed 100kb!",
+        registerCns: "Register CNS",
+        version: "Version",
+        no: 'No',
+        yes: 'Yes',
+        registerSuccess: "Register Success",
+        register: "Register",
+        cnsName: "CNS Name",
+        cns: "CNS",
+        registerCnsTips: "If the version is empty, you can enter the version to register",
+        registered: "Registered",
+        updateRegister: "Do you want to update the registration",
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -251,7 +270,12 @@ export default {
         developerMgmt: 'Developer Mgmt',
         checkEvent: 'Event Search',
         checkEventResult: 'Event',
-        eventName: 'Event Name'
+        eventName: 'Event Name',
+        onlineTools: 'Online Tools',
+        contractWarehouse: 'Contract Warehouse',
+        toolsContract: 'Tools Contract',
+        directory: 'Directory',
+        mgmtCns: "Mgmt CNS"
     },
     home: {
         nodes: "Nodes",
@@ -435,7 +459,11 @@ export default {
         eventParam: 'Please follow the prompt of event parameter type strictly',
         exportSol: 'Export',
         sureExport: 'Sure Export',
-        transactionReceipt: 'Transaction Receipt'
+        transactionReceipt: 'Transaction Receipt',
+        limit_1: "Only one file can be uploaded at a time",
+        exportToIde: "Export To IDE",
+        folder: "Folder"
+        
     },
     privateKey: {
         addUser: "Add Users",
@@ -710,6 +738,8 @@ export default {
     placeholder: {
         contractListSearch: 'Search by Name / Address',
         selected: 'Please select',
+        selectedAccountAddress: 'Select Account Address',
+        selectedNoUser: 'No available user, please create a new user key',
     },
     table: {
         contractAddress: 'Address',
@@ -730,6 +760,8 @@ export default {
         eventName: 'Event Name',
         blockHeight: 'Block Height',
         eventValue: 'Event',
+        contractName: 'Contract Name',
+        cnsVersion: 'CNS Version'
     },
     govCommittee: {
         addCommittee: 'Grant Committee Vote',
@@ -770,5 +802,22 @@ export default {
         operate: 'Operate',
         fromUser: 'Chain Committee',
         devAddress: 'Developer Address'
+    },
+    dialog: {
+        cnsVersion: 'Please enter version',
+        cnsVersionPattern: "It can only be numbers and letters",
+        cnsName: 'Please enter CNS name',
+    },
+    onlineTools: {
+        onlineHashCalculator: 'Hash Calculator',
+        algorithm: 'algorithm',
+        result: 'Result',
+        encryption: 'Encryption',
+        sign: 'Sign',
+        text: 'Text',
+        file: 'File',
+        drag: "Drag the file here, Or",
+        upload: " click upload",
+        uploadNumLimit: "Only one file can be uploaded",
     }
 }
