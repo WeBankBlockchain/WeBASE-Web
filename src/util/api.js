@@ -143,7 +143,7 @@ export function getContractList(data) {
 }
 
 // search contract list for contract path
-export function searchContract (data) {
+export function searchContract(data) {
     return get({
         url: `${url.ORG_LIST}/contract/contractList/multiPath`,
         method: 'post',
@@ -1512,7 +1512,7 @@ export function deletePath(data) {
 //event check 
 export function checkEvent(data) {
     return post({
-        url: `${ url.ORG_LIST }/event/eventLogs/list`,
+        url: `${url.ORG_LIST}/event/eventLogs/list`,
         method: 'post',
         data: data,
         headers: {
@@ -1682,3 +1682,162 @@ export function findCnsInfo(data) {
         }
     })
 }
+
+/**
+ * @method 查询主机列表
+ * @param none
+ */
+export function getHosts() {
+    return get({
+        url: `${url.ORG_LIST}/host/list`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 添加主机
+ * @param String sshIp; String sshUser; int sshPort ;init dockerPort ; String rootDir
+ */
+export function addHost(data) {
+    return post({
+        url: `${url.ORG_LIST}/host/add`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 检测主机
+ * @param Array hostIdList
+ */
+export function checkHost(data) {
+    return post({
+        url: `${url.ORG_LIST}/host/check`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 检测nodemgr ansible
+ */
+export function getAnsible() {
+    return post({
+        url: `${url.ORG_LIST}/host/ansible`,
+        method: 'post',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 部署初始化
+ * 
+ */
+export function initChainData(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/init`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**
+ * @method 部署初始化
+ * 
+ */
+export function deployChainData(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/config`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 检测端口
+ * 
+ */
+export function checkPort(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/checkPort`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  config
+ *
+ */
+export function startChainData(data) {
+    return get({
+        url: `${url.ORG_LIST}/deploy/chain/start`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method ping主机
+ * 
+ */
+export function pingHostData(data) {
+    return post({
+        url: `${url.ORG_LIST}/host/ping`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 添加节点
+ */
+export function addChainNodeData(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/node/add`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  删除主机
+ */
+export function deleteHost(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/host/${data}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+

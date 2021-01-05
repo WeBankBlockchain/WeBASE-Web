@@ -177,6 +177,9 @@ export default {
         Bus.$on("addFront", () => {
             this.getGroupList();
         })
+        Bus.$on("changeHeadGroup", () => {
+            this.getGroupList();
+        })
         this.queryGroupStatus4()
     },
     methods: {

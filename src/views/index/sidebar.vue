@@ -173,6 +173,8 @@ export default {
                                 break;
                             case 'onlineTools':
                                 it.name = this.$t('title.onlineTools')
+                            case 'hostMgrTitle':
+                                it.name = this.$t('text.hostMgrTitle')
                                 break;
                         }
                     })
@@ -278,7 +280,14 @@ export default {
                     }
                     if (list[i].children) {
                         list[i].children.forEach(it => {
-                            it.menuShow = true;
+                            if (it.menuShow) {
+                                it.menuShow = true;
+                            } else {
+                                it.menuShow = false;
+                            }
+                            if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
+                                it.menuShow = false;
+                            }
                         })
                     }
                 }
@@ -297,6 +306,9 @@ export default {
                                     it.menuShow = true;
                                 }
                                 if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
+                                    it.menuShow = false;
+                                }
+                                if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
                                     it.menuShow = false;
                                 }
                             })
@@ -367,7 +379,7 @@ export default {
     left: 0;
     width: 100%;
     padding: 30px;
-    color: rgba(256, 256, 256, 0.1);
+    color: rgba(255, 255, 255, 0.1);
     z-index: 9999;
     background-color: #0c1220;
     box-sizing: border-box;

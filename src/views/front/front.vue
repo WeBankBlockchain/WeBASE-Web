@@ -15,7 +15,7 @@
  */
 <template>
     <div class="front-module">
-        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='head'></v-content-head>
+        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head>
         <!-- <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
@@ -25,40 +25,61 @@
                     </div>
                 </div>
         </div> -->
-        <div class="module-wrapper" >
+        <div class="module-wrapper">
             <div class="search-part" style="padding-top: 20px;">
-                    <div class="search-part-left" v-if='!disabled'>
-                        <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
-                        <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
-                        <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 2)" @click="reset">{{$t('text.reset')}}</el-button>
-                    </div>
+                <div class="search-part-left" v-if='!disabled'>
+                    <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 2)" @click="reset">{{$t('text.reset')}}</el-button>
                 </div>
+            </div>
             <div class="search-table">
-                    <el-table :data="chainList" class="search-table-content" v-loading="loading">
-                        <el-table-column :label="$t('text.chainName')" prop="chainName" show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="$t('text.chainVersion')" prop="version" show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="$t('text.chainStatus')" prop="chainStatus" show-overflow-tooltip>
-                            <template slot-scope='scope'>
-                                <span v-if='scope.row.chainStatus != 2'>{{ChainStatus(scope.row.chainStatus)}}</span>
-                                <span v-if='scope.row.chainStatus == 2'>{{ChainStatus(scope.row.chainStatus)}}-<span class='cursor-pointer' style="color: #f00" @click='openHostInfo'>{{$t("text.errInfo")}}</span></span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column :label="$t('text.chainProgress')" show-overflow-tooltip>
-                            <template v-if='configData && configData.chainStatus != 3'>
-                                <el-progress v-if='(statusNumber || statusNumber == 0) && statusNumber != -1' :percentage="statusNumber" status="success" :showText='false'></el-progress>
-                                <el-progress v-if='statusNumber == -1' :percentage='10'  status="exception"></el-progress>
-                            </template>
-                            <template v-else>
-                                <span>{{$t('text.chainDeployed')}}</span>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
+                <el-form style="padding-top: 20px" v-if='chainList' class="chain-info">
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item :label='$t("text.chainName") + "："'>
+                                <span>{{chainList.chainName}}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item :label='$t("text.chainVersion") + "："'>
+                                <span>{{chainList.version}}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item :label='$t("text.chainType") + "："'>
+                                <span v-if='chainList.encryptType === 0'>{{$t("text.sha256")}}</span>
+                                <span v-if='chainList.encryptType === 1'>{{$t("text.sm3")}}</span>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item :label='$t("text.chainStatus") + "："'>
+                                <span :style="{'color': chainColor(chainList.chainStatus)}">{{ChainStatus(chainList.chainStatus)}}</span>
+                                <i class="el-icon-loading" v-if='chainList.chainStatus != 2 && chainList.chainStatus != 3'></i>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item :label='$t("home.createTime") + "："'>
+                                <span>{{changeDate(chainList.createTime)}}</span>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <!-- <el-table :data="chainList" class="search-table-content" v-loading="loading">
+                    <el-table-column :label="$t('text.chainName')" prop="chainName" show-overflow-tooltip></el-table-column>
+                    <el-table-column :label="$t('text.chainVersion')" prop="version" show-overflow-tooltip></el-table-column>
+                    <el-table-column :label="$t('text.chainStatus')" prop="chainStatus" show-overflow-tooltip>
+                        <template slot-scope='scope'>
+                            <span v-if='scope.row.chainStatus != 2'>{{ChainStatus(scope.row.chainStatus)}}</span>
+                            <span v-if='scope.row.chainStatus == 2'>{{ChainStatus(scope.row.chainStatus)}}-<span class='cursor-pointer' style="color: #f00" @click='openHostInfo'>{{$t("text.errInfo")}}</span></span>
+                        </template>
+                    </el-table-column>
+                </el-table> -->
+            </div>
         </div>
         <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
-                
-                
+
                 <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
                     <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
                         <template slot-scope="scope">
@@ -73,6 +94,7 @@
                                 </span>
                                 <span v-else-if='configData'>
                                     <i style="color: #f00" class="wbs-icon-radio font-6"></i>
+                                    <!-- {{Status(scope.row.status)}} -->
                                 </span>
                             </template>
                             <template v-else-if="head.enName ==='nodeType'">
@@ -82,16 +104,12 @@
                                     <span v-if='scope.row.status == 2 && !scope.row.nodeType'>{{$t("nodes.remove")}}</span>
                                 </span>
                             </template>
-                            
+
                             <template v-else-if="head.enName ==='operate'">
-                                <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" 
-                                :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
-                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 3)' 
-                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
-                                <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))'  
-                                :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
-                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)'  :disabled="disabled" type="text" size="small" 
-                                :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
+                                <el-button v-if='scope.row.status == 2 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="start(scope.row)">{{$t("text.start")}}</el-button>
+                                <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
+                                <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
+                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                             </template>
                             <template v-else>
                                 <span>{{scope.row[head.enName]}}</span>
@@ -118,9 +136,11 @@
 <script>
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
-import { getFronts, addnodes, deleteFront, getNodeList, 
-getConsensusNodeId,getGroupsInvalidIncluded,startNode,stopNode,getChainInfo,getProgress,deleteChain,encryption,getVersion } from "@/util/api";
-import { date, unique } from "@/util/util";
+import {
+    getFronts, addnodes, deleteFront, getNodeList,
+    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData
+} from "@/util/api";
+import { format, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import setConfig from "../index/dialog/setConfig"
@@ -188,7 +208,7 @@ export default {
             progressInterval: null,
             statusNumber: null,
             number: 0,
-            chainList: [],
+            chainList: null,
             hostInfoShow: false
         };
     },
@@ -273,7 +293,7 @@ export default {
             return data
         }
     },
-    beforeDestroy: function() {
+    beforeDestroy: function () {
         Bus.$off("changeConfig");
         clearInterval(this.frontInterval);
         clearInterval(this.progressInterval)
@@ -284,7 +304,7 @@ export default {
         } else {
             this.disabled = true
         }
-        Bus.$on("changeConfig",data => {
+        Bus.$on("changeConfig", data => {
             this.getData();
         })
         this.getConfigList();
@@ -294,29 +314,44 @@ export default {
         // }
     },
     methods: {
+        changeDate(val) {
+            let data;
+            data = format(val, "yyyy-MM-dd HH:mm:ss")
+            return data
+        },
+        // startChain() {
+        //     let data = {
+        //         chainName: this.chainList.chainName
+        //     }
+        //     startChainData(data).then(res => {
+        //         if (res.data.code === 0) {
+        //             alert('����ok')
+        //         }
+        //     })
+        // },
         hostInfoClose: function () {
             this.hostInfoShow = false
         },
         openHostInfo: function () {
             this.hostInfoShow = true
         },
-        getEncryption: function(){
+        getEncryption: function () {
             encryption().then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     // if(res.data.data == 1){
                     //     this.encryption = 'guomi'
                     // }else{
                     //     this.encryption = 'hash'
                     // }
-                    localStorage.setItem("encryptionId",res.data.data)
-                }else {
+                    localStorage.setItem("encryptionId", res.data.data)
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -325,77 +360,77 @@ export default {
                     });
                 });
         },
-        getProgresses: function () {
-            clearInterval(this.progressInterval)
-            this.progressInterval = setInterval ( () => {
-                this.getProgressData()
-            },1000)
-        },
+        // getProgresses: function () {
+        //     clearInterval(this.progressInterval)
+        //     this.progressInterval = setInterval(() => {
+        //         this.getProgressData()
+        //     }, 1000)
+        // },
         getProgressData: function () {
             getProgress().then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.statusNumber = res.data.data
-                    if(this.statusNumber == 10 || this.statusNumber == -1){
-                        localStorage.setItem("config",0)
+                    if (this.statusNumber == 10 || this.statusNumber == -1) {
+                        localStorage.setItem("config", 0)
                         clearInterval(this.progressInterval)
                     }
-                }else{
-                    localStorage.setItem("config",0)
+                } else {
+                    localStorage.setItem("config", 0)
                     clearInterval(this.progressInterval)
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
-            .catch(err => {
-                localStorage.setItem("config",0)
-                clearInterval(this.progressInterval)
+                .catch(err => {
+                    localStorage.setItem("config", 0)
+                    clearInterval(this.progressInterval)
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         deployChain: function () {
             this.configShow = true
         },
-        closeConfig: function() {
+        closeConfig: function () {
             this.configShow = false;
             this.getData()
         },
-        successConfig: function() {
+        successConfig: function () {
             this.configShow = false;
             this.getData();
-            localStorage.setItem("config",1)
-            this.getProgresses()
+            localStorage.setItem("config", 1)
+            // this.getProgresses()
         },
         getData: function () {
             this.number = 0;
             this.loadingNodes = true;
-            if(this.frontInterval){
+            if (this.frontInterval) {
                 clearInterval(this.frontInterval)
             }
             this.getConfigList()
             this.frontInterval = setInterval(() => {
                 this.getConfigList();
                 this.number++
-                if(this.number == 400){
+                if (this.number == 400) {
                     clearInterval(this.frontInterval);
                     this.number = 0;
                 }
-            },10000)
+            }, 10000)
         },
-        getVersionList () {
+        getVersionList() {
             getVersion().then(res => {
-                if(res.status == 200) {
-                    this.$store.dispatch('set_mgr_version_action',res.data)
+                if (res.status == 200) {
+                    this.$store.dispatch('set_mgr_version_action', res.data)
                 }
             }).catch(err => {
-                
+
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
@@ -405,40 +440,40 @@ export default {
         },
         getConfigList: function () {
             getChainInfo().then(res => {
-                if(res.data.code === 0) {
-                    
+                if (res.data.code === 0) {
+                    // clearInterval(this.frontInterval)
                     this.configData = res.data.data;
-                    if(res.data.data){
-                        this.chainList = [res.data.data]
-                        localStorage.setItem("configData",res.data.data.chainStatus);
-                        if(res.data.data.chainStatus != 3){
-                            this.getProgresses();
-                        }else{
-                            clearInterval(this.progressInterval)
-                        }
-                    }else{
-                        this.chainList = []
+                    if (res.data.data) {
+                        this.chainList = res.data.data
+                        localStorage.setItem("configData", res.data.data.chainStatus);
+                        // if (res.data.data.chainStatus != 3) {
+                        //     this.getProgresses();
+                        // } else {
+                        //     clearInterval(this.progressInterval)
+                        // }
+                    } else {
+                        this.chainList = null
                         clearInterval(this.frontInterval)
-                        localStorage.setItem("configData",0)
+                        localStorage.setItem("configData", 0)
                     }
                     this.getFrontTable();
-                }else{
+                } else {
                     clearInterval(this.frontInterval)
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            }).catch(err => {
-                    clearInterval(this.frontInterval)
-                    this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-                    
+                }
+            }).catch(err => {
+                clearInterval(this.frontInterval)
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
                 });
+
+            });
         },
         start: function (val) {
             this.loadingNodes = true;
@@ -447,28 +482,28 @@ export default {
             }
             startNode(reqData).then(res => {
                 this.loadingNodes = false;
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t("nodes.startSuccess")
                     })
                     this.getData()
-                }else{
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
-            .catch(err => {
-                this.loadingNodes = false;
+                .catch(err => {
+                    this.loadingNodes = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         stop: function (val) {
@@ -478,72 +513,78 @@ export default {
             }
             stopNode(reqData).then(res => {
                 this.loadingNodes = false;
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t("nodes.stopSuccess")
                     })
                     this.getData()
-                }else{
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
                 }
             })
-            .catch(err => {
-                this.loadingNodes = false;
+                .catch(err => {
+                    this.loadingNodes = false;
                     this.$message({
                         message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         update: function () {
             this.updateNodeShow = true
         },
-        reset () {
+        reset() {
             this.$confirm(this.$t("text.deleteChain"), this.$t("text.delete"), {
                 confirmButtonText: this.$t("text.sure"),
                 cancelButtonText: this.$t("text.cancel"),
                 type: 'warning'
-                }).then(() => {
-                    clearInterval(this.frontInterval);
-                    this.loadingNodes = true;
-                    this.loading = true;
-                    deleteChain().then(res => {
-                        if(res.data.code === 0){
-                            this.$message({
-                                type: "success",
-                                message: this.$t('text.resetSuccess'),
-                                duration: 2000
-                            });
-                            this.configData = null;
-                            this.loadingNodes = false;
-                            this.loading = false;
-                            this.getConfigList();
-                        }else{
-                            this.$message({
-                                type: "error",
-                                message: this.$chooseLang(res.data.code),
-                                duration: 2000
-                            }); 
-                        }
-                    }).catch (err => {
+            }).then(() => {
+                clearInterval(this.frontInterval);
+                this.loadingNodes = true;
+                this.loading = true;
+                deleteChain().then(res => {
+                    if (res.data.code === 0) {
                         this.$message({
-                            message: this.$t('text.systemError'),
-                            type: "error",
+                            type: "success",
+                            message: this.$t('text.resetSuccess'),
                             duration: 2000
                         });
-                    })
-                }).catch(() => {
+                        this.$router.push({
+                            path: "/node",
+                            query: {
+                                type: "chain"
+                            }
+                        })
+                        this.configData = null;
+                        this.loadingNodes = false;
+                        this.loading = false;
+                        this.getConfigList();
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code),
+                            duration: 2000
+                        });
+                    }
+                }).catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                })
+            }).catch(() => {
                 this.$message({
                     type: 'info',
                     message: this.$t('text.cancelDelete')
-                });          
+                });
             });
         },
         updateNodeClose: function () {
@@ -562,11 +603,11 @@ export default {
             this.deleteNodeShow = false;
             this.getData();
         },
-        addNodeClose: function() {
+        addNodeClose: function () {
             this.addNodeShow = false;
             this.getData();
         },
-        newNodeClose: function() {
+        newNodeClose: function () {
             this.newNodeShow = false;
             this.getData();
             // this.getProgresses();
@@ -588,35 +629,35 @@ export default {
                     if (res.data.code === 0) {
                         let num = 0;
                         let versionKey;
-                        for(let i = 0; i < res.data.data.length; i++){
-                            if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
-                                this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
-                                this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
-                                if(res.data.data[i].supportVersion){
-                                    versionKey = res.data.data[i].supportVersion.substring(2,3)
-                                    if(versionKey > 4){
-                                        num ++
+                        for (let i = 0; i < res.data.data.length; i++) {
+                            if (res.data.data[i].clientVersion || res.data.data[i].supportVersion) {
+                                this.$store.dispatch('set_version_action', res.data.data[i].clientVersion);
+                                this.$store.dispatch('set_support_version_action', res.data.data[i].supportVersion);
+                                if (res.data.data[i].supportVersion) {
+                                    versionKey = res.data.data[i].supportVersion.substring(2, 3)
+                                    if (versionKey > 4) {
+                                        num++
                                     }
-                                } 
+                                }
                             }
                         }
-                        if(num > 0) {
-                                localStorage.setItem("nodeVersionChange",1)
-                            }else{
-                                localStorage.setItem("nodeVersionChange","")
-                            }
-                            if(localStorage.getItem("nodeVersionChange")){
-                                this.$emit("versionChange")
-                            }
+                        if (num > 0) {
+                            localStorage.setItem("nodeVersionChange", 1)
+                        } else {
+                            localStorage.setItem("nodeVersionChange", "")
+                        }
+                        if (localStorage.getItem("nodeVersionChange")) {
+                            this.$emit("versionChange")
+                        }
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
                         this.loadingNodes = false;
-                        if(this.frontData.length == 0){
-                            this.deployShow = true 
-                        }else{
+                        if (this.frontData.length == 0) {
+                            this.deployShow = true
+                        } else {
                             this.deployShow = false
                         }
-                        if(this.configData && this.configData.chainStatus == 3){
+                        if (this.configData && this.configData.chainStatus == 3) {
                             this.getEncryption();
                             this.getGroupList();
                             this.getConsensus();
@@ -629,7 +670,7 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        
+
                     }
                 })
                 .catch(err => {
@@ -639,7 +680,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getConsensus: function () {
@@ -649,48 +690,53 @@ export default {
                 pageSize: 100
             }
             getConsensusNodeId(reqData).then(res => {
-                if(res.data.code === 0){
-                    if(res.data.data){
-                        for(let i = 0; i < this.frontData.length; i++){
-                        // this.frontData[i].nodeType = "";
-                            for(let index = 0; index < res.data.data.length; index++){
-                                if(this.frontData[i].nodeId == res.data.data[index].nodeId){
-                                    this.$set(this.frontData[i],'nodeType',res.data.data[index].nodeType)
+                if (res.data.code === 0) {
+                    if (res.data.data) {
+                        for (let i = 0; i < this.frontData.length; i++) {
+                            // this.frontData[i].nodeType = "";
+                            for (let index = 0; index < res.data.data.length; index++) {
+                                if (this.frontData[i].nodeId == res.data.data[index].nodeId) {
+                                    this.$set(this.frontData[i], 'nodeType', res.data.data[index].nodeType)
                                 }
                             }
                         }
-                    } 
-                }else{
+                    }
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            }).catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
-        getGroupList: function(){
+        getGroupList: function () {
             let _this = this
             getGroupsInvalidIncluded().then(res => {
-                if(res.data.code === 0){
-                    if(res.data.data && res.data.data.length){
-                        if(!localStorage.getItem("groupId")){
-                            localStorage.setItem("groupId",res.data.data[0].groupId)
+                if (res.data.code === 0) {
+                    try {
+                        if (res.data.data && res.data.data.length) {
+                            if (!localStorage.getItem("groupId")) {
+                                localStorage.setItem("groupId", res.data.data[0].groupId)
+                            }
+                            if (!localStorage.getItem("groupName")) {
+                                localStorage.setItem("groupName", res.data.data[0].groupName);
+                            }
+                            if (res.data.data.length > 0) {
+                                Bus.$emit("changeHeadGroup")
+                            }
                         }
-                        if(!localStorage.getItem("groupName")){
-                            localStorage.setItem("groupName",res.data.data[0].groupName);
-                        }
-                        if(res.data.data.length > 0){
-                            _this.$refs.head.getGroupList()
-                        }
+                    } catch (error) {
+                        console.log(error)
                     }
-                }else{
+
+                } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -747,7 +793,7 @@ export default {
             }
             return transString;
         },
-        ChainStatus (val) {
+        ChainStatus(val) {
             let str = ""
             switch (val) {
                 case 0:
@@ -783,7 +829,12 @@ export default {
             return str;
         },
         createFront() {
-            this.newNodeShow = true;
+            this.$router.push({
+                path: "/node",
+                query: {
+                    type: "node"
+                }
+            })
         },
         deleteNodes(val, type) {
             this.nodesDialogOptions = {
@@ -876,7 +927,7 @@ export default {
                             }
                         });
                         this.nodeData = unique(this.nodeData, 'nodeId')
-                    }else {
+                    } else {
                         this.nodeData = [];
                     }
 
@@ -933,7 +984,28 @@ export default {
                     return this.$t("text.addFail")
             }
         },
-        
+        chainColor(val) {
+            let colorString = "";
+            switch (val) {
+                case 0:
+                    colorString = "#E6A23C";
+                    break;
+                case 1:
+                    colorString = "#E6A23C";
+                    break;
+                case 2:
+                    colorString = "#F56C6C";
+                    break;
+                case 3:
+                    colorString = "#67C23A";
+                    break;
+                case 4:
+                    colorString = "#E6A23C";
+                    break;
+            }
+            return colorString;
+        }
+
     }
 };
 </script>
@@ -1004,33 +1076,39 @@ export default {
 .grayColor {
     color: #666 !important;
 }
-.guide-title{
+.guide-title {
     width: 100%;
     padding: 30px 0 50px 0;
     font-size: 24px;
     color: #000;
     text-align: center;
 }
-.guide-item{
-   padding-bottom: 60px;
+.guide-item {
+    padding-bottom: 60px;
     text-align: center;
 }
-.guide-item-title{
+.guide-item-title {
     font-size: 24px;
     color: #000;
 }
-.guide-item-img{
+.guide-item-img {
     margin: 0 60px;
 }
-.guide-content{
+.guide-content {
     padding-left: 10%;
     color: #999;
 }
-.guide-content-item{
+.guide-content-item {
     padding: 20px 0;
 }
-.guide-content-title{
+.guide-content-title {
     display: inline-block;
     color: #000;
+}
+.chain-info >>> .el-form-item__label {
+    line-height: 16px;
+}
+.chain-info >>> .el-form-item__content {
+    line-height: 16px;
 }
 </style>
