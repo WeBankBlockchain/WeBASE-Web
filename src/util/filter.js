@@ -76,3 +76,11 @@ Vue.filter('voteType', function (value) {
     }
     return name
 });
+
+Vue.filter('formatErrorMessage', function (value) {
+    try {
+        return `${value.formattedMessage} `
+    } catch (error) {
+        console.warn(error);
+    }
+});

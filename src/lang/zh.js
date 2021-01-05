@@ -16,6 +16,7 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        noStoreContract: '请在左侧面板点击打开一个合约',
         reqOvertime: "请求超时",
         loginFail: "登陆失败",
         systemError: "系统错误",
@@ -146,6 +147,23 @@ export default {
         goCreatPrivateKey: "请先到私钥管理创建私钥",
         searchMessage: "查询成功",
         emptyFolder: "空文件夹",
+        folderIsExists: "目录已存在",
+        previewAndDescription: "预览和说明",
+        developing: "应用开发中，敬请期待。。。",
+        appIntroduction: "合约仓库",
+        warehouseDes: "合约仓库中提供常用的工具合约和推荐应用合约模板。用户可将合约导入到自己目录进行引入。",
+        fileSize: "上传文件大小不能超过 100kb!",
+        registerCns: "注册CNS",
+        version: "版本号",
+        no: "否",
+        yes: "是",
+        registerSuccess: "注册成功",
+        register: "注册",
+        cnsName: "CNS名",
+        cns: "CNS",
+        registerCnsTips: "如果版本号为空，则没有注册过CNS，可以输入版本号进行注册",
+        registered: "已注册",
+        updateRegister: "是否要更新注册",
         chainInfo: "链信息",
         chainType: "链类型",
         sha256: "非国密",
@@ -281,7 +299,12 @@ export default {
         developerMgmt: '运维账号管理',
         checkEvent: 'Event查看',
         checkEventResult: 'Event',
-        eventName: '合约event名'
+        eventName: '合约event名',
+        onlineTools: '在线工具',
+        contractWarehouse: '合约仓库',
+        toolsContract: '工具合约',
+        directory: '目录',
+        mgmtCns: "管理CNS"
     },
     home: {
         nodes: "节点个数",
@@ -467,7 +490,10 @@ export default {
         eventParam: '请严格按照event参数类型提示输入;例如 byte类型输入"0x"',
         exportSol: '导出',
         sureExport: '确认导出',
-        transactionReceipt: '交易回执'
+        transactionReceipt: '交易回执',
+        limit_1: "每次最多只能上传一个文件",
+        exportToIde: "导出到IDE",
+        folder: "目录"
     },
     privateKey: {
         addUser: "新增用户",
@@ -743,6 +769,8 @@ export default {
     placeholder: {
         contractListSearch: '输入合约名或合约地址',
         selected: '请选择',
+        selectedAccountAddress: '请选择用户地址',
+        selectedNoUser: '没有用户，请去新建用户',
     },
     table: {
         contractAddress: '合约地址',
@@ -763,6 +791,8 @@ export default {
         eventName: 'Event名',
         blockHeight: '块高',
         eventValue: 'Event',
+        contractName: '合约名',
+        cnsVersion: 'cns版本号',
     },
     govCommittee: {
         addCommittee: '新增委员投票',
@@ -805,5 +835,22 @@ export default {
         operate: '操作',
         fromUser: '链委员',
         devAddress: '运维地址'
+    },
+    dialog: {
+        cnsVersion: '请输入版本',
+        cnsVersionPattern: "数字字母和英文字母'.'组成",
+        cnsName: '请输入名称',
+    },
+    onlineTools: {
+        onlineHashCalculator: 'Hash计算器',
+        algorithm: '算法',
+        result: '结果',
+        encryption: '加密',
+        sign: '签名',
+        text: '文本',
+        file: '文件',
+        drag: "将文件拖到此处，或",
+        upload: "点击上传",
+        uploadNumLimit: "只能上传一个文件",
     }
 }

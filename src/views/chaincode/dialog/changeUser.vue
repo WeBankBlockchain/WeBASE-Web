@@ -17,15 +17,49 @@
     <div class="chang-wrapper">
         <table class="opt-wrapper">
             <tr>
-                <td style="width: 40px;">{{this.$t('contracts.user')}}：</td>
+                <td style="width: 40px;text-align: right">{{this.$t('contracts.user')}}：</td>
                 <td>
-                    <el-select v-model="userName" :placeholder="$t('text.select')" style="width: 100%" :no-data-text="$t('text.goCreatPrivateKey')">
+                    <el-select v-model="userName" :placeholder="placeholderText" style="width: 100%" :no-data-text="$t('text.goCreatPrivateKey')">
                         <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
                     </el-select>
                 </td>
             </tr>
+            <tr>
+                <td style="width: 100px;text-align: right" class="text-td"><span>CNS：</span></td>
+                <td>
+                    <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
+                </td>
+            </tr>
+            <tr v-if="isCNS">
+                <td style="width: 100px;text-align: right;" class="text-td"><span style=""></span></td>
+                <td>
+                    <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
+                        <el-form-item prop="cnsName">
+                            <el-input v-model="cnsVersionFrom.cnsName">
+                                <template slot="prepend">
+                                    <span title="name">name</span>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                </td>
+            </tr>
+            <tr v-if="isCNS">
+                <td style="width: 100px;text-align: right;" class="text-td"><span></span></td>
+                <td>
+                    <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
+                        <el-form-item prop="cnsVersion">
+                            <el-input v-model="cnsVersionFrom.cnsVersion">
+                                <template slot="prepend">
+                                    <span title="version">version</span>
+                                </template>
+                            </el-input>
+                        </el-form-item>
+                    </el-form>
+                </td>
+            </tr>
             <tr v-if='inputs.length'>
-                <td style="vertical-align: top;">{{this.$t('contracts.params')}}：</td>
+                <td style="vertical-align: top;text-align: right;">{{this.$t('contracts.params')}}：</td>
                 <td>
                     <div v-for='(item,index) in inputs' :key='item.name' class="params-input">
                         <el-input v-model="parameter[index]" style="margin-bottom:10px;" :placeholder="item.type">
@@ -55,7 +89,7 @@ import errcode from "@/util/errcode";
 import { isJson } from "@/util/util"
 export default {
     name: "changeUser",
-    props: ["abi"],
+    props: ["abi", "contractName"],
     data: function () {
         return {
             userName: "",
@@ -66,8 +100,46 @@ export default {
             abifile: JSON.parse(this.abi),
             version: "",
             versionShow: false,
-            errorInfo: ""
+            errorInfo: "",
+            placeholderText: this.$t('placeholder.selectedAccountAddress'),
+            isCNS: false,
+            cnsVersionFrom: {
+                cnsVersion: "",
+                cnsName: this.contractName
+            }
         };
+    },
+    computed: {
+        rules() {
+            var obj = {
+                cnsVersion: [
+                    {
+                        required: true,
+                        message: this.$t('dialog.cnsVersion'),
+                        trigger: "blur"
+                    },
+                    {
+                        pattern: /^[A-Za-z0-9.]+$/,
+                        message: this.$t('dialog.cnsVersionPattern'),
+                        trigger: "blur"
+                    }
+                ],
+                cnsName: [
+                    {
+                        required: true,
+                        message: this.$t('dialog.cnsName'),
+                        trigger: "blur"
+                    },
+                    {
+                        pattern: /^[A-Za-z0-9.]+$/,
+                        message: this.$t('dialog.cnsVersionPattern'),
+                        trigger: "blur"
+                    }
+                ],
+            }
+            return obj
+        },
+
     },
     mounted: function () {
         this.getUserData();
@@ -87,6 +159,19 @@ export default {
             this.$emit("close");
         },
         submit: function () {
+            if (this.isCNS) {
+                this.$refs['cnsVersionFrom'].validate((valid) => {
+                    if (valid) {
+                        this.queryDeploy()
+                    } else {
+                        return false;
+                    }
+                });
+            } else {
+                this.queryDeploy()
+            }
+        },
+        queryDeploy() {
             this.versionShow = false;
             this.errorInfo = ''
             var params = []
@@ -105,7 +190,11 @@ export default {
                 userId: this.userName,
                 params: params
             };
-            this.$emit("change", data);
+            let cnsObj = {
+                version: this.cnsVersionFrom.cnsVersion,
+                saveEnabled: this.isCNS
+            }
+            this.$emit("change", data, cnsObj);
             this.$emit("close");
         },
         getUserData: function () {
@@ -115,7 +204,7 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
@@ -128,6 +217,8 @@ export default {
                         });
                         if (this.userList.length) {
                             this.userName = this.userList[0].address;
+                        } else {
+                            this.placeholderText = this.$t('placeholder.selectedNoUser')
                         }
                     } else {
                         this.$message({
@@ -144,6 +235,9 @@ export default {
                         duration: 2000
                     });
                 });
+        },
+        changeCns() {
+            this.cnsVersionFrom.cnsVersion = "";
         }
     }
 };
@@ -172,7 +266,14 @@ export default {
     max-width: 136px;
     overflow: hidden;
     text-overflow: ellipsis;
-
+}
+.demo-ruleForm >>> .el-form-item {
+    margin-bottom: 0px;
+}
+.demo-ruleForm >>> .el-form-item__error {
+    padding-top: 0px;
+    transform: scale(0.9);
+    top: 86%;
 }
 </style>
 

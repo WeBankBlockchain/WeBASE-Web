@@ -60,11 +60,12 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column :label="$t('nodes.operation')" width="220">
+                    <el-table-column :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -72,36 +73,6 @@
                 </el-pagination>
             </div>
         </div>
-        <!-- <div class="module-wrapper" style="padding: 30px 29px 0px;">
-            <p>冻结/解冻记录</p>
-            <el-table :data="contractHistoryList" tooltip-effect="dark">
-                <el-table-column v-for="head in contractHistoryHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
-                    <template slot-scope="scope">
-                        <template v-if="head.enName!='operate'">
-                            <span v-if="head.enName == 'status'">
-                                {{handleContractStatusZh(scope.row[head.enName])}}
-                            </span>
-                            <span v-else-if="head.enName == 'modifyAddress'">
-                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.modifyAddress)" :title="$t('privateKey.copy')"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else-if="head.enName == 'contractAddress'">
-                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('privateKey.copy')"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else>
-                                {{scope.row[head.enName]}}
-                            </span>
-                        </template>
-                        <template v-else>
-                            <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteHistory(scope.row)">{{$t('govCommittee.delete')}}</el-button>
-                        </template>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination class="page" @size-change="historySizeChange" @current-change="historyCurrentChange" :current-page="historyCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="historyPageSize" layout="total, sizes, prev, pager, next, jumper" :total="historyTotal">
-            </el-pagination>
-        </div> -->
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
@@ -116,6 +87,9 @@
         <el-dialog v-if="checkEventResultVisible" :title="$t('table.checkEventResult')" :visible.sync="checkEventResultVisible" width="670px" center class="send-dialog">
             <check-event-result @checkEventResultSuccess="checkEventResultSuccess($event)" @checkEventResultClose="checkEventResultClose" :checkEventResult="checkEventResult"></check-event-result>
         </el-dialog>
+        <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
+            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" :contractName="contractName" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose" ></mgmt-cns>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -126,6 +100,7 @@ import abiDialog from "./dialog/abiDialog"
 import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
+import mgmtCns from "./dialog/mgmtCns"
 import { getContractList, getAllContractStatus, deleteHandleHistory } from "@/util/api"
 import router from '@/router'
 import errcode from "@/util/errcode";
@@ -138,7 +113,8 @@ export default {
         "send-transation": sendTransation,
         freezeThaw,
         checkEventDialog,
-        checkEventResult
+        checkEventResult,
+        mgmtCns
     },
     data: function () {
         return {
@@ -212,7 +188,9 @@ export default {
             checkEventResultVisible: false,
             // contractInfo: null,
             checkEventResult: null,
-            groupId: localStorage.getItem("groupId")
+            groupId: localStorage.getItem("groupId"),
+            mgmtCnsVisible:false,
+            mgmtCnsItem: {}
         }
     },
     mounted: function () {
@@ -547,6 +525,16 @@ export default {
         checkEventResultClose() {
             this.checkEventResultVisible = false
         },
+        handleMgmtCns(item){
+            this.mgmtCnsVisible = true;
+            this.mgmtCnsItem = item;
+        },
+        mgmtCnsResultSuccess(){
+            this.mgmtCnsVisible = false;
+        },
+        mgmtCnsResultClose(){
+            this.mgmtCnsVisible = false;
+        }
     }
 }
 </script>

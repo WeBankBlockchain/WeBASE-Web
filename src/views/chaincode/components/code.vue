@@ -63,17 +63,29 @@
                     <div class="contract-info-list1" v-html="compileinfo">
                     </div>
                     <div class="contract-info-list1" style="color: #f00" v-show="errorInfo">
-                        {{errorInfo}}
+                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-for="(item, index) in errorMessage" :style="{'color' : severityColor(item)}">
+                            {{index+1}}: {{item | formatErrorMessage}}
+                            <!-- <i class="el-icon-circle-plus-outline" @click="optenErrorInfo(item, index)"></i>{{item | formatErrorMessage}} -->
+                            <!-- <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-if="item.open">
+                                <span>
+                                    <pre>{{item}}</pre>
+                                </span>
+                            </span> -->
+                        </span>
                     </div>
-                    <div class="contract-info-list1" style="color: #f00" v-show="errorInfo">
+                    <!-- <div class="contract-info-list1" style="color: #f00" v-show="errorInfo">
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-for="(item, index) in errorMessage">{{index+1}}、{{item}}</span>
-                    </div>
+                    </div> -->
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" :title="$t('text.copy')"></i>
                         </span>
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">{{contractAddress}}</span>
+                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">
+                            {{contractAddress}}
+                            <span v-if="reqVersion" style="margin-left: 10px;">(CNS: {{cnsName}} {{reqVersion}})</span>
+                            <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span>
+                        </span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractName
@@ -104,11 +116,14 @@
         <el-dialog v-dialogDrag :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version' :address='uploadAddress'></v-transaction>
         </el-dialog>
-        <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="350px" v-if="dialogUser" center class="send-dialog">
-            <v-user @change="deployContract($event)" @close="userClose" :abi='abiFile'></v-user>
+        <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="450px" v-if="dialogUser" center class="send-dialog">
+            <v-user @change="deployContract(arguments)" @close="userClose" :abi='abiFile' :contractName="contractName"></v-user>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
+        <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
+            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose" ></mgmt-cns>
+        </el-dialog>
     </div>
 </template>
 
@@ -134,10 +149,13 @@ import {
     setCompile,
     editChain,
     addFunctionAbi,
-    backgroundCompile
+    backgroundCompile,
+    registerCns,
+    findCnsInfo
 } from "@/util/api";
 import transaction from "@/components/sendTransaction";
 import changeUser from "../dialog/changeUser";
+import mgmtCns from "../dialog/mgmtCns"
 
 export default {
     name: "codes",
@@ -146,7 +164,8 @@ export default {
         "v-transaction": transaction,
         "v-user": changeUser,
         "v-editor": editor,
-        "v-upload": uploadFileAdr
+        "v-upload": uploadFileAdr,
+        mgmtCns
     },
     data: function () {
         return {
@@ -191,7 +210,11 @@ export default {
             complieBinTextHeight: false,
             mouseHover: false,
             showCompileText: true,
-            sendConstant: null
+            sendConstant: null,
+            reqVersion: "",
+            cnsName: "",
+            mgmtCnsVisible:false,
+            mgmtCnsItem: {}
         };
     },
     beforeDestroy: function () {
@@ -234,19 +257,9 @@ export default {
             this.version = data.contractVersion;
             this.complieAbiTextHeight = false;
             this.complieBinTextHeight = false;
-            // this.$refs['showAbiText'].style.overflow = 'hidden'
-            // this.$refs['showBinText'].style.overflow = 'hidden'
-            // if (data.contractAbi) {
-            //     this.$nextTick(() => {
-            //         if (this.$refs['showAbiText'].offsetHeight >= 72) {
-            //             this.complieAbiTextHeight = true
-            //         }
-            //         if (this.$refs['showBinText'].offsetHeight >= 72) {
-            //             this.complieBinTextHeight = true
-            //         }
-
-            //     })
-            // }
+            if(this.data.contractAddress){
+                this.queryFindCnsInfo()
+            }
 
         })
         Bus.$on("noData", data => {
@@ -741,7 +754,8 @@ export default {
                 });
             })
         },
-        deployContract(val) {
+        deployContract($event) {
+            var val = $event[0], cns = $event[1];
             if (val && !val.userId) {
                 this.$message({
                     type: "info",
@@ -786,6 +800,10 @@ export default {
                         this.data.contractSource = Base64.encode(this.content);
                         this.data.contractAddress = this.contractAddress;
                         this.data.contractVersion = this.version;
+                        this.queryFindCnsInfo()
+                        if (cns.saveEnabled) {
+                            this.queryRegisterCns(val, cns)
+                        }
                         Bus.$emit("deploy", this.data)
                     } else {
                         this.status = 3;
@@ -805,6 +823,30 @@ export default {
                         duration: 2000
                     });
                 });
+        },
+        queryRegisterCns(val, cns) {
+            let param = {
+                groupId: localStorage.getItem('groupId'),
+                contractName: this.contractName,
+                version: cns.version,
+                contractAbi: this.abiFile,
+                userAddress: val.userId,
+                saveEnabled: true,
+                contractAddress: this.contractAddress,
+                cnsName: cns.cnsName,
+                contractPath: this.data.contractPath
+            }
+            registerCns(param)
+                .then(res => {
+                    if (res.data.code === 0) {
+
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error"
+                        });
+                    }
+                })
         },
         foldInfo: function (val) {
             this.successHide = val;
@@ -871,8 +913,56 @@ export default {
                     });
                 });
             }
-        }
+        },
+        severityColor(item) {
+            let key = item.severity
+            switch (key) {
+                case "error":
+                    return '#F56C6C';
+                    break;
 
+                case "warning":
+                    return '#E6A23C';
+                    break;
+            }
+        },
+        queryFindCnsInfo() {
+            let param = {
+                groupId: localStorage.getItem('groupId'),
+                contractPath: this.data.contractPath,
+                contractName: this.data.contractName,
+                contractAddress: this.data.contractAddress
+            }
+            findCnsInfo(param)
+                .then(res => {
+                    const { data, status } = res
+                    if (status === 200) {
+                        if (data.data) {
+                            this.reqVersion = data.data.version;
+                            this.cnsName = data.data.cnsName;
+                        }else {
+                            this.reqVersion = "";
+                            this.cnsName = "";
+                        }
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+        },
+        handleRegisterCns(){
+            this.mgmtCnsItem = this.data;
+            this.mgmtCnsVisible = true;
+        },
+        mgmtCnsResultSuccess(){
+            this.queryFindCnsInfo()
+            this.mgmtCnsVisible = false;
+        },
+        mgmtCnsResultClose(){
+            this.mgmtCnsVisible = false;
+        },
     }
 };
 </script>

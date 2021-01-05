@@ -1573,6 +1573,116 @@ export function eventContractInfo(data, list) {
     })
 }
 
+// 仓库列表
+export function getContractStore() {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractStoreList`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getContractStoreById(storeId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractStoreById/${storeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//
+export function getContractItemById(contractId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractItemById/${contractId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getContractFolderById(contractFolderId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractFolderById/${contractFolderId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// 通过文件ID获取文件下的合约
+export function getContractItemByFolderId(folderId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractItemByFolderId/${folderId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getFolderItemListByStoreId(storeId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getFolderItemListByStoreId/${storeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//在线工具
+//生成sign
+export function signHash(data) {
+    return post({
+        url: `${url.ORG_LIST}/trans/signMessageHash`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function batchSaveContract(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/copyContracts`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//注册cns
+export function registerCns(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/registerCns`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//cns查询
+
+export function findCnsInfo(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/findCns`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 /**
  * @method 查询主机列表
  * @param none
@@ -1730,3 +1840,4 @@ export function deleteHost(data) {
         }
     })
 }
+

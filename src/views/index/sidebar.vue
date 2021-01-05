@@ -171,6 +171,8 @@ export default {
                             case 'checkEvent':
                                 it.name = this.$t('title.checkEvent')
                                 break;
+                            case 'onlineTools':
+                                it.name = this.$t('title.onlineTools')
                             case 'hostMgrTitle':
                                 it.name = this.$t('text.hostMgrTitle')
                                 break;
