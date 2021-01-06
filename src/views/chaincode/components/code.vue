@@ -62,20 +62,30 @@
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
                     </div>
-                    <div class="contract-info-list1" style="color: #f00" v-show="errorInfo">
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-for="(item, index) in errorMessage" :style="{'color' : severityColor(item)}">
+                    <div class="contract-info-list1 error-item" style="color: #f00" v-show="errorInfo">
+                        <!-- <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-for="(item, index) in errorMessage" :style="{'color' : severityColor(item)}">
                             {{index+1}}: {{item | formatErrorMessage}}
-                            <!-- <i class="el-icon-circle-plus-outline" @click="optenErrorInfo(item, index)"></i>{{item | formatErrorMessage}} -->
-                            <!-- <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-if="item.open">
+                            <i class="el-icon-circle-plus-outline" @click="optenErrorInfo(item, index)"></i>{{item | formatErrorMessage}}
+                            <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-if="item.open">
                                 <span>
                                     <pre>{{item}}</pre>
                                 </span>
-                            </span> -->
-                        </span>
+                            </span>
+                        </span> -->
+                        <el-collapse v-model="activeNames" @change="handleChange">
+                            <el-collapse-item :name="index" v-for="(item, index) in errorMessage" :key="index" :style="{'color': severityColor(item)}">
+                                <template slot="title">
+                                    {{index+1}}、{{item | formatErrorMessage}}
+                                </template>
+                                <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word;">
+                                    <span>
+                                        <pre :style="{'color': severityColor(item)}">{{item}}</pre>
+                                    </span>
+                                </span>
+                            </el-collapse-item>
+
+                        </el-collapse>
                     </div>
-                    <!-- <div class="contract-info-list1" style="color: #f00" v-show="errorInfo">
-                        <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word" v-for="(item, index) in errorMessage">{{index+1}}、{{item}}</span>
-                    </div> -->
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
                     <div class="contract-info-list" v-show="contractAddress">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress
@@ -214,7 +224,8 @@ export default {
             reqVersion: "",
             cnsName: "",
             mgmtCnsVisible:false,
-            mgmtCnsItem: {}
+            mgmtCnsItem: {},
+            activeNames: ['0']
         };
     },
     beforeDestroy: function () {
@@ -963,6 +974,9 @@ export default {
         mgmtCnsResultClose(){
             this.mgmtCnsVisible = false;
         },
+        handleChange(val) {
+            console.log(val);
+        }
     }
 };
 </script>
@@ -1017,6 +1031,7 @@ export default {
     border-top: 1px solid #ddd;
     box-sizing: border-box;
     overflow: auto;
+    padding-left: 5px;
 }
 .contract-info-content {
     height: 100%;
@@ -1145,5 +1160,24 @@ export default {
 }
 .contract-font:visited {
     color: #111;
+}
+.error-item >>> .el-collapse {
+    border-bottom: 1px solid #fff;
+    border-top: 1px solid #fff;
+}
+.error-item >>> .el-collapse-item__header {
+    color: inherit;
+    background-color: inherit;
+    height: 16px;
+    line-height: 16px;
+    border-bottom: 1px solid #fff;
+    font-size: 12px;
+    font-weight: none;
+}
+.error-item >>> .el-collapse-item__content{
+    /* background-color: #fff; */
+}
+.error-item >>>.el-collapse-item__wrap{
+    border-bottom: 1px solid #fff;
 }
 </style>
