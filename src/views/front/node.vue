@@ -9,11 +9,9 @@
                 <h3>{{$t('text.chainInfo')}}</h3>
                 <el-divider></el-divider>
                 <el-form :model="chainFrom" :rules='rules' ref="chainFrom" label-width="110px" class="demo-ruleForm">
-                    <el-form-item :label='$t("text.chainType")' prop='chainType'>
-                        <el-radio-group v-model="chainFrom.chainType">
-                            <el-radio-button :label="0">{{$t("text.sha256")}}</el-radio-button>
-                            <el-radio-button :label="1">{{$t("text.sm3")}}</el-radio-button>
-                        </el-radio-group>
+                    <el-form-item :label='$t("text.chainType")'>
+                        <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
+                        <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                     </el-form-item>
                     <el-form-item :label='$t("text.imageMode")' prop='dockerImageType'>
                         <el-radio v-model="chainFrom.dockerImageType" :label="2">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
@@ -48,8 +46,8 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainType") + "："'>
-                                <span v-if='chainFrom.encryptType === 0'>{{$t("text.sha256")}}</span>
-                                <span v-if='chainFrom.encryptType === 1'>{{$t("text.sm3")}}</span>
+                                <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
+                                <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -87,7 +85,7 @@
                     <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'RPC' + $t('alarm.port')" prop="rpcPort" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="$t('text.status')" prop="status" show-overflow-tooltip>
+                    <el-table-column :label="$t('contracts.status')" prop="status" show-overflow-tooltip>
                         <template slot-scope="scope">
                             <span :style="{'color': nodeColor(scope.row.status)}">{{Status(scope.row.status)}}</span>
                             <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top-start" v-if='scope.row.status === 3 || scope.row.status === 5 || scope.row.status === 7'>
@@ -128,7 +126,7 @@ export default {
     data() {
         return {
             chainFrom: {
-                chainType: 0,
+                encryptType: localStorage.getItem("encryptionId"),
                 chainVersion: null,
                 dockerImageType: 2
             },
@@ -152,7 +150,7 @@ export default {
     computed: {
         rules() {
             let data = {
-                chainType: [
+                encryptType: [
                     { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
                 ],
                 chainVersion: [
@@ -166,10 +164,10 @@ export default {
         }
     },
     mounted() {
-        if (this.type === 'chain') {
-            this.getConfigs();
-        } else {
+        if (this.type === 'node') {
             this.getChainDetail()
+        } else {
+            this.getConfigs();
         }
         if (this.$store.state.nodeList && this.$store.state.nodeList.length) {
             this.nodeList = this.$store.state.nodeList;
@@ -237,6 +235,7 @@ export default {
                     }
                     this.configList = [];
                     this.configList = res.data.data
+                    console.log(this.chainFrom)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -363,7 +362,7 @@ export default {
             let data = {
                 chainName: "default_chain",
                 imageTag: this.chainFrom.chainVersion,
-                encryptType: this.chainFrom.chainType,
+                encryptType: this.chainFrom.encryptType,
                 agencyName: "agency1",
                 ipconf: [`${val.ip}:1 agency1 1 ${val.p2pPort},${val.channelPort},${val.rpcPort}`],
                 deployNodeInfoList: [
@@ -417,7 +416,7 @@ export default {
                 chainName: "default_chain",
                 ipconf: ipconf,
                 imageTag: this.chainFrom.chainVersion,
-                encryptType: this.chainFrom.chainType,
+                encryptType: this.chainFrom.encryptType,
                 deployNodeInfoList: deployNodeInfoList,
                 agencyName: "agency1"
             }
@@ -713,7 +712,7 @@ export default {
 <style scoped>
 .wrapper-title {
     padding: 20px 30px;
-    font-size: 16px;
+    font-size: 18px;
 }
 .chain-info >>> .el-form-item__label {
     line-height: 16px;
