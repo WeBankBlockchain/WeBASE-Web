@@ -161,6 +161,8 @@ export default {
     },
     beforeDestroy: function () {
         Bus.$off("deleteFront")
+        Bus.$off("changeHeadGroup")
+        Bus.$off("addFront")
     },
     mounted: function () {
         if (localStorage.getItem("groupName")) {

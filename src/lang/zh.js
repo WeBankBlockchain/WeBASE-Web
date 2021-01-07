@@ -196,7 +196,7 @@ export default {
         enterHost: "进入主机管理",
         environmentReady: "环境准备",
         readyAnsibleInfo: "需要在WeBASE-Node-Manager所在机器安装Ansible，并为Ansible配置私钥",
-        readyDockerInfo: "需要安装最新版Docker并启动Docker",
+        readyDockerInfo: "需要安装最新版Docker并启动Docker，配置docker用户组",
         visualization: "可视化部署流程",
         addHostInfo: "进入主机管理，点击新增主机按钮，填入ip和文件路径（文件路径为节点的安装路径）",
         addCheckNode: "添加节点信息并检测、初始化主机",
@@ -206,7 +206,9 @@ export default {
         checkNodeInfo: "检测主机，新增完节点后，点击检测按钮。",
         initializationInfo: "初始化主机，当节点状态为检测成功，可以执行初始化操作，点击初始化按钮。",
         deployStartChain: "部署链并启动",
-        deployStartChainInfo: "当节点状态为初始化成功，即可进行部署操作，点击部署按钮，部署链是异步操作，时间较长，请耐心等待。"
+        deployStartChainInfo: "当节点状态为初始化成功，即可进行部署操作，点击部署按钮，部署链是异步操作，时间较长，请耐心等待。",
+        nodeLog: "节点日志",
+        checkErrorInfo: "节点未检测或检测失败，不能执行初始化"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

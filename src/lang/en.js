@@ -209,7 +209,9 @@ export default {
         checkNodeInfo: "Check the host. After adding the node, click the check button.",
         initializationInfo: "Initialize the host. When the node status is successfully detected, you can perform the initialization operation and click the initialization button.",
         deployStartChain: "Deploy chain and start",
-        deployStartChainInfo: "When the node status is initialized successfully, the deployment operation can be carried out. Click the deployment button. The deployment chain is asynchronous and takes a long time. Please wait patiently."
+        deployStartChainInfo: "When the node status is initialized successfully, the deployment operation can be carried out. Click the deployment button. The deployment chain is asynchronous and takes a long time. Please wait patiently.",
+        nodeLog: "Node log",
+        checkErrorInfo: "The node is not detected or failed to check. Initialization cannot be performed"
 
     },
     rule: {

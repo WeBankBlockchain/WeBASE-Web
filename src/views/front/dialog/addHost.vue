@@ -79,6 +79,7 @@ export default {
                 rootDir: this.hostFrom.sshPath,
             }
             addHost(data).then(res => {
+                this.loading = false
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -93,6 +94,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading = false
                     this.$message({
                         type: "error",
                         message: this.$t('text.systemError')

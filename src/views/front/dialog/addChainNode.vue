@@ -1,23 +1,27 @@
 <template>
     <div>
-        <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="450px" :center="true" :show-close='true'>
-            <el-form :model="nodeFrom" :rules='rules' ref="nodeFrom" label-width="100px" class="demo-ruleForm">
-                <el-form-item :label='$t("text.ip")' prop='ip'>
-                    <el-select v-model="nodeFrom.hostId" :placeholder="$t('text.select')" @change='hostChange'>
+        <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="480px" :center="true" :show-close='true'>
+            <el-form :model="nodeFrom" :rules='rules' ref="nodeFrom" label-width="120px" class="demo-ruleForm">
+                <el-form-item :label='$t("text.ip")' prop='hostId'>
+                    <el-select v-model="nodeFrom.hostId" :placeholder="$t('text.select')" @change='hostChange' style="width: 240px">
                         <el-option v-for="item in hostList" :key="item.id" :label="item.ip" :value="item.id">
                         </el-option>
                     </el-select>
+                    <el-tooltip class="item" effect="dark" content="如果主机列表为空，请到主机管理添加主机" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
-                <el-form-item :label='"Front" + $t("alarm.port")'>
+                <el-form-item :label='"Front" + $t("alarm.port")' prop='frontPort'>
                     <el-input v-model="nodeFrom.frontPort" :placeholder="$t('text.input') + 'Front' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
+
                 </el-form-item>
-                <el-form-item :label='"P2P" + $t("alarm.port")'>
+                <el-form-item :label='"P2P" + $t("alarm.port")' prop='p2pPort'>
                     <el-input v-model="nodeFrom.p2pPort" :placeholder="$t('text.input') + 'P2P' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
                 </el-form-item>
-                <el-form-item :label='"Channel" + $t("alarm.port")'>
+                <el-form-item :label='"Channel" + $t("alarm.port")' prop='channelPort'>
                     <el-input v-model="nodeFrom.channelPort" :placeholder="$t('text.input') + 'Channel' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
                 </el-form-item>
-                <el-form-item :label='"RPC" + $t("alarm.port")'>
+                <el-form-item :label='"RPC" + $t("alarm.port")' prop='rpcPort'>
                     <el-input v-model="nodeFrom.rpcPort" :placeholder="$t('text.input') + 'RPC' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
                 </el-form-item>
                 <el-form-item :label='$t("nodes.nodeCount")'>
