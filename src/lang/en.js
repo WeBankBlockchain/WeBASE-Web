@@ -120,8 +120,8 @@ export default {
         adding: "Adding",
         addFail: "Add failed",
         imageMode: "Docker Image pull mode",
-        manual: "Manual (recommended)",
-        automatic: "Automatic",
+        manual: "Manual",
+        automatic: "Automatic (recommended)",
         imageModeInfo1: "Automatic: pull the image from webase's CDN.",
         imageModeInfo2: "Manual: Manually load docker image by cdn's compression package to the host.",
         imageModeInfo3: "dockerhub：pull the image from Dockerhub to the host.",
@@ -134,8 +134,8 @@ export default {
         cancelDelete: "Undeleted",
         hostStatus: "Host Status",
         hostTitle: "Host information",
-        hostMgrTitle: "Host management",
-        chainTitle: "Chain management",
+        hostMgrTitle: "Host Mgmt",
+        chainTitle: "Chain Mgmt",
         dockerCatalog: "Docker directory",
         errInfo: "View error messages",
         webaseVersion: "WeBASE Version",
@@ -192,7 +192,27 @@ export default {
         deleteHostSuccess: "Delete host successfully.",
         portConflict: "Port already in use.",
         used: "Has been used",
-        addHostSuccess: "New host successfully added"
+        addHostSuccess: "New host successfully added",
+        noviceGuide: "Novice guide",
+        click: "Click",
+        here: "Here",
+        enterHost: "Enter host management",
+        environmentReady: "Environment Ready",
+        readyAnsibleInfo: "You need to install ansible on the machine where the WeBASE-Node-Manager is located and configure the private key for ansible",
+        readyDockerInfo: "You need to install the latest version of docker and start docker",
+        visualization: "Visualization of deployment process",
+        addHostInfo: "Enter host management, click Add host button, fill in IP and file path (file path is the installation path of node)",
+        addCheckNode: "Add node information and check and initialize the host",
+        addCheckNodeInfo1: "Enter the node management, select the image pull mode, select the chain version, and click the add node button to add a node.",
+        addCheckNodeInfo2: "The new node pop-up window selects the host, fills in each port, and fills in the number of nodes. The number of nodes is the number of new nodes, and the port increases according to the filled port.",
+        addCheckNodeInfo3: "Note: do not fill in the used ports or there are used ports in the incremental range.",
+        checkNodeInfo: "Check the host. After adding the node, click the check button.",
+        initializationInfo: "Initialize the host. When the node status is successfully detected, you can perform the initialization operation and click the initialization button.",
+        deployStartChain: "Deploy chain and start",
+        deployStartChainInfo: "When the node status is initialized successfully, the deployment operation can be carried out. Click the deployment button. The deployment chain is asynchronous and takes a long time. Please wait patiently.",
+        nodeLog: "Node log",
+        checkErrorInfo: "The node is not detected or failed to check. Initialization cannot be performed"
+
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -494,7 +514,7 @@ export default {
         limit_1: "Only one file can be uploaded at a time",
         exportToIde: "Export To IDE",
         folder: "Folder"
-        
+
     },
     privateKey: {
         addUser: "Add Users",
