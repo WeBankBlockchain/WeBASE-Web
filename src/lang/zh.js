@@ -148,6 +148,7 @@ export default {
         searchMessage: "查询成功",
         emptyFolder: "空文件夹",
         folderIsExists: "目录已存在",
+        folder: "文件夹",
         previewAndDescription: "预览和说明",
         developing: "应用开发中，敬请期待。。。",
         appIntroduction: "合约仓库",
@@ -189,6 +190,8 @@ export default {
         Cancelled: '已取消',
         deleteHostInfo: "是否删除该主机?",
         deleteHostSuccess: "删除主机成功",
+        portConflict: "端口冲突",
+        used: "已被使用",
         addHostSuccess: "新增主机成功",
         noviceGuide: "新手引导",
         click: "点击",
@@ -208,7 +211,11 @@ export default {
         deployStartChain: "部署链并启动",
         deployStartChainInfo: "当节点状态为初始化成功，即可进行部署操作，点击部署按钮，部署链是异步操作，时间较长，请耐心等待。",
         nodeLog: "节点日志",
-        checkErrorInfo: "节点未检测或检测失败，不能执行初始化"
+        checkErrorInfo: "节点未检测或检测失败，不能执行初始化",
+        newHost: "新增主机",
+        addNodeInfo: "添加节点完成",
+        goHostInfo: "请到主机管理添加主机信息",
+        down: "停止"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -345,8 +352,6 @@ export default {
         chartTransactions: "交易量",
         blockHash: "区块哈希",
         createTime: "创建时间",
-        portConflict: "端口冲突",
-        used: "已被使用"
     },
     nodes: {
         nodeFront: "节点前置",
@@ -783,7 +788,6 @@ export default {
         passwordPattern: "字母,数字组成,且至少包含一个大写字母和一个小写字母",
         updatePsdSuccess: "密码修改成功",
         updatePsdError: "密码修改失败",
-
     },
     placeholder: {
         contractListSearch: '输入合约名或合约地址',

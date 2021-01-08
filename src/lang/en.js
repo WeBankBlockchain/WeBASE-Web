@@ -211,8 +211,11 @@ export default {
         deployStartChain: "Deploy chain and start",
         deployStartChainInfo: "When the node status is initialized successfully, the deployment operation can be carried out. Click the deployment button. The deployment chain is asynchronous and takes a long time. Please wait patiently.",
         nodeLog: "Node log",
-        checkErrorInfo: "The node is not detected or failed to check. Initialization cannot be performed"
-
+        checkErrorInfo: "The node is not detected or failed to check. Initialization cannot be performed",
+        newHost: "New Host",
+        addNodeInfo: "Add node complete",
+        goHostInfo: "Please go to host management to add a host.",
+        down: "Down"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -257,6 +260,7 @@ export default {
         selectGroup: "Please select Groups",
         selctDockerImageType: "Select the docker image pull mode",
         userRule: "Please enter user",
+        fromUserRule: "Please check account",
         thresholdRule: "Please enter threshold",
         weightRule: "Please enter weight",
         eventName: 'Please enter event name',
@@ -514,7 +518,6 @@ export default {
         limit_1: "Only one file can be uploaded at a time",
         exportToIde: "Export To IDE",
         folder: "Folder"
-
     },
     privateKey: {
         addUser: "Add Users",
@@ -837,6 +840,8 @@ export default {
         threshold: 'Threshold%',
         isDelete: 'Are you sure to initiate deletion voting?',
         operate: 'Operate',
+        agree: 'Agree',
+        refuse: 'Refuse',
         success: 'Success',
         delete: 'Delete',
         blockNum: 'Block Number',

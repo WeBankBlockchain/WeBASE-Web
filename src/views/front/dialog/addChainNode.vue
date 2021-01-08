@@ -248,6 +248,12 @@ export default {
             getHosts().then(res => {
                 if (res.data.code === 0) {
                     this.hostList = res.data.data
+                    if (res.data.data.length === 0 || !res.data.data) {
+                        this.$message({
+                            type: "info",
+                            message: this.$t("text.goHostInfo")
+                        });
+                    }
                 } else {
                     this.$message({
                         type: "error",

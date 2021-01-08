@@ -9,13 +9,17 @@
             </el-page-header>
             <div class="link guide" @click='openGuide'>{{$t("text.noviceGuide")}}</div>
             <div class="search-part" v-if='type != "node"'>
-                <h3>{{$t('text.chainInfo')}}</h3>
+                <h3>{{$t('text.chainInfo')}} (
+                    <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
+                    <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
+                    )
+                </h3>
                 <el-divider></el-divider>
                 <el-form :model="chainFrom" :rules='rules' ref="chainFrom" label-width="110px" class="demo-ruleForm">
-                    <el-form-item :label='$t("text.chainType")'>
+                    <!-- <el-form-item :label='$t("text.chainType")'>
                         <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
                         <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item :label='$t("text.imageMode")' prop='dockerImageType'>
                         <el-radio v-model="chainFrom.dockerImageType" :label="2">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio>
@@ -33,7 +37,12 @@
                 </el-form>
             </div>
             <div class="search-part" v-if='type == "node"'>
-                <h3>{{$t('text.chainInfo')}}</h3>
+                <h3>{{$t('text.chainInfo')}}
+                    (
+                    <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
+                    <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
+                    )
+                </h3>
                 <el-divider></el-divider>
                 <el-form style="padding-top: 20px" v-if='chainFrom' class="chain-info">
                     <el-row>
@@ -47,12 +56,12 @@
                                 <span>{{chainFrom.version}}</span>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item :label='$t("text.chainType") + "："'>
                                 <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
                                 <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainStatus") + "："'>
                                 <span :style="{'color': chainColor(chainFrom.chainStatus)}">{{ChainStatus(chainFrom.chainStatus)}}</span>
@@ -69,8 +78,8 @@
                                 </el-radio>
                                 <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                                 </el-radio>
-                                <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
-                                </el-radio>
+                                <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                                </el-radio> -->
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -97,7 +106,7 @@
                     <el-table-column :label="$t('nodes.operation')" fixed="right" width='200px'>
                         <template slot-scope='scope'>
                             <el-button type='text' @click="deleteNode(scope.row)">{{$t('text.delete')}}</el-button>
-                            <el-button type='text' v-if='scope.row.status === 5' @click="checkone(scope.row)">{{$t('text.check')}}</el-button>
+                            <!-- <el-button type='text' v-if='scope.row.status === 5' @click="checkone(scope.row)">{{$t('text.check')}}</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -223,6 +232,20 @@ export default {
             this.addChainNodeShow = true
         },
         deleteNode(val) {
+            this.$confirm(this.$t("text.confirmDelete"), this.$t("text.tips"), {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
+                type: 'warning'
+            }).then(() => {
+                this.deleteData(val)
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$t("text.cancelDelete")
+                });
+            });
+        },
+        deleteData(val) {
             for (let i = 0; i < this.nodeList.length; i++) {
                 if (this.nodeList[i].id === val.id) {
                     this.nodeList.splice(i, 1)
@@ -231,7 +254,7 @@ export default {
             sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
             this.$store.dispatch('set_node_list_action', this.nodeList)
             if (this.nodeList.length) {
-                this.check()
+                this.check(this.$t("system.deleteSuccess"))
             }
 
         },
@@ -292,7 +315,7 @@ export default {
                 this.nodeList = JSON.parse(sessionStorage.getItem("nodeList"))
             }
             this.addChainNodeShow = false
-            this.check()
+            this.check(this.$t("text.addNodeInfo"))
         },
         init: function (formName) {
             if (this.checkShow) {
@@ -325,7 +348,7 @@ export default {
                 this.initChain()
             }
         },
-        check() {
+        check(val) {
             this.loading3 = true
             this.loading = true;
             let data = this.formatParam();
@@ -351,12 +374,18 @@ export default {
                     checkPort(data).then(res => {
                         this.loading = false;
                         if (res.data.code === 0) {
-                            this.$message({
-                                type: "success",
-                                message: this.$t("text.checkSuccess"),
-                            })
+                            if (val) {
+                                this.$message({
+                                    type: "success",
+                                    message: val,
+                                })
+                            } else {
+                                this.$message({
+                                    type: "success",
+                                    message: this.$t("text.checkSuccess"),
+                                })
+                            }
                             this.checkShow = false;
-
                             this.getHostList();
                         } else {
                             this.getHostList();
