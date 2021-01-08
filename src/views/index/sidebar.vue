@@ -92,6 +92,9 @@ export default {
                     case 'subscribeEvent':
                         item.name = this.$t('title.subscribeEvent')
                         break;
+                    case 'chainTitle':
+                        item.name = this.$t('text.chainTitle')
+                        break;
                 }
                 if (item.children) {
                     item.children.forEach((it) => {
@@ -289,6 +292,9 @@ export default {
                                 it.menuShow = false;
                             }
                         })
+                    }
+                    if (list[i].nameKey == 'guide') {
+                        list[i].menuShow = false
                     }
                 }
                 list.forEach(item => {

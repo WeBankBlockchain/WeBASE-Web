@@ -1,19 +1,20 @@
 <template>
     <div>
         <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head>
-        <div class="module-wrapper">
+        <div class="module-wrapper" style="padding-bottom: 20px">
             <p class="wrapper-title" v-if='type != "node"'>{{$t("text.addChain")}}</p>
             <!-- <p class="wrapper-title" v-if='type == "node"'>新增节点</p> -->
-            <el-page-header class="wrapper-title" v-if='type == "node"' @back="goBack" :content="$t('text.addNode')"></el-page-header>
+            <el-page-header class="wrapper-title" v-if='type == "node"' @back="goBack" :content="$t('text.addNode')">
+
+            </el-page-header>
+            <div class="link guide" @click='openGuide'>{{$t("text.noviceGuide")}}</div>
             <div class="search-part" v-if='type != "node"'>
                 <h3>{{$t('text.chainInfo')}}</h3>
                 <el-divider></el-divider>
                 <el-form :model="chainFrom" :rules='rules' ref="chainFrom" label-width="110px" class="demo-ruleForm">
-                    <el-form-item :label='$t("text.chainType")' prop='chainType'>
-                        <el-radio-group v-model="chainFrom.chainType">
-                            <el-radio-button :label="0">{{$t("text.sha256")}}</el-radio-button>
-                            <el-radio-button :label="1">{{$t("text.sm3")}}</el-radio-button>
-                        </el-radio-group>
+                    <el-form-item :label='$t("text.chainType")'>
+                        <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
+                        <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                     </el-form-item>
                     <el-form-item :label='$t("text.imageMode")' prop='dockerImageType'>
                         <el-radio v-model="chainFrom.dockerImageType" :label="2">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
@@ -48,8 +49,8 @@
                         </el-col>
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainType") + "："'>
-                                <span v-if='chainFrom.encryptType === 0'>{{$t("text.sha256")}}</span>
-                                <span v-if='chainFrom.encryptType === 1'>{{$t("text.sm3")}}</span>
+                                <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
+                                <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12">
@@ -80,6 +81,7 @@
                     <h3>{{$t("nodes.nodeList")}}</h3>
                     <el-divider></el-divider>
                     <el-button type="primary" @click="add">{{$t('text.addNode')}}</el-button>
+                    <el-button type="primary" :loading="loading" @click="check('chainFrom')">{{$t('text.check')}}</el-button>
                 </div>
                 <el-table :data="nodeList" class="search-table-content" v-loading="loading3">
                     <el-table-column :label="$t('text.hostTitle')" prop="ip" show-overflow-tooltip></el-table-column>
@@ -87,12 +89,9 @@
                     <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'RPC' + $t('alarm.port')" prop="rpcPort" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="$t('text.status')" prop="status" show-overflow-tooltip>
+                    <el-table-column :label="$t('contracts.status')" prop="status" show-overflow-tooltip>
                         <template slot-scope="scope">
                             <span :style="{'color': nodeColor(scope.row.status)}">{{Status(scope.row.status)}}</span>
-                            <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top-start" v-if='scope.row.status === 3 || scope.row.status === 5 || scope.row.status === 7'>
-                                <i class="el-icon-info"></i>
-                            </el-tooltip>
                         </template>
                     </el-table-column>
                     <el-table-column :label="$t('nodes.operation')" fixed="right" width='200px'>
@@ -102,15 +101,23 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <div style="padding: 30px 0">
+                <div style="padding: 30px 0" class="check-button">
                     <h3>{{$t('nodes.operation')}}</h3>
                     <el-divider></el-divider>
-                    <el-button type="primary" :loading="loading" @click="check('chainFrom')">{{$t('text.check')}}</el-button>
-                    <el-button type="primary" :loading="loading1" @click="init('chainFrom')" :disabled='checkShow'>{{$t('nodes.initialize')}}</el-button>
-                    <el-button type="primary" :loading="loading2" @click="deploy('chainFrom')" :disabled='initShow'>{{$t('text.deploy')}}</el-button>
+                    <el-button type="primary" :loading="loading1" @click="init('chainFrom')" v-if='!initShow'>{{$t('nodes.initialize')}}</el-button>
+                    <el-button type="primary" :loading="loading2" @click="deploy('chainFrom')" v-if='initShow'>{{$t('text.deploy')}}</el-button>
+                </div>
+                <div style="padding: 30px 0" v-if='nodeList.length && remarkList.length'>
+                    <h3>{{$t("text.nodeLog")}}</h3>
+                    <el-divider></el-divider>
+                    <div v-for='(item,index) in remarkList' :key='index'>
+                        <p>{{item.ip}}</p>
+                        <json-viewer :class="{'danger': (item.status === 3 || item.status === 5 || item.status === 7)}" :value="item.remark" :expand-depth='5' copyable></json-viewer>
+                    </div>
                 </div>
             </div>
         </div>
+
         <addChainNode v-if="addChainNodeShow" :show="addChainNodeShow" :data='addChainNodeData' @close='addChainNodeClose' @success="addChainNodeSuccess($event)"></addChainNode>
     </div>
 </template>
@@ -128,7 +135,7 @@ export default {
     data() {
         return {
             chainFrom: {
-                chainType: 0,
+                encryptType: localStorage.getItem("encryptionId"),
                 chainVersion: null,
                 dockerImageType: 2
             },
@@ -138,7 +145,7 @@ export default {
             loading3: false,
             nodeList: [],
             configList: [],
-            initShow: true,
+            initShow: false,
             checkShow: true,
             addChainNodeShow: false,
             configType: 1,
@@ -146,13 +153,15 @@ export default {
             configValue: "",
             addChainNodeData: null,
             type: this.$route.query.type,
-            chainInfo: null
+            chainInfo: null,
+            remarkList: [],
+            remarkData: `116.63.161.132 | FAILED! => { "changed": true, "msg": "non-zero return code", "rc": 2, "stderr": "Shared connection to 116.63.161.132 closed.\r\n", "stderr_lines": [ "Shared connection to 116.63.161.132 closed." ], "stdout": "Start download docker image tar of webase:v1.4.2...\r\nwget: /usr/local/lib/libssl.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)\r\nwget: /usr/local/lib/libcrypto.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)\r\nDownload finish in:[/root/v143/opt/download/docker-fisco-webase.tar].\r\nStart load docker image from tar...\r\n/root/v143/opt/download/docker-fisco-webase.tar not found!\r\n", "stdout_lines": [ "Start download docker image tar of webase:v1.4.2...", "wget: /usr/local/lib/libssl.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)", "wget: /usr/local/lib/libcrypto.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)", "Download finish in:[/root/v143/opt/download/docker-fisco-webase.tar].", "Start load docker image from tar...", "/root/v143/opt/download/docker-fisco-webase.tar not found!" ] }`
         }
     },
     computed: {
         rules() {
             let data = {
-                chainType: [
+                encryptType: [
                     { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
                 ],
                 chainVersion: [
@@ -166,10 +175,10 @@ export default {
         }
     },
     mounted() {
-        if (this.type === 'chain') {
-            this.getConfigs();
-        } else {
+        if (this.type === 'node') {
             this.getChainDetail()
+        } else {
+            this.getConfigs();
         }
         if (this.$store.state.nodeList && this.$store.state.nodeList.length) {
             this.nodeList = this.$store.state.nodeList;
@@ -178,6 +187,9 @@ export default {
         }
     },
     methods: {
+        openGuide() {
+            this.$router.push("/guide")
+        },
         goBack() {
             this.$router.go(-1)
         },
@@ -190,7 +202,8 @@ export default {
             getChainInfo().then(res => {
                 if (res.data.code === 0) {
                     this.chainFrom = res.data.data;
-                    this.chainFrom.dockerImageType = 2
+                    // this.chainFrom.dockerImageType = 2
+                    this.$set(this.chainFrom, "dockerImageType", 2)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -217,6 +230,10 @@ export default {
             }
             sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
             this.$store.dispatch('set_node_list_action', this.nodeList)
+            if (this.nodeList.length) {
+                this.check()
+            }
+
         },
         /**
          * @param type 1：docker镜像版本
@@ -237,6 +254,7 @@ export default {
                     }
                     this.configList = [];
                     this.configList = res.data.data
+                    console.log(this.chainFrom)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -274,9 +292,16 @@ export default {
                 this.nodeList = JSON.parse(sessionStorage.getItem("nodeList"))
             }
             this.addChainNodeShow = false
-            // this.getHostList()
+            this.check()
         },
         init: function (formName) {
+            if (this.checkShow) {
+                this.$message({
+                    type: "error",
+                    message: this.$t('text.checkErrorInfo'),
+                })
+                return
+            }
             if (this.type != "node") {
                 this.$refs[formName].validate(valid => {
                     if (valid) {
@@ -287,6 +312,7 @@ export default {
                             })
                             return
                         }
+                        this.loading3 = true
                         this.loading1 = true;
                         this.initChain()
                     } else {
@@ -294,11 +320,13 @@ export default {
                     }
                 })
             } else {
+                this.loading3 = true
                 this.loading1 = true;
                 this.initChain()
             }
         },
         check() {
+            this.loading3 = true
             this.loading = true;
             let data = this.formatParam();
             let array = [],
@@ -306,7 +334,19 @@ export default {
             for (let i = 0; i < this.nodeList.length; i++) {
                 array.push(this.nodeList[i].hostId)
             }
+            if (array.length === 0) {
+                this.$message({
+                    message: this.$t("home.nodes") + this.$t("nodes.thanOne"),
+                    type: "error",
+                    duration: 2000
+                });
+                this.loading3 = false
+                this.loading = false;
+                return
+            }
             checkHost({ hostIdList: array }).then(res => {
+                this.loading3 = false
+                this.initShow = false
                 if (res.data.code === 0) {
                     checkPort(data).then(res => {
                         this.loading = false;
@@ -316,6 +356,7 @@ export default {
                                 message: this.$t("text.checkSuccess"),
                             })
                             this.checkShow = false;
+
                             this.getHostList();
                         } else {
                             this.getHostList();
@@ -328,6 +369,8 @@ export default {
                         }
                     })
                         .catch(err => {
+                            this.loading3 = false
+                            this.initShow = false
                             this.loading = false;
                             this.getHostList()
                             this.checkShow = true
@@ -338,6 +381,7 @@ export default {
                             });
                         });
                 } else {
+                    this.loading3 = false
                     this.loading = false;
                     this.getHostList()
                     this.checkShow = true
@@ -348,6 +392,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading3 = false
                     this.loading = false;
                     this.checkShow = true
                     this.getHostList()
@@ -363,7 +408,7 @@ export default {
             let data = {
                 chainName: "default_chain",
                 imageTag: this.chainFrom.chainVersion,
-                encryptType: this.chainFrom.chainType,
+                encryptType: this.chainFrom.encryptType,
                 agencyName: "agency1",
                 ipconf: [`${val.ip}:1 agency1 1 ${val.p2pPort},${val.channelPort},${val.rpcPort}`],
                 deployNodeInfoList: [
@@ -417,7 +462,7 @@ export default {
                 chainName: "default_chain",
                 ipconf: ipconf,
                 imageTag: this.chainFrom.chainVersion,
-                encryptType: this.chainFrom.chainType,
+                encryptType: this.chainFrom.encryptType,
                 deployNodeInfoList: deployNodeInfoList,
                 agencyName: "agency1"
             }
@@ -444,14 +489,15 @@ export default {
         initChain() {
             let data = this.formatParam('init')
             initChainData(data).then(res => {
+                this.loading3 = false
                 this.loading1 = false;
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
-                        message: this.$t('test.initializeSuccess'),
+                        message: this.$t('text.initializeSuccess'),
                     })
                     this.getHostList()
-                    this.initShow = false
+                    this.initShow = true
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -461,6 +507,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading3 = false
                     this.loading1 = false;
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -480,6 +527,7 @@ export default {
                             })
                             return
                         }
+                        this.loading3 = true
                         this.loading2 = true;
                         if (this.type == "node") {
                             this.addNode()
@@ -492,6 +540,7 @@ export default {
                     }
                 })
             } else {
+                this.loading3 = true
                 this.loading2 = true;
                 if (this.type == "node") {
                     this.addNode()
@@ -503,6 +552,7 @@ export default {
         deployChain() {
             let data = this.formatParam()
             deployChainData(data).then(res => {
+                this.loading3 = false
                 this.loading2 = false;
                 if (res.data.code === 0) {
                     this.$message({
@@ -521,6 +571,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading3 = false
                     this.loading2 = false;
                     this.$message({
                         type: "error",
@@ -538,6 +589,7 @@ export default {
                 encryptType: data.encryptType
             }
             addChainNodeData(reqData).then(res => {
+                this.loading3 = false
                 this.loading2 = false;
                 if (res.data.code === 0) {
                     this.$message({
@@ -556,6 +608,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.loading3 = false
                     this.loading2 = false;
                     this.$message({
                         type: "error",
@@ -588,16 +641,45 @@ export default {
                     if (this.nodeList[i].hostId === this.hostList[j].id) {
                         this.nodeList[i].status = this.hostList[j].status
                         this.nodeList[i].remark = this.hostList[j].remark
+                        if (!this.hostList[j].remark) {
+                            this.nodeList[i].remark = 'success'
+                        }
                         this.$set(this.nodeList, i, this.nodeList[i])
                         if (this.nodeList[i].status === 3) {
-                            this.initShow = true;
+                            this.initShow = false;
                         }
-                        if (this.nodeList[i].status === 5) {
+                        if (this.nodeList[i].status === 5 || this.nodeList[i].status == 0) {
                             this.checkShow = true;
                         }
                     }
                 }
             }
+            try {
+                this.getRemarkList()
+            } catch (error) {
+                console.log(error)
+            }
+
+        },
+        getRemarkList() {
+            this.remarkList = this.distinct(this.nodeList, 'hostId')
+        },
+        //数组对象除重
+        distinct(arr, key) {
+            var newArr = [];
+            for (var i = 0; i < arr.length; i++) {
+                var flag = true;
+                for (var j = 0; j < newArr.length; j++) {
+                    if (arr[i].id == newArr[j].id) {
+                        flag = false;
+                        break
+                    };
+                };
+                if (flag) {
+                    newArr.push(arr[i]);
+                };
+            };
+            return newArr;
         },
         Status(val) {
             let string
@@ -713,12 +795,25 @@ export default {
 <style scoped>
 .wrapper-title {
     padding: 20px 30px;
-    font-size: 16px;
+    font-size: 18px;
 }
 .chain-info >>> .el-form-item__label {
     line-height: 16px;
 }
 .chain-info >>> .el-form-item__content {
     line-height: 16px;
+}
+.danger >>> .jv-string {
+    color: #f56c6c !important;
+}
+.check-button >>> .is-disabled {
+    color: #fff !important;
+    background-color: #c8c9cc !important;
+    border-color: #c8c9cc !important;
+}
+.guide {
+    position: absolute;
+    right: 40px;
+    top: 90px;
 }
 </style>
