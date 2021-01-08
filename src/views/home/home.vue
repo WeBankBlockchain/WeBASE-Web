@@ -85,7 +85,8 @@
                                     <div class="block-amount" style="padding-bottom: 7px;">
                                         <span>
                                             <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">
-                                                <span>{{$t("home.blockHeight")}}</span> {{item.blockNumber}}</router-link>
+                                                <span>{{$t("home.blockHeight")}}</span> {{item.blockNumber}}
+                                            </router-link>
                                         </span>
                                         <span class="color-8798AD">{{item.blockTimestamp}}</span>
                                     </div>
@@ -171,7 +172,7 @@ export default {
     },
     computed: {
         detailsList() {
-            let data  = [
+            let data = [
                 {
                     label: this.$t("home.nodes"),
                     name: "nodeCount",
@@ -258,12 +259,12 @@ export default {
     },
     mounted: function () {
         this.groupId = localStorage.getItem("groupId");
-        if(this.groupId && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (this.groupId && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getNetworkDetails();
             this.getNodeTable();
             this.getBlockList();
             this.getTransaction();
-             this.$nextTick(function () {
+            this.$nextTick(function () {
                 this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
                 this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
                 this.getChart();
@@ -320,7 +321,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getChart: function () {
@@ -355,7 +356,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getNodeTable: function () {
@@ -424,7 +425,7 @@ export default {
                     if (res.data.code === 0) {
                         this.blockData = res.data.data;
                     } else {
-                        
+
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
@@ -438,7 +439,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getTransaction: function () {
@@ -469,7 +470,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         goDetailRouter(item) {
@@ -511,19 +512,25 @@ export default {
             }
             return str;
         },
-        textColor: function (val) {
+        textColor(val) {
             let colorString = "";
             switch (val) {
                 case 1:
-                    colorString = "#58cb7d";
+                    colorString = "#67C23A";
                     break;
                 case 2:
-                    colorString = "#ed5454";
+                    colorString = "#F56C6C";
+                    break;
+                case 2:
+                    colorString = "#E6A23C";
+                    break;
+                case 2:
+                    colorString = "#909399";
                     break;
             }
             return colorString;
         },
-        nodesStatus: function (val) {
+        nodesStatus(val) {
             let transString = "";
             switch (val) {
                 case 1:
@@ -531,6 +538,12 @@ export default {
                     break;
                 case 2:
                     transString = this.$t("home.unusual");
+                    break;
+                case 3:
+                    transString = this.$t("nodes.starting");
+                    break;
+                case 4:
+                    transString = this.$t("text.down");
                     break;
             }
             return transString;
