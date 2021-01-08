@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-form ref="cnsVersionFrom" :model="cnsVersionFrom" :rules="rules" class="login-form" size="medium" label-width="135px">
+        <el-form ref="cnsVersionFrom" :model="cnsVersionFrom" :rules="rules" class="" size="medium" label-width="135px">
             <el-form-item :label="$t('contracts.user')" prop="userId">
                 <el-select v-model="cnsVersionFrom.userId" :placeholder="placeholderText" @change="changeId" style="width: 240px;">
                     <el-option :label="item.address" :value="item.address" :key="item.address" v-for='item in userList'>
