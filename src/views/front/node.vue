@@ -120,8 +120,10 @@
                     <h3>{{$t("text.nodeLog")}}</h3>
                     <el-divider></el-divider>
                     <div v-for='(item,index) in remarkList' :key='index'>
-                        <p>{{item.ip}}</p>
-                        <json-viewer :class="{'danger': (item.status === 3 || item.status === 5 || item.status === 7)}" :value="item.remark" :expand-depth='5' copyable></json-viewer>
+                        <div v-if='item.remark'>
+                            <p>{{item.ip}}</p>
+                            <json-viewer :class="{'danger': (item.status === 3 || item.status === 5 || item.status === 7)}" :value="item.remark" :expand-depth='5' copyable></json-viewer>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -318,7 +320,13 @@ export default {
             this.check(this.$t("text.addNodeInfo"))
         },
         init: function (formName) {
-            if (this.checkShow) {
+            if (this.nodeList.length == 0) {
+                this.$message({
+                    type: "error",
+                    message: this.$t("text.noAddNodeInfo"),
+                })
+                return
+            } else if (this.checkShow) {
                 this.$message({
                     type: "error",
                     message: this.$t('text.checkErrorInfo'),
@@ -330,7 +338,7 @@ export default {
                     if (valid) {
                         if (this.nodeList.length < 2) {
                             this.$message({
-                                type: "success",
+                                type: "error",
                                 message: this.$t("text.nodeCount"),
                             })
                             return
@@ -359,7 +367,7 @@ export default {
             }
             if (array.length === 0) {
                 this.$message({
-                    message: this.$t("home.nodes") + this.$t("nodes.thanOne"),
+                    message: this.$t("text.noAddNodeInfo"),
                     type: "error",
                     duration: 2000
                 });
@@ -670,9 +678,6 @@ export default {
                     if (this.nodeList[i].hostId === this.hostList[j].id) {
                         this.nodeList[i].status = this.hostList[j].status
                         this.nodeList[i].remark = this.hostList[j].remark
-                        if (!this.hostList[j].remark) {
-                            this.nodeList[i].remark = 'success'
-                        }
                         this.$set(this.nodeList, i, this.nodeList[i])
                         if (this.nodeList[i].status === 3) {
                             this.initShow = false;

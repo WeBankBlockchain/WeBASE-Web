@@ -1841,3 +1841,16 @@ export function deleteHost(data) {
     })
 }
 
+/**
+ * @method 刷新front
+ */
+export function refreshFront() {
+    return get({
+        url: `${url.ORG_LIST}/front/refresh`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
