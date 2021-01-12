@@ -1853,4 +1853,17 @@ export function refreshFront() {
         }
     })
 }
+/**
+ * @method  查询初始化状态
+ */
+export function initCheck(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/initCheck`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 

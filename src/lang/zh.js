@@ -210,13 +210,17 @@ export default {
         initializationInfo: "初始化主机，当节点状态为检测成功，可以执行初始化操作，点击初始化按钮。",
         deployStartChain: "部署链并启动",
         deployStartChainInfo: "当节点状态为初始化成功，即可进行部署操作，点击部署按钮，部署链是异步操作，时间较长，请耐心等待。",
-        nodeLog: "节点日志",
+        nodeLog: "操作日志",
         checkErrorInfo: "节点未检测或检测失败，不能执行初始化",
         newHost: "新增主机",
         addNodeInfo: "添加节点完成",
         goHostInfo: "请到主机管理添加主机信息",
         down: "停止",
-        noAddNodeInfo: "请添加节点"
+        noAddNodeInfo: "请添加节点",
+        leavePageInfo: "离开此页面将停止新增链/新增节点过程，确认离开此页面？",
+        laodngCheck: "检测中，请等待...",
+        loadingInit: "初始化中，请等待...",
+        loadingDeploy: "部署中，请等待..."
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
