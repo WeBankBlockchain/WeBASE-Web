@@ -210,7 +210,7 @@ export default {
         initializationInfo: "初始化主机，当节点状态为检测成功，可以执行初始化操作，点击初始化按钮。",
         deployStartChain: "部署链并启动",
         deployStartChainInfo: "当节点状态为初始化成功，即可进行部署操作，点击部署按钮，部署链是异步操作，时间较长，请耐心等待。",
-        nodeLog: "节点日志",
+        nodeLog: "操作日志",
         checkErrorInfo: "节点未检测或检测失败，不能执行初始化",
         newHost: "新增主机",
         addNodeInfo: "添加节点完成",

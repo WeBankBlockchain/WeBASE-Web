@@ -557,11 +557,17 @@ export default {
                 } else {
                     this.loading1 = false;
                     this.loading3 = false
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error",
-                        duration: 2000
-                    });
+                    if (res.data.code === 202466) {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code, res.data.attachment)
+                        });
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
                 }
             })
                 .catch(err => {
@@ -675,10 +681,17 @@ export default {
                     this.$store.dispatch('set_node_list_action', this.nodeList)
                     this.$router.push("/newNode")
                 } else {
-                    this.$message({
-                        type: "error",
-                        message: this.$chooseLang(res.data.code)
-                    });
+                    if (res.data.code === 202466) {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code, res.data.attachment)
+                        });
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
                 }
             })
                 .catch(err => {
