@@ -216,7 +216,8 @@ export default {
         addNodeInfo: "添加节点完成",
         goHostInfo: "请到主机管理添加主机信息",
         down: "停止",
-        noAddNodeInfo: "请添加节点"
+        noAddNodeInfo: "请添加节点",
+        leavePageInfo: "离开此页面将停止新增链/新增节点过程，确认离开此页面？"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

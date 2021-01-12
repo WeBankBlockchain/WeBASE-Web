@@ -216,7 +216,8 @@ export default {
         addNodeInfo: "Add node complete",
         goHostInfo: "Please go to host management to add a host.",
         down: "Down",
-        noAddNodeInfo: "Please add node"
+        noAddNodeInfo: "Please add node",
+        leavePageInfo: "Leaving this page will stop the process of adding new chain/nodes. Confirm to leave this page?"
     },
     rule: {
         textLong: "1 to 32 characters in length",
