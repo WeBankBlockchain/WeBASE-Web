@@ -217,7 +217,10 @@ export default {
         goHostInfo: "Please go to host management to add a host.",
         down: "Down",
         noAddNodeInfo: "Please add node",
-        leavePageInfo: "Leaving this page will stop the process of adding new chain/nodes. Confirm to leave this page?"
+        leavePageInfo: "Leaving this page will stop the process of adding new chain/nodes. Confirm to leave this page?",
+        laodngCheck: "Checking, please wait...",
+        loadingInit: "Initializing, please wait...",
+        loadingDeploy: "Deploying, please wait..."
     },
     rule: {
         textLong: "1 to 32 characters in length",

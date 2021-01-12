@@ -358,7 +358,7 @@ export default {
                             })
                             return
                         }
-                        this.laodingText = "初始化中，请等待..."
+                        this.laodingText = this.$t("text.loadingInit")
                         this.loading3 = true
                         this.loading1 = true;
                         this.initChain()
@@ -367,6 +367,7 @@ export default {
                     }
                 })
             } else {
+                this.laodingText = this.$t("text.loadingInit")
                 this.loading3 = true
                 this.loading1 = true;
                 this.initChain()
@@ -393,7 +394,7 @@ export default {
                 this.loading = false;
                 return
             }
-            this.laodingText = "检测中，请等待..."
+            this.laodingText = this.$t("text.laodngCheck")
             checkHost({ hostIdList: array }).then(res => {
                 this.loading3 = false
                 this.initShow = false
@@ -635,7 +636,7 @@ export default {
                             })
                             return
                         }
-                        this.laodingText = "部署中，请等待..."
+                        this.laodingText = this.$t("text.loadingDeploy")
                         this.loading3 = true
                         this.loading2 = true;
                         if (this.type == "node") {

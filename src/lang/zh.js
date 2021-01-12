@@ -217,7 +217,10 @@ export default {
         goHostInfo: "请到主机管理添加主机信息",
         down: "停止",
         noAddNodeInfo: "请添加节点",
-        leavePageInfo: "离开此页面将停止新增链/新增节点过程，确认离开此页面？"
+        leavePageInfo: "离开此页面将停止新增链/新增节点过程，确认离开此页面？",
+        laodngCheck: "检测中，请等待...",
+        loadingInit: "初始化中，请等待...",
+        loadingDeploy: "部署中，请等待..."
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
