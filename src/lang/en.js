@@ -558,7 +558,10 @@ export default {
         passwordError: "Password cannot be Chinese",
         file: "File",
         thaw: "Thaw",
-        freeze: "Freeze"
+        freeze: "Freeze",
+        validatorPrivateKey: "Please enter privateKey key",
+        validatorPrivateKey1: "Please enter hexadecimal",
+        importType: "Import Type",
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -861,7 +864,7 @@ export default {
     },
     dialog: {
         cnsVersion: 'Please enter version',
-        cnsVersionPattern: "It can only be numbers and letters",
+        cnsVersionPattern: "It can only be numbers, letters and'.'",
         cnsName: 'Please enter CNS name',
     },
     onlineTools: {

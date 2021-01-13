@@ -558,7 +558,10 @@ export default {
         passwordError: "密码不能是汉字",
         file: "文件",
         thaw: "解冻",
-        freeze: "冻结"
+        freeze: "冻结",
+        validatorPrivateKey: "请输入私钥",
+        validatorPrivateKey1: "请输入十六进制",
+        importType: "导入类型",
     },
     system: {
         chainManager: "链管理权限",
