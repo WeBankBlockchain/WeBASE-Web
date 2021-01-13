@@ -1841,3 +1841,29 @@ export function deleteHost(data) {
     })
 }
 
+/**
+ * @method 刷新front
+ */
+export function refreshFront() {
+    return get({
+        url: `${url.ORG_LIST}/front/refresh`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**
+ * @method  查询初始化状态
+ */
+export function initCheck(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/initCheck`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
