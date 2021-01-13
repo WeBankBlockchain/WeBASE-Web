@@ -90,9 +90,9 @@
                     <h3>{{$t("nodes.nodeList")}}</h3>
                     <el-divider></el-divider>
                     <el-button type="primary" @click="add">{{$t('text.addNode')}}</el-button>
-                    <el-button type="primary" :loading="loading" @click="check('chainFrom')">{{$t('text.check')}}</el-button>
+                    <el-button type="primary" :loading="loading" @click="check()">{{$t('text.check')}}</el-button>
                 </div>
-                <el-table :data="nodeList" class="search-table-content" v-loading="loading3">
+                <el-table :data="nodeList" class="search-table-content" v-loading="loading3" :element-loading-text="laodingText" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
                     <el-table-column :label="$t('text.hostTitle')" prop="ip" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'Front' + $t('alarm.port')" prop="frontPort" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
@@ -120,8 +120,10 @@
                     <h3>{{$t("text.nodeLog")}}</h3>
                     <el-divider></el-divider>
                     <div v-for='(item,index) in remarkList' :key='index'>
-                        <p>{{item.ip}}</p>
-                        <json-viewer :class="{'danger': (item.status === 3 || item.status === 5 || item.status === 7)}" :value="item.remark" :expand-depth='5' copyable></json-viewer>
+                        <div v-if='item.remark'>
+                            <p>{{item.ip}}</p>
+                            <json-viewer :class="{'danger': (item.status === 3 || item.status === 5 || item.status === 7)}" :value="item.remark" :expand-depth='5' copyable></json-viewer>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -134,7 +136,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import addChainNode from "./dialog/addChainNode"
-import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData } from "@/util/api"
+import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck } from "@/util/api"
 import { format } from "@/util/util"
 export default {
     components: {
@@ -163,8 +165,10 @@ export default {
             addChainNodeData: null,
             type: this.$route.query.type,
             chainInfo: null,
-            remarkList: [],
-            remarkData: `116.63.161.132 | FAILED! => { "changed": true, "msg": "non-zero return code", "rc": 2, "stderr": "Shared connection to 116.63.161.132 closed.\r\n", "stderr_lines": [ "Shared connection to 116.63.161.132 closed." ], "stdout": "Start download docker image tar of webase:v1.4.2...\r\nwget: /usr/local/lib/libssl.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)\r\nwget: /usr/local/lib/libcrypto.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)\r\nDownload finish in:[/root/v143/opt/download/docker-fisco-webase.tar].\r\nStart load docker image from tar...\r\n/root/v143/opt/download/docker-fisco-webase.tar not found!\r\n", "stdout_lines": [ "Start download docker image tar of webase:v1.4.2...", "wget: /usr/local/lib/libssl.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)", "wget: /usr/local/lib/libcrypto.so.1.1: version 'OPENSSL_1_1_0' not found (required by wget)", "Download finish in:[/root/v143/opt/download/docker-fisco-webase.tar].", "Start load docker image from tar...", "/root/v143/opt/download/docker-fisco-webase.tar not found!" ] }`
+            remarkList: [],    // 节点日志数组
+            timer: null,      // 定时器
+            deployOpt: false,// 判断链是否执行部署操作,
+            laodingText: "加载中"  //loading文案
         }
     },
     computed: {
@@ -181,6 +185,11 @@ export default {
                 ]
             }
             return data
+        }
+    },
+    beforeDestroy() {
+        if (this.timer) {
+            clearInterval(this.timer)
         }
     },
     mounted() {
@@ -206,6 +215,14 @@ export default {
             let data;
             data = format(val, "yyyy-MM-dd HH:mm:ss")
             return data
+        },
+        //离开页面，节点状态重置
+        resetNodeStatus() {
+            for (let i = 0; i < this.nodeList.length; i++) {
+                this.nodeList[i].status = -1
+            }
+            sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
+            this.$store.dispatch('set_node_list_action', this.nodeList)
         },
         getChainDetail() {
             getChainInfo().then(res => {
@@ -318,7 +335,13 @@ export default {
             this.check(this.$t("text.addNodeInfo"))
         },
         init: function (formName) {
-            if (this.checkShow) {
+            if (this.nodeList.length == 0) {
+                this.$message({
+                    type: "error",
+                    message: this.$t("text.noAddNodeInfo"),
+                })
+                return
+            } else if (this.checkShow) {
                 this.$message({
                     type: "error",
                     message: this.$t('text.checkErrorInfo'),
@@ -330,11 +353,12 @@ export default {
                     if (valid) {
                         if (this.nodeList.length < 2) {
                             this.$message({
-                                type: "success",
+                                type: "error",
                                 message: this.$t("text.nodeCount"),
                             })
                             return
                         }
+                        this.laodingText = this.$t("text.loadingInit")
                         this.loading3 = true
                         this.loading1 = true;
                         this.initChain()
@@ -343,12 +367,15 @@ export default {
                     }
                 })
             } else {
+                this.laodingText = this.$t("text.loadingInit")
                 this.loading3 = true
                 this.loading1 = true;
                 this.initChain()
             }
         },
         check(val) {
+            this.deployOpt = false
+            console.log(val)
             this.loading3 = true
             this.loading = true;
             let data = this.formatParam();
@@ -359,7 +386,7 @@ export default {
             }
             if (array.length === 0) {
                 this.$message({
-                    message: this.$t("home.nodes") + this.$t("nodes.thanOne"),
+                    message: this.$t("text.noAddNodeInfo"),
                     type: "error",
                     duration: 2000
                 });
@@ -367,6 +394,7 @@ export default {
                 this.loading = false;
                 return
             }
+            this.laodingText = this.$t("text.laodngCheck")
             checkHost({ hostIdList: array }).then(res => {
                 this.loading3 = false
                 this.initShow = false
@@ -516,23 +544,30 @@ export default {
             }
         },
         initChain() {
+            this.deployOpt = false
             let data = this.formatParam('init')
             initChainData(data).then(res => {
-                this.loading3 = false
-                this.loading1 = false;
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t('text.initializeSuccess'),
                     })
                     this.getHostList()
-                    this.initShow = true
+                    this.initTimer()
                 } else {
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error",
-                        duration: 2000
-                    });
+                    this.loading1 = false;
+                    this.loading3 = false
+                    if (res.data.code === 202466) {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code, res.data.attachment)
+                        });
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
                 }
             })
                 .catch(err => {
@@ -542,6 +577,57 @@ export default {
                         message: this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
+                    });
+                });
+        },
+        initTimer() {
+            this.initCheck()
+            this.timer = setInterval(() => {
+                this.initCheck()
+            }, 3000)
+        },
+        initCheck() {
+            let data = this.formatParam('init')
+            initCheck(data).then(res => {
+                if (res.data.code === 0) {
+                    let num1 = 0,
+                        num2 = 0
+                    for (let i = 0; i < res.data.data.length; i++) {
+                        if (res.data.data[i].status === 2) {
+                            num1++
+                        } else if (res.data.data[i].status === 3) {
+                            num2++
+                        }
+                    }
+                    if (num2 > 0) {
+                        this.loading1 = false;
+                        this.loading3 = false
+                        clearInterval(this.timer)
+                        this.getHostList()
+                    } else if (num1 === res.data.data.length) {
+                        this.initShow = true
+                        this.loading1 = false;
+                        this.loading3 = false
+                        clearInterval(this.timer)
+                        this.getHostList()
+                    }
+                } else {
+                    this.initShow = true
+                    this.loading1 = false;
+                    this.loading3 = false
+                    this.$message({
+                        type: "error",
+                        message: this.$chooseLang(res.data.code)
+                    });
+                }
+            })
+                .catch(err => {
+                    this.initShow = true
+                    this.loading3 = false
+                    this.loading1 = false;
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.systemError')
                     });
                 });
         },
@@ -556,6 +642,7 @@ export default {
                             })
                             return
                         }
+                        this.laodingText = this.$t("text.loadingDeploy")
                         this.loading3 = true
                         this.loading2 = true;
                         if (this.type == "node") {
@@ -581,6 +668,7 @@ export default {
         deployChain() {
             let data = this.formatParam()
             deployChainData(data).then(res => {
+                this.deployOpt = true
                 this.loading3 = false
                 this.loading2 = false;
                 if (res.data.code === 0) {
@@ -593,13 +681,21 @@ export default {
                     this.$store.dispatch('set_node_list_action', this.nodeList)
                     this.$router.push("/newNode")
                 } else {
-                    this.$message({
-                        type: "error",
-                        message: this.$chooseLang(res.data.code)
-                    });
+                    if (res.data.code === 202466) {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code, res.data.attachment)
+                        });
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
                 }
             })
                 .catch(err => {
+                    this.deployOpt = true
                     this.loading3 = false
                     this.loading2 = false;
                     this.$message({
@@ -618,6 +714,7 @@ export default {
                 encryptType: data.encryptType
             }
             addChainNodeData(reqData).then(res => {
+                this.deployOpt = true
                 this.loading3 = false
                 this.loading2 = false;
                 if (res.data.code === 0) {
@@ -637,6 +734,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.deployOpt = true
                     this.loading3 = false
                     this.loading2 = false;
                     this.$message({
@@ -670,9 +768,6 @@ export default {
                     if (this.nodeList[i].hostId === this.hostList[j].id) {
                         this.nodeList[i].status = this.hostList[j].status
                         this.nodeList[i].remark = this.hostList[j].remark
-                        if (!this.hostList[j].remark) {
-                            this.nodeList[i].remark = 'success'
-                        }
                         this.$set(this.nodeList, i, this.nodeList[i])
                         if (this.nodeList[i].status === 3) {
                             this.initShow = false;
@@ -816,6 +911,25 @@ export default {
                     break;
             }
             return colorString;
+        }
+    },
+    beforeRouteLeave: function (to, from, next) {
+        if (!this.deployOpt && this.nodeList.length !== 0) {
+            this.$confirm(this.$t("text.leavePageInfo"), this.$t("text.tips"), {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
+                type: 'warning'
+            }).then(() => {
+                this.resetNodeStatus()
+                next();
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$t("text.Cancelled")
+                });
+            });
+        } else {
+            next();
         }
     }
 }

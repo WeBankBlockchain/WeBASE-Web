@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%">
-        <newMain v-if='deployType == 0'></newMain>
+        <newMain v-if='deployType === 0'></newMain>
         <mains v-if='deployType == 1'></mains>
     </div>
 </template>
@@ -16,13 +16,13 @@ export default {
     },
     data: function () {
         return {
-            deployType: 0
+            deployType: null
         }
     },
-    mounted: function () {
-        if(localStorage.getItem("deployType")){
+    created: function () {
+        if (localStorage.getItem("deployType")) {
             this.deployType = localStorage.getItem("deployType")
-        }else{
+        } else {
             this.deployType = 0
         }
     }
@@ -30,5 +30,4 @@ export default {
 </script>
 
 <style>
-
 </style>
