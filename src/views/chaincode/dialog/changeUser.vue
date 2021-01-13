@@ -193,7 +193,8 @@ export default {
             };
             let cnsObj = {
                 version: this.cnsVersionFrom.cnsVersion,
-                saveEnabled: this.isCNS
+                saveEnabled: this.isCNS,
+                cnsName: this.cnsVersionFrom.cnsName
             }
             this.$emit("change", data, cnsObj);
             this.$emit("close");
