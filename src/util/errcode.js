@@ -430,6 +430,18 @@ let errCode = {
         en: "Version of contract is out of length",
         zh: '合约版本过长'
     },
+    "201223": {
+        en: "CNS register fail ",
+        zh: 'CNS注册失败'
+    },
+    "201224": {
+        en: "contract version not exists",
+        zh: '合约版本不存在'
+    },
+    "201225": {
+        en: "CNS name cannot be empty",
+        zh: 'CNS名称不能为空'
+    },
     "201226": {
         en: "sql syntax error",
         zh: 'sql语法错误'

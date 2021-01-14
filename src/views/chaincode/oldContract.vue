@@ -19,7 +19,7 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select">
+                    <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -534,6 +534,13 @@ export default {
         },
         mgmtCnsResultClose(){
             this.mgmtCnsVisible = false;
+        },
+        clearInput(){
+            this.contractName = "";
+            this.contractAddress = "";
+            this.contractData = "";
+            this.currentPage = 1;
+            this.getContracts()
         }
     }
 }
