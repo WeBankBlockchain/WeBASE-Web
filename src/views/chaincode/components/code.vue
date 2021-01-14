@@ -811,7 +811,6 @@ export default {
                         this.data.contractSource = Base64.encode(this.content);
                         this.data.contractAddress = this.contractAddress;
                         this.data.contractVersion = this.version;
-                        this.queryFindCnsInfo()
                         if (cns.saveEnabled) {
                             this.queryRegisterCns(val, cns)
                         }
@@ -850,7 +849,7 @@ export default {
             registerCns(param)
                 .then(res => {
                     if (res.data.code === 0) {
-
+                        this.queryFindCnsInfo()
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),

@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%">
-        <newMain v-if='deployType === 0'></newMain>
+        <newMain v-if='deployType == 0'></newMain>
         <mains v-if='deployType == 1'></mains>
     </div>
 </template>

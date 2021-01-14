@@ -46,6 +46,7 @@
                             <span>To:</span>
                         </span>
                         <span>{{transactionData.to || 'null'}}</span>
+                        <span v-if="transactionData.to">{{transactionData.to | contractSource}}</span>
                     </div>
                     <div class="item">
                         <span class="label">nonceRaw:</span>
