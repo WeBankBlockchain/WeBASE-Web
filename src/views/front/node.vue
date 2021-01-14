@@ -25,8 +25,8 @@
                         </el-radio>
                         <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio>
-                        <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
-                        </el-radio>
+                        <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                        </el-radio> -->
                     </el-form-item>
                     <el-form-item :label='$t("text.chainVersion")' prop='chainVersion'>
                         <el-select v-model="chainFrom.chainVersion" :placeholder="$t('text.select')">
@@ -92,7 +92,7 @@
                     <el-button type="primary" @click="add">{{$t('text.addNode')}}</el-button>
                     <el-button type="primary" :loading="loading" @click="check()">{{$t('text.check')}}</el-button>
                 </div>
-                <el-table :data="nodeList" class="search-table-content" v-loading="loading3" :element-loading-text="laodingText" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+                <el-table :data="nodeList" class="search-table-content" v-loading="loading3" :element-loading-text="laodingText" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)">
                     <el-table-column :label="$t('text.hostTitle')" prop="ip" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'Front' + $t('alarm.port')" prop="frontPort" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
@@ -136,7 +136,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import addChainNode from "./dialog/addChainNode"
-import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck } from "@/util/api"
+import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress } from "@/util/api"
 import { format } from "@/util/util"
 export default {
     components: {
@@ -168,7 +168,9 @@ export default {
             remarkList: [],    // 节点日志数组
             timer: null,      // 定时器
             deployOpt: false,// 判断链是否执行部署操作,
-            laodingText: "加载中"  //loading文案
+            laodingText: "加载中",  //loading文案
+            progressTimer: null,    //progress定时器,
+            statusNumber: 0    /// progess 值
         }
     },
     computed: {
@@ -190,6 +192,9 @@ export default {
     beforeDestroy() {
         if (this.timer) {
             clearInterval(this.timer)
+        }
+        if (this.progressTimer) {
+            clearInterval(this.progressTimer)
         }
     },
     mounted() {
@@ -394,6 +399,11 @@ export default {
                 this.loading = false;
                 return
             }
+            // 检测开始  先清除定时器，定时器打开
+            if (this.progressTimer) {
+                clearInterval(this.progressTimer)
+            }
+            this.getProgressData()
             this.laodingText = this.$t("text.laodngCheck")
             checkHost({ hostIdList: array }).then(res => {
                 this.loading3 = false
@@ -788,6 +798,34 @@ export default {
         getRemarkList() {
             this.remarkList = this.distinct(this.nodeList, 'hostId')
         },
+        /**
+         * @method  进度条定时器
+         */
+        getProgressData: function () {
+            this.progressTimer = setInterval(() => {
+                getProgress().then(res => {
+                    if (res.data.code === 0) {
+                        this.statusNumber = res.data.data
+                        // 根据进度，修改loading文字描述
+                        this.laodingText = this.$t("progress." + this.statusNumber)
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                    .catch(err => {
+                        this.$message({
+                            message: this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
+
+                    });
+            }, 500)
+        },
         //数组对象除重
         distinct(arr, key) {
             var newArr = [];
@@ -914,7 +952,7 @@ export default {
         }
     },
     beforeRouteLeave: function (to, from, next) {
-        if (!this.deployOpt && this.nodeList.length !== 0) {
+        if ((to.path !== "/guide" && to.path !== "/login") && (!this.deployOpt && this.nodeList.length !== 0)) {
             this.$confirm(this.$t("text.leavePageInfo"), this.$t("text.tips"), {
                 confirmButtonText: this.$t("text.sure"),
                 cancelButtonText: this.$t("text.cancel"),

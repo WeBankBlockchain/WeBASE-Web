@@ -591,16 +591,16 @@ export default {
 </script>
 <style scoped>
 .node-bg {
-    background: linear-gradient(to top right, #47befa, #37eef2);
+    background: linear-gradient(102.87deg, #4ccbf3 0%, #94eefb 100%);
 }
 .contract-bg {
-    background: linear-gradient(to top right, #466dff, #30a7ff);
+    background: linear-gradient(102.87deg, #4886ff 0%, #62b0f8 100%);
 }
 .block-bg {
-    background: linear-gradient(to top right, #736aff, #b287ff);
+    background: linear-gradient(102.87deg, #7280ff 0%, #98afff 100%);
 }
 .transation-bg {
-    background: linear-gradient(to top right, #ff6e9a, #ffa895);
+    background: linear-gradient(102.87deg, #ff9472 0%, #ffc1ad 100%);
 }
 .over-view-wrapper {
     background: #f7f7f7;

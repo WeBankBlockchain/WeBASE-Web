@@ -365,36 +365,7 @@ export default {
         //     this.progressInterval = setInterval(() => {
         //         this.getProgressData()
         //     }, 1000)
-        // },
-        getProgressData: function () {
-            getProgress().then(res => {
-                if (res.data.code === 0) {
-                    this.statusNumber = res.data.data
-                    if (this.statusNumber == 10 || this.statusNumber == -1) {
-                        localStorage.setItem("config", 0)
-                        clearInterval(this.progressInterval)
-                    }
-                } else {
-                    localStorage.setItem("config", 0)
-                    clearInterval(this.progressInterval)
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error",
-                        duration: 2000
-                    });
-                }
-            })
-                .catch(err => {
-                    localStorage.setItem("config", 0)
-                    clearInterval(this.progressInterval)
-                    this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
-
-                });
-        },
+        // }
         deployChain: function () {
             this.configShow = true
         },

@@ -880,5 +880,17 @@ export default {
         drag: "Drag the file here, Or",
         upload: " click upload",
         uploadNumLimit: "Only one file can be uploaded",
+    },
+    progress: {
+        0: 'Waiting to start',
+        1: 'Checking host free memory and dependencies',
+        2: 'Checking docker service active',
+        3: 'Checking port whether in use',
+        4: 'Installing host dependencies',
+        5: 'Initializing and load Docker image',
+        6: 'Generating chain certificates and config files',
+        7: 'Initializing db data of chain and front',
+        8: 'SCP config files to host',
+        9: 'Configure complete, starting...'
     }
 }
