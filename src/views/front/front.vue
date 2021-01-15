@@ -309,9 +309,6 @@ export default {
         })
         this.getConfigList();
         this.getData();
-        // if(localStorage.getItem("config") != 0){
-        //     this.getProgresses();
-        // }
     },
     methods: {
         changeDate(val) {
@@ -319,16 +316,6 @@ export default {
             data = format(val, "yyyy-MM-dd HH:mm:ss")
             return data
         },
-        // startChain() {
-        //     let data = {
-        //         chainName: this.chainList.chainName
-        //     }
-        //     startChainData(data).then(res => {
-        //         if (res.data.code === 0) {
-        //             alert('����ok')
-        //         }
-        //     })
-        // },
         hostInfoClose: function () {
             this.hostInfoShow = false
         },
@@ -572,15 +559,16 @@ export default {
         deleted: function (val) {
             this.$confirm(this.$t("text.confirmDelete"))
                 .then(_ => {
+                    this.loadingNodes = true;
                     this.detetedNode(val)
                 })
         },
-        detetedNode: function () {
+        detetedNode: function (val) {
             let reqData = {
-                nodeId: this.nodeData.nodeId,
+                nodeId: val.nodeId,
             }
+            clearInterval(this.frontInterval);
             deleteNode(reqData).then(res => {
-                this.loading = false;
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -588,6 +576,7 @@ export default {
                     })
                     this.getData()
                 } else {
+                    this.getData()
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -596,6 +585,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.getData()
                     this.loading = false;
                     this.$message({
                         message: this.$t('text.systemError'),

@@ -88,7 +88,7 @@
             <check-event-result @checkEventResultSuccess="checkEventResultSuccess($event)" @checkEventResultClose="checkEventResultClose" :checkEventResult="checkEventResult"></check-event-result>
         </el-dialog>
         <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
-            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" :contractName="contractName" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose" ></mgmt-cns>
+            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" :contractName="contractName" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
         </el-dialog>
     </div>
 </template>
@@ -189,12 +189,12 @@ export default {
             // contractInfo: null,
             checkEventResult: null,
             groupId: localStorage.getItem("groupId"),
-            mgmtCnsVisible:false,
+            mgmtCnsVisible: false,
             mgmtCnsItem: {}
         }
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -525,17 +525,17 @@ export default {
         checkEventResultClose() {
             this.checkEventResultVisible = false
         },
-        handleMgmtCns(item){
+        handleMgmtCns(item) {
             this.mgmtCnsVisible = true;
             this.mgmtCnsItem = item;
         },
-        mgmtCnsResultSuccess(){
+        mgmtCnsResultSuccess() {
             this.mgmtCnsVisible = false;
         },
-        mgmtCnsResultClose(){
+        mgmtCnsResultClose() {
             this.mgmtCnsVisible = false;
         },
-        clearInput(){
+        clearInput() {
             this.contractName = "";
             this.contractAddress = "";
             this.contractData = "";

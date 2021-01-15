@@ -224,8 +224,8 @@ export default {
         loadingInfo: "链启动中，此过程大约需要几分钟...",
         ruleAddUser: "请新增私钥用户",
         loading: "加载中...",
-        clearNode: "清空节点",
-        clearNodeInfo: "清空节点，请确认？"
+        clearNode: "清空表单",
+        clearNodeInfo: "清空表单，请确认？"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

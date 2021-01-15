@@ -17,8 +17,8 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import  committeeMgmt from "@/views/committeeMgmt/index";
-import  developerMgmt from "@/views/developerMgmt/index";
+import committeeMgmt from "@/views/committeeMgmt/index";
+import developerMgmt from "@/views/developerMgmt/index";
 export default {
     name: 'newPermission',
     components: {
@@ -26,7 +26,7 @@ export default {
         committeeMgmt,
         developerMgmt
     },
-    data () {
+    data() {
         return {
             activeName: 0
         }
@@ -41,28 +41,36 @@ export default {
         },
     },
     methods: {
-        handleClick () {
-            if(this.activeName == 0){
+        handleClick() {
+            if (this.activeName == 0) {
                 this.$refs.committeeMgmt.adminRivateKeyList = [];
-                this.$refs.committeeMgmt.queryGetThreshold()
-                this.$refs.committeeMgmt.getUserData()
-                this.$refs.committeeMgmt.queryCommitteeList()
-                this.$refs.committeeMgmt.queryVoteRecordList()
-            }else{
-                this.$refs.developerMgmt.queryOperatorList()
-                this.$refs.developerMgmt.getUserData()
+                if (localStorage.getItem("groupId")) {
+                    this.$refs.committeeMgmt.queryGetThreshold()
+                    this.$refs.committeeMgmt.getUserData()
+                    this.$refs.committeeMgmt.queryCommitteeList()
+                    this.$refs.committeeMgmt.queryVoteRecordList()
+                }
+            } else {
+                if (localStorage.getItem("groupId")) {
+                    this.$refs.developerMgmt.queryOperatorList()
+                    this.$refs.developerMgmt.getUserData()
+                }
             }
         },
-        changGroup () {
-            if(this.activeName == 0){
-                this.$refs.committeeMgmt.adminRivateKeyList = [];
-                this.$refs.committeeMgmt.queryGetThreshold()
-                this.$refs.committeeMgmt.getUserData()
-                this.$refs.committeeMgmt.queryCommitteeList()
-                this.$refs.committeeMgmt.queryVoteRecordList()
-            }else{
-                this.$refs.developerMgmt.queryOperatorList()
-                this.$refs.developerMgmt.getUserData()
+        changGroup() {
+            if (this.activeName == 0) {
+                if (localStorage.getItem("groupId")) {
+                    this.$refs.committeeMgmt.adminRivateKeyList = [];
+                    this.$refs.committeeMgmt.queryGetThreshold()
+                    this.$refs.committeeMgmt.getUserData()
+                    this.$refs.committeeMgmt.queryCommitteeList()
+                    this.$refs.committeeMgmt.queryVoteRecordList()
+                }
+            } else {
+                if (localStorage.getItem("groupId")) {
+                    this.$refs.developerMgmt.queryOperatorList()
+                    this.$refs.developerMgmt.getUserData()
+                }
             }
         }
     }
@@ -70,5 +78,4 @@ export default {
 </script>
 
 <style>
-
 </style>

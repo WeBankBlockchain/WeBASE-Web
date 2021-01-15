@@ -139,12 +139,12 @@ export default {
         }
     },
     mounted() {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserInfoData();
         }
     },
@@ -162,9 +162,9 @@ export default {
                 reqQuery = {
                     userParam: this.userName.replace(/^\s+|\s+$/g, "")
                 };
-                if(localStorage.getItem('root') === 'developer'){
-                    reqQuery.account = localStorage.getItem("user")
-                }
+            if (localStorage.getItem('root') === 'developer') {
+                reqQuery.account = localStorage.getItem("user")
+            }
             getUserList(reqData, reqQuery)
                 .then(res => {
                     this.loading = false;
@@ -258,7 +258,7 @@ export default {
                     });
                 });
         },
-        freezeThaw(val){
+        freezeThaw(val) {
             console.log(val)
         },
         copyPubilcKey(val) {

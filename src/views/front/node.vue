@@ -384,6 +384,10 @@ export default {
                         this.loading1 = true;
                         this.initChain()
                     } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$t("text.chainVersion") + this.$t('text.notNull'),
+                        })
                         return false
                     }
                 })
