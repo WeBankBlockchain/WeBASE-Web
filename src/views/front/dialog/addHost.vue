@@ -31,7 +31,7 @@ export default {
             dialogVisible: this.show,
             hostFrom: {
                 ip: "",
-                sshPath: "/data/home/webase/opt"
+                sshPath: "/home/opt"
             },
             loading: false
         }

@@ -47,6 +47,10 @@ export default {
         data: {
             type: Object,
             default: null
+        },
+        front: {
+            type: Array,
+            default: []
         }
     },
     data() {
@@ -63,7 +67,8 @@ export default {
             },
             loading: false,
             hostList: [],
-            nodeData: this.data
+            nodeData: this.data,
+            frontList: this.front
         }
     },
     computed: {
@@ -93,6 +98,12 @@ export default {
             this.getDetail()
         }
         this.getHostList()
+        if (this.frontList.length) {
+            for (let i = 0; i < this.frontList.length; i++) {
+                this.frontList[i].ip = this.frontList[i].frontIp
+                this.frontList[i].rpcPort = this.frontList[i].jsonrpcPort
+            }
+        }
     },
     methods: {
         modelClose() {
@@ -109,13 +120,11 @@ export default {
             })
         },
         hostChange(val) {
-            console.log(val)
             for (let i = 0; i < this.hostList.length; i++) {
                 if (val == this.hostList[i].id) {
                     this.nodeFrom.ip = this.hostList[i].ip
                 }
             }
-            console.log(this.nodeFrom)
         },
         add() {
             this.initialization()
@@ -138,56 +147,55 @@ export default {
                 return
             }
         },
-        initialization() {
-            let list = []
-            if (sessionStorage.getItem("nodeList")) {
-                list = JSON.parse(sessionStorage.getItem("nodeList"))
-            }
-            this.portAbs()
+        //检验端口是否被占用
+        validate(list, node) {
             if (this.nodeFrom.nodecount > 1) {
                 //判断各个端口加上节点数量后  与已添加的节点列表的各个端口是否存在冲突，
                 //判断依据是添加的端口小于或等于已添加的节点端口，添加的端口加上节点个数后大于或等于已添加的节点端口（存在冲突)
                 for (let i = 0; i < list.length; i++) {
-                    if ((this.nodeFrom.frontPort < list[i].frontPort &&
-                        (parseInt(this.nodeFrom.frontPort) + parseInt(this.nodeFrom.nodecount)) > list[i].frontPort) || this.nodeFrom.frontPort == list[i].frontPort ||
-                        (parseInt(this.nodeFrom.frontPort) + parseInt(this.nodeFrom.nodecount)) === list[i].frontPort) {
-                        this.$message({
-                            type: "error",
-                            message: `${this.$t('alarm.port')}${list[i].frontPort}${this.$t('text.used')}`
-                        });
-                        this.loading = false;
-                        return
+                    if (this.nodeFrom.hostId == list[i].hostId) {
+                        if ((this.nodeFrom.frontPort < list[i].frontPort &&
+                            (parseInt(this.nodeFrom.frontPort) + parseInt(this.nodeFrom.nodecount)) > list[i].frontPort) || this.nodeFrom.frontPort == list[i].frontPort ||
+                            (parseInt(this.nodeFrom.frontPort) + parseInt(this.nodeFrom.nodecount)) === list[i].frontPort) {
+                            this.$message({
+                                type: "error",
+                                message: `${this.$t('alarm.port')}${list[i].frontPort}${this.$t('text.used')}`
+                            });
+                            this.loading = false;
+                            return
+                        }
+                        if ((this.nodeFrom.p2pPort < list[i].p2pPort &&
+                            (parseInt(this.nodeFrom.p2pPort) + parseInt(this.nodeFrom.nodecount)) > list[i].p2pPort) ||
+                            this.nodeFrom.p2pPort == list[i].p2pPort || (parseInt(this.nodeFrom.p2pPort) + parseInt(this.nodeFrom.nodecount)) === list[i].p2pPort) {
+                            this.$message({
+                                type: "error",
+                                message: `${this.$t('alarm.port')}${list[i].p2pPort}${this.$t('text.used')}`
+                            });
+                            this.loading = false;
+                            return
+                        }
+                        if ((this.nodeFrom.channelPort < list[i].channelPort &&
+                            (parseInt(this.nodeFrom.channelPort) + parseInt(this.nodeFrom.nodecount) > list[i].channelPort)) ||
+                            this.nodeFrom.channelPort == list[i].channelPort || (parseInt(this.nodeFrom.channelPort) + parseInt(this.nodeFrom.nodecount)) === list[i].channelPort) {
+                            this.$message({
+                                type: "error",
+                                message: `${this.$t('alarm.port')}${list[i].channelPort}${this.$t('text.used')}`
+                            });
+                            this.loading = false;
+                            return
+                        }
+                        if ((this.nodeFrom.rpcPort < list[i].rpcPort &&
+                            (parseInt(this.nodeFrom.rpcPort) + parseInt(this.nodeFrom.nodecount)) > list[i].rpcPort) || this.nodeFrom.rpcPort == list[i].rpcPort ||
+                            (parseInt(this.nodeFrom.rpcPort) + parseInt(this.nodeFrom.nodecount)) === list[i].rpcPort) {
+                            this.$message({
+                                type: "error",
+                                message: `${this.$t('alarm.port')}${list[i].rpcPort}${this.$t('text.used')}`
+                            });
+                            this.loading = false;
+                            return
+                        }
                     }
-                    if ((this.nodeFrom.p2pPort < list[i].p2pPort &&
-                        (parseInt(this.nodeFrom.p2pPort) + parseInt(this.nodeFrom.nodecount)) > list[i].p2pPort) ||
-                        this.nodeFrom.p2pPort == list[i].p2pPort || (parseInt(this.nodeFrom.p2pPort) + parseInt(this.nodeFrom.nodecount)) === list[i].p2pPort) {
-                        this.$message({
-                            type: "error",
-                            message: `${this.$t('alarm.port')}${list[i].p2pPort}${this.$t('text.used')}`
-                        });
-                        this.loading = false;
-                        return
-                    }
-                    if ((this.nodeFrom.channelPort < list[i].channelPort &&
-                        (parseInt(this.nodeFrom.channelPort) + parseInt(this.nodeFrom.nodecount) > list[i].channelPort)) ||
-                        this.nodeFrom.channelPort == list[i].channelPort || (parseInt(this.nodeFrom.channelPort) + parseInt(this.nodeFrom.nodecount)) === list[i].channelPort) {
-                        this.$message({
-                            type: "error",
-                            message: `${this.$t('alarm.port')}${list[i].channelPort}${this.$t('text.used')}`
-                        });
-                        this.loading = false;
-                        return
-                    }
-                    if ((this.nodeFrom.rpcPort < list[i].rpcPort &&
-                        (parseInt(this.nodeFrom.rpcPort) + parseInt(this.nodeFrom.nodecount)) > list[i].rpcPort) || this.nodeFrom.rpcPort == list[i].rpcPort ||
-                        (parseInt(this.nodeFrom.rpcPort) + parseInt(this.nodeFrom.nodecount)) === list[i].rpcPort) {
-                        this.$message({
-                            type: "error",
-                            message: `${this.$t('alarm.port')}${list[i].rpcPort}${this.$t('text.used')}`
-                        });
-                        this.loading = false;
-                        return
-                    }
+
                 }
                 for (let i = 0; i < this.nodeFrom.nodecount; i++) {
                     let data = {
@@ -200,49 +208,105 @@ export default {
                         channelPort: parseInt(this.nodeFrom.channelPort) + i,
                         rpcPort: parseInt(this.nodeFrom.rpcPort) + i,
                     }
-                    list.push(data)
+                    if (!node) {
+                        list.push(data)
+                    }
+                }
+                if (!node) {
+                    return list
+                } else {
+                    return true
                 }
             } else {
                 this.nodeFrom.id = (new Date()).getTime()
                 this.nodeFrom.status = 0
+                console.log(list)
                 for (let i = 0; i < list.length; i++) {
-                    if (list[i].ip == this.nodeFrom.ip && list[i].frontPort == this.nodeFrom.frontPort) {
-                        this.$message({
-                            type: "error",
-                            message: `front${this.$t('alarm.port')}${this.$t('text.used')}`,
-                        })
-                        this.loading = false;
-                        return
-                    } else if (list[i].ip == this.nodeFrom.ip && list[i].p2pPort == this.nodeFrom.p2pPort) {
-                        this.$message({
-                            type: "error",
-                            message: `p2p${this.$t('alarm.port')}${this.$t('text.used')}`,
-                        })
-                        this.loading = false;
-                        return
-                    } else if (list[i].ip == this.nodeFrom.ip && list[i].channelPort == this.nodeFrom.channelPort) {
-                        this.$message({
-                            type: "error",
-                            message: `channel${this.$t('alarm.port')}${this.$t('text.used')}`,
-                        })
-                        this.loading = false;
-                        return
-                    }
-                    else if (list[i].ip == this.nodeFrom.ip && list[i].rpcPort == this.nodeFrom.rpcPort) {
-                        this.$message({
-                            type: "error",
-                            message: `rpc${this.$t('alarm.port')}${this.$t('text.used')}`,
-                        })
-                        this.loading = false;
-                        return
+                    if (this.nodeFrom.hostId == list[i].hostId) {
+                        if (list[i].ip == this.nodeFrom.ip && list[i].frontPort == this.nodeFrom.frontPort) {
+                            console.log("1111111111111111111111111111111111")
+                            this.$message({
+                                type: "error",
+                                message: `front${this.$t('alarm.port')}${this.$t('text.used')}`,
+                            })
+                            this.loading = false;
+                            return
+                        } else if (list[i].ip == this.nodeFrom.ip && list[i].p2pPort == this.nodeFrom.p2pPort) {
+                            this.$message({
+                                type: "error",
+                                message: `p2p${this.$t('alarm.port')}${this.$t('text.used')}`,
+                            })
+                            this.loading = false;
+                            return
+                        } else if (list[i].ip == this.nodeFrom.ip && list[i].channelPort == this.nodeFrom.channelPort) {
+                            this.$message({
+                                type: "error",
+                                message: `channel${this.$t('alarm.port')}${this.$t('text.used')}`,
+                            })
+                            this.loading = false;
+                            return
+                        }
+                        else if (list[i].ip == this.nodeFrom.ip && list[i].rpcPort == this.nodeFrom.rpcPort) {
+                            this.$message({
+                                type: "error",
+                                message: `rpc${this.$t('alarm.port')}${this.$t('text.used')}`,
+                            })
+                            this.loading = false;
+                            return
+                        }
                     }
                 }
-                list.push(this.nodeFrom)
+                if (!node) {
+                    list.push(this.nodeFrom)
+                    return list
+                } else {
+                    return true
+                }
+
             }
-            this.loading = false;
-            sessionStorage.setItem('nodeList', JSON.stringify(list))
-            this.$store.dispatch('set_node_list_action', list)
-            this.$emit("success", this.nodeFrom)
+
+        },
+        initialization() {
+            console.log(this.frontList)
+            let validate = true
+            let list = []
+            console.log(sessionStorage.getItem("nodeList"))
+            if (!!sessionStorage.getItem("nodeList")) {
+                list = JSON.parse(sessionStorage.getItem("nodeList"))
+            }
+            this.portAbs()
+            if (this.frontList.length === 0) {
+                let data = this.validate(list)
+                if (data) {
+                    list = data
+                } else {
+                    return
+                }
+
+            } else {
+                validate = this.validate(this.frontList, true)
+                if (validate) {
+                    let data = this.validate(list)
+                    if (data) {
+                        list = data
+                    } else {
+                        return
+                    }
+                } else {
+                    this.loading = false;
+                    return
+                }
+
+            }
+
+            if (!list) {
+                list = []
+            } else {
+                sessionStorage.setItem('nodeList', JSON.stringify(list))
+                this.$store.dispatch('set_node_list_action', list)
+                this.$emit("success", this.nodeFrom)
+            }
+
         },
         getHostList() {
             getHosts().then(res => {

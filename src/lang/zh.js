@@ -176,7 +176,7 @@ export default {
         nodeCount: "节点数量必须大于或等于两个",
         checkSuccess: "检测成功",
         checkFail: "检测失败",
-        initializeSuccess: "初始化成功",
+        initializeSuccess: "初始化开始",
         initializeFail: "初始化失败",
         chainConfigSuccess: "链配置成功",
         addNodeConfigSuccess: "新增节点配置成功",
@@ -220,7 +220,12 @@ export default {
         leavePageInfo: "离开此页面将停止新增链/新增节点过程，确认离开此页面？",
         laodngCheck: "检测中，请等待...",
         loadingInit: "初始化中，请等待...",
-        loadingDeploy: "部署中，请等待..."
+        loadingDeploy: "部署中，请等待...",
+        loadingInfo: "链启动中，此过程大约需要几分钟...",
+        ruleAddUser: "请新增私钥用户",
+        loading: "加载中...",
+        clearNode: "清空节点",
+        clearNodeInfo: "清空节点，请确认？"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

@@ -1345,16 +1345,20 @@ let errCode = {
         "zh": "Ansible检查docker容器的参数错误。"
     },
     "202493": {
-        "en": "Check host free memory/cpu or docker fail, please check host remark.",
-        "zh": "检查主机可用内存/cpu或docker失败，请检查主机备注。"
+        "en": "Check host not pass, please check host remark.",
+        "zh": "主机检测未通过，请查看操作日志。"
     },
     "202494": {
-        "en": "Host root dir access denied.",
-        "zh": "主机安装目录无法访问，请检查目录权限。"
+        "en": "Check host port is in use, please check host remark.",
+        "zh": "检测到接口已使用，请查看操作日志。"
     },
     "202496": {
         "en": "Host root dir access denied.",
         "zh": "主机安装目录无权限。"
+    },
+    "202497": {
+        "en": "Host not exist or already been deleted.",
+        "zh": "主机不存在或已被删除。"
     },
 
 

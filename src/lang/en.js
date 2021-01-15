@@ -176,7 +176,7 @@ export default {
         nodeCount: "The number of nodes must be greater than or equal to two.",
         checkSuccess: "Check Successful",
         checkFail: "Check failed",
-        initializeSuccess: "Initialization successful",
+        initializeSuccess: "Initialization start",
         initializeFail: "Initialization failed",
         chainConfigSuccess: "Chain configured successfully",
         addNodeConfigSuccess: "New node configured successfully",
@@ -220,7 +220,12 @@ export default {
         leavePageInfo: "Leaving this page will stop the process of adding new chain/nodes. Confirm to leave this page?",
         laodngCheck: "Checking, please wait...",
         loadingInit: "Initializing, please wait...",
-        loadingDeploy: "Deploying, please wait..."
+        loadingDeploy: "Deploying, please wait...",
+        loadingInfo: "Chain starting, this process takes about a few minutes,please wait...",
+        ruleAddUser: "Please add a new private key user",
+        loading: "loading...",
+        clearNode: "Clear node",
+        clearNodeInfo: "Clear node, please confirm?"
     },
     rule: {
         textLong: "1 to 32 characters in length",
