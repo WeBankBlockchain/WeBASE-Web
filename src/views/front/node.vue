@@ -25,8 +25,8 @@
                         </el-radio>
                         <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio>
-                        <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
-                        </el-radio>
+                        <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                        </el-radio> -->
                     </el-form-item>
                     <el-form-item :label='$t("text.chainVersion")' prop='chainVersion'>
                         <el-select v-model="chainFrom.chainVersion" :placeholder="$t('text.select')">
@@ -46,11 +46,11 @@
                 <el-divider></el-divider>
                 <el-form style="padding-top: 20px" v-if='chainFrom' class="chain-info">
                     <el-row>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item :label='$t("text.chainName") + "："'>
                                 <span>{{chainFrom.chainName}}</span>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainVersion") + "："'>
                                 <span>{{chainFrom.version}}</span>
@@ -88,33 +88,44 @@
             <div class="search-table">
                 <div style="padding: 20px 0">
                     <h3>{{$t("nodes.nodeList")}}</h3>
+                    <el-table :data="frontList" class="search-table-content" v-if='type == "node"'>
+                        <el-table-column :label='$t("nodes.ip")' prop="frontIp" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label='$t("nodes.frontPort")' prop="frontPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'RPC' + $t('alarm.port')" prop="jsonrpcPort" show-overflow-tooltip></el-table-column>
+                    </el-table>
+                </div>
+                <div :element-loading-text="laodingText" v-loading="loading3" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)">
                     <el-divider></el-divider>
                     <el-button type="primary" @click="add">{{$t('text.addNode')}}</el-button>
                     <el-button type="primary" :loading="loading" @click="check()">{{$t('text.check')}}</el-button>
-                </div>
-                <el-table :data="nodeList" class="search-table-content" v-loading="loading3" :element-loading-text="laodingText" element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)">
-                    <el-table-column :label="$t('text.hostTitle')" prop="ip" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="'Front' + $t('alarm.port')" prop="frontPort" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="'RPC' + $t('alarm.port')" prop="rpcPort" show-overflow-tooltip></el-table-column>
-                    <el-table-column :label="$t('contracts.status')" prop="status" show-overflow-tooltip>
-                        <template slot-scope="scope">
-                            <span :style="{'color': nodeColor(scope.row.status)}">{{Status(scope.row.status)}}</span>
-                        </template>
-                    </el-table-column>
-                    <el-table-column :label="$t('nodes.operation')" fixed="right" width='200px'>
-                        <template slot-scope='scope'>
-                            <el-button type='text' @click="deleteNode(scope.row)">{{$t('text.delete')}}</el-button>
-                            <!-- <el-button type='text' v-if='scope.row.status === 5' @click="checkone(scope.row)">{{$t('text.check')}}</el-button> -->
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <div style="padding: 30px 0" class="check-button">
-                    <h3>{{$t('nodes.operation')}}</h3>
-                    <el-divider></el-divider>
-                    <el-button type="primary" :loading="loading1" @click="init('chainFrom')" v-if='!initShow'>{{$t('nodes.initialize')}}</el-button>
-                    <el-button type="primary" :loading="loading2" @click="deploy('chainFrom')" v-if='initShow'>{{$t('text.deploy')}}</el-button>
+                    <el-button class="clear-right" @click='clearNode'>{{$t("text.clearNode")}}</el-button>
+
+                    <el-table :data="nodeList" class="search-table-content">
+                        <el-table-column :label="$t('text.hostTitle')" prop="ip" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'Front' + $t('alarm.port')" prop="frontPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="'RPC' + $t('alarm.port')" prop="rpcPort" show-overflow-tooltip></el-table-column>
+                        <el-table-column :label="$t('contracts.status')" prop="status" show-overflow-tooltip>
+                            <template slot-scope="scope">
+                                <span :style="{'color': nodeColor(scope.row.status)}">{{Status(scope.row.status)}}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column :label="$t('nodes.operation')" fixed="right" width='200px'>
+                            <template slot-scope='scope'>
+                                <el-button type='text' @click="deleteNode(scope.row)">{{$t('text.delete')}}</el-button>
+                                <!-- <el-button type='text' v-if='scope.row.status === 5' @click="checkone(scope.row)">{{$t('text.check')}}</el-button> -->
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <div style="padding: 30px 0" class="check-button">
+                        <h3>{{$t('nodes.operation')}}</h3>
+                        <el-divider></el-divider>
+                        <el-button type="primary" :loading="loading1" @click="init('chainFrom')" v-if='!initShow'>{{$t('nodes.initialize')}}</el-button>
+                        <el-button type="primary" :loading="loading2" @click="deploy('chainFrom')" v-if='initShow'>{{$t('text.deploy')}}</el-button>
+                    </div>
                 </div>
                 <div style="padding: 30px 0" v-if='nodeList.length && remarkList.length'>
                     <h3>{{$t("text.nodeLog")}}</h3>
@@ -129,14 +140,14 @@
             </div>
         </div>
 
-        <addChainNode v-if="addChainNodeShow" :show="addChainNodeShow" :data='addChainNodeData' @close='addChainNodeClose' @success="addChainNodeSuccess($event)"></addChainNode>
+        <addChainNode v-if="addChainNodeShow" :show="addChainNodeShow" :data='addChainNodeData' :front='frontList' @close='addChainNodeClose' @success="addChainNodeSuccess($event)"></addChainNode>
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
 import addChainNode from "./dialog/addChainNode"
-import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck } from "@/util/api"
+import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
 import { format } from "@/util/util"
 export default {
     components: {
@@ -150,12 +161,12 @@ export default {
                 chainVersion: null,
                 dockerImageType: 2
             },
-            loading: false,
-            loading1: false,
-            loading2: false,
-            loading3: false,
-            nodeList: [],
-            configList: [],
+            loading: false,   // 检测按钮loading
+            loading1: false,  // 初始化按钮loading
+            loading2: false,  // 部署按钮loading
+            loading3: false,  // 节点列表loading
+            nodeList: [],     // 节点列表
+            configList: [],    // 链镜像版本
             initShow: false,
             checkShow: true,
             addChainNodeShow: false,
@@ -163,12 +174,15 @@ export default {
             hostList: [],
             configValue: "",
             addChainNodeData: null,
-            type: this.$route.query.type,
+            type: this.$route.params.id,
             chainInfo: null,
             remarkList: [],    // 节点日志数组
             timer: null,      // 定时器
             deployOpt: false,// 判断链是否执行部署操作,
-            laodingText: "加载中"  //loading文案
+            laodingText: "加载中",  //loading文案
+            progressTimer: null,    //progress定时器,
+            statusNumber: 0,   /// progess 值
+            frontList: []
         }
     },
     computed: {
@@ -191,10 +205,17 @@ export default {
         if (this.timer) {
             clearInterval(this.timer)
         }
+        if (this.progressTimer) {
+            clearInterval(this.progressTimer)
+        }
+        // this.$route.query.type === this.type
     },
     mounted() {
+        console.log(this.type)
         if (this.type === 'node') {
             this.getChainDetail()
+            this.getFrontList()
+
         } else {
             this.getConfigs();
         }
@@ -394,6 +415,11 @@ export default {
                 this.loading = false;
                 return
             }
+            // 检测开始  先清除定时器，定时器打开
+            if (this.progressTimer) {
+                clearInterval(this.progressTimer)
+            }
+            this.getProgressData()
             this.laodingText = this.$t("text.laodngCheck")
             checkHost({ hostIdList: array }).then(res => {
                 this.loading3 = false
@@ -785,8 +811,81 @@ export default {
             }
 
         },
+
+        // 查询已部署的节点列表
+        getFrontList() {
+            getFronts({}).then(res => {
+                if (res.data.code === 0) {
+                    this.frontList = res.data.data
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+                .catch(err => {
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        // 清空节点
+        clearNode() {
+            this.$confirm(this.$t("text.clearNodeInfo"), this.$t("text.tips"), {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
+                type: 'warning'
+            }).then(() => {
+                this.nodeList = []
+                sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
+                this.$store.dispatch('set_node_list_action', this.nodeList)
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$t("text.Cancelled")
+                });
+            });
+        },
         getRemarkList() {
             this.remarkList = this.distinct(this.nodeList, 'hostId')
+        },
+        /**
+         * @method  进度条定时器
+         */
+        getProgressData: function () {
+            let number = 0
+            this.progressTimer = setInterval(() => {
+                getProgress().then(res => {
+                    if (res.data.code === 0) {
+                        this.statusNumber = res.data.data
+                        // 根据进度，修改loading文字描述
+                        this.laodingText = this.$t("progress." + this.statusNumber)
+                        number = number + 1
+                        if (number > 1800) {
+                            clearInterval(this.progressTimer)
+                        }
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                    .catch(err => {
+                        this.$message({
+                            message: this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
+
+                    });
+            }, 1000)
         },
         //数组对象除重
         distinct(arr, key) {
@@ -914,7 +1013,7 @@ export default {
         }
     },
     beforeRouteLeave: function (to, from, next) {
-        if (!this.deployOpt && this.nodeList.length !== 0) {
+        if ((to.path !== "/guide" && to.path !== "/login" && to.path !== "/newNode") && (!this.deployOpt && this.nodeList.length !== 0)) {
             this.$confirm(this.$t("text.leavePageInfo"), this.$t("text.tips"), {
                 confirmButtonText: this.$t("text.sure"),
                 cancelButtonText: this.$t("text.cancel"),
@@ -958,5 +1057,8 @@ export default {
     position: absolute;
     right: 40px;
     top: 90px;
+}
+.clear-right {
+    float: right;
 }
 </style>
