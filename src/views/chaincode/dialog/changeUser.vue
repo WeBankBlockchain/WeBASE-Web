@@ -122,7 +122,13 @@ export default {
                         pattern: /^[A-Za-z0-9.]+$/,
                         message: this.$t('dialog.cnsVersionPattern'),
                         trigger: "blur"
-                    }
+                    },
+                    {
+                        min: 1,
+                        max: 10,
+                        message: this.$t('dialog.length1_10'),
+                        trigger: "blur"
+                    },
                 ],
                 cnsName: [
                     {
@@ -134,7 +140,13 @@ export default {
                         pattern: /^[A-Za-z0-9.]+$/,
                         message: this.$t('dialog.cnsVersionPattern'),
                         trigger: "blur"
-                    }
+                    },
+                    {
+                        min: 1,
+                        max: 32,
+                        message: this.$t('dialog.rivateKeyVerifyLength1_32'),
+                        trigger: "blur"
+                    },
                 ],
             }
             return obj
@@ -160,7 +172,7 @@ export default {
         },
         submit: function () {
             if (this.isCNS) {
-                if(!this.cnsVersionFrom.cnsName) return;
+                if (!this.cnsVersionFrom.cnsName) return;
                 this.$refs['cnsVersionFrom'].validate((valid) => {
                     if (valid) {
                         this.queryDeploy()

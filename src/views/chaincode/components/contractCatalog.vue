@@ -386,7 +386,7 @@ export default {
             this.uploadFiles = e.target.files;
             if (this.uploadFiles.length > 20) {
                 this.$message({
-                    message: this.$t("contracts.contractCount"),
+                    message: this.$t("text.contractCount"),
                     type: "error"
                 });
                 return
