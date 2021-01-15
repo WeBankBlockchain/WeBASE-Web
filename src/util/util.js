@@ -327,7 +327,14 @@ export function dataType(type, value) {
             }
             break;
         default:
-            return value
+            try {
+                var value = value.replace(/\^\[.*\]\$/, '')
+                return JSON.parse(value)
+            } catch (error) {
+                console.log('error：' + value + '!!!' + error);
+                return
+            }
+            break;
             break;
     }
 }
@@ -352,10 +359,10 @@ export function versionfunegt(ver1, ver2) {
     }
 
 }
-export function subStringToNumber (val) {
+export function subStringToNumber(val) {
     let array = val.split("")
     let num = "";
-    for(let i = 0; i < array.length; i++){
+    for (let i = 0; i < array.length; i++) {
         num = num + array[i].charCodeAt(0)
     }
     return parseInt(num)

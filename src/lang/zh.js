@@ -873,9 +873,11 @@ export default {
         devAddress: '运维地址'
     },
     dialog: {
-        cnsVersion: '请输入版本',
+        cnsVersion: '请输入CNS版本',
         cnsVersionPattern: "数字字母和英文字母'.'组成",
-        cnsName: '请输入名称',
+        cnsName: '请输入CNS名称',
+        length1_10: '长度在 1 到 10 个字符',
+        rivateKeyVerifyLength1_32: '长度在 1 到 32 个字符',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',
