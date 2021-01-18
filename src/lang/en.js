@@ -224,8 +224,8 @@ export default {
         loadingInfo: "Chain starting, this process takes about a few minutes,please wait...",
         ruleAddUser: "Please add a new private key user",
         loading: "loading...",
-        clearNode: "Clear node",
-        clearNodeInfo: "Clear node, please confirm?"
+        clearNode: "Clear form",
+        clearNodeInfo: "Clear form, please confirm?"
     },
     rule: {
         textLong: "1 to 32 characters in length",

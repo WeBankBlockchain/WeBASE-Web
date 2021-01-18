@@ -138,7 +138,7 @@ export default {
         Bus.$off("save")
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -179,6 +179,7 @@ export default {
                 }
             })
         })
+        console.log(this.disabled)
     },
     directives: {
         Clickoutside,
