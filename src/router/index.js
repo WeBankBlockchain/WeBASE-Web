@@ -115,7 +115,7 @@ const routes = [
         children: [
             { path: '/host', component: host, name: '主机管理', nameKey: "hostMgrTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
-            { path: '/node', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
+            { path: '/node/:id', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
             { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
 
 

@@ -36,11 +36,11 @@
             <div class="search-table">
                 <el-form style="padding-top: 20px" v-if='chainList' class="chain-info">
                     <el-row>
-                        <el-col :span="12">
+                        <!-- <el-col :span="12">
                             <el-form-item :label='$t("text.chainName") + "："'>
                                 <span>{{chainList.chainName}}</span>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainVersion") + "："'>
                                 <span>{{chainList.version}}</span>
@@ -80,7 +80,7 @@
         <div class="module-wrapper" style="margin-top: 10px;">
             <div class="search-table">
 
-                <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" style="padding-bottom: 20px;">
+                <el-table :data="frontData" class="search-table-content" v-loading="loadingNodes" :element-loading-text="loadingTxt" element-loading-spinner="el-icon-loading" element-loading-background="rgba(255, 255, 255, 0.8)" style="padding-bottom: 20px;">
                     <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width='head.width'>
                         <template slot-scope="scope">
                             <template v-if='head.enName === "frontIp"'>
@@ -125,7 +125,7 @@
                 <add-node v-if='addNodeShow' :show='addNodeShow' @close='addNodeClose'></add-node>
                 <new-node v-if='newNodeShow' :show='newNodeShow' @close='newNodeClose' :data='frontData'></new-node>
                 <update-node v-if='updateNodeShow' :show='updateNodeShow' @close='updateNodeClose' @success='updateNodeSuccess'></update-node>
-                <delete-node v-if='deleteNodeShow' :show='deleteNodeShow' @close='deleteNodeClose' :data='nodeData'></delete-node>
+                <!-- <delete-node v-if='deleteNodeShow' :show='deleteNodeShow' @close='deleteNodeClose' :data='nodeData'></delete-node> -->
                 <set-config :show='configShow' v-if='configShow' @close='closeConfig' @success='successConfig'></set-config>
                 <host-info v-if='hostInfoShow' :show='hostInfoShow' @close='hostInfoClose'></host-info>
             </div>
@@ -138,7 +138,7 @@ import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
-    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData
+    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode
 } from "@/util/api";
 import { format, unique } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -147,7 +147,6 @@ import setConfig from "../index/dialog/setConfig"
 import addNode from "./dialog/addNode"
 import newNode from "./dialog/newNode"
 import updateNode from "./dialog/updateNode"
-import deleteNode from "./dialog/deleteNode"
 import Bus from "@/bus"
 import guideImg from "@/../static/image/guide.69e4d090.png"
 import hostInfo from "./dialog/hostInfo"
@@ -160,7 +159,6 @@ export default {
         "add-node": addNode,
         'new-node': newNode,
         'update-node': updateNode,
-        "delete-node": deleteNode,
         'set-config': setConfig,
         "host-info": hostInfo
     },
@@ -209,7 +207,8 @@ export default {
             statusNumber: null,
             number: 0,
             chainList: null,
-            hostInfoShow: false
+            hostInfoShow: false,
+            loadingTxt: this.$t('text.loading')
         };
     },
     computed: {
@@ -217,7 +216,8 @@ export default {
             let data = [
                 {
                     enName: "frontIp",
-                    name: this.$t("nodes.ip")
+                    name: this.$t("nodes.ip"),
+                    width: 120
                 },
                 {
                     enName: "frontPort",
@@ -242,12 +242,12 @@ export default {
                 {
                     enName: "status",
                     name: this.$t("home.status"),
-                    width: 150
+                    width: 100
                 },
                 {
                     enName: "nodeType",
                     name: this.$t("nodes.nodeStyle"),
-                    width: 180
+                    width: 100
                 },
                 {
                     enName: "operate",
@@ -309,9 +309,6 @@ export default {
         })
         this.getConfigList();
         this.getData();
-        // if(localStorage.getItem("config") != 0){
-        //     this.getProgresses();
-        // }
     },
     methods: {
         changeDate(val) {
@@ -319,16 +316,6 @@ export default {
             data = format(val, "yyyy-MM-dd HH:mm:ss")
             return data
         },
-        // startChain() {
-        //     let data = {
-        //         chainName: this.chainList.chainName
-        //     }
-        //     startChainData(data).then(res => {
-        //         if (res.data.code === 0) {
-        //             alert('����ok')
-        //         }
-        //     })
-        // },
         hostInfoClose: function () {
             this.hostInfoShow = false
         },
@@ -365,36 +352,7 @@ export default {
         //     this.progressInterval = setInterval(() => {
         //         this.getProgressData()
         //     }, 1000)
-        // },
-        getProgressData: function () {
-            getProgress().then(res => {
-                if (res.data.code === 0) {
-                    this.statusNumber = res.data.data
-                    if (this.statusNumber == 10 || this.statusNumber == -1) {
-                        localStorage.setItem("config", 0)
-                        clearInterval(this.progressInterval)
-                    }
-                } else {
-                    localStorage.setItem("config", 0)
-                    clearInterval(this.progressInterval)
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error",
-                        duration: 2000
-                    });
-                }
-            })
-                .catch(err => {
-                    localStorage.setItem("config", 0)
-                    clearInterval(this.progressInterval)
-                    this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
-
-                });
-        },
+        // }
         deployChain: function () {
             this.configShow = true
         },
@@ -446,11 +404,11 @@ export default {
                     if (res.data.data) {
                         this.chainList = res.data.data
                         localStorage.setItem("configData", res.data.data.chainStatus);
-                        // if (res.data.data.chainStatus != 3) {
-                        //     this.getProgresses();
-                        // } else {
-                        //     clearInterval(this.progressInterval)
-                        // }
+                        if (res.data.data.chainStatus == 3 || res.data.data.chainStatus == 2) {
+                            this.loadingNodes = false;
+                        } else {
+                            this.loadingTxt = this.$t("text.loadingInfo")
+                        }
                     } else {
                         this.chainList = null
                         clearInterval(this.frontInterval)
@@ -476,12 +434,13 @@ export default {
             });
         },
         start: function (val) {
+            clearInterval(this.frontInterval)
             this.loadingNodes = true;
             let reqData = {
                 nodeId: val.nodeId
             }
             startNode(reqData).then(res => {
-                this.loadingNodes = false;
+                // this.loadingNodes = false;
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -489,6 +448,7 @@ export default {
                     })
                     this.getData()
                 } else {
+                    this.getData()
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -497,6 +457,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.getData()
                     this.loadingNodes = false;
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -507,12 +468,13 @@ export default {
                 });
         },
         stop: function (val) {
+            clearInterval(this.frontInterval)
             this.loadingNodes = true;
             let reqData = {
                 nodeId: val.nodeId
             }
             stopNode(reqData).then(res => {
-                this.loadingNodes = false;
+                // this.loadingNodes = false;
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -520,6 +482,7 @@ export default {
                     })
                     this.getData()
                 } else {
+                    this.getData()
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -528,6 +491,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.getData()
                     this.loadingNodes = false;
                     this.$message({
                         message: this.$t('text.systemError'),
@@ -557,10 +521,7 @@ export default {
                             duration: 2000
                         });
                         this.$router.push({
-                            path: "/node",
-                            query: {
-                                type: "chain"
-                            }
+                            path: "/node/chain",
                         })
                         this.configData = null;
                         this.loadingNodes = false;
@@ -596,8 +557,42 @@ export default {
             this.getData();
         },
         deleted: function (val) {
-            this.nodeData = val;
-            this.deleteNodeShow = true
+            this.$confirm(this.$t("text.confirmDelete"))
+                .then(_ => {
+                    this.loadingNodes = true;
+                    this.detetedNode(val)
+                })
+        },
+        detetedNode: function (val) {
+            let reqData = {
+                nodeId: val.nodeId,
+            }
+            clearInterval(this.frontInterval);
+            deleteNode(reqData).then(res => {
+                if (res.data.code === 0) {
+                    this.$message({
+                        type: "success",
+                        message: this.$t("nodes.dleteNodeSuccess")
+                    })
+                    this.getData()
+                } else {
+                    this.getData()
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+                .catch(err => {
+                    this.getData()
+                    this.loading = false;
+                    this.$message({
+                        message: this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
         },
         deleteNodeClose: function () {
             this.deleteNodeShow = false;
@@ -651,7 +646,6 @@ export default {
                         }
                         this.total = res.data.totalCount;
                         this.frontData = res.data.data || [];
-                        this.loadingNodes = false;
                         if (this.frontData.length == 0) {
                             this.deployShow = true
                         } else {
@@ -702,6 +696,7 @@ export default {
                         }
                     }
                 } else {
+                    clearInterval(this.frontInterval);
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
@@ -709,6 +704,7 @@ export default {
                     });
                 }
             }).catch(err => {
+                clearInterval(this.frontInterval);
                 this.$message({
                     message: this.$t('text.systemError'),
                     type: "error",
@@ -830,10 +826,7 @@ export default {
         },
         createFront() {
             this.$router.push({
-                path: "/node",
-                query: {
-                    type: "node"
-                }
+                path: `/node/node`,
             })
         },
         deleteNodes(val, type) {
@@ -854,32 +847,7 @@ export default {
             if (item.nodeType === 2) return;
             this.$router.push({ path: 'hostDetail', query: { 'nodeIp': item.nodeIp, 'nodeId': item.nodeId } });
         },
-        deletedFront(val) {
-            this.$confirm(this.$t("text.confirmDelete"))
-                .then(_ => {
-                    deleteFront(val.frontId).then(res => {
-                        if (res.data.code === 0) {
-                            // Bus.$emit("deleteFront")
-                            this.getFrontTable();
-                            this.getNodeTable()
-                        } else {
-                            this.$message({
-                                message: this.$chooseLang(res.data.code),
-                                type: "error",
-                                duration: 2000
-                            });
-                        }
-                    }).catch(err => {
-                        this.$message({
-                            message: this.$t('text.systemError'),
-                            type: "error",
-                            duration: 2000
-                        });
-                    })
-                }).catch(_ => {
 
-                })
-        },
         getNodeTable() {
             this.loadingNodes = true;
             let groupId = localStorage.getItem("groupId");
@@ -897,7 +865,7 @@ export default {
                 };
             this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
                 .then(this.$axios.spread((acct, perms) => {
-                    this.loadingNodes = false;
+                    // this.loadingNodes = false;
                     if (acct.data.code === 0 && perms.data.code === 0) {
                         var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
                         var nodesStatusIdList = nodesStatusList.map(item => {

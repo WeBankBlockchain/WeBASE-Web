@@ -34,10 +34,7 @@ export default {
                         this.$router.push("/newNode")
                     } else {
                         this.$router.push({
-                            path: "/node",
-                            query: {
-                                type: "chain"
-                            }
+                            path: "/node/chain",
                         })
                     }
                 } else {

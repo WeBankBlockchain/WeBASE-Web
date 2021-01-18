@@ -97,7 +97,7 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin"  || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -125,9 +125,9 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize,
             }
-            if(this.cnsForm.contractVersion){
+            if (this.cnsForm.contractVersion) {
                 reqData.contractNameAndVersion = `${this.cnsForm.contractName}:${this.cnsForm.contractVersion}`
-            }else {
+            } else {
                 reqData.contractNameAndVersion = `${this.cnsForm.contractName}`
             }
             queryCnsList(reqData)
@@ -200,5 +200,4 @@ export default {
 .search-table-content >>> th {
     background: #fafafa;
 }
-
 </style>

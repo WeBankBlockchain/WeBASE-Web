@@ -176,7 +176,7 @@ export default {
         nodeCount: "The number of nodes must be greater than or equal to two.",
         checkSuccess: "Check Successful",
         checkFail: "Check failed",
-        initializeSuccess: "Initialization successful",
+        initializeSuccess: "Initialization start",
         initializeFail: "Initialization failed",
         chainConfigSuccess: "Chain configured successfully",
         addNodeConfigSuccess: "New node configured successfully",
@@ -220,7 +220,12 @@ export default {
         leavePageInfo: "Leaving this page will stop the process of adding new chain/nodes. Confirm to leave this page?",
         laodngCheck: "Checking, please wait...",
         loadingInit: "Initializing, please wait...",
-        loadingDeploy: "Deploying, please wait..."
+        loadingDeploy: "Deploying, please wait...",
+        loadingInfo: "Chain starting, this process takes about a few minutes,please wait...",
+        ruleAddUser: "Please add a new private key user",
+        loading: "loading...",
+        clearNode: "Clear form",
+        clearNodeInfo: "Clear form, please confirm?"
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -885,5 +890,17 @@ export default {
         drag: "Drag the file here, Or",
         upload: " click upload",
         uploadNumLimit: "Only one file can be uploaded",
+    },
+    progress: {
+        0: 'Waiting to start',
+        1: 'Checking host free memory and dependencies',
+        2: 'Checking docker service active',
+        3: 'Checking port whether in use',
+        4: 'Installing host dependencies',
+        5: 'Initializing and load Docker image',
+        6: 'Generating chain certificates and config files',
+        7: 'Initializing db data of chain and front',
+        8: 'SCP config files to host',
+        9: 'Configure complete, starting...'
     }
 }
