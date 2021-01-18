@@ -26,11 +26,11 @@
                 </div>
         </div> -->
         <div class="module-wrapper">
-            <div class="search-part" style="padding-top: 20px;">
-                <div class="search-part-left" v-if='!disabled'>
-                    <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 2)" @click="reset">{{$t('text.reset')}}</el-button>
+            <div class="search-part" style="padding-top: 20px;" v-if='!disabled'>
+                <div class="search-part-left">
+                    <!-- <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button> -->
+                    <el-button type="primary" class="search-part-left-btn" :disabled="!(configData && configData.chainStatus == 3)" @click="createFront">{{$t('text.addNode')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" :disabled='!(configData && (configData.chainStatus == 3 || configData.chainStatus == 2))' @click="reset">{{$t('text.reset')}}</el-button>
                 </div>
             </div>
             <div class="search-table">
@@ -373,9 +373,11 @@ export default {
             if (this.frontInterval) {
                 clearInterval(this.frontInterval)
             }
-            this.getConfigList()
+            this.getFrontStatus()
+            // this.getConfigList()
             this.frontInterval = setInterval(() => {
-                this.getConfigList();
+                this.getFrontStatus()
+                // this.getConfigList();
                 this.number++
                 if (this.number == 400) {
                     clearInterval(this.frontInterval);
@@ -395,6 +397,12 @@ export default {
                     type: "error",
                     duration: 2000
                 });
+            })
+        },
+        // 更新front状态  定时器中需要最先执行
+        getFrontStatus() {
+            getFrontStatus().then(() => {
+                this.getConfigList()
             })
         },
         getConfigList: function () {
@@ -440,6 +448,7 @@ export default {
             let reqData = {
                 nodeId: val.nodeId
             }
+            this.loadingTxt = this.$t("text.startingInfo")
             startNode(reqData).then(res => {
                 // this.loadingNodes = false;
                 if (res.data.code === 0) {
@@ -474,6 +483,7 @@ export default {
             let reqData = {
                 nodeId: val.nodeId
             }
+            this.loadingTxt = this.$t("text.stopingInfo")
             stopNode(reqData).then(res => {
                 // this.loadingNodes = false;
                 if (res.data.code === 0) {
@@ -514,6 +524,7 @@ export default {
                 clearInterval(this.frontInterval);
                 this.loadingNodes = true;
                 this.loading = true;
+                this.loadingTxt = this.$t("text.resetingInfo")
                 deleteChain().then(res => {
                     if (res.data.code === 0) {
                         this.$message({
@@ -570,6 +581,7 @@ export default {
                 nodeId: val.nodeId,
             }
             clearInterval(this.frontInterval);
+            this.loadingTxt = this.$t("text.deletingingInfo")
             deleteNode(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.$message({
@@ -624,7 +636,6 @@ export default {
             getFronts(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
-                        this.getFrontStatus()
                         let num = 0;
                         let versionKey;
                         for (let i = 0; i < res.data.data.length; i++) {
@@ -680,11 +691,7 @@ export default {
 
                 });
         },
-        // 更新front状态
-        getFrontStatus() {
-            getFrontStatus().then(() => {
-            })
-        },
+
         getConsensus: function () {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),

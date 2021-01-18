@@ -111,8 +111,8 @@ export default {
         agreeNodeBtn: "已添加为共识/观察节点，继续",
         addNode: "新增节点",
         upgradeNode: "升级节点",
-        reset: "重置",
-        resetSuccess: "重置成功",
+        reset: "删除链",
+        resetSuccess: "删除成功",
         deploying: "部署中",
         deployFail: "部署失败",
         restarting: "重启中",
@@ -222,11 +222,15 @@ export default {
         laodngCheck: "检测中，请等待...",
         loadingInit: "初始化中，请等待...",
         loadingDeploy: "部署中，请等待...",
-        loadingInfo: "链启动中，此过程大约需要几分钟...",
+        loadingInfo: "链启动中，大约需要几分钟...",
         ruleAddUser: "请新增私钥用户",
         loading: "加载中...",
         clearNode: "清空表单",
-        clearNodeInfo: "清空表单，请确认？"
+        clearNodeInfo: "清空表单，请确认？",
+        startingInfo: "节点启动中，大约需要30秒...",
+        stopingInfo: "节点停止中，大约需要30秒...",
+        resetingInfo: "链删除中，请等待...",
+        deletingingInfo: "节点删除中,请等待..."
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -573,6 +577,7 @@ export default {
         validatorPrivateKey: "请输入私钥",
         validatorPrivateKey1: "请输入十六进制",
         importType: "导入类型",
+        importFileValidator: '请上传文件'
     },
     system: {
         chainManager: "链管理权限",

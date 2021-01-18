@@ -435,8 +435,8 @@ let errCode = {
         zh: 'CNS注册失败'
     },
     "201224": {
-        en: "contract version not exists",
-        zh: '合约版本不存在'
+        en: "Version not exists",
+        zh: '版本不存在'
     },
     "201225": {
         en: "CNS name cannot be empty",
@@ -1363,6 +1363,10 @@ let errCode = {
     "202494": {
         "en": "Check host port is in use, please check host remark.",
         "zh": "检测到接口已使用，请查看操作日志。"
+    },
+    "202495": {
+        "en": "Host already exist",
+        "zh": "主机已存在"
     },
     "202496": {
         "en": "Host root dir access denied.",

@@ -320,6 +320,14 @@
 .el-button--text.is-active, .el-button--text:active, .el-button--text:focus, .el-button--text:hover {
     color: #00c1d4;
 }
+/* 按钮禁止点击效果*/
+.el-button.is-disabled{
+    cursor: not-allowed;
+    background-image: none;
+    color: #bcbec2 !important;
+    background-color: #f4f4f5 !important;
+    border-color: #e9e9eb !important;
+}
 
 /* element-ui input*/
 
