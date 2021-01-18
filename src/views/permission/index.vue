@@ -239,11 +239,11 @@ export default {
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserData()
             this.queryGetPermission();//链管理列表
         }
-        
+
     },
 
     methods: {
@@ -292,7 +292,7 @@ export default {
                     this.loading = false;
                     this.preRivateKeyList = []
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -323,7 +323,7 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
@@ -347,7 +347,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -412,7 +412,7 @@ export default {
             }).catch(err => {
                 this.loading = false;
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -462,7 +462,7 @@ export default {
                     this.loading = false;
                     this.getPermissionInfo()
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

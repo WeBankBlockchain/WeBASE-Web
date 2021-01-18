@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { addDevOps, getUserList, deleteDevOps,committeeList } from "@/util/api";
+import { addDevOps, getUserList, deleteDevOps, committeeList } from "@/util/api";
 export default {
     name: 'developerDialog',
 
@@ -136,7 +136,7 @@ export default {
                 .catch(err => {
                     this.loading = false
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -169,7 +169,7 @@ export default {
                 .catch(err => {
                     this.loading = false
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -200,7 +200,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -221,7 +221,7 @@ export default {
                     var fullList = acct.data.data, userList = perms.data.data, userRivateKeyList = [];
                     userList.map(value => {
                         // if (value.hasPk === 1) {
-                            userRivateKeyList.push(value)
+                        userRivateKeyList.push(value)
                         // }
                     });
                     this.permissionAdminList = []

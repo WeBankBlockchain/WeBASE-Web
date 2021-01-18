@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="search-table">
-                <el-table  :data="transactionList" class="block-table-content" :row-key="getRowKeys" :expand-row-keys="expands" v-loading="loading" @row-click="clickTable" ref="refTable">
+                <el-table :data="transactionList" class="block-table-content" :row-key="getRowKeys" :expand-row-keys="expands" v-loading="loading" @row-click="clickTable" ref="refTable">
                     <el-table-column type="expand" align="center">
                         <template slot-scope="scope">
                             <v-transaction-detail :transHash="scope.row.transHash"></v-transaction-detail>
@@ -75,7 +75,7 @@ export default {
         "v-content-head": contentHead,
         "v-transaction-detail": transactionDetail
     },
-    data: function() {
+    data: function () {
         return {
             transactionList: [],
             expands: [],
@@ -88,12 +88,12 @@ export default {
             total: 0,
             loading: false,
             numberFormat: numberFormat,
-            getRowKeys: function(row) {
+            getRowKeys: function (row) {
                 return row.transHash;
             }
         };
     },
-    mounted: function() {
+    mounted: function () {
         if (this.$route.query.blockNumber) {
             this.searchKey.key = "blockNumber";
             this.searchKey.value = this.$route.query.blockNumber;
@@ -101,10 +101,10 @@ export default {
         this.getTransaction();
     },
     methods: {
-        changGroup(){
+        changGroup() {
             this.getTransaction();
         },
-        search: function() {
+        search: function () {
             if (
                 this.searchKey.key == "transactionHash" &&
                 this.searchKey.value.length != 66 &&
@@ -120,15 +120,15 @@ export default {
                 this.getTransaction();
             }
         },
-        getTransaction: function() {
+        getTransaction: function () {
             this.expands = [];
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    groupId: groupId,
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                groupId: groupId,
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {};
             if (this.searchKey.value) {
                 if (this.searchKey.value.length === 66) {
@@ -154,30 +154,30 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getTransaction();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getTransaction();
         },
-        clickTable: function(row,  column,$event) {
+        clickTable: function (row, column, $event) {
             let nodeName = $event.target.nodeName;
             if (nodeName === "I") {
                 return
             }
             this.$refs.refTable.toggleRowExpansion(row);
         },
-        clearText: function() {
+        clearText: function () {
             this.getTransaction();
         },
         copyPubilcKey(val) {
@@ -208,13 +208,13 @@ export default {
     padding-bottom: 16px;
     font-size: 12px;
 }
-.block-table-content>>>.el-table__expanded-cell {
+.block-table-content >>> .el-table__expanded-cell {
     padding: 12px 6px;
 }
-.block-table-content>>>.el-table__expand-icon > .el-icon {
+.block-table-content >>> .el-table__expand-icon > .el-icon {
     font-size: 14px;
 }
-.block-table-content>>>.el-table__row {
+.block-table-content >>> .el-table__row {
     cursor: pointer;
 }
 .search-part {
@@ -230,36 +230,36 @@ export default {
 .input-with-select {
     width: 610px;
 }
-.input-with-select>>>.el-input__inner {
+.input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: 1px solid #eaedf3;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-input-group__append {
+.input-with-select >>> .el-input-group__append {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-button {
+.input-with-select >>> .el-button {
     border: 1px solid #20d4d9;
     border-radius: inherit;
     background: #20d4d9;
     color: #fff;
 }
-.input-with-select>>>.el-input__inner {
+.input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: 1px solid #eaedf3;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-input--suffix > .el-input__inner {
+.input-with-select >>> .el-input--suffix > .el-input__inner {
     box-shadow: none;
 }
-.input-with-select>>>.el-input-group__prepend {
+.input-with-select >>> .el-input-group__prepend {
     border-left-color: #fff;
 }
-.input-with-select>>>.el-input-group__append {
+.input-with-select >>> .el-input-group__append {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);

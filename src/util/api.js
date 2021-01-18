@@ -1867,3 +1867,16 @@ export function initCheck(data) {
     })
 }
 
+/**
+ * @method  更新front状态
+ */
+export function getFrontStatus() {
+    return get({
+        url: `${url.ORG_LIST}/front/refresh/status`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+

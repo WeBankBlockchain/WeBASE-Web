@@ -1,56 +1,52 @@
 <template>
     <div>
         <el-dialog :title="$t('alarm.alarmCofig')" :visible.sync="dialogVisible" width="500px" :before-close="handleClose" :center="true">
-        <div>
-            <el-form :model="alarmForm" :rules="rules" ref="alarmForm" label-width="120px" class="demo-ruleForm">
-                <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">
-                    <el-input v-model="alarmForm.ruleName" style="width: 250px;"></el-input>
-                </el-form-item>
-                <el-form-item :label="$t('alarm.alarmContent')" prop="alertContent">
-                    <el-input v-model="alarmForm.alertContent" type="textarea" :rows="2" style="width: 250px;"></el-input>
-                    <el-tooltip class="item" effect="dark" :content="$t('alarm.alarmContentTip')" placement="top-start">
-                        <i class="el-icon-info"></i>
-                    </el-tooltip>
-                </el-form-item>
-                <el-form-item :label="$t('alarm.recipientEmail')">
-                    <el-select v-model="alarmForm.userList" multiple :placeholder="$t('alarm.pleaseSlect')" @change='userChange($event)' style="width: 250px;">
-                        <el-option
-                        v-for="item in accountList"
-                        :key="item.account"
-                        :label="item.account + '(' + item.email + ')'"
-                        :value="item.email">
-                        </el-option>
-                    </el-select>
-                    <el-tooltip class="item" effect="dark" :content="$t('alarm.recipientEmailTip')" placement="top-start">
-                        <i class="el-icon-info"></i>
-                    </el-tooltip>
-                </el-form-item>
-                <el-form-item :label="$t('alarm.sendTime')" prop="alertIntervalSeconds">
-                    <el-select v-model="alarmForm.alertIntervalSeconds" :placeholder="$t('alarm.pleaseSlect')" style="width: 250px;">
-                        <el-option :label="item.lable" :value="item.value" v-for='item in alertIntervalSecondsList' :key='item.value'></el-option>
-                    </el-select>
-                    <el-tooltip class="item" effect="dark" :content="$t('alarm.alertIntervalSecondsTip')" placement="top-start">
-                        <i class="el-icon-info"></i>
-                    </el-tooltip>
-                </el-form-item>
-            </el-form>
-        </div>
-        <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="handleClose">{{$t('alarm.cancel')}}</el-button>
-            <el-button type="primary"  @click="submitForm('alarmForm')">{{$t('alarm.sure')}}</el-button>
-        </div>
+            <div>
+                <el-form :model="alarmForm" :rules="rules" ref="alarmForm" label-width="120px" class="demo-ruleForm">
+                    <el-form-item :label="$t('alarm.alarmEmailTile')" prop="ruleName">
+                        <el-input v-model="alarmForm.ruleName" style="width: 250px;"></el-input>
+                    </el-form-item>
+                    <el-form-item :label="$t('alarm.alarmContent')" prop="alertContent">
+                        <el-input v-model="alarmForm.alertContent" type="textarea" :rows="2" style="width: 250px;"></el-input>
+                        <el-tooltip class="item" effect="dark" :content="$t('alarm.alarmContentTip')" placement="top-start">
+                            <i class="el-icon-info"></i>
+                        </el-tooltip>
+                    </el-form-item>
+                    <el-form-item :label="$t('alarm.recipientEmail')">
+                        <el-select v-model="alarmForm.userList" multiple :placeholder="$t('alarm.pleaseSlect')" @change='userChange($event)' style="width: 250px;">
+                            <el-option v-for="item in accountList" :key="item.account" :label="item.account + '(' + item.email + ')'" :value="item.email">
+                            </el-option>
+                        </el-select>
+                        <el-tooltip class="item" effect="dark" :content="$t('alarm.recipientEmailTip')" placement="top-start">
+                            <i class="el-icon-info"></i>
+                        </el-tooltip>
+                    </el-form-item>
+                    <el-form-item :label="$t('alarm.sendTime')" prop="alertIntervalSeconds">
+                        <el-select v-model="alarmForm.alertIntervalSeconds" :placeholder="$t('alarm.pleaseSlect')" style="width: 250px;">
+                            <el-option :label="item.lable" :value="item.value" v-for='item in alertIntervalSecondsList' :key='item.value'></el-option>
+                        </el-select>
+                        <el-tooltip class="item" effect="dark" :content="$t('alarm.alertIntervalSecondsTip')" placement="top-start">
+                            <i class="el-icon-info"></i>
+                        </el-tooltip>
+                    </el-form-item>
+                </el-form>
+            </div>
+            <div class="text-right sure-btn" style="margin-top:10px">
+                <el-button @click="handleClose">{{$t('alarm.cancel')}}</el-button>
+                <el-button type="primary" @click="submitForm('alarmForm')">{{$t('alarm.sure')}}</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
-import { changeAlarm,accountList } from "@/util/api"
+import { changeAlarm, accountList } from "@/util/api"
 import errcode from "@/util/errcode"
 import router from "@/router"
 export default {
     name: "emailAlarmTypeDetail",
-    props: ['show','data'],
-    data: function(){
+    props: ['show', 'data'],
+    data: function () {
         return {
             dialogVisible: this.show,
             alarmData: this.data,
@@ -93,8 +89,8 @@ export default {
         },
         rules() {
             let data = {
-               ruleName: [
-                   {
+                ruleName: [
+                    {
                         required: true,
                         message: this.$t('alarm.inputEmailTitle'),
                         trigger: "blur"
@@ -105,36 +101,36 @@ export default {
                         message: this.$t('alarm.longSize'),
                         trigger: "blur"
                     }
-               ],
-               alertContent: [
+                ],
+                alertContent: [
                     {
                         required: true,
                         message: this.$t('alarm.inputalarmContent'),
                         trigger: "blur"
                     },
-               ],
-               alertIntervalSeconds: [
+                ],
+                alertIntervalSeconds: [
                     {
                         required: true,
                         message: this.$t('alarm.selectIntervalSeconds'),
                         trigger: "blur"
-                    }, 
-               ]
+                    },
+                ]
             };
-            return data 
+            return data
         }
     },
-    mounted: function(){
-        if(this.alarmData.userList){
+    mounted: function () {
+        if (this.alarmData.userList) {
             this.alarmForm.userList = JSON.parse(this.alarmData.userList)
         }
         this.getAccountList();
     },
     methods: {
-        handleClose: function(){
+        handleClose: function () {
             this.$emit("close")
         },
-        submitForm: function(formName){
+        submitForm: function (formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.modifyAlarm()
@@ -144,22 +140,22 @@ export default {
                 }
             });
         },
-        userChange: function(val){
-            if(this.alarmForm.userList && this.alarmForm.userList.length){
-                if(!this.alarmForm.userList[this.alarmForm.userList.length-1]){
+        userChange: function (val) {
+            if (this.alarmForm.userList && this.alarmForm.userList.length) {
+                if (!this.alarmForm.userList[this.alarmForm.userList.length - 1]) {
                     this.$message({
-                            type: "error",
-                            message: this.$t('alarm.noEmail')
-                        });
-                        this.alarmForm.userList.splice(this.alarmForm.userList.length-1,1)
+                        type: "error",
+                        message: this.$t('alarm.noEmail')
+                    });
+                    this.alarmForm.userList.splice(this.alarmForm.userList.length - 1, 1)
                 }
             }
         },
         getAccountList() {
             let reqData = {
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {
                     account: ''
                 };
@@ -177,42 +173,42 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        modifyAlarm: function(){
+        modifyAlarm: function () {
             let data = {
                 ruleId: this.alarmData.ruleId,
                 alertIntervalSeconds: this.alarmForm.alertIntervalSeconds,
                 alertContent: this.alarmForm.alertContent,
                 ruleName: this.alarmForm.ruleName,
             }
-            if(this.alarmForm.userList && this.alarmForm.userList.length){
+            if (this.alarmForm.userList && this.alarmForm.userList.length) {
                 data.userList = JSON.stringify(this.alarmForm.userList)
-            }else{
+            } else {
                 data.userList = ""
             }
             changeAlarm(data).then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t('alarm.updateAlarmSuccess')
                     });
                     this.handleClose();
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -223,5 +219,4 @@ export default {
 </script>
 
 <style>
-
 </style>

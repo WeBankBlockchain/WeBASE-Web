@@ -156,20 +156,20 @@ export default {
                 description: this.description,
 
             }
-            createGroup(data,"").then(res => {
+            createGroup(data, "").then(res => {
                 this.loading = false;
                 if (res.data.code === 0) {
                     let array = res.data.data
                     array.forEach(item => {
-                        if(item.code!=0){
+                        if (item.code != 0) {
                             this.$message({
                                 type: 'error',
-                                message: this.$t('nodes.nodeFront')+`${item.frontId}`+this.$t('nodes.failCreatGroup'),
+                                message: this.$t('nodes.nodeFront') + `${item.frontId}` + this.$t('nodes.failCreatGroup'),
                                 duration: 4500
                             })
                         }
                     });
-                    this.$nextTick(_=>{
+                    this.$nextTick(_ => {
                         callback()
                     })
                 } else {
@@ -182,7 +182,7 @@ export default {
                 this.loading = false;
                 this.$message({
                     type: "error",
-                    message: this.$t('text.systemError')
+                    message: err.data || this.$t('text.systemError')
                 })
             })
         },
@@ -196,10 +196,10 @@ export default {
                 if (res.data.code === 0) {
                     let array = res.data.data
                     array.forEach(item => {
-                        if(item.code!=0){
+                        if (item.code != 0) {
                             this.$message({
                                 type: 'error',
-                                message: this.$t('nodes.nodeFront')+`${item.frontId}`+this.$t('nodes.failStartGroup'),
+                                message: this.$t('nodes.nodeFront') + `${item.frontId}` + this.$t('nodes.failStartGroup'),
                                 duration: 4500
                             })
                         }
@@ -215,7 +215,7 @@ export default {
                 this.loading = false;
                 this.$message({
                     type: "error",
-                    message: this.$t('text.systemError')
+                    message: err.data || this.$t('text.systemError')
                 })
             })
         },

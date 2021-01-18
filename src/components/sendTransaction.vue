@@ -36,7 +36,7 @@
         <div class="send-item" v-if="isCNS">
             <span class="send-item-title"></span>
             <el-input v-model.trim="cnsVersion" style="width: 260px;margin-bottom:4px;" :placeholder="$t('dialog.cnsVersion')">
-                 <template slot="prepend">
+                <template slot="prepend">
                     <span class="">version</span>
                 </template>
             </el-input>
@@ -219,7 +219,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -324,7 +324,7 @@ export default {
                     this.buttonClick = false;
                     this.close();
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

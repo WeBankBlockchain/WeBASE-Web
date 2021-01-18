@@ -260,7 +260,7 @@ export default {
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -326,7 +326,7 @@ export default {
             })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -462,7 +462,7 @@ export default {
                             this.getHostList()
                             this.checkShow = true
                             this.$message({
-                                message: this.$t('text.systemError'),
+                                message: err.data || this.$t('text.systemError'),
                                 type: "error",
                                 duration: 2000
                             });
@@ -485,7 +485,7 @@ export default {
                     this.getHostList()
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
 
@@ -526,7 +526,7 @@ export default {
                     this.getHostList()
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
@@ -580,7 +580,7 @@ export default {
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
-                        message: this.$t('text.initializeSuccess'),
+                        message: this.$t('text.initializeStart'),
                     })
                     this.getHostList()
                     this.initTimer()
@@ -604,7 +604,7 @@ export default {
                     this.loading3 = false
                     this.loading1 = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -657,7 +657,7 @@ export default {
                     this.loading1 = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
@@ -730,7 +730,7 @@ export default {
                     this.loading2 = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
@@ -769,7 +769,7 @@ export default {
                     this.loading2 = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
@@ -788,7 +788,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
@@ -831,7 +831,7 @@ export default {
             })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -883,7 +883,7 @@ export default {
                 })
                     .catch(err => {
                         this.$message({
-                            message: this.$t('text.systemError'),
+                            message: err.data || this.$t('text.systemError'),
                             type: "error",
                             duration: 2000
                         });

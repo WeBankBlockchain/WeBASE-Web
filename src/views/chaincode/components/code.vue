@@ -132,7 +132,7 @@
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
         <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
-            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose" ></mgmt-cns>
+            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
         </el-dialog>
     </div>
 </template>
@@ -223,7 +223,7 @@ export default {
             sendConstant: null,
             reqVersion: "",
             cnsName: "",
-            mgmtCnsVisible:false,
+            mgmtCnsVisible: false,
             mgmtCnsItem: {},
             activeNames: ['0']
         };
@@ -268,7 +268,7 @@ export default {
             this.version = data.contractVersion;
             this.complieAbiTextHeight = false;
             this.complieBinTextHeight = false;
-            if(this.data.contractAddress){
+            if (this.data.contractAddress) {
                 this.queryFindCnsInfo()
             }
 
@@ -759,7 +759,7 @@ export default {
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -828,7 +828,7 @@ export default {
                     this.status = 3;
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -950,7 +950,7 @@ export default {
                         if (data.data) {
                             this.reqVersion = data.data.version;
                             this.cnsName = data.data.cnsName;
-                        }else {
+                        } else {
                             this.reqVersion = "";
                             this.cnsName = "";
                         }
@@ -962,15 +962,15 @@ export default {
                     }
                 })
         },
-        handleRegisterCns(){
+        handleRegisterCns() {
             this.mgmtCnsItem = this.data;
             this.mgmtCnsVisible = true;
         },
-        mgmtCnsResultSuccess(){
+        mgmtCnsResultSuccess() {
             this.queryFindCnsInfo()
             this.mgmtCnsVisible = false;
         },
-        mgmtCnsResultClose(){
+        mgmtCnsResultClose() {
             this.mgmtCnsVisible = false;
         },
         handleChange(val) {
@@ -1173,10 +1173,10 @@ export default {
     font-size: 12px;
     font-weight: none;
 }
-.error-item >>> .el-collapse-item__content{
+.error-item >>> .el-collapse-item__content {
     /* background-color: #fff; */
 }
-.error-item >>>.el-collapse-item__wrap{
+.error-item >>> .el-collapse-item__wrap {
     border-bottom: 1px solid #fff;
 }
 </style>

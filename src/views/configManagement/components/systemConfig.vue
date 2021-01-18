@@ -124,7 +124,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -140,25 +140,25 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];
-                        if(res.data.data.length == 0){
+                        if (res.data.data.length == 0) {
                             this.$message({
                                 type: "info",
                                 message: this.$t("contracts.addPrivateKeyInfo")
-                            }); 
+                            });
                         }
                         res.data.data.forEach(value => {
                             if (value.hasPk === 1) {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                        if (this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -169,7 +169,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

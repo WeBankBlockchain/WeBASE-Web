@@ -137,7 +137,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -153,7 +153,7 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
@@ -168,7 +168,7 @@ export default {
                         if (!this.adminRivateKeyList.length) {
                             this.$message({
                                 type: "info",
-                                message: this.$t('nodes.groupId') +' ' + this.itemNodeData.groupId +', ' + this.$t('contracts.addPrivateKeyInfo'),
+                                message: this.$t('nodes.groupId') + ' ' + this.itemNodeData.groupId + ', ' + this.$t('contracts.addPrivateKeyInfo'),
                             });
                             return
                         }
@@ -183,7 +183,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

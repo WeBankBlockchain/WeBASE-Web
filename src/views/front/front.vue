@@ -138,7 +138,8 @@ import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
-    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode
+    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
+    getFrontStatus
 } from "@/util/api";
 import { format, unique } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -341,7 +342,7 @@ export default {
             })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -390,7 +391,7 @@ export default {
             }).catch(err => {
 
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -426,7 +427,7 @@ export default {
             }).catch(err => {
                 clearInterval(this.frontInterval)
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -460,7 +461,7 @@ export default {
                     this.getData()
                     this.loadingNodes = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -494,7 +495,7 @@ export default {
                     this.getData()
                     this.loadingNodes = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -523,6 +524,7 @@ export default {
                         this.$router.push({
                             path: "/node/chain",
                         })
+                        localStorage.setItem("groupId", null)
                         this.configData = null;
                         this.loadingNodes = false;
                         this.loading = false;
@@ -536,7 +538,7 @@ export default {
                     }
                 }).catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -588,7 +590,7 @@ export default {
                     this.getData()
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -622,6 +624,7 @@ export default {
             getFronts(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        this.getFrontStatus()
                         let num = 0;
                         let versionKey;
                         for (let i = 0; i < res.data.data.length; i++) {
@@ -670,12 +673,17 @@ export default {
                 .catch(err => {
                     this.loadingNodes = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
 
                 });
+        },
+        // 更新front状态
+        getFrontStatus() {
+            getFrontStatus().then(() => {
+            })
         },
         getConsensus: function () {
             let reqData = {
@@ -706,7 +714,7 @@ export default {
             }).catch(err => {
                 clearInterval(this.frontInterval);
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -741,7 +749,7 @@ export default {
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });

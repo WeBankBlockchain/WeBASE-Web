@@ -30,8 +30,7 @@
                     </div>
                     <div class="text-left-label">
                         <span class="text-left-label-title">{{this.$t('transaction.time')}}：</span>
-                        <el-date-picker @change="changeDate" v-model="transDate" type="datetimerange" :picker-options="transPickerOptions" 
-                        :range-separator="$t('system.to')" :start-placeholder="$t('transaction.startTime')" :end-placeholder="$t('transaction.endTime')" align="left" value-format="yyyy-MM-dd HH:mm:ss" class="date-select-32">
+                        <el-date-picker @change="changeDate" v-model="transDate" type="datetimerange" :picker-options="transPickerOptions" :range-separator="$t('system.to')" :start-placeholder="$t('transaction.startTime')" :end-placeholder="$t('transaction.endTime')" align="left" value-format="yyyy-MM-dd HH:mm:ss" class="date-select-32">
                         </el-date-picker>
                     </div>
                     <div class="text-left-label1">
@@ -48,7 +47,7 @@
             </div>
 
             <div class="chart" ref="chart">
-                <v-chart ref="linechart" :id="'transId'" v-if="chartStatistics.show" :chartStatistics="chartStatistics" v-bind:reload="reloadNum"   v-loading="loading"></v-chart>
+                <v-chart ref="linechart" :id="'transId'" v-if="chartStatistics.show" :chartStatistics="chartStatistics" v-bind:reload="reloadNum" v-loading="loading"></v-chart>
             </div>
         </div>
     </div>
@@ -141,15 +140,15 @@ export default {
         this.$nextTick(() => {
             this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
             this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
-            if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+            if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
                 this.getMonitorTransactionInfo();
                 this.getMonitorUserList();
             }
-            
+
         });
     },
     methods: {
-        changGroup(val){
+        changGroup(val) {
             this.groupId = val
             this.userName = ""
             this.$nextTick(() => {
@@ -162,8 +161,8 @@ export default {
         getMonitorTransactionInfo() {
             this.loading = true
             let reqData = {
-                    groupId: this.groupId
-                },
+                groupId: this.groupId
+            },
                 reqQurey = {};
             reqQurey = {
                 userName: this.userName,
@@ -189,11 +188,11 @@ export default {
                             this.$set(this.chartStatistics, "totalCount", 0);
                         } else {
                             var startDate = format(
-                                    new Date(
-                                        transInfoList[0]["time"]
-                                    ).getTime(),
-                                    "yyyy-MM-dd"
-                                ),
+                                new Date(
+                                    transInfoList[0]["time"]
+                                ).getTime(),
+                                "yyyy-MM-dd"
+                            ),
                                 endDate = format(
                                     new Date(
                                         transInfoList[len - 1]["time"]
@@ -257,11 +256,11 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getMonitorUserList() {
@@ -278,22 +277,22 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        
+
                     }
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getMonitorUserInterfaceList(val) {
             let reqData = {
-                    groupId: this.groupId
-                },
+                groupId: this.groupId
+            },
                 reqQurey = {};
             reqQurey = {
                 userName: val
@@ -312,11 +311,11 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         changeUserName(val) {

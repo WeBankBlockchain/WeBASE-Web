@@ -163,7 +163,7 @@ export default {
             })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -172,7 +172,7 @@ export default {
         add: function () {
             let value = {
                 ip: "",
-                name: "",//»ú¹¹
+                name: "",//ï¿½ï¿½ï¿½ï¿½
                 group: 1,
                 number: 1,
                 key: Date.now()
@@ -250,7 +250,7 @@ export default {
                     this.loading = false;
                     this.disabled = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

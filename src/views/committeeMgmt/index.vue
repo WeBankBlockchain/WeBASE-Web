@@ -115,7 +115,7 @@
                         <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="450px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold"> 
+                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="450px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -467,7 +467,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -516,7 +516,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -567,7 +567,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -609,7 +609,7 @@ export default {
                         .catch(err => {
                             this.btnLoading = false
                             this.$message({
-                                message: this.$t('text.systemError'),
+                                message: err.data || this.$t('text.systemError'),
                                 type: "error",
                                 duration: 2000
                             });
@@ -652,7 +652,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -696,7 +696,7 @@ export default {
                         .catch(err => {
                             this.btnLoading = false
                             this.$message({
-                                message: this.$t('text.systemError'),
+                                message: err.data || this.$t('text.systemError'),
                                 type: "error",
                                 duration: 2000
                             });
@@ -729,7 +729,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -763,7 +763,7 @@ export default {
                         .catch(err => {
                             this.btnLoading = false
                             this.$message({
-                                message: this.$t('text.systemError'),
+                                message: err.data || this.$t('text.systemError'),
                                 type: "error",
                                 duration: 2000
                             });
@@ -808,7 +808,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -873,7 +873,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
