@@ -1,10 +1,9 @@
 <template>
     <div>
-        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="dialogVisible" :before-close="modelClose" 
-         class="dialog-wrapper" width="450px" :center="true" :show-close='true'>
+        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="450px" :center="true" :show-close='true'>
             <div>
-                <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="100px" class="demo-ruleForm">
-                    <el-form-item  label='IP' prop='ip'>
+                <el-form :model="nodeFrom" :rules='rules' ref="nodeFrom" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label='IP' prop='ip'>
                         <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 140px;" maxlength="16"></el-input>
                     </el-form-item>
                     <el-form-item :label='$t("nodes.agency")'>
@@ -15,7 +14,7 @@
                     </el-form-item>
                 </el-form>
                 <div class="text-right sure-btn" style="margin-top:10px">
-                    <el-button  @click="modelClose">{{this.$t("text.cancel")}}</el-button>
+                    <el-button @click="modelClose">{{this.$t("text.cancel")}}</el-button>
                     <el-button type="primary" :loading="loading" @click="submit('nodeFrom')">{{this.$t("text.sure")}}</el-button>
                 </div>
             </div>
@@ -29,17 +28,17 @@ export default {
     name: "addNode",
     props: ['show'],
     computed: {
-        rules () {
+        rules() {
             let data = {
                 ip: [
-                    {required: true, message: this.$t('rule.ipName'), trigger: 'blur'},
-                    {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/,  message: this.$t('nodes.ipError'), trigger: 'blur'}
+                    { required: true, message: this.$t('rule.ipName'), trigger: 'blur' },
+                    { pattern: /((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: this.$t('nodes.ipError'), trigger: 'blur' }
                 ]
             }
             return data
         }
     },
-    data () {
+    data() {
         return {
             nodeFrom: {
                 ip: "",
@@ -51,7 +50,7 @@ export default {
         }
     },
     methods: {
-        modelClose: function() {
+        modelClose: function () {
             this.$emit("close")
         },
         submit: function (formName) {
@@ -64,35 +63,35 @@ export default {
                 }
             })
         },
-        add: function() {
+        add: function () {
             let reqData = {
                 IP: this.nodeFrom.ip,
                 agencyName: this.nodeFrom.agencyName,
                 num: this.nodeFrom.num
             }
             newNode(reqData).then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t('nodes.addNodeSuccess')
                     })
                     this.modelClose()
-                }else{
+                } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            })
-            .catch(err => {
-                    this.loading = false;
-                    this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-                    
+                }
+            })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
                 });
         }
     }
@@ -100,5 +99,4 @@ export default {
 </script>
 
 <style>
-
 </style>

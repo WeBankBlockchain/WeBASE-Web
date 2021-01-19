@@ -53,7 +53,7 @@ import errcode from "@/util/errcode";
 
 export default {
     name: "AddUser",
-    data: function() {
+    data: function () {
         return {
             loading: false,
             pubKey: false,
@@ -95,7 +95,7 @@ export default {
         }
     },
     methods: {
-        changeKey: function() {
+        changeKey: function () {
             let type = this.timeGranularity
             this.userForm = {
                 name: "",
@@ -114,7 +114,7 @@ export default {
                     break;
             }
         },
-        modelClose: function() {
+        modelClose: function () {
             this.userForm = Object.assign({
                 name: "",
                 publicKey: "",
@@ -124,7 +124,7 @@ export default {
             this.loading = false;
             this.$store.state.creatUserVisible = false;
         },
-        submit: function(formName) {
+        submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.$confirm(this.$t('text.confirmSubmit'), {
@@ -146,7 +146,7 @@ export default {
                 }
             });
         },
-        addUser: function() {
+        addUser: function () {
             let reqData = {
                 groupId: this.groupId,
                 userName: this.userForm.name,
@@ -175,7 +175,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -212,7 +212,7 @@ export default {
                 .catch(err => {
                     this.modelClose();
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

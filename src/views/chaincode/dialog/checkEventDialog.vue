@@ -24,7 +24,7 @@
                 <el-tooltip class="item" effect="dark" :content="$t('contracts.eventParam')" placement="right">
                     <i class="el-icon-info"></i>
                 </el-tooltip>
-                <li v-for="item in inputList" class="event-info">
+                <li v-for="(item,index) in inputList" class="event-info" :key='index'>
                     <div v-if="item.indexed">
                         <div>{{item.name}}:</div>
                         <el-input v-model="item.value" :placeholder="item.type" style="width: 240px;" @input="e => (item.msgObj = isType(e,item.type))"></el-input>
@@ -197,7 +197,7 @@ export default {
                 }
             })
             indexedList.forEach((item, index) => {
-                topicObj[`indexed${index+1}`] = {
+                topicObj[`indexed${index + 1}`] = {
                     type: item.type,
                     value: item.value
                 }
@@ -225,7 +225,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },

@@ -15,6 +15,7 @@
  */
 import Axios from 'axios'
 import router from '../router'
+import Cookies from 'js-cookie'
 let axiosIns = Axios.create({
     timeout: 60 * 1000
 });
@@ -43,7 +44,13 @@ axiosIns.interceptors.response.use(
         return response;
     },
     error => {
-        // if (error.response) {
+        if (error.message.includes('timeout')) {
+            if (localStorage.getItem('lang') === "en") {
+                error.data = 'Timeout'
+            } else {
+                error.data = '请求超时'
+            }
+        }
         //     switch (error.response.status) {
         //         case 401:
         //             store.commit(types.LOGOUT);

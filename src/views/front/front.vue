@@ -26,11 +26,11 @@
                 </div>
         </div> -->
         <div class="module-wrapper">
-            <div class="search-part" style="padding-top: 20px;">
-                <div class="search-part-left" v-if='!disabled'>
-                    <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" v-if="configData && configData.chainStatus == 3" @click="createFront">{{$t('text.addNode')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" v-if="configData && (configData.chainStatus == 3 || configData.chainStatus == 2)" @click="reset">{{$t('text.reset')}}</el-button>
+            <div class="search-part" style="padding-top: 20px;" v-if='!disabled'>
+                <div class="search-part-left">
+                    <!-- <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button> -->
+                    <el-button type="primary" class="search-part-left-btn" :disabled="!(configData && configData.chainStatus == 3)" @click="createFront">{{$t('text.addNode')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" :disabled='!(configData && (configData.chainStatus == 3 || configData.chainStatus == 2))' @click="reset">{{$t('text.reset')}}</el-button>
                 </div>
             </div>
             <div class="search-table">
@@ -138,7 +138,8 @@ import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
-    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode
+    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
+    getFrontStatus
 } from "@/util/api";
 import { format, unique } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -341,7 +342,7 @@ export default {
             })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -372,9 +373,11 @@ export default {
             if (this.frontInterval) {
                 clearInterval(this.frontInterval)
             }
-            this.getConfigList()
+            this.getFrontStatus()
+            // this.getConfigList()
             this.frontInterval = setInterval(() => {
-                this.getConfigList();
+                this.getFrontStatus()
+                // this.getConfigList();
                 this.number++
                 if (this.number == 400) {
                     clearInterval(this.frontInterval);
@@ -390,10 +393,16 @@ export default {
             }).catch(err => {
 
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
+            })
+        },
+        // 更新front状态  定时器中需要最先执行
+        getFrontStatus() {
+            getFrontStatus().then(() => {
+                this.getConfigList()
             })
         },
         getConfigList: function () {
@@ -426,7 +435,7 @@ export default {
             }).catch(err => {
                 clearInterval(this.frontInterval)
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -439,6 +448,7 @@ export default {
             let reqData = {
                 nodeId: val.nodeId
             }
+            this.loadingTxt = this.$t("text.startingInfo")
             startNode(reqData).then(res => {
                 // this.loadingNodes = false;
                 if (res.data.code === 0) {
@@ -460,7 +470,7 @@ export default {
                     this.getData()
                     this.loadingNodes = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -473,6 +483,7 @@ export default {
             let reqData = {
                 nodeId: val.nodeId
             }
+            this.loadingTxt = this.$t("text.stopingInfo")
             stopNode(reqData).then(res => {
                 // this.loadingNodes = false;
                 if (res.data.code === 0) {
@@ -494,7 +505,7 @@ export default {
                     this.getData()
                     this.loadingNodes = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -513,6 +524,7 @@ export default {
                 clearInterval(this.frontInterval);
                 this.loadingNodes = true;
                 this.loading = true;
+                this.loadingTxt = this.$t("text.resetingInfo")
                 deleteChain().then(res => {
                     if (res.data.code === 0) {
                         this.$message({
@@ -523,6 +535,7 @@ export default {
                         this.$router.push({
                             path: "/node/chain",
                         })
+                        localStorage.setItem("groupId", null)
                         this.configData = null;
                         this.loadingNodes = false;
                         this.loading = false;
@@ -536,7 +549,7 @@ export default {
                     }
                 }).catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -568,6 +581,7 @@ export default {
                 nodeId: val.nodeId,
             }
             clearInterval(this.frontInterval);
+            this.loadingTxt = this.$t("text.deletingingInfo")
             deleteNode(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.$message({
@@ -588,7 +602,7 @@ export default {
                     this.getData()
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -670,13 +684,14 @@ export default {
                 .catch(err => {
                     this.loadingNodes = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
 
                 });
         },
+
         getConsensus: function () {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
@@ -706,7 +721,7 @@ export default {
             }).catch(err => {
                 clearInterval(this.frontInterval);
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -741,7 +756,7 @@ export default {
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });

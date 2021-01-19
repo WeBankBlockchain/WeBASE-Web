@@ -29,7 +29,7 @@
 
 <script>
 import { createGroup, crudGroup } from "@/util/api"
-import { isJson  } from "@/util/util";
+import { isJson } from "@/util/util";
 export default {
     name: 'nodeAddGroup',
 
@@ -48,16 +48,16 @@ export default {
     data() {
         let _this = this;
         let validateJSON = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error(_this.$t("rule.contractAbi")));
+            if (value === '') {
+                callback(new Error(_this.$t("rule.contractAbi")));
+            } else {
+                if (!isJson(value)) {
+                    callback(new Error(_this.$t("rule.correctJson")));
                 } else {
-                    if (!isJson(value)) {
-                        callback(new Error(_this.$t("rule.correctJson")));
-                    } else {
-                        callback()
-                    }
+                    callback()
                 }
             }
+        }
         return {
             ruleForm: {
                 groupTimestamp: this.itemGroupData.groupTimestamp,
@@ -154,7 +154,7 @@ export default {
                 this.loading = false;
                 this.$message({
                     type: "error",
-                    message: this.$t('text.systemError')
+                    message: err.data || this.$t('text.systemError')
                 })
             })
         },
@@ -177,11 +177,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -200,10 +200,10 @@ export default {
                     _this.ruleForm.groupTimestamp = JSON.parse(fileString).groupTimestamp
                     _this.ruleForm.nodeIdList = JSON.parse(fileString).nodeIdList
                 } catch (error) {
-                    console.log(error) 
+                    console.log(error)
                 }
-                
-                
+
+
             }
         },
     }
@@ -213,7 +213,6 @@ export default {
 
 <style scoped>
 .add-wrapper {
-
 }
 .tool-tip {
     position: absolute;

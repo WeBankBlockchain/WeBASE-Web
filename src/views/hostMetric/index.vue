@@ -31,20 +31,17 @@
             <div class="more-search-table" style="padding-top:10px;">
                 <div class="search-item">
                     <span>{{$t('monitor.contrastDate')}}</span>
-                    <el-date-picker v-model="currentDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" 
-                    :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
+                    <el-date-picker v-model="currentDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
                     <span>{{$t('monitor.contrastDate')}}</span>
-                    <el-date-picker v-model="contrastDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" 
-                    :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" class=" select-32" @change="changeContrastDate">
+                    <el-date-picker v-model="contrastDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" class=" select-32" @change="changeContrastDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
                     <span>{{$t('monitor.startEndTime')}}</span>
-                    <el-time-picker is-range v-model="startEndTime" :range-separator="$t('system.to')" :start-placeholder="$t('monitor.startTime')" 
-                    :end-placeholder="$t('monitor.endTime')" :placeholder="$t('monitor.timeRange')" class="time-select-32">
+                    <el-time-picker is-range v-model="startEndTime" :range-separator="$t('system.to')" :start-placeholder="$t('monitor.startTime')" :end-placeholder="$t('monitor.endTime')" :placeholder="$t('monitor.timeRange')" class="time-select-32">
                     </el-time-picker>
                 </div>
                 <div class="search-item">
@@ -75,7 +72,7 @@
 import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth, getFronts } from "@/util/api";
-import { format, numberFormat,formatData } from "@/util/util.js";
+import { format, numberFormat, formatData } from "@/util/util.js";
 import errcode from "@/util/errcode";
 import Bus from "@/bus"
 export default {
@@ -85,7 +82,7 @@ export default {
         "v-metric-chart": metricChart
     },
     watch: {
-        $route: function() {
+        $route: function () {
             this.nodeId = this.$root.$route.query.nodeId;
         }
     },
@@ -135,7 +132,7 @@ export default {
         Bus.$off("chooselanguage")
     },
     mounted() {
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getFrontTable();
         }
         Bus.$on("changeGroup", data => {
@@ -146,7 +143,7 @@ export default {
         })
     },
     methods: {
-        changGroup(){
+        changGroup() {
             this.getFrontTable()
         },
         changeNodes() {
@@ -156,7 +153,7 @@ export default {
             getFronts({})
                 .then(res => {
                     if (res.data.code === 0) {
-                        if(res.data.totalCount !=0) {
+                        if (res.data.totalCount != 0) {
                             this.nodesOptions = res.data.data.map(item => {
                                 return {
                                     value: item.frontId,
@@ -169,14 +166,14 @@ export default {
                                 this.nodeId = this.nodesOptions[0]["value"];
                                 this.confirmParam();
                             }
-                        }else {
+                        } else {
                             this.$message({
                                 message: this.$t('monitor.addFrontInfo'),
                                 type: "error",
                                 duration: 2500
                             })
                         }
-                        
+
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -187,10 +184,10 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                            message: this.$t('text.systemError'),
-                            type: "error",
-                            duration: 2000
-                        });
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
                 });
         },
         changeCurrentDate($event) {
@@ -199,7 +196,7 @@ export default {
                 new Date()
             ];
         },
-        changeContrastDate($event) {},
+        changeContrastDate($event) { },
         getChartData() {
             if (this.reloadNum === 1) {
                 this.loadingInit = true;
@@ -207,8 +204,8 @@ export default {
             this.loading = true;
             this.sureing = true;
             var reqData = {
-                    nodeId: this.nodeId
-                },
+                nodeId: this.nodeId
+            },
                 reqQurey = {};
             reqQurey = this.chartParam;
             metricInfo(reqData, reqQurey)
@@ -224,12 +221,12 @@ export default {
                         ) {
                             var timestampList =
                                 data[0]["data"]["lineDataList"][
-                                    "timestampList"
+                                "timestampList"
                                 ] || [];
                         } else {
                             var timestampList =
                                 data[0]["data"]["contrastDataList"][
-                                    "timestampList"
+                                "timestampList"
                                 ] || [];
                         }
                         this.metricData = data;
@@ -256,9 +253,9 @@ export default {
                                 item.metricUint = this.$t('monitor.bandwidth');
                                 item.metricU = "KB/s";
                             }
-                            if(this.chartParam.contrastBeginDate){
+                            if (this.chartParam.contrastBeginDate) {
                                 item.data.contrastDataList.contractDataShow = true
-                            }else{
+                            } else {
                                 item.data.contrastDataList.contractDataShow = false
                             }
                             item.data.contrastDataList.timestampList = timestampList;
@@ -276,7 +273,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -288,9 +285,9 @@ export default {
         },
         timeParam() {
             let initStartTime = format(
-                    new Date(this.startEndTime[0]).getTime(),
-                    "HH:mm:ss"
-                ),
+                new Date(this.startEndTime[0]).getTime(),
+                "HH:mm:ss"
+            ),
                 initEndTime = format(
                     new Date(this.startEndTime[1]).getTime(),
                     "HH:mm:ss"

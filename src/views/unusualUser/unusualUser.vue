@@ -135,7 +135,7 @@ export default {
         }
     },
     mounted() {
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualUserList();
         }
     },
@@ -176,7 +176,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

@@ -111,8 +111,8 @@ export default {
         agreeNodeBtn: "Added as consensus / observation node, continue",
         addNode: "New Node",
         upgradeNode: "Upgrade Node",
-        reset: "Reset",
-        resetSuccess: "Reset successful",
+        reset: "Delete chain",
+        resetSuccess: "Delete successful",
         deploying: "Deploying",
         deployFail: "Deploy failure",
         restarting: "Restarting",
@@ -176,7 +176,8 @@ export default {
         nodeCount: "The number of nodes must be greater than or equal to two.",
         checkSuccess: "Check Successful",
         checkFail: "Check failed",
-        initializeSuccess: "Initialization start",
+        initializeStart: "Initialization start",
+        initializeSuccess: "Initialization successful",
         initializeFail: "Initialization failed",
         chainConfigSuccess: "Chain configured successfully",
         addNodeConfigSuccess: "New node configured successfully",
@@ -225,7 +226,11 @@ export default {
         ruleAddUser: "Please add a new private key user",
         loading: "loading...",
         clearNode: "Clear form",
-        clearNodeInfo: "Clear form, please confirm?"
+        clearNodeInfo: "Clear form, please confirm?",
+        startingInfo: "Starting, It takes about 30 seconds...",
+        stopingInfo: "Stoping, It takes about 30 seconds...",
+        resetingInfo: "Chain deleting, please wait...",
+        deletingingInfo: "Node deleting, please wait..."
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -572,6 +577,7 @@ export default {
         validatorPrivateKey: "Please enter privateKey key",
         validatorPrivateKey1: "Please enter hexadecimal",
         importType: "Import Type",
+        importFileValidator: 'Please upload the file'
     },
     system: {
         chainManager: "Chain Management Permission",

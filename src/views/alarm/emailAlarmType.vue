@@ -4,18 +4,12 @@
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <div style="padding-bottom: 10px;">
                 <span>{{$t('alarm.enableAlarm')}}</span>
-                <el-switch
-                    v-model="enable"
-                    active-color="#13ce66"
-                    inactive-color="#ff4949"
-                    :active-value="1"
-                    :inactive-value="0"
-                     @change='authChange($event)'>
+                <el-switch v-model="enable" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="0" @change='authChange($event)'>
                 </el-switch>
             </div>
             <h3>{{$t('alarm.alarmCofigList')}}</h3>
             <el-table :data="alarmList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
-                <el-table-column :label="$t('alarm.alarmEmailTile')"  show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.alarmEmailTile')" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <span @click="link(scope.row)" class="link">{{scope.row.ruleName}}</span>
                     </template>
@@ -38,7 +32,7 @@
         </div>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <h3>{{$t('alarm.alarmLogList')}}</h3>
-            <el-table :data="alarmLogList" tooltip-effect="dark"  class="search-table-content" style="padding-bottom: 20px;">
+            <el-table :data="alarmLogList" tooltip-effect="dark" class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column :label="$t('alarm.alarmType')" prop='alertType' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <span v-if='scope.row.alertType == 1'>{{$t('alarm.nodeAlarm')}}</span>
@@ -54,13 +48,13 @@
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('alarm.alarmContent')" prop='alertContent' show-overflow-tooltip align="center" width="400"></el-table-column>
-                 <el-table-column :label="$t('alarm.alarmStatus')" prop='status' show-overflow-tooltip align="center">
+                <el-table-column :label="$t('alarm.alarmStatus')" prop='status' show-overflow-tooltip align="center">
                     <template slot-scope="scope">
                         <span v-if='scope.row.status' style="color: #3CB371">{{$t('alarm.processed')}}</span>
                         <span v-else style="color: #f00">{{$t('alarm.unprocessed')}}</span>
                     </template>
                 </el-table-column>
-                 <el-table-column :label="$t('alarm.alarmTime')" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
+                <el-table-column :label="$t('alarm.alarmTime')" prop='createTime' show-overflow-tooltip align="center"></el-table-column>
                 <el-table-column :label="$t('alarm.modifyTime')" prop='modifyTime' show-overflow-tooltip align="center"></el-table-column>
                 <el-table-column :label="$t('alarm.operation')" fixed="right" show-overflow-tooltip align="center">
                     <template slot-scope="scope">
@@ -70,7 +64,7 @@
                 </el-table-column>
             </el-table>
             <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
-             </el-pagination>
+            </el-pagination>
         </div>
         <emailAlarmType-detail :show='emailAlarmTypeShow' v-if='emailAlarmTypeShow' :data="emailAlarmTypeData" @close='emailAlarmTypeClose'></emailAlarmType-detail>
         <emailAlarm-detail :show='emailAlarmShow' v-if='emailAlarmShow' :data='emailAlarmData' @close='emailAlarmClose'></emailAlarm-detail>
@@ -78,7 +72,7 @@
 </template>
 
 <script>
-import { getAlarmList,startAlarm,getEmailList,changeEmailConfig,getAlarmLogs,changeAlarmLog } from "@/util/api"
+import { getAlarmList, startAlarm, getEmailList, changeEmailConfig, getAlarmLogs, changeAlarmLog } from "@/util/api"
 import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
 import emailAlarmTypeDetail from "./dialog/emailAlarmTypeDetail"
@@ -90,7 +84,7 @@ export default {
         "emailAlarmType-detail": emailAlarmTypeDetail,
         "emailAlarm-detail": emailAlarmDetail
     },
-    data: function(){
+    data: function () {
         return {
             alarmList: [],
             loading: false,
@@ -107,276 +101,276 @@ export default {
             total: 0
         }
     },
-    mounted: function(){
+    mounted: function () {
         this.getAlarms();
         this.getEmailConfig();
         this.getAlarmLogList()
     },
     methods: {
-        handle: function(row){
+        handle: function (row) {
             this.$confirm(this.$t('alarm.sureHandle'), this.$t('alarm.tip'), {
-                    confirmButtonText: this.$t('alarm.sure'),
-                    cancelButtonText: this.$t('alarm.cancel'),
-                    type: 'warning'
-                }).then(() => {
-                    this.uploadAlarmLog(row)
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: this.$t("alarm.cancelEnter")
-                    });          
+                confirmButtonText: this.$t('alarm.sure'),
+                cancelButtonText: this.$t('alarm.cancel'),
+                type: 'warning'
+            }).then(() => {
+                this.uploadAlarmLog(row)
+            }).catch(() => {
+                this.$message({
+                    type: 'info',
+                    message: this.$t("alarm.cancelEnter")
                 });
+            });
         },
-        uploadAlarmLog: function(row){
+        uploadAlarmLog: function (row) {
             let data = {
                 logId: row.logId,
                 status: 1
             }
             changeAlarmLog(data).then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t('alarm.logsSure')
                     });
                     this.getAlarmLogList()
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
-            .catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-            });
-        },
-        getAlarmLogList: function(){
-            let data = {
-                pageNumber: this.currentPage,
-                pageSize: this.pageSize
-            }
-            getAlarmLogs(data,{}).then(res => {
-                if(res.data.code === 0){
-                    this.alarmLogList = res.data.data;
-                    this.total = res.data.totalCount
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
-            .catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
-            });
-        },
-        getEmailConfig: function(){
-            getEmailList().then(res => {
-                if(res.data && res.data.code === 0){
-                    if(res.data.data.length) {
-                        this.emailData = res.data.data[0];
-                        this.enable = this.emailData.enable
-                    }
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                }
+            })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        authChange: function(val){
+        getAlarmLogList: function () {
+            let data = {
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            }
+            getAlarmLogs(data, {}).then(res => {
+                if (res.data.code === 0) {
+                    this.alarmLogList = res.data.data;
+                    this.total = res.data.totalCount
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        getEmailConfig: function () {
+            getEmailList().then(res => {
+                if (res.data && res.data.code === 0) {
+                    if (res.data.data.length) {
+                        this.emailData = res.data.data[0];
+                        this.enable = this.emailData.enable
+                    }
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+        authChange: function (val) {
             let data = {
                 serverId: this.emailData.serverId,
                 enable: val
             }
             changeEmailConfig(data).then(res => {
-                if(res.data && res.data.code === 0){
+                if (res.data && res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t('alarm.updateEmailAlarmConfigSuccess')
                     });
                     this.getEmailConfig();
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        getAlarms: function(){
+        getAlarms: function () {
             this.loading = true
             getAlarmList().then(res => {
                 this.loading = false
-                if(res.data && res.data.code === 0){
+                if (res.data && res.data.code === 0) {
                     this.alarmList = res.data.data
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.loading = false
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        handleClick: function(row){
+        handleClick: function (row) {
             this.emailAlarmTypeData = row;
             this.emailAlarmTypeShow = true
         },
-        changGroup: function(){
+        changGroup: function () {
 
         },
-        emailAlarmTypeClose: function(){
+        emailAlarmTypeClose: function () {
             this.emailAlarmTypeShow = false;
             this.getAlarms()
         },
-        emailAlarmClose: function(){
+        emailAlarmClose: function () {
             this.emailAlarmShow = false
         },
-        link: function(row){
+        link: function (row) {
             this.emailAlarmData = row
             this.emailAlarmShow = true
         },
-        startUp: function(row){
-            if(!row.enable && row.userList){
+        startUp: function (row) {
+            if (!row.enable && row.userList) {
                 this.$confirm(this.$t('alarm.enableAlarm'), this.$t('alarm.tip'), {
                     confirmButtonText: this.$t('alarm.sure'),
                     cancelButtonText: this.$t('alarm.cnacel'),
                     type: 'warning'
                 }).then(() => {
-                    this.start(row,1)
+                    this.start(row, 1)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: this.$t("alarm.cancelEnter")
-                    });          
+                    });
                 });
-            }else if(row.userList){
+            } else if (row.userList) {
                 this.$confirm(this.$t("alarm.disableAlarm"), this.$t('alarm.tip'), {
                     confirmButtonText: this.$t('alarm.sure'),
                     cancelButtonText: this.$t('alarm.cancel'),
                     type: 'warning'
                 }).then(() => {
-                    this.start(row,0)
+                    this.start(row, 0)
                 }).catch(() => {
                     this.$message({
                         type: 'info',
                         message: this.$t("alarm.cancelEnter")
-                    });          
+                    });
                 });
-            }else{
+            } else {
                 this.$message({
-                        type: 'info',
-                        message: this.$t("alarm.addEmail")
-                    }); 
+                    type: 'info',
+                    message: this.$t("alarm.addEmail")
+                });
             }
-            
+
         },
-        start: function(row,index){
+        start: function (row, index) {
             getEmailList().then(res => {
-                if(res.data && res.data.code === 0){
-                    if(res.data.data && res.data.data.length && res.data.data[0].enable) {
-                        this.startUpAlarm(row,index)
-                    }else{
+                if (res.data && res.data.code === 0) {
+                    if (res.data.data && res.data.data.length && res.data.data[0].enable) {
+                        this.startUpAlarm(row, index)
+                    } else {
                         this.$message({
                             type: "error",
                             message: this.$t("alarm.noAlarmEmail")
                         });
                     }
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        startUpAlarm: function(row,index){
+        startUpAlarm: function (row, index) {
             let data = {
                 ruleId: row.ruleId,
                 enable: index
             }
             startAlarm(data).then(res => {
-                if(res.data &&res.data.code === 0){
-                    if(!index){
+                if (res.data && res.data.code === 0) {
+                    if (!index) {
                         this.$message({
                             type: "success",
                             message: this.$t("alarm.disableAlarmSuccess")
                         });
                         this.buttonText = this.$t("alarm.start")
-                    }else{
-                         this.$message({
+                    } else {
+                        this.$message({
                             type: "success",
                             message: this.$t("alarm.enableAlarmSuccess")
                         });
                         this.buttonText = this.$t("alarm.cancel")
                     }
                     this.getAlarms();
-                }else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getAlarmLogList();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getAlarmLogList();
         },
@@ -385,5 +379,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -75,7 +75,7 @@ export default {
                     {
                         min: 6,
                         max: 12,
-                        message:  this.$t('main.longPassword'),
+                        message: this.$t('main.longPassword'),
                         trigger: "blur"
                     }
                 ],
@@ -140,12 +140,12 @@ export default {
                             type: "success",
                             message: this.$t('main.updatePsdSuccess')
                         });
-                        this.rulePasswordForm =  {
+                        this.rulePasswordForm = {
                             oldPass: "",
                             pass: "",
                             checkPass: ""
                         }
-                        this.$emit('success',true)
+                        this.$emit('success', true)
                         this.accountStatus = "2";
                         sessionStorage.setItem("accountStatus", "2");
                     } else {
@@ -158,7 +158,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                     });
                 });
         }
@@ -167,5 +167,4 @@ export default {
 </script>
 
 <style>
-
 </style>

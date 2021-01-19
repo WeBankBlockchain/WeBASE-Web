@@ -1,44 +1,45 @@
 <template>
     <div>
         <div>
-        <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" 
-         class="dialog-wrapper" width="580px" :center="true" :show-close='true'>
-            <div>
-                <el-form  :model="nodeFrom" :rules='rules'  ref="nodeFrom" label-width="168px" class="demo-ruleForm">
-                    <el-form-item  label='IP' prop='ip'>
-                        <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 250px;" maxlength="16"></el-input>
-                    </el-form-item>
-                    <el-form-item  :label='$t("nodes.selectGroup")' prop='groupId'>
-                        <el-select v-model="nodeFrom.groupId" :placeholder="$t('nodes.selectGroup')" style="width: 250px;">
-                            <el-option :label="item.groupName" :value="item.groupId" v-for='item in groupList'  :key='item.groupId'></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item :label='$t("nodes.agency")' prop='agencyName'>
-                        <el-input v-model="nodeFrom.agencyName" :placeholder="$t('nodes.inputAgency')" style="width: 250px;" maxlength="16"></el-input>
-                    </el-form-item>
-                    <el-form-item :label="$t('text.imageMode')" prop='dockerImageType'>
-                        <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip></el-radio>
-                        <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip></el-radio>
-                    </el-form-item>
-                    <!-- <el-form-item :label='$t("nodes.nodeCount")'>
+            <el-dialog :title="$t('text.addNode')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="580px" :center="true" :show-close='true'>
+                <div>
+                    <el-form :model="nodeFrom" :rules='rules' ref="nodeFrom" label-width="168px" class="demo-ruleForm">
+                        <el-form-item label='IP' prop='ip'>
+                            <el-input v-model="nodeFrom.ip" :placeholder="$t('rule.ipName')" style="width: 250px;" maxlength="16"></el-input>
+                        </el-form-item>
+                        <el-form-item :label='$t("nodes.selectGroup")' prop='groupId'>
+                            <el-select v-model="nodeFrom.groupId" :placeholder="$t('nodes.selectGroup')" style="width: 250px;">
+                                <el-option :label="item.groupName" :value="item.groupId" v-for='item in groupList' :key='item.groupId'></el-option>
+                            </el-select>
+                        </el-form-item>
+                        <el-form-item :label='$t("nodes.agency")' prop='agencyName'>
+                            <el-input v-model="nodeFrom.agencyName" :placeholder="$t('nodes.inputAgency')" style="width: 250px;" maxlength="16"></el-input>
+                        </el-form-item>
+                        <el-form-item :label="$t('text.imageMode')" prop='dockerImageType'>
+                            <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                            </el-radio>
+                            <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                            </el-radio>
+                        </el-form-item>
+                        <!-- <el-form-item :label='$t("nodes.nodeCount")'>
                         <el-input v-model="nodeFrom.num" :placeholder="$t('nodes.inputNodes')" style="width: 250px;" maxlength="16"></el-input>
                     </el-form-item> -->
-                </el-form>
-                <div class="text-right sure-btn" style="margin-top:10px">
-                    <el-button  @click="modelClose">{{this.$t("text.cancel")}}</el-button>
-                    <el-button type="primary" :loading="loading" @click="submit('nodeFrom')">{{this.$t("text.sure")}}</el-button>
+                    </el-form>
+                    <div class="text-right sure-btn" style="margin-top:10px">
+                        <el-button @click="modelClose">{{this.$t("text.cancel")}}</el-button>
+                        <el-button type="primary" :loading="loading" @click="submit('nodeFrom')">{{this.$t("text.sure")}}</el-button>
+                    </div>
                 </div>
-            </div>
-        </el-dialog>
-    </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
 <script>
-import { addNode ,getGroupsInvalidIncluded} from "@/util/api"
+import { addNode, getGroupsInvalidIncluded } from "@/util/api"
 export default {
     name: "newNode",
-    props: ['show','data'],
+    props: ['show', 'data'],
     data: function () {
         return {
             dialogVisible: this.show,
@@ -56,43 +57,43 @@ export default {
         }
     },
     computed: {
-       rules(){
-           var  validatePass = (rule, value, callback) => {
-            let num = 0;
-            for(let i = 0; i < this.nodeList.length; i++){
-                if(value == this.nodeList[i].frontIp){
-                    num++
+        rules() {
+            var validatePass = (rule, value, callback) => {
+                let num = 0;
+                for (let i = 0; i < this.nodeList.length; i++) {
+                    if (value == this.nodeList[i].frontIp) {
+                        num++
+                    }
                 }
-            }
                 if (value === "") {
                     callback(new Error(this.$t('rule.ipName')));
-                } else if(num > 0){
+                } else if (num > 0) {
                     callback(new Error(this.$t('rule.ipSame')));
-                } else{
+                } else {
                     callback();
                 }
             };
-           let data = {
-               ip: [
-                    {required: true, validator: validatePass, trigger: 'blur'},
-                    {required: true, message: this.$t("rule.ipName"), trigger: 'blur'},
-                    {pattern:/((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: this.$t("nodes.ipError"), trigger: 'blur'}
+            let data = {
+                ip: [
+                    { required: true, validator: validatePass, trigger: 'blur' },
+                    { required: true, message: this.$t("rule.ipName"), trigger: 'blur' },
+                    { pattern: /((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))/, message: this.$t("nodes.ipError"), trigger: 'blur' }
                 ],
                 agencyName: [
-                    {required: true, message: this.$t("rule.agencyName"), trigger: 'blur'},
+                    { required: true, message: this.$t("rule.agencyName"), trigger: 'blur' },
                 ],
                 groupId: [
-                    {required: true, message: this.$t("rule.selectGroup"), trigger: 'blur'},
+                    { required: true, message: this.$t("rule.selectGroup"), trigger: 'blur' },
                 ],
                 dockerImageType: [
-                    {required: true, message: this.$t("rule.selctDockerImageType"), trigger: 'blur'},
+                    { required: true, message: this.$t("rule.selctDockerImageType"), trigger: 'blur' },
                 ]
             }
             return data
         }
     },
     mounted: function () {
-       this.getGroupList()
+        this.getGroupList()
     },
     methods: {
         // ipChange: function() {
@@ -110,7 +111,7 @@ export default {
         //         this.agencyShow = false
         //     }
         // },
-        modelClose () {
+        modelClose() {
             this.$emit("close")
         },
         submit: function (formName) {
@@ -144,45 +145,45 @@ export default {
             //     reqData.dockerImageType = this.nodeFrom.dockerImageType
             // }
             addNode(reqData).then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$message({
                         type: "success",
                         message: this.$t('nodes.addNodeSuccess')
                     })
                     this.modelClose()
-                }else{
-                    this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            })
-            .catch(err => {
-                    this.loading = false;
-                    this.$message({
-                        message: this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
-                    
-                });
-        },
-        getGroupList: function(){
-            getGroupsInvalidIncluded().then(res => {
-                if(res.data.code === 0){
-                    this.groupList = res.data.data
-                }else{
+                } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-                   
+                }
+            })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        getGroupList: function () {
+            getGroupsInvalidIncluded().then(res => {
+                if (res.data.code === 0) {
+                    this.groupList = res.data.data
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -193,5 +194,4 @@ export default {
 </script>
 
 <style>
-
 </style>

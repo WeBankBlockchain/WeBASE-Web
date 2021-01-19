@@ -207,11 +207,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -300,11 +300,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
