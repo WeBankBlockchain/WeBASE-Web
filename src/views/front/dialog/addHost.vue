@@ -3,7 +3,7 @@
         <el-dialog :title="$t('text.newHost')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="450px" :center="true" :show-close='true'>
             <el-form :model="hostFrom" :rules='rules' ref="hostFrom" label-width="148px" class="demo-ruleForm">
                 <el-form-item label='IP' prop='ip'>
-                    <el-input v-model="hostFrom.ip" :placeholder="$t('rule.ipName')" style="width: 240px;" maxlength="16"></el-input>
+                    <el-input v-model.trim="hostFrom.ip" :placeholder="$t('rule.ipName')" style="width: 240px;" maxlength="16"></el-input>
                 </el-form-item>
                 <el-form-item :label='$t("text.installDirectory")' prop='sshPath'>
                     <el-input v-model="hostFrom.sshPath" :placeholder="$t('text.select') + $t('text.installDirectory')" style="width: 240px;" maxlength="26"></el-input>
