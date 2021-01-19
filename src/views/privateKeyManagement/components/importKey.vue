@@ -118,13 +118,13 @@ export default {
                         trigger: "blur"
                     },
                     {
-                        pattern: /^[0-9a-fA-F]$/,
+                        pattern: /([a-fA-F0-9]{1,100})$/,
                         message: this.$t('privateKey.validatorPrivateKey1'),
                         trigger: "blur"
                     }
                 ],
                 fileList: [
-                    {required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change'}
+                    { required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change' }
                 ]
             };
             return data
@@ -310,7 +310,7 @@ export default {
             this.$refs['uploadKey'].clearValidate();
             this.keyForm.fileList = fileList
         },
-        removeFile(){
+        removeFile() {
             this.keyForm.fileList = []
         }
     }

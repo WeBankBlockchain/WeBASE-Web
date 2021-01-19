@@ -426,10 +426,10 @@ export default {
             this.getProgressData()
             this.laodingText = this.$t("text.laodngCheck")
             checkHost({ hostIdList: array }).then(res => {
-                this.loading3 = false
-                this.initShow = false
                 if (res.data.code === 0) {
                     checkPort(data).then(res => {
+                        this.loading3 = false
+                        this.initShow = false
                         this.loading = false;
                         if (res.data.code === 0) {
                             if (val) {

@@ -33,7 +33,7 @@
                     </el-col>
                     <el-col :span="17">
                         <span class="font-color-fff text-hidden">value</span>
-                        <el-input class="input-inner" type="text" v-model="item.argumentValue" @input="inputArgumentValue($event,item.type)"></el-input>
+                        <input class="input-inner" type="text" v-model="item.argumentValue" @input="inputArgumentValue($event,item.type)" />
                         <span></span>
                     </el-col>
                 </el-row>
