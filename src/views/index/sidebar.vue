@@ -193,6 +193,23 @@ export default {
             }
         }
     },
+    watch: {
+        // $route(to, from) {
+        //     console.log(to);
+        //     console.log(from);
+        // },
+        // activeRoute(to, from) {
+
+        //     // console.log(this.$route.path, to, from, this.activeRoute)
+        //     console.log(this.$route.path !== to, to === "/node/node" || to === "/node/chain", to)
+        //     if (this.$route.path !== to && to !== "/node/node" && to !== "/node/chain") {
+        //         this.activeRoute = this.$route.path
+        //     } else if (to === "/node/node" || to === "/node/chain") {
+        //         this.activeRoute = '/front'
+        //     }
+        //     console.log(this.activeRoute)
+        // }
+    },
     mounted: function () {
         this.$nextTick(function () {
             localStorage.setItem("sidebarHide", false);

@@ -4,7 +4,7 @@
             <el-form :model="nodeFrom" :rules='rules' ref="nodeFrom" label-width="100px" class="demo-ruleForm">
                 <el-form-item :label="$t('nodes.selectVersion')" prop="newTagId">
                     <el-select v-model="nodeFrom.newTagId" :placeholder="$t('nodes.selectVersionInfo')" style="width: 250px;">
-                        <el-option v-for="item in configList" :key="item.id" :label="item.configValue" :value="item.id">
+                        <el-option v-for="(item,index) in configList" :key="index" :label="item.configValue" :value="item.id">
                         </el-option>
                     </el-select>
                     <el-button type="primary" icon='el-icon-refresh-right' style="margin-left: 20px;" @click='refresh'></el-button>

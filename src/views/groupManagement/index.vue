@@ -39,7 +39,7 @@
                     </el-table>
                     <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                     </el-pagination>
-                    <el-dialog :title="$t('nodes.addGroup')" :visible.sync="generateGroupVisibility" v-if="generateGroupVisibility" center>
+                    <el-dialog :title="$t('nodes.addGroup')" :visible.sync="generateGroupVisibility" v-if="generateGroupVisibility" center :close-on-click-modal='false' :close-on-press-escape='false' :show-close='false'>
                         <generate-group @generateSuccess="generateSuccess" @close="close"></generate-group>
                     </el-dialog>
                     <el-dialog :title="$t('nodes.modifyGroup')+'('+'ID:'+' '+`${modifyGroupId}`+')'" :visible.sync="modifyGroupVisibility" v-if="modifyGroupVisibility" center>
