@@ -44,7 +44,7 @@
                     )
                 </h3>
                 <el-divider></el-divider>
-                <el-form style="padding-top: 20px" v-if='chainFrom' class="chain-info">
+                <el-form v-if='chainFrom' class="chain-info">
                     <el-row>
                         <!-- <el-col :span="12">
                             <el-form-item :label='$t("text.chainName") + "："'>
@@ -56,12 +56,6 @@
                                 <span>{{chainFrom.version}}</span>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span="12">
-                            <el-form-item :label='$t("text.chainType") + "："'>
-                                <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
-                                <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
-                            </el-form-item>
-                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainStatus") + "："'>
                                 <span :style="{'color': chainColor(chainFrom.chainStatus)}">{{ChainStatus(chainFrom.chainStatus)}}</span>
@@ -86,7 +80,7 @@
                 </el-form>
             </div>
             <div class="search-table">
-                <div style="padding: 20px 0">
+                <div>
                     <h3>{{$t("nodes.nodeList")}}</h3>
                     <el-table :data="frontList" class="search-table-content" v-if='type == "node"'>
                         <el-table-column :label='$t("nodes.ip")' prop="frontIp" show-overflow-tooltip></el-table-column>
@@ -120,16 +114,14 @@
                             </template>
                         </el-table-column>
                     </el-table>
-                    <div style="padding: 30px 0" class="check-button">
-                        <h3>{{$t('nodes.operation')}}</h3>
-                        <el-divider></el-divider>
+                    <div style="padding: 10px 0" class="check-button">
                         <el-button type="primary" :loading="loading1" @click="init('chainFrom')" v-if='!initShow'>{{$t('nodes.initialize')}}</el-button>
                         <el-button type="primary" :loading="loading2" @click="deploy('chainFrom')" v-if='initShow'>{{$t('text.deploy')}}</el-button>
                     </div>
                 </div>
-                <div style="padding: 30px 0" v-if='nodeList.length && remarkList.length'>
-                    <h3>{{$t("text.nodeLog")}}</h3>
-                    <el-divider></el-divider>
+                <div style="padding: 30px 0 0 0" v-if='nodeList.length && remarkList.length'>
+                    <h3 style="padding-bottom: 20px">{{$t("text.nodeLog")}}</h3>
+                    <!-- <el-divider></el-divider> -->
                     <div v-for='(item,index) in remarkList' :key='index'>
                         <div v-if='item.remark'>
                             <p>{{item.ip}}</p>
@@ -148,7 +140,7 @@
 import contentHead from "@/components/contentHead";
 import addChainNode from "./dialog/addChainNode"
 import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
-import { format } from "@/util/util"
+import { format, dynamicPoint } from "@/util/util"
 export default {
     components: {
         "v-content-head": contentHead,
@@ -379,7 +371,7 @@ export default {
                             })
                             return
                         }
-                        this.laodingText = this.$t("text.loadingInit")
+                        this.laodingText = dynamicPoint(this.$t("text.loadingInit"), 0)
                         this.loading3 = true
                         this.loading1 = true;
                         this.initChain()
@@ -392,7 +384,7 @@ export default {
                     }
                 })
             } else {
-                this.laodingText = this.$t("text.loadingInit")
+                this.laodingText = dynamicPoint(this.$t("text.loadingInit"), 0)
                 this.loading3 = true
                 this.loading1 = true;
                 this.initChain()
@@ -424,9 +416,10 @@ export default {
                 clearInterval(this.progressTimer)
             }
             this.getProgressData()
-            this.laodingText = this.$t("text.laodngCheck")
+            this.laodingText = dynamicPoint(this.$t("text.laodngCheck"), 0)
             checkHost({ hostIdList: array }).then(res => {
                 if (res.data.code === 0) {
+                    // this.initShow = false
                     checkPort(data).then(res => {
                         this.loading3 = false
                         this.initShow = false
@@ -471,6 +464,7 @@ export default {
                     this.loading3 = false
                     this.loading = false;
                     this.getHostList()
+                    this.initShow = false
                     this.checkShow = true
                     this.$message({
                         type: "error",
@@ -672,7 +666,7 @@ export default {
                             })
                             return
                         }
-                        this.laodingText = this.$t("text.loadingDeploy")
+                        this.laodingText = dynamicPoint(this.$t("text.loadingDeploy"), 0)
                         this.loading3 = true
                         this.loading2 = true;
                         if (this.type == "node") {
@@ -868,8 +862,8 @@ export default {
                     if (res.data.code === 0) {
                         this.statusNumber = res.data.data
                         // 根据进度，修改loading文字描述
-                        this.laodingText = this.$t("progress." + this.statusNumber)
                         number = number + 1
+                        this.laodingText = dynamicPoint(this.$t("progress." + this.statusNumber), number)
                         if (number > 1800) {
                             clearInterval(this.progressTimer)
                         }

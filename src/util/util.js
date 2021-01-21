@@ -367,3 +367,18 @@ export function subStringToNumber(val) {
     }
     return parseInt(num)
 }
+
+/**
+ * @method  省略号动态效果
+ */
+export function dynamicPoint(val, num) {
+    console.log(val, num)
+    if (num % 3 === 0) {
+        return `${val}······`
+    } else if (num % 3 === 1) {
+        return `${val}····`
+    } else {
+        return `${val}··`
+    }
+
+}

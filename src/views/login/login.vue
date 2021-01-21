@@ -40,51 +40,23 @@
             </div>
             <div class="login-content">
                 <template>
-                    <el-form
-                        ref="loginForm"
-                        :model="loginForm"
-                        :rules="rules"
-                        class="login-form"
-                    >
+                    <el-form ref="loginForm" :model="loginForm" :rules="rules" class="login-form">
                         <el-form-item :label="$t('login.user')" prop="user">
-                            <el-input
-                                v-model="loginForm.user"
-                                :placeholder="$t('inputText.user')"
-                            >
+                            <el-input v-model="loginForm.user" :placeholder="$t('inputText.user')">
                             </el-input>
                         </el-form-item>
-                        <el-form-item
-                            :label="$t('login.password')"
-                            prop="password"
-                        >
-                            <el-input
-                                v-model="loginForm.password"
-                                :placeholder="$t('inputText.password')"
-                                type="password"
-                            >
+                        <el-form-item :label="$t('login.password')" prop="password">
+                            <el-input v-model="loginForm.password" :placeholder="$t('inputText.password')" type="password">
                             </el-input>
                         </el-form-item>
-                        <el-form-item
-                            :label="$t('login.verificationCode')"
-                            prop="vercode"
-                        >
+                        <el-form-item :label="$t('login.verificationCode')" prop="vercode">
                             <div style="width: 100%">
-                                <el-input
-                                    style="width: 240px"
-                                    v-model="loginForm.vercode"
-                                    :placeholder="
+                                <el-input style="width: 240px" v-model="loginForm.vercode" :placeholder="
                                         $t('inputText.verificationCode')
-                                    "
-                                    @keyup.enter.native="submit('loginForm')"
-                                >
+                                    " @keyup.enter.native="submit('loginForm')">
                                 </el-input>
                                 <span class="codeUrlImg">
-                                    <img
-                                        style="width: 100%; height: 100%"
-                                        :src="codeUrl"
-                                        alt=""
-                                        @click="changeCode()"
-                                    />
+                                    <img style="width: 100%; height: 100%" :src="codeUrl" alt="" @click="changeCode()" />
                                 </span>
                             </div>
                         </el-form-item>
@@ -92,13 +64,7 @@
                 </template>
             </div>
             <div>
-                <el-button
-                    @click="submit('loginForm')"
-                    type="primary"
-                    class="login-submit"
-                    :loading="logining"
-                    >{{ this.$t("login.login") }}</el-button
-                >
+                <el-button @click="submit('loginForm')" type="primary" class="login-submit" :loading="logining">{{ this.$t("login.login") }}</el-button>
             </div>
         </div>
     </div>
@@ -254,6 +220,8 @@ export default {
                         localStorage.setItem("config", 0);
                         localStorage.setItem("nodeVersionChange", "");
                         localStorage.setItem("selectData", "");
+                        localStorage.setItem("solcName", '')
+                        localStorage.setItem("versionId", null)
                         this.getConfigType();
                     } else {
                         this.changeCode();
