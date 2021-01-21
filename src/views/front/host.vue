@@ -14,7 +14,7 @@
                     <el-button type="primary" class="search-part-left-btn" @click="add">{{$t("text.addHost")}}</el-button>
                 </div>
             </div>
-            <div class="search-table">
+            <div class="search-table" style="padding-bottom: 20px">
                 <el-table :data="hostList" class="search-table-content" v-loading="loading">
                     <el-table-column :label="'IP'" prop="ip" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="$t('text.installDirectory')" prop="rootDir" show-overflow-tooltip></el-table-column>
@@ -25,9 +25,10 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteData(scope.row.id)" type="text" size="small">{{$t('text.delete')}}</el-button>
                         </template>
                     </el-table-column>
+                    <div slot="empty" class="table-no-date">
+                        请添加主机
+                    </div>
                 </el-table>
-                <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
-                </el-pagination>
             </div>
         </div>
         <add-host v-if="addHostShow" :show="addHostShow" @close='addHostClose'></add-host>
@@ -231,5 +232,8 @@ export default {
     position: absolute;
     right: 40px;
     top: 90px;
+}
+.table-no-date {
+    text-align: center;
 }
 </style>
