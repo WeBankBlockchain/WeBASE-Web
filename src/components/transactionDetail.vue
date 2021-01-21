@@ -95,51 +95,6 @@
                     </div>                   
                 </div>
             </el-tab-pane>
-            <!-- <el-tab-pane label="event" v-if="eventLog.length > 0" @click="decodeEventClick">
-                <template v-if="unEvent">
-                    <div class="text-center">
-                        无法解析
-                    </div>
-                </template>
-                <template v-else>
-                    <div v-for="(item,num) in eventLog" v-if="eventSHow">
-                        <div class="item">
-                            <span class="label">Address :</span>
-                            <span>{{item.address}}</span>
-                        </div>
-                        <div class="item">
-                            <span class="label">Name :</span>
-                            <span>{{item.eventName}}</span>
-                        </div>
-                        <div class="item">
-                            <span class="label">Topics :</span>
-                            <div style="display: inline-block;width:800px;">
-                                <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            <span class="label">Data :</span>
-                            <div class="detail-input-content">
-                                <span v-if="!item.eventDataShow" class="input-data">{{item.data}}</span>
-                                <el-table class="input-data" :data="item.eventLgData" v-show="item.eventDataShow" style="display:inline-block;width:100%;">
-                                    <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
-                                    <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
-                                        <template slot-scope="scope">
-                                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
-                                            <span>{{scope.row.data}}</span>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </div>
-                        </div>
-                        <div class="item" v-show='item.eventButtonShow'>
-                            <span class="label"></span>
-                            <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
-                        </div>
-                    </div>
-                </template>
-
-            </el-tab-pane> -->
             <el-tab-pane :label="$t('table.transactionReceipt')" name="txReceiptInfo">
                 <el-row v-for="item in txReceiptInfoList" :key="item">
                     <el-col :xs='24' :sm="24" :md="6" :lg="4" :xl="2">
@@ -147,7 +102,6 @@
                     </el-col>
                     <el-col :xs='24' :sm="24" :md="18" :lg="20" :xl="22">
                         <template class="item" style="font-size: 0" v-if="item == 'output'">
-                            <!-- <span class="label">Output:</span> -->
                             <div>
                                 <span v-if="showOutputDecode && txInfoReceiptMap.status == '0x0'">{{txInfoReceiptMap.output || ""}}</span>
                                 <span v-if="txInfoReceiptMap.status != '0x0'">{{decodeOutData}}</span>
@@ -176,7 +130,6 @@
                                     
                                 </div>
                                 <div class="item" v-if="txInfoReceiptMap.status == '0x0' && showOutDecode && inputButtonShow">
-                                        <!-- <span class="label"></span> -->
                                         <el-button @click="decodeOutput" type="primary">{{buttonOutTitle}}</el-button>
                                     </div>
                             </div>
@@ -221,7 +174,9 @@
                         </template>
                         <template v-else-if="item == 'status'">
                             <p class="base-p" :style="{'color': txStatusColor(txInfoReceiptMap[item])}">{{txInfoReceiptMap[item]}}</p>
-                            
+                        </template>
+                         <template v-else-if="item == 'to'">
+                            <p class="base-p">{{txInfoReceiptMap[item]}} <span v-if="txInfoReceiptMap[item]">{{txInfoReceiptMap[item] | contractSource}}</span></p>
                         </template>
                         <template v-else>
                             <p class="base-p">{{txInfoReceiptMap[item]}}</p>

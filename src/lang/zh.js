@@ -230,7 +230,8 @@ export default {
         startingInfo: "节点启动中，大约需要30秒...",
         stopingInfo: "节点停止中，大约需要30秒...",
         resetingInfo: "链删除中，请等待...",
-        deletingingInfo: "节点删除中,请等待..."
+        deletingingInfo: "节点删除中,请等待...",
+        cnsNameVersion: "CNS名或CNS版本不能为空",
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -285,6 +286,7 @@ export default {
         inputIsNumber: '输入不是数字',
         inputIsAddress: '输入不是Address',
         inputIsJson: '输入不是JSON',
+        privateKeyNameRule: "只能是数字或者字母组成",
     },
     head: {
         helpText: "帮助文档",
@@ -532,7 +534,9 @@ export default {
         transactionReceipt: '交易回执',
         limit_1: "每次最多只能上传一个文件",
         exportToIde: "导出到IDE",
-        folder: "目录"
+        folder: "目录",
+        cnsTitle: "链上CNS查询",
+        localCnsTitle: "本地CNS",
     },
     privateKey: {
         addUser: "新增用户",

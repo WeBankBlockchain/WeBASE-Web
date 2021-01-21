@@ -1391,8 +1391,8 @@ let errCode = {
         "zh": "CNS 名不能为空"
     },
     "202504": {
-        "en": "contract version not exists.",
-        "zh": "合约版本不存在"
+        "en": "version already exists.",
+        "zh": "版本已存在"
     },
     "302000": {
         en: "user not logged in",

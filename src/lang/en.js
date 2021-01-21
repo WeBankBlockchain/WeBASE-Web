@@ -230,7 +230,8 @@ export default {
         startingInfo: "Starting, It takes about 30 seconds...",
         stopingInfo: "Stoping, It takes about 30 seconds...",
         resetingInfo: "Chain deleting, please wait...",
-        deletingingInfo: "Node deleting, please wait..."
+        deletingingInfo: "Node deleting, please wait...",
+        cnsNameVersion: "CNS name or CNS version cannot be empty",
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -285,6 +286,7 @@ export default {
         inputIsNumber: 'Input is not a number',
         inputIsAddress: 'Input is not address',
         inputIsJson: 'Input is not JSON',
+        privateKeyNameRule: "It can only be numbers or letters",
     },
     head: {
         helpText: "Document",
@@ -532,7 +534,9 @@ export default {
         transactionReceipt: 'Transaction Receipt',
         limit_1: "Only one file can be uploaded at a time",
         exportToIde: "Export To IDE",
-        folder: "Folder"
+        folder: "Folder",
+        cnsTitle: "On chain CNS query",
+        localCnsTitle: "Local CNS",
     },
     privateKey: {
         addUser: "Add Users",
@@ -889,7 +893,7 @@ export default {
         onlineHashCalculator: 'Hash Calculator',
         algorithm: 'algorithm',
         result: 'Result',
-        encryption: 'Encryption',
+        encryption: 'Encrypt',
         sign: 'Sign',
         text: 'Text',
         file: 'File',
