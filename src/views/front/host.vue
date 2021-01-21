@@ -9,7 +9,7 @@
                         <el-button slot="append" @click="search">添加</el-button>
                     </el-input>
                 </div> -->
-                <div class="link guide" @click='openGuide'>{{$t("text.noviceGuide")}}</div>
+                <!-- <div class="link guide" @click='openGuide'>{{$t("text.noviceGuide")}}</div> -->
                 <div style="padding: 20px 0" v-if='!disabled'>
                     <el-button type="primary" class="search-part-left-btn" @click="add">{{$t("text.addHost")}}</el-button>
                 </div>

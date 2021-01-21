@@ -7,7 +7,7 @@
             <el-page-header class="wrapper-title" v-if='type == "node"' @back="goBack" :content="$t('text.addNode')">
 
             </el-page-header>
-            <div class="link guide" @click='openGuide'>{{$t("text.noviceGuide")}}</div>
+            <!-- <div class="link guide" @click='openGuide'>{{$t("text.noviceGuide")}}</div> -->
             <div class="search-part" v-if='type != "node"'>
                 <h3>{{$t('text.chainInfo')}} (
                     <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
