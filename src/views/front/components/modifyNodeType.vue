@@ -3,7 +3,7 @@
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
             <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
-                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+                    <el-option v-for="(item,index) in adminRivateKeyList" :key="index" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
@@ -44,12 +44,12 @@ export default {
             adminRivateKeyList: [],
             nodeTypeList: [
                 {
-                    type: 'observer',
-                    name: this.$t("nodes.observer")
-                },
-                {
                     type: 'sealer',
                     name: this.$t("nodes.sealer")
+                },
+                {
+                    type: 'observer',
+                    name: this.$t("nodes.observer")
                 },
                 {
                     type: 'remove',

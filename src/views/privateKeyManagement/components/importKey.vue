@@ -130,7 +130,7 @@ export default {
                     }
                 ],
                 fileList: [
-                    {required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change'}
+                    { required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change' }
                 ]
             };
             return data
@@ -316,7 +316,7 @@ export default {
             this.$refs['uploadKey'].clearValidate();
             this.keyForm.fileList = fileList
         },
-        removeFile(){
+        removeFile() {
             this.keyForm.fileList = []
         }
     }

@@ -22,7 +22,7 @@
 
         </el-table>
         <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
+            <el-button @click="close" :disabled='loading'>{{this.$t("text.cancel")}}</el-button>
             <el-button type="primary" :loading="loading" @click="submit('groupFrom')">{{this.$t("text.sure")}}</el-button>
         </div>
     </div>
@@ -157,7 +157,6 @@ export default {
 
             }
             createGroup(data, "").then(res => {
-                this.loading = false;
                 if (res.data.code === 0) {
                     let array = res.data.data
                     array.forEach(item => {
@@ -173,6 +172,7 @@ export default {
                         callback()
                     })
                 } else {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: this.$chooseLang(res.data.code)
@@ -206,6 +206,7 @@ export default {
                     });
                     this.$emit('generateSuccess')
                 } else {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: this.$chooseLang(res.data.code)

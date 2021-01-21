@@ -26,7 +26,7 @@
                 </div>
         </div> -->
         <div class="module-wrapper">
-            <div class="search-part" style="padding-top: 20px;" v-if='!disabled'>
+            <div class="search-part" style="padding-top: 30px;" v-if='!disabled'>
                 <div class="search-part-left">
                     <!-- <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button> -->
                     <el-button type="primary" class="search-part-left-btn" :disabled="!(configData && configData.chainStatus == 3)" @click="createFront">{{$t('text.addNode')}}</el-button>
@@ -141,7 +141,7 @@ import {
     getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
     getFrontStatus
 } from "@/util/api";
-import { format, unique } from "@/util/util";
+import { format, unique, dynamicPoint } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import setConfig from "../index/dialog/setConfig"
@@ -209,7 +209,8 @@ export default {
             number: 0,
             chainList: null,
             hostInfoShow: false,
-            loadingTxt: this.$t('text.loading')
+            loadingTxt: this.$t('text.loading'),
+            optShow: false
         };
     },
     computed: {
@@ -348,12 +349,19 @@ export default {
                     });
                 });
         },
-        // getProgresses: function () {
-        //     clearInterval(this.progressInterval)
-        //     this.progressInterval = setInterval(() => {
-        //         this.getProgressData()
-        //     }, 1000)
-        // }
+        // 动态小数点
+        getProgresses: function (val) {
+            clearInterval(this.progressInterval)
+            let number = 0
+            this.progressInterval = setInterval(() => {
+                number = number + 1
+                if (val) {
+                    this.loadingTxt = dynamicPoint(val, number)
+                } else {
+                    this.loadingTxt = dynamicPoint(this.$t('text.loading'), number)
+                }
+            }, 500)
+        },
         deployChain: function () {
             this.configShow = true
         },
@@ -374,6 +382,7 @@ export default {
                 clearInterval(this.frontInterval)
             }
             this.getFrontStatus()
+            this.getProgresses()
             // this.getConfigList()
             this.frontInterval = setInterval(() => {
                 this.getFrontStatus()
@@ -413,18 +422,21 @@ export default {
                     if (res.data.data) {
                         this.chainList = res.data.data
                         localStorage.setItem("configData", res.data.data.chainStatus);
-                        if (res.data.data.chainStatus == 3 || res.data.data.chainStatus == 2) {
+                        if ((res.data.data.chainStatus == 3 || res.data.data.chainStatus == 2) && !this.optShow) {
+                            clearInterval(this.progressInterval)
                             this.loadingNodes = false;
                         } else {
-                            this.loadingTxt = this.$t("text.loadingInfo")
+                            this.getProgresses(this.$t("text.loadingInfo"))
                         }
                     } else {
                         this.chainList = null
+                        clearInterval(this.progressInterval)
                         clearInterval(this.frontInterval)
                         localStorage.setItem("configData", 0)
                     }
                     this.getFrontTable();
                 } else {
+                    clearInterval(this.progressInterval)
                     clearInterval(this.frontInterval)
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -448,9 +460,11 @@ export default {
             let reqData = {
                 nodeId: val.nodeId
             }
-            this.loadingTxt = this.$t("text.startingInfo")
+            // this.loadingTxt = 
+            this.getProgresses(this.$t("text.startingInfo"))
+            this.optShow = true
             startNode(reqData).then(res => {
-                // this.loadingNodes = false;
+                this.optShow = false
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -468,6 +482,7 @@ export default {
             })
                 .catch(err => {
                     this.getData()
+                    this.optShow = false
                     this.loadingNodes = false;
                     this.$message({
                         message: err.data || this.$t('text.systemError'),
@@ -483,9 +498,10 @@ export default {
             let reqData = {
                 nodeId: val.nodeId
             }
-            this.loadingTxt = this.$t("text.stopingInfo")
+            this.optShow = true
+            this.getProgresses(this.$t("text.stopingInfo"))
             stopNode(reqData).then(res => {
-                // this.loadingNodes = false;
+                this.optShow = false
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -502,6 +518,7 @@ export default {
                 }
             })
                 .catch(err => {
+                    this.optShow = false
                     this.getData()
                     this.loadingNodes = false;
                     this.$message({
@@ -524,8 +541,10 @@ export default {
                 clearInterval(this.frontInterval);
                 this.loadingNodes = true;
                 this.loading = true;
-                this.loadingTxt = this.$t("text.resetingInfo")
+                this.optShow = true
+                this.getProgresses(this.$t("text.resetingInfo"))
                 deleteChain().then(res => {
+                    this.optShow = false
                     if (res.data.code === 0) {
                         this.$message({
                             type: "success",
@@ -548,6 +567,7 @@ export default {
                         });
                     }
                 }).catch(err => {
+                    this.optShow = false
                     this.$message({
                         message: err.data || this.$t('text.systemError'),
                         type: "error",
@@ -581,8 +601,10 @@ export default {
                 nodeId: val.nodeId,
             }
             clearInterval(this.frontInterval);
-            this.loadingTxt = this.$t("text.deletingingInfo")
+            this.optShow = true
+            this.getProgresses(this.$t("text.deletingingInfo"))
             deleteNode(reqData).then(res => {
+                this.optShow = false
                 if (res.data.code === 0) {
                     this.$message({
                         type: "success",
@@ -600,6 +622,7 @@ export default {
             })
                 .catch(err => {
                     this.getData()
+                    this.optShow = false
                     this.loading = false;
                     this.$message({
                         message: err.data || this.$t('text.systemError'),
