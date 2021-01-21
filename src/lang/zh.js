@@ -891,7 +891,7 @@ export default {
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
         length1_10: '长度在 1 到 10 个字符',
-        rivateKeyVerifyLength1_32: '长度在 1 到 32 个字符',
+        privateKeyVerifyLength1_32: '长度在 1 到 32 个字符',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',
