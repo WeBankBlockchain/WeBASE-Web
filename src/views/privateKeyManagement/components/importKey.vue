@@ -95,6 +95,12 @@ export default {
                         trigger: "blur"
                     },
                     {
+                        pattern: /^[A-za-z0-9]+$/,
+                        message: this.$t('rule.privateKeyNameRule'),
+                        trigger: "blur",
+
+                    },
+                    {
                         min: 1,
                         max: 12,
                         message: this.$t('rule.textLong1_12'),

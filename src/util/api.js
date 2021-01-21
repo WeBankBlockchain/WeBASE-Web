@@ -1682,7 +1682,18 @@ export function findCnsInfo(data) {
         }
     })
 }
+//localCns查询
 
+export function findCnsInfoList(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/findCnsList`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 /**
  * @method 查询主机列表
  * @param none

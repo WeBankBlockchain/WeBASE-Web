@@ -133,7 +133,19 @@ export default {
     },
     methods: {
         submit: function (formName) {
-            this.send();
+            if (this.isCNS) {
+                if (!this.cnsName || !this.cnsVersion) {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.cnsNameVersion')
+                    })
+                    return
+                } else {
+                    this.send();
+                }
+            } else {
+                this.send();
+            }
         },
         close: function (formName) {
             this.$emit("close", false);
@@ -342,13 +354,10 @@ export default {
         queryFindCnsInfo() {
             let param = {
                 groupId: localStorage.getItem('groupId'),
-                contractPath: this.data.contractPath,
-                contractName: this.data.contractName,
                 contractAddress: this.data.contractAddress
             }
             findCnsInfo(param)
                 .then(res => {
-                    console.log(res.data);
                     if (res.data.code === 0) {
                         if (res.data.data) {
                             this.cnsVersion = res.data.data.version;

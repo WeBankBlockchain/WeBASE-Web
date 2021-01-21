@@ -162,6 +162,7 @@
 <script>
 import { getFunctionAbi } from "@/util/api"
 import { debuglog } from 'util';
+import { toContractName } from "@/util/util"
 export default {
     name: 'editor',
     props: ['data', 'show', 'input', 'editorOutput', 'sendConstant'],
@@ -202,8 +203,14 @@ export default {
                 this.decodefun()
             }
         }
-
-
+        for (const key in this.data) {
+            if (this.data.hasOwnProperty(key)) {
+                if(key == 'to'){
+                    const element = this.data[key];
+                    this.data[key] = `${element} ${toContractName(element)}`
+                }
+            }
+        }
     },
     methods: {
         decodeOutput: function () {

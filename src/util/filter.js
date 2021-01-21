@@ -86,7 +86,6 @@ Vue.filter('formatErrorMessage', function (value) {
 });
 
 Vue.filter('contractSource', function (value) {
-    console.log(typeof value);
     switch (value) {
         case "0x0000000000000000000000000000000000001000":
             return "SystemConfig"

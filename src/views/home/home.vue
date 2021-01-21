@@ -163,7 +163,9 @@ import { changWeek, numberFormat, unique } from "@/util/util";
 import router from "@/router";
 import errcode from "@/util/errcode";
 import sRight from "@/../static/image/s-right.png";
-import artboard from "@/../static/image/artboard.png"
+import artboard from "@/../static/image/artboard.png";
+import constant from "@/util/constant";
+import { toContractName } from "@/util/util"
 export default {
     name: "home",
     components: {
@@ -580,11 +582,16 @@ export default {
         },
         splitAddress(val) {
             if (!val) return;
-            var startStr = '', endStr = '', str = '';
-            startStr = val.substring(0, 8);
-            endStr = val.substring(val.length - 4);
-            str = `${startStr}...${endStr}`;
-            return str;
+            if (constant.SYSTEMCONTRACT.includes(val)) {
+                return toContractName(val)
+            } else {
+                var startStr = '', endStr = '', str = '';
+                startStr = val.substring(0, 8);
+                endStr = val.substring(val.length - 4);
+                str = `${startStr}...${endStr}`;
+                return str;
+            }
+
         }
     }
 };

@@ -19,14 +19,7 @@
             <el-radio-group v-model="timeGranularity" @change='changeKey'>
                 <el-radio :label="'RIV'">{{this.$t("privateKey.privateKeyUser")}}</el-radio>
                 <el-radio :label="'PUB'">{{this.$t('privateKey.publicKeyUser')}}</el-radio>
-                <!-- <el-radio :label="1">5秒钟</el-radio> -->
             </el-radio-group>
-            <!-- <span class="wbs-icon-radio radio-key riv-key" :style="{'color': rivKey ? '#4b8fe5':''}" @click="changeKey('RIV')">
-                <span class="base-span-key" :style="{'color': rivKey ? '#2956a3':''}">私钥用户</span>
-            </span>
-            <span class="wbs-icon-radio radio-key pub-key" :style="{'color': pubKey ? '#4b8fe5':''}" @click="changeKey('PUB')">
-                <span class="base-span-key" :style="{'color': pubKey ? '#2956a3':''}">公钥用户</span>
-            </span> -->
         </div>
         <div class="divide-line"></div>
         <el-form :model="userForm" :rules="rules" ref="userForm" label-width="142px" class="demo-ruleForm">
@@ -77,6 +70,12 @@ export default {
                         trigger: "blur"
                     },
                     {
+                        pattern: /^[A-za-z0-9]+$/,
+                        message: this.$t('rule.privateKeyNameRule'),
+                        trigger: "blur",
+
+                    },
+                    {
                         min: 1,
                         max: 12,
                         message: this.$t('rule.folderLong'),
@@ -113,6 +112,7 @@ export default {
                     this.rivKey = true;
                     break;
             }
+            this.$refs['userForm'].clearValidate();
         },
         modelClose: function () {
             this.userForm = Object.assign({
