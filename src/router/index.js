@@ -50,7 +50,6 @@ const committeeMgmt = resolve => require(['@/views/committeeMgmt'], resolve);
 const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
 const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
-const guide = resolve => require(['@/views/guide'], resolve);
 const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
 // const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 Vue.use(Router);
@@ -91,17 +90,6 @@ const routes = [
         children: [
             { path: '/blockInfo', component: blockInfo, name: '区块信息', nameKey: "blockTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/transactionInfo', component: transactionInfo, name: '交易信息', nameKey: "transactionInfo", menuShow: true, meta: { requireAuth: true } },
-        ]
-    },
-    {
-        path: '/',
-        component: main,
-        name: '新手引导',
-        nameKey: "guide",
-        menuShow: false,
-        iconCls: 'wbs-icon-overview sidebar-icon',
-        children: [
-            { path: '/guide', component: guide, name: '新手引导', nameKey: "guide", menuShow: false, meta: { requireAuth: true } }
         ]
     },
     {

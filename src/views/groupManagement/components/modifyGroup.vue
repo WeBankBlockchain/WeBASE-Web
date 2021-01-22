@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="newNodeList" tooltip-effect="dark" style="width: 100%">
+        <el-table :data="newNodeList" tooltip-effect="dark" style="width: 100%" v-loading='loading'>
             <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" :prop="head.enName" :width="head.width" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <span v-if="head.enName === 'nodeId'">

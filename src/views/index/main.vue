@@ -299,11 +299,11 @@ export default {
                             }
                         } else {
                             this.accountStatus = sessionStorage.getItem("accountStatus");
-                            router.push("/guide");
+                            router.push("/host");
                         }
 
                     } else {
-                        router.push("/guide");
+                        router.push("/host");
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
