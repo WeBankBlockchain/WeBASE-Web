@@ -891,7 +891,7 @@ export default {
         cnsVersionPattern: "It can only be numbers, letters and'.'",
         cnsName: 'Please enter CNS name',
         length1_10: 'The length is between 1 and 10 character',
-        rivateKeyVerifyLength1_32: 'The length is between 1 and 32 characters',
+        privateKeyVerifyLength1_32: 'The length is between 1 and 32 characters',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash Calculator',
