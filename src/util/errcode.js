@@ -15,16 +15,20 @@
  */
 let errCode = {
     "101001": {
-        en: "system error",
-        zh: '系统异常'
+        en: "WeBASE-Front system error",
+        zh: 'WeBASE-Front系统异常'
     },
     "101002": {
         en: "param valid fail",
         zh: '参数校验异常'
     },
     "102000": {
-        en: "system exception",
-        zh: '系统异常'
+        en: "WeBASE-Node-Manager system exception",
+        zh: 'WeBASE-Node-Manager系统异常'
+    },
+    "103001": {
+        en: "WeBASE-Sign system exception",
+        zh: 'WeBASE-Sign系统异常'
     },
     "102001": {
         en: "system exception: please check front",
@@ -1264,8 +1268,8 @@ let errCode = {
         "zh": "单个主机最多部署 4 个节点"
     },
     "202468": {
-        "en": "Cannot install node on WeBASE-Node-Manager host.",
-        "zh": "无法在WeBASE-Node-Manager主机上安装节点。"
+        "en": "Host of WeBASE-Node-Manager's ip is already existed.",
+        "zh": "节点管理服务主机IP(127.0.0.1)已存在。"
     },
     "202469": {
         "en": "Check docker installed and running of host.",
@@ -1318,7 +1322,7 @@ let errCode = {
     },
     "202482": {
         "en": "Ansible ping cannot reach target ip.",
-        "zh": "主机节点无法连通，请见ansible或网络配置。"
+        "zh": "主机节点无法连通，请检查ansible hosts免密配置。"
     },
     "202483": {
         "en": "Ansible init host of image and scp config not all success.",
