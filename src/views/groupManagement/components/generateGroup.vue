@@ -116,7 +116,7 @@ export default {
 
     methods: {
         queryFrontList() {
-            getFronts()
+            getFronts({ frontStatus: 1 })
                 .then(res => {
                     if (res.data.code === 0) {
                         this.nodeList = res.data.data

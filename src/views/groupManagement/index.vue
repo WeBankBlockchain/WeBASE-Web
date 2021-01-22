@@ -163,6 +163,7 @@ export default {
         },
         modifyClose() {
             this.modifyGroupVisibility = false;
+            this.queryGroupTable()
         },
         modifySuccess() {
             // this.modifyGroupVisibility = false;
