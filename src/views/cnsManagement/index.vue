@@ -11,7 +11,7 @@
                     <el-input v-model.trim="cnsForm.contractVersion" :placeholder="$t('text.input')" class="select-32" style="width: 200px;"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button size="small" type="primary" @click="searchCns('cnsForm')" class="modify-btn" :disabled="disabled" :loading="loading">{{this.$t('text.search')}}</el-button>
+                    <el-button size="small" type="primary" @click="searchCns('cnsForm')" class="modify-btn" :disabled="disabled" :loading="loading1">{{this.$t('text.search')}}</el-button>
                 </el-form-item>
             </el-form>
 
@@ -57,6 +57,7 @@ export default {
         return {
             disabled: false,
             loading: false,
+            loading1: false,
             currentPage: 1,
             pageSize: 10,
             total: 0,
@@ -155,6 +156,7 @@ export default {
         searchCns(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    this.loading1 = true
                     this.getCnsList('handleSearch')
                 } else {
                     return false;
@@ -177,6 +179,7 @@ export default {
             queryCnsList(reqData)
                 .then(res => {
                     this.loading = false;
+                    this.loading1 = false;
                     if (res.data.code === 0) {
                         this.cnsList = res.data.data;
                         this.total = res.data.totalCount
@@ -196,6 +199,7 @@ export default {
                 })
                 .catch(err => {
                     this.loading = false;
+                    this.loading1 = false;
                     this.$message({
                         message: err.data || this.$t('text.systemError'),
                         type: "error",

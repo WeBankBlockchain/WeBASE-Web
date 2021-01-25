@@ -409,11 +409,11 @@ export function toContractName(value) {
 export function dynamicPoint(val, num) {
     console.log(val, num)
     if (num % 3 === 0) {
-        return `${val}······`
+        return `${val}··`
     } else if (num % 3 === 1) {
         return `${val}····`
     } else {
-        return `${val}··`
+        return `${val}······`
     }
 
 }
