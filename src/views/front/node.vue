@@ -722,10 +722,10 @@ export default {
                         this.loading3 = false
                         this.loading2 = false;
                         this.$router.push("/newNode")
-                        this.$message({
-                            type: "error",
-                            message: err.data || this.$t('text.systemError')
-                        });
+                        // this.$message({
+                        //     type: "error",
+                        //     message: err.data || this.$t('text.systemError')
+                        // });
                     }else{
                         this.getHostList()
                         this.initShow = false
@@ -777,10 +777,10 @@ export default {
                         this.loading3 = false
                         this.loading2 = false;
                         this.$router.push("/newNode")
-                        this.$message({
-                            type: "error",
-                            message: err.data || this.$t('text.systemError')
-                        });
+                        // this.$message({
+                        //     type: "error",
+                        //     message: err.data || this.$t('text.systemError')
+                        // });
                     }else{
                         this.getHostList()
                         this.initShow = false
