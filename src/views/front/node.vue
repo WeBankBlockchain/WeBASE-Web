@@ -722,6 +722,9 @@ export default {
                         this.loading3 = false
                         this.loading2 = false;
                         this.$router.push("/newNode")
+                        this.nodeList = []
+                        sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
+                        this.$store.dispatch('set_node_list_action', this.nodeList)
                         // this.$message({
                         //     type: "error",
                         //     message: err.data || this.$t('text.systemError')
@@ -776,6 +779,9 @@ export default {
                         this.deployOpt = true
                         this.loading3 = false
                         this.loading2 = false;
+                        this.nodeList = []
+                        sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
+                        this.$store.dispatch('set_node_list_action', this.nodeList)
                         this.$router.push("/newNode")
                         // this.$message({
                         //     type: "error",
