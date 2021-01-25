@@ -15,16 +15,20 @@
  */
 let errCode = {
     "101001": {
-        en: "system error",
-        zh: '系统异常'
+        en: "WeBASE-Front system error",
+        zh: 'WeBASE-Front系统异常'
     },
     "101002": {
         en: "param valid fail",
         zh: '参数校验异常'
     },
     "102000": {
-        en: "system exception",
-        zh: '系统异常'
+        en: "WeBASE-Node-Manager system exception",
+        zh: 'WeBASE-Node-Manager系统异常'
+    },
+    "103001": {
+        en: "WeBASE-Sign system exception",
+        zh: 'WeBASE-Sign系统异常'
     },
     "102001": {
         en: "system exception: please check front",
