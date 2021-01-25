@@ -155,14 +155,14 @@ export default {
         searchCns(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
-                    this.getCnsList()
+                    this.getCnsList('handleSearch')
                 } else {
                     return false;
                 }
             });
 
         },
-        getCnsList() {
+        getCnsList(handleType) {
             this.loading = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
@@ -180,10 +180,12 @@ export default {
                     if (res.data.code === 0) {
                         this.cnsList = res.data.data;
                         this.total = res.data.totalCount
-                        this.$message({
-                            type: 'success',
-                            message: this.$t('text.selectSuccess')
-                        })
+                        if (handleType == 'handleSearch') {
+                            this.$message({
+                                type: 'success',
+                                message: this.$t('text.selectSuccess')
+                            })
+                        }
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -210,21 +212,21 @@ export default {
             this.currentPage = val;
             this.getCnsList();
         },
-        queryLocalCns(){
+        queryLocalCns() {
             this.loadingLocal = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: this.currentPageLocal,
                 pageSize: this.pageSizeLocal,
             }
-            
+
             findCnsInfoList(reqData)
                 .then(res => {
                     this.loadingLocal = false;
                     if (res.data.code === 0) {
                         this.localCnsList = res.data.data;
                         this.totalLocal = res.data.totalCount
-                        
+
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
