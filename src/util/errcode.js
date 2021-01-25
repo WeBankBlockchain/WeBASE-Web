@@ -321,7 +321,7 @@ let errCode = {
     },
     "201128": {
         en: "Group peers not connected",
-        zh: '与sealer间不存在有效的p2p链接'
+        zh: '群组内节点无有效P2P连接'
     },
     "201129": {
         en: "Group genesis conf already exists",
@@ -341,7 +341,7 @@ let errCode = {
     },
     "201133": {
         en: "Group is stopping",
-        zh: '正在释放资源'
+        zh: '群组停止中'
     },
     "201134": {
         en: "Group not deleted",
@@ -372,7 +372,7 @@ let errCode = {
     },
     "201200": {
         en: "Params not fit",
-        zh: '参数不合适'
+        zh: '参数不匹配'
     },
     "201201": {
         en: "Address is invalid",
@@ -396,11 +396,11 @@ let errCode = {
     },
     "201207": {
         en: "System config key is invalid",
-        zh: '系统配置密钥无效'
+        zh: '系统配置的类型不正确'
     },
     "201208": {
         en: "Unsupported for this system config key",
-        zh: '不支持此系统配置密钥'
+        zh: '不支持修改此系统配置'
     },
     "201209": {
         en: "Provide value by positive integer mode, from 100000 to 2147483647",
@@ -416,7 +416,7 @@ let errCode = {
     },
     "201216": {
         en: "Node id is invalid",
-        zh: '节点id无效'
+        zh: '节点ID不正确'
     },
     "201217": {
         en: "Invalid node type: sealer, observer, remove",
@@ -432,7 +432,7 @@ let errCode = {
     },
     "201222": {
         en: "Version of contract is out of length",
-        zh: '合约版本过长'
+        zh: '合约版本过长,不能超过32位'
     },
     "201223": {
         en: "CNS register fail ",
@@ -641,7 +641,7 @@ let errCode = {
     },
     "202013": {
         en: "invalid user id",
-        zh: '无效的用户编号'
+        zh: '无效的用户ID'
     },
     "202014": {
         en: "user already exists",
@@ -657,7 +657,7 @@ let errCode = {
     },
     "202017": {
         en: "invalid contract id",
-        zh: '无效的合约编号'
+        zh: '无效的合约ID'
     },
     "202018": {
         en: "invalid param info",
@@ -673,7 +673,7 @@ let errCode = {
     },
     "202021": {
         en: "invalid organization type",
-        zh: '无效的组织类型'
+        zh: '组织类型不正确'
     },
     "202022": {
         en: "unable to delete deployed contract",
@@ -1261,7 +1261,7 @@ let errCode = {
     },
     "202466": {
         "en": "Please pull the Docker image manually in host /ip/",
-        "zh": "主机/ip/请手动拉取 Docker 镜像"
+        "zh": "主机上的节点镜像不存在，请检查！"
     },
     "202467": {
         "en": "Max 4 nodes on a single host",
@@ -1309,7 +1309,7 @@ let errCode = {
     },
     "202479": {
         "en": "Delete host fail for host contains node(front).",
-        "zh": "删除前置包含节点的主机失败。"
+        "zh": "删除主机失败，主机仍包含节点"
     },
 
     "202480": {

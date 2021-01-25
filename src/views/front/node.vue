@@ -46,11 +46,6 @@
                 <el-divider></el-divider>
                 <el-form v-if='chainFrom' class="chain-info">
                     <el-row>
-                        <!-- <el-col :span="12">
-                            <el-form-item :label='$t("text.chainName") + "："'>
-                                <span>{{chainFrom.chainName}}</span>
-                            </el-form-item>
-                        </el-col> -->
                         <el-col :span="12">
                             <el-form-item :label='$t("text.chainVersion") + "："'>
                                 <span>{{chainFrom.version}}</span>
@@ -705,6 +700,8 @@ export default {
                     this.$store.dispatch('set_node_list_action', this.nodeList)
                     this.$router.push("/newNode")
                 } else {
+                    this.getHostList()
+                    this.initShow = false
                     if (res.data.code === 202466) {
                         this.$message({
                             type: "error",
@@ -719,13 +716,24 @@ export default {
                 }
             })
                 .catch(err => {
-                    this.deployOpt = true
-                    this.loading3 = false
-                    this.loading2 = false;
-                    this.$message({
-                        type: "error",
-                        message: err.data || this.$t('text.systemError')
-                    });
+                    if (err.data) {
+                        setTimeout( () => {
+                            this.deployOpt = true
+                            this.loading3 = false
+                            this.loading2 = false;
+                            this.$router.push("/newNode")
+                        }, 15000 * (this.nodeList.length-1))
+                    }else{
+                        this.getHostList()
+                        this.initShow = false
+                        this.deployOpt = true
+                        this.loading3 = false
+                        this.loading2 = false;
+                        this.$message({
+                            type: "error",
+                            message: err.data || this.$t('text.systemError')
+                        });
+                    }
                 });
         },
         addNode() {
@@ -751,6 +759,8 @@ export default {
                     this.$store.dispatch('set_node_list_action', this.nodeList)
                     this.$router.push("/newNode")
                 } else {
+                    this.initShow = false
+                    this.getHostList()
                     this.$message({
                         type: "error",
                         message: this.$chooseLang(res.data.code)
@@ -758,6 +768,16 @@ export default {
                 }
             })
                 .catch(err => {
+                    if(err.data) {
+                        setTimeout( () => {
+                            this.deployOpt = true
+                            this.loading3 = false
+                            this.loading2 = false;
+                            this.$router.push("/newNode")
+                        }, 15000 * (this.nodeList.length-1))
+                    }else{
+                    this.getHostList()
+                    this.initShow = false
                     this.deployOpt = true
                     this.loading3 = false
                     this.loading2 = false;
@@ -765,6 +785,8 @@ export default {
                         type: "error",
                         message: err.data || this.$t('text.systemError')
                     });
+                    }
+                    
                 });
         },
         getHostList() {
@@ -840,6 +862,7 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.nodeList = []
+                this.initShow = false; 
                 sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
                 this.$store.dispatch('set_node_list_action', this.nodeList)
             }).catch(() => {

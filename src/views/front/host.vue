@@ -19,7 +19,7 @@
                     <el-table-column :label="'IP'" prop="ip" show-overflow-tooltip></el-table-column>
                     <el-table-column :label="$t('text.installDirectory')" prop="rootDir" show-overflow-tooltip></el-table-column>
                     <!-- <el-table-column :label="'主机状态'" prop="status" show-overflow-tooltip></el-table-column> -->
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
+                    <el-table-column  :label="$t('nodes.operation')" width="100">
                         <template slot-scope="scope">
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="check(scope.row)" type="text" size="small">ping</el-button> -->
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteData(scope.row.id)" type="text" size="small">{{$t('text.delete')}}</el-button>
