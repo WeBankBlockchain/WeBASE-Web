@@ -717,12 +717,15 @@ export default {
             })
                 .catch(err => {
                     if (err.data) {
-                        setTimeout( () => {
-                            this.deployOpt = true
-                            this.loading3 = false
-                            this.loading2 = false;
-                            this.$router.push("/newNode")
-                        }, 15000 * (this.nodeList.length-1))
+                        this.initShow = false
+                        this.deployOpt = true
+                        this.loading3 = false
+                        this.loading2 = false;
+                        this.$router.push("/newNode")
+                        this.$message({
+                            type: "error",
+                            message: err.data || this.$t('text.systemError')
+                        });
                     }else{
                         this.getHostList()
                         this.initShow = false
@@ -769,22 +772,25 @@ export default {
             })
                 .catch(err => {
                     if(err.data) {
-                        setTimeout( () => {
-                            this.deployOpt = true
-                            this.loading3 = false
-                            this.loading2 = false;
-                            this.$router.push("/newNode")
-                        }, 15000 * (this.nodeList.length-1))
+                        this.initShow = false
+                        this.deployOpt = true
+                        this.loading3 = false
+                        this.loading2 = false;
+                        this.$router.push("/newNode")
+                        this.$message({
+                            type: "error",
+                            message: err.data || this.$t('text.systemError')
+                        });
                     }else{
-                    this.getHostList()
-                    this.initShow = false
-                    this.deployOpt = true
-                    this.loading3 = false
-                    this.loading2 = false;
-                    this.$message({
-                        type: "error",
-                        message: err.data || this.$t('text.systemError')
-                    });
+                        this.getHostList()
+                        this.initShow = false
+                        this.deployOpt = true
+                        this.loading3 = false
+                        this.loading2 = false;
+                        this.$message({
+                            type: "error",
+                            message: err.data || this.$t('text.systemError')
+                        });
                     }
                     
                 });
