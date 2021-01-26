@@ -235,7 +235,13 @@ export default {
         startingInfo: "节点启动中，大约需要30秒",
         stopingInfo: "节点停止中，大约需要30秒",
         resetingInfo: "链删除中，请等待",
-        deletingingInfo: "节点删除中,请等待"
+        deletingingInfo: "节点删除中,请等待",
+        upgradeFailed: "升级失败",
+        addingNode: "添加节点中",
+        restart: "重启",
+        restartingInfo: "节点重启中，请等待",
+        restartIndfo1: "重启共识节点可能导致链共识异常，请确认？",
+        restartIndfo2: "确认节点重启?"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

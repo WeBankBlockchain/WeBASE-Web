@@ -110,6 +110,7 @@
                                 <el-button v-if='scope.row.status == 1 && scope.row.nodeType == "remove" && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="stop(scope.row)">{{$t('text.stop')}}</el-button>
                                 <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
+                                <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="restartNode(scope.row)">{{$t("text.restart")}}</el-button>
                             </template>
                             <template v-else>
                                 <span>{{scope.row[head.enName]}}</span>
@@ -139,7 +140,7 @@ import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
     getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
-    getFrontStatus
+    getFrontStatus, restartNode
 } from "@/util/api";
 import { format, unique, dynamicPoint } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -454,14 +455,19 @@ export default {
 
             });
         },
-        start: function (val) {
+        /**
+         * @method  启动节点
+         */
+        start: function (val,type) {
             clearInterval(this.frontInterval)
             this.loadingNodes = true;
             let reqData = {
                 nodeId: val.nodeId
             }
             // this.loadingTxt = 
-            this.getProgresses(this.$t("text.startingInfo"))
+            if(!type){
+                this.getProgresses(this.$t("text.startingInfo"))
+            }
             this.optShow = true
             startNode(reqData).then(res => {
                 this.optShow = false
@@ -492,6 +498,9 @@ export default {
 
                 });
         },
+        /**
+         * @method  停止节点
+         */
         stop: function (val) {
             clearInterval(this.frontInterval)
             this.loadingNodes = true;
@@ -529,9 +538,65 @@ export default {
 
                 });
         },
+        /**
+         * @method  重启
+         */
+        restartNode(val) {
+            let text = this.$t("text.restartIndfo2")
+            if(val&& val.nodeType === "sealer"){
+                text = this.$t("text.restartIndfo1")
+            }
+            this.$confirm(text, this.$t("text.restart"), {
+                confirmButtonText: this.$t("text.sure"),
+                cancelButtonText: this.$t("text.cancel"),
+                type: 'warning'
+            }).then(() => {
+                this.restart(val)
+            }).catch(err => {
+                console.log(err)
+            })
+        },
+        restart(val) {
+            clearInterval(this.frontInterval)
+            this.loadingNodes = true;
+            let reqData = {
+                nodeId: val.nodeId
+            }
+            this.optShow = true
+            this.getProgresses(this.$t("text.restartingInfo"))
+            restartNode(reqData).then(res => {
+                if(res.data.code === 0){
+                    this.start(val,true)
+                }else {
+                    this.getData()
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+                .catch(err => {
+                    this.optShow = false
+                    this.getData()
+                    this.loadingNodes = false;
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        /**
+         * @method 打开修改弹窗
+         */
         update: function () {
             this.updateNodeShow = true
         },
+        /**
+         * @method  重置链
+         */
         reset() {
             this.$confirm(this.$t("text.deleteChain"), this.$t("text.delete"), {
                 confirmButtonText: this.$t("text.sure"),
@@ -843,7 +908,17 @@ export default {
                     str = this.$t('text.running');
                     break;
                 case 4:
-                    str = this.$t('text.restarting')
+                    str = this.$t('text.restarting');
+                    break;
+                case 5:
+                    str = this.$t('nodea.upgrading');
+                    break;
+                case 6:
+                    str = this.$t('text.upgradeFailed');
+                    break;
+                case 7:
+                    str = this.$t('text.addingNode');
+                    break;
             }
             return str;
         },

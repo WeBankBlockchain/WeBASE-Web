@@ -235,7 +235,13 @@ export default {
         startingInfo: "Starting, It takes about 30 seconds",
         stopingInfo: "Stoping, It takes about 30 seconds",
         resetingInfo: "Chain deleting, please wait",
-        deletingingInfo: "Node deleting, please wait"
+        deletingingInfo: "Node deleting, please wait",
+        upgradeFailed: "Upgrade failed",
+        addingNode: "Adding node",
+        restart: "Restart",
+        restartingInfo: "Node restarting,please wait",
+        restartIndfo1: "Restart consensus node may cause chain consensus exception, please confirm?",
+        restartIndfo2: "Confirm node restart?"
     },
     rule: {
         textLong: "1 to 32 characters in length",
