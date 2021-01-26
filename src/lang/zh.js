@@ -241,7 +241,8 @@ export default {
         restart: "重启",
         restartingInfo: "节点重启中，请等待",
         restartIndfo1: "重启共识节点可能导致链共识异常，请确认？",
-        restartIndfo2: "确认节点重启?"
+        restartIndfo2: "确认节点重启?",
+        initChainTimeout: "拉取镜像超时，请切换镜像拉取方式为手动"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

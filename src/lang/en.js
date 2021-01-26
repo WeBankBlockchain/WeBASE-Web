@@ -241,7 +241,8 @@ export default {
         restart: "Restart",
         restartingInfo: "Node restarting,please wait",
         restartIndfo1: "Restart consensus node may cause chain consensus exception, please confirm?",
-        restartIndfo2: "Confirm node restart?"
+        restartIndfo2: "Confirm node restart?",
+        initChainTimeout: "Pull image timeout, please switch the image pull mode to manual"
     },
     rule: {
         textLong: "1 to 32 characters in length",

@@ -590,13 +590,21 @@ export default {
                 }
             })
                 .catch(err => {
-                    this.loading3 = false
-                    this.loading1 = false;
-                    this.$message({
-                        message: err.data || this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
+                    if (err.data && this.statusNumber === 5) {
+                        this.$message({
+                            message: this.$t('text.initChainTimeout'),
+                            type: "error",
+                            duration: 2000
+                        });
+                    } else {
+                        this.loading3 = false
+                        this.loading1 = false;
+                        this.$message({
+                            message: err.data || this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
                 });
         },
         initTimer() {
