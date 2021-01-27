@@ -85,7 +85,8 @@
                                     <div class="block-amount" style="padding-bottom: 7px;">
                                         <span>
                                             <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip">
-                                                <span>{{$t("home.blockHeight")}}</span> {{item.blockNumber}}</router-link>
+                                                <span>{{$t("home.blockHeight")}}</span> {{item.blockNumber}}
+                                            </router-link>
                                         </span>
                                         <span class="color-8798AD">{{item.blockTimestamp}}</span>
                                     </div>
@@ -162,7 +163,9 @@ import { changWeek, numberFormat, unique } from "@/util/util";
 import router from "@/router";
 import errcode from "@/util/errcode";
 import sRight from "@/../static/image/s-right.png";
-import artboard from "@/../static/image/artboard.png"
+import artboard from "@/../static/image/artboard.png";
+import constant from "@/util/constant";
+import { toContractName } from "@/util/util"
 export default {
     name: "home",
     components: {
@@ -171,7 +174,7 @@ export default {
     },
     computed: {
         detailsList() {
-            let data  = [
+            let data = [
                 {
                     label: this.$t("home.nodes"),
                     name: "nodeCount",
@@ -258,12 +261,12 @@ export default {
     },
     mounted: function () {
         this.groupId = localStorage.getItem("groupId");
-        if(this.groupId && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (this.groupId && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getNetworkDetails();
             this.getNodeTable();
             this.getBlockList();
             this.getTransaction();
-             this.$nextTick(function () {
+            this.$nextTick(function () {
                 this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
                 this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
                 this.getChart();
@@ -316,11 +319,11 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getChart: function () {
@@ -351,11 +354,11 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getNodeTable: function () {
@@ -424,7 +427,7 @@ export default {
                     if (res.data.code === 0) {
                         this.blockData = res.data.data;
                     } else {
-                        
+
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
@@ -434,11 +437,11 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         getTransaction: function () {
@@ -465,11 +468,11 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         goDetailRouter(item) {
@@ -511,19 +514,25 @@ export default {
             }
             return str;
         },
-        textColor: function (val) {
+        textColor(val) {
             let colorString = "";
             switch (val) {
                 case 1:
-                    colorString = "#58cb7d";
+                    colorString = "#67C23A";
                     break;
                 case 2:
-                    colorString = "#ed5454";
+                    colorString = "#F56C6C";
+                    break;
+                case 2:
+                    colorString = "#E6A23C";
+                    break;
+                case 2:
+                    colorString = "#909399";
                     break;
             }
             return colorString;
         },
-        nodesStatus: function (val) {
+        nodesStatus(val) {
             let transString = "";
             switch (val) {
                 case 1:
@@ -531,6 +540,12 @@ export default {
                     break;
                 case 2:
                     transString = this.$t("home.unusual");
+                    break;
+                case 3:
+                    transString = this.$t("nodes.starting");
+                    break;
+                case 4:
+                    transString = this.$t("text.down");
                     break;
             }
             return transString;
@@ -567,27 +582,32 @@ export default {
         },
         splitAddress(val) {
             if (!val) return;
-            var startStr = '', endStr = '', str = '';
-            startStr = val.substring(0, 8);
-            endStr = val.substring(val.length - 4);
-            str = `${startStr}...${endStr}`;
-            return str;
+            if (constant.SYSTEMCONTRACT.includes(val)) {
+                return toContractName(val)
+            } else {
+                var startStr = '', endStr = '', str = '';
+                startStr = val.substring(0, 8);
+                endStr = val.substring(val.length - 4);
+                str = `${startStr}...${endStr}`;
+                return str;
+            }
+
         }
     }
 };
 </script>
 <style scoped>
 .node-bg {
-    background: linear-gradient(to top right, #47befa, #37eef2);
+    background: linear-gradient(102.87deg, #4ccbf3 0%, #94eefb 100%);
 }
 .contract-bg {
-    background: linear-gradient(to top right, #466dff, #30a7ff);
+    background: linear-gradient(102.87deg, #4886ff 0%, #62b0f8 100%);
 }
 .block-bg {
-    background: linear-gradient(to top right, #736aff, #b287ff);
+    background: linear-gradient(102.87deg, #7280ff 0%, #98afff 100%);
 }
 .transation-bg {
-    background: linear-gradient(to top right, #ff6e9a, #ffa895);
+    background: linear-gradient(102.87deg, #ff9472 0%, #ffc1ad 100%);
 }
 .over-view-wrapper {
     background: #f7f7f7;

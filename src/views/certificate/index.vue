@@ -124,7 +124,7 @@ export default {
                     name: this.$t('nodes.operation'),
                     width: ''
                 },
-                
+
             ]
             return data
         }
@@ -142,7 +142,7 @@ export default {
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getCertList()
         }
     },
@@ -162,7 +162,7 @@ export default {
                 const { data } = res;
                 if (data.code === 0) {
                     let fileDownload = require('js-file-download');
-                    fileDownload( data.data.content ,`${data.data.certName}.crt`);
+                    fileDownload(data.data.content, `${data.data.certName}.crt`);
                 } else {
                     this.$message({
                         type: 'error',
@@ -193,17 +193,17 @@ export default {
                     this.getCertList()
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            }).catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: err.data || this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
         onBeforeUpload(file) {
@@ -236,17 +236,17 @@ export default {
                     this.getCertList()
                 } else {
                     this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                }
-            }).catch(err => {
-                this.$message({
-                        message: this.$t('text.systemError'),
+                        message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
+                }
+            }).catch(err => {
+                this.$message({
+                    message: err.data || this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
             })
         },
         handleSizeChange(val) {

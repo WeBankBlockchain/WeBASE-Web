@@ -21,7 +21,7 @@
         </div>
         <div v-if='transationData && transationData.logs' slot :style="{'height':editorHeight + 'px'}" style="overflow-y:auto">
             <div>{</div>
-            <div v-for="(val,key) in transationData" style="padding-left: 10px;">
+            <div v-for="(val,key) in transationData" :key='key' style="padding-left: 10px;">
                 <div v-if='key != "logs"&& key != "output"'>
                     <template v-if="key=='status'">
                         <span class="transation-title">{{key}}:</span>
@@ -66,7 +66,7 @@
                     <span>{{key}}:</span>
                     <span v-if='!val.length'>{{val}}</span>
                     <span v-if='val.length'>[
-                        <div v-for='item in val' style="padding-left: 10px;">
+                        <div v-for='(item,index) in val' :key='index' style="padding-left: 10px;">
                             <div>{</div>
                             <div style="padding-left: 10px;">
                                 <div>
@@ -162,6 +162,7 @@
 <script>
 import { getFunctionAbi } from "@/util/api"
 import { debuglog } from 'util';
+import { toContractName } from "@/util/util"
 export default {
     name: 'editor',
     props: ['data', 'show', 'input', 'editorOutput', 'sendConstant'],
@@ -202,8 +203,14 @@ export default {
                 this.decodefun()
             }
         }
-
-
+        for (const key in this.data) {
+            if (this.data.hasOwnProperty(key)) {
+                if(key == 'to'){
+                    const element = this.data[key];
+                    this.data[key] = `${element} ${toContractName(element)}`
+                }
+            }
+        }
     },
     methods: {
         decodeOutput: function () {
@@ -297,15 +304,15 @@ export default {
             list.eventName = eventData.abiInfo.name + "(";
             for (let i = 0; i < eventData.abiInfo.inputs.length; i++) {
                 if (i == eventData.abiInfo.inputs.length - 1) {
-                    if(eventData.abiInfo.inputs[i]['indexed']){
-                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" +" "+ eventData.abiInfo.inputs[i].name;
-                    }else {
+                    if (eventData.abiInfo.inputs[i]['indexed']) {
+                        list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" + " " + eventData.abiInfo.inputs[i].name;
+                    } else {
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name;
                     }
                 } else {
                     if (eventData.abiInfo.inputs[i]['indexed']) {
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + "indexed" + " " + eventData.abiInfo.inputs[i].name + ",";
-                    }else {
+                    } else {
                         list.eventName = list.eventName + eventData.abiInfo.inputs[i].type + " " + eventData.abiInfo.inputs[i].name + ",";
                     }
                 }

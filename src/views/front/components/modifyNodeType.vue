@@ -3,7 +3,7 @@
         <el-form :model="modifyForm" :rules="rules" ref="modifyForm" label-width="110px" class="demo-ruleForm">
             <el-form-item :label="$t('nodes.admin')" prop="adminRivateKey" style="width: 320px;">
                 <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
-                    <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+                    <el-option v-for="(item,index) in adminRivateKeyList" :key="index" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
@@ -44,12 +44,12 @@ export default {
             adminRivateKeyList: [],
             nodeTypeList: [
                 {
-                    type: 'observer',
-                    name: this.$t("nodes.observer")
-                },
-                {
                     type: 'sealer',
                     name: this.$t("nodes.sealer")
+                },
+                {
+                    type: 'observer',
+                    name: this.$t("nodes.observer")
                 },
                 {
                     type: 'remove',
@@ -60,17 +60,17 @@ export default {
                 adminRivateKey: '',
                 nodeType: ''
             },
-            deployType: null
+            deployType: null,
+            ruleTest: this.$t("rule.adminRule")
         }
     },
-
     computed: {
         rules() {
             let data = {
                 adminRivateKey: [
                     {
                         required: true,
-                        message: this.$t("rule.adminRule"),
+                        message: this.ruleTest,
                         trigger: "blur"
                     }
                 ],
@@ -95,9 +95,9 @@ export default {
     },
 
     mounted() {
-        if(localStorage.getItem("deployType")){
+        if (localStorage.getItem("deployType")) {
             this.deployType = localStorage.getItem("deployType")
-        }else{
+        } else {
             this.deployType = 0
         }
         this.getUserData();
@@ -120,7 +120,7 @@ export default {
                         }).catch(() => {
                             console.log('close')
                         });
-                    }else if((this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'remove') || (this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'remove')){
+                    } else if ((this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'remove') || (this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'remove')) {
                         this.$confirm(this.$t("nodes.removeText"), this.$t("text.tips"), {
                             confirmButtonText: this.$t("text.sure"),
                             cancelButtonText: this.$t("text.cancel"),
@@ -130,7 +130,7 @@ export default {
                         }).catch(() => {
                             console.log('close')
                         });
-                    }else if((this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'sealer') || (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer')){
+                    } else if ((this.modifyNode.nodeType === 'observer' && this.modifyForm.nodeType === 'sealer') || (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer')) {
                         this.$confirm(this.$t("nodes.sealerText"), this.$t("text.tips"), {
                             confirmButtonText: this.$t("text.sure"),
                             cancelButtonText: this.$t("text.cancel"),
@@ -140,10 +140,10 @@ export default {
                         }).catch(() => {
                             console.log('close')
                         });
-                    }else {
+                    } else {
                         this.queryConsensusNodeId()
                     }
-                    
+
                 } else {
                     return false;
                 }
@@ -178,7 +178,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -194,12 +194,15 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
+                        if (res.data.data.length === 0) {
+                            this.ruleTest = this.$t("text.ruleAddUser")
+                        }
                         this.adminRivateKeyList = [];
                         res.data.data.forEach(value => {
                             if (value.hasPk === 1) {
@@ -217,7 +220,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -231,7 +234,7 @@ export default {
 .sure-btn >>> .el-button {
     padding: 9px 16px;
 }
-.info{
+.info {
     padding-left: 30px;
     color: #f00;
 }

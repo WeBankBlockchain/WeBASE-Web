@@ -22,17 +22,17 @@
                         <el-tooltip effect="dark" placement="top-start" style="padding-top:4px;">
                             <div slot="content">
                                 {{this.$t("text.example")}}：<br>{{this.$t("contracts.createTable")}}：
-                                <i class="wbs-icon-copy font-12" @click="copySql('create table t_demo(name varchar, item_id varchar, item_name varchar, primary key(name))')" :title="$t('text.copy')">create table t_demo(name varchar, item_id varchar, item_name varchar, primary key(name))</i> 
-                                <br>{{this.$t("contracts.insertTable")}}： 
-                                <i class="wbs-icon-copy font-12" @click="copySql('insert into t_demo (name, item_id, item_name) values (fruit, 1, apple1)')" :title="$t('text.copy')">insert into t_demo (name, item_id, item_name) values (fruit, 1, apple1)</i> 
+                                <i class="wbs-icon-copy font-12" @click="copySql('create table t_demo(name varchar, item_id varchar, item_name varchar, primary key(name))')" :title="$t('text.copy')">create table t_demo(name varchar, item_id varchar, item_name varchar, primary key(name))</i>
+                                <br>{{this.$t("contracts.insertTable")}}：
+                                <i class="wbs-icon-copy font-12" @click="copySql('insert into t_demo (name, item_id, item_name) values (fruit, 1, apple1)')" :title="$t('text.copy')">insert into t_demo (name, item_id, item_name) values (fruit, 1, apple1)</i>
                                 <br>{{this.$t("contracts.searchTable")}}：
-                                <i class="wbs-icon-copy font-12" @click="copySql('select * from t_demo where name = fruit')" :title="$t('text.copy')">select * from t_demo where name = fruit</i> 
+                                <i class="wbs-icon-copy font-12" @click="copySql('select * from t_demo where name = fruit')" :title="$t('text.copy')">select * from t_demo where name = fruit</i>
                                 <br>{{this.$t("contracts.updateTable")}}：
-                                <i class="wbs-icon-copy font-12" @click="copySql('update t_demo set item_name = orange where name = fruit and item_id = 1')" :title="$t('text.copy')">update t_demo set item_name = orange where name = fruit and item_id = 1</i> 
+                                <i class="wbs-icon-copy font-12" @click="copySql('update t_demo set item_name = orange where name = fruit and item_id = 1')" :title="$t('text.copy')">update t_demo set item_name = orange where name = fruit and item_id = 1</i>
                                 <br>{{this.$t("contracts.deleteTable")}}：
-                                <i class="wbs-icon-copy font-12" @click="copySql('delete from t_demo where name = fruit and item_id = 1')" :title="$t('text.copy')">delete from t_demo where name = fruit and item_id = 1</i> 
+                                <i class="wbs-icon-copy font-12" @click="copySql('delete from t_demo where name = fruit and item_id = 1')" :title="$t('text.copy')">delete from t_demo where name = fruit and item_id = 1</i>
                                 <br>{{this.$t("contracts.tableDetail")}}：
-                                <i class="wbs-icon-copy font-12" @click="copySql('desc t_demo')" :title="$t('text.copy')">desc t_demo</i> 
+                                <i class="wbs-icon-copy font-12" @click="copySql('desc t_demo')" :title="$t('text.copy')">desc t_demo</i>
                             </div>
                             <i class="el-icon-info contract-icon font-15">Example</i>
                         </el-tooltip>
@@ -109,13 +109,13 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
         this.initEditor()
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserData()
         }
     },
@@ -151,41 +151,41 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];
-                        if(res.data.data.length == 0){
+                        if (res.data.data.length == 0) {
                             this.$message({
                                 type: "info",
                                 message: this.$t("contracts.addPrivateKeyInfo")
-                            }); 
+                            });
                         }
                         res.data.data.forEach(value => {
                             if (value.hasPk === 1) {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if(this.adminRivateKeyList.length) this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                        if (this.adminRivateKeyList.length) this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
-                        
+
                     }
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         runSql(formName) {
@@ -230,7 +230,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

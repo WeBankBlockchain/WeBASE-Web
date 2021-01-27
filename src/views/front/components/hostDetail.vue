@@ -20,20 +20,17 @@
             <div class="more-search-table">
                 <div class="search-item">
                     <span>{{$t('monitor.showDate')}}</span>
-                    <el-date-picker v-model="currentDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" 
-                    :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
+                    <el-date-picker v-model="currentDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" :default-value="`${Date()}`" class=" select-32" @change="changeCurrentDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
                     <span>{{$t('monitor.contrastDate')}}</span>
-                    <el-date-picker v-model="contrastDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" 
-                    :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" class=" select-32" @change="changeContrastDate">
+                    <el-date-picker v-model="contrastDate" type="date" :placeholder="$t('monitor.selectDate')" :picker-options="pickerOption" :format="$t('monitor.dateLabel')" :value-format="$t('monitor.dateFormat')" class=" select-32" @change="changeContrastDate">
                     </el-date-picker>
                 </div>
                 <div class="search-item">
                     <span>{{$t('monitor.startEndTime')}}</span>
-                    <el-time-picker is-range v-model="startEndTime" :range-separator="$t('system.to')"
-                     :start-placeholder="$t('monitor.startTime')" :end-placeholder="$t('monitor.endTime')" :placeholder="$t('monitor.timeRange')" class="time-select-32">
+                    <el-time-picker is-range v-model="startEndTime" :range-separator="$t('system.to')" :start-placeholder="$t('monitor.startTime')" :end-placeholder="$t('monitor.endTime')" :placeholder="$t('monitor.timeRange')" class="time-select-32">
                     </el-time-picker>
                 </div>
                 <div class="search-item">
@@ -76,7 +73,7 @@
 import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
 import { metricInfo, nodesHealth } from "@/util/api";
-import { format, numberFormat,formatData } from "@/util/util.js";
+import { format, numberFormat, formatData } from "@/util/util.js";
 import Bus from "@/bus"
 export default {
     name: "hostDetail",
@@ -85,10 +82,10 @@ export default {
         "v-metric-chart": metricChart
     },
     watch: {
-        nodeIp: function() {
+        nodeIp: function () {
             this.getNodeIpDetail();
         },
-        $route: function() {
+        $route: function () {
             this.nodesQuery = this.$root.$route.query;
         }
     },
@@ -97,7 +94,7 @@ export default {
             loadingInit: false,
             loading: false,
             sureing: false,
-            currentDate: format(new Date().getTime(),'yyyy-MM-dd'),
+            currentDate: format(new Date().getTime(), 'yyyy-MM-dd'),
             contrastDate: null,
             startEndTime: [new Date(formatData()), new Date()],
             beginDate: "",
@@ -112,8 +109,8 @@ export default {
             tab: "hostInfo",
             chartParam: {
                 gap: 60,
-                beginDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date(formatData()).getTime(),'HH:mm:ss')}`,
-                endDate: `${format(new Date().getTime(),'yyyy-MM-dd')}T${format(new Date().getTime(),'HH:mm:ss')}`,
+                beginDate: `${format(new Date().getTime(), 'yyyy-MM-dd')}T${format(new Date(formatData()).getTime(), 'HH:mm:ss')}`,
+                endDate: `${format(new Date().getTime(), 'yyyy-MM-dd')}T${format(new Date().getTime(), 'HH:mm:ss')}`,
                 contrastBeginDate: "",
                 contrastEndDate: "",
                 groupId: localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '1'
@@ -142,7 +139,7 @@ export default {
             nodesQuery: this.$root.$route.query
         };
     },
-     beforeDestroy: function () {
+    beforeDestroy: function () {
         Bus.$off("changeGroup")
         Bus.$off("chooselanguage")
     },
@@ -156,23 +153,23 @@ export default {
         })
     },
     methods: {
-        changGroup(val){
+        changGroup(val) {
             this.chartParam.groupId = val
-            if(this.tab=='chainInfo') {
+            if (this.tab == 'chainInfo') {
                 this.getHealthData()
-            }else{
+            } else {
                 this.getChartData()
             }
         },
         getChartData() {
-            if(this.reloadNum===1){
+            if (this.reloadNum === 1) {
                 this.loadingInit = true
             }
             this.loading = true;
             this.sureing = true;
             var reqData = {
-                    nodeId: this.nodesQuery.nodeId
-                },
+                nodeId: this.nodesQuery.nodeId
+            },
                 reqQurey = {};
             reqQurey = this.chartParam;
             metricInfo(reqData, reqQurey)
@@ -188,12 +185,12 @@ export default {
                         ) {
                             var timestampList =
                                 data[0]["data"]["lineDataList"][
-                                    "timestampList"
+                                "timestampList"
                                 ] || [];
                         } else {
                             var timestampList =
                                 data[0]["data"]["contrastDataList"][
-                                    "timestampList"
+                                "timestampList"
                                 ] || [];
                         }
                         this.metricData = data;
@@ -220,9 +217,9 @@ export default {
                                 item.metricUint = this.$t('monitor.bandwidth');
                                 item.metricU = "KB/s";
                             }
-                            if(this.chartParam.contrastBeginDate){
+                            if (this.chartParam.contrastBeginDate) {
                                 item.data.contrastDataList.contractDataShow = true
-                            }else{
+                            } else {
                                 item.data.contrastDataList.contractDataShow = false
                             }
                             item.data.contrastDataList.timestampList = timestampList;
@@ -239,7 +236,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -249,8 +246,8 @@ export default {
             this.loading = true;
             this.sureing = true;
             var reqData = {
-                    nodeId: this.nodesQuery.nodeId
-                },
+                nodeId: this.nodesQuery.nodeId
+            },
                 reqQurey = {};
             reqQurey = this.chartParam;
             nodesHealth(reqData, reqQurey)
@@ -265,12 +262,12 @@ export default {
                         ) {
                             var timestampList =
                                 data[0]["data"]["lineDataList"][
-                                    "timestampList"
+                                "timestampList"
                                 ] || [];
                         } else {
                             var timestampList =
                                 data[0]["data"]["contrastDataList"][
-                                    "timestampList"
+                                "timestampList"
                                 ] || [];
                         }
                         this.nodesHealthData = data;
@@ -279,7 +276,7 @@ export default {
                                 item.metricName = this.$t('monitor.blockHeight');
                             } else if (item.metricType === "pbftView") {
                                 item.metricName = "pbftView";
-                            }else if (item.metricType === 'pendingCount'){
+                            } else if (item.metricType === 'pendingCount') {
                                 item.metricName = this.$t('monitor.pendingCount');
                             }
                             item.data.contrastDataList.timestampList = timestampList;
@@ -296,7 +293,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -305,7 +302,7 @@ export default {
         changeCurrentDate($event) {
             this.startEndTime = [new Date(formatData()), new Date()];
         },
-        changeContrastDate($event) {},
+        changeContrastDate($event) { },
         confirmParam(val) {
             this.timeParam();
             switch (val) {
@@ -344,8 +341,8 @@ export default {
             }
         },
         timeParam() {
-            let initStartTime = format(new Date(this.startEndTime[0]).getTime(),'HH:mm:ss') ,
-                initEndTime = format(new Date(this.startEndTime[1]).getTime(),'HH:mm:ss');
+            let initStartTime = format(new Date(this.startEndTime[0]).getTime(), 'HH:mm:ss'),
+                initEndTime = format(new Date(this.startEndTime[1]).getTime(), 'HH:mm:ss');
             if (this.currentDate) {
                 this.beginDate = `${this.currentDate}T${initStartTime}`;
                 this.endDate = `${this.currentDate}T${initEndTime}`;
@@ -383,7 +380,7 @@ export default {
 .search-item > span {
     margin-right: 5px;
 }
-.more-search-table>>>.el-radio + .el-radio {
+.more-search-table >>> .el-radio + .el-radio {
     margin-left: 10px;
 }
 .metric-content {
@@ -397,14 +394,14 @@ export default {
     margin-top: -1px;
     min-height: 700px;
 }
-.tab-list>>>.el-button {
+.tab-list >>> .el-button {
     border: none;
     background: transparent;
     padding: 10px 12px;
     color: #666666;
     border-radius: 0;
 }
-.tab-list>>>.el-button:hover {
+.tab-list >>> .el-button:hover {
     color: #1e1e1e;
 }
 .tab-list .active {

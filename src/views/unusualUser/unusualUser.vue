@@ -58,10 +58,6 @@
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
-            <!-- <div class="notify-cation" v-if="noticeVisibility">
-                <div style="text-align: right;"><i class="el-icon-close" @click="closeNotice"></i></div>
-                <p>异常过多，已经停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。</p>
-            </div> -->
         </div>
 
     </div>
@@ -135,7 +131,7 @@ export default {
         }
     },
     mounted() {
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualUserList();
         }
     },
@@ -176,7 +172,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

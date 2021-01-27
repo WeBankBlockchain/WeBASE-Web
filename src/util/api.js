@@ -143,7 +143,7 @@ export function getContractList(data) {
 }
 
 // search contract list for contract path
-export function searchContract (data) {
+export function searchContract(data) {
     return get({
         url: `${url.ORG_LIST}/contract/contractList/multiPath`,
         method: 'post',
@@ -1512,7 +1512,7 @@ export function deletePath(data) {
 //event check 
 export function checkEvent(data) {
     return post({
-        url: `${ url.ORG_LIST }/event/eventLogs/list`,
+        url: `${url.ORG_LIST}/event/eventLogs/list`,
         method: 'post',
         data: data,
         headers: {
@@ -1572,3 +1572,336 @@ export function eventContractInfo(data, list) {
         }
     })
 }
+
+// 仓库列表
+export function getContractStore() {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractStoreList`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getContractStoreById(storeId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractStoreById/${storeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//
+export function getContractItemById(contractId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractItemById/${contractId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getContractFolderById(contractFolderId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractFolderById/${contractFolderId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// 通过文件ID获取文件下的合约
+export function getContractItemByFolderId(folderId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getContractItemByFolderId/${folderId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getFolderItemListByStoreId(storeId) {
+    return get({
+        url: `${url.ORG_LIST}/contractStore/getFolderItemListByStoreId/${storeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//在线工具
+//生成sign
+export function signHash(data) {
+    return post({
+        url: `${url.ORG_LIST}/trans/signMessageHash`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function batchSaveContract(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/copyContracts`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//注册cns
+export function registerCns(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/registerCns`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//cns查询
+
+export function findCnsInfo(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/findCns`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//localCns查询
+
+export function findCnsInfoList(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/findCnsList`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**
+ * @method 查询主机列表
+ * @param none
+ */
+export function getHosts() {
+    return get({
+        url: `${url.ORG_LIST}/host/list`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 添加主机
+ * @param String sshIp; String sshUser; int sshPort ;init dockerPort ; String rootDir
+ */
+export function addHost(data) {
+    return post({
+        url: `${url.ORG_LIST}/host/add`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 检测主机
+ * @param Array hostIdList
+ */
+export function checkHost(data) {
+    return post({
+        url: `${url.ORG_LIST}/host/check`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 检测nodemgr ansible
+ */
+export function getAnsible() {
+    return post({
+        url: `${url.ORG_LIST}/host/ansible`,
+        method: 'post',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 部署初始化
+ * 
+ */
+export function initChainData(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/init`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**
+ * @method 部署初始化
+ * 
+ */
+export function deployChainData(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/config`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 检测端口
+ * 
+ */
+export function checkPort(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/checkPort`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  config
+ *
+ */
+export function startChainData(data) {
+    return get({
+        url: `${url.ORG_LIST}/deploy/chain/start`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method ping主机
+ * 
+ */
+export function pingHostData(data) {
+    return post({
+        url: `${url.ORG_LIST}/host/ping`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 添加节点
+ */
+export function addChainNodeData(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/node/add`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  删除主机
+ */
+export function deleteHost(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/host/${data}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 刷新front
+ */
+export function refreshFront() {
+    return get({
+        url: `${url.ORG_LIST}/front/refresh`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**
+ * @method  查询初始化状态
+ */
+export function initCheck(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/initCheck`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  更新front状态
+ */
+export function getFrontStatus() {
+    return get({
+        url: `${url.ORG_LIST}/front/refresh/status`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method 重启节点
+ */
+export function restartNode(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/node/stopForce`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+

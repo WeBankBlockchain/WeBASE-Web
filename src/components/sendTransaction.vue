@@ -20,6 +20,28 @@
             <span>{{data.contractName}}</span>
         </div>
         <div class="send-item">
+            <span class="send-item-title">CNS:</span>
+            <span>
+                <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
+            </span>
+        </div>
+        <div class="send-item" v-if="isCNS">
+            <span class="send-item-title"></span>
+            <el-input v-model.trim="cnsName" style="width: 260px;margin-bottom:4px;" :placeholder="$t('dialog.cnsName')">
+                <template slot="prepend">
+                    <span class="">name</span>
+                </template>
+            </el-input>
+        </div>
+        <div class="send-item" v-if="isCNS">
+            <span class="send-item-title"></span>
+            <el-input v-model.trim="cnsVersion" style="width: 260px;margin-bottom:4px;" :placeholder="$t('dialog.cnsVersion')">
+                <template slot="prepend">
+                    <span class="">version</span>
+                </template>
+            </el-input>
+        </div>
+        <div class="send-item" v-else>
             <span class="send-item-title">{{this.$t('contracts.contractAddress')}}:</span>
             <el-input v-model="contractAddress" style="width: 260px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
             <el-tooltip class="item" effect="dark" :content="$t('contracts.contractAddressInfo')" placement="top-start">
@@ -47,7 +69,7 @@
         <div class="send-item" v-show="pramasData.length" style="line-height: 25px;">
             <span class="send-item-title" style="position: relative;top: 5px;">{{this.$t("contracts.params")}}:</span>
             <ul style="position: relative;top: -25px;">
-                <li v-for="(item,index) in pramasData" style="margin-left:120px;">
+                <li v-for="(item,index) in pramasData" style="margin-left:120px;margin-bottom: 5px;">
                     <el-input v-model="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
                         <template slot="prepend">
                             <span class="">{{item.name}}</span>
@@ -65,9 +87,9 @@
     </div>
 </template>
 <script>
-import { sendTransation, getUserList } from "@/util/api";
+import { sendTransation, getUserList, findCnsInfo } from "@/util/api";
 import errcode from "@/util/errcode";
-import {isJson} from "@/util/util"
+import { isJson } from "@/util/util"
 export default {
     name: "sendTransation",
     props: ["data", "dialogClose", "abi", 'version', 'address'],
@@ -89,13 +111,17 @@ export default {
             contractAddress: this.data.contractAddress || "",
             constant: false,
             pramasObj: null,
-            stateMutability: ''
+            stateMutability: '',
+            isCNS: false,
+            cnsList: [],
+            cnsVersion: "",
+            cnsName: ""
         };
     },
     computed: {
-        showUser(){
+        showUser() {
             let showUser = true;
-            if(this.constant || this.stateMutability==='view' || this.stateMutability==='pure'){
+            if (this.constant || this.stateMutability === 'view' || this.stateMutability === 'pure') {
                 showUser = false
             }
             return showUser
@@ -107,7 +133,19 @@ export default {
     },
     methods: {
         submit: function (formName) {
-            this.send();
+            if (this.isCNS) {
+                if (!this.cnsName || !this.cnsVersion) {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('text.cnsNameVersion')
+                    })
+                    return
+                } else {
+                    this.send();
+                }
+            } else {
+                this.send();
+            }
         },
         close: function (formName) {
             this.$emit("close", false);
@@ -168,7 +206,7 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
@@ -193,7 +231,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -205,23 +243,23 @@ export default {
             if (this.transation.funcType === "constructor") {
                 this.transation.funcName = this.data.contractName;
             }
-            
+
             if (this.transation.funcValue.length) {
                 for (let i = 0; i < this.transation.funcValue.length; i++) {
                     let data = this.transation.funcValue[i].replace(
                         /^\s+|\s+$/g,
                         ""
                     );
-                    if(data && isJson(data)){
+                    if (data && isJson(data)) {
                         try {
                             this.transation.funcValue[i] = JSON.parse(data)
                         } catch (error) {
                             console.log(error)
                         }
-                    }else {
+                    } else {
                         this.transation.funcValue[i] = data;
                     }
-                    
+
                 }
             }
             let functionName = "";
@@ -230,15 +268,19 @@ export default {
                     functionName = value.name
                 }
             })
-            
+
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                user: this.constant || this.stateMutability==='view' || this.stateMutability==='pure' ? '' : this.transation.userName,
+                user: this.constant || this.stateMutability === 'view' || this.stateMutability === 'pure' ? '' : this.transation.userName,
                 contractName: this.data.contractName,
                 funcName: functionName || "",
                 funcParam: this.transation.funcValue,
                 contractId: this.data.contractId,
-                contractAbi: [this.pramasObj]
+                contractAbi: [this.pramasObj],
+                useCns: this.isCNS,
+                cnsName: this.isCNS ? this.cnsName : "",
+                version: this.isCNS ? this.cnsVersion : '',
+
             };
             if (this.contractAddress) {
                 data.contractAddress = this.contractAddress
@@ -260,10 +302,10 @@ export default {
                         if (this.contractAddress && !this.data.contractAddress) {
                             successData.contractAddress = this.contractAddress
                         }
-                        this.$emit("success", Object.assign({},successData,{
+                        this.$emit("success", Object.assign({}, successData, {
                             constant: this.constant
-                        }) );
-                        if (this.constant || this.stateMutability==='view' || this.stateMutability==='pure') {
+                        }));
+                        if (this.constant || this.stateMutability === 'view' || this.stateMutability === 'pure') {
                             this.$message({
                                 type: "success",
                                 message: this.$t("text.selectSuccess")
@@ -294,7 +336,7 @@ export default {
                     this.buttonClick = false;
                     this.close();
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -303,6 +345,32 @@ export default {
         splitString(val) {
             var str = val;
             return str.substring(0, 8)
+        },
+        changeCns(val) {
+            if (val) {
+                this.queryFindCnsInfo()
+            }
+        },
+        queryFindCnsInfo() {
+            let param = {
+                groupId: localStorage.getItem('groupId'),
+                contractAddress: this.data.contractAddress
+            }
+            findCnsInfo(param)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        if (res.data.data) {
+                            this.cnsVersion = res.data.data.version;
+                            this.cnsName = res.data.data.cnsName
+                        }
+
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
         }
     }
 };
@@ -323,7 +391,7 @@ export default {
 .send-item-params {
     display: inline-block;
 }
-.send-item >>>.el-input__inner {
+.send-item >>> .el-input__inner {
     height: 32px;
     line-height: 32px;
 }

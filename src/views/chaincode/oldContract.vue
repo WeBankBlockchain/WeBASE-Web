@@ -19,7 +19,7 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select">
+                    <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -31,7 +31,11 @@
                             <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center"></el-table-column>
+                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center">
+                        <template slot-scope="scope">
+                            <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="handleType" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
                         <template slot-scope="scope">
                             <span>{{contractStatusZh(scope.row.handleType) }}</span>
@@ -56,11 +60,12 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column :label="$t('nodes.operation')" width="220">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -68,36 +73,6 @@
                 </el-pagination>
             </div>
         </div>
-        <!-- <div class="module-wrapper" style="padding: 30px 29px 0px;">
-            <p>冻结/解冻记录</p>
-            <el-table :data="contractHistoryList" tooltip-effect="dark">
-                <el-table-column v-for="head in contractHistoryHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
-                    <template slot-scope="scope">
-                        <template v-if="head.enName!='operate'">
-                            <span v-if="head.enName == 'status'">
-                                {{handleContractStatusZh(scope.row[head.enName])}}
-                            </span>
-                            <span v-else-if="head.enName == 'modifyAddress'">
-                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.modifyAddress)" :title="$t('privateKey.copy')"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else-if="head.enName == 'contractAddress'">
-                                <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('privateKey.copy')"></i>
-                                {{scope.row[head.enName]}}
-                            </span>
-                            <span v-else>
-                                {{scope.row[head.enName]}}
-                            </span>
-                        </template>
-                        <template v-else>
-                            <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteHistory(scope.row)">{{$t('govCommittee.delete')}}</el-button>
-                        </template>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination class="page" @size-change="historySizeChange" @current-change="historyCurrentChange" :current-page="historyCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="historyPageSize" layout="total, sizes, prev, pager, next, jumper" :total="historyTotal">
-            </el-pagination>
-        </div> -->
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="500px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
@@ -112,6 +87,9 @@
         <el-dialog v-if="checkEventResultVisible" :title="$t('table.checkEventResult')" :visible.sync="checkEventResultVisible" width="670px" center class="send-dialog">
             <check-event-result @checkEventResultSuccess="checkEventResultSuccess($event)" @checkEventResultClose="checkEventResultClose" :checkEventResult="checkEventResult"></check-event-result>
         </el-dialog>
+        <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
+            <mgmt-cns :mgmtCnsItem="mgmtCnsItem" :contractName="contractName" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -122,6 +100,7 @@ import abiDialog from "./dialog/abiDialog"
 import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
+import mgmtCns from "./dialog/mgmtCns"
 import { getContractList, getAllContractStatus, deleteHandleHistory } from "@/util/api"
 import router from '@/router'
 import errcode from "@/util/errcode";
@@ -134,7 +113,8 @@ export default {
         "send-transation": sendTransation,
         freezeThaw,
         checkEventDialog,
-        checkEventResult
+        checkEventResult,
+        mgmtCns
     },
     data: function () {
         return {
@@ -162,10 +142,10 @@ export default {
             handleFreezeThawType: '',
             historyCurrentPage: 1,
             historyPageSize: 10,
-            historyTotal: 0,  
+            historyTotal: 0,
             btnIndex: '',
             btnLoading: false,
-            adminRivateKeyList: [],          
+            adminRivateKeyList: [],
             contractHistoryList: [],
             contractHistoryHead: [
                 {
@@ -183,7 +163,7 @@ export default {
                     name: this.$t("contracts.contractAddress"),
                     width: ''
                 },
-                 {
+                {
                     enName: 'status',
                     name: this.$t("contracts.status"),
                     width: ''
@@ -208,11 +188,13 @@ export default {
             checkEventResultVisible: false,
             // contractInfo: null,
             checkEventResult: null,
-            groupId: localStorage.getItem("groupId")
+            groupId: localStorage.getItem("groupId"),
+            mgmtCnsVisible: false,
+            mgmtCnsItem: {}
         }
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -235,7 +217,7 @@ export default {
                 contractAddress: this.contractAddress,
                 contractStatus: 2
             }
-            if(localStorage.getItem("root") === 'developer'){
+            if (localStorage.getItem("root") === 'developer') {
                 data.account = localStorage.getItem("user")
             }
             getContractList(data).then(res => {
@@ -248,17 +230,17 @@ export default {
                     });
                     dataArray.forEach(item => {
                         item.haveEvent = false
-                        if(item.contractAbi) {
-                            let contractAbi  = JSON.parse(item.contractAbi)
+                        if (item.contractAbi) {
+                            let contractAbi = JSON.parse(item.contractAbi)
                             for (let index = 0; index < contractAbi.length; index++) {
-                                if(contractAbi[index]['type'] === "event") {
+                                if (contractAbi[index]['type'] === "event") {
                                     item.haveEvent = true
                                     break;
                                 }
                             }
                         }
                     });
-                        console.log(dataArray);
+                    console.log(dataArray);
                     this.queryAllContractStatus(contractAddressList, dataArray)
                 } else {
                     this.$message({
@@ -269,7 +251,7 @@ export default {
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -301,7 +283,7 @@ export default {
                     }
                 }).catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -328,7 +310,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -349,7 +331,7 @@ export default {
                                     type: 'success',
                                     message: this.$t('govCommittee.success')
                                 })
-                                
+
                             } else {
                                 this.$message({
                                     message: this.$chooseLang(res.data.code),
@@ -361,7 +343,7 @@ export default {
                         .catch(err => {
                             this.btnLoading = false
                             this.$message({
-                                message: this.$t('text.systemError'),
+                                message: err.data || this.$t('text.systemError'),
                                 type: "error",
                                 duration: 2000
                             });
@@ -396,6 +378,14 @@ export default {
                 path: "/contract",
                 query: {
                     contractId: val.contractId,
+                    contractPath: val.contractPath
+                }
+            })
+        },
+        openPath(val) {
+            router.push({
+                path: "/contract",
+                query: {
                     contractPath: val.contractPath
                 }
             })
@@ -476,7 +466,7 @@ export default {
         freezeThawSuccess() {
             this.freezeThawVisible = false
             this.getContracts()
-            
+
         },
         freezeThawClose() {
             this.freezeThawVisible = false
@@ -514,7 +504,7 @@ export default {
         checkEvent: function (val) {
             this.contractInfo = val;
             this.$router.push({
-                path:'/eventCheck',
+                path: '/eventCheck',
                 query: {
                     groupId: this.groupId,
                     type: 'contract',
@@ -529,12 +519,29 @@ export default {
         checkEventClose() {
             this.checkEventVisible = false;
         },
-        checkEventResultSuccess(){
+        checkEventResultSuccess() {
             this.checkEventResultVisible = false
         },
-        checkEventResultClose(){
+        checkEventResultClose() {
             this.checkEventResultVisible = false
         },
+        handleMgmtCns(item) {
+            this.mgmtCnsVisible = true;
+            this.mgmtCnsItem = item;
+        },
+        mgmtCnsResultSuccess() {
+            this.mgmtCnsVisible = false;
+        },
+        mgmtCnsResultClose() {
+            this.mgmtCnsVisible = false;
+        },
+        clearInput() {
+            this.contractName = "";
+            this.contractAddress = "";
+            this.contractData = "";
+            this.currentPage = 1;
+            this.getContracts()
+        }
     }
 }
 </script>

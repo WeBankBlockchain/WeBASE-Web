@@ -47,7 +47,7 @@
                             </ul>
                         </template>
                     </el-table-column>
-                    <el-table-column v-for="head in unusualContractHead" :key="head.enName" :label="head.name" show-overflow-tooltip align="center" v-if="head.enName!=='hashs'">
+                    <el-table-column v-for="(head,index) in unusualContractHead" :key="index" :label="head.name" show-overflow-tooltip align="center" v-if="head.enName!=='hashs'">
                         <template slot-scope="scope">
                             <span>{{scope.row[head.enName]}}</span>
                         </template>
@@ -143,7 +143,7 @@ export default {
         }
     },
     mounted() {
-        if(localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualContractList();
         }
     },
@@ -184,7 +184,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

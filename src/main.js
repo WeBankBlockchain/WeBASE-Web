@@ -44,7 +44,7 @@ Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.withCredentials = true;
-axios.defaults.timeout = 60 * 1000;
+// axios.defaults.timeout = 60 * 1000;
 Vue.use(router);
 Vue.use(VueClipboard);
 Vue.use(ElementUI, {

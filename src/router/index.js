@@ -21,6 +21,9 @@ const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
 const front = resolve => require(['@/views/front/index'], resolve);
+const host = resolve => require(['@/views/front/host'], resolve);
+const node = resolve => require(['@/views/front/node'], resolve);
+const newFront = resolve => require(['@/views/front/front'], resolve);
 const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
 const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
@@ -47,6 +50,8 @@ const committeeMgmt = resolve => require(['@/views/committeeMgmt'], resolve);
 const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
 const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
+const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
+// const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -71,7 +76,7 @@ const routes = [
         component: main,
         children: [
             {
-                path: '/home', component: home, name: '数据概览',nameKey: "dataOverview", menuShow: true, meta: { requireAuth: true }
+                path: '/home', component: home, name: '数据概览', nameKey: "dataOverview", menuShow: true, meta: { requireAuth: true }
             }
         ]
     },
@@ -90,14 +95,19 @@ const routes = [
     {
         path: '/',
         component: main,
-        name: '节点管理',
-        nameKey: "nodeTitle",
-        leaf: true,
+        name: '链管理',
+        nameKey: "chainTitle",
+        // leaf: true,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
+            { path: '/host', component: host, name: '主机管理', nameKey: "hostMgrTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
-            { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", menuShow: true, meta: { requireAuth: true } }
+            { path: '/node/:id', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
+            { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
+
+
+            { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", leaf: false, menuShow: false, meta: { requireAuth: true } }
         ]
     },
     {
@@ -124,11 +134,13 @@ const routes = [
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', enName: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
             { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: true, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: true, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
+            // { path: '/onlineTools', component: onlineTools, name: '在线工具', nameKey: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
         ]
     },
     {

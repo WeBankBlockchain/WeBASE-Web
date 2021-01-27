@@ -327,7 +327,14 @@ export function dataType(type, value) {
             }
             break;
         default:
-            return value
+            try {
+                var value = value.replace(/\^\[.*\]\$/, '')
+                return JSON.parse(value)
+            } catch (error) {
+                console.log('error：' + value + '!!!' + error);
+                return
+            }
+            break;
             break;
     }
 }
@@ -352,11 +359,61 @@ export function versionfunegt(ver1, ver2) {
     }
 
 }
-export function subStringToNumber (val) {
+export function subStringToNumber(val) {
     let array = val.split("")
     let num = "";
-    for(let i = 0; i < array.length; i++){
+    for (let i = 0; i < array.length; i++) {
         num = num + array[i].charCodeAt(0)
     }
     return parseInt(num)
+}
+
+export function toContractName(value) {
+    switch (value) {
+        case "0x0000000000000000000000000000000000001000":
+            return "SystemConfig"
+            break;
+        case "0x0000000000000000000000000000000000001001":
+            return "TableFactory"
+            break;
+        case "0x0000000000000000000000000000000000001002":
+            return "CRUD"
+            break;
+        case "0x0000000000000000000000000000000000001003":
+            return "Consensus"
+            break;
+        case "0x0000000000000000000000000000000000001004":
+            return "CNS"
+            break;
+        case "0x0000000000000000000000000000000000001005":
+            return "Permission"
+            break;
+        case "0x0000000000000000000000000000000000001007":
+            return "CSM"
+            break;
+        case "0x0000000000000000000000000000000000001008":
+            return "ChainGovern"
+            break;
+        case "0x0000000000000000000000000000000000001009":
+            return "ChainCharge"
+            break;
+        default:
+            return ""
+            break;
+
+    }
+}
+/**
+ * @method  省略号动态效果
+ */
+export function dynamicPoint(val, num) {
+    console.log(val, num)
+    if (num % 3 === 0) {
+        return `${val}··`
+    } else if (num % 3 === 1) {
+        return `${val}····`
+    } else {
+        return `${val}······`
+    }
+
 }

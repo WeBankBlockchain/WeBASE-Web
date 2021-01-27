@@ -32,7 +32,8 @@ const state = {
     folders: [],
     contractDataList: [],
     worker: null,
-    versionData: null
+    versionData: null,
+    nodeList: []
 }
 export default new Vuex.Store({
     state,
@@ -62,26 +63,29 @@ export default new Vuex.Store({
             state.language = language
             Cookies.set('language', language)
         },
-        set_version (state,name){
+        set_version(state, name) {
             state.version = name
         },
-        set_mgr_version (state,name) {
+        set_mgr_version(state, name) {
             state.mgrVersion = name
         },
-        set_support_version (state,name){
+        set_support_version(state, name) {
             state.supportVersion = name
         },
-        set_folders (state,data){
+        set_folders(state, data) {
             state.folders = data
         },
-        set_contract_dataList(state,data){
+        set_contract_dataList(state, data) {
             state.contractDataList = data
         },
-        set_worker(state,data) {
+        set_worker(state, data) {
             state.worker = data
         },
-        set_version_data (state,data){
+        set_version_data(state, data) {
             state.versionData = data
+        },
+        set_node_list(state, data) {
+            state.nodeList = data
         }
     },
     actions: {
@@ -97,26 +101,29 @@ export default new Vuex.Store({
         setLanguage({ commit }, language) {
             commit('SET_LANGUAGE', language)
         },
-        set_version_action (context,name) {
-            context.commit("set_version",name)
+        set_version_action(context, name) {
+            context.commit("set_version", name)
         },
-        set_mgr_version_action(context,name){
-            context.commit("set_mgr_version",name)
+        set_mgr_version_action(context, name) {
+            context.commit("set_mgr_version", name)
         },
-        set_support_version_action(context,name){
-            context.commit("set_support_version",name)
+        set_support_version_action(context, name) {
+            context.commit("set_support_version", name)
         },
-        set_folders_action (context,data) {
-            context.commit ("set_folders",data)
+        set_folders_action(context, data) {
+            context.commit("set_folders", data)
         },
-        set_contract_dataList_action(context,data){
-            context.commit('set_contract_dataList',data)
+        set_contract_dataList_action(context, data) {
+            context.commit('set_contract_dataList', data)
         },
-        set_worker_action(context,data) {
-            context.commit("set_worker",data)
+        set_worker_action(context, data) {
+            context.commit("set_worker", data)
         },
-        set_version_data_action(context,data){
-            context.commit("set_version_data",data)
+        set_version_data_action(context, data) {
+            context.commit("set_version_data", data)
+        },
+        set_node_list_action(context, data) {
+            context.commit("set_node_list", data)
         }
     }
 })

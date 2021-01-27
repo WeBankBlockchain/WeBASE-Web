@@ -27,7 +27,7 @@
                             <el-option v-for="item in eventNameList" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
-                        <li v-for="item in inputList">
+                        <li v-for="(item,index) in inputList" :key='index'>
                             <div v-if="item.indexed" style="position: relative;">
                                 <div class="param-name">{{item.name}}:</div>
                                 <el-input v-model="item.value" :placeholder="item.type" style="width: 500px;" @input="e => (item.msgObj = isType(e,item.type))"></el-input>
@@ -232,8 +232,9 @@ export default {
     created() {
     },
     mounted() {
-
-        this.queryInit()
+        if (localStorage.getItem("groupId")) {
+            this.queryInit()
+        }
     },
 
     methods: {
@@ -384,7 +385,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
@@ -495,7 +496,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },

@@ -10,7 +10,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('system.outUserAddress')" prop="otherRivateKey"  v-if="btnType==='addBtn'">
+            <el-form-item :label="$t('system.outUserAddress')" prop="otherRivateKey" v-if="btnType==='addBtn'">
                 <el-select v-model.trim="permissionForm.otherRivateKey" :placeholder="$t('system.inputUser')" filterable>
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
@@ -18,7 +18,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('system.outUserAddress')"  v-if="btnType==='deleteBtn'">
+            <el-form-item :label="$t('system.outUserAddress')" v-if="btnType==='deleteBtn'">
                 <span :title="deleteParam.address" class="delete-address">{{deleteParam.address}}</span>
             </el-form-item>
         </el-form>
@@ -146,7 +146,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -167,7 +167,7 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
-                            message: this.$t("system.deleteSuccess") 
+                            message: this.$t("system.deleteSuccess")
                         })
                         this.$emit('authorizeSuccess')
                     } else {
@@ -181,7 +181,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -199,22 +199,22 @@ export default {
                 pageSize: 1000
             };
             let query = {}
-            if(localStorage.getItem('root') === 'developer'){
+            if (localStorage.getItem('root') === 'developer') {
                 query.account = localStorage.getItem("user")
             }
             getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.adminRivateKeyList = [];
-                        if(res.data.data.length == 0){
+                        if (res.data.data.length == 0) {
                             this.$message({
                                 type: "info",
                                 message: this.$t("system.deleteSuccess")
-                            }); 
+                            });
                         }
                         res.data.data.forEach(value => {
                             // if (value.hasPk === 1) {
-                                this.adminRivateKeyList.push(value);
+                            this.adminRivateKeyList.push(value);
                             // }
                         });
                     } else {
@@ -227,7 +227,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -248,7 +248,7 @@ export default {
                     var fullList = acct.data.data, userList = perms.data.data, userRivateKeyList = [];
                     userList.map(value => {
                         // if (value.hasPk === 1) {
-                            userRivateKeyList.push(value)
+                        userRivateKeyList.push(value)
                         // }
                     });
                     this.permissionAdminList = []

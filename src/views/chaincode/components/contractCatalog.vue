@@ -138,7 +138,7 @@ export default {
         Bus.$off("save")
     },
     mounted: function () {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -179,6 +179,7 @@ export default {
                 }
             })
         })
+        console.log(this.disabled)
     },
     directives: {
         Clickoutside,
@@ -190,6 +191,9 @@ export default {
         }
     },
     methods: {
+        /**
+         * @method 点击任意处清除右键弹窗
+         */
         checkNull: function (list) {
             this.contractArry.forEach(value => {
                 value.handleModel = false;
@@ -204,6 +208,11 @@ export default {
             this.contractFolder = false;
             this.handleModel = false;
         },
+        /**
+         * 右键弹窗
+         * @param e 选中位置
+         * @param list  选中对象
+         */
         handle: function (e, list) {
             console.log(e)
             this.checkNull();
@@ -243,6 +252,11 @@ export default {
                 this.handleModel = false;
             }
         },
+        /**
+         * 重命名
+         * @param val  选中内容
+         * 主要是将选中的对象的renameShow 置为true
+         */
         rename: function (val) {
             this.contractArry.forEach(value => {
                 value.handleModel = false;
@@ -297,6 +311,11 @@ export default {
             this.contractFolder = false;
             this.handleModel = false;
         },
+        /**
+         * 重命名修改合约名称
+         * @param val  修改的合约对象
+         * 判断合约是否符合规则 and 合约名再统一contractPath是否重复，置为false，再调用保存合约方法
+         */
         changeName: function (val) {
             let pattern = /^[A-Za-z0-9_]+$/
             if (pattern.test(this.contractName) && this.contractName.length < 32 && this.contractName.length > 1) {
@@ -329,14 +348,24 @@ export default {
                 this.$set(val, 'renameShow', false)
             }
         },
+        /**
+         * 新增文件夹 打开文件夹弹窗
+         */
         addFolder: function () {
             this.checkNull();
             this.foldershow = true
         },
+        /**
+         * 新增文件  打开文件弹窗
+         */
         addFile: function () {
             this.checkNull();
             this.fileshow = true
         },
+        /**
+         * 在文件夹下新增文件
+         * @param   val  选中的文件夹对象
+         */
         addFiles: function (val) {
             this.selectFolderData = val
             this.fileshow = true;
@@ -346,13 +375,23 @@ export default {
             this.contractFolder = false;
             this.handleModel = false;
         },
+        /**
+         * @method 批量上传
+         * 此处判断合约数量不大于20个，每个合约大小不大于400k，判断成立  打开输入合约路径的弹窗
+         */
         upload: function (e) {
             this.checkNull();
             if (!e.target.files.length) {
                 return;
             }
             this.uploadFiles = e.target.files;
-
+            if (this.uploadFiles.length > 20) {
+                this.$message({
+                    message: this.$t("text.contractCount"),
+                    type: "error"
+                });
+                return
+            }
             for (let i = 0; i < this.uploadFiles.length; i++) {
                 let filessize = Math.ceil(this.uploadFiles[i].size / 1024);
                 let files = this.uploadFiles[i].name.split(".");
@@ -376,7 +415,14 @@ export default {
                 }
             }
         },
+        /**
+         * @method   执行批量上传
+         * 执行批量上传请求，通过for循环依次执行新建合约请求
+         * 新建合约请求为同步执行
+         * 最后一次新建合约请求完成后查询合约列表
+         */
         catalogSuccess: function (val) {
+            let len = this.uploadFiles.length
             for (let i = 0; i < this.uploadFiles.length; i++) {
                 let reader = new FileReader(); //新建一个FileReader
                 reader.readAsText(this.uploadFiles[i], "UTF-8"); //读取文件
@@ -393,49 +439,116 @@ export default {
                             type: "error",
                             message: this.$t("contracts.contractNameSameFail")
                         });
-                        num++;
+                        return
                     }
-                });
-                if (!num) {
-                    reader.onload = function (evt) {
-                        var fileString = "";
-                        fileString = Base64.encode(evt.target.result); // 读取文件内容
-                        let data = {
-                            contractName: filename,
-                            contractSource: fileString,
-                            contractPath: val,
-                            contractType: "file",
-                            contractActive: false,
-                            contractstatus: 0,
-                            contractAbi: "",
-                            contractBin: "",
-                            contractAddress: "",
-                            contractVersion: "",
-                            contractNo: new Date().getTime()
-                        };
-                        _this.saveContract(data);
-                    };
+                })
+                let data
+                reader.onload = function (evt) {
+                    var fileString = "";
+                    fileString = Base64.encode(evt.target.result); // 读取文件内容
+                    data = {
+                        contractName: filename,
+                        contractSource: fileString,
+                        contractPath: val,
+                        contractType: "file",
+                        contractActive: false,
+                        contractstatus: 0,
+                        contractAbi: "",
+                        contractBin: "",
+                        contractAddress: "",
+                        contractVersion: "",
+                        contractNo: new Date().getTime()
+                    }
+                    if (i == len - 1) {
+                        _this.saveOneContract(data, true)
+                    } else {
+                        _this.saveOneContract(data)
+                    }
                 }
             }
-            this.$refs.file.value = null;
             this.catalogClose();
         },
+        /**
+         * @method 同步保存合约  （upload合约专用）
+         * @param data  合约内容
+         * @param type  为true执行查询合约列表请求
+         */
+        async saveOneContract(data, type) {
+            let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                contractName: data.contractName,
+                contractPath: data.contractPath,
+                contractSource: data.contractSource,
+                contractAbi: data.contractAbi,
+                contractBin: data.contractBin,
+                bytecodeBin: data.bytecodeBin,
+                account: localStorage.getItem("user")
+            }
+            if (data.contractId) {
+                reqData.contractId = data.contractId
+            }
+            await saveChaincode(reqData).then(res => {
+                if (res.data.code === 0) {
+                    if (type) {
+                        this.$refs.file.value = null;
+                        this.getContracts(data.contractPath, res.data.data);
+                    }
+                    if (data.contractId) {
+                        this.$message({
+                            type: "success",
+                            message: title || this.$t("contracts.contractSaveSuccess")
+                        });
+                    }
+                } else {
+                    this.$message({
+                        message: this.$chooseLang(res.data.code),
+                        type: "error",
+                        duration: 2000
+                    });
+                }
+            })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        /**
+         * 关闭选择合约路径弹窗
+         */
         catalogClose: function () {
             this.$refs.file.value = null;
             this.cataLogShow = false
         },
+        /**
+         * 关闭文件夹弹窗
+         */
         folderClose: function () {
             this.foldershow = false
         },
+        /**
+         * 新建文件成功事件
+         */
         folderSuccess: function () {
             this.folderClose()
             this.getContractPaths();
         },
+        /**
+         * 关闭文件弹窗
+         */
         fileClose: function () {
             this.fileshow = false
             this.folderId = ""
             this.ID = ""
         },
+        /**
+         * 查询合约目录列表 并预处理
+         * 再执行查询合约内容请求
+         * @param val 合约对象
+         */
         getContractPaths(val) {
             getContractPathList(localStorage.getItem("groupId")).then(res => {
                 if (res.data.code == 0) {
@@ -468,10 +581,13 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
+        /**
+         * 生成合约目录树状结构
+         */
         getContractArry: function (val) {
             let result = [];
             let list = [];
@@ -529,6 +645,11 @@ export default {
                 Bus.$emit("noData", true)
             }
         },
+        /**
+         * 新建或者更更新合约
+         * @param data  合约对象
+         * @param title 新建成功后提示信息
+         */
         saveContract: function (data, title) {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
@@ -562,21 +683,30 @@ export default {
             })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
 
                 });
         },
+        /**
+         * 查询合约列表  
+         * @param  path  合约路径
+         * @param  合约对象
+         * 根据合约路径查询合约列表
+         */
         getContracts: function (path, list) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
             }
             try {
+                //当用户权限为开发者时，需要传入参数account
                 if (localStorage.getItem("root") === 'developer') {
                     data.account = localStorage.getItem("user")
                 }
+                //当合约路径传入，且合约列表长度大于0，参数contractPathList即为传入的path
+                //当合约路径传入，且合约列表长度等于0，需要加上根目录"/"，如果path不是对象，则contractPathList再加上path
                 if (path && this.$store.state.contractDataList.length > 0) {
                     data.contractPathList = [path]
                 } else if (path && this.$store.state.contractDataList.length == 0) {
@@ -588,6 +718,7 @@ export default {
 
                     data.contractPathList = path;
                 }
+                //判断url是否存在合约路径，且合约路径是不是""/"
                 else if (this.$route.query.contractPath) {
                     if (this.$route.query.contractPath == "/") {
                         data.contractPathList = [this.$route.query.contractPath]
@@ -595,6 +726,10 @@ export default {
                         data.contractPathList = [this.$route.query.contractPath, "/"]
                     }
                 }
+                //selectData时在左侧目录选中的合约或者文件夹，
+                // 判断对象是有contractPath，且contractPath == "/"  此时选中对象时合约对象，那么contractPathList值为选中对象的contractPath
+                // 判断对象是有contractPath，且contractPath ！= "/"  此时选中对象时合约对象，那么contractPathList值为选中对象的contractPath和'/'
+                // 判断对象没有contractPath，且contractType == "folder"  此时选中对象时文件夹对象，那么contractPathList值为选中对象的名称（contractName）和'/'
                 else if (localStorage.getItem("selectData")) {
                     if (JSON.parse(localStorage.getItem("selectData"))) {
                         if (JSON.parse(localStorage.getItem("selectData")).contractPath && JSON.parse(localStorage.getItem("selectData")).contractPath == "/") {
@@ -621,6 +756,7 @@ export default {
                     this.contractList = []
                     let contractList = res.data.data || [];
                     let contractDataList = this.$store.state.contractDataList;
+                    //查询的合约列表与存入的合约列表合并且除重处理
                     this.contractList = this.changeContractData(contractDataList, contractList, data.contractPath)
                     this.$store.dispatch('set_contract_dataList_action', this.contractList);
                     localStorage.setItem("contractList", JSON.stringify(this.contractList))
@@ -636,8 +772,10 @@ export default {
                             this.$set(value, "renameShow", false)
                             this.$set(value, "inputShow", false)
                         })
+                        //当有传入的对象时
                         if (list) {
                             this.getContractArry(list);
+                            //当有没有传入的对象时，url存在合约id时
                         } else if (this.$route.query.contractId) {
                             let num = 0;
                             this.contractList.forEach(value => {
@@ -650,7 +788,14 @@ export default {
                             if (!num) {
                                 this.getContractArry()
                             }
+                        } else if (this.$route.query.contractPath && !this.$route.query.contractId) {
+                            if (res.data.data.length) {
+                                this.getContractArry(res.data.data[0])
+                            } else {
+                                this.getContractArry()
+                            }
                         }
+                        //当有选中合约时
                         else if (localStorage.getItem("selectData") && JSON.parse(localStorage.getItem("selectData")) && JSON.parse(localStorage.getItem("selectData")).contractId) {
                             let num = 0;
                             this.contractList.forEach(value => {
@@ -675,6 +820,7 @@ export default {
                         }
 
                     }
+
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -686,12 +832,18 @@ export default {
 
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
+        /**
+         * 合约列表除重且更新
+         * @param  list1  已存在的合约列表
+         * @param list2 查询的合约列表
+         * @param path 已查询的合约路径
+         */
         changeContractData(list1, list2, path) {
             let arry = [];
             let obj = {}
@@ -722,6 +874,9 @@ export default {
             }
             return list
         },
+        /**
+         * 新建文件成功事件
+         */
         fileSucccess: function (val) {
             let num = 0
             this.contractList.forEach(value => {
@@ -738,6 +893,9 @@ export default {
             }
             this.fileClose()
         },
+        /**
+         * 预处理合约路径列表
+         */
         createFolder: function (val) {
             let result = []
             this.folderList.forEach(value => {
@@ -770,6 +928,9 @@ export default {
             })
             return result
         },
+        /**
+         * 打开文件夹
+         */
         open: function (val) {
             console.log(val)
             if (val.contractName != "/" && val.contractPath != "/") {
@@ -796,6 +957,9 @@ export default {
             this.$set(val, 'contractActive', true);
             this.folderData = val
         },
+        /**
+         * 选中某个合约或文件夹
+         */
         select: function (val, type) {
             let num = 0;
 
@@ -827,6 +991,9 @@ export default {
             }
 
         },
+        /**
+         * 删除合约
+         */
         deleteFile: function (val) {
             this.$confirm(this.$t("text.confirmDelete"))
                 .then(_ => {
@@ -835,6 +1002,9 @@ export default {
                 .catch(_ => { });
 
         },
+        /**
+         * 删除合约请求
+         */
         deleteData: function (val) {
             this.loading = true;
             let data = {
@@ -871,12 +1041,15 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
+        /**
+         * 删除文件夹
+         */
         deleteFolder: function (val) {
             this.$confirm(this.$t("text.confirmDelete"))
                 .then(_ => {
@@ -884,6 +1057,9 @@ export default {
                 })
                 .catch(_ => { });
         },
+        /**
+         * 删除文件夹请求
+         */
         deleteFolderData: function (val) {
             this.loading = true
             let reqData = {
@@ -927,7 +1103,7 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

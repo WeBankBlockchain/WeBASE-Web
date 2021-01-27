@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table :data="newNodeList" tooltip-effect="dark" style="width: 100%">
+        <el-table :data="newNodeList" tooltip-effect="dark" style="width: 100%" v-loading='loading'>
             <el-table-column v-for="head in frontHead" :label="head.name" :key="head.enName" :prop="head.enName" :width="head.width" show-overflow-tooltip>
                 <template slot-scope="scope">
                     <span v-if="head.enName === 'nodeId'">
@@ -141,10 +141,10 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
 
@@ -189,10 +189,10 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -298,14 +298,14 @@ export default {
                             }
                         })
                         var runningList = []
-                        array.forEach(item=>{
-                            if(item.status ==='RUNNING'){
+                        array.forEach(item => {
+                            if (item.status === 'RUNNING') {
                                 runningList.push(item.status)
                             }
                         })
-                        if(runningList.length){
+                        if (runningList.length) {
                             this.querygetConsensusNodeId(array)
-                        }else {
+                        } else {
                             this.newNodeList = array
                         }
                     } else {
@@ -315,10 +315,10 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -356,10 +356,10 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -429,11 +429,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -454,9 +454,9 @@ export default {
             this.addGroupVisibility = false
             this.queryNodeList()
         },
-        addGroupSuccess(){
+        addGroupSuccess() {
             this.addGroupVisibility = false;
-            this.$nextTick(_=>{
+            this.$nextTick(_ => {
                 this.agreeNodeVisibility = false
                 this.queryNodeList()
             })

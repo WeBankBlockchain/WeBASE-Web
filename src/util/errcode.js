@@ -15,16 +15,20 @@
  */
 let errCode = {
     "101001": {
-        en: "system error",
-        zh: '系统异常'
+        en: "WeBASE-Front system error",
+        zh: 'WeBASE-Front系统异常'
     },
     "101002": {
         en: "param valid fail",
         zh: '参数校验异常'
     },
     "102000": {
-        en: "system exception",
-        zh: '系统异常'
+        en: "WeBASE-Node-Manager system exception",
+        zh: 'WeBASE-Node-Manager系统异常'
+    },
+    "103001": {
+        en: "WeBASE-Sign system exception",
+        zh: 'WeBASE-Sign系统异常'
     },
     "102001": {
         en: "system exception: please check front",
@@ -317,7 +321,7 @@ let errCode = {
     },
     "201128": {
         en: "Group peers not connected",
-        zh: '与sealer间不存在有效的p2p链接'
+        zh: '群组内节点无有效P2P连接'
     },
     "201129": {
         en: "Group genesis conf already exists",
@@ -337,7 +341,7 @@ let errCode = {
     },
     "201133": {
         en: "Group is stopping",
-        zh: '正在释放资源'
+        zh: '群组停止中'
     },
     "201134": {
         en: "Group not deleted",
@@ -368,7 +372,7 @@ let errCode = {
     },
     "201200": {
         en: "Params not fit",
-        zh: '参数不合适'
+        zh: '参数不匹配'
     },
     "201201": {
         en: "Address is invalid",
@@ -392,11 +396,11 @@ let errCode = {
     },
     "201207": {
         en: "System config key is invalid",
-        zh: '系统配置密钥无效'
+        zh: '系统配置的类型不正确'
     },
     "201208": {
         en: "Unsupported for this system config key",
-        zh: '不支持此系统配置密钥'
+        zh: '不支持修改此系统配置'
     },
     "201209": {
         en: "Provide value by positive integer mode, from 100000 to 2147483647",
@@ -412,7 +416,7 @@ let errCode = {
     },
     "201216": {
         en: "Node id is invalid",
-        zh: '节点id无效'
+        zh: '节点ID不正确'
     },
     "201217": {
         en: "Invalid node type: sealer, observer, remove",
@@ -428,7 +432,19 @@ let errCode = {
     },
     "201222": {
         en: "Version of contract is out of length",
-        zh: '合约版本过长'
+        zh: '合约版本过长,不能超过32位'
+    },
+    "201223": {
+        en: "CNS register fail ",
+        zh: 'CNS注册失败'
+    },
+    "201224": {
+        en: "Version not exists",
+        zh: '版本不存在'
+    },
+    "201225": {
+        en: "CNS name cannot be empty",
+        zh: 'CNS名称不能为空'
     },
     "201226": {
         en: "sql syntax error",
@@ -625,7 +641,7 @@ let errCode = {
     },
     "202013": {
         en: "invalid user id",
-        zh: '无效的用户编号'
+        zh: '无效的用户ID'
     },
     "202014": {
         en: "user already exists",
@@ -641,7 +657,7 @@ let errCode = {
     },
     "202017": {
         en: "invalid contract id",
-        zh: '无效的合约编号'
+        zh: '无效的合约ID'
     },
     "202018": {
         en: "invalid param info",
@@ -657,7 +673,7 @@ let errCode = {
     },
     "202021": {
         en: "invalid organization type",
-        zh: '无效的组织类型'
+        zh: '组织类型不正确'
     },
     "202022": {
         en: "unable to delete deployed contract",
@@ -1016,8 +1032,8 @@ let errCode = {
         "zh": "插入链信息到数据库失败"
     },
     "202409": {
-        "en": "Generate host, agency, group configuration error.",
-        "zh": "生成主机，机构，群组配置信息文件失败"
+        "en": "Chain root dir exist, please move it manually.",
+        "zh": "链的根目录default_chain_nodes已存在，请移除脏数据文件"
     },
     "202410": {
         "en": "Execute build_chain.sh script error.",
@@ -1245,19 +1261,142 @@ let errCode = {
     },
     "202466": {
         "en": "Please pull the Docker image manually in host /ip/",
-        "zh": "主机/ip/请手动拉取 Docker 镜像"
+        "zh": "主机上的节点镜像不存在，请检查/ip/！"
     },
     "202467": {
         "en": "Max 4 nodes on a single host",
         "zh": "单个主机最多部署 4 个节点"
     },
     "202468": {
-        "en": "Cannot install node on WeBASE-Node-Manager host.",
-        "zh": "无法在WeBASE-Node-Manager主机上安装节点。"
+        "en": "Host of WeBASE-Node-Manager's ip is already existed.",
+        "zh": "节点管理服务主机IP(127.0.0.1)已存在。"
     },
+    "202469": {
+        "en": "Check docker installed and running of host.",
+        "zh": "检查docker主机的安装和运行情况。"
+    },
+    "202470": {
+        "en": "Check host memory not enough for nodes(s).",
+        "zh": "检查主机内存不足，无法容纳节点。"
+    },
+    "202471": {
+        "en": "Check host cpu core count not enough for node.",
+        "zh": "检查节点的主机cpu核心数不足。"
+    },
+    "202472": {
+        "en": "Host check had been interrupt.",
+        "zh": "主机检查被中断。"
+    },
+    "202473": {
+        "en": "Host check fail for inpurt param.",
+        "zh": "检测主机参数错误"
+    },
+    "202475": {
+        "en": "Fail to generate chain and front config locally.",
+        "zh": "本地生成链和前置配置失败。"
+    },
+    "202476": {
+        "en": "Not all host init success.",
+        "zh": "部分主机初始化失败。"
+    },
+    "202477": {
+        "en": "Ipconf's node port config error.",
+        "zh": "Ipconf的节点端口配置错误。"
+    },
+    "202478": {
+        "en": "Ipconf not match with deploy info list.",
+        "zh": "Ipconf与部署信息列表不匹配。"
+    },
+    "202479": {
+        "en": "Delete host fail for host contains node(front).",
+        "zh": "删除主机失败，主机仍包含节点"
+    },
+
+    "202480": {
+        "en": "Ansible not installed!",
+        "zh": "Ansible未安装！"
+    },
+    "202481": {
+        "en": "Ansible fetch not support fetch directory.",
+        "zh": "Ansible fetch不支持拉取目录。"
+    },
+    "202482": {
+        "en": "Ansible ping cannot reach target ip.",
+        "zh": "主机节点无法连通，请检查ansible hosts免密配置。"
+    },
+    "202483": {
+        "en": "Ansible init host of image and scp config not all success.",
+        "zh": "Ansible 初始化主机镜像和scp配置没有全部成功。"
+    },
+    "202484": {
+        "en": "Ansible pull docker hub fail.",
+        "zh": "Ansible连接DockerHub错误。"
+    },
+    "202485": {
+        "en": "Ansible pull docker cdn fail.",
+        "zh": "Ansible连接CDN错误。"
+    },
+    "202486": {
+        "en": "Ansible run docker command fail.",
+        "zh": "Ansible run docker命令失败。"
+    },
+    "202487": {
+        "en": "Ansible exec command error.",
+        "zh": "Ansible 执行远端命令失败。"
+    },
+    "202488": {
+        "en": "Ansible exec scp(copy) error.",
+        "zh": "Ansible 执行 scp（复制）错误。"
+    },
+    "202489": {
+        "en": "Ansible exec scp(fetch) error",
+        "zh": "Ansible 执行 scp (拉取)错误。"
+    },
+    "202491": {
+        "en": "Ansible check image exist error for param.",
+        "zh": "Ansible检查镜像的参数错误。"
+    },
+    "202492": {
+        "en": "Ansible check docker container exist error for param.",
+        "zh": "Ansible检查docker容器的参数错误。"
+    },
+    "202493": {
+        "en": "Check host not pass, please check host remark.",
+        "zh": "主机检测未通过，请查看操作日志。"
+    },
+    "202494": {
+        "en": "Check host port is in use, please check host remark.",
+        "zh": "检测到接口已使用，请查看操作日志。"
+    },
+    "202495": {
+        "en": "Host already exist",
+        "zh": "主机已存在"
+    },
+    "202496": {
+        "en": "Host root dir access denied.",
+        "zh": "主机安装目录无权限。"
+    },
+    "202497": {
+        "en": "Host not exist or already been deleted.",
+        "zh": "主机不存在或已被删除。"
+    },
+
+
     "202501": {
         "en": "Contract path is exists.",
         "zh": "目录已存在。"
+    },
+    "202502": {
+        "en": "version cannot be empty.",
+        "zh": "版本不能为空"
+    },
+    "202503": {
+        "en": "cns name cannot be empty.",
+        "zh": "CNS 名不能为空"
+    },
+    "202504": {
+        "en": "version already exists.",
+        "zh": "版本已存在"
     },
     "302000": {
         en: "user not logged in",
@@ -1450,6 +1589,10 @@ let errCode = {
     "-52012": {
         en: "CURRENT_VALUE_IS_EXPECTED_VALUE",
         zh: "当前值是预期值"
+    },
+    "-1": {
+        en: "no active connection available with node, please check node status",
+        zh: "节点与前置断开连接，请检查节点状态"
     },
 
     "422": {

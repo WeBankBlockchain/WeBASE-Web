@@ -22,7 +22,7 @@
 
         </el-table>
         <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
+            <el-button @click="close" :disabled='loading'>{{this.$t("text.cancel")}}</el-button>
             <el-button type="primary" :loading="loading" @click="submit('groupFrom')">{{this.$t("text.sure")}}</el-button>
         </div>
     </div>
@@ -116,7 +116,7 @@ export default {
 
     methods: {
         queryFrontList() {
-            getFronts()
+            getFronts({ frontStatus: 1 })
                 .then(res => {
                     if (res.data.code === 0) {
                         this.nodeList = res.data.data
@@ -156,23 +156,23 @@ export default {
                 description: this.description,
 
             }
-            createGroup(data,"").then(res => {
-                this.loading = false;
+            createGroup(data, "").then(res => {
                 if (res.data.code === 0) {
                     let array = res.data.data
                     array.forEach(item => {
-                        if(item.code!=0){
+                        if (item.code != 0) {
                             this.$message({
                                 type: 'error',
-                                message: this.$t('nodes.nodeFront')+`${item.frontId}`+this.$t('nodes.failCreatGroup'),
+                                message: this.$t('nodes.nodeFront') + `${item.frontId}` + this.$t('nodes.failCreatGroup'),
                                 duration: 4500
                             })
                         }
                     });
-                    this.$nextTick(_=>{
+                    this.$nextTick(_ => {
                         callback()
                     })
                 } else {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: this.$chooseLang(res.data.code)
@@ -182,7 +182,7 @@ export default {
                 this.loading = false;
                 this.$message({
                     type: "error",
-                    message: this.$t('text.systemError')
+                    message: err.data || this.$t('text.systemError')
                 })
             })
         },
@@ -196,16 +196,17 @@ export default {
                 if (res.data.code === 0) {
                     let array = res.data.data
                     array.forEach(item => {
-                        if(item.code!=0){
+                        if (item.code != 0) {
                             this.$message({
                                 type: 'error',
-                                message: this.$t('nodes.nodeFront')+`${item.frontId}`+this.$t('nodes.failStartGroup'),
+                                message: this.$t('nodes.nodeFront') + `${item.frontId}` + this.$t('nodes.failStartGroup'),
                                 duration: 4500
                             })
                         }
                     });
                     this.$emit('generateSuccess')
                 } else {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: this.$chooseLang(res.data.code)
@@ -215,7 +216,7 @@ export default {
                 this.loading = false;
                 this.$message({
                     type: "error",
-                    message: this.$t('text.systemError')
+                    message: err.data || this.$t('text.systemError')
                 })
             })
         },

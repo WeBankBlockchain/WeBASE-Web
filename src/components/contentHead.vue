@@ -161,6 +161,8 @@ export default {
     },
     beforeDestroy: function () {
         Bus.$off("deleteFront")
+        Bus.$off("changeHeadGroup")
+        Bus.$off("addFront")
     },
     mounted: function () {
         if (localStorage.getItem("groupName")) {
@@ -175,6 +177,9 @@ export default {
             this.getGroupList('delete');
         })
         Bus.$on("addFront", () => {
+            this.getGroupList();
+        })
+        Bus.$on("changeHeadGroup", () => {
             this.getGroupList();
         })
         this.queryGroupStatus4()
@@ -224,7 +229,7 @@ export default {
                 localStorage.setItem("groupName", "")
                 localStorage.setItem("groupId", "")
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -297,7 +302,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

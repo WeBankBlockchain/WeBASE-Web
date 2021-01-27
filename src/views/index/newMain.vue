@@ -51,7 +51,7 @@
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups,encryption, getGroupsInvalidIncluded,getFronts,getVersion } from "@/util/api";
+import { resetPassword, addnodes, getGroups, encryption, getGroupsInvalidIncluded, getFronts, getVersion, refreshFront } from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
@@ -62,7 +62,7 @@ export default {
         "set-front": setFront,
         'v-guide': guide
     },
-    data: function() {
+    data: function () {
         return {
             version: "",
             guideShow: false,
@@ -81,12 +81,12 @@ export default {
         };
     },
     computed: {
-        
-        show: function() {
+
+        show: function () {
             return this.menuShow;
         },
         rules2() {
-            var  validatePass = (rule, value, callback) => {
+            var validatePass = (rule, value, callback) => {
                 if (value === "") {
                     callback(new Error(this.$t('main.inputPassword')));
                 } else {
@@ -100,7 +100,7 @@ export default {
                 if (value === "") {
                     callback(new Error(this.$t('main.againPassword')));
                 } else if (value !== this.rulePasswordForm.pass) {
-                   callback(new Error(this.$t('main.passwordError')));
+                    callback(new Error(this.$t('main.passwordError')));
                 } else {
                     callback();
                 }
@@ -154,33 +154,45 @@ export default {
             return data
         }
     },
-    mounted(){
+    mounted() {
+        this.getRefreshFront()
         this.getEncryption();
         this.getGroupList();
         this.getFrontTable();
         // this.getVersionList()
     },
     methods: {
-        getVersionList () {
+        getRefreshFront() {
+            refreshFront().then(res => {
+                console.log(res)
+            }).catch(err => {
+                this.$message({
+                    message: err.data || this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            })
+        },
+        getVersionList() {
             getVersion().then(res => {
-                if(res.status == 200) {
+                if (res.status == 200) {
                     this.version = res.data;
-                    this.$store.dispatch('set_mgr_version_action',this.version)
+                    this.$store.dispatch('set_mgr_version_action', this.version)
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
             })
         },
         versionChange: function () {
-            if(this.$refs.menu){
+            if (this.$refs.menu) {
                 this.$refs.menu.changeRouter();
             }
         },
-        change: function(val) {
+        change: function (val) {
             this.menuShow = !val;
             this.menuHide = val;
         },
@@ -199,10 +211,10 @@ export default {
         },
         getResetPassword() {
             let reqData;
-                reqData = {
-                    oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
-                    newAccountPwd: sha256(this.rulePasswordForm.pass)
-                };
+            reqData = {
+                oldAccountPwd: sha256(this.rulePasswordForm.oldPass),
+                newAccountPwd: sha256(this.rulePasswordForm.pass)
+            };
             resetPassword(reqData, {})
                 .then(res => {
                     this.loading = false;
@@ -226,35 +238,35 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
-        getGroupList: function(){
+        getGroupList: function () {
             getGroupsInvalidIncluded().then(res => {
-                if(res.data.code === 0){
-                    if(res.data.data && res.data.data.length){
-                        if(!localStorage.getItem("groupId")){
-                            localStorage.setItem("groupId",res.data.data[0].groupId)
+                if (res.data.code === 0) {
+                    if (res.data.data && res.data.data.length) {
+                        if (!localStorage.getItem("groupId")) {
+                            localStorage.setItem("groupId", res.data.data[0].groupId)
                         }
-                        if(!localStorage.getItem("groupName")){
-                            localStorage.setItem("groupName",res.data.data[0].groupName);
+                        if (!localStorage.getItem("groupName")) {
+                            localStorage.setItem("groupName", res.data.data[0].groupName);
                         }
                         this.accountStatus = sessionStorage.getItem("accountStatus");
-                        if(this.$route.path && this.$route.path !== "/main"){
+                        if (this.$route.path && this.$route.path !== "/main") {
                             router.push(this.$route.path)
-                        }else if(this.$route.path == "/main"){
+                        } else if (this.$route.path == "/main") {
                             router.push("/home")
-                        }else{
+                        } else {
                             router.push("/home")
                         }
-                    }else{
+                    } else {
                         this.guideShow = true
                     }
-                }else{
+                } else {
                     this.guideShow = true
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -265,7 +277,7 @@ export default {
                 }
             }).catch(err => {
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -280,25 +292,25 @@ export default {
                         let versionKey;
                         this.frontData = res.data.data;
                         let num = 0;
-                        for(let i = 0; i < res.data.data.length; i++){
-                            if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
-                                this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
-                                this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
-                                if(res.data.data[i].supportVersion){
-                                    versionKey = res.data.data[i].supportVersion.substring(2,3)
-                                    if(versionKey > 4){
-                                        num ++
+                        for (let i = 0; i < res.data.data.length; i++) {
+                            if (res.data.data[i].clientVersion || res.data.data[i].supportVersion) {
+                                this.$store.dispatch('set_version_action', res.data.data[i].clientVersion);
+                                this.$store.dispatch('set_support_version_action', res.data.data[i].supportVersion);
+                                if (res.data.data[i].supportVersion) {
+                                    versionKey = res.data.data[i].supportVersion.substring(2, 3)
+                                    if (versionKey > 4) {
+                                        num++
                                     }
-                                } 
+                                }
                             }
                         }
-                        if(num > 0) {
-                            localStorage.setItem("nodeVersionChange",1)
-                        }else{
-                            localStorage.setItem("nodeVersionChange","")
+                        if (num > 0) {
+                            localStorage.setItem("nodeVersionChange", 1)
+                        } else {
+                            localStorage.setItem("nodeVersionChange", "")
                         }
                         this.getVersionList();
-                        if(localStorage.getItem("nodeVersionChange")){
+                        if (localStorage.getItem("nodeVersionChange")) {
                             this.versionChange();
                         }
                     } else {
@@ -307,49 +319,49 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        
+
                     }
                 })
                 .catch(err => {
                     console.log(err)
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
-        getEncryption: function(){
+        getEncryption: function () {
             encryption().then(res => {
-                if(res.data.code === 0){
-                    if(res.data.data != localStorage.getItem("encryptionId")){
+                if (res.data.code === 0) {
+                    if (res.data.data != localStorage.getItem("encryptionId")) {
                         localStorage.removeItem('solcName')
                         localStorage.removeItem('versionId');
                     }
-                    localStorage.setItem("encryptionId",res.data.data)
-                }else {
+                    localStorage.setItem("encryptionId", res.data.data)
+                } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
                         type: "error",
                         duration: 2000
                     });
-                    }
-                })
+                }
+            })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        closeFront: function(){
+        closeFront: function () {
             this.frontShow = false;
             this.getGroupList();
             this.getFrontTable();
         },
-        closeGuide: function(){
+        closeGuide: function () {
             this.guideShow = false
             this.frontShow = true;
         }

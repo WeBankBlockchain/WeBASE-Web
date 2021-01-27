@@ -91,7 +91,7 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin" && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -145,7 +145,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
@@ -185,7 +185,7 @@ export default {
                 })
                 .catch(err => {
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });

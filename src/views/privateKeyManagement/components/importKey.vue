@@ -1,7 +1,7 @@
 <template>
     <div class="key-dialog">
         <el-form :model="keyForm" :rules="rules" ref="keyForm" label-width="142px" class="demo-ruleForm">
-            <el-form-item :label="$t('privateKey.fileType')" prop="fileType" style="width: 546px;">
+            <el-form-item :label="$t('privateKey.importType')" prop="fileType" style="width: 546px;">
                 <el-radio-group v-model="keyForm.fileType" @change="changeFileType">
                     <el-radio :label="item.enName" :key="item.enName" v-for="item in fileTypeList">{{item.enName}}</el-radio>
                 </el-radio-group>
@@ -12,23 +12,18 @@
             <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
                 <el-input type="password" v-model="keyForm.password" :placeholder="$t('privateKey.placeholderPassword')"></el-input>
             </el-form-item>
-             <el-form-item :label="$t('privateKey.description')" prop="description" style="width: 546px;">
+            <el-form-item :label="$t('privateKey.privateKey')" prop="privateKey" style="width: 546px;" v-if="keyForm.fileType=='string'">
+                <el-input v-model="keyForm.privateKey" :placeholder="$t('privateKey.validatorPrivateKey')"></el-input>
+            </el-form-item>
+            <el-form-item :label="$t('privateKey.description')" prop="description" style="width: 546px;">
                 <el-input v-model="keyForm.description" :placeholder="$t('privateKey.inputDescription')"></el-input>
             </el-form-item>
-            <el-form-item :label="$t('privateKey.file')" prop="file" style="width: 546px;">
-                <el-upload
-                    ref="upload"
-                    :accept="keyForm.fileType"
-                    action=""
-                    :http-request="uploadFile"
-                    :auto-upload="false"
-                    :file-list="fileList"
-                    show-file-list
-                    :limit="1">
+            <el-form-item :label="$t('privateKey.file')" prop="fileList" style="width: 546px;" v-if="keyForm.fileType!='string'" ref="uploadKey">
+                <el-upload ref="upload" :accept="keyForm.fileType" action="" :http-request="uploadFile" :auto-upload="false" :file-list="keyForm.fileList" show-file-list :limit="1" :on-change="uploadChange" :on-remove="removeFile">
                     <el-button slot="trigger" size="small" type="primary">{{this.$t('privateKey.importFile')}}</el-button>
                 </el-upload>
             </el-form-item>
-           
+
         </el-form>
         <div class="dialog-footer">
             <el-button class="footer-button" @click="modelClose">{{this.$t('text.cancel')}}</el-button>
@@ -56,11 +51,16 @@ export default {
             disabled: false,
             keyForm: {
                 fileName: "",
-                fileType: ".txt",
+                fileType: "string",
                 password: "",
-                description: ""
+                description: "",
+                privateKey: "",
+                fileList: []
             },
             fileTypeList: [
+                {
+                    enName: 'string',
+                },
                 {
                     enName: '.txt',
                 },
@@ -95,6 +95,12 @@ export default {
                         trigger: "blur"
                     },
                     {
+                        pattern: /^[A-za-z0-9]+$/,
+                        message: this.$t('rule.privateKeyNameRule'),
+                        trigger: "blur",
+
+                    },
+                    {
                         min: 1,
                         max: 12,
                         message: this.$t('rule.textLong1_12'),
@@ -110,6 +116,21 @@ export default {
                 ],
                 password: [
                     { validator: checkData, trigger: 'blur' }
+                ],
+                privateKey: [
+                    {
+                        required: true,
+                        message: this.$t('privateKey.validatorPrivateKey'),
+                        trigger: "blur"
+                    },
+                    {
+                        pattern: /([a-fA-F0-9]{1,100})$/,
+                        message: this.$t('privateKey.validatorPrivateKey1'),
+                        trigger: "blur"
+                    }
+                ],
+                fileList: [
+                    { required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change' }
                 ]
             };
             return data
@@ -137,40 +158,57 @@ export default {
         onBeforeUpload() {
 
         },
-        changeFileType(){
-            this.$refs.upload.clearFiles()
+        changeFileType() {
+            if (this.$refs.upload) this.$refs.upload.clearFiles();
+            this.$refs['keyForm'].clearValidate();
             this.keyForm.fileName = ''
             this.keyForm.description = '';
+            this.keyForm.fileList = [];
         },
-        submitUploadList(){
-            this.$refs.upload.submit()
+        submitUploadList() {
+            if (this.keyForm.fileType == "string") {
+                this.uploadFile()
+            } else {
+                this.$refs['keyForm'].validate(valid => {
+                    if (valid) {
+                        this.$refs.upload.submit()
+                    }
+                })
+            }
         },
         uploadFile(param) {
             this.$refs['keyForm'].validate(valid => {
                 if (valid) {
-                    var reader = new FileReader(), self = this;
-                    reader.readAsText(param.file, "UTF-8");
-                    reader.onload = function (evt) {
-                        var fileContent = evt.target.result;
-                        switch (self.keyForm.fileType) {
-                            case '.txt':
-                                try {
-                                    var fileString = JSON.parse(fileContent).privateKey;
-                                    self.textRivateKey(fileString)
-                                } catch (error) {
-                                    console.log(error)
-                                }
-                                break;
-                            case '.pem':
+                    if (this.keyForm.fileType == "string") {
+                        var reg = /^0x+/i;
+                        var privateKey = this.keyForm.privateKey.replace(reg, "");
+                        this.textRivateKey(privateKey)
+                    } else {
+                        var reader = new FileReader(), self = this;
+                        reader.readAsText(param.file, "UTF-8");
+                        reader.onload = function (evt) {
+                            var fileContent = evt.target.result;
+                            switch (self.keyForm.fileType) {
+                                case '.txt':
+                                    try {
+                                        var fileString = JSON.parse(fileContent).privateKey;
+                                        self.textRivateKey(fileString)
+                                    } catch (error) {
+                                        console.log(error)
+                                    }
+                                    break;
+                                case '.pem':
 
-                                self.pemRivateKey(fileContent)
-                                break;
-                            case '.p12':
-                                self.p12RivateKey(param.file)
-                                break;
+                                    self.pemRivateKey(fileContent)
+                                    break;
+                                case '.p12':
+                                    self.p12RivateKey(param.file)
+                                    break;
+                            }
                         }
+                        this.$refs.upload.clearFiles()
                     }
-                    this.$refs.upload.clearFiles()
+
                 } else {
                     return false;
                 }
@@ -274,11 +312,18 @@ export default {
                     });
                 });
         },
+        uploadChange(file, fileList) {
+            this.$refs['uploadKey'].clearValidate();
+            this.keyForm.fileList = fileList
+        },
+        removeFile() {
+            this.keyForm.fileList = []
+        }
     }
 }
 </script>
 
-<style scoped> 
+<style scoped>
 .footer-button {
     margin-right: 10px;
 }

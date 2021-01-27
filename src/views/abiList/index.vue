@@ -133,12 +133,12 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if(localStorage.getItem('groupId') && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)){
+        if (localStorage.getItem('groupId') && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.queryAbiList()
         }
     },
@@ -171,13 +171,13 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             },
-                
+
                 reqQuery = {
                     account: ""
                 };
-                if(localStorage.getItem("root") === 'developer'){
-                    reqQuery.account = localStorage.getItem('user')
-                }
+            if (localStorage.getItem("root") === 'developer') {
+                reqQuery.account = localStorage.getItem('user')
+            }
             getAbiList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
@@ -207,11 +207,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -300,11 +300,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },

@@ -44,7 +44,7 @@
                 <el-dialog :visible.sync="accountDialogVisible" :title="accountDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper" v-if="accountDialogVisible">
                     <account-dialog :accountDialogOptions="accountDialogOptions" @success="success" @close="close"></account-dialog>
                 </el-dialog>
-                
+
             </div>
 
         </div>
@@ -101,18 +101,18 @@ export default {
         this.getAccountList();
     },
     methods: {
-        success(){
+        success() {
             this.getAccountList()
         },
-        close(val){
+        close(val) {
             this.accountDialogVisible = val
         },
         getAccountList() {
             this.loading = true;
             let reqData = {
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {
                     account: ''
                 };
@@ -133,26 +133,26 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
                 });
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getAccountList();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getAccountList();
         },
-        creatAccount(){
+        creatAccount() {
             this.accountDialogVisible = true
             this.accountDialogTitle = this.$t('account.createAccount')
             this.accountDialogOptions = {
-                type:'creat',
+                type: 'creat',
                 data: {
                     account: '',
                     role: ''
@@ -166,7 +166,7 @@ export default {
             }
             this.accountDialogVisible = true
             this.accountDialogTitle = this.$t('account.deleteAccount')
-            
+
         },
         modifyAccount(val, type) {
             this.accountDialogOptions = {
@@ -176,13 +176,13 @@ export default {
             this.accountDialogVisible = true
             this.accountDialogTitle = this.$t('account.updataAccount')
         },
-        translate(val){
+        translate(val) {
             var str = '';
             switch (val) {
                 case 100000:
                     str = this.$t('text.Administrator')
                     break;
-            
+
                 case 100001:
                     str = this.$t('text.normalUsers')
                     break;

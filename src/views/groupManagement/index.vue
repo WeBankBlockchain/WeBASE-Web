@@ -39,7 +39,7 @@
                     </el-table>
                     <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                     </el-pagination>
-                    <el-dialog :title="$t('nodes.addGroup')" :visible.sync="generateGroupVisibility" v-if="generateGroupVisibility" center>
+                    <el-dialog :title="$t('nodes.addGroup')" :visible.sync="generateGroupVisibility" v-if="generateGroupVisibility" center :close-on-click-modal='false' :close-on-press-escape='false' :show-close='false'>
                         <generate-group @generateSuccess="generateSuccess" @close="close"></generate-group>
                     </el-dialog>
                     <el-dialog :title="$t('nodes.modifyGroup')+'('+'ID:'+' '+`${modifyGroupId}`+')'" :visible.sync="modifyGroupVisibility" v-if="modifyGroupVisibility" center>
@@ -163,6 +163,7 @@ export default {
         },
         modifyClose() {
             this.modifyGroupVisibility = false;
+            this.queryGroupTable()
         },
         modifySuccess() {
             // this.modifyGroupVisibility = false;
@@ -170,7 +171,7 @@ export default {
             this.updateGroup++;
             // this.updateGroupType = 'update'
         },
-        joinGroupTipsSuccess(){
+        joinGroupTipsSuccess() {
             this.joinGroupTipsVisibility = false
             this.queryGroupTable()
         },
@@ -212,11 +213,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -236,11 +237,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },
@@ -284,11 +285,11 @@ export default {
                         })
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     this.dropLoading = false;
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     })
                 })
         },

@@ -18,7 +18,7 @@
         <el-dialog :title="$t('contracts.createFolder')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="450px" :center="true">
             <div>
                 <el-form :model="folderFrom" :rules="rules" ref="folderFrom" label-width="110px" class="demo-ruleForm">
-                    
+
                     <el-form-item :label="$t('contracts.folderName')" prop="folderName" style="width:400px" class="add-folder">
                         <span style="color: #a3a3a3">{{userFolader}}</span>
                         <el-input v-model="folderFrom.folderName" @keyup.enter.native="handleFolder"></el-input>
@@ -62,7 +62,7 @@ export default {
             return data
         }
     },
-    data: function(){
+    data: function () {
         return {
             folderFrom: {
                 folderName: ""
@@ -73,21 +73,21 @@ export default {
             pathList: []
         }
     },
-    mounted: function(){
-        if(localStorage.getItem("root") === 'developer'){
+    mounted: function () {
+        if (localStorage.getItem("root") === 'developer') {
             this.userFolader = localStorage.getItem("user") + "_"
-        }else{
+        } else {
             this.userFolader = ""
         }
     },
     methods: {
-        
-        
-        submit: function(formName){
+
+
+        submit: function (formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
                     this.add()
-                }else{
+                } else {
                     return false;
                 }
             })
@@ -98,23 +98,23 @@ export default {
                 groupId: localStorage.getItem("groupId")
             }
             addContractPath(reqData).then(res => {
-                if(res.data.code === 0){
+                if (res.data.code === 0) {
                     this.$emit("success")
-                }else {
-                        this.$message({
-                            type: "error",
-                            message: this.$chooseLang(res.data.code)
-                        });
-                    }
-                })
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: this.$chooseLang(res.data.code)
+                    });
+                }
+            })
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError')
                     });
                 });
         },
-        modelClose: function(){
+        modelClose: function () {
             this.$emit("close")
         },
         handleFolder() {
@@ -124,8 +124,8 @@ export default {
 }
 </script>
 <style scoped>
-    .add-folder >>> .el-input {
-        width: 65% !important;
-    }
+.add-folder >>> .el-input {
+    width: 65% !important;
+}
 </style>
 

@@ -28,7 +28,7 @@
                     </div>
                     <div class="item">
                         <span class="label">To:</span>
-                        <span>{{transactionData.to}}</span>
+                        <span>{{transactionData.to | contractSource}}</span>
                     </div>
                     <div class="item" style="font-size: 0">
                         <span class="label">Input:</span>

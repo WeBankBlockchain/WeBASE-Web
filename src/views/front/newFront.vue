@@ -54,7 +54,7 @@
             <div class="search-table">
                 <h3 style="padding: 20px 0 8px 0;">
                     {{this.$t("nodes.nodeList")}}
-                    <el-tooltip effect="dark"  placement="top-start">
+                    <el-tooltip effect="dark" placement="top-start">
                         <div slot="content">{{$t('nodes.nodeDescription')}}</div>
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
@@ -97,7 +97,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
-import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId,getVersion } from "@/util/api";
+import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
@@ -228,16 +228,16 @@ export default {
         this.getNodeTable();
     },
     methods: {
-        getVersionList () {
+        getVersionList() {
             getVersion().then(res => {
-                if(res.status == 200) {
+                if (res.status == 200) {
                     this.version = res.data;
-                    this.$store.dispatch('set_mgr_version_action',this.version)
+                    this.$store.dispatch('set_mgr_version_action', this.version)
                 }
             }).catch(err => {
-                
+
                 this.$message({
-                    message: this.$t('text.systemError'),
+                    message: err.data || this.$t('text.systemError'),
                     type: "error",
                     duration: 2000
                 });
@@ -263,29 +263,29 @@ export default {
                         this.loading = false;
                         let num = 0;
                         let versionKey;
-                        if(!localStorage.getItem("nodeVersionChange")){
-                            for(let i = 0; i < this.frontData.length; i++){
-                                if(res.data.data[i].clientVersion || res.data.data[i].supportVersion){
-                                    this.$store.dispatch('set_version_action',res.data.data[i].clientVersion);
-                                    this.$store.dispatch('set_support_version_action',res.data.data[i].supportVersion);
-                                    if(res.data.data[i].supportVersion){
-                                        versionKey = res.data.data[i].supportVersion.substring(2,3)
-                                        if(versionKey > 4){
-                                            num ++
+                        if (!localStorage.getItem("nodeVersionChange")) {
+                            for (let i = 0; i < this.frontData.length; i++) {
+                                if (res.data.data[i].clientVersion || res.data.data[i].supportVersion) {
+                                    this.$store.dispatch('set_version_action', res.data.data[i].clientVersion);
+                                    this.$store.dispatch('set_support_version_action', res.data.data[i].supportVersion);
+                                    if (res.data.data[i].supportVersion) {
+                                        versionKey = res.data.data[i].supportVersion.substring(2, 3)
+                                        if (versionKey > 4) {
+                                            num++
                                         }
-                                    } 
+                                    }
                                 }
                             }
-                            if(num > 0) {
-                                localStorage.setItem("nodeVersionChange",1)
-                            }else{
-                                localStorage.setItem("nodeVersionChange","")
+                            if (num > 0) {
+                                localStorage.setItem("nodeVersionChange", 1)
+                            } else {
+                                localStorage.setItem("nodeVersionChange", "")
                             }
                             this.getVersionList();
-                            if(localStorage.getItem("nodeVersionChange")){
+                            if (localStorage.getItem("nodeVersionChange")) {
                                 this.$emit("versionChange")
                             }
-                        }  
+                        }
                     } else {
                         this.loading = false;
                         this.$message({
@@ -293,17 +293,17 @@ export default {
                             type: "error",
                             duration: 2000
                         });
-                        
+
                     }
                 })
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
         handleSizeChange(val) {
@@ -328,10 +328,16 @@ export default {
             let colorString = "";
             switch (val) {
                 case 1:
-                    colorString = "#58cb7d";
+                    colorString = "#67C23A";
                     break;
                 case 2:
-                    colorString = "#ed5454";
+                    colorString = "#F56C6C";
+                    break;
+                case 2:
+                    colorString = "#E6A23C";
+                    break;
+                case 2:
+                    colorString = "#909399";
                     break;
             }
             return colorString;
@@ -344,6 +350,12 @@ export default {
                     break;
                 case 2:
                     transString = this.$t("home.unusual");
+                    break;
+                case 3:
+                    transString = this.$t("nodes.starting");
+                    break;
+                case 4:
+                    transString = this.$t("text.down");
                     break;
             }
             return transString;
@@ -401,7 +413,7 @@ export default {
                         }
                     }).catch(err => {
                         this.$message({
-                            message: this.$t('text.systemError'),
+                            message: err.data || this.$t('text.systemError'),
                             type: "error",
                             duration: 2000
                         });
@@ -453,7 +465,7 @@ export default {
                             }
                         });
                         this.nodeData = unique(this.nodeData, 'nodeId')
-                    }else {
+                    } else {
                         this.nodeData = [];
                     }
                 }))

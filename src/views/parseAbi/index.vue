@@ -28,12 +28,12 @@
                     <el-col :span="7">
                         <div>{{item.name}}</div>
                         <el-select v-model="item.type" @change="changeArgType(index)">
-                            <el-option v-for="(it, index) in item.argumentOption" :key="index" :label="it" :value="it"></el-option>
+                            <el-option v-for="(it, i) in item.argumentOption" :key="i" :label="it" :value="it"></el-option>
                         </el-select>
                     </el-col>
                     <el-col :span="17">
                         <span class="font-color-fff text-hidden">value</span>
-                        <input class="input-inner" type="text" v-model="item.argumentValue" @input="inputArgumentValue($event,item.type)"></input>
+                        <input class="input-inner" type="text" v-model="item.argumentValue" @input="inputArgumentValue($event,item.type)" />
                         <span></span>
                     </el-col>
                 </el-row>

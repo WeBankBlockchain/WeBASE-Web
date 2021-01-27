@@ -73,7 +73,7 @@ export default {
     components: {
         "v-content-head": contentHead
     },
-    data: function() {
+    data: function () {
         return {
             blockData: [],
             currentPage: 1,
@@ -87,14 +87,14 @@ export default {
             }
         };
     },
-    mounted: function() {
+    mounted: function () {
         this.getBlockList();
     },
     methods: {
-        changGroup(val){
+        changGroup(val) {
             this.getBlockList()
         },
-        search: function() {
+        search: function () {
             if (
                 this.searchKey.key == "pkHash" &&
                 this.searchKey.value.length != 66 &&
@@ -110,23 +110,23 @@ export default {
                 this.getBlockList();
             }
         },
-        getBlockList: function() {
+        getBlockList: function () {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
-                    groupId: groupId,
-                    pageNumber: this.currentPage,
-                    pageSize: this.pageSize
-                },
+                groupId: groupId,
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
                 reqQuery = {};
             if (this.$route.query.blockNumber) {
                 this.searchKey.key = "blockNumber";
                 this.searchKey.value = this.$route.query.blockNumber;
             }
-            if(this.searchKey.value){
-                if(this.searchKey.value.length===66){
+            if (this.searchKey.value) {
+                if (this.searchKey.value.length === 66) {
                     reqQuery.pkHash = this.searchKey.value;
-                }else {
+                } else {
                     reqQuery.blockNumber = this.searchKey.value;
                 }
             }
@@ -147,23 +147,23 @@ export default {
                 .catch(err => {
                     this.loading = false;
                     this.$message({
-                        message: this.$t('text.systemError'),
+                        message: err.data || this.$t('text.systemError'),
                         type: "error",
                         duration: 2000
                     });
-                    
+
                 });
         },
-        handleSizeChange: function(val) {
+        handleSizeChange: function (val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getBlockList();
         },
-        handleCurrentChange: function(val) {
+        handleCurrentChange: function (val) {
             this.currentPage = val;
             this.getBlockList();
         },
-        link: function(val) {
+        link: function (val) {
             router.push({
                 path: "/transactionInfo",
                 query: {
@@ -171,15 +171,15 @@ export default {
                 }
             });
         },
-        clickTable: function(row, column, $event) {
+        clickTable: function (row, column, $event) {
             let nodeName = $event.target.nodeName;
             if (nodeName === "I") {
                 return
             }
             this.link(row.blockNumber)
         },
-        
-        clearText: function(){
+
+        clearText: function () {
             this.getBlockList()
         },
         copyPubilcKey(val) {
@@ -213,24 +213,24 @@ export default {
 .input-with-select {
     width: 610px;
 }
-.input-with-select>>>.el-input__inner {
+.input-with-select >>> .el-input__inner {
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     border: 1px solid #eaedf3;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-input--suffix > .el-input__inner {
+.input-with-select >>> .el-input--suffix > .el-input__inner {
     box-shadow: none;
 }
-.input-with-select>>>.el-input-group__prepend {
+.input-with-select >>> .el-input-group__prepend {
     border-left-color: #fff;
 }
-.input-with-select>>>.el-input-group__append {
+.input-with-select >>> .el-input-group__append {
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
 }
-.input-with-select>>>.el-button {
+.input-with-select >>> .el-button {
     border: 1px solid #20d4d9;
     border-radius: inherit;
     background: #20d4d9;
