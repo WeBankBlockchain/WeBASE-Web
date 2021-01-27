@@ -1,3 +1,19 @@
+### v1.4.3(2021-01-27)
+
+**Add**
+- 新增主机管理页面，优化可视化部署操作流程
+- 支持明文私钥导入
+
+**Fix**
+- 修复一些已知bug 
+
+**兼容性**
+- 支持FISCO-BCOS v2.4.x 及以上版本
+- WeBASE-Node-Manager v1.4.3+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
+
 ### v1.4.2(2020-12-03)
 
 **Add**
