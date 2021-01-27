@@ -1032,8 +1032,8 @@ let errCode = {
         "zh": "插入链信息到数据库失败"
     },
     "202409": {
-        "en": "Generate host, agency, group configuration error.",
-        "zh": "生成主机，机构，群组配置信息文件失败"
+        "en": "Chain root dir exist, please move it manually.",
+        "zh": "链的根目录default_chain_nodes已存在，请移除脏数据文件"
     },
     "202410": {
         "en": "Execute build_chain.sh script error.",
@@ -1261,7 +1261,7 @@ let errCode = {
     },
     "202466": {
         "en": "Please pull the Docker image manually in host /ip/",
-        "zh": "主机上的节点镜像不存在，请检查！"
+        "zh": "主机上的节点镜像不存在，请检查/ip/！"
     },
     "202467": {
         "en": "Max 4 nodes on a single host",

@@ -590,13 +590,21 @@ export default {
                 }
             })
                 .catch(err => {
-                    this.loading3 = false
-                    this.loading1 = false;
-                    this.$message({
-                        message: err.data || this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
+                    if (err.data && this.statusNumber === 5) {
+                        this.$message({
+                            message: this.$t('text.initChainTimeout'),
+                            type: "error",
+                            duration: 2000
+                        });
+                    } else {
+                        this.loading3 = false
+                        this.loading1 = false;
+                        this.$message({
+                            message: err.data || this.$t('text.systemError'),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
                 });
         },
         initTimer() {
@@ -722,10 +730,13 @@ export default {
                         this.loading3 = false
                         this.loading2 = false;
                         this.$router.push("/newNode")
-                        this.$message({
-                            type: "error",
-                            message: err.data || this.$t('text.systemError')
-                        });
+                        this.nodeList = []
+                        sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
+                        this.$store.dispatch('set_node_list_action', this.nodeList)
+                        // this.$message({
+                        //     type: "error",
+                        //     message: err.data || this.$t('text.systemError')
+                        // });
                     }else{
                         this.getHostList()
                         this.initShow = false
@@ -776,11 +787,14 @@ export default {
                         this.deployOpt = true
                         this.loading3 = false
                         this.loading2 = false;
+                        this.nodeList = []
+                        sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
+                        this.$store.dispatch('set_node_list_action', this.nodeList)
                         this.$router.push("/newNode")
-                        this.$message({
-                            type: "error",
-                            message: err.data || this.$t('text.systemError')
-                        });
+                        // this.$message({
+                        //     type: "error",
+                        //     message: err.data || this.$t('text.systemError')
+                        // });
                     }else{
                         this.getHostList()
                         this.initShow = false

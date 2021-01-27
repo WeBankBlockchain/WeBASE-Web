@@ -1891,3 +1891,17 @@ export function getFrontStatus() {
     })
 }
 
+/**
+ * @method 重启节点
+ */
+export function restartNode(data) {
+    return post({
+        url: `${url.ORG_LIST}/deploy/node/stopForce`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
