@@ -115,11 +115,11 @@ export default {
                     name: this.$t("contracts.contractAbi"),
                     width: ''
                 },
-                {
-                    enName: "contractBin",
-                    name: this.$t("contracts.runtimeBin"),
-                    width: ''
-                }
+                // {
+                //     enName: "contractBin",
+                //     name: this.$t("contracts.runtimeBin"),
+                //     width: ''
+                // }
             ];
             return data
         }
