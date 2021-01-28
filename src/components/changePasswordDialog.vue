@@ -151,7 +151,7 @@ export default {
                     } else {
                         this.$message({
                             type: "error",
-                            message: errcode.errCode[res.data.code].cn
+                            message: this.$chooseLang(res.data.code)
                         });
                     }
                 })
