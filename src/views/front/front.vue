@@ -619,6 +619,8 @@ export default {
                         this.$router.push({
                             path: "/node/chain",
                         })
+                        this.$store.dispatch('set_contract_dataList_action', []);
+                        localStorage.setItem("contractList", JSON.stringify([]))
                         localStorage.setItem("groupId", null)
                         this.configData = null;
                         this.loadingNodes = false;
