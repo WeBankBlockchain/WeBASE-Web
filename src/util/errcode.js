@@ -1475,8 +1475,8 @@ let errCode = {
         zh: "节点无法访问"
     },
     "-51103": {
-        en: "The node is not a group peer",
-        zh: "节点不是群组成员"
+        en: "The node is already set as removed",
+        zh: "节点已被设为游离节点"
     },
     "-51104": {
         en: "The node is already in the sealer list",
@@ -1484,7 +1484,7 @@ let errCode = {
     },
     "-51105": {
         en: "The node is already in the observer list",
-        zh: "节点已经在观察者列表中"
+        zh: "节点已经在观察者列表中" 
     },
     "-51200": {
         en: "Contract name and version already exist",
