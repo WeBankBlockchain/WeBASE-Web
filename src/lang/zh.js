@@ -358,7 +358,9 @@ export default {
         contractWarehouse: '合约仓库',
         toolsContract: '工具合约',
         directory: '目录',
-        mgmtCns: "管理CNS"
+        mgmtCns: "管理CNS",
+        externalAccount: '链上用户',
+        externalContract: '链上合约'
     },
     home: {
         nodes: "节点个数",

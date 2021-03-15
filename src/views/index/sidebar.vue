@@ -162,6 +162,12 @@ export default {
                             case 'emailAlarmType':
                                 it.name = this.$t('title.emailAlarmType')
                                 break;
+                            case 'externalAccount':
+                                it.name = this.$t('title.externalAccount')
+                                break;
+                            case 'externalContract':
+                                it.name = this.$t('title.externalContract')
+                                break;
                             case 'blockEvent':
                                 it.name = this.$t('title.blockEvent')
                                 break;

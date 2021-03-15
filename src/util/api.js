@@ -1905,3 +1905,34 @@ export function restartNode(data) {
     })
 }
 
+/**
+ * 链上用户
+ * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
+ */
+export function externalAccountList(data) {
+    const params = reviseParam(data, {});
+    return post({
+        url: `${url.ORG_LIST}/external/account/list/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * 链上合约的数据
+ * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
+ */
+export function externalContractList(data) {
+    const params = reviseParam(data, {});
+    return post({
+        url: `${url.ORG_LIST}/external/contract/list/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+

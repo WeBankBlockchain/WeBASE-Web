@@ -17,7 +17,7 @@
     <div class="key-dialog">
         <div class="text-center">
             <el-radio-group v-model="timeGranularity" @change='changeKey'>
-                <el-radio :label="'RIV'">{{this.$t("privateKey.privateKeyUser")}}</el-radio>
+                <el-radio :label="'RIV'" v-if='!address'>{{this.$t("privateKey.privateKeyUser")}}</el-radio>
                 <el-radio :label="'PUB'">{{this.$t('privateKey.publicKeyUser')}}</el-radio>
             </el-radio-group>
         </div>
@@ -46,6 +46,12 @@ import errcode from "@/util/errcode";
 
 export default {
     name: "AddUser",
+    props: {
+        address: {
+            type: String,
+            default: null
+        }
+    },
     data: function () {
         return {
             loading: false,
@@ -91,6 +97,13 @@ export default {
                 ]
             };
             return data
+        }
+    },
+    mounted() {
+        if (this.address) {
+            this.timeGranularity = 'PUB'
+            this.changeKey();
+            this.userForm.publicKey = this.address;
         }
     },
     methods: {

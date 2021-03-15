@@ -1256,8 +1256,8 @@ let errCode = {
         "zh": "application.yml中的webaseSignAddess配置错误"
     },
     "202465": {
-        "en": "Error getting docker image mode",
-        "zh": "获取镜像方式错误"
+        "en": "webaseSignAddress cannot be 127.0.0.1 or localhost in application.yml file",
+        "zh": "配置项application.yml文件中webaseSign的地址不能是127.0.0.1或localhost"
     },
     "202466": {
         "en": "Please pull the Docker image manually in host /ip/",
