@@ -19,9 +19,20 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
+                    <!-- <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
-                    </el-tooltip>
+                    </el-tooltip> -->
+                    <el-radio-group v-model="type"  @change="changeContractList">
+                        <el-radio :label="item.value" :key='item.value' v-for="item in userOptions">{{item.name}}</el-radio>
+                    </el-radio-group>
+                    <!-- <el-select :placeholder="'切换选择不同类型的用户'" v-model="type"  @change="changeContractList">
+                        <el-option
+                        v-for="item in userOptions"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                        </el-option>
+                    </el-select> -->
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('contracts.contractAddressInput')" v-model="contractAddress" class="input-with-select" @clear="clearText">
@@ -49,7 +60,17 @@
                     </el-table-column>
                     <el-table-column v-for="(head,index) in unusualContractHead" :key="index" :label="head.name" show-overflow-tooltip align="center" v-if="head.enName!=='hashs'">
                         <template slot-scope="scope">
-                            <span>{{scope.row[head.enName]}}</span>
+                            <template  v-if='head.enName != "deployTime"'>
+                                <span>{{scope.row[head.enName]}}</span>
+                            </template>
+                            <template v-else-if='head.enName == "deployTime"'>
+                                <span>{{changeDate(scope.row[head.enName])}}</span>
+                            </template>
+                        </template>
+                    </el-table-column>
+                    <el-table-column  :label="$t('nodes.operation')" width="300">
+                        <template slot-scope="scope">
+                            <el-button :disabled="disabled || scope.row.abiId > 0 || scope.row.abiId === 0" :class="{'grayColor': disabled}" @click="importData(scope.row)" type="text" size="small">导入ABI</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -61,28 +82,51 @@
                 <p>{{$t('transaction.unusualMoreTips')}}</p>
             </div>
         </div>
+        <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
+            <import-abi @importSuccess="importSuccess" @closeImport="closeImport" :address='address'></import-abi>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
 import transactionDetail from "@/components/transactionDetail";
-import { unusualContractList } from "@/util/api";
+import { unusualContractList, getAllContractList } from "@/util/api";
+import importAbi from "../abiList/components/importAbi"
+import { getDate } from "@/util/util"
 export default {
     name: "unusualContract",
     components: {
         contentHead,
-        transactionDetail
+        transactionDetail,
+        importAbi
     },
     data() {
         return {
+            disabled: false,
             loading: false,
             noticeVisibility: false,
             currentPage: 1,
             pageSize: 10,
             total: 0,
             contractAddress: "",
-            unusualContractList: []
+            unusualContractList: [],
+            userOptions: [
+                {
+                    name: '全量合约',
+                    value: 1
+                },
+                {
+                    name: '正常合约',
+                    value: 2
+                },
+                {
+                    name: '未登记合约',
+                    value: 3
+                }
+            ],
+            type: 1,
+            importVisibility: false
         };
     },
     computed: {
@@ -92,12 +136,16 @@ export default {
                     enName: "contractAddress",
                     name: this.$t('contracts.contractAddress')
                 },
+                 {
+                    enName: "contractName",
+                    name: this.$t('contracts.contractName')
+                },
                 {
                     enName: "transCount",
                     name: this.$t('home.chartTransactions')
                 },
                 {
-                    enName: "time",
+                    enName: "deployTime",
                     name: this.$t('transaction.transactionTime')
                 },
                 {
@@ -111,11 +159,14 @@ export default {
             var arr = this.unusualContractList,
                 list = [];
             arr.forEach(item => {
-                item.hashs = item["hashs"].split(",");
+                if (item.hashs) {
+                    item.hashs = item["hashs"].split(",");
+                }
             });
             arr.forEach(item => {
                 let hashArr = [];
-                for (let i = 0; i < item.hashs.length; i++) {
+                if (item.hashs) {
+                    for (let i = 0; i < item.hashs.length; i++) {
                     let obj = {};
                     if (i === 0) {
                         obj.hash = item.hashs[i];
@@ -126,6 +177,8 @@ export default {
                     }
                     hashArr.push(obj);
                 }
+                }
+
                 item.hashs = hashArr;
             });
             return arr;
@@ -143,11 +196,25 @@ export default {
         }
     },
     mounted() {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+            this.disabled = false
+        } else {
+            this.disabled = true
+        }
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualContractList();
         }
     },
     methods: {
+        changeDate(val) {
+            const value = getDate(val)
+            console.log(value)
+            return value
+        },
+        changeContractList (val) {
+            this.type = val;
+            this.getUnusualContractList()
+        },
         changGroup() {
             this.getUnusualContractList()
         },
@@ -164,9 +231,9 @@ export default {
             },
                 reqQuery = {};
             reqQuery = {
-                contractAddress: this.contractAddress
+                type: this.type
             };
-            unusualContractList(reqData, reqQuery)
+            getAllContractList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.unusualContractList = res.data.data;
@@ -214,6 +281,18 @@ export default {
         },
         clearText: function () {
             this.getUnusualContractList()
+        },
+        importData(val) {
+            this.importVisibility = true;
+            this.address = val.contractAddress
+        },
+        importSuccess () {
+            this.importVisibility = false;
+            this.getUnusualContractList();
+        },
+        closeImport () {
+            this.importVisibility = false;
+            this.getUnusualContractList();
         }
     }
 };

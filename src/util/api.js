@@ -1935,4 +1935,50 @@ export function externalContractList(data) {
     })
 }
 
+/**
+ * 链上所有合约abi
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllAbiList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/abi/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
+/**
+ * 链上所有合约地址
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllContractList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/external/contract/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * 链上所有用户地址
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllUserList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/external/account/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}

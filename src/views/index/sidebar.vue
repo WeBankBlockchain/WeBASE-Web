@@ -117,12 +117,12 @@ export default {
                             case 'contractIDE':
                                 it.name = this.$t('title.contractIDE')
                                 break;
-                            case 'abiList':
-                                it.name = this.$t('title.abiList')
-                                break;
-                            case 'parseAbi':
-                                it.name = this.$t('title.parseAbi')
-                                break;
+                            // case 'abiList':
+                            //     it.name = this.$t('title.abiList')
+                            //     break;
+                            // case 'parseAbi':
+                            //     it.name = this.$t('title.parseAbi')
+                            //     break;
                             case 'contractList':
                                 it.name = this.$t('title.contractList')
                                 break;
@@ -162,12 +162,12 @@ export default {
                             case 'emailAlarmType':
                                 it.name = this.$t('title.emailAlarmType')
                                 break;
-                            case 'externalAccount':
-                                it.name = this.$t('title.externalAccount')
-                                break;
-                            case 'externalContract':
-                                it.name = this.$t('title.externalContract')
-                                break;
+                            // case 'externalAccount':
+                            //     it.name = this.$t('title.externalAccount')
+                            //     break;
+                            // case 'externalContract':
+                            //     it.name = this.$t('title.externalContract')
+                            //     break;
                             case 'blockEvent':
                                 it.name = this.$t('title.blockEvent')
                                 break;
@@ -277,12 +277,12 @@ export default {
                             if (it.nameKey == 'contractList') {
                                 it.menuShow = true;
                             }
-                            if (it.nameKey == 'abiList') {
-                                it.menuShow = true;
-                            }
-                            if (it.nameKey == 'parseAbi') {
-                                it.menuShow = true;
-                            }
+                            // if (it.nameKey == 'abiList') {
+                            //     it.menuShow = true;
+                            // }
+                            // if (it.nameKey == 'parseAbi') {
+                            //     it.menuShow = true;
+                            // }
                             if (it.nameKey == 'CNSmanager') {
                                 it.menuShow = true;
                             }
