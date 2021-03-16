@@ -1400,8 +1400,12 @@ let errCode = {
     },
 
     "202511": {
-        "en": "app key cannot be empty",
-        "zh": "应用Key不能为空"
+        "en": "Front's sdk cert and key not found!",
+        "zh": "找不到前置sdk证书和密钥！"
+    },
+    "202512": {
+        "en": "Write front's sdk cert and key fail!",
+        "zh": "写入前置的sdk证书和密钥失败！"
     },
     "202514": {
         "en": "app key not exists",
