@@ -668,8 +668,8 @@ let errCode = {
         zh: '合约名称不能重复'
     },
     "202020": {
-        en: "current organization already exist",
-        zh: '已存在本组织信息'
+        en: "deployed contract cannot be modified",
+        zh: '已部署合约不支持修改'
     },
     "202021": {
         en: "invalid organization type",
@@ -1398,6 +1398,32 @@ let errCode = {
         "en": "version already exists.",
         "zh": "版本已存在"
     },
+
+    "202511": {
+        "en": "app key cannot be empty",
+        "zh": "应用Key不能为空"
+    },
+    "202514": {
+        "en": "app key not exists",
+        "zh": "应用Key不存在"
+    },
+    "202516": {
+        "en": "app name exists ",
+        "zh": "应用名称已存在"
+    },
+    "202517": {
+        "en": "app name not exists",
+        "zh": "应用名称不存在"
+    },
+    "202518": {
+        "en": "app id not exists",
+        "zh": "应用编号不存在"
+    },
+    "202519": {
+        "en": "link format invalid",
+        "zh": "链接格式错误"
+    },
+
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'

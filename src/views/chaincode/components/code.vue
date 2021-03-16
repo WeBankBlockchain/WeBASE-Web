@@ -21,17 +21,17 @@
                 <span>{{contractName + '.sol'}}</span>
             </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" v-if="!contractAddress && !disabled" @click="saveCode">
+                <span class="contract-code-done" v-if="(!contractAddress && !disabled) || (contractAddress && !disabled &&isDeployedModifyEnable)" @click="saveCode">
                     <el-tooltip class="item" effect="dark" :content="$t('contracts.contractSaveTips')" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
                     <span>{{this.$t("text.save")}}</span>
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="!contractAddress && !disabled && !loading">
+                <span class="contract-code-done" @click="compile" v-if="(!contractAddress && !disabled && !loading )|| (contractAddress && !disabled && !loading &&isDeployedModifyEnable)">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>{{this.$t("text.compile")}}</span>
                 </span>
-                <span class="contract-code-done" @click="deploying" v-if="!contractAddress && abiFile && bin && !disabled">
+                <span class="contract-code-done" @click="deploying" v-if="(!contractAddress && abiFile && bin && !disabled)|| (contractAddress && !disabled &&isDeployedModifyEnable)">
                     <i class="wbs-icon-deploy font-16"></i>
                     <span>{{this.$t("text.deploy")}}</span>
                 </span>
@@ -161,7 +161,8 @@ import {
     addFunctionAbi,
     backgroundCompile,
     registerCns,
-    findCnsInfo
+    findCnsInfo,
+    fetchIsDeployedModifyEnable
 } from "@/util/api";
 import transaction from "@/components/sendTransaction";
 import changeUser from "../dialog/changeUser";
@@ -225,7 +226,8 @@ export default {
             cnsName: "",
             mgmtCnsVisible: false,
             mgmtCnsItem: {},
-            activeNames: ['0']
+            activeNames: ['0'],
+            isDeployedModifyEnable: false
         };
     },
     beforeDestroy: function () {
@@ -241,6 +243,7 @@ export default {
         } else {
             this.disabled = true
         }
+        this.queryIsDeployedModifyEnable()
         this.initEditor();
         Bus.$on('select', data => {
             this.codeShow = true;
@@ -324,6 +327,20 @@ export default {
         }
     },
     methods: {
+        queryIsDeployedModifyEnable(){
+            fetchIsDeployedModifyEnable()
+                .then(res=> {
+                    if(res.data.code==0){
+                        this.isDeployedModifyEnable = res.data.data
+                    }else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+        },
         initEditor: function () {
             let _this = this
             this.aceEditor = ace.edit(this.$refs.ace, {

@@ -44,11 +44,11 @@ export function loginOut() {
 //
 export function encryption() {
     return get({
-        url: `${url.ORG_LIST}/encrypt`,
+        url: `${url.ORG_LIST}/config/encrypt`,
         method: 'get',
-        // headers: {
-        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        // }
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
     })
 }
 //init change passWord
@@ -592,6 +592,19 @@ export function nodesHealth(data, list) {
         }
     })
 }
+
+export function fetchNodeMonitor(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/stat`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 
 export function addFront(data) {
     return get({
@@ -1276,7 +1289,7 @@ export function getDeployType() {
 //获取链版本
 export function getVersion() {
     return get({
-        url: `${url.ORG_LIST}/version`,
+        url: `${url.ORG_LIST}/config/version`,
         method: "get",
         responseType: "text",
         headers: {
@@ -1905,3 +1918,84 @@ export function restartNode(data) {
     })
 }
 
+// 导出cert sdk
+export function exportCertSdk(frontId) {
+    return get({
+        url: `${url.ORG_LIST}/cert/sdk/zip/${frontId}`,
+        method: 'get',
+        responseType: 'blob',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+/**
+ * @method  保存应用
+ */
+export function fetchSaveApp(data) {
+    return post({
+        url: `${url.ORG_LIST}/app/save`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+            
+        }
+    })
+}
+
+/**
+ * @method  删除应用
+ */
+export function fetchDeleteApp(id) {
+    return deleted({
+        url: `${url.ORG_LIST}/app/${id}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+/**
+ * @method  应用列表
+ */
+export function fetchAppList(data) {
+    return get({
+        url: `${url.ORG_LIST}/app/list`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  获取服务信息
+ */
+export function fetchAppServerInfo(data) {
+    return get({
+        url: `${url.ORG_LIST}/config/ipPort`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * @method  查询已部署合约是否支持修改
+ */
+export function fetchIsDeployedModifyEnable() {
+    return get({
+        url: `${url.ORG_LIST}/config/isDeployedModifyEnable`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}

@@ -95,6 +95,9 @@ export default {
                     case 'chainTitle':
                         item.name = this.$t('text.chainTitle')
                         break;
+                    case 'appManagement':
+                        item.name = this.$t('title.appManagement')
+                        break;
                 }
                 if (item.children) {
                     item.children.forEach((it) => {
@@ -178,6 +181,9 @@ export default {
                                 it.name = this.$t('title.onlineTools')
                             case 'hostMgrTitle':
                                 it.name = this.$t('text.hostMgrTitle')
+                                break;
+                            case 'appManagement':
+                                it.name = this.$t('title.appManagement')
                                 break;
                         }
                     })

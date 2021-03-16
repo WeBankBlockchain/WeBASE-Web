@@ -62,6 +62,11 @@
                             <v-metric-chart :chartOption="item" :reload="nodesReloadNum" v-loading="loading" :metricName="'nodes'"></v-metric-chart>
                         </el-col>
                     </template>
+                    <template v-for="item in nodesInfoData">
+                        <el-col :xs='24' :sm="24" :md="24" :lg="12" :xl="12">
+                            <v-metric-chart :chartOption="item" :reload="nodesInfoReload" v-loading="loading" :metricName="'nodes'"></v-metric-chart>
+                        </el-col>
+                    </template>
                 </el-row>
             </div>
         </div>
@@ -71,7 +76,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import metricChart from "@/components/metricChart";
-import { metricInfo, nodesHealth, getFronts } from "@/util/api";
+import { metricInfo, nodesHealth, getFronts, fetchNodeMonitor } from "@/util/api";
 import { format, numberFormat, formatData } from "@/util/util.js";
 import errcode from "@/util/errcode";
 import Bus from "@/bus"
@@ -81,7 +86,9 @@ export default {
         "v-content-head": contentHead,
         "v-metric-chart": metricChart
     },
-
+    computed:{
+        
+    },
     data() {
         return {
             sureing: false,
@@ -119,7 +126,9 @@ export default {
             nodesReloadNum: 1,
             nodesHealthData: [],
             nodesOptions: [],
-            nodeId: this.$root.$route.query.nodeId || ""
+            nodeId: this.$root.$route.query.nodeId || "",
+            nodesInfoData: [],
+            nodesInfoReload: 1
         };
     },
     beforeDestroy: function () {
@@ -212,19 +221,10 @@ export default {
                     this.loadingInit = false;
                     if (res.data.code === 0) {
                         var data = res.data.data || [];
-                        if (
-                            data[0]["data"]["lineDataList"]["timestampList"]
-                                .length > 0
-                        ) {
-                            var timestampList =
-                                data[0]["data"]["lineDataList"][
-                                "timestampList"
-                                ] || [];
+                        if (data[0]["data"]["lineDataList"]["timestampList"].length > 0) {
+                            var timestampList = data[0]["data"]["lineDataList"]["timestampList"] || [];
                         } else {
-                            var timestampList =
-                                data[0]["data"]["contrastDataList"][
-                                "timestampList"
-                                ] || [];
+                            var timestampList = data[0]["data"]["contrastDataList"]["timestampList"] || [];
                         }
                         this.nodesHealthData = data;
                         this.nodesHealthData.forEach(item => {
@@ -260,9 +260,79 @@ export default {
                     });
                 });
         },
+
+        queryNodeMonitor() {
+            if (this.nodesInfoReload === 1) {
+                this.loadingInit = true;
+            }
+            this.loading = true;
+            this.sureing = true;
+            var reqData = {
+                nodeId: this.nodeId
+            },
+                reqQurey = {};
+            reqQurey = this.chartParam;
+            var newObj = {}
+            for (let key in reqQurey) {
+                if (key == 'beginDate' || key == 'endDate' || key == 'contrastBeginDate' || key == 'contrastEndDate') {
+                    if (reqQurey[key]) {
+                        newObj[key] = new Date(reqQurey[key]).getTime()
+                    }
+                }
+            }
+            let newParam = Object.assign({}, reqQurey, newObj)
+            fetchNodeMonitor(reqData, newParam)
+                .then(res => {
+                    this.loading = false;
+                    this.sureing = false;
+                    this.loadingInit = false;
+
+                    if (res.data.code === 0) {
+                        console.log('=======');
+                        var data = res.data.data || [];
+                        if (data[0]["data"]["lineDataList"]["timestampList"].length > 0) {
+                            var timestampList = data[0]["data"]["lineDataList"]["timestampList"] || [];
+                        } else {
+                            var timestampList = data[0]["data"]["contrastDataList"]["timestampList"] || [];
+                        }
+                        this.nodesInfoData = data;
+                        this.nodesInfoData.forEach(item => {
+                            if (item.metricType === "blockSize") {
+                                item.metricName = this.$t('monitor.blockSize');
+                            } else if (item.metricType === "blockCycle") {
+                                item.metricName = this.$t('monitor.blockCycle');
+                            } else if (item.metricType === "tps") {
+                                item.metricName = this.$t('monitor.tps');;
+                            }
+                            if (this.chartParam.contrastBeginDate) {
+                                item.data.contrastDataList.contractDataShow = true
+                            } else {
+                                item.data.contrastDataList.contractDataShow = false
+                            }
+                            item.data.contrastDataList.timestampList = timestampList;
+                            item.data.lineDataList.timestampList = timestampList;
+                        });
+                        this.nodesInfoReload++;
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
         confirmParam() {
             this.timeParam();
             this.getHealthData();
+            this.queryNodeMonitor()
         },
         timeParam() {
             let initStartTime = format(
