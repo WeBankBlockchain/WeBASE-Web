@@ -1994,7 +1994,7 @@ export function getAllAbiList(data,list) {
         }
     })
 }
-/** 
+/**
  * @method  删除应用
  */
 export function fetchDeleteApp(id) {
