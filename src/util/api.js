@@ -1994,7 +1994,7 @@ export function getAllAbiList(data,list) {
         }
     })
 }
-
+/**
  * @method  删除应用
  */
 export function fetchDeleteApp(id) {
@@ -2036,7 +2036,7 @@ export function getAllContractList(data,list) {
         }
     })
 }
-
+/**
  * @method  获取服务信息
  */
 export function fetchAppServerInfo(data) {
@@ -2064,7 +2064,8 @@ export function getAllUserList(data,list) {
       AuthorizationToken: "Token " + localStorage.getItem("token") || "",
   }
 })
-
+}
+/**
  * @method  查询已部署合约是否支持修改
  */
 export function fetchIsDeployedModifyEnable() {
@@ -2075,5 +2076,4 @@ export function fetchIsDeployedModifyEnable() {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }
     })
-}
-
+    }
