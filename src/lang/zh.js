@@ -397,7 +397,7 @@ export default {
         directory: '目录',
         mgmtCns: "管理CNS",
         externalAccount: '链上用户',
-        externalContract: '链上合约'
+        externalContract: '链上合约',
         appManagement: "应用管理",
     },
     home: {
