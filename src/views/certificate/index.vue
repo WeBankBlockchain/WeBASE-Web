@@ -2,12 +2,16 @@
     <div>
         <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
-            <div class="search-part">
+            <div class="search-part" style="display: flex;">
                 <div class="search-part-left">
                     <el-upload ref="upload" multiple action :limit="10" accept=".crt,.cer,.der" :http-request="uploadCrt" :before-upload="onBeforeUpload" :on-exceed="onUploadExceed">
                         <el-button size="small" type="primary" :disabled="disabled">{{this.$t('system.addCertificate')}}</el-button>
                         <!-- <div slot="tip">只能上传crt文件，且不超过500kb</div> -->
                     </el-upload>
+
+                </div>
+                <div style="margin-left: 20px;">
+                    <el-button type="primary" :disabled="disabled" @click="exportSdk()" size="small">{{$t('text.exportSdk')}}</el-button>
                 </div>
             </div>
             <div class="search-table">
@@ -52,18 +56,26 @@
             </el-pagination> -->
             </div>
         </div>
+        <el-dialog :visible.sync="frontDialogVisible" :title="frontDialogTitle" width="433px" :append-to-body="true" :center="true" class="dialog-wrapper" v-if="frontDialogVisible">
+            <front-dialog @close="close" @submit="submit"></front-dialog>
+        </el-dialog>
+
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
-import { deleteCert, certList, exportCert, importCert } from "@/util/api";
+import frontDialog from "./components/frontDialog";
+import { deleteCert, certList, exportCert, importCert, exportCertSdk, getFronts } from "@/util/api";
 import { format } from "@/util/util";
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 export default {
     name: 'Certificate',
 
     components: {
         "v-content-head": contentHead,
+        frontDialog
     },
 
     props: {
@@ -77,7 +89,10 @@ export default {
             pageSize: 100,
             total: 0,
             certificateList: [],
-            format: format
+            format: format,
+            frontDialogVisible: false,
+            frontDialogTitle: '',
+            frontId: ''
         }
     },
 
@@ -145,6 +160,7 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getCertList()
         }
+        this.queryFronts()
     },
 
     methods: {
@@ -153,6 +169,25 @@ export default {
         },
         importCert() {
 
+        },
+        queryFronts() {
+            getFronts({})
+                .then(res => {
+                    if (res.data.code === 0) {
+                        const { data } = res.data
+                        if (data.length) {
+                            
+                            this.frontId = data[0]['frontId']
+                        }
+                        
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
         },
         sureExportCert(row) {
             let list = {
@@ -276,6 +311,36 @@ export default {
         },
         onUploadExceed(files, fileList) {
             this.$message.warning(this.$t('system.uploadWarning1') + files.length + this.$t('system.uploadWarning2')(files.length + fileList.length) + this.$t('system.uploadWarning3'));
+        },
+        close(){
+            this.frontDialogVisible = false
+        },
+        submit(val){
+            this.frontDialogVisible = false
+            this.sureExportSdk(val)
+        },
+        exportSdk() {
+            // this.frontDialogVisible = true
+            this.sureExportSdk()
+        },
+        sureExportSdk(){
+            // const zip = new JSZip()
+            exportCertSdk(this.frontId).then(res => {
+                const blob = new Blob([res.data])
+                const fileName = `sdk.zip`
+                if ('download' in document.createElement('a')) {
+                    const elink = document.createElement('a')
+                    elink.download = fileName
+                    elink.style.display = 'none'
+                    elink.href = URL.createObjectURL(blob)
+                    document.body.appendChild(elink)
+                    elink.click()
+                    URL.revokeObjectURL(elink.href)
+                    document.body.removeChild(elink)
+                } else { 
+                    navigator.msSaveBlob(blob, fileName)
+                }
+            })
         },
         copyFingerPrint(val) {
             if (!val) {

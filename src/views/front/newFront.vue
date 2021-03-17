@@ -40,9 +40,10 @@
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="100">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="140">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">{{$t('text.delete')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="exportSdk(scope.row)" type="text" size="small">{{$t('text.exportSdk')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -97,11 +98,13 @@
 <script>
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
-import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion } from "@/util/api";
+import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import Bus from "@/bus"
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 export default {
     name: "newFront",
     components: {
@@ -420,6 +423,24 @@ export default {
                     })
                 }).catch(_ => {
                 })
+        },
+        exportSdk(val) {
+            exportCertSdk(val.frontId).then(res => {
+                const blob = new Blob([res.data])
+                const fileName = `sdk.zip`
+                if ('download' in document.createElement('a')) { // 非IE下载
+                    const elink = document.createElement('a')
+                    elink.download = fileName
+                    elink.style.display = 'none'
+                    elink.href = URL.createObjectURL(blob)
+                    document.body.appendChild(elink)
+                    elink.click()
+                    URL.revokeObjectURL(elink.href) // 释放URL 对象
+                    document.body.removeChild(elink)
+                } else { // IE10+下载
+                    navigator.msSaveBlob(blob, fileName)
+                }
+            })
         },
         getNodeTable() {
             this.loadingNodes = true;

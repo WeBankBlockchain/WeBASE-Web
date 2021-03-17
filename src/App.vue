@@ -62,6 +62,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #2E384D;
+    min-width: 1280px;
 }
 ul,
 li {

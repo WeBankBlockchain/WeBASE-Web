@@ -51,7 +51,7 @@ const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
 const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
 const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
-// const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
+const appManagement = resolve => require(['@/views/appManagement'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -105,7 +105,7 @@ const routes = [
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/node/:id', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
             { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
-
+            
 
             { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", leaf: false, menuShow: false, meta: { requireAuth: true } }
         ]
@@ -134,7 +134,7 @@ const routes = [
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
-            // { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', enName: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
+            
             { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: true, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: true, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
@@ -170,6 +170,18 @@ const routes = [
             // { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },
             // { path: '/developerMgmt', component: developerMgmt, name: '运维账号管理', nameKey: "developerMgmt", menuShow: true, meta: { requireAuth: true } },
 
+        ]
+    },
+    {
+        path: '/',
+        component: main,
+        name: '应用管理',
+        nameKey: "appManagement",
+        leaf: true,
+        menuShow: true,
+        iconCls: 'wbs-icon-deploy sidebar-icon',
+        children: [
+            { path: '/appManagement', component: appManagement, name: '应用管理', nameKey: 'appManagement', menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {

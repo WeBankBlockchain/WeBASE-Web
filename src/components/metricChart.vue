@@ -271,6 +271,15 @@ export default {
                         echarts
                             .init(document.getElementById("blockHeight"))
                             .resize();
+                        echarts
+                            .init(document.getElementById("pendingCount"))
+                            .resize();
+                        echarts
+                            .init(document.getElementById("blockSize"))
+                            .resize();
+                        echarts
+                            .init(document.getElementById("blockCycle"))
+                            .resize();
                     } else {
                         echarts.init(document.getElementById("cpu")).resize();
                         echarts
