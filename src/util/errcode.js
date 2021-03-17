@@ -668,8 +668,8 @@ let errCode = {
         zh: '合约名称不能重复'
     },
     "202020": {
-        en: "current organization already exist",
-        zh: '已存在本组织信息'
+        en: "deployed contract cannot be modified",
+        zh: '已部署合约不支持修改'
     },
     "202021": {
         en: "invalid organization type",
@@ -1398,6 +1398,36 @@ let errCode = {
         "en": "version already exists.",
         "zh": "版本已存在"
     },
+
+    "202511": {
+        "en": "Front's sdk cert and key not found!",
+        "zh": "找不到前置sdk证书和密钥！"
+    },
+    "202512": {
+        "en": "Write front's sdk cert and key fail!",
+        "zh": "写入前置的sdk证书和密钥失败！"
+    },
+    "202514": {
+        "en": "app key not exists",
+        "zh": "应用Key不存在"
+    },
+    "202516": {
+        "en": "app name exists ",
+        "zh": "应用名称已存在"
+    },
+    "202517": {
+        "en": "app name not exists",
+        "zh": "应用名称不存在"
+    },
+    "202518": {
+        "en": "app id not exists",
+        "zh": "应用编号不存在"
+    },
+    "202519": {
+        "en": "link format invalid",
+        "zh": "链接格式错误"
+    },
+
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
@@ -1475,8 +1505,8 @@ let errCode = {
         zh: "节点无法访问"
     },
     "-51103": {
-        en: "The node is not a group peer",
-        zh: "节点不是群组成员"
+        en: "The node is already set as removed",
+        zh: "节点已被设为游离节点"
     },
     "-51104": {
         en: "The node is already in the sealer list",
@@ -1484,7 +1514,7 @@ let errCode = {
     },
     "-51105": {
         en: "The node is already in the observer list",
-        zh: "节点已经在观察者列表中"
+        zh: "节点已经在观察者列表中" 
     },
     "-51200": {
         en: "Contract name and version already exist",

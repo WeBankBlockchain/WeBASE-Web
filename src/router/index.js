@@ -54,6 +54,7 @@ const contractWarehouse = resolve => require(['@/views/contractWarehouse'], reso
 // const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 const externalAccount = resolve => require(['@/views/external/externalAccount'], resolve);
 const externalContract = resolve => require(['@/views/external/externalContract'], resolve);
+const appManagement = resolve => require(['@/views/appManagement'], resolve); 
 Vue.use(Router);
 const routes = [
     {
@@ -107,7 +108,7 @@ const routes = [
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/node/:id', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
             { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
-
+            
 
             { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", leaf: false, menuShow: false, meta: { requireAuth: true } }
         ]
@@ -172,6 +173,18 @@ const routes = [
             // { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },
             // { path: '/developerMgmt', component: developerMgmt, name: '运维账号管理', nameKey: "developerMgmt", menuShow: true, meta: { requireAuth: true } },
 
+        ]
+    },
+    {
+        path: '/',
+        component: main,
+        name: '应用管理',
+        nameKey: "appManagement",
+        leaf: true,
+        menuShow: true,
+        iconCls: 'wbs-icon-deploy sidebar-icon',
+        children: [
+            { path: '/appManagement', component: appManagement, name: '应用管理', nameKey: 'appManagement', menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {

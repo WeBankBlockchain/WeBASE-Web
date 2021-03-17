@@ -128,6 +128,7 @@ export function put(options) {
  * @return {Promise}
  */
 export function deleted(options) {
+    console.log('options', options);
     return new Promise((resolve, reject) => {
         axiosIns(options).then(response => {
             resolve(response)

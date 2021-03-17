@@ -16,6 +16,33 @@
 
 /* customize class */
 
+.span-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+}
+
+.one-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 17px;
+    max-height: 17px;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.two-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 19px;
+    max-height: 76px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
 .module-wrapper {
     min-width: 540px;
     margin: 15px 15px 0 15px;
@@ -73,6 +100,7 @@
 .font-weight-500 {
     font-weight: 500
 }
+
 .font-weight-900 {
     font-weight: 900
 }
@@ -267,12 +295,12 @@
     color: #00c1d4;
 } */
 
-.select-32 >>> .el-input__inner {
+.select-32>>>.el-input__inner {
     height: 32px;
     line-height: 32px;
 }
 
-.select-32 >>> .el-input__icon {
+.select-32>>>.el-input__icon {
     line-height: 32px;
 }
 
@@ -320,8 +348,10 @@
 .el-button--text.is-active, .el-button--text:active, .el-button--text:focus, .el-button--text:hover {
     color: #00c1d4;
 }
+
 /* 按钮禁止点击效果*/
-.el-button.is-disabled{
+
+.el-button.is-disabled {
     cursor: not-allowed;
     background-image: none;
     color: #bcbec2 !important;
@@ -344,7 +374,7 @@
 .el-dialog {
     border: 1px solid #eaedf3;
     box-shadow: 0 12px 27px 0 rgba(159, 166, 189, 0.33);
-    border-radius: 8px;
+    border-radius: 4px;
 }
 
 .el-dialog__header {
