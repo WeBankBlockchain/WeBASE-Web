@@ -273,6 +273,13 @@ export default {
         imgSize: 'Only one picture can be uploaded at a time, with the size of 80 * 80px. PNG and JPG formats are supported, and the size cannot exceed 200KB',
         imgSize200k: 'Upload image size cannot exceed 200KB!',
         imgSize80px: 'Upload image size 80 * 80px',
+        totalUser: 'Full users',
+        normalUser: 'Normal users',
+        unregisteredUser: 'Unregistered users',
+        totalContract: 'Full contracts',
+        normalContract: 'Normal contracts',
+        unregisteredContract: 'Unregistered contracts'
+
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -588,7 +595,7 @@ export default {
     },
     privateKey: {
         addUser: "Add Users",
-        importRivateKey: "Import Rivate Key",
+        importPrivateKey: "Import Private Key",
         addUserTips: "The account number of the transaction sent in the group needs to be added to the private key management, otherwise it will be judged as an abnormal user.",
         searchUser: "Please enter user name or public key address",
         copyPublicKey: "Copy Public Key",

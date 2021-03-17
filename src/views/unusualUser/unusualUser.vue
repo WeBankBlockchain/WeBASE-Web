@@ -67,7 +67,7 @@
                     </el-table-column>
                     <el-table-column  :label="$t('nodes.operation')" width="200">
                         <template slot-scope="scope">
-                            <el-button :disabled="disabled || scope.row.userId > 0" :class="{'grayColor': disabled}"  @click="importData(scope.row)" type="text">导入</el-button>
+                            <el-button :disabled="disabled || scope.row.userId > 0" :class="{'grayColor': disabled}"  @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -105,15 +105,15 @@ export default {
             unusualUserList: [],
             userOptions: [
                 {
-                    name: '全量用户',
+                    name: this.$t('text.totalUser'),
                     value: 1
                 },
                 {
-                    name: '正常用户',
+                    name: this.$t('text.normalUser'),
                     value: 2
                 },
                 {
-                    name: '未登记用户',
+                    name: this.$t('text.unregisteredUser'),
                     value: 3
                 }
             ],

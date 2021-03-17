@@ -2076,4 +2076,4 @@ export function fetchIsDeployedModifyEnable() {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }
     })
-    }
+}

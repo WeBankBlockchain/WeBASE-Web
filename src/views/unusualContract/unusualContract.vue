@@ -70,7 +70,7 @@
                     </el-table-column>
                     <el-table-column  :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
-                            <el-button :disabled="disabled || scope.row.abiId > 0 || scope.row.abiId === 0" :class="{'grayColor': disabled}" @click="importData(scope.row)" type="text" size="small">导入ABI</el-button>
+                            <el-button :disabled="disabled || scope.row.abiId > 0 || scope.row.abiId === 0" :class="{'grayColor': disabled}" @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -113,15 +113,15 @@ export default {
             unusualContractList: [],
             userOptions: [
                 {
-                    name: '全量合约',
+                    name: this.$t('text.totalContract'),
                     value: 1
                 },
                 {
-                    name: '正常合约',
+                    name: this.$t('text.normalContract'),
                     value: 2
                 },
                 {
-                    name: '未登记合约',
+                    name: this.$t('text.unregisteredContract'),
                     value: 3
                 }
             ],
