@@ -216,6 +216,7 @@ export default {
             }
             queryCrudService(reqData)
                 .then(res => {
+                    this.aceEditor.setValue('')
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.runSqlResult = res.data.data;

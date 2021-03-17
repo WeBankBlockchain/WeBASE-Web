@@ -1918,6 +1918,23 @@ export function restartNode(data) {
     })
 }
 
+
+/**
+ * 链上用户
+ * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
+ */
+export function externalAccountList(data) {
+    const params = reviseParam(data, {});
+    return post({
+        url: `${url.ORG_LIST}/external/account/list/${params.str}`,
+        method: 'get',
+       headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
 // 导出cert sdk
 export function exportCertSdk(frontId) {
     return get({
@@ -1926,6 +1943,22 @@ export function exportCertSdk(frontId) {
         responseType: 'blob',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+/**
+ * 链上合约的数据
+ * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
+ */
+export function externalContractList(data) {
+    const params = reviseParam(data, {});
+    return post({
+        url: `${url.ORG_LIST}/external/contract/list/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }
     })
 }
@@ -1941,12 +1974,27 @@ export function fetchSaveApp(data) {
         data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-            
         }
     })
 }
 
 /**
+
+ * 链上所有合约abi
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllAbiList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/abi/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
  * @method  删除应用
  */
 export function fetchDeleteApp(id) {
@@ -1968,12 +2016,27 @@ export function fetchAppList(data) {
         method: 'get',
         params: data,
         headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }
     })
 }
 
 /**
+ * 链上所有合约地址
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllContractList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/external/contract/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
  * @method  获取服务信息
  */
 export function fetchAppServerInfo(data) {
@@ -1988,6 +2051,20 @@ export function fetchAppServerInfo(data) {
 }
 
 /**
+ * 链上所有用户地址
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllUserList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/external/account/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+      AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+  }
+})
+
  * @method  查询已部署合约是否支持修改
  */
 export function fetchIsDeployedModifyEnable() {
@@ -1995,7 +2072,8 @@ export function fetchIsDeployedModifyEnable() {
         url: `${url.ORG_LIST}/config/isDeployedModifyEnable`,
         method: 'get',
         headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }
     })
 }
+

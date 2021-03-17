@@ -365,8 +365,8 @@ export default {
         accountManagement: "账户管理",
         transactionAudit: "交易审计",
         userTransaction: "用户交易",
-        unusualUser: "异常用户",
-        unusualContract: "异常合约",
+        unusualUser: "链上用户",
+        unusualContract: "链上合约",
         transactionInfo: "交易信息",
         systemMonitor: "系统监控",
         nodesMonitor: "节点监控",
@@ -396,6 +396,8 @@ export default {
         toolsContract: '工具合约',
         directory: '目录',
         mgmtCns: "管理CNS",
+        externalAccount: '链上用户',
+        externalContract: '链上合约'
         appManagement: "应用管理",
     },
     home: {

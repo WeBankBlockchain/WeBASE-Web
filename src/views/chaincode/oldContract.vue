@@ -18,6 +18,10 @@
         <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
+                <div class="search-part-left" style="padding-top: 20px;">
+                    <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="routeAbi">abi编码</el-button>
+                </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
@@ -26,6 +30,12 @@
             </div>
             <div class="search-table">
                 <el-table :data="contractList" tooltip-effect="dark" v-loading="loading">
+                    <el-table-column prop="contractAddress" :label="$t('contracts.contractAddress')" show-overflow-tooltip align="center">
+                        <template slot-scope="scope">
+                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('contracts.copyContractAddress')"></i>
+                            <span>{{scope.row.contractAddress}}</span>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="contractName" :label="$t('contracts.contractName')" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
                             <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
@@ -41,12 +51,6 @@
                             <span>{{contractStatusZh(scope.row.handleType) }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractAddress" :label="$t('contracts.contractAddress')" show-overflow-tooltip align="center">
-                        <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('contracts.copyContractAddress')"></i>
-                            <span>{{scope.row.contractAddress}}</span>
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="contractAbi" :label="$t('contracts.contractAbi')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
@@ -60,12 +64,14 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="300">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
+                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -90,6 +96,12 @@
         <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
             <mgmt-cns :mgmtCnsItem="mgmtCnsItem" :contractName="contractName" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
         </el-dialog>
+        <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
+            <import-abi @importSuccess="importSuccess" @closeImport="closeImport"></import-abi>
+        </el-dialog>
+        <el-dialog :title="$t('nodes.addAbi')" :visible.sync="updateVisibility" width="500px" v-if="updateVisibility" center class="send-dialog">
+            <update-abi @updateSuccess="updateSuccess" @closeUpdate="closeUpdate" :updateItem="updateItem"></update-abi>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -101,9 +113,10 @@ import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
 import mgmtCns from "./dialog/mgmtCns"
-import { getContractList, getAllContractStatus, deleteHandleHistory } from "@/util/api"
+import { getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi } from "@/util/api"
+import importAbi from "../abiList/components/importAbi"
+import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
-import errcode from "@/util/errcode";
 export default {
     name: "oldContract",
     components: {
@@ -114,7 +127,9 @@ export default {
         freezeThaw,
         checkEventDialog,
         checkEventResult,
-        mgmtCns
+        mgmtCns,
+        importAbi,
+        updateAbi
     },
     data: function () {
         return {
@@ -190,7 +205,10 @@ export default {
             checkEventResult: null,
             groupId: localStorage.getItem("groupId"),
             mgmtCnsVisible: false,
-            mgmtCnsItem: {}
+            mgmtCnsItem: {},
+            importVisibility: false,
+            updateVisibility: false,
+            updateItem: null
         }
     },
     mounted: function () {
@@ -209,18 +227,19 @@ export default {
             this.getContracts()
         },
         getContracts: function () {
-            let data = {
+            const data = {
                 groupId: this.groupId,
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize,
-                contractName: this.contractName,
-                contractAddress: this.contractAddress,
-                contractStatus: 2
+                // contractName: this.contractName,
+                // contractAddress: this.contractAddress,
+                // contractStatus: 2
             }
+            const query = {}
             if (localStorage.getItem("root") === 'developer') {
-                data.account = localStorage.getItem("user")
+                query.account = localStorage.getItem("user")
             }
-            getContractList(data).then(res => {
+            getAllAbiList(data,query).then(res => {
                 if (res.data.code == 0) {
                     let dataArray = res.data.data || [];
                     this.total = res.data.totalCount || 0;
@@ -353,6 +372,61 @@ export default {
 
                 });
 
+        },
+        // 打开添加abi弹窗
+        generateAbi() {
+            this.importVisibility = true;
+        },
+        closeImport() {
+            this.importVisibility = false
+        },
+        importSuccess() {
+            this.importVisibility = false;
+            this.getContracts()
+        },
+        closeUpdate() {
+            this.updateVisibility = false
+        },
+        updateAbi(val) {
+            this.updateItem = val;
+            this.updateVisibility = true;
+        },
+        updateSuccess() {
+            this.updateVisibility = false;
+            this.getContracts()
+        },
+        routeAbi() {
+            this.$router.push("/parseAbi")
+        },
+        deleteAbi(val) {
+            this.$confirm(this.$t('text.confirmDelete'))
+                .then(_ => {
+                    this.sureDeleteAbi(val)
+                })
+                .catch(_ => { });
+
+        },
+        sureDeleteAbi(val) {
+            this.loading = true
+            deleteImportAbi(val.abiId)
+                .then(res => {
+                    this.loading = false
+                    if (res.data.code === 0) {
+                        this.getContracts()
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        })
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError')
+                    })
+                })
         },
         copyPubilcKey: function (val) {
             if (!val) {

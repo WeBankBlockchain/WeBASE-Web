@@ -51,6 +51,9 @@ const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
 const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
 const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
+// const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
+const externalAccount = resolve => require(['@/views/external/externalAccount'], resolve);
+const externalContract = resolve => require(['@/views/external/externalContract'], resolve);
 const appManagement = resolve => require(['@/views/appManagement'], resolve); 
 Vue.use(Router);
 const routes = [
@@ -134,9 +137,9 @@ const routes = [
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
-            
-            { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: true, meta: { requireAuth: true } },
-            { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', enName: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
+            { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
+            { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: false, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
@@ -195,7 +198,7 @@ const routes = [
             { path: '/nodesMetric', component: nodesMetric, name: '节点监控', nameKey: "nodesMonitor", menuShow: true, meta: { requireAuth: false } },
             { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: true, meta: { requireAuth: false } },
             { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', nameKey: "emailAlarm", menuShow: true, meta: { requireAuth: false } },
-            { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', nameKey: "emailAlarmType", menuShow: true, meta: { requireAuth: false } },
+            { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', nameKey: "emailAlarmType", menuShow: true, meta: { requireAuth: false } }
         ]
     },
     {
@@ -208,7 +211,9 @@ const routes = [
         children: [
             { path: '/transactionCharts', component: transactionCharts, name: '用户交易', nameKey: "userTransaction", menuShow: true, meta: { requireAuth: true } },
             { path: '/unusualUser', component: unusualUser, name: '异常用户', nameKey: "unusualUser", menuShow: true, meta: { requireAuth: true } },
-            { path: '/unusualContract', component: unusualContract, name: '异常合约', nameKey: "unusualContract", menuShow: true, meta: { requireAuth: true } }
+            { path: '/unusualContract', component: unusualContract, name: '异常合约', nameKey: "unusualContract", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/externalAccount', component: externalAccount, name: '链上用户', nameKey: "externalAccount", menuShow: true, meta: { requireAuth: false } },
+            // { path: '/externalContract', component: externalContract, name: '链上合约', nameKey: "externalContract", menuShow: true, meta: { requireAuth: false } },
         ]
     },
     {
