@@ -257,7 +257,6 @@ export default {
         useTmp:'使用模板',
         process: '接入流程',
         registerDialogTitle:'查看注册信息',
-
         appTitleDev: '应用管理台改造（开发者）',
         appListTile: '应用列表',
         appTitleAdmin: '应用配置（管理员）',
@@ -274,6 +273,12 @@ export default {
         imgSize: '每次只能上传一张图片,尺寸为80*80px，支持PNG、JPG格式，大小不能超过200KB',
         imgSize200k: '上传图片大小不能超过 200kb!',
         imgSize80px: '上传图片尺寸80*80px',
+        totalUser: '全量用户',
+        normalUser: '正常用户',
+        unregisteredUser: '未登记用户',
+        totalContract: '全量合约',
+        normalContract: '正常合约',
+        unregisteredContract: '未登记合约'
         
     },
     rule: {
@@ -591,7 +596,7 @@ export default {
     },
     privateKey: {
         addUser: "新增用户",
-        importRivateKey: "导入私钥",
+        importPrivateKey: "导入私钥",
         addUserTips: "群组内发送交易的账号都需要在私钥管理里添加，否则会判断为异常用户。",
         searchUser: "请输入用户名或公钥地址",
         copyPublicKey: "复制公钥",
