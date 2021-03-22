@@ -139,6 +139,7 @@
 
 <script>
 import ace from "ace-builds";
+// require("ace-builds/webpack-resolver");
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/mode-javascript";
@@ -153,6 +154,9 @@ import uploadFileAdr from "../dialog/uploadFileAdr"
 import Bus from '@/bus'
 import web3 from "@/util/ethAbi"
 import router from "@/router"
+
+// import javascriptWorkerUrl from "file-loader?esModule=false!./src-noconflict/worker-javascript.js";
+// ace.config.setModuleUrl("ace/mode/json_worker", javascriptWorkerUrl);
 import {
     addChaincode,
     getDeployStatus,
