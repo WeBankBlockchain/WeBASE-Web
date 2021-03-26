@@ -3,12 +3,17 @@
         <el-form :model="appForm" :rules="rules" ref="appForm" label-width="100px" class="demo-ruleForm">
             <el-form-item :label="$t('text.useTmp')" v-if="handleType=='create'">
                 <div>
-                    <el-checkbox v-model="isTemplate" @change="changeTemplate"></el-checkbox>
-                    <el-select v-model="tmpId" placeholder="请选择" v-if="isTemplate" @change="changeTmp" style="width: 420px;">
-                        <el-option v-for="item in appList" :key="item.id" :label="item.appName" :value="item.id">
-                        </el-option>
-                    </el-select>
+                    <el-radio-group v-model="createRadio" @change="changeTemplate">
+                        <el-radio :label="'tmp'">{{$t('text.changeTmp')}}</el-radio>
+                        <el-radio :label="'create'">{{$t('text.customApplication')}}</el-radio>
+                    </el-radio-group>
                 </div>
+            </el-form-item>
+            <el-form-item :label="$t('text.appTmp')" prop="tmpId" style="width: 537px;" v-if="createRadio=='tmp'&&handleType=='create'">
+                <el-select v-model="tmpId" :placeholder="$t('text.select')" @change="changeTmp" style="width: 437px;">
+                    <el-option v-for="item in appList" :key="item.id" :label="item.appName" :value="item.id">
+                    </el-option>
+                </el-select>
             </el-form-item>
             <el-form-item :label="$t('text.appName')" prop="appName" style="width: 537px;">
                 <el-input v-model="appForm.appName" clearable></el-input>
@@ -17,7 +22,7 @@
                 <el-input v-model="appForm.appDocLink" clearable></el-input>
             </el-form-item>
             <el-form-item :label="$t('text.appDesc')" prop="appDesc" style="width: 537px;">
-                <el-input type="textarea" v-model="appForm.appDesc" clearable  :placeholder="$t('placeholder.input1_32')"></el-input>
+                <el-input type="textarea" v-model="appForm.appDesc" clearable :placeholder="$t('placeholder.input1_32')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('text.appDetail')" prop="appDetail" style="width: 537px;">
                 <el-input type="textarea" v-model="appForm.appDetail" clearable :placeholder="$t('placeholder.input1_200')"></el-input>
@@ -46,6 +51,7 @@
 </template>
 <script>
 import { fetchSaveApp, fetchAppList } from "@/util/api";
+import appTmp from "@/assets/appTmp.png";
 export default {
     name: "AppDialog",
     props: ['appDialogInfo', 'handleType'],
@@ -56,6 +62,12 @@ export default {
                     {
                         required: true,
                         message: this.$t('rule.appNameRule'),
+                        trigger: "blur"
+                    },
+                    {
+                        min: 1,
+                        max: 12,
+                        message: this.$t('rule.textLong1_12'),
                         trigger: "blur"
                     },
                 ],
@@ -77,12 +89,12 @@ export default {
                         message: this.$t('rule.appDescRule'),
                         trigger: "blur"
                     },
-                    {
-                        min: 1,
-                        max: 32,
-                        message: this.$t('rule.textLong'),
-                        trigger: "blur"
-                    }
+                    // {
+                    //     min: 1,
+                    //     max: 32,
+                    //     message: this.$t('rule.textLong'),
+                    //     trigger: "blur"
+                    // }
                 ],
                 appDetail: [
                     {
@@ -90,12 +102,12 @@ export default {
                         message: this.$t('rule.appDetailRule'),
                         trigger: "blur"
                     },
-                    {
-                        min: 1,
-                        max: 200,
-                        message: this.$t('rule.textLong1_200'),
-                        trigger: "blur"
-                    }
+                    // {
+                    //     min: 1,
+                    //     max: 200,
+                    //     message: this.$t('rule.textLong1_200'),
+                    //     trigger: "blur"
+                    // }
 
                 ]
             }
@@ -112,10 +124,13 @@ export default {
                 appDetail: this.appDialogInfo.appDetail || '',
             },
             imgString: '',
-            fileList: [],
-            isTemplate: false,
+            fileList: [
+                
+            ],
             appList: [],
-            tmpId: ''
+            tmpId: '',
+            createRadio: 'tmp',
+            appTmp: appTmp
         }
     },
     mounted() {
@@ -138,28 +153,37 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
+            console.log(file);
             var isSize = false;
+            
             var reader = new FileReader();
-            reader.onload = function (event) {
+            reader.onload = (event) => {
                 var txt = event.target.result;
                 var img = document.createElement("img");
                 img.src = txt;
-                img.onload = function () {
+                img.onload = () => {
                     var imgWidth = img.width;
                     var imgHeight = img.height;
                     if (imgWidth == 80 && imgHeight == 80) {
                         isSize = true
+                    }else{
+                        
                     }
+                    
+                    if (!isSize) {
+                        this.$message.error(this.$t('text.imgSize80px'));
+                    }
+                    const isLt2M = file.size / 1024 < 200;
+                    if (!isLt2M) {
+                        this.$message.error(this.$t('text.imgSize200k'));
+                    }
+                    
                 }
             };
-            reader.readAsDataURL(file);
-            const isLt2M = file.size / 1024 < 200;
-            if (!isLt2M) {
-                this.$message.error(this.$t('text.imgSize200k'));
-            }
-            if (!isSize) {
-                this.$message.error(this.$t('text.imgSize80px'));
-            }
+            // this.$nextTick(()=>{
+            //     reader.readAsDataURL(file);
+            //     console.log(isSize,'nextTick');
+            // })
             return isLt2M && isSize;
         },
         uploadChange(file, fileList) {
@@ -185,7 +209,7 @@ export default {
                 appDocLink: this.appForm.appDocLink,
                 appDesc: this.appForm.appDesc,
                 appDetail: this.appForm.appDetail,
-                appIcon: this.imgString,
+                appIcon: this.imgString ? this.imgString : this.appForm.appIcon,
                 id: this.appDialogInfo.id
             }
             fetchSaveApp(param)
@@ -228,15 +252,20 @@ export default {
                 }
             });
             for (const key in this.appForm) {
-                if (key != 'appIcon') {
                     this.appForm[key] = tmpInfo[key]
-                }
             }
-            console.log(this.appForm);
         },
-        changeTemplate() {
-            if (!this.isTemplate) {
-                this.appForm = {}
+        changeTemplate(val) {
+            this.tmpId = ''
+            if (val == 'create') {
+                this.appForm = {
+                    appName: '',
+                    appDocLink: '',
+                    appIcon: '',
+                    appDesc: '',
+                    appDetail: '',
+                }
+
             }
         }
 
@@ -260,14 +289,14 @@ export default {
 .avatar-uploader-icon {
     font-size: 28px;
     color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
     text-align: center;
 }
 .avatar {
-    width: 178px;
-    height: 178px;
+    width: 80px;
+    height: 80px;
     display: block;
 }
 .dialog-footer {
@@ -290,6 +319,10 @@ export default {
 }
 .demo-ruleForm >>> .el-form-item {
     margin-bottom: 20px;
+}
+.demo-ruleForm >>> .el-upload-list--picture-card .el-upload-list__item {
+    width: 100%;
+    height: 80px;
 }
 .img-icon {
     font-size: 12px;

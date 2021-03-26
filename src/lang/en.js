@@ -16,6 +16,9 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        changeTmp: 'Select Tmp',
+        customApplication: 'Custom App',
+        isRedeploy: 'Has the contract been deployed or redeployed?',
         noStoreContract: 'Please open a contract in the left panel',
         reqOvertime: "Request Timeout",
         loginFail: "Login Failed",
@@ -247,6 +250,7 @@ export default {
         gmssl: 'When using guomi SSL, you need to put the SDK Certificate in a folder named "GM"',
         registerInfo: 'Register',
         appIntroduction1: 'App Doc',
+        appTmp: 'App Tmp',
         appName: 'App Name',
         appDocLink: 'Doc link',
         appDesc: 'App Desc',
@@ -273,6 +277,11 @@ export default {
         imgSize: 'Only one picture can be uploaded at a time, with the size of 80 * 80px. PNG and JPG formats are supported, and the size cannot exceed 200KB',
         imgSize200k: 'Upload image size cannot exceed 200KB!',
         imgSize80px: 'Upload image size 80 * 80px',
+        decimal: "Decimal Key",
+        decimalType: "Decimal",
+        hexType: "Hex",
+        exportWeid: "Support import in WeID",
+        title: "Title",
         totalUser: 'Full users',
         normalUser: 'Normal users',
         unregisteredUser: 'Unregistered users',
@@ -634,6 +643,7 @@ export default {
         thaw: "Thaw",
         freeze: "Freeze",
         validatorPrivateKey: "Please enter privateKey key",
+        validatorPrivateKey16: "Please enter the hex (excluding 0x)",
         validatorPrivateKey1: "Please enter hexadecimal",
         importType: "Import Type",
         importFileValidator: 'Please upload the file'
@@ -898,7 +908,10 @@ export default {
         blockHeight: 'Block Height',
         eventValue: 'Event',
         contractName: 'Contract Name',
-        cnsVersion: 'CNS Version'
+        cnsVersion: 'CNS Version',
+        fileType: "Import Type",
+        exportType: "Export Type",
+        fileName: "PrivateKey Name",
     },
     govCommittee: {
         addCommittee: 'Grant Committee Vote',

@@ -54,6 +54,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
+                                <el-button v-show="scope.row['hasPk'] ==1" :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
                                 <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
                                 <!-- <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="freezeThaw(scope.row)">{{freezeOrThawBtn(1)}}</el-button> -->
                             </template>
@@ -72,6 +73,9 @@
         <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
             <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
         </el-dialog>
+        <el-dialog :visible.sync="$store.state.exportRivateKey" :title="$t('system.export')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.exportRivateKey' center>
+            <export-key :exportInfo="exportInfo"></export-key>
+        </el-dialog>
     </div>
 </template>
 
@@ -80,6 +84,7 @@
 import contentHead from "@/components/contentHead";
 import creatUser from "./components/creatUser.vue";
 import importKey from "./components/importKey.vue";
+import ExportKey from './components/exportKey.vue';
 import { getUserList, getUserDescription } from "@/util/api";
 import errcode from "@/util/errcode";
 export default {
@@ -88,6 +93,7 @@ export default {
         "v-contentHead": contentHead,
         "v-creatUser": creatUser,
         "v-importKey": importKey,
+        ExportKey
     },
     data() {
         return {
@@ -100,7 +106,8 @@ export default {
             tdWidth: {
                 publicKey: 450
             },
-            disabled: false
+            disabled: false,
+            exportInfo: {}
         };
     },
     computed: {
@@ -228,6 +235,10 @@ export default {
                         message: this.$t("text.cancel"),
                     });
                 });
+        },
+        exportFile(params) {
+            this.exportInfo = params
+            this.$store.dispatch('switch_export_rivate_key_dialog')
         },
         userDescriptionInfo(value, params) {
             let reqData = {

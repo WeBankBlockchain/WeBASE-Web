@@ -12,8 +12,14 @@
             <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
                 <el-input type="password" v-model="keyForm.password" :placeholder="$t('privateKey.placeholderPassword')"></el-input>
             </el-form-item>
+            <el-form-item :label="$t('table.fileName')" prop="radio" style="width: 546px;" v-if="keyForm.fileType==='string'">
+                <el-radio-group v-model="keyForm.radio" @change="changeJzType">
+                    <el-radio :label="16">{{$t('text.hexType')}}</el-radio>
+                    <el-radio :label="10">{{$t('text.decimalType')}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
             <el-form-item :label="$t('privateKey.privateKey')" prop="privateKey" style="width: 546px;" v-if="keyForm.fileType=='string'">
-                <el-input v-model="keyForm.privateKey" :placeholder="$t('privateKey.validatorPrivateKey')"></el-input>
+                <el-input v-model="keyForm.privateKey" :placeholder="keyPlaceholderDec"></el-input>
             </el-form-item>
             <el-form-item :label="$t('privateKey.description')" prop="description" style="width: 546px;">
                 <el-input v-model="keyForm.description" :placeholder="$t('privateKey.inputDescription')"></el-input>
@@ -35,6 +41,7 @@
 <script>
 import { queryImportPrivateKey, ImportPemPrivateKey, ImportP12PrivateKey } from "@/util/api";
 let Base64 = require("js-base64").Base64;
+const Web3Utils = require('web3-utils');
 export default {
     name: 'importKey',
 
@@ -55,7 +62,8 @@ export default {
                 password: "",
                 description: "",
                 privateKey: "",
-                fileList: []
+                fileList: [],
+                radio: 16
             },
             fileTypeList: [
                 {
@@ -71,7 +79,8 @@ export default {
                     enName: '.p12',
                 }
             ],
-            fileList: []
+            fileList: [],
+            keyPlaceholderDec: ''
         }
     },
 
@@ -131,6 +140,9 @@ export default {
                 ],
                 fileList: [
                     { required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change' }
+                ],
+                radio: [
+                    { required: true, message: 'Error', trigger: 'change' }
                 ]
             };
             return data
@@ -144,6 +156,11 @@ export default {
     },
 
     mounted() {
+         if (this.keyForm.radio == 16) {
+            this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey16')
+        } else {
+            this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey')
+        }
     },
 
     methods: {
@@ -157,6 +174,13 @@ export default {
         },
         onBeforeUpload() {
 
+        },
+        changeJzType(val) {
+            if (val == 16) {
+                this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey16')
+            } else {
+                this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey')
+            }
         },
         changeFileType() {
             if (this.$refs.upload) this.$refs.upload.clearFiles();
@@ -182,7 +206,11 @@ export default {
                     if (this.keyForm.fileType == "string") {
                         var reg = /^0x+/i;
                         var privateKey = this.keyForm.privateKey.replace(reg, "");
-                        this.textPrivateKey(privateKey)
+                        if (this.keyForm.radio == 10) {
+                            privateKey = Web3Utils.toHex(privateKey).split('0x')[1]
+
+                        }
+                        this.textRivateKey(privateKey)
                     } else {
                         var reader = new FileReader(), self = this;
                         reader.readAsText(param.file, "UTF-8");

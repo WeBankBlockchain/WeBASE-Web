@@ -701,7 +701,16 @@ export default {
             this.contractAddress = "";
         },
         deploying: function () {
-            this.dialogUser = true;
+            if(this.data.contractStatus && this.data && this.data.contractStatus ==2) {
+                this.$confirm(this.$t('text.isRedeploy'))
+                .then(_ => {
+                    this.dialogUser = true
+                })
+                .catch(_ => { });
+            }else {
+                this.dialogUser = true;
+            }
+            
         },
         userClose: function () {
             this.dialogUser = false;
