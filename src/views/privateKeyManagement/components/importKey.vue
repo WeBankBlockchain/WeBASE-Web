@@ -170,7 +170,7 @@ export default {
                 fileType: ""
             });
             this.loading = false;
-            this.$store.state.importRivateKey = false;
+            this.$store.state.importPrivateKey = false;
         },
         onBeforeUpload() {
 
@@ -220,17 +220,17 @@ export default {
                                 case '.txt':
                                     try {
                                         var fileString = JSON.parse(fileContent).privateKey;
-                                        self.textRivateKey(fileString)
+                                        self.textPrivateKey(fileString)
                                     } catch (error) {
                                         console.log(error)
                                     }
                                     break;
                                 case '.pem':
 
-                                    self.pemRivateKey(fileContent)
+                                    self.pemPrivateKey(fileContent)
                                     break;
                                 case '.p12':
-                                    self.p12RivateKey(param.file)
+                                    self.p12PrivateKey(param.file)
                                     break;
                             }
                         }
@@ -242,7 +242,7 @@ export default {
                 }
             });
         },
-        textRivateKey(fileString) {
+        textPrivateKey(fileString) {
             let reqQuery = {
                 privateKey: Base64.encode(fileString),
                 userName: this.keyForm.fileName,
@@ -254,7 +254,7 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('importRivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.modelClose()
                         this.$message({
                             type: 'success',
@@ -274,7 +274,7 @@ export default {
                     });
                 });
         },
-        pemRivateKey(fileContent) {
+        pemPrivateKey(fileContent) {
             let reqQuery = {
                 pemContent: fileContent,
                 userName: this.keyForm.fileName,
@@ -286,7 +286,7 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('importRivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.$message({
                             type: 'success',
                             message: this.$t('text.importSuccessed')
@@ -308,7 +308,7 @@ export default {
 
 
         },
-        p12RivateKey(param) {
+        p12PrivateKey(param) {
             var form = new FormData()
             form.append('userName', this.keyForm.fileName)
             form.append('p12File', param)
@@ -320,7 +320,7 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('importRivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.$message({
                             type: 'success',
                             message: this.$t('text.importSuccessed')

@@ -20,7 +20,7 @@
             <div class="search-part">
                 <div class="search-part-left" style="padding-top: 20px;">
                     <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="routeAbi">abi编码</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">

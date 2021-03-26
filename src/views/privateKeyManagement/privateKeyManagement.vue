@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 <template>
-    <div class="rivate-key-management-wrapper">
+    <div class="private-key-management-wrapper">
         <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
                     <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t('privateKey.addUser')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_rivate_key_dialog')">{{this.$t('privateKey.importRivateKey')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_private_key_dialog')">{{this.$t('privateKey.importPrivateKey')}}</el-button>
                     <el-tooltip effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
@@ -32,8 +32,8 @@
                 </div>
             </div>
             <div class="search-table">
-                <el-table :data="rivateKeyList" tooltip-effect="dark" v-loading="loading">
-                    <el-table-column v-for="head in rivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width="tdWidth[head.enName] || ''" align="center">
+                <el-table :data="privateKeyList" tooltip-effect="dark" v-loading="loading">
+                    <el-table-column v-for="head in privateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width="tdWidth[head.enName] || ''" align="center">
                         <template slot-scope="scope">
                             <template v-if="head.enName!='operate'">
                                 <span v-if="head.enName ==='userStatus'" :style="{'color': statusColor(scope.row[head.enName])}">{{userStatus(scope.row[head.enName])}}</span>
@@ -70,8 +70,8 @@
         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
-        <el-dialog :visible.sync="$store.state.importRivateKey" :title="$t('privateKey.importRivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importRivateKey' center>
-            <v-importKey @importRivateKeySuccess="importRivateKeySuccess" ref="importKey"></v-importKey>
+        <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
+            <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
         </el-dialog>
         <el-dialog :visible.sync="$store.state.exportRivateKey" :title="$t('system.export')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.exportRivateKey' center>
             <export-key :exportInfo="exportInfo"></export-key>
@@ -102,7 +102,7 @@ export default {
             currentPage: 1,
             pageSize: 10,
             total: 0,
-            rivateKeyList: [],
+            privateKeyList: [],
             tdWidth: {
                 publicKey: 450
             },
@@ -111,7 +111,7 @@ export default {
         };
     },
     computed: {
-        rivateKeyHead() {
+        privateKeyHead() {
             let data = [
                 {
                     enName: "userName",
@@ -176,7 +176,7 @@ export default {
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
-                        this.rivateKeyList = res.data.data || [];
+                        this.privateKeyList = res.data.data || [];
                         this.total = res.data.totalCount;
                     } else {
                         this.$message({
@@ -212,7 +212,7 @@ export default {
         creatUserClose() {
             this.getUserInfoData();
         },
-        importRivateKeySuccess() {
+        importPrivateKeySuccess() {
             this.getUserInfoData();
         },
         bindUserClose() {
