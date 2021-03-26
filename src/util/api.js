@@ -310,6 +310,33 @@ export function ImportP12PrivateKey(data) {
 
     })
 }
+//export pem privateKey 
+export function exportPemPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/exportPem`,
+        method: 'post',
+        data: data,
+        responseType: 'blob',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+//export p12 privateKey
+export function exportP12PrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/exportP12`,
+        method: 'post',
+        data: data,
+        responseType: 'blob',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+
 /**Modify user description */
 export function getUserDescription(data) {
     return put({

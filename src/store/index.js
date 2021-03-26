@@ -33,7 +33,8 @@ const state = {
     contractDataList: [],
     worker: null,
     versionData: null,
-    nodeList: []
+    nodeList: [],
+    exportRivateKey: false
 }
 export default new Vuex.Store({
     state,
@@ -49,6 +50,9 @@ export default new Vuex.Store({
         },
         switch_import_rivate_key_dialog(state) {
             state.importRivateKey = !state.importRivateKey
+        },
+        switch_export_rivate_key_dialog(state) {
+            state.exportRivateKey = !state.exportRivateKey
         },
         changeLogin(state, status) {
             state.isLogin = status
@@ -94,6 +98,9 @@ export default new Vuex.Store({
         },
         switch_import_rivate_key_dialog(context) {
             context.commit('switch_import_rivate_key_dialog')
+        }, 
+        switch_export_rivate_key_dialog(context) {
+            context.commit('switch_export_rivate_key_dialog')
         },
         loginAction({ commit }) {
             commit('changeLogin', 1)

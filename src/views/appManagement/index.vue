@@ -7,66 +7,68 @@
                     {{this.$t('text.appDescContent')}}
                 </p>
                 <div style="margin-top: 36px;">
-                    <p class="access-process">
+                    <p class="access-process cursor-pointer" @click="processVisible = !processVisible">
                         <span class="process-title" style="margin-left:8px;">
                             {{this.$t('text.process')}}
                         </span>
                     </p>
-                    <div style="margin-top: 24px;">
-                        <el-row :gutter="24">
-                            <el-col :span="12">
-                                <div class="process-item">
-                                    <div class="process-item-title">
-                                        {{this.$t('text.appTitleDev')}}
-                                    </div>
-                                    <div class="step-item">
-                                        <el-steps direction="vertical" :space='32'>
-                                            <el-step>
-                                                <template slot="title">
-                                                    <p class="span-ellipsis">
-                                                        {{$t('text.appStep11')}}
-                                                    </p>
-                                                </template>
-                                            </el-step>
-                                            <el-step :title="$t('text.appStep12')"></el-step>
-                                        </el-steps>
-                                        <div style="margin-left:36px;">
-                                            <span class="step-tag">
-                                                {{this.$t('text.appStepTag1')}}
-                                            </span>
-                                            <span class="step-tag">
-                                                {{this.$t('text.appStepTag2')}}
-                                            </span>
-                                            <span class="step-tag">
-                                                {{this.$t('text.appStepTag3')}}
-                                            </span>
-                                            <span class="step-tag">
-                                                {{this.$t('text.appStepTag4')}}
-                                            </span>
+                    <transition name="fade">
+                        <div style="margin-top: 24px;" v-if="processVisible">
+                            <el-row :gutter="24">
+                                <el-col :span="12">
+                                    <div class="process-item">
+                                        <div class="process-item-title">
+                                            {{this.$t('text.appTitleDev')}}
                                         </div>
+                                        <div class="step-item">
+                                            <el-steps direction="vertical" :space='32'>
+                                                <el-step>
+                                                    <template slot="title">
+                                                        <p class="span-ellipsis">
+                                                            {{$t('text.appStep11')}}
+                                                        </p>
+                                                    </template>
+                                                </el-step>
+                                                <el-step :title="$t('text.appStep12')"></el-step>
+                                            </el-steps>
+                                            <div style="margin-left:36px;">
+                                                <span class="step-tag">
+                                                    {{this.$t('text.appStepTag1')}}
+                                                </span>
+                                                <span class="step-tag">
+                                                    {{this.$t('text.appStepTag2')}}
+                                                </span>
+                                                <span class="step-tag">
+                                                    {{this.$t('text.appStepTag3')}}
+                                                </span>
+                                                <span class="step-tag">
+                                                    {{this.$t('text.appStepTag4')}}
+                                                </span>
+                                            </div>
 
-                                    </div>
-                                </div>
-                            </el-col>
-                            <el-col :span="12">
-                                <div class="process-item">
-                                    <div class="process-item-title">
-                                        {{this.$t('text.appTitleAdmin')}}
-                                    </div>
-                                    <div class="step-item">
-                                        <el-steps direction="vertical" :space='32'>
-                                            <el-step :title="$t('text.appStep21')"></el-step>
-                                            <el-step :title="$t('text.appStep22')"></el-step>
-                                        </el-steps>
-                                        <div style="margin-left:36px;">
-                                            <div style="height:21px;"></div>
                                         </div>
                                     </div>
-                                </div>
-                            </el-col>
-                        </el-row>
+                                </el-col>
+                                <el-col :span="12">
+                                    <div class="process-item">
+                                        <div class="process-item-title">
+                                            {{this.$t('text.appTitleAdmin')}}
+                                        </div>
+                                        <div class="step-item">
+                                            <el-steps direction="vertical" :space='32'>
+                                                <el-step :title="$t('text.appStep21')"></el-step>
+                                                <el-step :title="$t('text.appStep22')"></el-step>
+                                            </el-steps>
+                                            <div style="margin-left:36px;">
+                                                <div style="height:21px;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </el-col>
+                            </el-row>
 
-                    </div>
+                        </div>
+                    </transition>
                 </div>
             </div>
         </div>
@@ -155,7 +157,8 @@ export default {
             registerDialogVisible: false,
             registerDialogInfo: {},
             hostInfo: {},
-            handleType: ''
+            handleType: '',
+            processVisible: false
         }
     },
     mounted() {
@@ -166,6 +169,10 @@ export default {
         }
         this.queryAppList()
         this.queryAppServerInfo()
+        setInterval(()=>{
+            this.queryAppList()
+            this.queryAppServerInfo()
+        },1000*10)
     },
     methods: {
         changGroup() {
@@ -253,6 +260,9 @@ export default {
             this.handleType = 'create'
             this.appDialogInfo = {}
             this.appDialogVisible = true
+        },
+        openProcess() {
+
         }
     }
 }
@@ -333,13 +343,11 @@ export default {
 }
 .right-warehouse {
     margin-left: 20px;
-    
 }
 .el-row {
     /* margin-bottom: 20px; */
 }
 .right-warehouse-item {
-    
 }
 .btn-item {
     margin-left: 0;
@@ -355,7 +363,6 @@ export default {
 }
 .store-name {
     font-size: 14px;
-    
 }
 .store-name >>> .el-button {
     padding: 0;
@@ -370,8 +377,16 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid #dddddd;
 }
-.dialog-wrapper >>> .el-dialog__header{
+.dialog-wrapper >>> .el-dialog__header {
     text-align: left;
+}
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 </style>
