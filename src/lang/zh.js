@@ -274,12 +274,12 @@ export default {
         imgSize200k: '上传图片大小不能超过 200kb!',
         imgSize80px: '上传图片尺寸80*80px',
         totalUser: '全量用户',
-        normalUser: '正常用户',
+        normalUser: '已登记用户',
         unregisteredUser: '未登记用户',
         totalContract: '全量合约',
-        normalContract: '正常合约',
-        unregisteredContract: '未登记合约'
-        
+        normalContract: '已登记合约',
+        unregisteredContract: '未登记合约',
+        checkData: '查看'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

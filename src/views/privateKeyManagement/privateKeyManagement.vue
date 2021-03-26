@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 <template>
-    <div class="private-key-management-wrapper">
-        <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead>
+    <div>
+        
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
@@ -26,7 +26,7 @@
                     </el-tooltip>
                 </div>
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" style="width: 370px;">
+                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" clearable style="width: 370px;">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -138,12 +138,18 @@ export default {
             return data
         }
     },
+    created() {
+        if(this.$route.query.userParam) {
+            this.userName = this.$route.query.userParam
+        }
+    },
     mounted() {
         if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
+        console.log(localStorage.getItem("groupId"))
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserInfoData();
         }
