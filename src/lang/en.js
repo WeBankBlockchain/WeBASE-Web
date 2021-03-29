@@ -283,12 +283,12 @@ export default {
         exportWeid: "Support import in WeID",
         title: "Title",
         totalUser: 'Full users',
-        normalUser: 'Normal users',
+        normalUser: 'Registered users',
         unregisteredUser: 'Unregistered users',
         totalContract: 'Full contracts',
-        normalContract: 'Normal contracts',
-        unregisteredContract: 'Unregistered contracts'
-
+        normalContract: 'Registered contracts',
+        unregisteredContract: 'Unregistered contracts',
+        checkData: 'Look up'
     },
     rule: {
         textLong: "1 to 32 characters in length",

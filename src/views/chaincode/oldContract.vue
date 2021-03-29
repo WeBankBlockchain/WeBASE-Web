@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead>
+    <div>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left" style="padding-top: 20px;">
@@ -71,7 +70,7 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
-                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -105,7 +104,6 @@
     </div>
 </template>
 <script>
-import contentHead from "@/components/contentHead";
 import sendTransation from "@/components/sendTransaction";
 import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
@@ -113,14 +111,13 @@ import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
 import mgmtCns from "./dialog/mgmtCns"
-import { getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi } from "@/util/api"
+import { getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode } from "@/util/api"
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
 export default {
-    name: "oldContract",
+    name: "registeredContract",
     components: {
-        "v-contentHead": contentHead,
         "v-editor": editor,
         "abi-dialog": abiDialog,
         "send-transation": sendTransation,
@@ -209,6 +206,11 @@ export default {
             importVisibility: false,
             updateVisibility: false,
             updateItem: null
+        }
+    },
+    created() {
+        if (this.$route.query) {
+            this.contractName = this.$route.query.contractName
         }
     },
     mounted: function () {
@@ -401,16 +403,32 @@ export default {
         deleteAbi(val) {
             this.$confirm(this.$t('text.confirmDelete'))
                 .then(_ => {
-                    this.sureDeleteAbi(val)
+                    this.deleteData(val)
                 })
                 .catch(_ => { });
 
         },
-        sureDeleteAbi(val) {
+        // 删除功能，当仅存在abiId是调用删除abi接口
+        // 当仅存在contractId时调用删除合约接口
+        // 当同时存在abiId和contractId时，两个接口都调用
+        deleteData(val) {
+            if(val.abiId && !val.contractId) {
+                this.deleteAbiData(val)
+            } else if(!val.abiId && val.contractId) {
+                this.deleteContractData(val)
+            } else {
+                this.deleteAbiData(val,'wait')
+                this.deleteContractData(val)
+            }
+        },
+        async deleteAbiData(val,type) {
             this.loading = true
-            deleteImportAbi(val.abiId)
+            await deleteImportAbi(val.abiId)
                 .then(res => {
                     this.loading = false
+                    if (type) {
+                        this.loading = true
+                    }
                     if (res.data.code === 0) {
                         this.getContracts()
                     } else {
@@ -421,6 +439,31 @@ export default {
                     }
                 })
                 .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError')
+                    })
+                })
+        },
+        async deleteContractData(val) {
+            this.loading = true;
+            let data = {
+                groupId: localStorage.getItem("groupId"),
+                contractId: val.contractId
+            }
+            await deleteCode(data, {}).then(res => {
+                this.loading = false
+                    if (res.data.code === 0) {
+                        this.getContracts()
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        })
+                    }
+            })
+            .catch(err => {
                     this.loading = false;
                     this.$message({
                         type: "error",

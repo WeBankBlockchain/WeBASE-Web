@@ -283,12 +283,12 @@ export default {
         exportWeid: "支持在WeID中导入",
         title: "提示",
         totalUser: '全量用户',
-        normalUser: '正常用户',
+        normalUser: '已登记用户',
         unregisteredUser: '未登记用户',
         totalContract: '全量合约',
-        normalContract: '正常合约',
-        unregisteredContract: '未登记合约'
-        
+        normalContract: '已登记合约',
+        unregisteredContract: '未登记合约',
+        checkData: '查看'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

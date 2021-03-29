@@ -22,9 +22,9 @@
                     <!-- <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
                     </el-tooltip> -->
-                    <el-radio-group v-model="type" @change="changeUserList">
+                    <!-- <el-radio-group v-model="type" @change="changeUserList">
                         <el-radio :label="item.value" :key='item.value' v-for="item in userOptions">{{item.name}}</el-radio>
-                    </el-radio-group>
+                    </el-radio-group> -->
                     <!-- <el-select :placeholder="'切换选择不同类型的用户'" v-model="type"  @change="changeUserList">
                         <el-option
                         v-for="item in userOptions"
@@ -67,7 +67,8 @@
                     </el-table-column>
                     <el-table-column  :label="$t('nodes.operation')" width="200">
                         <template slot-scope="scope">
-                            <el-button :disabled="disabled || scope.row.userId > 0" :class="{'grayColor': disabled}"  @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
+                            <el-button v-if="!(disabled || scope.row.userId > 0)"   @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
+                            <el-button v-if="disabled || scope.row.userId > 0"  @click="routeLink(scope.row)" type="text">{{$t("text.checkData")}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -206,7 +207,7 @@ export default {
             },
                 reqQuery = {};
             reqQuery = {
-                type: this.type
+                type: 3
             };
             getAllUserList(reqData, reqQuery)
                 .then(res => {
@@ -265,6 +266,14 @@ export default {
         },
         bindUserClose () {
             this.getUnusualUserList();
+        },
+        routeLink(val) {
+            this.$router.push({
+                path: '/privateKeyManagement',
+                query: {
+                    userParam: val.address
+                }
+            })
         }
     }
 };
