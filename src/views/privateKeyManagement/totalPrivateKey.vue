@@ -8,9 +8,15 @@
                     <span >{{scope.row.address}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="userName" :label='$t("privateKey.userName")' :formatter='formatterData' show-overflow-tooltip align="center">
+            <el-table-column prop="userName" :label='$t("privateKey.userName")' show-overflow-tooltip align="center">
+                <template slot-scope="scope">
+                    <span>{{formatterData(scope.row.userName)}}</span>
+                </template>
             </el-table-column>
-            <el-table-column prop="userId" :label='$t("privateKey.userId")' :formatter='formatterData' show-overflow-tooltip width="120" align="center">
+            <el-table-column prop="userId" :label='$t("privateKey.userId")'  show-overflow-tooltip width="120" align="center">
+                <template slot-scope="scope">
+                    <span>{{formatterData(scope.row.userId)}}</span>
+                </template>
             </el-table-column>
             <el-table-column prop="description" :label="$t('privateKey.description')" show-overflow-tooltip width="135" align="center">
                 <!-- <template slot-scope="scope">
@@ -25,7 +31,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-            <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
+            <el-table-column fixed="right" :label="$t('nodes.operation')" width="160">
                 <template slot-scope="scope">
                   <el-button v-if="!(disabled || scope.row.userId > 0)"   @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
                   <el-button v-if="disabled || scope.row.userId > 0" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
@@ -72,14 +78,21 @@ export default {
         }
     },
     mounted() {
-        this.getList()
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+            this.disabled = false
+        } else {
+            this.disabled = true
+        }
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getList()
+        }
     },
     methods: {
         formatterData(row) {
-            if(row.userName === null) {
+            if(row === null) {
                 return '-'
-            } else if (row.userId === null) {
-                return '-'
+            } else {
+                return row
             }
         },
         getList() {

@@ -132,8 +132,8 @@ export default {
                         trigger: "blur"
                     },
                     {
-                        pattern: /([a-fA-F0-9]{1,100})$/,
-                        message: this.$t('privateKey.validatorPrivateKey1'),
+                        pattern: this.keyForm.radio==10 ? /^[1-9]\d*$/: /([a-fA-F0-9]{1,100})$/,
+                        message: this.keyForm.radio==10 ? this.$t('privateKey.validatorPrivateKey10'): this.$t('privateKey.validatorPrivateKey1'),
                         trigger: "blur"
                     }
                 ],
@@ -209,7 +209,7 @@ export default {
                             privateKey = Web3Utils.toHex(privateKey).split('0x')[1]
 
                         }
-                        this.textRivateKey(privateKey)
+                        this.textPrivateKey(privateKey)
                     } else {
                         var reader = new FileReader(), self = this;
                         reader.readAsText(param.file, "UTF-8");
