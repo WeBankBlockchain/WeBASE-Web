@@ -257,6 +257,7 @@ export default {
         appDetail: '应用详情',
         appIcon: '应用图标',
         creatApp: '新建应用',
+        modifyApp: '修改应用',
         appLinkService: '应用链接',
         useTmp:'新建类型',
         process: '接入流程',
@@ -648,6 +649,7 @@ export default {
         validatorPrivateKey: "请输入私钥",
         validatorPrivateKey16: "请输入十六进制私钥（不含0x）",
         validatorPrivateKey1: "请输入十六进制",
+        validatorPrivateKey10: "请输入十进制",
         importType: "导入类型",
         importFileValidator: '请上传文件'
     },

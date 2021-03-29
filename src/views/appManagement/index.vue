@@ -158,8 +158,12 @@ export default {
             registerDialogInfo: {},
             hostInfo: {},
             handleType: '',
-            processVisible: false
+            processVisible: false,
+            timer: null
         }
+    },
+    beforeDestroy(){
+        clearInterval(this.timer)
     },
     mounted() {
         if (localStorage.getItem("root") === "admin") {
@@ -169,7 +173,7 @@ export default {
         }
         this.queryAppList()
         this.queryAppServerInfo()
-        setInterval(()=>{
+        this.timer = setInterval(()=>{
             this.queryAppList()
             this.queryAppServerInfo()
         },1000*10)
@@ -222,6 +226,7 @@ export default {
         },
         modifyApp(val) {
             this.handleType = 'modify'
+            this.appDialogTitle = this.$t('text.modifyApp')
             this.appDialogInfo = val
             this.appDialogVisible = true
         },
@@ -258,6 +263,7 @@ export default {
         },
         creatApp() {
             this.handleType = 'create'
+            this.appDialogTitle = this.$t('text.creatApp')
             this.appDialogInfo = {}
             this.appDialogVisible = true
         },
