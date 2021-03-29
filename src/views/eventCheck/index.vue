@@ -378,12 +378,12 @@ export default {
                             return
                         }
                         eventList.forEach(item => {
-                            newEventList.push(item.log)
+                            newEventList.push(item)
                         })
                         if (newEventList && newEventList.length) {
-                        newEventList.forEach(item => {
-                            item.eventVal = this.decodeEvent(item.log, item.data)
-                        })
+                            newEventList.forEach(item => {
+                                item.eventVal = this.decodeEvent(item.log, item.data)
+                            })
                         }
                         this.eventList = newEventList;
                     } else {

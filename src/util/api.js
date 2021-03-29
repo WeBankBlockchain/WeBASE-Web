@@ -332,8 +332,17 @@ export function exportP12PrivateKey(data) {
         }
     })
 }
-
-
+// /user/export / { userId }
+//export tex privateKey
+export function exportTxtPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/export/${data}`,
+        method: 'post',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
 /**Modify user description */
 export function getUserDescription(data) {
     return put({
