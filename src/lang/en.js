@@ -293,7 +293,9 @@ export default {
     rule: {
         textLong: "1 to 32 characters in length",
         textLong1_12: "1 to 12 digits in length",
+        textLong1_62: "1 to 62 digits in length",
         textLong1_200: "The length is between 1 and 200 characters",
+        textLong1_300: "The length is between 1 and 300 characters",
         textLong1_32767: "Must be less than or equal to 32767",
         passwordError: "Login password error",
         loginPasswordType: "Please input the password correctly",
@@ -887,6 +889,8 @@ export default {
         selectedNoUser: 'No available user, please create a new user key',
         input1_200: 'Please enter the details within 200 characters',
         input1_32: 'Please enter the profile within 32 characters',
+        input1_300: 'Please enter the details within 300 characters',
+        input1_62: 'Please enter the profile within 62 characters',
     },
     table: {
         contractAddress: 'Address',

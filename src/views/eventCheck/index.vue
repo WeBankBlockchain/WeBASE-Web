@@ -314,6 +314,15 @@ export default {
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    let indexedArr = [];
+                    this.inputList.forEach(item => {
+                        if (item.msgObj) {
+                            indexedArr.push(item.msgObj.is)
+                        }
+                    })
+                    if (indexedArr.includes(false)) {
+                        return
+                    }
                     this.queryAdd()
                 } else {
                     return false;
@@ -369,12 +378,12 @@ export default {
                             return
                         }
                         eventList.forEach(item => {
-                            newEventList.push(item.log)
+                            newEventList.push(item)
                         })
                         if (newEventList && newEventList.length) {
-                        newEventList.forEach(item => {
-                            item.eventVal = this.decodeEvent(item.log, item.data)
-                        })
+                            newEventList.forEach(item => {
+                                item.eventVal = this.decodeEvent(item.log, item.data)
+                            })
                         }
                         this.eventList = newEventList;
                     } else {

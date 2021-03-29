@@ -2,21 +2,22 @@
 <div class="module-wrapper">
     <div class="search-table">
         <el-table :data="userList" tooltip-effect="dark" v-loading="loading">
-            <el-table-column prop="userName" :label='$t("privateKey.userName")' show-overflow-tooltip align="center">
-            </el-table-column>
-            <el-table-column prop="userId" :label='$t("privateKey.userId")' show-overflow-tooltip width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="description" :label="$t('privateKey.description')" show-overflow-tooltip width="135" align="center">
-                <!-- <template slot-scope="scope">
-                    <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
-                </template> -->
-            </el-table-column>
             <el-table-column prop="address" :label="$t('privateKey.userAddress')" show-overflow-tooltip align="center">
                  <template slot-scope="scope">
                     <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.signUserId)" :title="$t('privateKey.userAddress')"></i>
                     <span >{{scope.row.address}}</span>
                 </template>
             </el-table-column>
+            <el-table-column prop="userName" :label='$t("privateKey.userName")' :formatter='formatterData' show-overflow-tooltip align="center">
+            </el-table-column>
+            <el-table-column prop="userId" :label='$t("privateKey.userId")' :formatter='formatterData' show-overflow-tooltip width="120" align="center">
+            </el-table-column>
+            <el-table-column prop="description" :label="$t('privateKey.description')" show-overflow-tooltip width="135" align="center">
+                <!-- <template slot-scope="scope">
+                    <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
+                </template> -->
+            </el-table-column>
+            
             <el-table-column prop="signUserId" :label="$t('privateKey.signUserId')" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.signUserId' @click="copyPubilcKey(scope.row.signUserId)" :title="$t('privateKey.signUserId')"></i>
@@ -74,6 +75,13 @@ export default {
         this.getList()
     },
     methods: {
+        formatterData(row) {
+            if(row.userName === null) {
+                return '-'
+            } else if (row.userId === null) {
+                return '-'
+            }
+        },
         getList() {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
@@ -175,6 +183,25 @@ export default {
         },
         importPrivateKeySuccess() {
             this.getList();
+        },
+        copyPubilcKey(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: this.$t("text.copyErrorMsg"),
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: this.$t("text.copySuccessMsg"),
+                        duration: 2000
+                    });
+                });
+            }
         },
     }
 }
