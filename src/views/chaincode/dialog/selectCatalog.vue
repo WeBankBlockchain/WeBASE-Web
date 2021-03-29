@@ -128,9 +128,10 @@ export default {
                                 }
                             }
                         }
-                        if (num == 0 && localStorage.getItem("root") === "developer") {
-                            this.addPath();
-                        }
+                        // if (num == 0 && localStorage.getItem("root") === "developer") {
+                        //     console.log(11111);
+                        //     this.addPath();
+                        // }
                         this.changeOptions();
                     } else {
                         this.$message({

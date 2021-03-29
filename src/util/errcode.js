@@ -1407,6 +1407,10 @@ let errCode = {
         "en": "Write front's sdk cert and key fail!",
         "zh": "写入前置的sdk证书和密钥失败！"
     },
+    "202513": {
+        "en": "Write private key file fail!",
+        "zh": "写入密钥文件失败！"
+    },
     "202514": {
         "en": "app key not exists",
         "zh": "应用Key不存在"
@@ -1457,8 +1461,8 @@ let errCode = {
         zh: "PrivateKey格式错误"
     },
     "303006": {
-        en: "User of this sign user id is  already been disable",
-        zh: "此签名用户id的用户已被禁用"
+        en: "privateKey not support transfer",
+        zh: "私钥不支持传输"
     },
     "402000": {
         en: "param exception",
