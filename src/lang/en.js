@@ -257,6 +257,7 @@ export default {
         appDetail: 'App Detail',
         appIcon: 'App Icon',
         creatApp: 'Creat App',
+        modifyApp: 'Modify App',
         appLinkService: 'Link App',
         useTmp: 'Use Tmp',
         process: 'Process',

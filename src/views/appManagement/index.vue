@@ -222,6 +222,7 @@ export default {
         },
         modifyApp(val) {
             this.handleType = 'modify'
+            this.appDialogTitle = this.$t('text.modifyApp')
             this.appDialogInfo = val
             this.appDialogVisible = true
         },
@@ -258,6 +259,7 @@ export default {
         },
         creatApp() {
             this.handleType = 'create'
+            this.appDialogTitle = this.$t('text.creatApp')
             this.appDialogInfo = {}
             this.appDialogVisible = true
         },

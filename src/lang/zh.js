@@ -257,6 +257,7 @@ export default {
         appDetail: '应用详情',
         appIcon: '应用图标',
         creatApp: '新建应用',
+        modifyApp: '修改应用',
         appLinkService: '应用链接',
         useTmp:'新建类型',
         process: '接入流程',
