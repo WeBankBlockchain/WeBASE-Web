@@ -26,14 +26,14 @@
                     <span class="link" @click='openAbi(scope.row)'>{{scope.row.contractAbi}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
+            <!-- <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractBin' @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
                     <span>{{scope.row.contractBin}}</span>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-            <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
+            <el-table-column fixed="right" :label="$t('nodes.operation')" width="240">
                 <template slot-scope="scope">
                   <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)"  @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
                     <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)' @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>

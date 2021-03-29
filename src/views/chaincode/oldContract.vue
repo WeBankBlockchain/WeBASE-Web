@@ -247,6 +247,12 @@ export default {
             if (localStorage.getItem("root") === 'developer') {
                 query.account = localStorage.getItem("user")
             }
+            if (this.contractName) {
+                query.contractName = this.contractName
+            } 
+            if (this.contractAddress) {
+                query.contractAddress = this.contractAddress
+            }
             getAllAbiList(data,query).then(res => {
                 if (res.data.code == 0) {
                     let newData = (new Date()).getTime()
