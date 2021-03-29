@@ -648,6 +648,7 @@ export default {
         validatorPrivateKey: "Please enter privateKey key",
         validatorPrivateKey16: "Please enter the hex (excluding 0x)",
         validatorPrivateKey1: "Please enter hexadecimal",
+        validatorPrivateKey10: "Please enter decimal",
         importType: "Import Type",
         importFileValidator: 'Please upload the file'
     },
