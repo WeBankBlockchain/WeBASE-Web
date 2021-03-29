@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { queryImportPrivateKey, exportPemPrivateKey, exportP12PrivateKey } from "@/util/api";
+import { queryImportPrivateKey, exportPemPrivateKey, exportP12PrivateKey, exportTxtPrivateKey } from "@/util/api";
 let Base64 = require("js-base64").Base64;
 const FileSaver = require("file-saver");
 const Web3Utils = require('web3-utils');
@@ -176,25 +176,33 @@ export default {
             })
         },
         textRivateKey() {
-            if (this.keyForm.fileType == 'Decimal Key' || this.keyForm.fileType == '十进制私钥') {
-                const decimalBN = Web3Utils.hexToNumberString(`0x${this.exportInfo.privateKey}`)
-                let str = JSON.stringify(decimalBN);
-                var blob = new Blob([str], { type: "text;charset=utf-8" });
-                FileSaver.saveAs(blob, `${this.keyForm.fileName}_decimal_key_${this.exportInfo.address}`);
-                this.$notify({
-                    title: this.$t('text.title'),
-                    message: this.$t('text.exportWeid'),
-                    duration: 0
-                });
-            } else {
-                let str = JSON.stringify(this.exportInfo);
-                var blob = new Blob([str], { type: "text;charset=utf-8" });
-                FileSaver.saveAs(blob, `${this.keyForm.fileName}_key_${this.exportInfo.address}`);
-            }
-            this.modelClose()
+
+
+            exportTxtPrivateKey(this.exportInfo.userId)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        const decimalBN = Web3Utils.hexToNumberString(`0x${res.data.data.privateKey}`)
+                        let str = JSON.stringify(decimalBN);
+                        var blob = new Blob([str], { type: "text;charset=utf-8" });
+                        FileSaver.saveAs(blob, `${this.keyForm.fileName}_decimal_key_${res.data.data.address}`);
+                        this.$notify({
+                            title: this.$t('text.title'),
+                            message: this.$t('text.exportWeid'),
+                            duration: 0
+                        });
+                        this.modelClose();
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+
         },
         pemRivateKey() {
-            
+
             var form = {
                 signUserId: this.exportInfo.signUserId,
                 groupId: localStorage.getItem('groupId'),
