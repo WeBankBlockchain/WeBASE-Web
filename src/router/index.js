@@ -26,8 +26,8 @@ const node = resolve => require(['@/views/front/node'], resolve);
 const newFront = resolve => require(['@/views/front/front'], resolve);
 const hostDetail = resolve => require(['@/views/front/components/hostDetail'], resolve);
 const contract = resolve => require(['@/views/chaincode/contract'], resolve);
-const oldContract = resolve => require(['@/views/chaincode/oldContract'], resolve)
-const privateKeyManagement = resolve => require(['@/views/privateKeyManagement/privateKeyManagement'], resolve);
+const oldContract = resolve => require(['@/views/chaincode/index'], resolve)
+const privateKeyManagement = resolve => require(['@/views/privateKeyManagement/index'], resolve);
 const hostMetric = resolve => require(['@/views/hostMetric'], resolve);
 const nodesMetric = resolve => require(['@/views/nodesMetric'], resolve);
 const accountInfo = resolve => require(['@/views/account/accountInfo'], resolve);

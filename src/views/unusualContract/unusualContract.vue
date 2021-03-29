@@ -22,9 +22,9 @@
                     <!-- <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
                     </el-tooltip> -->
-                    <el-radio-group v-model="type"  @change="changeContractList">
+                    <!-- <el-radio-group v-model="type"  @change="changeContractList">
                         <el-radio :label="item.value" :key='item.value' v-for="item in userOptions">{{item.name}}</el-radio>
-                    </el-radio-group>
+                    </el-radio-group> -->
                     <!-- <el-select :placeholder="'切换选择不同类型的用户'" v-model="type"  @change="changeContractList">
                         <el-option
                         v-for="item in userOptions"
@@ -52,7 +52,6 @@
                                             <span>{{item.hash}}</span>
                                         </span>
                                     </div>
-
                                     <transaction-detail :transHash="item.hash" v-if="item.show"></transaction-detail>
                                 </li>
                             </ul>
@@ -70,7 +69,8 @@
                     </el-table-column>
                     <el-table-column  :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
-                            <el-button :disabled="disabled || scope.row.abiId > 0 || scope.row.abiId === 0" :class="{'grayColor': disabled}" @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
+                            <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)"  @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
+                            <el-button v-if="disabled || scope.row.abiId > 0 || scope.row.abiId === 0"  @click="routeLink(scope.row)" type="text" size="small">{{$t('text.checkData')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -136,10 +136,10 @@ export default {
                     enName: "contractAddress",
                     name: this.$t('contracts.contractAddress')
                 },
-                 {
-                    enName: "contractName",
-                    name: this.$t('contracts.contractName')
-                },
+                //  {
+                //     enName: "contractName",
+                //     name: this.$t('contracts.contractName')
+                // },
                 {
                     enName: "transCount",
                     name: this.$t('home.chartTransactions')
@@ -231,7 +231,7 @@ export default {
             },
                 reqQuery = {};
             reqQuery = {
-                type: this.type
+                type: 3
             };
             getAllContractList(reqData, reqQuery)
                 .then(res => {
@@ -293,6 +293,14 @@ export default {
         closeImport () {
             this.importVisibility = false;
             this.getUnusualContractList();
+        },
+        routeLink(val) {
+            this.$router.push({
+                path: '/contractList',
+                query: {
+                    contractAddress: val.contractAddress
+                }
+            })
         }
     }
 };

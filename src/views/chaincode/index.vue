@@ -1,0 +1,60 @@
+<template>
+    <div class="rivate-key-management-wrapper">
+        <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead>
+
+        <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="全量" name="total">
+                <total-contract ref='total'></total-contract>
+            </el-tab-pane>
+            <el-tab-pane label="已登记" name="registered">
+                <registered-contract ref='registered'></registered-contract>
+            </el-tab-pane>
+        </el-tabs>
+    </div>
+</template>
+
+<script>
+import registeredContract from './oldContract'
+import totalContract from './totalContract'
+import contentHead from "@/components/contentHead";
+export default {
+    name: "contractList",
+    components: {
+        registeredContract,
+        totalContract,
+        "v-contentHead": contentHead,
+    },
+    data() {
+        return {
+            activeName: null
+        }
+    },
+    created() {
+      if (this.$route.query.tab === 'total') {
+          this.activeName = 'total'
+      } else {
+          this.activeName = 'registered'
+      }
+    },
+    methods: {
+        handleClick() {
+          if (this.activeName === 'total') {
+                this.$refs.total.getList()
+            } else {
+                this.$refs.registered.getContracts()
+            }
+        },
+        changGroup(data) {
+            if (this.activeName === 'total') {
+                this.$refs.total.getList()
+            } else {
+                this.$refs.registered.changGroup(data)
+            }
+        },
+    }
+}
+</script>
+
+<style>
+
+</style>
