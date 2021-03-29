@@ -45,10 +45,7 @@ export function loginOut() {
 export function encryption() {
     return get({
         url: `${url.ORG_LIST}/config/encrypt`,
-        method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        method: 'get'
     })
 }
 //init change passWord

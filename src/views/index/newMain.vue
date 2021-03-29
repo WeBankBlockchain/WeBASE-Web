@@ -156,7 +156,7 @@ export default {
     },
     mounted() {
         this.getRefreshFront()
-        // this.getEncryption();
+        this.getEncryption();
         this.getGroupList();
         this.getFrontTable();
         // this.getVersionList()

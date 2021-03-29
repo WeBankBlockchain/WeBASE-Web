@@ -293,7 +293,9 @@ export default {
     rule: {
         textLong: "长度在 1 到 32 个字符",
         textLong1_12: "长度在 1 到 12 位",
+        textLong1_62: "长度在 1 到 62 位",
         textLong1_200: "长度在 1 到 200 个字符",
+        textLong1_300: "长度在 1 到 300 个字符",
         textLong1_32767: "必须小于或等于32767",
         passwordError: "登录密码错误",
         loginPasswordType: "请正确输入密码",
@@ -888,6 +890,8 @@ export default {
         selectedNoUser: '没有用户，请去新建用户',
         input1_200: '请输入200字符以内的详情',
         input1_32: '请输入32字符以内的简介',
+        input1_300: '请输入300字符以内的详情',
+        input1_62: '请输入62字符以内的简介',
     },
     table: {
         contractAddress: '合约地址',

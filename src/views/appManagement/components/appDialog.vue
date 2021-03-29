@@ -22,10 +22,10 @@
                 <el-input v-model="appForm.appDocLink" clearable></el-input>
             </el-form-item>
             <el-form-item :label="$t('text.appDesc')" prop="appDesc" style="width: 537px;">
-                <el-input type="textarea" v-model="appForm.appDesc" clearable :placeholder="$t('placeholder.input1_32')"></el-input>
+                <el-input type="textarea" v-model="appForm.appDesc" clearable :placeholder="$t('placeholder.input1_62')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('text.appDetail')" prop="appDetail" style="width: 537px;">
-                <el-input type="textarea" v-model="appForm.appDetail" clearable :placeholder="$t('placeholder.input1_200')"></el-input>
+                <el-input type="textarea" v-model="appForm.appDetail" clearable :placeholder="$t('placeholder.input1_300')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('text.appIcon')" prop="fileList" style="width: 537px;">
                 <el-upload class="avatar-uploader" :file-list="fileList" action="" accept=".jpg, .png, ,jpeg" :show-file-list="true" :limit="1" list-type="picture-card" :http-request="uploadFile" :on-change="uploadChange" :auto-upload="true" :before-upload="beforeAvatarUpload">
@@ -89,12 +89,12 @@ export default {
                         message: this.$t('rule.appDescRule'),
                         trigger: "blur"
                     },
-                    // {
-                    //     min: 1,
-                    //     max: 32,
-                    //     message: this.$t('rule.textLong'),
-                    //     trigger: "blur"
-                    // }
+                    {
+                        min: 1,
+                        max: 62,
+                        message: this.$t('rule.textLong1_62'),
+                        trigger: "blur"
+                    }
                 ],
                 appDetail: [
                     {
@@ -102,12 +102,12 @@ export default {
                         message: this.$t('rule.appDetailRule'),
                         trigger: "blur"
                     },
-                    // {
-                    //     min: 1,
-                    //     max: 200,
-                    //     message: this.$t('rule.textLong1_200'),
-                    //     trigger: "blur"
-                    // }
+                    {
+                        min: 1,
+                        max: 300,
+                        message: this.$t('rule.textLong1_300'),
+                        trigger: "blur"
+                    }
 
                 ]
             }
@@ -125,7 +125,7 @@ export default {
             },
             imgString: '',
             fileList: [
-                
+
             ],
             appList: [],
             tmpId: '',
@@ -153,38 +153,28 @@ export default {
             }
         },
         beforeAvatarUpload(file) {
-            console.log(file);
-            var isSize = false;
-            
-            var reader = new FileReader();
-            reader.onload = (event) => {
-                var txt = event.target.result;
-                var img = document.createElement("img");
-                img.src = txt;
-                img.onload = () => {
-                    var imgWidth = img.width;
-                    var imgHeight = img.height;
-                    if (imgWidth == 80 && imgHeight == 80) {
-                        isSize = true
-                    }else{
-                        
+            return new Promise((resolve, reject) => {
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    var txt = event.target.result;
+                    var img = document.createElement("img");
+                    img.src = txt;
+                    img.onload = () => {
+                        var imgWidth = img.width;
+                        var imgHeight = img.height;
+                        if (imgWidth == 80 && imgHeight == 80) {
+                            resolve(file)
+                        } else {
+                            reject(this.$message.error(this.$t('text.imgSize80px')))
+                        }
+                        const isLt2M = file.size / 1024 < 200;
+                        if (!isLt2M) {
+                            this.$message.error(this.$t('text.imgSize200k'));
+                        }
                     }
-                    
-                    if (!isSize) {
-                        this.$message.error(this.$t('text.imgSize80px'));
-                    }
-                    const isLt2M = file.size / 1024 < 200;
-                    if (!isLt2M) {
-                        this.$message.error(this.$t('text.imgSize200k'));
-                    }
-                    
                 }
-            };
-            // this.$nextTick(()=>{
-            //     reader.readAsDataURL(file);
-            //     console.log(isSize,'nextTick');
-            // })
-            return isLt2M && isSize;
+            })
         },
         uploadChange(file, fileList) {
             this.$refs['appForm'].clearValidate();
@@ -252,7 +242,7 @@ export default {
                 }
             });
             for (const key in this.appForm) {
-                    this.appForm[key] = tmpInfo[key]
+                this.appForm[key] = tmpInfo[key]
             }
         },
         changeTemplate(val) {
