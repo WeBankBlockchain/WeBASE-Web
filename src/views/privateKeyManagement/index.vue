@@ -3,11 +3,11 @@
         <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead>
 
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="全量" name="total">
-                <total-privateKey ref='total'></total-privateKey>
-            </el-tab-pane>
             <el-tab-pane label="已登记" name="registered">
-                <privateKey ref='registered'></privateKey>
+                <privateKey ref='registered' v-if='activeName === "registered"'></privateKey>
+            </el-tab-pane>
+            <el-tab-pane label="全量" name="total">
+                <total-privateKey ref='total' v-if='activeName === "total"'></total-privateKey>
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -38,11 +38,11 @@ export default {
     },
     methods: {
         handleClick() {
-          if (this.activeName === 'total') {
-                this.$refs.total.getList()
-            } else {
-                this.$refs.registered.getUserInfoData()
-            }
+        //   if (this.activeName === 'total') {
+        //         this.$refs.total.getList()
+        //     } else {
+        //         this.$refs.registered.getUserInfoData()
+        //     }
         },
         changGroup(data) {
             if (this.activeName === 'total') {

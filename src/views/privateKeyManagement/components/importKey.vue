@@ -83,7 +83,6 @@ export default {
             keyPlaceholderDec: ''
         }
     },
-
     computed: {
         rules() {
             var checkData = (rule, value, callback) => {

@@ -120,7 +120,6 @@ export default {
             this.getList();
         },
         importData(val) {
-          console.log(val)
             this.address = val.address;
             this.$store.dispatch('switch_creat_user_dialog')
         },
