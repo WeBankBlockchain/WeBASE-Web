@@ -158,8 +158,12 @@ export default {
             registerDialogInfo: {},
             hostInfo: {},
             handleType: '',
-            processVisible: false
+            processVisible: false,
+            timer: null
         }
+    },
+    beforeDestroy(){
+        clearInterval(this.timer)
     },
     mounted() {
         if (localStorage.getItem("root") === "admin") {
@@ -169,7 +173,7 @@ export default {
         }
         this.queryAppList()
         this.queryAppServerInfo()
-        setInterval(()=>{
+        this.timer = setInterval(()=>{
             this.queryAppList()
             this.queryAppServerInfo()
         },1000*10)
