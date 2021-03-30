@@ -28,9 +28,9 @@
                 <el-input type="textarea" v-model="appForm.appDetail" clearable :placeholder="$t('placeholder.input1_300')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('text.appIcon')" prop="fileList" style="width: 537px;">
+                <!-- <img :src="appForm.appIcon" alt=""></img> -->
                 <el-upload class="avatar-uploader" :file-list="fileList" action="" accept=".jpg, .png, ,jpeg" :show-file-list="true" :limit="1" list-type="picture-card" :http-request="uploadFile" :on-change="uploadChange" :auto-upload="true" :before-upload="beforeAvatarUpload">
                     <i slot="default" class="el-icon-plus"></i>
-
                     <div slot="file" slot-scope="{file}" class="avatar">
                         <img class="el-upload-list__item-thumbnail" :src="file.url" alt="">
                         <span class="el-upload-list__item-actions">
@@ -40,6 +40,7 @@
                         </span>
                     </div>
                 </el-upload>
+
                 <span slot="default" class="img-icon">{{this.$t('text.imgSize')}}</span>
             </el-form-item>
         </el-form>
@@ -51,7 +52,6 @@
 </template>
 <script>
 import { fetchSaveApp, fetchAppList } from "@/util/api";
-import appTmp from "@/assets/appTmp.png";
 export default {
     name: "AppDialog",
     props: ['appDialogInfo', 'handleType'],
@@ -124,25 +124,30 @@ export default {
                 appDetail: this.appDialogInfo.appDetail || '',
             },
             imgString: '',
-            fileList: [
-
-            ],
+            fileList: [],
             appList: [],
             tmpId: '',
-            createRadio: 'tmp',
-            appTmp: appTmp
+            createRadio: 'tmp'
         }
     },
     mounted() {
         if (this.handleType == 'create') {
             this.queryAppList()
         }
-
+        this.initImg()
     },
 
     methods: {
         modelClose() {
             this.$emit('close')
+        },
+        initImg() {
+            if (this.appDialogInfo.appIcon) {
+                this.fileList.push({
+                    url: this.appDialogInfo.appIcon
+                })
+                this.imgString = this.appDialogInfo.appIcon
+            }
         },
         uploadFile(param) {
             var reader = new FileReader(), self = this;
@@ -244,9 +249,15 @@ export default {
             for (const key in this.appForm) {
                 this.appForm[key] = tmpInfo[key]
             }
+            this.fileList.push({
+                url: this.appForm.appIcon
+            })
+            this.imgString = this.appForm.appIcon
         },
         changeTemplate(val) {
             this.tmpId = ''
+            this.fileList = []
+            this.imgString = ""
             if (val == 'create') {
                 this.appForm = {
                     appName: '',

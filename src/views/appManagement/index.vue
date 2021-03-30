@@ -11,6 +11,9 @@
                         <span class="process-title" style="margin-left:8px;">
                             {{this.$t('text.process')}}
                         </span>
+                        <span>
+                            <i :class="!processVisible ? 'el-icon-arrow-down': 'el-icon-arrow-up'"></i>
+                        </span>
                     </p>
                     <transition name="fade">
                         <div style="margin-top: 24px;" v-if="processVisible">
@@ -74,7 +77,7 @@
         </div>
         <div class="module-wrapper">
             <div class="desc-wrapper">
-                <div style="margin-top: 36px;">
+                <div style="margin-top: 0px;">
                     <p class="access-process">
                         <span class="process-title" style="margin-left:8px;">
                             {{this.$t('text.appListTile')}}

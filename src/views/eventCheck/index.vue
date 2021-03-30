@@ -50,9 +50,9 @@
         <div class="module-wrapper">
             <div class="search-table" v-if="eventList.length > 0" style="padding-bottom: 13px;">
                 <el-table :data="eventList" tooltip-effect="dark" v-loading="loading">
-                    <el-table-column prop="blockNumber" :label="$t('table.blockHeight')" show-overflow-tooltip width="120" align="center">
+                    <el-table-column prop="log" :label="$t('table.blockHeight')" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
-                            <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
+                            <span @click="link(scope.row.log.blockNumber)" class="link">{{scope.row.log.blockNumber}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="eventVal" :label="$t('table.eventValue')" show-overflow-tooltip align="center"></el-table-column>
