@@ -429,14 +429,14 @@ export default {
         // 删除功能，当仅存在abiId是调用删除abi接口
         // 当仅存在contractId时调用删除合约接口
         // 当同时存在abiId和contractId时，两个接口都调用
-        deleteData(val) {
+        async deleteData(val) {
             if(val.abiId && !val.contractId) {
                 this.deleteAbiData(val)
             } else if(!val.abiId && val.contractId) {
                 this.deleteContractData(val)
             } else {
-                this.deleteAbiData(val,'wait')
-                this.deleteContractData(val)
+                await this.deleteAbiData(val,'wait')
+                await this.deleteContractData(val)
             }
         },
         async deleteAbiData(val,type) {
@@ -473,6 +473,12 @@ export default {
             await deleteCode(data, {}).then(res => {
                 this.loading = false
                     if (res.data.code === 0) {
+                        // 更新vuex contractList
+                        let allContractList = this.$store.state.contractDataList;
+                        let list = allContractList.filter((item) => {
+                            return item.contractId !== val.contractId
+                        })
+                        this.$store.dispatch('set_contract_dataList_action', list);
                         this.getContracts()
                     } else {
                         this.$message({

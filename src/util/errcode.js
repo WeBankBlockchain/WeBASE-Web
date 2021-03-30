@@ -39,8 +39,8 @@ let errCode = {
         zh: "没有群组属于这个群组id（节点不属于这个群组）"
     },
     "102003": {
-        en: "当webase为v1.3.2以上版本（含）时，fisco bcos节点必须为v2.4.1以上版本（含）",
-        zh: "WeBASE 和 FISCO BCOS 节点"
+        en: "When webase is v1.3.2 above(inclusive),fisco-bcos node must be v2.4.1 above(inclusive)",
+        zh: "当webase为v1.3.2以上版本（含）时，fisco bcos节点必须为v2.4.1以上版本（含）"
     },
     "101003": {
         en: "web3j instance of current group is null",
