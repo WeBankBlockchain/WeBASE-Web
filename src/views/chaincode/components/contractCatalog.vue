@@ -135,7 +135,7 @@ export default {
         Bus.$off("compile")
         Bus.$off("deploy")
         Bus.$off("open")
-        Bus.$off("save")
+        Bus.$off("save");
     },
     mounted: function () {
         if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
@@ -1236,6 +1236,7 @@ export default {
     top: 0;
     opacity: 0;
     z-index: 999;
+    font-size: 0;
     cursor: pointer;
 }
 .colorActive {
