@@ -36,13 +36,15 @@
                         </template>
 
                         <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{
+                                    'color': term.path == activeRoute ? '#37eef2':'',
                                     'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
                                     'padding-left':term.path == activeRoute ? '55px': '58px',
                                     'background-color':term.path == activeRoute ? '#1e293e': '#0c1220',}">
                             <span>{{term.name}}</span>
                         </el-menu-item>
                     </el-submenu>
-                    <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path" :style="{'border-left':item.children[0].path == activeRoute ? '3px solid #37eef2': '',
+                    <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path" :style="{
+                                'border-left':item.children[0].path == activeRoute ? '3px solid #37eef2': '',
                                 'padding-left':item.children[0].path == activeRoute ? '30px': '33px',
                                 'background-color':item.children[0].path == activeRoute ? '#1e293e': '#0c1220',}">
                         <i :class="item.iconCls"></i>
@@ -66,7 +68,7 @@ export default {
         return {
             maxLog: maxLog,
             activeIndex: 0,
-            activeRoute: "",
+            // activeRoute: "",
             active: '',
             userRole: localStorage.getItem("root"),
             routesList: [],
@@ -206,17 +208,25 @@ export default {
             }
         },
         activeRoute() {
-            return this.active
+            return this.active ? this.active : this.$route.path
         }
     },
     watch: {
         $route(to, from) {
-            if (this.$route.path !== to && to !== "/node/node" && to !== "/node/chain") {
+            console.log()
+            if (this.$route.path !== to.path && to.path !== "/node/node" && to.path !== "/node/chain") {
                 this.active = this.$route.path
-            } else if (to === "/node/node" || to === "/node/chain") {
+            } else if (to.path === "/node/node" || to.path === "/node/chain") {
+                this.active = '/front'
+            } else {
+                this.active = this.$route.path
+            }
+            if (this.$route.path === '/hostDetail') {
                 this.active = '/front'
             }
-            console.log(this.active)
+            if (this.$route.path === '/parseAbi') {
+                this.active = '/contractList'
+            }
         },
         // activeRoute(to, from) {
 
