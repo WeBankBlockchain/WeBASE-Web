@@ -9,9 +9,6 @@
                 </template>
             </el-table-column>
             <el-table-column prop="contractName" :label="$t('contracts.contractName')" show-overflow-tooltip width="120" align="center">
-                <template slot-scope="scope">
-                    <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
-                </template>
             </el-table-column>
             <!-- <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center">
                 <template slot-scope="scope">
@@ -25,24 +22,24 @@
             </el-table-column> -->
             <el-table-column prop="contractAbi" :label="$t('contracts.contractAbi')" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
-                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
+                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractAbi' @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
                     <span class="link" @click='openAbi(scope.row)'>{{scope.row.contractAbi}}</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
+            <!-- <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
-                    <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
+                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractBin' @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
                     <span>{{scope.row.contractBin}}</span>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-            <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
+            <el-table-column fixed="right" :label="$t('nodes.operation')" width="240">
                 <template slot-scope="scope">
                   <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)"  @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
                     <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)' @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                     <el-button v-if="!disabled &&scope.row.contractAddress && scope.row.haveEvent"  @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                     <el-button v-if="!disabled" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
-                    <el-button v-if="!disabled"  @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                    <el-button v-if="!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)"  @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
                     <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)'  @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                     <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button> -->
                 </template>
@@ -122,7 +119,14 @@ export default {
         }
     },
     mounted() {
-        this.getList()
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+            this.disabled = false
+        } else {
+            this.disabled = true
+        }
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getList()
+        }
     },
     methods: {
         getList() {

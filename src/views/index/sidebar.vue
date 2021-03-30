@@ -35,7 +35,8 @@
                             </div>
                         </template>
 
-                        <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
+                        <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{
+                                    'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
                                     'padding-left':term.path == activeRoute ? '55px': '58px',
                                     'background-color':term.path == activeRoute ? '#1e293e': '#0c1220',}">
                             <span>{{term.name}}</span>
@@ -52,7 +53,6 @@
         </div>
 
     </div>
-    </div>
 </template>
 
 <script>
@@ -67,6 +67,7 @@ export default {
             maxLog: maxLog,
             activeIndex: 0,
             activeRoute: "",
+            active: '',
             userRole: localStorage.getItem("root"),
             routesList: [],
             versionfunegt: versionfunegt
@@ -203,15 +204,19 @@ export default {
             } else {
                 return false;
             }
+        },
+        activeRoute() {
+            return this.active
         }
     },
     watch: {
         $route(to, from) {
             if (this.$route.path !== to && to !== "/node/node" && to !== "/node/chain") {
-                this.activeRoute = this.$route.path
+                this.active = this.$route.path
             } else if (to === "/node/node" || to === "/node/chain") {
-                this.activeRoute = '/front'
+                this.active = '/front'
             }
+            console.log(this.active)
         },
         // activeRoute(to, from) {
 
@@ -358,7 +363,7 @@ export default {
         },
         select: function (index, indexPath) {
             this.activeIndex = indexPath[0];
-            this.activeRoute = index;
+            this.active = index;
         },
         handleOpen(key, keyPath) {
         },

@@ -2,21 +2,28 @@
 <div class="module-wrapper">
     <div class="search-table">
         <el-table :data="userList" tooltip-effect="dark" v-loading="loading">
-            <el-table-column prop="userName" :label='$t("privateKey.userName")' show-overflow-tooltip align="center">
-            </el-table-column>
-            <el-table-column prop="userId" :label='$t("privateKey.userId")' show-overflow-tooltip width="120" align="center">
-            </el-table-column>
-            <el-table-column prop="description" :label="$t('privateKey.description')" show-overflow-tooltip width="135" align="center">
-                <!-- <template slot-scope="scope">
-                    <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
-                </template> -->
-            </el-table-column>
             <el-table-column prop="address" :label="$t('privateKey.userAddress')" show-overflow-tooltip align="center">
                  <template slot-scope="scope">
                     <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.signUserId)" :title="$t('privateKey.userAddress')"></i>
                     <span >{{scope.row.address}}</span>
                 </template>
             </el-table-column>
+            <el-table-column prop="userName" :label='$t("privateKey.userName")' show-overflow-tooltip align="center">
+                <template slot-scope="scope">
+                    <span>{{formatterData(scope.row.userName)}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="userId" :label='$t("privateKey.userId")'  show-overflow-tooltip width="120" align="center">
+                <template slot-scope="scope">
+                    <span>{{formatterData(scope.row.userId)}}</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="description" :label="$t('privateKey.description')" show-overflow-tooltip width="135" align="center">
+                <!-- <template slot-scope="scope">
+                    <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
+                </template> -->
+            </el-table-column>
+            
             <el-table-column prop="signUserId" :label="$t('privateKey.signUserId')" show-overflow-tooltip align="center">
                 <template slot-scope="scope">
                     <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.signUserId' @click="copyPubilcKey(scope.row.signUserId)" :title="$t('privateKey.signUserId')"></i>
@@ -24,7 +31,7 @@
                 </template>
             </el-table-column>
             <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-            <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
+            <el-table-column fixed="right" :label="$t('nodes.operation')" width="160">
                 <template slot-scope="scope">
                   <el-button v-if="!(disabled || scope.row.userId > 0)"   @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
                   <el-button v-if="disabled || scope.row.userId > 0" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
@@ -71,9 +78,23 @@ export default {
         }
     },
     mounted() {
-        this.getList()
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+            this.disabled = false
+        } else {
+            this.disabled = true
+        }
+        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getList()
+        }
     },
     methods: {
+        formatterData(row) {
+            if(row === null) {
+                return '-'
+            } else {
+                return row
+            }
+        },
         getList() {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
@@ -120,7 +141,6 @@ export default {
             this.getList();
         },
         importData(val) {
-          console.log(val)
             this.address = val.address;
             this.$store.dispatch('switch_creat_user_dialog')
         },
@@ -176,6 +196,25 @@ export default {
         },
         importPrivateKeySuccess() {
             this.getList();
+        },
+        copyPubilcKey(val) {
+            if (!val) {
+                this.$message({
+                    type: "fail",
+                    showClose: true,
+                    message: this.$t("text.copyErrorMsg"),
+                    duration: 2000
+                });
+            } else {
+                this.$copyText(val).then(e => {
+                    this.$message({
+                        type: "success",
+                        showClose: true,
+                        message: this.$t("text.copySuccessMsg"),
+                        duration: 2000
+                    });
+                });
+            }
         },
     }
 }

@@ -25,7 +25,7 @@
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
-                </div>
+                </div> 
             </div>
             <div class="search-table">
                 <el-table :data="contractList" tooltip-effect="dark" v-loading="loading">
@@ -37,12 +37,14 @@
                     </el-table-column>
                     <el-table-column prop="contractName" :label="$t('contracts.contractName')" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
-                            <span class="link" @click='open(scope.row)'>{{scope.row.contractName}}</span>
+                            <span class="link" @click='open(scope.row)' v-if='scope.row.contractId'>{{scope.row.contractName}}</span>
+                            <span  v-if='!scope.row.contractId'>{{scope.row.contractName}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center">
+                    <el-table-column prop="contractPath"  :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center">
                         <template slot-scope="scope">
-                            <span class="link" @click='openPath(scope.row)'>{{scope.row.contractPath}}</span>
+                            <span class="link" @click='openPath(scope.row)' v-if='scope.row.contractPath'>{{scope.row.contractPath}}</span>
+                            <span  v-if='!scope.row.contractPath'>-</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="handleType" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
@@ -52,25 +54,25 @@
                     </el-table-column>
                     <el-table-column prop="contractAbi" :label="$t('contracts.contractAbi')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractAbi' @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
                             <span class="link" @click='openAbi(scope.row)'>{{scope.row.contractAbi}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
-                            <span>{{scope.row.contractBin}}</span>
+                            <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractBin' @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
+                            <span>{{scope.row.bin}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
                     <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
-                            <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -224,6 +226,10 @@ export default {
         }
     },
     methods: {
+        formatterPath: function(row) {
+            let str = row ? row : "-"
+            return str
+        },
         changGroup: function (data) {
             this.groupId = data
             this.getContracts()
@@ -241,8 +247,15 @@ export default {
             if (localStorage.getItem("root") === 'developer') {
                 query.account = localStorage.getItem("user")
             }
+            if (this.contractName) {
+                query.contractName = this.contractName
+            } 
+            if (this.contractAddress) {
+                query.contractAddress = this.contractAddress
+            }
             getAllAbiList(data,query).then(res => {
                 if (res.data.code == 0) {
+                    let newData = (new Date()).getTime()
                     let dataArray = res.data.data || [];
                     this.total = res.data.totalCount || 0;
                     let contractAddressList = []
@@ -261,7 +274,7 @@ export default {
                             }
                         }
                     });
-                    console.log(dataArray);
+                    // console.log(dataArray);
                     this.queryAllContractStatus(contractAddressList, dataArray)
                 } else {
                     this.$message({
@@ -289,6 +302,11 @@ export default {
                         let statusList = res.data.data;
                         for (let key in statusList) {
                             dataArray.forEach(item => {
+                                if (item.contractBin) {
+                                    item.bin = item.contractBin.substring(0,6)+ '...'
+                                } else {
+                                    item.bin = item.contractBin
+                                }
                                 if (key == item.contractAddress) {
                                     item.handleType = statusList[key]
                                 }
