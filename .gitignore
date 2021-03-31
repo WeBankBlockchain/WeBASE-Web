@@ -11,4 +11,3 @@ package-lock.json
 *.ntvs*
 *.njsproj
 *.sln
-config/index.js
