@@ -181,7 +181,8 @@ export default {
             exportTxtPrivateKey(this.exportInfo.userId)
                 .then(res => {
                     if (res.data.code === 0) {
-                        const decimalBN = Web3Utils.hexToNumberString(`0x${res.data.data.privateKey}`)
+                        let hexPrivateKey = Base64.decode(res.data.data.privateKey)
+                        const decimalBN = Web3Utils.hexToNumberString(`0x${hexPrivateKey}`)
                         let str = JSON.stringify(decimalBN);
                         var blob = new Blob([str], { type: "text;charset=utf-8" });
                         FileSaver.saveAs(blob, `${this.keyForm.fileName}_decimal_key_${res.data.data.address}`);
