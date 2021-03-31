@@ -5,6 +5,7 @@
                 <i class="el-icon-copy-document"></i>
             </span>
         </div> -->
+        <p style="color: #F56C6C;padding-bottom: 5px">IP供参考，可以具体应用处修改。</p>
         <div class="register-item">
             <span class="item-key">IP：</span>
             <span>{{registerDialogInfo.ip}}</span>
