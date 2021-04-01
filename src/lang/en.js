@@ -471,6 +471,7 @@ export default {
         frontIp: "Front ID",
         modifyGroup: "Modify Group",
         addAbi: "Import ABI",
+        updateAbi: "Update ABI",
         groupStatus: "Status",
         status: "Status",
         groupTimestamp: "Timestamp",

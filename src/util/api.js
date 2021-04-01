@@ -313,7 +313,7 @@ export function exportPemPrivateKey(data) {
         url: `${url.ORG_LIST}/user/exportPem`,
         method: 'post',
         data: data,
-        responseType: 'blob',
+        responseType: 'blob/application/json',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }
@@ -326,7 +326,7 @@ export function exportP12PrivateKey(data) {
         url: `${url.ORG_LIST}/user/exportP12`,
         method: 'post',
         data: data,
-        responseType: 'blob',
+        responseType: 'blob/application/json',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }

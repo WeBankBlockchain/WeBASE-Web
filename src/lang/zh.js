@@ -472,6 +472,7 @@ export default {
         frontIp: "前置IP",
         modifyGroup: "修改群组",
         addAbi: "导入ABI",
+        updateAbi: "更新ABI",
         groupStatus: "群组状态",
         status: "状态",
         groupTimestamp: "创世块时间戳",

@@ -176,24 +176,41 @@ export default {
             })
         },
         textRivateKey() {
-
-
             exportTxtPrivateKey(this.exportInfo.userId)
                 .then(res => {
                     if (res.data.code === 0) {
-                        const decimalBN = Web3Utils.hexToNumberString(`0x${res.data.data.privateKey}`)
-                        let str = JSON.stringify(decimalBN);
-                        var blob = new Blob([str], { type: "text;charset=utf-8" });
-                        FileSaver.saveAs(blob, `${this.keyForm.fileName}_decimal_key_${res.data.data.address}`);
-                        this.$notify({
-                            title: this.$t('text.title'),
-                            message: this.$t('text.exportWeid'),
-                            duration: 0
-                        });
+                        const { address, publicKey, privateKey, userName, signUserId, appId } = res.data.data;
+                        if (this.keyForm.fileType == '.txt') {
+                            let exportPrivateKeyObj = {
+                                address: address,
+                                publicKey: publicKey,
+                                privateKey: Base64.decode(privateKey),
+                                userName: userName,
+                                signUserId: signUserId,
+                                appId: appId,
+                            }
+                            let str = JSON.stringify(exportPrivateKeyObj);
+                            var blob = new Blob([str], { type: "text;charset=utf-8" });
+                            FileSaver.saveAs(blob, `${this.keyForm.fileName}_key_${res.data.data.address}`);
+
+                        } else {
+                            let hexPrivateKey = Base64.decode(privateKey)
+                            const decimalBN = Web3Utils.hexToNumberString(`0x${hexPrivateKey}`)
+                            console.log(decimalBN);
+                            let str = JSON.stringify(decimalBN);
+                            console.log(str);
+                            var blob = new Blob([decimalBN], { type: "text;charset=utf-8" });
+                            FileSaver.saveAs(blob, `${this.keyForm.fileName}_decimal_key_${res.data.data.address}`);
+                            this.$notify({
+                                title: this.$t('text.title'),
+                                message: this.$t('text.exportWeid'),
+                                duration: 3000
+                            });
+                        }
                         this.modelClose();
                     } else {
                         this.$message({
-                            message: this.$chooseLang(res.data.code),
+                            message: err.data || this.$chooseLang(res.data.code),
                             type: "error",
                             duration: 2000
                         });
@@ -211,7 +228,7 @@ export default {
             exportPemPrivateKey(form)
                 .then(res => {
                     const { data, status } = res;
-                    console.log(res);
+                    console.log(status, res);
                     if (status === 200) {
                         const content = res.data;
                         const blob = new Blob([content])
@@ -239,7 +256,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError'),
                     });
                 });
 
@@ -284,7 +301,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError'),
                     });
                 });
         },
