@@ -648,7 +648,7 @@ export default {
                 path: '/eventCheck',
                 query: {
                     groupId: this.groupId,
-                    type: 'contract',
+                    type: 'abi',
                     contractAddress: val.contractAddress
                 }
             })

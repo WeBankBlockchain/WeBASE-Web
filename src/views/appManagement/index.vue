@@ -92,7 +92,7 @@
                                 <div>
                                     <li class="item-warehouse">
                                         <div class="left-warehouse">
-                                            <el-image :src="item.appIcon">
+                                            <el-image :src="item.appIcon" style="border-radius: 10px;">
                                                 <div slot="error" class="image-slot">
                                                     <i class="el-icon-picture-outline"></i>
                                                 </div>
@@ -103,13 +103,14 @@
                                                 <span style="font-weight:bold;font-size: 15px;">
                                                     {{item.appName}}
                                                 </span>
+                                                <span style="display: inline-block;width: 10px"></span>
                                                 <el-button type="text" class="font-color-2956a3 font-12 cursor-pointer" :disabled="disabled" @click="modifyApp(item)">{{$t('text.modify')}}</el-button>
                                                 <el-button type="text" class="font-color-2956a3 font-12 cursor-pointer" :disabled="disabled" @click="deleteApp(item)">{{$t('text.delete')}}</el-button>
                                             </div>
-                                            <div class="right-warehouse-item store-desc one-ellipsis" style="margin-top:6px; color:#2E384D;">
+                                            <div class="right-warehouse-item store-desc one-ellipsis" style="margin-top:6px; color:#2E384D;" :title='item.appDesc'>
                                                 {{item.appDesc}}
                                             </div>
-                                            <div class="right-warehouse-item store-desc two-ellipsis" style="color: #666666;">
+                                            <div class="right-warehouse-item store-desc two-ellipsis" style="color: #666666;" :title='item.appDetail'>
                                                 {{item.appDetail}}
                                             </div>
                                             <div class="right-warehouse-item" style="margin-top:14px;">
@@ -340,13 +341,15 @@ export default {
     margin-bottom: 20px;
 }
 .item-warehouse {
-    border: 1px solid #dddddd;
+    /* border: 1px solid #dddddd; */
     border-radius: 2px;
     display: flex;
     flex-direction: row;
     padding: 20px;
     min-height: 174px;
     margin-bottom: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 12px 0 #ddd;
 }
 .left-warehouse {
 }
