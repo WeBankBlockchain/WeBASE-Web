@@ -289,7 +289,8 @@ export default {
         totalContract: '全量合约',
         normalContract: '已登记合约',
         unregisteredContract: '未登记合约',
-        checkData: '查看'
+        checkData: '查看',
+        closeSign:"私钥不允许传输"
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

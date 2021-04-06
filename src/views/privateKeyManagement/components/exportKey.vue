@@ -153,7 +153,6 @@ export default {
         submitUploadList() {
             this.$refs['keyForm'].validate(valid => {
                 if (valid) {
-                    console.log(this.keyForm.fileType);
                     switch (this.keyForm.fileType) {
                         case '十进制私钥':
                             this.textRivateKey()
@@ -196,9 +195,7 @@ export default {
                         } else {
                             let hexPrivateKey = Base64.decode(privateKey)
                             const decimalBN = Web3Utils.hexToNumberString(`0x${hexPrivateKey}`)
-                            console.log(decimalBN);
                             let str = JSON.stringify(decimalBN);
-                            console.log(str);
                             var blob = new Blob([decimalBN], { type: "text;charset=utf-8" });
                             FileSaver.saveAs(blob, `${this.keyForm.fileName}_decimal_key_${res.data.data.address}`);
                             this.$notify({
@@ -209,8 +206,9 @@ export default {
                         }
                         this.modelClose();
                     } else {
+                        this.modelClose()
                         this.$message({
-                            message: err.data || this.$chooseLang(res.data.code),
+                            message: this.$t('text.closeSign'),
                             type: "error",
                             duration: 2000
                         });
@@ -228,7 +226,6 @@ export default {
             exportPemPrivateKey(form)
                 .then(res => {
                     const { data, status } = res;
-                    console.log(status, res);
                     if (status === 200) {
                         const content = res.data;
                         const blob = new Blob([content])
@@ -247,18 +244,13 @@ export default {
                         }
                         this.modelClose()
                     } else {
+                        this.modelClose()
                         this.$message({
                             type: "error",
-                            message: this.$chooseLang(res.data.code)
+                            message: this.$t('text.closeSign')
                         });
                     }
                 })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: err.data || this.$t('text.systemError'),
-                    });
-                });
 
 
         },
@@ -292,18 +284,13 @@ export default {
                         }
                         this.modelClose()
                     } else {
+                        this.modelClose()
                         this.$message({
                             type: "error",
-                            message: this.$chooseLang(res.data.code)
+                            message: this.$t('text.closeSign')
                         });
                     }
                 })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: err.data || this.$t('text.systemError'),
-                    });
-                });
         },
     }
 }

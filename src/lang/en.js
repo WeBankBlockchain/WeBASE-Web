@@ -289,7 +289,8 @@ export default {
         totalContract: 'Full contracts',
         normalContract: 'Registered contracts',
         unregisteredContract: 'Unregistered contracts',
-        checkData: 'Look up'
+        checkData: 'Look up',
+        closeSign: "privateKey not support transfer"
     },
     rule: {
         textLong: "1 to 32 characters in length",
