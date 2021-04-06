@@ -205,6 +205,7 @@ export default {
                 })
                 return
             }
+            this.runSqlResult = ''
             var sqlContent = this.aceEditor.getValue().trim();
             var sqlType = sqlContent.split(' ')[0].toLowerCase();
 
@@ -216,7 +217,7 @@ export default {
             }
             queryCrudService(reqData)
                 .then(res => {
-                    this.aceEditor.setValue('')
+                    // this.aceEditor.setValue('')
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.runSqlResult = res.data.data;
