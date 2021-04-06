@@ -38,6 +38,10 @@ let errCode = {
         en: "No group belongs to this groupId(node not belongs to this group)",
         zh: "没有群组属于这个群组id（节点不属于这个群组）"
     },
+    "102003": {
+        en: "When webase is v1.3.2 above(inclusive),fisco-bcos node must be v2.4.1 above(inclusive)",
+        zh: "当webase为v1.3.2以上版本（含）时，fisco bcos节点必须为v2.4.1以上版本（含）"
+    },
     "101003": {
         en: "web3j instance of current group is null",
         zh: '当前群组的web3j为空'
@@ -333,7 +337,7 @@ let errCode = {
     },
     "201131": {
         en: "Group genesis conf not found",
-        zh: '未找到创世块配置文件'
+        zh: '群组配置文件不存在，无法添加该节点为共识节点'
     },
     "201132": {
         en: "Group config.ini not found",
@@ -668,8 +672,8 @@ let errCode = {
         zh: '合约名称不能重复'
     },
     "202020": {
-        en: "current organization already exist",
-        zh: '已存在本组织信息'
+        en: "deployed contract cannot be modified",
+        zh: '已部署合约不支持修改'
     },
     "202021": {
         en: "invalid organization type",
@@ -1256,8 +1260,8 @@ let errCode = {
         "zh": "application.yml中的webaseSignAddess配置错误"
     },
     "202465": {
-        "en": "Error getting docker image mode",
-        "zh": "获取镜像方式错误"
+        "en": "webaseSignAddress cannot be 127.0.0.1 or localhost in application.yml file",
+        "zh": "配置项application.yml文件中webaseSign的地址不能是127.0.0.1或localhost"
     },
     "202466": {
         "en": "Please pull the Docker image manually in host /ip/",
@@ -1398,6 +1402,40 @@ let errCode = {
         "en": "version already exists.",
         "zh": "版本已存在"
     },
+
+    "202511": {
+        "en": "Front's sdk cert and key not found!",
+        "zh": "找不到前置sdk证书和密钥！"
+    },
+    "202512": {
+        "en": "Write front's sdk cert and key fail!",
+        "zh": "写入前置的sdk证书和密钥失败！"
+    },
+    "202513": {
+        "en": "Write private key file fail!",
+        "zh": "写入密钥文件失败！"
+    },
+    "202514": {
+        "en": "Group genesis conf not found",
+        "zh": "群组配置文件不存在，无法添加该节点为共识节点"
+    },
+    "202516": {
+        "en": "app name exists ",
+        "zh": "应用名称已存在"
+    },
+    "202517": {
+        "en": "app name not exists",
+        "zh": "应用名称不存在"
+    },
+    "202518": {
+        "en": "app id not exists",
+        "zh": "应用编号不存在"
+    },
+    "202519": {
+        "en": "link format invalid",
+        "zh": "链接格式错误"
+    },
+
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'
@@ -1427,8 +1465,8 @@ let errCode = {
         zh: "PrivateKey格式错误"
     },
     "303006": {
-        en: "User of this sign user id is  already been disable",
-        zh: "此签名用户id的用户已被禁用"
+        en: "privateKey not support transfer",
+        zh: "私钥不支持传输"
     },
     "402000": {
         en: "param exception",
@@ -1475,8 +1513,8 @@ let errCode = {
         zh: "节点无法访问"
     },
     "-51103": {
-        en: "The node is not a group peer",
-        zh: "节点不是群组成员"
+        en: "The node is already set as removed",
+        zh: "节点已被设为游离节点"
     },
     "-51104": {
         en: "The node is already in the sealer list",
@@ -1484,7 +1522,7 @@ let errCode = {
     },
     "-51105": {
         en: "The node is already in the observer list",
-        zh: "节点已经在观察者列表中"
+        zh: "节点已经在观察者列表中" 
     },
     "-51200": {
         en: "Contract name and version already exist",

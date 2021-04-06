@@ -12,8 +12,14 @@
             <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
                 <el-input type="password" v-model="keyForm.password" :placeholder="$t('privateKey.placeholderPassword')"></el-input>
             </el-form-item>
+            <el-form-item :label="$t('table.fileName')" prop="radio" style="width: 546px;" v-if="keyForm.fileType==='string'">
+                <el-radio-group v-model="keyForm.radio" @change="changeJzType">
+                    <el-radio :label="16">{{$t('text.hexType')}}</el-radio>
+                    <el-radio :label="10">{{$t('text.decimalType')}}</el-radio>
+                </el-radio-group>
+            </el-form-item>
             <el-form-item :label="$t('privateKey.privateKey')" prop="privateKey" style="width: 546px;" v-if="keyForm.fileType=='string'">
-                <el-input v-model="keyForm.privateKey" :placeholder="$t('privateKey.validatorPrivateKey')"></el-input>
+                <el-input v-model="keyForm.privateKey" :placeholder="keyPlaceholderDec"></el-input>
             </el-form-item>
             <el-form-item :label="$t('privateKey.description')" prop="description" style="width: 546px;">
                 <el-input v-model="keyForm.description" :placeholder="$t('privateKey.inputDescription')"></el-input>
@@ -35,6 +41,7 @@
 <script>
 import { queryImportPrivateKey, ImportPemPrivateKey, ImportP12PrivateKey } from "@/util/api";
 let Base64 = require("js-base64").Base64;
+const Web3Utils = require('web3-utils');
 export default {
     name: 'importKey',
 
@@ -55,7 +62,8 @@ export default {
                 password: "",
                 description: "",
                 privateKey: "",
-                fileList: []
+                fileList: [],
+                radio: 16
             },
             fileTypeList: [
                 {
@@ -71,10 +79,10 @@ export default {
                     enName: '.p12',
                 }
             ],
-            fileList: []
+            fileList: [],
+            keyPlaceholderDec: ''
         }
     },
-
     computed: {
         rules() {
             var checkData = (rule, value, callback) => {
@@ -124,13 +132,16 @@ export default {
                         trigger: "blur"
                     },
                     {
-                        pattern: /([a-fA-F0-9]{1,100})$/,
-                        message: this.$t('privateKey.validatorPrivateKey1'),
+                        pattern: this.keyForm.radio==10 ? /^[1-9]\d*$/: /([a-fA-F0-9]{1,100})$/,
+                        message: this.keyForm.radio==10 ? this.$t('privateKey.validatorPrivateKey10'): this.$t('privateKey.validatorPrivateKey1'),
                         trigger: "blur"
                     }
                 ],
                 fileList: [
                     { required: true, message: this.$t('privateKey.importFileValidator'), trigger: 'change' }
+                ],
+                radio: [
+                    { required: true, message: 'Error', trigger: 'change' }
                 ]
             };
             return data
@@ -144,6 +155,11 @@ export default {
     },
 
     mounted() {
+         if (this.keyForm.radio == 16) {
+            this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey16')
+        } else {
+            this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey')
+        }
     },
 
     methods: {
@@ -153,10 +169,17 @@ export default {
                 fileType: ""
             });
             this.loading = false;
-            this.$store.state.importRivateKey = false;
+            this.$store.state.importPrivateKey = false;
         },
         onBeforeUpload() {
 
+        },
+        changeJzType(val) {
+            if (val == 16) {
+                this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey16')
+            } else {
+                this.keyPlaceholderDec = this.$t('privateKey.validatorPrivateKey')
+            }
         },
         changeFileType() {
             if (this.$refs.upload) this.$refs.upload.clearFiles();
@@ -182,7 +205,11 @@ export default {
                     if (this.keyForm.fileType == "string") {
                         var reg = /^0x+/i;
                         var privateKey = this.keyForm.privateKey.replace(reg, "");
-                        this.textRivateKey(privateKey)
+                        if (this.keyForm.radio == 10) {
+                            privateKey = Web3Utils.toHex(privateKey).split('0x')[1]
+
+                        }
+                        this.textPrivateKey(privateKey)
                     } else {
                         var reader = new FileReader(), self = this;
                         reader.readAsText(param.file, "UTF-8");
@@ -192,17 +219,17 @@ export default {
                                 case '.txt':
                                     try {
                                         var fileString = JSON.parse(fileContent).privateKey;
-                                        self.textRivateKey(fileString)
+                                        self.textPrivateKey(fileString)
                                     } catch (error) {
                                         console.log(error)
                                     }
                                     break;
                                 case '.pem':
 
-                                    self.pemRivateKey(fileContent)
+                                    self.pemPrivateKey(fileContent)
                                     break;
                                 case '.p12':
-                                    self.p12RivateKey(param.file)
+                                    self.p12PrivateKey(param.file)
                                     break;
                             }
                         }
@@ -214,7 +241,7 @@ export default {
                 }
             });
         },
-        textRivateKey(fileString) {
+        textPrivateKey(fileString) {
             let reqQuery = {
                 privateKey: Base64.encode(fileString),
                 userName: this.keyForm.fileName,
@@ -226,7 +253,7 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('importRivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.modelClose()
                         this.$message({
                             type: 'success',
@@ -242,11 +269,11 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError'),
                     });
                 });
         },
-        pemRivateKey(fileContent) {
+        pemPrivateKey(fileContent) {
             let reqQuery = {
                 pemContent: fileContent,
                 userName: this.keyForm.fileName,
@@ -258,7 +285,7 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('importRivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.$message({
                             type: 'success',
                             message: this.$t('text.importSuccessed')
@@ -274,13 +301,13 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError'),
                     });
                 });
 
 
         },
-        p12RivateKey(param) {
+        p12PrivateKey(param) {
             var form = new FormData()
             form.append('userName', this.keyForm.fileName)
             form.append('p12File', param)
@@ -292,7 +319,7 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('importRivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.$message({
                             type: 'success',
                             message: this.$t('text.importSuccessed')
@@ -308,7 +335,7 @@ export default {
                 .catch(err => {
                     this.$message({
                         type: "error",
-                        message: this.$t('text.systemError')
+                        message: err.data || this.$t('text.systemError'),
                     });
                 });
         },

@@ -14,26 +14,26 @@
  * limitations under the License.
  */
 <template>
-    <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead>
+    <div>
+        
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left" v-if="!disabled">
                     <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t('privateKey.addUser')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_rivate_key_dialog')">{{this.$t('privateKey.importRivateKey')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="$store.dispatch('switch_import_private_key_dialog')">{{this.$t('privateKey.importPrivateKey')}}</el-button>
                     <el-tooltip effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
                 </div>
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" style="width: 370px;">
+                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" clearable style="width: 370px;">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
             </div>
             <div class="search-table">
-                <el-table :data="rivateKeyList" tooltip-effect="dark" v-loading="loading">
-                    <el-table-column v-for="head in rivateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width="tdWidth[head.enName] || ''" align="center">
+                <el-table :data="privateKeyList" tooltip-effect="dark" v-loading="loading">
+                    <el-table-column v-for="head in privateKeyHead" :label="head.name" :key="head.enName" show-overflow-tooltip :width="tdWidth[head.enName] || ''" align="center">
                         <template slot-scope="scope">
                             <template v-if="head.enName!='operate'">
                                 <span v-if="head.enName ==='userStatus'" :style="{'color': statusColor(scope.row[head.enName])}">{{userStatus(scope.row[head.enName])}}</span>
@@ -54,6 +54,7 @@
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else>
+                                <el-button v-show="scope.row['hasPk'] ==1" :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
                                 <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
                                 <!-- <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="freezeThaw(scope.row)">{{freezeOrThawBtn(1)}}</el-button> -->
                             </template>
@@ -69,8 +70,11 @@
         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
-        <el-dialog :visible.sync="$store.state.importRivateKey" :title="$t('privateKey.importRivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importRivateKey' center>
-            <v-importKey @importRivateKeySuccess="importRivateKeySuccess" ref="importKey"></v-importKey>
+        <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
+            <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
+        </el-dialog>
+        <el-dialog :visible.sync="$store.state.exportRivateKey" :title="$t('system.export')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.exportRivateKey' center>
+            <export-key :exportInfo="exportInfo"></export-key>
         </el-dialog>
     </div>
 </template>
@@ -80,6 +84,7 @@
 import contentHead from "@/components/contentHead";
 import creatUser from "./components/creatUser.vue";
 import importKey from "./components/importKey.vue";
+import ExportKey from './components/exportKey.vue';
 import { getUserList, getUserDescription } from "@/util/api";
 import errcode from "@/util/errcode";
 export default {
@@ -88,6 +93,7 @@ export default {
         "v-contentHead": contentHead,
         "v-creatUser": creatUser,
         "v-importKey": importKey,
+        ExportKey
     },
     data() {
         return {
@@ -96,15 +102,16 @@ export default {
             currentPage: 1,
             pageSize: 10,
             total: 0,
-            rivateKeyList: [],
+            privateKeyList: [],
             tdWidth: {
                 publicKey: 450
             },
-            disabled: false
+            disabled: false,
+            exportInfo: {}
         };
     },
     computed: {
-        rivateKeyHead() {
+        privateKeyHead() {
             let data = [
                 {
                     enName: "userName",
@@ -138,12 +145,18 @@ export default {
             return data
         }
     },
+    created() {
+        if(this.$route.query.userParam) {
+            this.userName = this.$route.query.userParam
+        }
+    },
     mounted() {
         if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
+        console.log(localStorage.getItem("groupId"))
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserInfoData();
         }
@@ -169,7 +182,7 @@ export default {
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
-                        this.rivateKeyList = res.data.data || [];
+                        this.privateKeyList = res.data.data || [];
                         this.total = res.data.totalCount;
                     } else {
                         this.$message({
@@ -205,7 +218,7 @@ export default {
         creatUserClose() {
             this.getUserInfoData();
         },
-        importRivateKeySuccess() {
+        importPrivateKeySuccess() {
             this.getUserInfoData();
         },
         bindUserClose() {
@@ -218,6 +231,9 @@ export default {
             this.$prompt(this.$t("privateKey.inputDescription"), '', {
                 confirmButtonText: this.$t("text.sure"),
                 cancelButtonText: this.$t("text.cancel"),
+                inputValue: params.description,
+                inputPattern: /^.{3,64}$/,
+                inputErrorMessage: this.$t('text.textInfo')
             })
                 .then(({ value }) => {
                     this.userDescriptionInfo(value, params);
@@ -228,6 +244,10 @@ export default {
                         message: this.$t("text.cancel"),
                     });
                 });
+        },
+        exportFile(params) {
+            this.exportInfo = params
+            this.$store.dispatch('switch_export_rivate_key_dialog')
         },
         userDescriptionInfo(value, params) {
             let reqData = {

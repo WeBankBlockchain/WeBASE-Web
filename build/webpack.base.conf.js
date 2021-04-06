@@ -4,6 +4,9 @@ const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 const { VueLoaderPlugin } = require('vue-loader')
+var HappyPack = require('happypack')
+var os = require('os')
+var happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
@@ -14,7 +17,12 @@ function resolve(dir) {
 module.exports = {
     mode : 'development',
     plugins: [
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new HappyPack({
+            id: 'happy-babel-js',
+            loaders: ['babel-loader?cacheDirectory=true'],
+            threadPool: happyThreadPool
+      })
     ],
     context: path.resolve(__dirname, '../'),
     // node: {
@@ -47,8 +55,8 @@ module.exports = {
             },
             {
                 test: /\.js$/,
-                loader: 'babel-loader',
-                include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+                loader: 'happypack/loader?id=happy-babel-js',
+                include: [resolve('src'), resolve('node_modules/webpack-dev-server/client')]
             },
             {
                 test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
@@ -74,7 +82,7 @@ module.exports = {
                     name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
                 }
             }
-        ]
+        ],
     },
     node: {
         // prevent webpack from injecting useless setImmediate polyfill because Vue

@@ -35,13 +35,16 @@
                             </div>
                         </template>
 
-                        <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
+                        <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{
+                                    'color': term.path == activeRoute ? '#37eef2':'',
+                                    'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
                                     'padding-left':term.path == activeRoute ? '55px': '58px',
                                     'background-color':term.path == activeRoute ? '#1e293e': '#0c1220',}">
                             <span>{{term.name}}</span>
                         </el-menu-item>
                     </el-submenu>
-                    <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path" :style="{'border-left':item.children[0].path == activeRoute ? '3px solid #37eef2': '',
+                    <el-menu-item v-else-if="item.leaf&&item.children&&item.children.length" :index="item.children[0].path" :style="{
+                                'border-left':item.children[0].path == activeRoute ? '3px solid #37eef2': '',
                                 'padding-left':item.children[0].path == activeRoute ? '30px': '33px',
                                 'background-color':item.children[0].path == activeRoute ? '#1e293e': '#0c1220',}">
                         <i :class="item.iconCls"></i>
@@ -51,7 +54,6 @@
             </el-menu>
         </div>
 
-    </div>
     </div>
 </template>
 
@@ -66,7 +68,8 @@ export default {
         return {
             maxLog: maxLog,
             activeIndex: 0,
-            activeRoute: "",
+            // activeRoute: "",
+            active: '',
             userRole: localStorage.getItem("root"),
             routesList: [],
             versionfunegt: versionfunegt
@@ -95,6 +98,9 @@ export default {
                     case 'chainTitle':
                         item.name = this.$t('text.chainTitle')
                         break;
+                    case 'appManagement':
+                        item.name = this.$t('title.appManagement')
+                        break;
                 }
                 if (item.children) {
                     item.children.forEach((it) => {
@@ -117,12 +123,12 @@ export default {
                             case 'contractIDE':
                                 it.name = this.$t('title.contractIDE')
                                 break;
-                            case 'abiList':
-                                it.name = this.$t('title.abiList')
-                                break;
-                            case 'parseAbi':
-                                it.name = this.$t('title.parseAbi')
-                                break;
+                            // case 'abiList':
+                            //     it.name = this.$t('title.abiList')
+                            //     break;
+                            // case 'parseAbi':
+                            //     it.name = this.$t('title.parseAbi')
+                            //     break;
                             case 'contractList':
                                 it.name = this.$t('title.contractList')
                                 break;
@@ -162,6 +168,12 @@ export default {
                             case 'emailAlarmType':
                                 it.name = this.$t('title.emailAlarmType')
                                 break;
+                            // case 'externalAccount':
+                            //     it.name = this.$t('title.externalAccount')
+                            //     break;
+                            // case 'externalContract':
+                            //     it.name = this.$t('title.externalContract')
+                            //     break;
                             case 'blockEvent':
                                 it.name = this.$t('title.blockEvent')
                                 break;
@@ -179,6 +191,9 @@ export default {
                             case 'hostMgrTitle':
                                 it.name = this.$t('text.hostMgrTitle')
                                 break;
+                            case 'appManagement':
+                                it.name = this.$t('title.appManagement')
+                                break;
                         }
                     })
                 }
@@ -191,13 +206,28 @@ export default {
             } else {
                 return false;
             }
+        },
+        activeRoute() {
+            return this.active ? this.active : this.$route.path
         }
     },
     watch: {
-        // $route(to, from) {
-        //     console.log(to);
-        //     console.log(from);
-        // },
+        $route(to, from) {
+            console.log()
+            if (this.$route.path !== to.path && to.path !== "/node/node" && to.path !== "/node/chain") {
+                this.active = this.$route.path
+            } else if (to.path === "/node/node" || to.path === "/node/chain") {
+                this.active = '/front'
+            } else {
+                this.active = this.$route.path
+            }
+            if (this.$route.path === '/hostDetail') {
+                this.active = '/front'
+            }
+            if (this.$route.path === '/parseAbi') {
+                this.active = '/contractList'
+            }
+        },
         // activeRoute(to, from) {
 
         //     // console.log(this.$route.path, to, from, this.activeRoute)
@@ -271,12 +301,12 @@ export default {
                             if (it.nameKey == 'contractList') {
                                 it.menuShow = true;
                             }
-                            if (it.nameKey == 'abiList') {
-                                it.menuShow = true;
-                            }
-                            if (it.nameKey == 'parseAbi') {
-                                it.menuShow = true;
-                            }
+                            // if (it.nameKey == 'abiList') {
+                            //     it.menuShow = true;
+                            // }
+                            // if (it.nameKey == 'parseAbi') {
+                            //     it.menuShow = true;
+                            // }
                             if (it.nameKey == 'CNSmanager') {
                                 it.menuShow = true;
                             }
@@ -343,7 +373,7 @@ export default {
         },
         select: function (index, indexPath) {
             this.activeIndex = indexPath[0];
-            this.activeRoute = index;
+            this.active = index;
         },
         handleOpen(key, keyPath) {
         },

@@ -44,11 +44,8 @@ export function loginOut() {
 //
 export function encryption() {
     return get({
-        url: `${url.ORG_LIST}/encrypt`,
-        method: 'get',
-        // headers: {
-        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        // }
+        url: `${url.ORG_LIST}/config/encrypt`,
+        method: 'get'
     })
 }
 //init change passWord
@@ -308,6 +305,42 @@ export function ImportP12PrivateKey(data) {
             'Content-Type': "multipart/form-data"
         }
 
+    })
+}
+//export pem privateKey 
+export function exportPemPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/exportPem`,
+        method: 'post',
+        data: data,
+        responseType: 'blob/application/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+//export p12 privateKey
+export function exportP12PrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/exportP12`,
+        method: 'post',
+        data: data,
+        responseType: 'blob',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+// /user/export / { userId }
+//export tex privateKey
+export function exportTxtPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/export/${data}`,
+        method: 'post',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
     })
 }
 /**Modify user description */
@@ -592,6 +625,19 @@ export function nodesHealth(data, list) {
         }
     })
 }
+
+export function fetchNodeMonitor(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/stat`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 
 export function addFront(data) {
     return get({
@@ -1276,7 +1322,7 @@ export function getDeployType() {
 //获取链版本
 export function getVersion() {
     return get({
-        url: `${url.ORG_LIST}/version`,
+        url: `${url.ORG_LIST}/config/version`,
         method: "get",
         responseType: "text",
         headers: {
@@ -1905,3 +1951,162 @@ export function restartNode(data) {
     })
 }
 
+
+/**
+ * 链上用户
+ * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
+ */
+export function externalAccountList(data) {
+    const params = reviseParam(data, {});
+    return post({
+        url: `${url.ORG_LIST}/external/account/list/${params.str}`,
+        method: 'get',
+       headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+// 导出cert sdk
+export function exportCertSdk(frontId) {
+    return get({
+        url: `${url.ORG_LIST}/cert/sdk/zip/${frontId}`,
+        method: 'get',
+        responseType: 'blob',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+/**
+ * 链上合约的数据
+ * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
+ */
+export function externalContractList(data) {
+    const params = reviseParam(data, {});
+    return post({
+        url: `${url.ORG_LIST}/external/contract/list/${params.str}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+
+/**
+ * @method  保存应用
+ */
+export function fetchSaveApp(data) {
+    return post({
+        url: `${url.ORG_LIST}/app/save`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+/**
+
+ * 链上所有合约abi
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllAbiList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/abi/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+/**
+ * @method  删除应用
+ */
+export function fetchDeleteApp(id) {
+    return deleted({
+        url: `${url.ORG_LIST}/app/${id}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+/**
+ * @method  应用列表
+ */
+export function fetchAppList(data) {
+    return get({
+        url: `${url.ORG_LIST}/app/list`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+/**
+ * 链上所有合约地址
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllContractList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/external/contract/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+/**
+ * @method  获取服务信息
+ */
+export function fetchAppServerInfo(data) {
+    return get({
+        url: `${url.ORG_LIST}/config/ipPort`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+/**
+ * 链上所有用户地址
+ * @params {*} {groupId} 、{pageNumber}、 {pageSize} ？ account
+ */
+export function getAllUserList(data,list) {
+    const params = reviseParam(data, list);
+    return post({
+        url: `${url.ORG_LIST}/external/account/list/all/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+      AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+  }
+})
+}
+/**
+ * @method  查询已部署合约是否支持修改
+ */
+export function fetchIsDeployedModifyEnable() {
+    return get({
+        url: `${url.ORG_LIST}/config/isDeployedModifyEnable`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}

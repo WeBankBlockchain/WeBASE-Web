@@ -19,9 +19,20 @@
         <div class="module-wrapper" style="position: relative;">
             <div class="search-part">
                 <div class="search-part-left">
-                    <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
+                    <!-- <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
-                    </el-tooltip>
+                    </el-tooltip> -->
+                    <!-- <el-radio-group v-model="type" @change="changeUserList">
+                        <el-radio :label="item.value" :key='item.value' v-for="item in userOptions">{{item.name}}</el-radio>
+                    </el-radio-group> -->
+                    <!-- <el-select :placeholder="'切换选择不同类型的用户'" v-model="type"  @change="changeUserList">
+                        <el-option
+                        v-for="item in userOptions"
+                        :key="item.value"
+                        :label="item.name"
+                        :value="item.value">
+                        </el-option>
+                    </el-select> -->
                 </div>
 
                 <div class="search-part-right">
@@ -54,39 +65,69 @@
                             <span>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
+                    <el-table-column  :label="$t('nodes.operation')" width="200">
+                        <template slot-scope="scope">
+                            <el-button v-if="!(disabled || scope.row.userId > 0)"   @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
+                            <el-button v-if="disabled || scope.row.userId > 0"  @click="routeLink(scope.row)" type="text">{{$t("text.checkData")}}</el-button>
+                        </template>
+                    </el-table-column>
                 </el-table>
                 <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
             </div>
         </div>
-
+        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser" :address='address'></v-creatUser>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-import { unusualUserList } from "@/util/api";
+import { unusualUserList, getAllUserList } from "@/util/api";
 import contentHead from "@/components/contentHead";
 import transactionDetail from "@/components/transactionDetail";
+import creatUser from "../privateKeyManagement/components/creatUser.vue";
 export default {
     name: "unusualUser",
     components: {
         contentHead,
-        transactionDetail
+        transactionDetail,
+        "v-creatUser": creatUser,
     },
     data() {
         return {
+            disabled: false,
             loading: false,
             noticeVisibility: false,
             currentPage: 1,
             pageSize: 10,
             total: 0,
             userName: '',
-            unusualUserList: []
+            unusualUserList: [],
+            userOptions: [
+                {
+                    name: this.$t('text.totalUser'),
+                    value: 1
+                },
+                {
+                    name: this.$t('text.normalUser'),
+                    value: 2
+                },
+                {
+                    name: this.$t('text.unregisteredUser'),
+                    value: 3
+                }
+            ],
+            type: 1
         };
     },
     computed: {
         unusualUserHead() {
             let data = [
+                {
+                    enName: "address",
+                    name: this.$t('privateKey.userAddress')
+                },
                 {
                     enName: "userName",
                     name: this.$t('privateKey.userName')
@@ -96,7 +137,7 @@ export default {
                     name: this.$t('home.chartTransactions')
                 },
                 {
-                    enName: "time",
+                    enName: "modifyTime",
                     name: this.$t('transaction.transactionTime')
                 },
                 {
@@ -110,11 +151,14 @@ export default {
             var arr = this.unusualUserList,
                 list = [];
             arr.forEach(item => {
-                item.hashs = item["hashs"].split(",");
+                if (item.hashs) {
+                    item.hashs = item["hashs"].split(",");
+                }
             });
             arr.forEach(item => {
                 let hashArr = [];
-                for (let i = 0; i < item.hashs.length; i++) {
+                if (item.hashs) {
+                    for (let i = 0; i < item.hashs.length; i++) {
                     let obj = {};
                     if (i === 0) {
                         obj.hash = item.hashs[i];
@@ -126,16 +170,27 @@ export default {
                     hashArr.push(obj);
                 }
                 item.hashs = hashArr;
+                }
             });
             return arr;
         }
     },
     mounted() {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+            this.disabled = false
+        } else {
+            this.disabled = true
+        }
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualUserList();
         }
     },
     methods: {
+        changeUserList(val) {
+            console.log(val)
+            this.type = val
+            this.getUnusualUserList()
+        },
         changGroup() {
             this.getUnusualUserList()
         },
@@ -152,9 +207,9 @@ export default {
             },
                 reqQuery = {};
             reqQuery = {
-                userName: this.userName
+                type: 3
             };
-            unusualUserList(reqData, reqQuery)
+            getAllUserList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
                         this.unusualUserList = res.data.data;
@@ -201,6 +256,24 @@ export default {
         },
         clearText: function () {
             this.getUnusualUserList()
+        },
+        importData(val) {
+            this.address = val.address;
+            this.$store.dispatch('switch_creat_user_dialog')
+        },
+        creatUserClose () {
+            this.getUnusualUserList();
+        },
+        bindUserClose () {
+            this.getUnusualUserList();
+        },
+        routeLink(val) {
+            this.$router.push({
+                path: '/privateKeyManagement',
+                query: {
+                    userParam: val.address
+                }
+            })
         }
     }
 };

@@ -53,7 +53,7 @@
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
                         <i :class="item.folderIcon" @contextmenu.prevent="handle($event,item)" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
                         <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
-                        <span @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
+                        <span :title="item.contractName" @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
                                 <li class="contract-menu-handle-list" @click="addFiles(item)">{{$t('contracts.createFile')}}</li>
@@ -135,7 +135,7 @@ export default {
         Bus.$off("compile")
         Bus.$off("deploy")
         Bus.$off("open")
-        Bus.$off("save")
+        Bus.$off("save");
     },
     mounted: function () {
         if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
@@ -1215,6 +1215,9 @@ export default {
 .contract-folder {
     position: relative;
     padding-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .contract-folder i {
     cursor: pointer;
@@ -1233,6 +1236,7 @@ export default {
     top: 0;
     opacity: 0;
     z-index: 999;
+    font-size: 0;
     cursor: pointer;
 }
 .colorActive {

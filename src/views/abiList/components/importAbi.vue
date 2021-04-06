@@ -30,6 +30,10 @@ export default {
     },
 
     props: {
+        address: {
+            type: String,
+            default: null
+        }
     },
 
     data() {
@@ -97,6 +101,9 @@ export default {
     },
 
     mounted() {
+        if (this.address) {
+            this.abiForm.contractAddress = this.address
+        }
     },
 
     methods: {

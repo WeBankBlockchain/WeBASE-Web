@@ -11,6 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// var ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
 
 const env = config.build.env
 
@@ -67,6 +68,20 @@ const webpackConfig = merge(baseWebpackConfig, {
             sourceMap: config.build.productionSourceMap,
             parallel: true,
         }),
+        // new ParallelUglifyPlugin({
+        //     cacheDir: '.cache/',
+        //     uglifyJS:{
+        //         output: {
+        //           comments: false
+        //         },
+        //         warnings: false,
+        //         compress: {
+        //           drop_debugger: true,
+        //           drop_console: true
+        //         }
+        //       },
+        //     sourceMap: config.build.productionSourceMap
+        //   }),
         // extract css into its own file
         // new ExtractTextPlugin({
         //     filename: utils.assetsPath('css/[name].[contenthash].css'),
@@ -145,7 +160,7 @@ const webpackConfig = merge(baseWebpackConfig, {
                 to: config.build.assetsSubDirectory,
                 ignore: ['.*']
             }
-        ])
+        ]),
     ]
 })
 
@@ -162,6 +177,7 @@ if (config.build.productionGzip) {
                 ')$'
             ),
             threshold: 10240,
+            // deleteOriginalAssets:true, //删除源文件，不建议
             minRatio: 0.8
         })
     )

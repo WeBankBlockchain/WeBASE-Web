@@ -50,9 +50,9 @@
         <div class="module-wrapper">
             <div class="search-table" v-if="eventList.length > 0" style="padding-bottom: 13px;">
                 <el-table :data="eventList" tooltip-effect="dark" v-loading="loading">
-                    <el-table-column prop="blockNumber" :label="$t('table.blockHeight')" show-overflow-tooltip width="120" align="center">
+                    <el-table-column prop="log" :label="$t('table.blockHeight')" show-overflow-tooltip width="120" align="center">
                         <template slot-scope="scope">
-                            <span @click="link(scope.row.blockNumber)" class="link">{{scope.row.blockNumber}}</span>
+                            <span @click="link(scope.row.log.blockNumber)" class="link">{{scope.row.log.blockNumber}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column prop="eventVal" :label="$t('table.eventValue')" show-overflow-tooltip align="center"></el-table-column>
@@ -211,7 +211,7 @@ export default {
                         var param = [], label = [];
                         item.inputs.forEach(it => {
                             param.push(`${it.type}`)
-                            label.push(this.labelParam(it))
+                            label.push(this.labelParam(it).replace(/(^\s*)|(\s*$)/g, ""))
                         })
                         options.push({
                             label: `${item.name}(${label.join(',')})`,
@@ -314,6 +314,15 @@ export default {
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    let indexedArr = [];
+                    this.inputList.forEach(item => {
+                        if (item.msgObj) {
+                            indexedArr.push(item.msgObj.is)
+                        }
+                    })
+                    if (indexedArr.includes(false)) {
+                        return
+                    }
                     this.queryAdd()
                 } else {
                     return false;
@@ -369,11 +378,13 @@ export default {
                             return
                         }
                         eventList.forEach(item => {
-                            newEventList.push(item.log)
+                            newEventList.push(item)
                         })
-                        newEventList.forEach(item => {
-                            item.eventVal = this.decodeEvent(item)
-                        })
+                        if (newEventList && newEventList.length) {
+                            newEventList.forEach(item => {
+                                item.eventVal = this.decodeEvent(item.log, item.data)
+                            })
+                        }
                         this.eventList = newEventList;
                     } else {
                         this.$message({
@@ -441,7 +452,7 @@ export default {
             }
 
         },
-        decodeEvent(paramVal) {
+        decodeEvent(paramVal, dataList) {
             let Web3EthAbi = require('web3-eth-abi');
             let contractAbi = JSON.parse(this.contractEventForm.contractAbi)
             let inputs = []
@@ -459,7 +470,7 @@ export default {
             inputs.forEach(input => {
                 eventFun.push(`${input.data}`)
             })
-            return `${this.contractEventForm.eventName.replace(/[(][^）]+[\))]/g, '')} (${eventFun.join()})`
+            return `${this.contractEventForm.eventName.replace(/[(][^）]+[\))]/g, '')} (${dataList.join()})`
         },
         copyKey(val) {
             if (!val) {
@@ -512,6 +523,7 @@ export default {
             cb(results);
         },
         selectAddress(item) {
+            this.inputList = []
             let queryParam = {
                 groupId: this.groupId,
                 type: item.type,
