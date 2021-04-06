@@ -5,7 +5,7 @@
                 <i class="el-icon-copy-document"></i>
             </span>
         </div> -->
-        <p style="color: #F56C6C;padding-bottom: 5px">IP供参考，可以具体应用处修改。</p>
+        <p style="color: #F56C6C;padding-bottom: 5px">{{$t('text.appInfo1')}}</p>
         <div class="register-item">
             <span class="item-key">IP：</span>
             <span>{{registerDialogInfo.ip}}</span>
@@ -22,6 +22,7 @@
             <span class="item-key">appSecret：</span>
             <span>{{registerDialogInfo.appSecret}}</span>
         </div>
+        <p style="color: #F56C6C;padding-bottom: 5px">{{$t('text.appInfo2')}}</p>
         <div class="dialog-footer">
             <el-button type="primary" @click="copyInfo">{{this.$t('text.copyInfo')}}</el-button>
         </div>

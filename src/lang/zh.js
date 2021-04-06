@@ -289,7 +289,11 @@ export default {
         totalContract: '全量合约',
         normalContract: '已登记合约',
         unregisteredContract: '未登记合约',
-        checkData: '查看'
+        checkData: '查看',
+        textInfo: '描述长度在3到64位',
+        appInfo1: 'IP供参考，可以具体应用处修改。',
+        appInfo2: '请点击“应用文档”参考进行注册应用操作。',
+        versionError: 'Solc版本加载失败，请检查/static/js目录中是否存在对应的合约版本'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",

@@ -190,6 +190,14 @@ export default {
                     cmd: "loadVersion",
                     data: this.versionData.url
                 });
+                w.addEventListener("error", function (ev) {
+                    that.$message({
+                        type: "error",
+                        message: this.$t('text.versionError')
+                    });
+                    that.loading = false
+                    console.log(ev)
+                })
             } else {
                 var head = document.head;
                 var script = document.createElement("script");

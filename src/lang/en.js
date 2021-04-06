@@ -289,7 +289,11 @@ export default {
         totalContract: 'Full contracts',
         normalContract: 'Registered contracts',
         unregisteredContract: 'Unregistered contracts',
-        checkData: 'Look up'
+        checkData: 'Look up',
+        textInfo: 'The description length is 3 to 64 bits',
+        appInfo1: 'IP is for reference, and can be modified in specific application.',
+        appInfo2: 'Please click the "Application document" reference to register the application.',
+        versionError: 'The Solc version failed to load. Please check whether the corresponding contract version exists in the "/static/js" directory'
     },
     rule: {
         textLong: "1 to 32 characters in length",

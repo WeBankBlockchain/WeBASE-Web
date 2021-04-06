@@ -231,7 +231,9 @@ export default {
             this.$prompt(this.$t("privateKey.inputDescription"), '', {
                 confirmButtonText: this.$t("text.sure"),
                 cancelButtonText: this.$t("text.cancel"),
-                inputValue: params.description
+                inputValue: params.description,
+                inputPattern: /^.{3,64}$/,
+                inputErrorMessage: this.$t('text.textInfo')
             })
                 .then(({ value }) => {
                     this.userDescriptionInfo(value, params);
