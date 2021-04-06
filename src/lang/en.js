@@ -290,6 +290,7 @@ export default {
         normalContract: 'Registered contracts',
         unregisteredContract: 'Unregistered contracts',
         checkData: 'Look up',
+        closeSign: "privateKey not support transfer",
         textInfo: 'The description length is 3 to 64 bits',
         appInfo1: 'IP is for reference, and can be modified in specific application.',
         appInfo2: 'Please click the "Application document" reference to register the application.',

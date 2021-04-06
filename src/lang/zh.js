@@ -290,6 +290,7 @@ export default {
         normalContract: '已登记合约',
         unregisteredContract: '未登记合约',
         checkData: '查看',
+        closeSign:"私钥不允许传输",
         textInfo: '描述长度在3到64位',
         appInfo1: 'IP供参考，可以具体应用处修改。',
         appInfo2: '请点击“应用文档”参考进行注册应用操作。',
