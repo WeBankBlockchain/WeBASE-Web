@@ -617,8 +617,17 @@ export default {
         },
         compileLowVersion: function () {
             // this.loading = true;
-            let wrapper = require("solc/wrapper");
-            let solc = wrapper(window.Module);
+            try {
+                let wrapper = require("solc/wrapper");
+                let solc = wrapper(window.Module);
+            } catch (error) {
+                console.log(error);
+                this.$message({
+                    type: 'error',
+                    message: this.$t('text.versionError'),
+                    duration: 3000
+                })
+            }
             this.refreshMessage();
             for (let i = 0; i < constant.COMPILE_INFO.length; i++) {
                 this.compileinfo = this.compileinfo + constant.COMPILE_INFO[i];
