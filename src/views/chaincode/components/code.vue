@@ -619,7 +619,7 @@ export default {
             // this.loading = true;
             try {
                 let wrapper = require("solc/wrapper");
-                let solc = wrapper(window.Module);
+                var solc = wrapper(window.Module);
             } catch (error) {
                 console.log(error);
                 this.$message({
