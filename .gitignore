@@ -12,3 +12,4 @@ package-lock.json
 *.njsproj
 *.sln
 v0.*.js
+v0.*.js.gz

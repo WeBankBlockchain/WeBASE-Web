@@ -598,16 +598,20 @@ export default {
 </script>
 <style scoped>
 .node-bg {
-    background: linear-gradient(102.87deg, #4ccbf3 0%, #94eefb 100%);
+    /* background: linear-gradient(102.87deg, #4ccbf3 0%, #94eefb 100%); */
+    background-color: #73baf6;
 }
 .contract-bg {
-    background: linear-gradient(102.87deg, #4886ff 0%, #62b0f8 100%);
+    /* background: linear-gradient(102.87deg, #4886ff 0%, #62b0f8 100%); */
+    background-color: #6CC8E6;
 }
 .block-bg {
-    background: linear-gradient(102.87deg, #7280ff 0%, #98afff 100%);
+    /* background: linear-gradient(102.87deg, #7280ff 0%, #98afff 100%); */
+    background-color: #ECAC7B;
 }
 .transation-bg {
-    background: linear-gradient(102.87deg, #ff9472 0%, #ffc1ad 100%);
+    /* background: linear-gradient(102.87deg, #ff9472 0%, #ffc1ad 100%); */
+    background-color: #8AAEFD;
 }
 .over-view-wrapper {
     background: #f7f7f7;
@@ -782,7 +786,7 @@ export default {
     height: 120px;
     padding: 28px 16px;
     margin: 8px 15px 16px 0;
-    background-color: #fff;
+    /* background-color: #fff; */
     box-shadow: 0 4px 12px 0 #dfe2e9;
     border-radius: 2px;
     box-sizing: border-box;
