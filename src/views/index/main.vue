@@ -70,8 +70,8 @@ export default {
         return {
             guideShow: false,
             frontShow: false,
-            menuShow: true,
-            menuHide: false,
+            menuShow: false,
+            menuHide: true,
             loading: false,
             accountStatus: 0,
             account: localStorage.getItem("user"),
