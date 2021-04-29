@@ -53,6 +53,7 @@ const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
 const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
 // const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 const appManagement = resolve => require(['@/views/appManagement'], resolve); 
+const toolsContract = resolve => require(['@/views/toolsContract'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -135,13 +136,13 @@ const routes = [
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
-            // { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', enName: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
+            { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', enName: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
             // { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: false, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
-            // { path: '/onlineTools', component: onlineTools, name: '在线工具', nameKey: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
+            { path: '/toolsContract', component: toolsContract, name: '工具合约', nameKey: 'toolsContract', menuShow: false, meta: { requireAuth: false } }, 
         ]
     },
     {

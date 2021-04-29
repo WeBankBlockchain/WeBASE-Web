@@ -3,7 +3,7 @@
         <content-head :headTitle="$t('title.contractWarehouse')"></content-head>
         <div class="module-wrapper" style="padding: 20px;" v-loading="loading">
             <div class="contract-introduction">
-                <p>{{$t('text.appIntroduction')}}</p>
+                <!-- <p>{{$t('text.appIntroduction')}}</p> -->
                 <p>{{$t('text.warehouseDes')}}</p>
             </div>
 
@@ -12,7 +12,7 @@
                     <el-col :span="12" v-for="(item, index) in wareHouseList" :key="index">
                         <li class="item-warehouse">
                             <div class="left-warehouse">
-                                <svg-icon :icon-class='item.iconName' class="font-120" style=""></svg-icon>
+                                <svg-icon :icon-class='item.warehouseIcon' class="font-120" style=""></svg-icon>
                                 <!-- <el-image style="width: 120px; height: 120px" :src="item.storeIcon">
                                     <div slot="error" class="image-slot">
                                         <i class="el-icon-picture-outline"></i>
@@ -21,15 +21,15 @@
                             </div>
                             <div class="right-warehouse">
                                 <div class="right-warehouse-item">
-                                    <p v-if="language=='zh'">{{item.storeName}}</p>
-                                    <p v-else>{{item.storeName_en}}</p>
+                                    <p v-if="language=='zh'">{{item.warehouseName}}</p>
+                                    <p v-else>{{item.warehouseNameEn}}</p>
                                 </div>
                                 <div class="right-warehouse-item">
-                                    <p v-if="language=='zh'">{{item.storeDesc}}</p>
-                                    <p v-else>{{item.storeDetail_en}}</p>
+                                    <p v-if="language=='zh'">{{item.description}}</p>
+                                    <p v-else>{{item.descriptionEn}}</p>
                                 </div>
                                 <div class="right-warehouse-item">
-                                    <el-button type="primary" v-show="item.storeType==2" size="small" @click="exportContract(item)" class="btn-item">{{$t('contracts.exportToIde')}}</el-button>
+                                    <el-button type="primary" v-show="item.type!=1" size="small" @click="exportContract(item)" class="btn-item">{{$t('contracts.exportToIde')}}</el-button>
                                     <el-button type="primary" size="small" @click="toDetail(item)">{{$t('text.previewAndDescription')}}</el-button>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                     </el-col>
                 </el-row>
             </div>
-            <!-- <folder v-if='folderVisible' :folderItem="folderItem" :folderVisible="folderVisible" @close="close" @success="success($event)"></folder> -->
+            <folder v-if='folderVisible' :folderItem="folderItem" :folderVisible="folderVisible" @close="close" @success="success($event)"></folder>
         </div>
     </div>
 </template>
@@ -51,13 +51,13 @@
 import contentHead from "@/components/contentHead";
 import Bus from "@/bus"
 import { getContractStore, getContractItemByFolderId, batchSaveContract } from "@/util/api"
-// import Folder from "@/components/Folder";
+import Folder from "@/components/Folder";
 export default {
     name: 'contractWarehouse',
 
     components: {
         contentHead,
-        // Folder
+        Folder
     },
 
     props: {
@@ -104,9 +104,9 @@ export default {
                         var iconList = ["tools", "supply"];
                         list.forEach((item, index) => {
                             if (index === 0) {
-                                item.iconName = iconList[index]
+                                item.warehouseIcon = iconList[index]
                             } else {
-                                item.iconName = iconList[1]
+                                item.warehouseIcon = iconList[1]
                             }
                         });
                         this.wareHouseList = list;
@@ -125,13 +125,13 @@ export default {
             console.log(item);
         },
         toDetail(val) {
-            let warehouseType = val.storeType;
+            let warehouseType = val.type;
             this.$router.push({
                 path: '/toolsContract',
                 query: {
-                    storeId: val.storeId,
-                    storeType: val.storeType,
-                    storeName: val.storeName
+                    storeId: val.id,
+                    storeType: val.type,
+                    storeName: val.warehouseName
                 }
             })
 
@@ -145,7 +145,7 @@ export default {
             this.queryContract()
         },
         queryContract() {
-            getContractItemByFolderId(this.folderItem.storeId)
+            getContractItemByFolderId(this.folderItem.id)
                 .then(res => {
                     if (res.data.code === 0) {
                         var folderContract = res.data.data;
@@ -163,13 +163,14 @@ export default {
             let contractItems = folderContract.map(item => {
                 return {
                     contractName: item.contractName,
-                    contractSource: item.contractSrc
+                    contractSource: item.contractSource
                 }
             })
             let param = {
                 contractItems: contractItems,
                 contractPath: this.folderName,
-                groupId: localStorage.getItem("groupId")
+                groupId: localStorage.getItem("groupId"),
+                account: localStorage.getItem("user")
             }
             console.log(param);
             batchSaveContract(param)

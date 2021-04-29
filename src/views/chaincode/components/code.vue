@@ -39,6 +39,10 @@
                     <i class="wbs-icon-send font-16"></i>
                     <span>{{this.$t("text.send")}}</span>
                 </span>
+                <span class="contract-code-done" @click="exportJava">
+                    <i class="el-icon-download contract-icon-style font-16"></i>
+                    <span>导出java项目</span>
+                </span>
             </span>
         </div>
         <div class="contract-code-content" :class="{infoHide: !successHide}">
@@ -126,7 +130,7 @@
         <el-dialog v-dialogDrag :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version' :address='uploadAddress'></v-transaction>
         </el-dialog>
-        <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="450px" v-if="dialogUser" center class="send-dialog">
+        <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="550px" v-if="dialogUser" center class="send-dialog">
             <v-user @change="deployContract(arguments)" @close="userClose" :abi='abiFile' :contractName="contractName"></v-user>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
@@ -705,6 +709,10 @@ export default {
                 this.compileShow = true;
                 this.loading = false;
             }
+        },
+        // 导出java项目
+        exportJava() {
+            this.$store.dispatch('set_exportProject_show_action',true)
         },
         refreshMessage: function () {
             this.abiFileShow = false;
