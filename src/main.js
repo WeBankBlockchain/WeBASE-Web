@@ -42,6 +42,7 @@ import './svgIcons'
 import ace from 'ace-builds'
 import { chooseLang } from "./util/errcode.js";
 import mavonEditor from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 Vue.config.productionTip = false;
 axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';

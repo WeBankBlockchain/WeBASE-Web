@@ -440,7 +440,7 @@ export default {
     bottom: 10px;
 }
 .contract-info >>> .markdown-body {
-    /* color: #9da2ab; */
+    color: #333;
 }
 .contract-info >>> .v-note-wrapper {
     border: inherit

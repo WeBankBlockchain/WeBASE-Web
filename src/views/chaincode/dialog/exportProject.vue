@@ -9,20 +9,20 @@
               <el-form-item :label="$t('text.projectGroupName')" prop="artifactName">
                   <el-input v-model="projectFrom.group" style="width: 300px"></el-input>
               </el-form-item>
-              <el-form-item :label="$t('text.projectUser')">
-                  <el-select v-model="projectFrom.userAddress" multiple :placeholder="$t('text.select')" style="width: 300px">
-                      <el-option v-for="item in userList" :key="item.address" :label="item.userName" :value="item.address">
-                      </el-option>
-                  </el-select>
-              </el-form-item>
               <el-form-item :label="$t('text.projectFront')" prop="frontId">
                   <el-select v-model="projectFrom.frontId"  :placeholder="$t('text.select')" style="width: 300px">
-                      <el-option v-for="item in frontList" :key="item.frontId" :label="item.frontId" :value="item.frontId">
+                      <el-option v-for="item in frontList" :key="item.frontId" :label="item.nodeId" :value="item.frontId">
                       </el-option>
                   </el-select>
               </el-form-item>
               <el-form-item label="channelIp" prop="channelIp">
                 <el-input v-model="projectFrom.channelIp" style="width: 300px"></el-input>
+              </el-form-item>
+              <el-form-item :label="$t('text.projectUser')">
+                  <el-select v-model="projectFrom.userAddress" multiple :placeholder="$t('text.select')" style="width: 300px">
+                      <el-option v-for="item in userList" :key="item.address" :label="item.userName" :value="item.address">
+                      </el-option>
+                  </el-select>
               </el-form-item>
               <!-- <el-form-item :label="'p12密码'" prop="p12Password">
                   <el-input v-model="projectFrom.p12Password" style="width: 300px"></el-input>
