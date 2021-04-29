@@ -1622,7 +1622,7 @@ export function eventContractInfo(data, list) {
 // 仓库列表
 export function getContractStore() {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractStoreList`,
+        url: `${url.ORG_LIST}/warehouse/list`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1642,7 +1642,7 @@ export function getContractStoreById(storeId) {
 //
 export function getContractItemById(contractId) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractItemById/${contractId}`,
+        url: `${url.ORG_LIST}/warehouse/${contractId}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1652,7 +1652,7 @@ export function getContractItemById(contractId) {
 
 export function getContractFolderById(contractFolderId) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractFolderById/${contractFolderId}`,
+        url: `${url.ORG_LIST}/warehouse/folder/list/${contractFolderId}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1662,7 +1662,7 @@ export function getContractFolderById(contractFolderId) {
 // 通过文件ID获取文件下的合约
 export function getContractItemByFolderId(folderId) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractItemByFolderId/${folderId}`,
+        url: `${url.ORG_LIST}/warehouse/item/list/${folderId}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1672,7 +1672,7 @@ export function getContractItemByFolderId(folderId) {
 
 export function getFolderItemListByStoreId(storeId) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getFolderItemListByStoreId/${storeId}`,
+        url: `${url.ORG_LIST}/warehouse/folder/${storeId}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1695,7 +1695,7 @@ export function signHash(data) {
 
 export function batchSaveContract(data) {
     return post({
-        url: `${url.ORG_LIST}/contract/copyContracts`,
+        url: `${url.ORG_LIST}/contract/copy`,
         method: 'post',
         data: data,
         headers: {
@@ -2105,6 +2105,19 @@ export function fetchIsDeployedModifyEnable() {
     return get({
         url: `${url.ORG_LIST}/config/isDeployedModifyEnable`,
         method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+/**
+ * @method 导出合约项目
+ */
+export function exportJavaProject(data) {
+    return get({
+        url: `${url.ORG_LIST}/scaffold/export`,
+        method: 'post',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
         }

@@ -34,7 +34,8 @@ const state = {
     worker: null,
     versionData: null,
     nodeList: [],
-    exportRivateKey: false
+    exportRivateKey: false,
+    exportProjectShow: false
 }
 export default new Vuex.Store({
     state,
@@ -90,6 +91,9 @@ export default new Vuex.Store({
         },
         set_node_list(state, data) {
             state.nodeList = data
+        },
+        set_exportProject_show(state,data) {
+            state.exportProjectShow = data
         }
     },
     actions: {
@@ -131,6 +135,9 @@ export default new Vuex.Store({
         },
         set_node_list_action(context, data) {
             context.commit("set_node_list", data)
+        },
+        set_exportProject_show_action(context,data){
+            context.commit("set_exportProject_show",data)
         }
     }
 })

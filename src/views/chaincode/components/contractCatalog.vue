@@ -83,12 +83,18 @@
         <add-folder v-if="foldershow" :foldershow="foldershow" @close='folderClose' @success='folderSuccess'></add-folder>
         <add-file v-if="fileshow" :data='selectFolderData' :fileshow="fileshow" @close='fileClose' @success='fileSucccess($event)' :id='folderId'></add-file>
         <select-catalog v-if='cataLogShow' :show='cataLogShow' @success='catalogSuccess($event)' @close='catalogClose'></select-catalog>
+         <export-project 
+        v-if='$store.state.exportProjectShow' 
+        :show='$store.state.exportProjectShow'
+        :folderList='pathList'
+        @close='exportProjectShowClose'></export-project>
     </div>
 </template>
 <script>
 import addFolder from "../dialog/addFolder"
 import addFile from "../dialog/addFile"
 import selectCatalog from "../dialog/selectCatalog"
+import exportProject from "../dialog/exportProject"
 import { searchContract, saveChaincode, deleteCode, getContractPathList, deletePath } from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
@@ -103,6 +109,7 @@ export default {
         "add-folder": addFolder,
         "add-file": addFile,
         "select-catalog": selectCatalog,
+        exportProject
     },
     data: function () {
         return {
@@ -251,6 +258,10 @@ export default {
                 this.contractFolder = false;
                 this.handleModel = false;
             }
+        },
+        // 导出项目
+        exportProjectShowClose() {
+            this.$store.dispatch('set_exportProject_show_action',false)
         },
         /**
          * 重命名
