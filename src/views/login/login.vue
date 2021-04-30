@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div class="login-bg" :style="{ backgroundImage: 'url(' + bgLogin + ')' }">
+    <div class="login-bg" :style="{ backgroundImage: 'url(' + bgLogin + ')' }" v-if="vueShow">
         <div class="login-lang">
             <lang-select class="right-menu-item hover-effect"></lang-select>
         </div>
@@ -77,6 +77,7 @@ import {
     getPictureCheckCode,
     encryption,
     getDeployType,
+    getConfigList,
 } from "@/util/api";
 import url from "@/util/url";
 import router from "@/router";
@@ -109,6 +110,13 @@ export default {
             },
             authToken: null,
             encryption: "hash",
+            typeSupportIframe:2,
+            typeSupportUrls:3,
+            supportIframe: false,
+            supportUrls:[],
+            useAutoLogin: false,
+            vueShow:false,
+            routerUrl:"/main",
         };
     },
     computed: {
@@ -139,9 +147,19 @@ export default {
             return obj;
         },
     },
+    created: function(){
+        this.routerUrl = this.$route.query.router;
+        this.checkIframe().then(res => {
+            if(this.useAutoLogin){
+                this.changeCode(this.autoLogin);
+            }
+            else{
+                this.changeCode();
+            }
+        });
+    },
     mounted: function () {
         localStorage.setItem("config", 0);
-        this.changeCode();
         this.getEncryption();
         // let soljson = document.getElementById('soljson')
         // if(soljson){
@@ -167,7 +185,7 @@ export default {
                 }
             });
         },
-        changeCode: function () {
+        changeCode: function (callback) {
             this.codeUrl = "";
             this.authToken = "";
             getPictureCheckCode()
@@ -175,6 +193,9 @@ export default {
                     if (res.data.code === 0) {
                         this.codeUrl = `data:image/png;base64,${res.data.data.base64Image}`;
                         this.authToken = res.data.data.token;
+                        if(callback){
+                            callback();
+                        }
                     } else {
                         this.codeUrl = "";
                         this.authToken = "";
@@ -269,7 +290,7 @@ export default {
                 .then((res) => {
                     if (res.data.code == 0) {
                         localStorage.setItem("deployType", res.data.data);
-                        router.push("/main");
+                        router.push(this.routerUrl);
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -286,7 +307,65 @@ export default {
                     });
                 });
         },
-    },
+        autoLogin: function(){
+            this.loginForm.vercode = "8888";
+            this.loginForm.user = this.$route.query.user;
+            this.loginForm.password = this.$route.query.password;
+            this.userLogin();
+        },
+        getConfigs: async function () {
+            await getConfigList({type:this.typeSupportIframe}).then(res => {
+                if (res.data.code === 0) {
+                    this.supportIframe = res.data.data[0].configValue == 1;
+                }
+            }).catch(err => {
+                this.$message({
+                    message: err.data || this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            });
+            await getConfigList({type:this.typeSupportUrls}).then(res => {
+                if (res.data.code === 0) {
+                    this.supportUrls = res.data.data[0].configValue.split("|");
+                }
+            }).catch(err => {
+                this.$message({
+                    message: err.data || this.$t('text.systemError'),
+                    type: "error",
+                    duration: 2000
+                });
+            });
+        },
+        checkIframe: async function(){
+            await this.getConfigs().then(res =>{
+                if(self == top){
+                    this.vueShow = true;
+                    this.useAutoLogin = false;
+                }
+                else{
+                    let url = "";
+                    if(this.supportIframe){
+                        if(parent !== window){
+                            url = document.referrer;
+                        }
+                        else{
+                            url = parent.location.href;
+                        }
+                        let findUrl = this.supportUrls.find(function(item,index){
+                            return url.indexOf(item.toString()) > -1;
+                        });
+                        if(findUrl){
+                            this.useAutoLogin = true;
+                        }
+                    }
+                    else{
+                        this.vueShow = false;
+                    }
+                }
+            });
+        }
+    }
 };
 </script>
 <style>

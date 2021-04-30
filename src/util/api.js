@@ -1184,9 +1184,10 @@ export function getConfigList(data) {
         url: `${url.ORG_LIST}/config/list`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        // 免登
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
     })
 }
 
