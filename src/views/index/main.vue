@@ -16,7 +16,7 @@
 <template>
     <div class="main-wrapper">
         <div id="shade" v-if="accountStatus === '1'"></div>
-        <div id="reset-password" v-if="accountStatus === '1'">
+        <div id="reset-password" v-if="accountStatus === '1' && useAutoLogin == 'false'">
             <div class="reset-password-title">
                 {{$t('main.changePassword')}}
             </div>
@@ -82,8 +82,13 @@ export default {
                 checkPass: ""
             },
             configType: 1,
-            configShow: false
+            configShow: false,
+            useAutoLogin: false,
         };
+    },
+    created: function () {
+        console.log("来了main")
+        this.useAutoLogin = sessionStorage.getItem("useAutoLogin");
     },
     computed: {
 

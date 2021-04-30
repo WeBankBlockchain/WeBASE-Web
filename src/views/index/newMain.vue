@@ -15,8 +15,8 @@
  */
 <template>
     <div class="main-wrapper">
-        <div id="shade" v-if="accountStatus === '1'"></div>
-        <div id="reset-password" v-if="accountStatus === '1'">
+        <div id="shade" v-if="accountStatus === '1' && useAutoLogin == 'false'"></div>
+        <div id="reset-password" v-if="accountStatus === '1' && useAutoLogin == 'false'">
             <div class="reset-password-title">
                 {{$t('main.changePassword')}}
             </div>
@@ -42,8 +42,8 @@
         <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
             <router-view class="bg-f7f7f7" @versionChange='versionChange'></router-view>
         </div>
-        <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
-        <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
+        <set-front :show='frontShow' v-if='frontShow && useAutoLogin == "false"' @close='closeFront' ></set-front>
+        <v-guide :show='guideShow' v-if='guideShow && useAutoLogin == "false"' @close='closeGuide'></v-guide>
     </div>
 </template>
 
@@ -78,6 +78,7 @@ export default {
                 pass: "",
                 checkPass: ""
             },
+            useAutoLogin: false,
         };
     },
     computed: {
@@ -153,6 +154,10 @@ export default {
             }
             return data
         }
+    },
+    created: function () {
+        console.log("来了newmain")
+        this.useAutoLogin = sessionStorage.getItem("useAutoLogin");
     },
     mounted() {
         this.getRefreshFront()

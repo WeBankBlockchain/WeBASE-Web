@@ -148,7 +148,7 @@ export default {
         },
     },
     created: function(){
-        this.routerUrl = this.$route.query.router;
+        this.routerUrl = this.$route.query.router ? this.$route.query.router : this.routerUrl;
         this.checkIframe().then(res => {
             if(this.useAutoLogin){
                 this.changeCode(this.autoLogin);
@@ -241,8 +241,9 @@ export default {
                         localStorage.setItem("config", 0);
                         localStorage.setItem("nodeVersionChange", "");
                         localStorage.setItem("selectData", "");
-                        localStorage.setItem("solcName", '')
-                        localStorage.setItem("versionId", null)
+                        localStorage.setItem("solcName", '');
+                        localStorage.setItem("versionId", null);
+                        sessionStorage.setItem("useAutoLogin", this.useAutoLogin);
                         this.getConfigType();
                     } else {
                         this.changeCode();
@@ -290,6 +291,7 @@ export default {
                 .then((res) => {
                     if (res.data.code == 0) {
                         localStorage.setItem("deployType", res.data.data);
+                        console.log("this.routerUrl",this.routerUrl)
                         router.push(this.routerUrl);
                     } else {
                         this.$message({

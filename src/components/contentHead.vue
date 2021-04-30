@@ -64,7 +64,7 @@
                 </el-dropdown-menu>
             </el-dropdown>
             <span style="padding-right:10px"></span>
-            <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
+            <el-popover placement="bottom" width="0" min-width="50px" trigger="click" v-if="useAutoLogin=='false'">
                 <div class="sign-out-wrapper">
                     <span class="change-password" @click="changePassword">{{this.$t("head.changePassword")}}</span><br>
                     <span class="change-password" @click="lookVersion">{{this.$t("head.versionInfo")}}</span><br>
@@ -156,8 +156,13 @@ export default {
             abnormalList: [],
             root: localStorage.getItem('root'),
             groupVisible: false,
-            versionInfoVisible: false
+            versionInfoVisible: false,
+            useAutoLogin: false,
         };
+    },
+    created: function () {
+        this.useAutoLogin = sessionStorage.getItem("useAutoLogin");
+        console.log("useAutoLogin",this.useAutoLogin)
     },
     beforeDestroy: function () {
         Bus.$off("deleteFront")
