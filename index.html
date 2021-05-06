@@ -10,11 +10,11 @@
     <script src="./static/js/base-loading.js"></script>
     <link rel="stylesheet" type="text/css" href="./static/css/reset.css">
     <link rel="stylesheet" type="text/css" href="./static/css/base.css">
-    <style id="antiClickjack">
+    <!-- <style id="antiClickjack">
         body {
             display: none !important;
         }
-    </style>
+    </style> -->
 
 
     <style type="text/css">
@@ -53,12 +53,12 @@
     </body>
     <script src="./static/js/web3.min.js" type="text/javascript"></script>
     <script>
-        if (self == top) {
-            var antiClickjack = document.getElementById("antiClickjack");
-            antiClickjack.parentNode.removeChild(antiClickjack);
-        } else {
-            top.location = self.location;
-        }
+        // if (self == top) {
+        //     var antiClickjack = document.getElementById("antiClickjack");
+        //     antiClickjack.parentNode.removeChild(antiClickjack);
+        // } else {
+        //     top.location = self.location;
+        // }
         var userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
         var jsSrc = (navigator.language || navigator.browserLanguage).toLowerCase();
         console.log(userAgent, jsSrc)
