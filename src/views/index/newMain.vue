@@ -156,7 +156,6 @@ export default {
         }
     },
     created: function () {
-        console.log("来了newmain")
         this.useAutoLogin = sessionStorage.getItem("useAutoLogin");
     },
     mounted() {
@@ -169,7 +168,6 @@ export default {
     methods: {
         getRefreshFront() {
             refreshFront().then(res => {
-                console.log(res)
             }).catch(err => {
                 this.$message({
                     message: err.data || this.$t('text.systemError'),

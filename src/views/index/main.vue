@@ -87,7 +87,6 @@ export default {
         };
     },
     created: function () {
-        console.log("来了main")
         this.useAutoLogin = sessionStorage.getItem("useAutoLogin");
     },
     computed: {
