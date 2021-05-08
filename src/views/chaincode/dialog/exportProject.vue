@@ -1,72 +1,68 @@
 <template>
     <div>
         <el-dialog :title="$t('text.exportJavaProject')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="750px">
-          <h3 style="padding-left: 18px">项目信息</h3>
-          <el-form :model="projectFrom" :rules="rules" ref="projectFrom" label-width="116px" class="demo-ruleForm">
-              <el-form-item :label="$t('text.projectName')" prop="artifactName">
-                  <el-input v-model="projectFrom.artifactName" style="width: 300px"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('text.projectGroupName')" prop="artifactName">
-                  <el-input v-model="projectFrom.group" style="width: 300px"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('text.projectFront')" prop="frontId">
-                  <el-select v-model="projectFrom.frontId"  :placeholder="$t('text.select')" style="width: 300px">
-                      <el-option v-for="item in frontList" :key="item.frontId" :label="item.nodeId" :value="item.frontId">
-                      </el-option>
-                  </el-select>
-              </el-form-item>
-              <el-form-item label="channelIp" prop="channelIp">
-                <el-input v-model="projectFrom.channelIp" style="width: 300px"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('text.projectUser')">
-                  <el-select v-model="projectFrom.userAddress" multiple :placeholder="$t('text.select')" style="width: 300px">
-                      <el-option v-for="item in userList" :key="item.address" :label="item.userName" :value="item.address">
-                      </el-option>
-                  </el-select>
-              </el-form-item>
-              <!-- <el-form-item :label="'p12密码'" prop="p12Password">
+            <h3 style="padding-left: 18px">{{$t('text.projectTitle')}}</h3>
+            <el-form :model="projectFrom" :rules="rules" ref="projectFrom" label-width="116px" class="demo-ruleForm">
+                <el-form-item :label="$t('text.projectName')" prop="artifactName">
+                    <el-input v-model="projectFrom.artifactName" style="width: 415px"></el-input>
+                </el-form-item>
+                <el-form-item :label="$t('text.projectGroupName')" prop="group">
+                    <el-input v-model="projectFrom.group" style="width: 415px"></el-input>
+                </el-form-item>
+                <div class="channel-ip">
+                    <el-form-item :label="$t('text.projectFront')" prop="frontId">
+                        <el-select v-model="projectFrom.frontId" :placeholder="$t('text.select')" style="width: 149px">
+                            <el-option v-for="item in frontList" :key="item.frontId" :label="item.nodeId" :value="item.frontId">
+                                <span style="float: left">{{ item.nodeId | splitString6}}...</span>
+                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.frontId }}</span>
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="channelIp" prop="channelIp">
+                        <el-input v-model="projectFrom.channelIp" style="width: 149px"></el-input>
+                        <el-tooltip effect="dark" :content="$t('text.actualChannelIp')" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
+                    </el-form-item>
+                </div>
+                <el-form-item :label="$t('text.projectUser')">
+                    <el-select v-model="projectFrom.userAddress" :placeholder="$t('text.select')" style="width: 415px">
+                        <el-option v-for="item in userList" :key="item.address" :label="item.userName" :value="item.address">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <!-- <el-form-item :label="'p12密码'" prop="p12Password">
                   <el-input v-model="projectFrom.p12Password" style="width: 300px"></el-input>
               </el-form-item> -->
-          </el-form>
-          <el-divider></el-divider>
-          <h3 style="padding-left: 18px">{{$t('text.projectContract')}}</h3>
-           <p style="padding-left: 28px">{{$t('text.exportJavaProjectInfo1')}}</p>
-          <p style="padding:5px 0;color: #F56C6C;padding-left: 28px">{{$t('text.exportJavaProjectInfo2')}}</p>
-            <el-table
-            :show-header='false'
-            :data="tableData"
-            style="width: 100%;padding: 0 20px"
-            :row-key="getRowKeys"
-            :expand-row-keys="expands"
-            @expand-change="clickTable" 
-            ref="refTable"
-            >
-            <el-table-column type="expand">
-              <template slot-scope="scope">
-                <!-- <span>{{contractList}}</span> -->
-                <div class="table-content">
-                 <el-table :data="scope.row.contractList" :show-header='false'  @selection-change="handleSelectionChange" :default-sort="{prop: 'contractPath', order: 'descending'}">
-                   <el-table-column
-                    type="selection"
-                    :selectable='selectDisabled'
-                    width="55">
-                  </el-table-column>
-                   <el-table-column prop="contractName" show-overflow-tooltip :label="$t('contracts.contractName')"></el-table-column>
-                   <el-table-column prop="contractPath" :label="$t('text.compileStatus')">
-                     <template slot-scope="prop">
-                       <span v-if='prop.row.contractAbi' style="color: #67C23A">{{$t('text.compiled')}}</span>
-                       <span v-if='!prop.row.contractAbi' style="color: #F56C6C">{{$t('text.uncomplie')}}</span>
-                     </template>
-                   </el-table-column>
-                 </el-table>
-                 </div>
-                 <!-- <div v-else>暂无数据</div> -->
-              </template>
-            </el-table-column>
-            <el-table-column prop="contractPath" :label="$t('text.uncomplie')" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="modifyTime" :label="$t('nodes.modifyTime')"></el-table-column>
-          </el-table>
-          <div slot="footer" class="dialog-footer">
+            </el-form>
+            <el-divider></el-divider>
+            <h3 style="padding-left: 18px">{{$t('text.projectContract')}}</h3>
+            <p style="padding-left: 28px">{{$t('text.exportJavaProjectInfo1')}}</p>
+            <p style="padding:5px 0;color: #F56C6C;padding-left: 28px">{{$t('text.exportJavaProjectInfo2')}}</p>
+            <el-table :show-header='false' :data="tableData" style="width: 100%;padding: 0 20px" :row-key="getRowKeys" :expand-row-keys="expands" @expand-change="clickTable" ref="refTable">
+                <el-table-column type="expand">
+                    <template slot-scope="scope">
+                        <!-- <span>{{contractList}}</span> -->
+                        <div class="table-content">
+                            <el-table ref="multipleTable" :data="scope.row.contractList" :show-header='true' @selection-change="handleSelectionChange" :default-sort="{prop: 'contractPath', order: 'descending'}">
+                                <el-table-column type="selection" :selectable='selectDisabled' width="55">
+                                </el-table-column>
+                                <el-table-column prop="contractName" show-overflow-tooltip :label="$t('contracts.contractName')"></el-table-column>
+                                <el-table-column prop="contractPath" :label="$t('text.compileStatus')">
+                                    <template slot-scope="prop">
+                                        <span v-if='prop.row.contractAbi' style="color: #67C23A">{{$t('text.compiled')}}</span>
+                                        <span v-if='!prop.row.contractAbi' style="color: #F56C6C">{{$t('text.uncomplie')}}</span>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                        <!-- <div v-else>暂无数据</div> -->
+                    </template>
+                </el-table-column>
+                <el-table-column prop="contractPath" :label="$t('text.uncomplie')" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="modifyTime" :label="$t('nodes.modifyTime')"></el-table-column>
+            </el-table>
+            <div slot="footer" class="dialog-footer">
                 <el-button @click="modelClose">{{$t('text.cancel')}}</el-button>
                 <el-button type="primary" @click="submit('projectFrom')">{{$t('text.confirm')}}</el-button>
             </div>
@@ -75,19 +71,19 @@
 </template>
 
 <script>
-import { searchContract, getUserList, getFronts, exportJavaProject} from "@/util/api";
+import { searchContract, getUserList, getFronts, exportJavaProject } from "@/util/api";
 let Base64 = require("js-base64").Base64;
 export default {
     name: 'exportProject',
     props: {
-      folderList: {
-        type: Array,
-        default: []
-      },
-      show: {
-        type: Boolean,
-        default: false
-      }
+        folderList: {
+            type: Array,
+            default: []
+        },
+        show: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {
@@ -99,12 +95,12 @@ export default {
             },
             contractList: [],
             multipleSelection: [],
-            selectDisabled(row,index) {
-              if(!row.contractAbi) {
-                return false
-              }else {
-                return true
-              }
+            selectDisabled(row, index) {
+                if (!row.contractAbi) {
+                    return false
+                } else {
+                    return true
+                }
             },
             userList: [],
             frontList: [],
@@ -113,7 +109,7 @@ export default {
                 group: 'org_example',
                 userAddress: [],
                 frontId: null,
-                channelIp: '',
+                channelIp: '127.0.0.1',
             },
             rules: {
                 artifactName: [
@@ -135,7 +131,7 @@ export default {
                     },
                 ],
                 group: [
-                  {
+                    {
                         required: true,
                         message: this.$t("rule.group"),
                         trigger: "blur",
@@ -153,54 +149,63 @@ export default {
                     },
                 ],
                 frontId: [
-                  {
+                    {
                         required: true,
                         message: this.$t("rule.frontId"),
                         trigger: "blur",
                     },
                 ],
                 p12Password: [
-                  {
+                    {
                         required: true,
                         message: this.$t('privateKey.placeholderPassword'),
                         trigger: "blur"
                     },
                 ],
                 channelIp: [
-                  {
+                    {
                         required: true,
                         message: this.$t('rule.ipName'),
                         trigger: "blur",
                     },
+                    {
+                        pattern: /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/,
+                        message: this.$t("rule.IpRule"),
+                        trigger: "blur",
+                    },
                 ]
-            }
+            },
         }
     },
+    destroyed() {
+        this.$store.state.exportProjectShow = false
+    },
     mounted() {
-      this.getList();
-      this.getFrontTable()
-      this.getUserInfoData()
+        this.getList();
+        this.getFrontTable()
+        this.getUserInfoData()
+        console.log(this.$store.state.selectedContractInfo, '======');
     },
     methods: {
-      getList() {
-        this.expands = []
-        this.tableData = this.folderList.map((value) => {
-          value.contractList = []
-          return value
-        })
-        this.expands.push(this.tableData[0].contractPath)
-        this.$nextTick(() => {
-            this.getContractList(this.tableData[0])
-          })
-        // console.log(this.tableData)
-      },
-      getUserInfoData() {
+        getList() {
+            this.expands = []
+            this.tableData = this.folderList.map((value) => {
+                value.contractList = []
+                return value
+            })
+            this.expands.push(this.$store.state.selectedContracts.contractPath)
+            this.$nextTick(() => {
+                
+                this.getContractList(this.$store.state.selectedContracts)
+            })
+        },
+        getUserInfoData() {
             this.loading = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 pageNumber: 1,
                 pageSize: 500
-            }, reqQuery= {}
+            }, reqQuery = {}
             if (localStorage.getItem('root') === 'developer') {
                 reqQuery.account = localStorage.getItem("user")
             }
@@ -226,102 +231,123 @@ export default {
                     });
                 });
         },
-      modelClose() {
-        this.$emit('close')
-      },
-      clickTable: function (row, expandedRows) {
-          this.$nextTick(() => {
-            this.getContractList(row)
-          })
-      },
-      getContractList(row) {
-        const reqData = {
-          groupId: localStorage.getItem("groupId"),
-          contractPathList: [row.contractPath]
-        }
-        searchContract(reqData).then(res => {
-          if(res.data.code === 0) {
-            this.contractList = res.data.data
-            let num
-            // 调用数组方法强刷数据
-            this.tableData.forEach((value,index) => {
-              if(value.contractPath === row.contractPath) {
-                row.contractList = this.contractList
-                num = index
-              }
-            });
-            this.$set(this.tableData,num,row)
-          } else {
-            this.$message({
-              type: "error",
-              message: this.$chooseLang(res.data.code)
-            });
-          }
-        })
-        .catch(err => {
-            this.$message({
-              type: "error",
-              message: err.data || this.$t('text.systemError')
-            });
-        });
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-        console.log(val)
-      },
-      submit(formName) {
-        if (this.multipleSelection.length === 0) {
-          this.$message({
-              type: "error",
-              message: this.$t('rule.checkContract')
-            });
-        }
-        this.$refs[formName].validate((valid) => {
-            if (valid) {
-                this.export()
-            }else {
-                return false;
+        modelClose() {
+            this.$emit('close')
+        },
+
+        clickTable: function (row, expandedRows) {
+            if (expandedRows.length) {
+                this.expands = []
+                if (row) {
+                    this.expands.push(row.contractPath)
+                }
+            } else {
+                this.expands = []
             }
-        })
-      },
-      export() {
-        const idList = this.multipleSelection.map(value => {
-          return value.contractId
-        })
-        const reqData = {
-          contractIdList: idList,
-          group: this.projectFrom.group,
-          artifactName: this.projectFrom.artifactName,
-          frontId: this.projectFrom.frontId,
-          groupId: localStorage.getItem("groupId"),
-          channelIp: this.projectFrom.channelIp
-        }
-        console.log(this.projectFrom.userAddress)
-        if(this.projectFrom.userAddress) {
-          reqData.userAddressList = this.projectFrom.userAddress
-        }
-        exportJavaProject(reqData).then(res => {
-          if(res.data.code === 0) {
-            const content = Base64.toUint8Array(res.data.data.fileStreamBase64);
-            console.log(content)
-            const blob = new Blob([content],{type: `application/zip;charset=utf-8`})
-            const fileName = res.data.data.fileName
-            if ('download' in document.createElement('a')) {
-                const elink = document.createElement('a')
-                elink.download = fileName
-                elink.style.display = 'none'
-                elink.href = URL.createObjectURL(blob)
-                document.body.appendChild(elink)
-                elink.click()
-                URL.revokeObjectURL(elink.href)
-                document.body.removeChild(elink)
-                        } else {
-                            navigator.msSaveBlob(blob, fileName)
+            this.$nextTick(() => {
+                this.getContractList(row)
+            })
+        },
+        getContractList(row) {
+            const reqData = {
+                groupId: localStorage.getItem("groupId"),
+                contractPathList: [row.contractPath]
+            }
+            searchContract(reqData).then(res => {
+                if (res.data.code === 0) {
+                    this.contractList = res.data.data
+                    let num
+                    // 调用数组方法强刷数据
+                    this.tableData.forEach((value, index) => {
+                        if (value.contractPath === row.contractPath) {
+                            row.contractList = this.contractList
+                            num = index
                         }
-          }
-        })
-      },
-      getFrontTable() {
+                    });
+                    this.$set(this.tableData, num, row)
+                    var selectedContract = this.$store.state.selectedContractInfo;
+                    // delete  selectedContract.contractList
+                    // this.tableData.forEach(item=>{
+                    //     if(item.contractList.length){
+                    //         item.contractList.forEach(row=>{
+                    //         if(row.contractId == selectedContract.contractId){
+                    //             this.$refs.multipleTable.toggleRowSelection(selectedContract,true);
+                    //         }
+                    //     })
+                    //     }
+                    // })
+                    //  this.$refs.multipleTable.toggleRowSelection(selectedContract.contractList[0]);
+                
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: this.$chooseLang(res.data.code)
+                    });
+                }
+            })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError')
+                    });
+                });
+        },
+        handleSelectionChange(val) {
+
+            this.multipleSelection = val;
+            console.log(val)
+        },
+        submit(formName) {
+            if (this.multipleSelection.length === 0) {
+                this.$message({
+                    type: "error",
+                    message: this.$t('rule.checkContract')
+                });
+            }
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.export()
+                } else {
+                    return false;
+                }
+            })
+        },
+        export() {
+            const idList = this.multipleSelection.map(value => {
+                return value.contractId
+            })
+            const reqData = {
+                contractIdList: idList,
+                group: this.projectFrom.group,
+                artifactName: this.projectFrom.artifactName,
+                frontId: this.projectFrom.frontId,
+                groupId: localStorage.getItem("groupId"),
+                channelIp: this.projectFrom.channelIp
+            }
+            if (this.projectFrom.userAddress) {
+                reqData.userAddressList = [this.projectFrom.userAddress]
+            }
+            exportJavaProject(reqData).then(res => {
+                if (res.data.code === 0) {
+                    const content = Base64.toUint8Array(res.data.data.fileStreamBase64);
+                    const blob = new Blob([content], { type: `application/zip;charset=utf-8` })
+                    const fileName = res.data.data.fileName
+                    if ('download' in document.createElement('a')) {
+                        const elink = document.createElement('a')
+                        elink.download = fileName
+                        elink.style.display = 'none'
+                        elink.href = URL.createObjectURL(blob)
+                        document.body.appendChild(elink)
+                        elink.click()
+                        URL.revokeObjectURL(elink.href)
+                        document.body.removeChild(elink)
+                    } else {
+                        navigator.msSaveBlob(blob, fileName)
+                    }
+                }
+            })
+        },
+        getFrontTable() {
             getFronts({})
                 .then(res => {
                     if (res.data.code === 0) {
@@ -349,8 +375,11 @@ export default {
 </script>
 
 <style scoped>
-.table-content{
-  max-height: 270px;
-  overflow: auto;
+.table-content {
+    max-height: 270px;
+    overflow: auto;
+}
+.channel-ip {
+    display: flex;
 }
 </style>

@@ -21,6 +21,12 @@ Vue.filter('splitString', function (value) {
     return value.substring(0, 8)
 });
 /**
+ * 截取字符串前8位
+ */
+Vue.filter('splitString6', function (value) {
+    return value.substring(0, 6)
+});
+/**
  * 截取字符串前25位
  */
 Vue.filter('splitString_0_25', function (value) {

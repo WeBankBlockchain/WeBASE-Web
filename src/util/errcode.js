@@ -1244,8 +1244,8 @@ let errCode = {
         "zh": "传输文件失败"
     },
     "202461": {
-        "en": "Control container through Docker api error.",
-        "zh": "Docker 容器操作失败"
+        "en": "Host must be all localhost(127.0.0.1) or all non-localhost",
+        "zh": "主机必须全都是127.0.0.1或都不是127.0.0.1"
     },
     "202462": {
         "en": "Two nodes at least.",
@@ -1435,7 +1435,14 @@ let errCode = {
         "en": "link format invalid",
         "zh": "链接格式错误"
     },
-
+    "202531": {
+        "en": "Generate project failed in scaffold",
+        "zh": "项目Scaffold脚手架生成失败"
+    },
+    "202532": {
+        "en": "Get sdk cert/key content map failed",
+        "zh": "获取SDK证书私钥失败"
+    },
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'

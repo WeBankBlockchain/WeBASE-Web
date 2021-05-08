@@ -24,9 +24,9 @@
                     <el-form-item :label="$t('nodes.frontPort')" prop="port" style="width:330px">
                         <el-input v-model="frontFrom.port" :placeholder="$t('text.port5002')"></el-input>
                     </el-form-item>
-                    <el-form-item :label="$t('nodes.agency')" prop="company" style="width:330px">
+                    <!-- <el-form-item :label="$t('nodes.agency')" prop="company" style="width:330px">
                         <el-input v-model="frontFrom.company"></el-input>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
             </div>
             <div class="text-right sure-btn" style="margin-top:10px">
@@ -123,8 +123,7 @@ export default {
         setFront: function () {
             let reqData = {
                 frontIp: this.frontFrom.ip,
-                frontPort: this.frontFrom.port,
-                agency: this.frontFrom.company
+                frontPort: this.frontFrom.port
             }
             addFront(reqData).then(res => {
                 this.loading = false;
