@@ -35,7 +35,9 @@ const state = {
     versionData: null,
     nodeList: [],
     exportRivateKey: false,
-    exportProjectShow: false
+    exportProjectShow: false,
+    selectedContracts: {},
+    selectedContractInfo: {}
 }
 export default new Vuex.Store({
     state,
@@ -94,7 +96,13 @@ export default new Vuex.Store({
         },
         set_exportProject_show(state,data) {
             state.exportProjectShow = data
-        }
+        }, 
+        set_selected_contracts(state, data) {
+            state.selectedContracts = data
+        }, 
+        set_selected_contracts_info(state, data) {
+            state.selectedContractInfo = data
+        },
     },
     actions: {
         switch_creat_user_dialog(context) {
@@ -138,6 +146,12 @@ export default new Vuex.Store({
         },
         set_exportProject_show_action(context,data){
             context.commit("set_exportProject_show",data)
-        }
+        },
+        set_selected_contracts_action(context, data) {
+            context.commit("set_selected_contracts", data)
+        },
+        set_selected_contracts_info_action(context, data) {
+            context.commit("set_selected_contracts_info", data)
+        },
     }
 })

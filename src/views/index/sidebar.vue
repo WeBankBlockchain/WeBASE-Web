@@ -194,6 +194,9 @@ export default {
                             case 'appManagement':
                                 it.name = this.$t('title.appManagement')
                                 break;
+                            case 'contractWarehouse':
+                                it.name = this.$t('title.contractWarehouse')
+                                break;
                         }
                     })
                 }

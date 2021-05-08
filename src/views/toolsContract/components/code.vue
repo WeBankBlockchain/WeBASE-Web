@@ -43,6 +43,7 @@
 <script>
 import ace from "ace-builds";
 import "ace-builds/webpack-resolver";
+import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-tomorrow";
 import "ace-builds/src-noconflict/mode-javascript";
@@ -69,7 +70,7 @@ export default {
             contractName: "",
             infoHeight: 300,
             aceEditor: null,
-            themePath: "ace/theme/monokai",
+            themePath: "ace/theme/chrome",
             modePath: "ace/mode/solidity",
             data: null,
             codeShow: false,

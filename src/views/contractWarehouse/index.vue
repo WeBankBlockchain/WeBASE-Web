@@ -24,7 +24,7 @@
                                     <p v-if="language=='zh'">{{item.warehouseName}}</p>
                                     <p v-else>{{item.warehouseNameEn}}</p>
                                 </div>
-                                <div class="right-warehouse-item">
+                                <div class="right-warehouse-item right-warehouse-item-content">
                                     <p v-if="language=='zh'">{{item.description}}</p>
                                     <p v-else>{{item.descriptionEn}}</p>
                                 </div>
@@ -36,8 +36,13 @@
                         </li>
                     </el-col>
                     <el-col :span="12">
-                        <li class="item-warehouse-none item-warehouse">
-                            {{$t('text.developing')}}
+                        <li class="item-warehouse">
+                            <div class="left-warehouse">
+                                <svg-icon icon-class='comingSoon' class="font-120" style=""></svg-icon>
+                            </div>
+                            <div class="item-warehouse-none right-warehouse">
+                                {{$t('text.developing')}}
+                            </div>
                         </li>
                     </el-col>
                 </el-row>
@@ -50,7 +55,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import Bus from "@/bus"
-import { getContractStore, getContractItemByFolderId, batchSaveContract } from "@/util/api"
+import { getContractStore, getContractItemByFolderId, batchSaveContract, getFolderItemListByStoreId } from "@/util/api"
 import Folder from "@/components/Folder";
 export default {
     name: 'contractWarehouse',
@@ -101,12 +106,20 @@ export default {
                     this.loading = false;
                     if (res.data.code === 0) {
                         var list = res.data.data;
-                        var iconList = ["tools", "supply"];
+                        var iconList = ["tools", "supply", "points"];
                         list.forEach((item, index) => {
-                            if (index === 0) {
-                                item.warehouseIcon = iconList[index]
-                            } else {
-                                item.warehouseIcon = iconList[1]
+                            switch (item.warehouseIcon) {
+                                case "toolboxId":
+                                    item.warehouseIcon = "tools"
+                                    break;
+                                case "evidenceId":
+                                    item.warehouseIcon = "supply"
+                                    break;
+                                case "pointsId":
+                                    item.warehouseIcon = "points"
+                                    break;
+                                default:
+                                    break;
                             }
                         });
                         this.wareHouseList = list;
@@ -122,7 +135,6 @@ export default {
         exportContract(item) {
             this.folderVisible = true;
             this.folderItem = item;
-            console.log(item);
         },
         toDetail(val) {
             let warehouseType = val.type;
@@ -131,7 +143,7 @@ export default {
                 query: {
                     storeId: val.id,
                     storeType: val.type,
-                    storeName: val.warehouseName
+                    storeName: this.language != 'en'? val.warehouseName : val.warehouseNameEn
                 }
             })
 
@@ -142,10 +154,35 @@ export default {
         success(val) {
             this.folderVisible = false;
             this.folderName = val;
-            this.queryContract()
+            this.queryContractFolder()
         },
-        queryContract() {
-            getContractItemByFolderId(this.folderItem.id)
+        //通过合约仓库id 获取合约文件夹
+        queryContractFolder() {
+            let param = {
+                warehouseId: this.folderItem.id
+            }
+            getFolderItemListByStoreId(param)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        let list = res.data.data;
+                        if (list.length) {
+                            var contractFolderId = list[0]['id'];
+                            this.queryContract(contractFolderId)
+                        }
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        });
+                    }
+                })
+        },
+        //通过合约文件夹id 获取合约列表
+        queryContract(contractFolderId) {
+            let param = {
+                folderId: contractFolderId
+            }
+            getContractItemByFolderId(param)
                 .then(res => {
                     if (res.data.code === 0) {
                         var folderContract = res.data.data;
@@ -208,18 +245,25 @@ export default {
     display: flex;
     flex-direction: row;
     margin-bottom: 20px;
+    height: 125px;
+    padding: 10px;
 }
 .left-warehouse {
     margin-left: 10px;
 }
 .right-warehouse {
     margin-left: 20px;
+    padding-right: 10px;
+    padding-bottom: 10px;
 }
 .el-row {
     /* margin-bottom: 20px; */
 }
 .right-warehouse-item {
     margin-top: 10px;
+}
+.right-warehouse-item-content {
+    height: 42px;
 }
 .btn-item {
     margin-left: 0;

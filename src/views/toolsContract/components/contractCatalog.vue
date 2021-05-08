@@ -110,22 +110,25 @@ export default {
             })
         },
         queryContractFolder() {
-            getFolderItemListByStoreId(this.storeId)
+            let param = {
+                warehouseId: this.storeId
+            }
+            getFolderItemListByStoreId(param)
                 .then(res => {
                     if (res.data.code === 0) {
                         let list = res.data.data;
-                        console.log(list,res.data.data)
-                        if (list && JSON.stringify(list) !== '{}') {
-                            list.folderIcon = 'el-icon-caret-bottom';
-                            list.contractActive = false;
-                            list.folderActive = false;
-                            list.child = [];
-                            list.handleModel = false;
-                            list.handleFile = false;
-                            list.folderId = list.id
-                            this.folderList = [list];
-                            console.log(this.folderList)
-                            var contractFolderId = list;
+                        if (list.length) {
+                            list.forEach((item, index) => {
+                                item.folderIcon = index == 0 ?'el-icon-caret-bottom':'el-icon-caret-right';
+                                item.contractActive = false;
+                                item.folderActive = false;
+                                item.child = [];
+                                item.handleModel = false;
+                                item.handleFile = false;
+                                item.folderId = item.id
+                            })
+                            this.folderList = list;
+                            var contractFolderId = list[0];
                             this.open(contractFolderId)
                             this.queryContract(contractFolderId)
                         }
@@ -138,7 +141,6 @@ export default {
                 })
         },
         open(val) {
-            console.log(val)
             if (val.folderActive) {
                 this.$set(val, 'folderActive', false)
                 this.$set(val, 'folderIcon', 'el-icon-caret-right')
@@ -147,10 +149,9 @@ export default {
                 this.$set(val, 'folderIcon', 'el-icon-caret-bottom')
                 this.queryContract(val, 'open');
             }
-            this.$set(val, 'contractActive', true);
+            // this.$set(val, 'contractActive', true);
         },
         select(val) {
-            console.log(val)
             this.folderList.forEach(value => {
                 this.$set(value, 'contractActive', false)
                 value.child.forEach(item => {
@@ -164,7 +165,10 @@ export default {
             Bus.$emit('select1', val)
         },
         queryContract(val, type) {
-            getContractItemByFolderId(val.folderId)
+            let param = {
+                folderId: val.id
+            }
+            getContractItemByFolderId(param)
                 .then(res => {
                     if (res.data.code === 0) {
                         var folderContract = res.data.data;
@@ -202,7 +206,6 @@ export default {
             list.handleFile = true;
             this.clentX = e.clientX + 'px';
             this.clentY = e.clientY + 'px';
-            console.log(this.folderList);
         },
         exportToIde(item, type) {
             this.checkNull()
@@ -228,7 +231,8 @@ export default {
             let param = {
                 contractItems: contractItems,
                 contractPath: this.folderName,
-                groupId: localStorage.getItem("groupId")
+                groupId: localStorage.getItem("groupId"),
+                account: localStorage.getItem('user')
             }
             batchSaveContract(param)
                 .then(res => {
@@ -374,7 +378,7 @@ export default {
 .contract-menu-handle {
     position: fixed;
     font-size: 0;
-    width: 70px;
+    width: 84px;
     cursor: pointer;
     font-size: 12px;
     text-align: center;

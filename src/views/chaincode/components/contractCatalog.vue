@@ -972,8 +972,12 @@ export default {
          * 选中某个合约或文件夹
          */
         select: function (val, type) {
+            console.log(val, type);
+            if(!type){
+                this.$store.dispatch('set_selected_contracts_action',val);
+                this.$store.dispatch('set_selected_contracts_info_action', val);
+            }
             let num = 0;
-
             this.contractArry.forEach(value => {
                 if (val && val.contractId && value.contractId == val.contractId) {
                     this.$set(value, 'contractActive', true)

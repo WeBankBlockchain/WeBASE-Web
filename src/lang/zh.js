@@ -259,6 +259,8 @@ export default {
         creatApp: '新建应用',
         modifyApp: '修改应用',
         appLinkService: '应用链接',
+        notRegister: '未注册',
+        notAlive: '未存活',
         useTmp:'新建类型',
         process: '接入流程',
         registerDialogTitle:'查看注册信息',
@@ -301,7 +303,7 @@ export default {
         projectName: "项目名称",
         projectGroupName: '包名',
         projectUser: '用户',
-        projectFront: 'front前置',
+        projectFront: '节点',
         projectContract: '选择合约',
         compileStatus: '编译状态',
         compiled: '已编译',
@@ -310,6 +312,8 @@ export default {
         importSuccessed: '导入成功',
         exportSuccessed: '导出成功',
         updateSuccess: '成功',
+        actualChannelIp: '根据实际channelIp修改',
+        projectTitle: '项目信息'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -335,6 +339,7 @@ export default {
         contractAbi: "请输入合约ABI",
         contractLong: "长度在 1 到 32 个字符",
         contractRule: "请输入数字、字母或下划线",
+        IpRule: "请输入正确的IP",
         folderName: "请输入文件夹名称",
         folderLong: "长度在 1 到 12 个字符",
         folderRule: "请输入数字、字母或下划线",
@@ -982,6 +987,7 @@ export default {
     },
     devOpsMgmt: {
         addDeveloper: '新增运维',
+        deleteDev: '删除运维',
         deleteDeveloper: '删除',
         user: '账户',
         address: '账户地址',

@@ -1660,26 +1660,27 @@ export function getContractFolderById(contractFolderId) {
     })
 }
 // 通过文件ID获取文件下的合约
-export function getContractItemByFolderId(folderId) {
+export function getContractItemByFolderId(data) {
     return get({
-        url: `${url.ORG_LIST}/warehouse/item/list/${folderId}`,
+        url: `${url.ORG_LIST}/warehouse/item/list`,
         method: 'get',
+        params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
-
-export function getFolderItemListByStoreId(storeId) {
+//获取合约仓库目录
+export function getFolderItemListByStoreId(data) {
     return get({
-        url: `${url.ORG_LIST}/warehouse/folder/${storeId}`,
+        url: `${url.ORG_LIST}/warehouse/folder/list`,
         method: 'get',
+        params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
-
 //在线工具
 //生成sign
 export function signHash(data) {
