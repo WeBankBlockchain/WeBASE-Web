@@ -21,8 +21,8 @@
                     <el-form-item label="channelIp" prop="channelIp">
                         <el-input v-model="projectFrom.channelIp" style="width: 149px"></el-input>
                         <el-tooltip effect="dark" :content="$t('text.actualChannelIp')" placement="top-start">
-                        <i class="el-icon-info"></i>
-                    </el-tooltip>
+                            <i class="el-icon-info"></i>
+                        </el-tooltip>
                     </el-form-item>
                 </div>
                 <el-form-item :label="$t('text.projectUser')">
@@ -195,7 +195,7 @@ export default {
             })
             this.expands.push(this.$store.state.selectedContracts.contractPath)
             this.$nextTick(() => {
-                
+
                 this.getContractList(this.$store.state.selectedContracts)
             })
         },
@@ -264,7 +264,26 @@ export default {
                             num = index
                         }
                     });
+
                     this.$set(this.tableData, num, row)
+                    var selectedDirectoryInfo = {}
+                    var rootDirectoryInfo = {}
+                    for (var i = 0; i < this.tableData.length; i++) {
+                        if (this.tableData[i]['contractPath'] == row.contractPath) {
+                            selectedDirectoryInfo = this.tableData[i]
+                            this.tableData.splice(i, 1); 
+                            break;
+                        }
+                    }
+                    this.tableData.unshift(selectedDirectoryInfo);
+                    for (var i = 0; i < this.tableData.length; i++) {
+                        if (this.tableData[i]['contractPath'] == '/') {
+                            rootDirectoryInfo = this.tableData[i]
+                            this.tableData.splice(i, 1); 
+                            break;
+                        }
+                    }
+                    this.tableData.unshift(rootDirectoryInfo);
                     var selectedContract = this.$store.state.selectedContractInfo;
                     // delete  selectedContract.contractList
                     // this.tableData.forEach(item=>{
@@ -277,7 +296,7 @@ export default {
                     //     }
                     // })
                     //  this.$refs.multipleTable.toggleRowSelection(selectedContract.contractList[0]);
-                
+
                 } else {
                     this.$message({
                         type: "error",
