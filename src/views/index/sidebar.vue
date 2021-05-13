@@ -36,7 +36,7 @@
                         </template>
 
                         <el-menu-item v-for="term in item.children" :key="term.path" :index="term.path" v-if="term.menuShow" style="padding-left: 58px" :style="{
-                                    'color': term.path == activeRoute ? '#37eef2':'',
+                                    'color': term.path == activeRoute ? '#37eef2':'#9da2ab',
                                     'border-left':term.path == activeRoute ? '3px solid #37eef2': '',
                                     'padding-left':term.path == activeRoute ? '55px': '58px',
                                     'background-color':term.path == activeRoute ? '#1e293e': '#0c1220',}">
@@ -412,7 +412,7 @@ export default {
 }
 .el-menu-item-group > ul > .el-menu-item {
     font-size: 14px;
-    color: #9da2ab;
+    color: #9da2ab; 
     text-align: left;
     padding-left: 57px !important;
     height: 46px;
