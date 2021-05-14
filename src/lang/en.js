@@ -293,7 +293,7 @@ export default {
         unregisteredContract: 'Unregistered contracts',
         checkData: 'Look up',
         closeSign: "privateKey not support transfer",
-        textInfo: 'The description length is 3 to 64 bits',
+        textInfo: 'The description length is 1 to 120 bits',
         appInfo1: 'IP is for reference, and can be modified in specific application.',
         appInfo2: 'Please click the "Application document" reference to register the application.',
         versionError: 'The Solc version failed to load. Please check whether the corresponding contract version exists in the "/static/js" directory',
@@ -329,6 +329,7 @@ export default {
         portName: "Please enter the port name",
         portLong: "1 to 12 digits in length",
         portRule: "Please enter a number from 1 to 65535",
+        isPort: "Please enter port",
         agencyName: "Please enter the agency name",
         agencyLong: "1 to 16 digits in length",
         agencyRule: "Please input Chinese, English and numbers for agency name",
@@ -380,7 +381,7 @@ export default {
         appLinkDocRule: 'Please input the link correctly, such as: starting with HTTP / HTTPS',
         artifactName: 'Please enter project name',
         group: 'Please enter group name',
-        frontId: 'Please check front',
+        frontId: 'Please check node',
         checkContract: 'Please check contract'
     },
     head: {

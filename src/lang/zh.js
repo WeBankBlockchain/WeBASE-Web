@@ -293,7 +293,7 @@ export default {
         unregisteredContract: '未登记合约',
         checkData: '查看',
         closeSign:"私钥不允许传输",
-        textInfo: '描述长度在3到64位',
+        textInfo: '描述长度在120字符以内',
         appInfo1: 'IP供参考，可以具体应用处修改。',
         appInfo2: '请点击“应用文档”参考进行注册应用操作。',
         versionError: 'Solc版本加载失败，请检查/static/js目录中是否存在对应的合约版本',
@@ -329,6 +329,7 @@ export default {
         portName: "请输入端口名称",
         portLong: "长度在 1 到 12 个数字",
         portRule: "端口请输入1-65535之内的数字",
+        isPort: "请输入端口",
         agencyName: "请输入机构名称",
         agencyLong: "长度在 1 到 16 位",
         agencyRule: "机构名称请输入中文、英文和数字",
@@ -379,7 +380,7 @@ export default {
         appLinkDocRule: "请正确输入链接如：http/https开头",
         artifactName: '请输入项目名称',
         group: '请输入包名称',
-        frontId: '请选择前置',
+        frontId: '请选择节点',
         checkContract: '请选择合约'
     },
     head: {

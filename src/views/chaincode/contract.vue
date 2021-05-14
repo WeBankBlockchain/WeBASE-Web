@@ -94,31 +94,31 @@ export default {
         this.allVersion = [
             {
                 solcName: "v0.4.25",
-                url: `http://${this.host}/static/js/v0.4.25.js`,
                 versionId: 0,
+                url: `http://${this.host}/static/js/v0.4.25.js`,
                 encryptType: 0,
-                net: 0
+                net: 1
             },
             {
-                solcName: "v0.4.24-gm",
-                url: `http://${this.host}/static/js/v0.4.24-gm.js`,
+                solcName: "v0.4.25-gm",
                 versionId: 1,
+                url: `http://${this.host}/static/js/v0.4.25-gm.js`,
                 encryptType: 1,
-                net: 0
+                net: 1
             },
             {
-                solcName: "v0.5.1",
+                solcName: "v0.5.2",
+                url: `http://${this.host}/static/js/v0.5.2.js`,
                 versionId: 2,
-                url: `http://${this.host}/static/js/v0.5.1.js`,
                 encryptType: 0,
-                net: 0
+                net: 1
             },
             {
-                solcName: "v0.5.1-gm",
+                solcName: "v0.5.2-gm",
                 versionId: 3,
-                url: `http://${this.host}/static/js/v0.5.1-gm.js`,
+                url: `http://${this.host}/static/js/v0.5.2-gm.js`,
                 encryptType: 1,
-                net: 0
+                net: 1
             },
             {
                 solcName: "v0.6.10",
