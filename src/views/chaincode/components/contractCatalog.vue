@@ -138,11 +138,6 @@ export default {
         Bus.$off("save");
     },
     mounted: function () {
-        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
-            this.disabled = false
-        } else {
-            this.disabled = true
-        }
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.$nextTick(function () {
                 this.getContractPaths()
@@ -179,7 +174,6 @@ export default {
                 }
             })
         })
-        console.log(this.disabled)
     },
     directives: {
         Clickoutside,
@@ -550,6 +544,12 @@ export default {
          * @param val 合约对象
          */
         getContractPaths(val) {
+            if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+                this.disabled = false
+            } else {
+                this.disabled = true
+            }
+            console.log(this.disabled)
             getContractPathList(localStorage.getItem("groupId")).then(res => {
                 if (res.data.code == 0) {
                     this.pathList = res.data.data;
