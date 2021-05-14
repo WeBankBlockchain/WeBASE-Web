@@ -9,22 +9,25 @@
                 <el-form-item :label="$t('text.projectGroupName')" prop="group">
                     <el-input v-model="projectFrom.group" style="width: 415px"></el-input>
                 </el-form-item>
-                <div class="channel-ip">
-                    <el-form-item :label="$t('text.projectFront')" prop="frontId">
-                        <el-select v-model="projectFrom.frontId" :placeholder="$t('text.select')" style="width: 149px">
-                            <el-option v-for="item in frontList" :key="item.frontId" :label="item.nodeId" :value="item.frontId">
-                                <span style="float: left">{{ item.nodeId | splitString6}}...</span>
-                                <span style="float: right; color: #8492a6; font-size: 13px">{{ item.frontId }}</span>
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="channelIp" prop="channelIp">
-                        <el-input v-model="projectFrom.channelIp" style="width: 149px"></el-input>
-                        <el-tooltip effect="dark" :content="$t('text.actualChannelIp')" placement="top-start">
-                            <i class="el-icon-info"></i>
-                        </el-tooltip>
-                    </el-form-item>
-                </div>
+                <!-- <div class="channel-ip"> -->
+                <el-form-item :label="$t('text.projectFront')" prop="frontId">
+                    <el-select v-model="projectFrom.frontId" :placeholder="$t('text.select')" style="width: 415px" @change="changeFront">
+                        <el-option v-for="item in frontList" :key="item.frontId" :label="item.nodeId" :value="item.frontId">
+                            <span style="float: left">{{ item.nodeId | splitString6}}...</span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.frontId }}</span>
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="channelIp" prop="channelIp">
+                    <el-input v-model="projectFrom.channelIp" style="width: 415px"></el-input>
+                    <el-tooltip effect="dark" :content="$t('text.actualChannelIp')" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
+                </el-form-item>
+                <el-form-item label="channelPort" prop="channelPort">
+                    <el-input v-model="projectFrom.channelPort" style="width: 415px"></el-input>
+                </el-form-item>
+                <!-- </div> -->
                 <el-form-item :label="$t('text.projectUser')">
                     <el-select v-model="projectFrom.userAddress" :placeholder="$t('text.select')" style="width: 415px">
                         <el-option v-for="item in userList" :key="item.address" :label="item.userName" :value="item.address">
@@ -71,8 +74,9 @@
 </template>
 
 <script>
-import { searchContract, getUserList, getFronts, exportJavaProject } from "@/util/api";
+import { searchContract, getUserList, getFronts, exportJavaProject, fetchChannelPort } from "@/util/api";
 let Base64 = require("js-base64").Base64;
+import { unique } from "@/util/util"
 export default {
     name: 'exportProject',
     props: {
@@ -86,6 +90,21 @@ export default {
         }
     },
     data() {
+        var isPort = (rule, value, callback) => {
+            var parten = /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
+            
+            if (value === '') {
+                callback(new Error(this.$t('rule.isPort')))
+            } else {
+
+                if (!parten.test(value)) {
+                    callback(new Error(this.$t('rule.portRule')))
+                }else {
+                    callback()
+                }
+            }
+
+        }
         return {
             tableData: [],
             dialogVisible: this.show,
@@ -95,6 +114,7 @@ export default {
             },
             contractList: [],
             multipleSelection: [],
+            selectedList: [],
             selectDisabled(row, index) {
                 if (!row.contractAbi) {
                     return false
@@ -110,6 +130,7 @@ export default {
                 userAddress: [],
                 frontId: null,
                 channelIp: '127.0.0.1',
+                channelPort: ''
             },
             rules: {
                 artifactName: [
@@ -152,7 +173,7 @@ export default {
                     {
                         required: true,
                         message: this.$t("rule.frontId"),
-                        trigger: "blur",
+                        trigger: "change",
                     },
                 ],
                 p12Password: [
@@ -173,6 +194,9 @@ export default {
                         message: this.$t("rule.IpRule"),
                         trigger: "blur",
                     },
+                ],
+                channelPort: [
+                    { validator: isPort, trigger: 'blur' }
                 ]
             },
         }
@@ -236,14 +260,14 @@ export default {
         },
 
         clickTable: function (row, expandedRows) {
-            if (expandedRows.length) {
-                this.expands = []
-                if (row) {
-                    this.expands.push(row.contractPath)
-                }
-            } else {
-                this.expands = []
-            }
+            // if (expandedRows.length) {
+            //     this.expands = []
+            //     if (row) {
+            //         this.expands.push(row.contractPath)
+            //     }
+            // } else {
+            //     this.expands = []
+            // }
             this.$nextTick(() => {
                 this.getContractList(row)
             })
@@ -271,19 +295,23 @@ export default {
                     for (var i = 0; i < this.tableData.length; i++) {
                         if (this.tableData[i]['contractPath'] == row.contractPath) {
                             selectedDirectoryInfo = this.tableData[i]
-                            this.tableData.splice(i, 1); 
+                            this.tableData.splice(i, 1);
                             break;
                         }
                     }
-                    this.tableData.unshift(selectedDirectoryInfo);
+                    if (Object.keys(selectedDirectoryInfo).length > 0) {
+                        this.tableData.unshift(selectedDirectoryInfo);
+                    }
                     for (var i = 0; i < this.tableData.length; i++) {
                         if (this.tableData[i]['contractPath'] == '/') {
                             rootDirectoryInfo = this.tableData[i]
-                            this.tableData.splice(i, 1); 
+                            this.tableData.splice(i, 1);
                             break;
                         }
                     }
-                    this.tableData.unshift(rootDirectoryInfo);
+                    if (Object.keys(rootDirectoryInfo).length > 0) {
+                        this.tableData.unshift(rootDirectoryInfo);
+                    }
                     var selectedContract = this.$store.state.selectedContractInfo;
                     // delete  selectedContract.contractList
                     // this.tableData.forEach(item=>{
@@ -312,9 +340,11 @@ export default {
                 });
         },
         handleSelectionChange(val) {
+            // this.selectedList = [];
+            // this.selectedList = val;
+            // this.multipleSelection = unique(this.multipleSelection.concat(this.selectedList), 'contractId')
+            // console.log(this.multipleSelection);
 
-            this.multipleSelection = val;
-            console.log(val)
         },
         submit(formName) {
             if (this.multipleSelection.length === 0) {
@@ -389,6 +419,28 @@ export default {
 
                 });
         },
+        changeFront(val) {
+            console.log(val);
+            this.queryChannelPort(val)
+        },
+        queryChannelPort(val) {
+            let param = {
+                frontId: val
+            }
+            fetchChannelPort(param)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        this.projectFrom.channelPort = res.data.data
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+
+                    }
+                })
+        }
     }
 }
 </script>

@@ -2124,3 +2124,17 @@ export function exportJavaProject(data) {
         }
     })
 }
+/**
+ * @method 获取channelport
+ */
+export function fetchChannelPort(data) {
+    return get({
+        url: `${url.ORG_LIST}/front/nodeConfig`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+

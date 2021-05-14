@@ -563,7 +563,6 @@ export default {
         },
         compileHighVersion() {
             let that = this
-
             this.refreshMessage();
             this.contractList = this.$store.state.contractDataList
             let content = "";
@@ -625,7 +624,6 @@ export default {
                 let wrapper = require("solc/wrapper");
                 var solc = wrapper(window.Module);
             } catch (error) {
-                console.log(error);
                 this.$message({
                     type: 'error',
                     message: this.$t('text.versionError'),

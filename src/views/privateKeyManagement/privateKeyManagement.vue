@@ -232,7 +232,7 @@ export default {
                 confirmButtonText: this.$t("text.sure"),
                 cancelButtonText: this.$t("text.cancel"),
                 inputValue: params.description,
-                inputPattern: /^.{3,64}$/,
+                inputPattern: /^.{1,120}$/,
                 inputErrorMessage: this.$t('text.textInfo')
             })
                 .then(({ value }) => {
