@@ -25,7 +25,7 @@
                     </el-tooltip>
                 </el-form-item>
                 <el-form-item label="channelPort" prop="channelPort">
-                    <el-input v-model="projectFrom.channelPort" style="width: 415px"></el-input>
+                    <el-input v-model="projectFrom.channelPort" :disabled="queryPort ? true : false " style="width: 415px"></el-input>
                 </el-form-item>
                 <!-- </div> -->
                 <el-form-item :label="$t('text.projectUser')">
@@ -132,6 +132,7 @@ export default {
                 channelIp: '127.0.0.1',
                 channelPort: ''
             },
+            queryPort: '',
             rules: {
                 artifactName: [
                     {
@@ -196,7 +197,7 @@ export default {
                     },
                 ],
                 channelPort: [
-                    { validator: isPort, trigger: 'blur' }
+                    { validator: isPort, trigger: 'change' }
                 ]
             },
         }
@@ -260,14 +261,14 @@ export default {
         },
 
         clickTable: function (row, expandedRows) {
-            // if (expandedRows.length) {
-            //     this.expands = []
-            //     if (row) {
-            //         this.expands.push(row.contractPath)
-            //     }
-            // } else {
-            //     this.expands = []
-            // }
+            if (expandedRows.length) {
+                this.expands = []
+                if (row) {
+                    this.expands.push(row.contractPath)
+                }
+            } else {
+                this.expands = []
+            }
             this.$nextTick(() => {
                 this.getContractList(row)
             })
@@ -341,7 +342,7 @@ export default {
         },
         handleSelectionChange(val) {
             // this.selectedList = [];
-            // this.selectedList = val;
+            this.multipleSelection = val;
             // this.multipleSelection = unique(this.multipleSelection.concat(this.selectedList), 'contractId')
             // console.log(this.multipleSelection);
 
@@ -430,7 +431,14 @@ export default {
             fetchChannelPort(param)
                 .then(res => {
                     if (res.data.code === 0) {
-                        this.projectFrom.channelPort = res.data.data
+                        if(res.data.data){
+                            if(res.data.data.channelPort){
+                                this.queryPort = true
+                                this.projectFrom.channelPort = res.data.data.channelPort
+                            }
+                            
+                            
+                        }
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
