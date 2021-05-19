@@ -42,12 +42,12 @@
             <h3 style="padding-left: 18px">{{$t('text.projectContract')}}</h3>
             <p style="padding-left: 28px">{{$t('text.exportJavaProjectInfo1')}}</p>
             <p style="padding:5px 0;color: #F56C6C;padding-left: 28px">{{$t('text.exportJavaProjectInfo2')}}</p>
-            <el-table :show-header='false' :data="tableData" style="width: 100%;padding: 0 20px" :row-key="getRowKeys" :expand-row-keys="expands" @expand-change="clickTable" ref="refTable">
+            <el-table :show-header='false' :data="tableData" class="block-table-content" style="width: 100%;padding: 0 20px" :row-key="getRowKeys" :expand-row-keys="expands" @row-click="clickTable" ref="refTable">
                 <el-table-column type="expand">
                     <template slot-scope="scope">
                         <!-- <span>{{contractList}}</span> -->
                         <div class="table-content">
-                            <el-table ref="multipleTable" :data="scope.row.contractList" :show-header='true' @selection-change="handleSelectionChange" :default-sort="{prop: 'contractPath', order: 'descending'}">
+                            <el-table ref="multipleTable" :data="scope.row.contractList" :show-header='true' @selection-change="handleSelectionChange($event, scope.row)" :default-sort="{prop: 'contractPath', order: 'descending'}">
                                 <el-table-column type="selection" :selectable='selectDisabled' width="55">
                                 </el-table-column>
                                 <el-table-column prop="contractName" show-overflow-tooltip :label="$t('contracts.contractName')"></el-table-column>
@@ -92,14 +92,14 @@ export default {
     data() {
         var isPort = (rule, value, callback) => {
             var parten = /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/;
-            
+
             if (value === '') {
                 callback(new Error(this.$t('rule.isPort')))
             } else {
 
                 if (!parten.test(value)) {
                     callback(new Error(this.$t('rule.portRule')))
-                }else {
+                } else {
                     callback()
                 }
             }
@@ -126,13 +126,16 @@ export default {
             frontList: [],
             projectFrom: {
                 artifactName: "demo",
-                group: 'org_example',
+                group: 'org.example',
                 userAddress: [],
                 frontId: null,
                 channelIp: '127.0.0.1',
                 channelPort: ''
             },
             queryPort: '',
+            dynamicObject: {},
+            selectedParentPath: '',
+            multipleSelectedId: [],
             rules: {
                 artifactName: [
                     {
@@ -165,8 +168,8 @@ export default {
                         trigger: "blur",
                     },
                     {
-                        pattern: /^[A-Za-z0-9_]+$/,
-                        message: this.$t("rule.contractRule"),
+                        pattern: /^[A-Za-z0-9.]+$/,
+                        message: this.$t("rule.contractGroupRule"),
                         trigger: "blur",
                     },
                 ],
@@ -260,20 +263,17 @@ export default {
             this.$emit('close')
         },
 
-        clickTable: function (row, expandedRows) {
-            if (expandedRows.length) {
-                this.expands = []
-                if (row) {
-                    this.expands.push(row.contractPath)
-                }
-            } else {
-                this.expands = []
+        clickTable: function (row, column, $event) {
+            let nodeName = $event.target.nodeName;
+            if (nodeName === "I") {
+                return
             }
+            this.$refs.refTable.toggleRowExpansion(row);
             this.$nextTick(() => {
-                this.getContractList(row)
+                this.getContractList(row, 'ExpandEvent')
             })
         },
-        getContractList(row) {
+        getContractList(row, handleType) {
             const reqData = {
                 groupId: localStorage.getItem("groupId"),
                 contractPathList: [row.contractPath]
@@ -291,40 +291,30 @@ export default {
                     });
 
                     this.$set(this.tableData, num, row)
-                    var selectedDirectoryInfo = {}
-                    var rootDirectoryInfo = {}
-                    for (var i = 0; i < this.tableData.length; i++) {
-                        if (this.tableData[i]['contractPath'] == row.contractPath) {
-                            selectedDirectoryInfo = this.tableData[i]
-                            this.tableData.splice(i, 1);
-                            break;
+                    if (!handleType) {
+                        var selectedDirectoryInfo = {}
+                        var rootDirectoryInfo = {}
+                        for (var i = 0; i < this.tableData.length; i++) {
+                            if (this.tableData[i]['contractPath'] == row.contractPath) {
+                                selectedDirectoryInfo = this.tableData[i]
+                                this.tableData.splice(i, 1);
+                                break;
+                            }
+                        }
+                        if (Object.keys(selectedDirectoryInfo).length > 0) {
+                            this.tableData.unshift(selectedDirectoryInfo);
+                        }
+                        for (var i = 0; i < this.tableData.length; i++) {
+                            if (this.tableData[i]['contractPath'] == '/') {
+                                rootDirectoryInfo = this.tableData[i]
+                                this.tableData.splice(i, 1);
+                                break;
+                            }
+                        }
+                        if (Object.keys(rootDirectoryInfo).length > 0) {
+                            this.tableData.unshift(rootDirectoryInfo);
                         }
                     }
-                    if (Object.keys(selectedDirectoryInfo).length > 0) {
-                        this.tableData.unshift(selectedDirectoryInfo);
-                    }
-                    for (var i = 0; i < this.tableData.length; i++) {
-                        if (this.tableData[i]['contractPath'] == '/') {
-                            rootDirectoryInfo = this.tableData[i]
-                            this.tableData.splice(i, 1);
-                            break;
-                        }
-                    }
-                    if (Object.keys(rootDirectoryInfo).length > 0) {
-                        this.tableData.unshift(rootDirectoryInfo);
-                    }
-                    var selectedContract = this.$store.state.selectedContractInfo;
-                    // delete  selectedContract.contractList
-                    // this.tableData.forEach(item=>{
-                    //     if(item.contractList.length){
-                    //         item.contractList.forEach(row=>{
-                    //         if(row.contractId == selectedContract.contractId){
-                    //             this.$refs.multipleTable.toggleRowSelection(selectedContract,true);
-                    //         }
-                    //     })
-                    //     }
-                    // })
-                    //  this.$refs.multipleTable.toggleRowSelection(selectedContract.contractList[0]);
 
                 } else {
                     this.$message({
@@ -340,11 +330,21 @@ export default {
                     });
                 });
         },
-        handleSelectionChange(val) {
-            // this.selectedList = [];
-            this.multipleSelection = val;
-            // this.multipleSelection = unique(this.multipleSelection.concat(this.selectedList), 'contractId')
-            // console.log(this.multipleSelection);
+        handleSelectionChange($event, val) {
+            this.selectedParentPath = val.contractPath
+            this.multipleSelection = $event;
+            if (this.selectedParentPath) {
+                this.dynamicObject[this.selectedParentPath] = this.multipleSelection
+            }
+            const dynamicObject = Object.values(this.dynamicObject)
+            this.multipleSelectedId = []
+            dynamicObject.forEach(item => {
+
+                item.forEach(it => {
+                    this.multipleSelectedId.push(it.id)
+                })
+            })
+            this.multipleSelectedId = Array.from(new Set(this.multipleSelectedId))
 
         },
         submit(formName) {
@@ -363,11 +363,11 @@ export default {
             })
         },
         export() {
-            const idList = this.multipleSelection.map(value => {
-                return value.contractId
-            })
+            // const idList = this.multipleSelection.map(value => {
+            //     return value.contractId
+            // })
             const reqData = {
-                contractIdList: idList,
+                contractIdList: this.multipleSelectedId,
                 group: this.projectFrom.group,
                 artifactName: this.projectFrom.artifactName,
                 frontId: this.projectFrom.frontId,
@@ -431,13 +431,13 @@ export default {
             fetchChannelPort(param)
                 .then(res => {
                     if (res.data.code === 0) {
-                        if(res.data.data){
-                            if(res.data.data.channelPort){
+                        if (res.data.data) {
+                            if (res.data.data.channelPort) {
                                 this.queryPort = true
                                 this.projectFrom.channelPort = res.data.data.channelPort
                             }
-                            
-                            
+
+
                         }
                     } else {
                         this.$message({
@@ -460,5 +460,8 @@ export default {
 }
 .channel-ip {
     display: flex;
+}
+.block-table-content >>> .el-table__row {
+    cursor: pointer;
 }
 </style>

@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('transaction.inputUser')" v-model="userName" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('transaction.inputUser')" v-model="userName" class="input-with-select" clearable @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -205,10 +205,13 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             },
-                reqQuery = {};
-            reqQuery = {
-                type: 3
-            };
+                reqQuery = {
+                    type: 3
+                };
+
+            if (this.userName) {
+                reqQuery['userName'] = this.userName;
+            }
             getAllUserList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {

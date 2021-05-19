@@ -367,7 +367,7 @@ let errCode = {
     },
     "201153": {
         en: "Unable to create instance of type, check input params",
-        zh: '无法创建类型的实例，请检查输入参数'
+        zh: '输入参数格式错误'
     },
 
     "201213": {

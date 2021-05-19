@@ -617,7 +617,7 @@ export function nodesHostInfo(data, list) {
 export function nodesHealth(data, list) {
     const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/chain/mointorInfo/${params.str}`,
+        url: `${url.ORG_LIST}/chain/monitorInfo/${params.str}`,
         method: 'get',
         params: params.querys,
         headers: {
