@@ -35,7 +35,7 @@
                     </el-select> -->
                 </div>
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('contracts.contractAddressInput')" v-model="contractAddress" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('contracts.contractAddressInput')" v-model="contractAddress" clearable class="input-with-select" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -59,7 +59,7 @@
                     </el-table-column>
                     <el-table-column v-for="(head,index) in unusualContractHead" :key="index" :label="head.name" show-overflow-tooltip align="center" v-if="head.enName!=='hashs'">
                         <template slot-scope="scope">
-                            <template  v-if='head.enName != "deployTime"'>
+                            <template v-if='head.enName != "deployTime"'>
                                 <span>{{scope.row[head.enName]}}</span>
                             </template>
                             <template v-else-if='head.enName == "deployTime"'>
@@ -67,10 +67,10 @@
                             </template>
                         </template>
                     </el-table-column>
-                    <el-table-column  :label="$t('nodes.operation')" width="300">
+                    <el-table-column :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
-                            <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)"  @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
-                            <el-button v-if="disabled || scope.row.abiId > 0 || scope.row.abiId === 0"  @click="routeLink(scope.row)" type="text" size="small">{{$t('text.checkData')}}</el-button>
+                            <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)" @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
+                            <el-button v-if="disabled || scope.row.abiId > 0 || scope.row.abiId === 0" @click="routeLink(scope.row)" type="text" size="small">{{$t('text.checkData')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -167,16 +167,16 @@ export default {
                 let hashArr = [];
                 if (item.hashs) {
                     for (let i = 0; i < item.hashs.length; i++) {
-                    let obj = {};
-                    if (i === 0) {
-                        obj.hash = item.hashs[i];
-                        obj.show = true;
-                    } else {
-                        obj.hash = item.hashs[i];
-                        obj.show = false;
+                        let obj = {};
+                        if (i === 0) {
+                            obj.hash = item.hashs[i];
+                            obj.show = true;
+                        } else {
+                            obj.hash = item.hashs[i];
+                            obj.show = false;
+                        }
+                        hashArr.push(obj);
                     }
-                    hashArr.push(obj);
-                }
                 }
 
                 item.hashs = hashArr;
@@ -211,7 +211,7 @@ export default {
             console.log(value)
             return value
         },
-        changeContractList (val) {
+        changeContractList(val) {
             this.type = val;
             this.getUnusualContractList()
         },
@@ -229,10 +229,13 @@ export default {
                 pageNumber: this.currentPage,
                 pageSize: this.pageSize
             },
-                reqQuery = {};
-            reqQuery = {
-                type: 3
-            };
+                reqQuery = {
+                    type: 3
+                };
+            if (this.contractAddress) {
+                reqQuery['contractAddress'] = this.contractAddress;
+            }
+
             getAllContractList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
@@ -286,11 +289,11 @@ export default {
             this.importVisibility = true;
             this.address = val.contractAddress
         },
-        importSuccess () {
+        importSuccess() {
             this.importVisibility = false;
             this.getUnusualContractList();
         },
-        closeImport () {
+        closeImport() {
             this.importVisibility = false;
             this.getUnusualContractList();
         },

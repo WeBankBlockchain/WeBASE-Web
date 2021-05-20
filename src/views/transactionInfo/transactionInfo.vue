@@ -24,7 +24,7 @@
                     <span>{{$t('text.tiao')}}</span>
                 </div>
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('inputText.transactionSearch')" v-model="searchKey.value" class="input-with-select" @clear="clearText">
+                    <el-input :placeholder="$t('inputText.transactionSearch')" v-model="searchKey.value" class="input-with-select" clearable @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>

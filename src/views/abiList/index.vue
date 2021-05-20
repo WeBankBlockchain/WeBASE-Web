@@ -292,6 +292,10 @@ export default {
                 .then(res => {
                     this.loading = false
                     if (res.data.code === 0) {
+                        this.$message({
+                            type: "success",
+                            message: this.$t('text.resetSuccess')
+                        })
                         this.queryAbiList()
                     } else {
                         this.$message({
