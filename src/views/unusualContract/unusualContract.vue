@@ -19,9 +19,9 @@
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
-                    <!-- <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
+                    <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
-                    </el-tooltip> -->
+                    </el-tooltip>
                     <!-- <el-radio-group v-model="type"  @change="changeContractList">
                         <el-radio :label="item.value" :key='item.value' v-for="item in userOptions">{{item.name}}</el-radio>
                     </el-radio-group> -->

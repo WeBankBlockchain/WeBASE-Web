@@ -304,6 +304,9 @@ export default {
                             if (it.nameKey == 'contractList') {
                                 it.menuShow = true;
                             }
+                             if (it.nameKey == 'checkEvent') {
+                                it.menuShow = true;
+                            }
                             // if (it.nameKey == 'abiList') {
                             //     it.menuShow = true;
                             // }
@@ -319,6 +322,7 @@ export default {
                             if (it.nameKey == 'PrivateKey') {
                                 it.menuShow = true;
                             }
+                           
                         })
                     }
                 });

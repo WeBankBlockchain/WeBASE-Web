@@ -60,7 +60,7 @@
                     </el-table-column>
                     <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
-                            <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractBin' @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
+                            <i class="wbs-icon-copy font-12 copy-public-key" v-show='scope.row.contractBin' @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
                             <span>{{scope.row.bin}}</span>
                         </template>
                     </el-table-column>
@@ -448,6 +448,10 @@ export default {
                         this.loading = true
                     }
                     if (res.data.code === 0) {
+                        this.$message({
+                            type: "success",
+                            message: this.$t('text.resetSuccess')
+                        })
                         this.getContracts()
                     } else {
                         this.$message({

@@ -39,25 +39,28 @@
             <ul>
                 <li v-for='item in contractArry' :key="item.contractId">
                     <div v-if='item.contractType == "file"' class="contract-file" :id='item.contractId'>
+
                         <i class="wbs-icon-file" @click='select(item)' v-if='!item.renameShow' :id='item.contractId'></i>
                         <span @contextmenu.prevent="handle($event,item)" @click='select(item)' :id='item.contractId' v-if='!item.renameShow' :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <el-input v-model="contractName" v-focus maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
                         <div class="contract-menu-handle" v-if='!disabled &&item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul v-if="contractFile">
                                 <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
-                                <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li>
+                                <!-- <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li> -->
+                                <li class="contract-menu-handle-list" @click="deleteFile(item)">{{$t("text.delete")}}</li>
                                 <li class="contract-menu-handle-list" @click="exportFile(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
                     </div>
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
                         <i :class="item.folderIcon" @contextmenu.prevent="handle($event,item)" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
-                        <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
-                        <span :title="item.contractName" @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
+                        <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" @click='open(item)' v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
+                        <span :title="item.contractName" @contextmenu.prevent="handle($event,item)" @click='open(item)' :id='item.folderId' v-if="!item.renameShow" :class="[{'colorActive': item.contractActive}, 'cursor-pointer']">{{item.contractName}}</span>
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
                                 <li class="contract-menu-handle-list" @click="addFiles(item)">{{$t('contracts.createFile')}}</li>
-                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
+                                <!-- <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li> -->
+                                <li class="contract-menu-handle-list" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
                                 <li class="contract-menu-handle-list" @click="exportFolder(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
@@ -70,7 +73,8 @@
                                 <div class="contract-menu-handle" v-if='!disabled &&list.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                                     <ul v-if="contractFile">
                                         <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
-                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li>
+                                        <!-- <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li> -->
+                                        <li class="contract-menu-handle-list" @click="deleteFile(list)">{{$t("text.delete")}}</li>
                                         <li class="contract-menu-handle-list" @click="exportFile(list)">{{$t('contracts.exportSol')}}</li>
                                     </ul>
                                 </div>

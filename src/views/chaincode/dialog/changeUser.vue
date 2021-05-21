@@ -20,7 +20,10 @@
                 <td style="width: 40px;text-align: right">{{this.$t('contracts.user')}}：</td>
                 <td>
                     <el-select v-model="userName" :placeholder="placeholderText" style="width: 300px" :no-data-text="$t('text.goCreatPrivateKey')">
-                        <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
+                        <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'>
+                            <span>{{item.userName}}</span>
+                            <span class="font-12">{{item.address}}</span>
+                        </el-option>
                     </el-select>
                 </td>
             </tr>

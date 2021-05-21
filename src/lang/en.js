@@ -341,7 +341,7 @@ export default {
         contractAbi: "Please enter the contract ABI",
         contractLong: "1 to 32 characters in length",
         contractRule: "Please enter numbers, letters or underscores",
-        contractGroupRule: "Please enter a number, letter or dot",
+        contractGroupRule: "Contains letters or letters and '. ', cannot begin with a letter, cannot begin with '. ' At the end",
         IpRule: "Please enter the correct IP",
         folderName: "Please enter a folder name",
         folderLong: "1 to 12 characters in length",
@@ -563,7 +563,7 @@ export default {
         notice: "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported."
     },
     contracts: {
-        createFile: "Create",
+        createFile: "Create File",
         createFolder: "Create Folder",
         upLoadFile: "Upload File",
         contractTips: "All contracts deployed within the group need to be added in contract management, compiled and saved, otherwise it will be judged as abnormal contracts.",

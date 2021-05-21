@@ -341,7 +341,7 @@ export default {
         contractAbi: "请输入合约ABI",
         contractLong: "长度在 1 到 32 个字符",
         contractRule: "请输入数字、字母或下划线",
-        contractGroupRule: "请输入数字、字母或点",
+        contractGroupRule: "包含字母或字母和‘.’，以字母开头，不能以“.”结尾",
         IpRule: "请输入正确的IP",
         folderName: "请输入文件夹名称",
         folderLong: "长度在 1 到 12 个字符",
@@ -564,7 +564,7 @@ export default {
         notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。",
     },
     contracts: {
-        createFile: "新建",
+        createFile: "新建文件",
         createFolder: "新建文件夹",
         upLoadFile: "上传文件",
         contractTips: "群组内部署的合约都需要在合约管理里添加，编译保存，否则会判断为异常合约。",

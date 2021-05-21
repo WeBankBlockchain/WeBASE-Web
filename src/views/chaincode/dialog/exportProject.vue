@@ -42,7 +42,7 @@
             <h3 style="padding-left: 18px">{{$t('text.projectContract')}}</h3>
             <p style="padding-left: 28px">{{$t('text.exportJavaProjectInfo1')}}</p>
             <p style="padding:5px 0;color: #F56C6C;padding-left: 28px">{{$t('text.exportJavaProjectInfo2')}}</p>
-            <el-table :show-header='false' :data="tableData" class="block-table-content" style="width: 100%;padding: 0 20px" :row-key="getRowKeys" :expand-row-keys="expands" @row-click="clickTable" ref="refTable">
+            <el-table :show-header='false' :data="tableData" class="block-table-content" style="width: 100%;padding: 0 20px" :row-key="getRowKeys" :expand-row-keys="expands" @expand-change="handleExpand" @row-click="clickTable" ref="refTable">
                 <el-table-column type="expand">
                     <template slot-scope="scope">
                         <!-- <span>{{contractList}}</span> -->
@@ -168,7 +168,7 @@ export default {
                         trigger: "blur",
                     },
                     {
-                        pattern: /^[A-Za-z0-9.]+$/,
+                        // pattern: /^[A-Za-z].[A-Za-z]$/,
                         message: this.$t("rule.contractGroupRule"),
                         trigger: "blur",
                     },
@@ -262,16 +262,19 @@ export default {
         modelClose() {
             this.$emit('close')
         },
-
+        handleExpand (row){
+            this.getContractList(row, 'ExpandEvent')
+        },
         clickTable: function (row, column, $event) {
+            this.getContractList(row, 'ExpandEvent')
             let nodeName = $event.target.nodeName;
+            this.$refs.refTable.toggleRowExpansion(row);
+            // this.$nextTick(() => {
+                
+            // })
             if (nodeName === "I") {
                 return
             }
-            this.$refs.refTable.toggleRowExpansion(row);
-            this.$nextTick(() => {
-                this.getContractList(row, 'ExpandEvent')
-            })
         },
         getContractList(row, handleType) {
             const reqData = {
@@ -341,7 +344,7 @@ export default {
             dynamicObject.forEach(item => {
 
                 item.forEach(it => {
-                    this.multipleSelectedId.push(it.id)
+                    this.multipleSelectedId.push(it.contractId)
                 })
             })
             this.multipleSelectedId = Array.from(new Set(this.multipleSelectedId))
