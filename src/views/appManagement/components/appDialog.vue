@@ -210,6 +210,10 @@ export default {
             fetchSaveApp(param)
                 .then(res => {
                     if (res.data.code === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.updateSuccessMsg')
+                        })
                         this.$emit('success')
                     } else {
                         this.$message({

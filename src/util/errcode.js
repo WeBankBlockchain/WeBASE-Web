@@ -1443,6 +1443,10 @@ let errCode = {
         "en": "Get sdk cert/key content map failed",
         "zh": "获取SDK证书私钥失败"
     },
+    "202534": {
+        "en": "contract path not exists.",
+        "zh": "合约路径不存在"
+    },
     "302000": {
         en: "user not logged in",
         zh: '未登录的用户'

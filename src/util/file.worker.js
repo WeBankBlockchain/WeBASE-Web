@@ -41,7 +41,6 @@ function findImports (path,list,contractPath) {
         if (newArry.length > 1) {
             for (let i = 0; i < newArry.length; i++) {
                 if (newpath == newArry[i].contractName + ".sol") {
-                    debugger
                     return {
                         contents: Base64.decode(
                             newArry[i].contractSource

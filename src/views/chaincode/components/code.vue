@@ -39,7 +39,7 @@
                     <i class="wbs-icon-send font-16"></i>
                     <span>{{this.$t("text.send")}}</span>
                 </span>
-                <span class="contract-code-done" @click="exportJava" v-if="(!contractAddress && abiFile && bin && !disabled)|| (contractAddress && !disabled &&isDeployedModifyEnable)">
+                <span class="contract-code-done" @click="exportJava" v-if="(!contractAddress && abiFile && bin && !disabled)|| (contractAddress && !disabled)">
                     <i class="el-icon-download contract-icon-style font-16"></i>
                     <span>{{this.$t("text.exportJavaProject")}}</span>
                 </span>
