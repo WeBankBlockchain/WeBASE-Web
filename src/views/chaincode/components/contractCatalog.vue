@@ -87,11 +87,7 @@
         <add-folder v-if="foldershow" :foldershow="foldershow" @close='folderClose' @success='folderSuccess'></add-folder>
         <add-file v-if="fileshow" :data='selectFolderData' :fileshow="fileshow" @close='fileClose' @success='fileSucccess($event)' :id='folderId'></add-file>
         <select-catalog v-if='cataLogShow' :show='cataLogShow' @success='catalogSuccess($event)' @close='catalogClose'></select-catalog>
-         <export-project 
-        v-if='$store.state.exportProjectShow' 
-        :show='$store.state.exportProjectShow'
-        :folderList='pathList'
-        @close='exportProjectShowClose'></export-project>
+        <export-project v-if='$store.state.exportProjectShow' :show='$store.state.exportProjectShow' :folderList='pathList' @close='exportProjectShowClose'></export-project>
     </div>
 </template>
 <script>
@@ -265,7 +261,7 @@ export default {
         },
         // 导出项目
         exportProjectShowClose() {
-            this.$store.dispatch('set_exportProject_show_action',false)
+            this.$store.dispatch('set_exportProject_show_action', false)
         },
         /**
          * 重命名
@@ -504,6 +500,11 @@ export default {
             }
             await saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
+                    if (localStorage.getItem("root") === "developer") {
+                        setTimeout(() => {
+                            this.getContractPaths()
+                        }, 200);
+                    }
                     if (type) {
                         this.$refs.file.value = null;
                         this.getContracts(data.contractPath, res.data.data);
@@ -977,8 +978,8 @@ export default {
          */
         select: function (val, type) {
             console.log(val, type);
-            if(!type){
-                this.$store.dispatch('set_selected_contracts_action',val);
+            if (!type) {
+                this.$store.dispatch('set_selected_contracts_action', val);
                 this.$store.dispatch('set_selected_contracts_info_action', val);
             }
             let num = 0;

@@ -150,7 +150,7 @@ export default {
                         trigger: "blur",
                     },
                     {
-                        pattern: /^[A-Za-z0-9_]+$/,
+                        pattern: /^[a-zA-Z_]+([a-zA-Z_][a-zA-Z0-9_]*[_])*([a-zA-Z_][a-zA-Z0-9_]*)$/,
                         message: this.$t("rule.contractRule"),
                         trigger: "blur",
                     },
@@ -168,7 +168,7 @@ export default {
                         trigger: "blur",
                     },
                     {
-                        // pattern: /^[A-Za-z].[A-Za-z]$/,
+                        pattern: /^[a-zA-Z_]+([a-zA-Z_][a-zA-Z0-9_]*[.])*([a-zA-Z_][a-zA-Z0-9_]*)$/,
                         message: this.$t("rule.contractGroupRule"),
                         trigger: "blur",
                     },

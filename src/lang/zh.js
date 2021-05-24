@@ -313,7 +313,8 @@ export default {
         exportSuccessed: '导出成功',
         updateSuccess: '成功',
         actualChannelIp: '根据实际channelIp修改',
-        projectTitle: '项目信息'
+        projectTitle: '项目信息',
+        haveAbi: 'abi信息不能为空',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -758,6 +759,7 @@ export default {
         transactionTime: "最新交易时间",
         hash: "哈希",
         inputUser: "请输入用户",
+        inputUserAddress: "请输入用户地址",
         startTime: "开始日期",
         endTime: "结束日期",
         unusualMoreTips: "异常过多，已经停止审计。建议查看交易情况，找出异常原因后导入合约或用户来清理异常记录。",

@@ -21,7 +21,7 @@
                 <el-input v-model="devOpsAddress" disabled></el-input>
             </el-form-item>
         </el-form>
-        <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+        <p style="padding-left: 50px" v-if="handleType =='add'">{{$t('govCommittee.dialogTips')}}</p>
         <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="close">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" @click="submit('addDevForm')" :loading="loading">{{this.$t('text.sure')}}</el-button>

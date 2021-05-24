@@ -216,7 +216,7 @@ export default {
     },
     watch: {
         $route(to, from) {
-            console.log()
+            console.log(this.$route.path)
             if (this.$route.path !== to.path && to.path !== "/node/node" && to.path !== "/node/chain") {
                 this.active = this.$route.path
             } else if (to.path === "/node/node" || to.path === "/node/chain") {
@@ -229,6 +229,9 @@ export default {
             }
             if (this.$route.path === '/parseAbi') {
                 this.active = '/contractList'
+            }
+            if (this.$route.path === '/privateKeyManagement') {
+                this.active = '/privateKeyManagement'
             }
         },
         // activeRoute(to, from) {
