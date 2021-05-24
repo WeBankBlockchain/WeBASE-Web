@@ -757,6 +757,7 @@ export default {
         transactionTime: "Latest Transaction Time",
         hash: "Hash",
         inputUser: "Please Enter User",
+        inputUserAddress: "Please Enter User Address",
         startTime: "Start Date",
         endTime: "End Date",
         unusualMoreTips: "There are too many exceptions and the audit has been stopped. It is recommended to check the transaction status, find out the cause of the abnormality and import the contract or user to clean up the abnormal record.",

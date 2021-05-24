@@ -1521,7 +1521,7 @@ export function deleteHandleHistory(data) {
         }
     })
 }
-// coantarct path list
+// contract path list
 export function getContractPathList(data) {
     return post({
         url: `${url.ORG_LIST}/contract/contractPath/list/${data}`,

@@ -3,7 +3,7 @@
     <div class="search-part">
 
             <div class="search-part-right">
-                <el-input :placeholder="$t('contracts.contractAddressInput')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
+                <el-input :placeholder="$t('privateKey.inputUserName')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                     <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                 </el-input>
             </div>
