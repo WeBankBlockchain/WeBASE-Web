@@ -335,12 +335,12 @@ export default {
         }
     },
     methods: {
-        queryIsDeployedModifyEnable(){
+        queryIsDeployedModifyEnable() {
             fetchIsDeployedModifyEnable()
-                .then(res=> {
-                    if(res.data.code==0){
+                .then(res => {
+                    if (res.data.code == 0) {
                         this.isDeployedModifyEnable = res.data.data
-                    }else {
+                    } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
@@ -710,7 +710,7 @@ export default {
         },
         // 导出java项目
         exportJava() {
-            this.$store.dispatch('set_exportProject_show_action',true)
+            this.$store.dispatch('set_exportProject_show_action', true)
         },
         refreshMessage: function () {
             this.abiFileShow = false;
@@ -720,16 +720,24 @@ export default {
             this.contractAddress = "";
         },
         deploying: function () {
-            if(this.data.contractStatus && this.data && this.data.contractStatus ==2) {
-                this.$confirm(this.$t('text.isRedeploy'))
-                .then(_ => {
-                    this.dialogUser = true
+            if (JSON.parse(this.abiFile).length == 0 || !this.abiFile) {
+                this.$message({
+                    type: 'error',
+                    message: this.$t('text.haveAbi')
                 })
-                .catch(_ => { });
-            }else {
-                this.dialogUser = true;
+            } else {
+                if (this.data.contractStatus && this.data && this.data.contractStatus == 2) {
+                    this.$confirm(this.$t('text.isRedeploy'))
+                        .then(_ => {
+                            this.dialogUser = true
+                        })
+                        .catch(_ => { });
+                } else {
+                    this.dialogUser = true;
+                }
             }
-            
+
+
         },
         userClose: function () {
             this.dialogUser = false;
@@ -907,7 +915,17 @@ export default {
             this.successHide = val;
         },
         send: function () {
-            this.dialogVisible = true;
+            console.log(JSON.parse(this.abiFile));
+            if(JSON.parse(this.abiFile).length == 0 || !this.abiFile){
+                this.$message({
+                    type: 'error',
+                    message: this.$t('text.haveAbi')
+                })
+            }else {
+                this.dialogVisible = true;
+            }
+            
+            
         },
         handleClose: function () {
             this.dialogVisible = false;

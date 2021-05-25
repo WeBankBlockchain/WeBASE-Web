@@ -42,6 +42,7 @@ export default {
         select: "Please select",
         tips: "Tips",
         updateSuccessMsg: "Update Success",
+        createSuccessMsg: "Create Success",
         save: "Save",
         compile: "Compile",
         deploy: "Deploy",
@@ -313,7 +314,9 @@ export default {
         exportSuccessed: 'export Successed',
         updateSuccess: 'update Success',
         actualChannelIp: 'Modify according to the actual channelip',
-        projectTitle: 'Project Info'
+        projectTitle: 'Project Info',
+        haveAbi: 'The ABI information cannot be empty',
+        haveSelectionAll: 'The contract is not compiled at all'
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -340,8 +343,8 @@ export default {
         contractAddress: "Please enter the contract address",
         contractAbi: "Please enter the contract ABI",
         contractLong: "1 to 32 characters in length",
-        contractRule: "Please enter numbers, letters or underscores",
-        contractGroupRule: "Contains letters or letters and '. ', cannot begin with a letter, cannot begin with '. ' At the end",
+        contractRule: "Contains letters or letters and '_', begins with a letter, cannot end with '_'",
+        contractGroupRule: "Contains letters or letters and '. ', cannot begin with a letter, cannot begin with '. ' Endings, such as com.webank",
         IpRule: "Please enter the correct IP",
         folderName: "Please enter a folder name",
         folderLong: "1 to 12 characters in length",
@@ -661,7 +664,7 @@ export default {
         privateKeyUser: "Private key user",
         publicKeyUser: "Public key user",
         publicKeyInfo: "Public key information",
-        inputUserName: "Please enter User Name",
+        inputUserName: "Please enter User Address",
         inputPublicInfo: "Please enter public key information or public key address.",
         userLong: "Within 120 characters",
         inputPublic: "Please enter public key information",

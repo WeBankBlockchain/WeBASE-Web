@@ -25,7 +25,7 @@
             <div class="mini-sidebar-contract-icon" v-if="!menuShowC" style="padding-bottom:40px">
                 <i class="el-icon-caret-right font-color-aeb1b5" @click="hideMune(false)" style="font-size: 18px;"></i>
             </div>
-            <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" active-text-color="#37eef2" active-background-color="#1e293e" background-color="#0c1220" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
+            <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" :active-text-color="activeTextColor ? '#37eef2': ''" active-background-color="#1e293e" background-color="#0c1220" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
                 <template v-for="(item,index) in routesListC" v-if="item.menuShow">
                     <el-submenu v-if="!item.leaf" :index="`${index}`" ref="ele" class="">
                         <template slot="title">
@@ -72,7 +72,8 @@ export default {
             active: '',
             userRole: localStorage.getItem("root"),
             routesList: [],
-            versionfunegt: versionfunegt
+            versionfunegt: versionfunegt,
+            activeTextColor: true
         };
     },
     computed: {
@@ -216,7 +217,7 @@ export default {
     },
     watch: {
         $route(to, from) {
-            console.log(this.$route.path)
+            console.log(to , from)
             if (this.$route.path !== to.path && to.path !== "/node/node" && to.path !== "/node/chain") {
                 this.active = this.$route.path
             } else if (to.path === "/node/node" || to.path === "/node/chain") {
@@ -230,21 +231,10 @@ export default {
             if (this.$route.path === '/parseAbi') {
                 this.active = '/contractList'
             }
-            if (this.$route.path === '/privateKeyManagement') {
-                this.active = '/privateKeyManagement'
+            if(to.path != from.path){
+                this.activeTextColor = false
             }
         },
-        // activeRoute(to, from) {
-
-        //     // console.log(this.$route.path, to, from, this.activeRoute)
-        //     console.log(this.$route.path !== to, to === "/node/node" || to === "/node/chain", to)
-        //     if (this.$route.path !== to && to !== "/node/node" && to !== "/node/chain") {
-        //         this.activeRoute = this.$route.path
-        //     } else if (to === "/node/node" || to === "/node/chain") {
-        //         this.activeRoute = '/front'
-        //     }
-        //     console.log(this.activeRoute)
-        // }
     },
     mounted: function () {
         this.$nextTick(function () {
