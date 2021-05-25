@@ -12,7 +12,7 @@
         <el-table :data="userList" tooltip-effect="dark" v-loading="loading">
             <el-table-column prop="address" :label="$t('privateKey.userAddress')" show-overflow-tooltip align="center">
                  <template slot-scope="scope">
-                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.signUserId)" :title="$t('privateKey.userAddress')"></i>
+                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.address)" :title="$t('privateKey.userAddress')"></i>
                     <span >{{scope.row.address}}</span>
                 </template>
             </el-table-column>
@@ -117,7 +117,7 @@ export default {
                 type: 1
             };
             if (this.contractData) {
-                reqQuery['userName'] = this.contractData;
+                reqQuery['address'] = this.contractData;
             }
             getAllUserList(reqData, reqQuery)
                 .then(res => {

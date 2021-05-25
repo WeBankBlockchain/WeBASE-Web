@@ -249,6 +249,10 @@ export default {
             fetchDeleteApp(val.id)
                 .then(res => {
                     if (res.data.code === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.resetSuccess')
+                        })
                         this.queryAppList()
                     } else {
                         this.$message({

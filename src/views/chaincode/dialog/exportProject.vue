@@ -47,7 +47,7 @@
                     <template slot-scope="scope">
                         <!-- <span>{{contractList}}</span> -->
                         <div class="table-content">
-                            <el-table ref="multipleTable" :data="scope.row.contractList" :show-header='true' @selection-change="handleSelectionChange($event, scope.row)" :default-sort="{prop: 'contractPath', order: 'descending'}">
+                            <el-table ref="multipleTable" :data="scope.row.contractList" :show-header='true' @select-all="handleSelectAll" @selection-change="handleSelectionChange($event, scope.row)" :default-sort="{prop: 'contractPath', order: 'descending'}">
                                 <el-table-column type="selection" :selectable='selectDisabled' width="55">
                                 </el-table-column>
                                 <el-table-column prop="contractName" show-overflow-tooltip :label="$t('contracts.contractName')"></el-table-column>
@@ -364,6 +364,14 @@ export default {
                     return false;
                 }
             })
+        },
+        handleSelectAll(selection){
+            if(!selection.length){
+                this.$message({
+                    type:"error",
+                    message: this.$t('text.haveSelectionAll')
+                })
+            }
         },
         export() {
             // const idList = this.multipleSelection.map(value => {

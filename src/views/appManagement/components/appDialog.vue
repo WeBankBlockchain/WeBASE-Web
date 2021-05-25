@@ -212,7 +212,7 @@ export default {
                     if (res.data.code === 0) {
                         this.$message({
                             type: 'success',
-                            message: this.$t('text.updateSuccessMsg')
+                            message: this.handleType == 'modify' ?this.$t('text.updateSuccessMsg') : this.$t('text.createSuccessMsg')
                         })
                         this.$emit('success')
                     } else {
