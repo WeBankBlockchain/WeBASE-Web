@@ -117,6 +117,9 @@ export default {
             useAutoLogin: false,
             vueShow:false,
             routerUrl:"/main",
+            postFUrl:"",
+            postUser:"",
+            postPassword:"",
         };
     },
     computed: {
@@ -148,7 +151,6 @@ export default {
         },
     },
     created: function(){
-        this.routerUrl = this.$route.query.router ? this.$route.query.router : this.routerUrl;
         this.checkIframe().then(res => {
             if(this.useAutoLogin){
                 this.changeCode(this.autoLogin);
@@ -159,6 +161,7 @@ export default {
         });
     },
     mounted: function () {
+        window.addEventListener('message',this.listenMessage,true);  
         localStorage.setItem("config", 0);
         this.getEncryption();
         // let soljson = document.getElementById('soljson')
@@ -291,7 +294,6 @@ export default {
                 .then((res) => {
                     if (res.data.code == 0) {
                         localStorage.setItem("deployType", res.data.data);
-                        console.log("this.routerUrl",this.routerUrl)
                         router.push(this.routerUrl);
                     } else {
                         this.$message({
@@ -311,8 +313,8 @@ export default {
         },
         autoLogin: function(){
             this.loginForm.vercode = "8888";
-            this.loginForm.user = this.$route.query.user;
-            this.loginForm.password = this.$route.query.password;
+            this.loginForm.user = this.postUser;
+            this.loginForm.password = this.postPassword;
             this.userLogin();
         },
         getConfigs: async function () {
@@ -346,14 +348,8 @@ export default {
                     this.useAutoLogin = false;
                 }
                 else{
-                    let url = "";
                     if(this.supportIframe){
-                        if(parent !== window){
-                            url = document.referrer;
-                        }
-                        else{
-                            url = parent.location.href;
-                        }
+                        let url = this.postFUrl;
                         let findUrl = this.supportUrls.find(function(item,index){
                             return url.indexOf(item.toString()) > -1;
                         });
@@ -366,7 +362,22 @@ export default {
                     }
                 }
             });
+        },
+        listenMessage: function(e){            
+            if(e.data.router){
+                this.destroyListenMessage();
+                this.routerUrl = e.data.router;
+                this.postFUrl = e.origin;
+                this.postUser = e.data.user;
+                this.postPassword = e.data.password;
+            }
+        },
+        destroyListenMessage: function(){
+            window.removeEventListener("message", this.listenMessage, true);
         }
+    },
+    destroyed(){
+        this.destroyListenMessage();
     }
 };
 </script>

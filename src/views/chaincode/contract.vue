@@ -210,6 +210,7 @@ export default {
                         console.log('加载成功.');
                         console.timeEnd("耗时");
                         that.loading = false
+                        that.$refs.menu.getContractPaths();
                     }
                 } else {
                     that.loading = false

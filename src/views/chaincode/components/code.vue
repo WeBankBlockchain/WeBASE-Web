@@ -1082,8 +1082,9 @@ export default {
     padding-left: 20px;
 }
 .contract-code-handle {
-    float: right;
-    padding-right: 20px;
+    /* float: right; 
+    padding-right: 20px;*/
+    padding-left: 50px;
 }
 .contract-info-title {
     text-align: center;
