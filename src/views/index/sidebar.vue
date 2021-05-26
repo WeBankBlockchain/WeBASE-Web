@@ -169,12 +169,6 @@ export default {
                             case 'emailAlarmType':
                                 it.name = this.$t('title.emailAlarmType')
                                 break;
-                            // case 'externalAccount':
-                            //     it.name = this.$t('title.externalAccount')
-                            //     break;
-                            // case 'externalContract':
-                            //     it.name = this.$t('title.externalContract')
-                            //     break;
                             case 'blockEvent':
                                 it.name = this.$t('title.blockEvent')
                                 break;
@@ -217,13 +211,16 @@ export default {
     },
     watch: {
         $route(to, from) {
-            console.log(to , from)
             if (this.$route.path !== to.path && to.path !== "/node/node" && to.path !== "/node/chain") {
                 this.active = this.$route.path
             } else if (to.path === "/node/node" || to.path === "/node/chain") {
                 this.active = '/front'
             } else {
-                this.active = this.$route.path
+                if(this.$route.path === '/front' || this.$route.path === '/newNode'){
+                    
+                }else {
+                    this.active = this.$route.path
+                }
             }
             if (this.$route.path === '/hostDetail') {
                 this.active = '/front'
@@ -234,13 +231,14 @@ export default {
             if(to.path != from.path){
                 this.activeTextColor = false
             }
+            
         },
     },
     mounted: function () {
-        this.$nextTick(function () {
+        // this.$nextTick( () =>{
             localStorage.setItem("sidebarHide", false);
             this.changeRouter();
-        });
+        // });
     },
     methods: {
         changeRouter: function () {
@@ -253,6 +251,7 @@ export default {
                 if (item.nameKey == 'systemManager') {
                     if (item.children) {
                         item.children.forEach(it => {
+                            console.log('nodeVersionChange:',localStorage.getItem("nodeVersionChange"))
                             if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
                                 it.menuShow = false;
                             } else if (it.nameKey == 'newPermission') {
@@ -300,12 +299,6 @@ export default {
                              if (it.nameKey == 'checkEvent') {
                                 it.menuShow = true;
                             }
-                            // if (it.nameKey == 'abiList') {
-                            //     it.menuShow = true;
-                            // }
-                            // if (it.nameKey == 'parseAbi') {
-                            //     it.menuShow = true;
-                            // }
                             if (it.nameKey == 'CNSmanager') {
                                 it.menuShow = true;
                             }
@@ -348,6 +341,7 @@ export default {
                     if (this.userRole === "admin" && item.name === "帐号管理") {
                         item.menuShow = true;
                     }
+
                     if (item.nameKey == 'systemManager') {
                         if (item.children) {
                             item.children.forEach(it => {
