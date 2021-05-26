@@ -366,12 +366,12 @@ export default {
             })
         },
         handleSelectAll(selection){
-            if(!selection.length){
-                this.$message({
-                    type:"error",
-                    message: this.$t('text.haveSelectionAll')
-                })
-            }
+            // if(!selection.length){
+            //     this.$message({
+            //         type:"error",
+            //         message: this.$t('text.haveSelectionAll')
+            //     })
+            // }
         },
         export() {
             // const idList = this.multipleSelection.map(value => {
@@ -432,7 +432,6 @@ export default {
                 });
         },
         changeFront(val) {
-            console.log(val);
             this.queryChannelPort(val)
         },
         queryChannelPort(val) {
@@ -444,11 +443,13 @@ export default {
                     if (res.data.code === 0) {
                         if (res.data.data) {
                             if (res.data.data.channelPort) {
-                                this.queryPort = true
-                                this.projectFrom.channelPort = res.data.data.channelPort
+                                if(res.data.data.channelPort == 'null'){
+                                    this.projectFrom.channelPort = ''
+                                }else {
+                                    this.queryPort = true
+                                    this.projectFrom.channelPort = res.data.data.channelPort
+                                }
                             }
-
-
                         }
                     } else {
                         this.$message({

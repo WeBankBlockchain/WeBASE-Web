@@ -316,7 +316,8 @@ export default {
         actualChannelIp: 'Modify according to the actual channelip',
         projectTitle: 'Project Info',
         haveAbi: 'The ABI information cannot be empty',
-        haveSelectionAll: 'The contract is not compiled at all'
+        haveSelectionAll: 'The contract is not compiled at all',
+        haveCertSdk: 'Failed to get SDK certificate. Please check certificate file'
     },
     rule: {
         textLong: "1 to 32 characters in length",
