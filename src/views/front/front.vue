@@ -15,7 +15,7 @@
  */
 <template>
     <div class="front-module">
-        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head>
+        <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head>
         <!-- <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>

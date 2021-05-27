@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-head :headTitle="$t('title.contractWarehouse')"></content-head>
+        <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractWarehouse')"></content-head>
         <div class="module-wrapper" style="padding: 20px;" v-loading="loading">
             <div class="contract-introduction">
                 <!-- <p>{{$t('text.appIntroduction')}}</p> -->

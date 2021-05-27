@@ -2,7 +2,7 @@
     <div>
         <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')" @changGroup="changGroup" :headTooltip="$t('title.permissionTips')" :headHref="headHref">
         </v-content-head>
-        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
                 <el-tab-pane :label="$t('title.committeeMgmt')">
                     <committeeMgmt ref='committeeMgmt'></committeeMgmt>
@@ -12,6 +12,9 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
+        <div v-else class="module-wrapper" style="padding: 30px 29px 0 29px;">
+             <permission ref='permission'></permission>
+        </div>
     </div>
 </template>
 
@@ -19,18 +22,23 @@
 import contentHead from "@/components/contentHead";
 import committeeMgmt from "@/views/committeeMgmt/index";
 import developerMgmt from "@/views/developerMgmt/index";
+import permission from "@/views/permission/index";
+import {getFronts} from "@/util/api";
 export default {
     name: 'newPermission',
     components: {
         "v-content-head": contentHead,
         committeeMgmt,
-        developerMgmt
+        developerMgmt,
+        permission
     },
     data() {
         return {
-            activeName: 0
+            activeName: 0,
+            nodeVersionChange: localStorage.getItem("nodeVersionChange")
+            // nodeVersionChange: ""
         }
-    },
+    },  
     computed: {
         headHref() {
             let data = {
@@ -38,8 +46,7 @@ export default {
                 content: this.$t('title.permissionHref')
             }
             return data
-        },
-    },
+        },   
     methods: {
         handleClick() {
             if (this.activeName == 0) {
@@ -72,7 +79,8 @@ export default {
                     this.$refs.developerMgmt.getUserData()
                 }
             }
-        }
+        } 
+      }
     }
 }
 </script>

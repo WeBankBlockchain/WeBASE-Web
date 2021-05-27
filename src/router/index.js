@@ -166,7 +166,7 @@ const routes = [
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
             { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: true, meta: { requireAuth: true } },
-            { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
             { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } },
             // { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },

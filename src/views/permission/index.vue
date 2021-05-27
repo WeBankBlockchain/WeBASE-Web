@@ -1,8 +1,8 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')" @changGroup="changGroup" :headTooltip="$t('title.permissionTips')" :headHref="headHref">
-        </v-content-head>
-        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')" @changGroup="changGroup" :headTooltip="$t('title.permissionTips')" :headHref="headHref">
+        </v-content-head> -->
+        <div class="" style="padding: 0px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
                 <el-tab-pane :label="$t('system.chainManager')">
                     <el-button type="primary" :disabled="disabled" @click="addAuthor">{{this.$t('system.addChainManager')}}</el-button>
