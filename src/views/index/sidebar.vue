@@ -61,6 +61,7 @@
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
 import { versionfunegt } from "@/util/util.js";
+import{getFronts} from "@/util/api";
 export default {
     name: "sidebar",
     props: ["minMenu"],
@@ -237,6 +238,7 @@ export default {
     mounted: function () {
         // this.$nextTick( () =>{
             localStorage.setItem("sidebarHide", false);
+            this.getFrontTable();
             this.changeRouter();
         // });
     },
@@ -248,23 +250,23 @@ export default {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
                 }
-                if (item.nameKey == 'systemManager') {
-                    if (item.children) {
-                        item.children.forEach(it => {
-                            console.log('nodeVersionChange:',localStorage.getItem("nodeVersionChange"))
-                            if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
-                                it.menuShow = false;
-                            } else if (it.nameKey == 'newPermission') {
-                                it.menuShow = true;
-                            } else {
-                                it.menuShow = true;
-                            }
-                            if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
-                                it.menuShow = false;
-                            }
-                        })
-                    }
-                }
+                // if (item.nameKey == 'systemManager') {
+                //     if (item.children) {
+                //         item.children.forEach(it => {
+                //             console.log('nodeVersionChange:',localStorage.getItem("nodeVersionChange"))
+                //             if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
+                //                 it.menuShow = false;
+                //             } else if (it.nameKey == 'newPermission') {
+                //                 it.menuShow = true;
+                //             } else {
+                //                 it.menuShow = true;
+                //             }
+                //             if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
+                //                 it.menuShow = false;
+                //             }
+                //         })
+                //     }
+                // }
             });
             if (localStorage.getItem("root") === "developer") {
                 list.forEach(item => {
@@ -342,25 +344,25 @@ export default {
                         item.menuShow = true;
                     }
 
-                    if (item.nameKey == 'systemManager') {
-                        if (item.children) {
-                            item.children.forEach(it => {
-                                if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
-                                    it.menuShow = false;
-                                } else if (it.nameKey == 'newPermission') {
-                                    it.menuShow = true;
-                                } else {
-                                    it.menuShow = true;
-                                }
-                                if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
-                                    it.menuShow = false;
-                                }
-                                if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
-                                    it.menuShow = false;
-                                }
-                            })
-                        }
-                    }
+                    // if (item.nameKey == 'systemManager') {
+                    //     if (item.children) {
+                    //         item.children.forEach(it => {
+                    //             if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
+                    //                 it.menuShow = false;
+                    //             } else if (it.nameKey == 'newPermission') {
+                    //                 it.menuShow = true;
+                    //             } else {
+                    //                 it.menuShow = true;
+                    //             }
+                    //             if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
+                    //                 it.menuShow = false;
+                    //             }
+                    //             if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
+                    //                 it.menuShow = false;
+                    //             }
+                    //         })
+                    //     }
+                    // }
                 });
             }
             this.routesList = list;
@@ -386,7 +388,48 @@ export default {
                 localStorage.setItem("sidebarHide", false);
             }
         },
-        getAdmin: function () { }
+        getAdmin: function () { },
+        getFrontTable() {
+            let reqData = {
+                // frontId: this.frontId
+            }
+            getFronts(reqData)
+                .then(res => { 
+                    if (res.data.code === 0) {
+                        if (res.data.data.length > 0) {
+                            let num = 0;
+                            let versionKey;
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                if (res.data.data[i].clientVersion || res.data.data[i].supportVersion) {
+                                    this.$store.dispatch('set_version_action', res.data.data[i].clientVersion);
+                                    this.$store.dispatch('set_support_version_action', res.data.data[i].supportVersion);
+                                    if (res.data.data[i].supportVersion) {
+                                        versionKey = res.data.data[i].supportVersion.substring(2, 3)
+                                        if (versionKey > 4) {
+                                            num++
+                                        }
+                                    }
+                                }
+                            }
+                            if (num > 0) {
+                                localStorage.setItem("nodeVersionChange", 1)
+                            } else {
+                                localStorage.setItem("nodeVersionChange", "")
+                            }
+                           
+                        } 
+
+                    } 
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        }
     }
 };
 </script>
