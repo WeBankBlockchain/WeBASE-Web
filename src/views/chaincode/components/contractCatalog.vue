@@ -500,11 +500,11 @@ export default {
             }
             await saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
-                    if (localStorage.getItem("root") === "developer") {
+                    // if (localStorage.getItem("root") === "developer") {
                         setTimeout(() => {
                             this.getContractPaths()
                         }, 200);
-                    }
+                    // }
                     if (type) {
                         this.$refs.file.value = null;
                         this.getContracts(data.contractPath, res.data.data);
