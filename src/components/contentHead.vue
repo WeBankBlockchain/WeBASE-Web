@@ -268,6 +268,9 @@ export default {
             delCookie("JSESSIONID");
             delCookie("NODE_MGR_ACCOUNT_C");
             this.$router.push("/login");
+            if(localStorage.getItem('root')==='developer'){
+                location.reload();
+            }
         },
         changePassword: function () {
             this.changePasswordDialogVisible = true;

@@ -61,7 +61,7 @@
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
 import { versionfunegt } from "@/util/util.js";
-import{getFronts} from "@/util/api";
+import { getFronts } from "@/util/api";
 export default {
     name: "sidebar",
     props: ["minMenu"],
@@ -217,9 +217,9 @@ export default {
             } else if (to.path === "/node/node" || to.path === "/node/chain") {
                 this.active = '/front'
             } else {
-                if(this.$route.path === '/front' || this.$route.path === '/newNode'){
-                    
-                }else {
+                if (this.$route.path === '/front' || this.$route.path === '/newNode') {
+
+                } else {
                     this.active = this.$route.path
                 }
             }
@@ -229,26 +229,35 @@ export default {
             if (this.$route.path === '/parseAbi') {
                 this.active = '/contractList'
             }
-            if(to.path != from.path){
+            if (to.path != from.path) {
                 this.activeTextColor = false
             }
-            
+
         },
     },
     mounted: function () {
-        // this.$nextTick( () =>{
+        this.$nextTick( () =>{
             localStorage.setItem("sidebarHide", false);
             this.getFrontTable();
             this.changeRouter();
-        // });
+        });
     },
     methods: {
         changeRouter: function () {
+
             let list = this.$router.options.routes;
 
             list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
+                }
+                if (item.children) {
+                    item.children.forEach((it) => {
+                        // it.menuShow = true;
+                        // if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
+                        //         it.menuShow = false;
+                        // }
+                    })
                 }
                 // if (item.nameKey == 'systemManager') {
                 //     if (item.children) {
@@ -298,7 +307,7 @@ export default {
                             if (it.nameKey == 'contractList') {
                                 it.menuShow = true;
                             }
-                             if (it.nameKey == 'checkEvent') {
+                            if (it.nameKey == 'checkEvent') {
                                 it.menuShow = true;
                             }
                             if (it.nameKey == 'CNSmanager') {
@@ -310,7 +319,7 @@ export default {
                             if (it.nameKey == 'PrivateKey') {
                                 it.menuShow = true;
                             }
-                           
+
                         })
                     }
                 });
@@ -394,7 +403,7 @@ export default {
                 // frontId: this.frontId
             }
             getFronts(reqData)
-                .then(res => { 
+                .then(res => {
                     if (res.data.code === 0) {
                         if (res.data.data.length > 0) {
                             let num = 0;
@@ -416,10 +425,10 @@ export default {
                             } else {
                                 localStorage.setItem("nodeVersionChange", "")
                             }
-                           
-                        } 
 
-                    } 
+                        }
+
+                    }
                 })
                 .catch(err => {
                     this.$message({
