@@ -99,7 +99,7 @@ const routes = [
         component: main,
         name: '链管理',
         nameKey: "chainTitle",
-        // leaf: true,
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
@@ -107,8 +107,6 @@ const routes = [
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/node/:id', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
             { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
-            
-
             { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", leaf: false, menuShow: false, meta: { requireAuth: true } }
         ]
     },
@@ -130,7 +128,7 @@ const routes = [
         component: main,
         name: '合约管理',
         nameKey: "contractTitle",
-        // leaf: true,
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
@@ -162,6 +160,7 @@ const routes = [
         component: main,
         name: '系统管理',
         nameKey: "systemManager",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
@@ -191,6 +190,7 @@ const routes = [
         component: main,
         name: '系统监控',
         nameKey: "systemMonitor",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
@@ -205,6 +205,7 @@ const routes = [
         component: main,
         name: '交易审计',
         nameKey: "transactionAudit",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-regulatory sidebar-icon',
         children: [
@@ -220,6 +221,7 @@ const routes = [
         component: main,
         name: '订阅事件',
         nameKey: "subscribeEvent",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-dingyue sidebar-icon',
         children: [

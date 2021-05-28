@@ -20,6 +20,7 @@ export default {
         }
     },
     created: function () {
+        localStorage.removeItem('selectData')
         if (localStorage.getItem("deployType")) {
             this.deployType = localStorage.getItem("deployType")
         } else {
