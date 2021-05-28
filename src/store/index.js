@@ -133,6 +133,7 @@ export default new Vuex.Store({
             context.commit("set_folders", data)
         },
         set_contract_dataList_action(context, data) {
+            console.log('store:', data)
             context.commit('set_contract_dataList', data)
         },
         set_worker_action(context, data) {

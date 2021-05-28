@@ -617,6 +617,7 @@ export default {
                 that.compileShow = true;
                 that.loading = false;
             })
+            console.log('wwww:', w)
         },
         compileLowVersion: function () {
             // this.loading = true;

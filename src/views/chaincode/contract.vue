@@ -90,6 +90,12 @@ export default {
             }
         }
     },
+    destroyed(){
+        if(this.$store.state.worke){
+            this.$store.state.worker.terminate()
+            this.$store.state.worker = null
+        }
+    },
     mounted: function () {
         this.allVersion = [
             {
@@ -141,6 +147,7 @@ export default {
     methods: {
         initWorker() {
             let w = webworkify(require.resolve('@/util/file.worker'));
+            console.log('w:', w);
             this.$store.state.worker = w
         },
         querySolcList() {

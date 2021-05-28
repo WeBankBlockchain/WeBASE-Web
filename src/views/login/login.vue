@@ -148,6 +148,7 @@ export default {
         //     soljson.remove()
         //     location.reload()
         // }
+        this.$store.dispatch('set_contract_dataList_action', []);
     },
     methods: {
         handleEncryption: function () {

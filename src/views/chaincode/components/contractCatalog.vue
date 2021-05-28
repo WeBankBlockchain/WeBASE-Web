@@ -771,6 +771,7 @@ export default {
                 if (res.data.code == 0) {
                     this.contractList = []
                     let contractList = res.data.data || [];
+                    console.log('contractDataList:',this.$store.state.contractDataList)
                     let contractDataList = this.$store.state.contractDataList;
                     //查询的合约列表与存入的合约列表合并且除重处理
                     this.contractList = this.changeContractData(contractDataList, contractList, data.contractPath)

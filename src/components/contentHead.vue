@@ -269,7 +269,9 @@ export default {
             delCookie("NODE_MGR_ACCOUNT_C");
             this.$router.push("/login");
             if(localStorage.getItem('root')==='developer'){
-                location.reload();
+                setTimeout(() => {
+                    location.reload();
+                }, 300);
             }
         },
         changePassword: function () {
