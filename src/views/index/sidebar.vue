@@ -236,7 +236,7 @@ export default {
         },
     },
     mounted: function () {
-        this.$nextTick( () =>{
+        this.$nextTick(() => {
             localStorage.setItem("sidebarHide", false);
             this.getFrontTable();
             this.changeRouter();
@@ -244,38 +244,14 @@ export default {
     },
     methods: {
         changeRouter: function () {
-
-            let list = this.$router.options.routes;
+            let list = this.$router.options.routes.map(item => {
+                return item
+            });
 
             list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
                 }
-                if (item.children) {
-                    item.children.forEach((it) => {
-                        // it.menuShow = true;
-                        // if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
-                        //         it.menuShow = false;
-                        // }
-                    })
-                }
-                // if (item.nameKey == 'systemManager') {
-                //     if (item.children) {
-                //         item.children.forEach(it => {
-                //             console.log('nodeVersionChange:',localStorage.getItem("nodeVersionChange"))
-                //             if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
-                //                 it.menuShow = false;
-                //             } else if (it.nameKey == 'newPermission') {
-                //                 it.menuShow = true;
-                //             } else {
-                //                 it.menuShow = true;
-                //             }
-                //             if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
-                //                 it.menuShow = false;
-                //             }
-                //         })
-                //     }
-                // }
             });
             if (localStorage.getItem("root") === "developer") {
                 list.forEach(item => {
@@ -319,11 +295,66 @@ export default {
                             if (it.nameKey == 'PrivateKey') {
                                 it.menuShow = true;
                             }
-
                         })
                     }
                 });
             } else {
+                for (let i = 0; i < list.length; i++) {
+                    if (!list[i]['leaf']) {
+                        if (list[i].children) {
+                            list[i].children.forEach(item => {
+                                if (item.nameKey == 'hostMgrTitle') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/front') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/newPermission') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/configManagement') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/contractWarehouse') {
+                                    item.menuShow = true
+                                }
+
+                                if (item.path == '/certificate') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/nodesMetric') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/hostMetric') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/emailAlarm') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/emailAlarmType') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/transactionCharts') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/unusualUser') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/unusualContract') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/blockEvent') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/contractEvent') {
+                                    item.menuShow = true
+                                }
+                            })
+                        }
+                    }
+                }
+
+
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].name == '帐号管理') {
                         list[i].menuShow = false
@@ -342,6 +373,7 @@ export default {
                             if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
                                 it.menuShow = false;
                             }
+
                         })
                     }
                     if (list[i].nameKey == 'guide') {

@@ -782,7 +782,6 @@ export default {
                         let result = [];
                         let arrry = []
                         let obj = {};
-
                         this.contractList.forEach(value => {
                             this.$set(value, "contractType", 'file')
                             this.$set(value, "contractActive", false)
