@@ -26,6 +26,9 @@
                 </el-form-item>
                 <el-form-item label="channelPort" prop="channelPort">
                     <el-input v-model="projectFrom.channelPort" :disabled="queryPort ? true : false " style="width: 415px"></el-input>
+                    <el-tooltip effect="dark" :content="$t('text.haveChannelPort')" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
                 <!-- </div> -->
                 <el-form-item :label="$t('text.projectUser')">
