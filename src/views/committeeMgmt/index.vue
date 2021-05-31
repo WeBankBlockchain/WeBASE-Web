@@ -59,6 +59,7 @@
                             </el-select>
                         </el-form-item>
                     </el-form>
+                    <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p>
                     <div class="text-right sure-btn" style="margin-top:10px">
                         <el-button @click="closeAddCommittee">{{this.$t('text.cancel')}}</el-button>
                         <el-button type="primary" @click="sureAddCommittee">{{this.$t('text.sure')}}</el-button>
@@ -83,6 +84,7 @@
                             </el-select>
                         </el-form-item>
                     </el-form>
+                    <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p>
                     <div class="text-right sure-btn" style="margin-top:10px">
                         <el-button @click="closeDeleteCommittee">{{this.$t('text.cancel')}}</el-button>
                         <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
@@ -110,6 +112,7 @@
                             <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" class="form-item-input"></el-input>
                         </el-form-item>
                     </el-form>
+                    <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
                     <div class="text-right sure-btn" style="margin-top:10px">
                         <el-button @click="closeModifyWeight">{{this.$t('text.cancel')}}</el-button>
                         <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
@@ -129,6 +132,7 @@
                             <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" class="form-item-input"></el-input>
                         </el-form-item>
                     </el-form>
+                    <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
                     <div class="text-right sure-btn" style="margin-top:10px">
                         <el-button @click="closeModifyThreshold">{{this.$t('text.cancel')}}</el-button>
                         <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>

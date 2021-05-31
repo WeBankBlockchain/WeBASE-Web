@@ -53,6 +53,7 @@ const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
 const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
 // const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 const appManagement = resolve => require(['@/views/appManagement'], resolve); 
+const toolsContract = resolve => require(['@/views/toolsContract'], resolve);
 Vue.use(Router);
 const routes = [
     {
@@ -98,7 +99,7 @@ const routes = [
         component: main,
         name: '链管理',
         nameKey: "chainTitle",
-        // leaf: true,
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-group sidebar-icon',
         children: [
@@ -106,8 +107,6 @@ const routes = [
             { path: '/front', component: front, name: '节点管理', nameKey: "nodeTitle", menuShow: true, meta: { requireAuth: true } },
             { path: '/node/:id', component: node, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
             { path: '/newNode', component: newFront, name: '节点管理', nameKey: "nodeTitle", menuShow: false, meta: { requireAuth: true } },
-            
-
             { path: '/hostDetail', component: hostDetail, name: '节点详情', nameKey: "nodeDetail", leaf: false, menuShow: false, meta: { requireAuth: true } }
         ]
     },
@@ -129,19 +128,19 @@ const routes = [
         component: main,
         name: '合约管理',
         nameKey: "contractTitle",
-        // leaf: true,
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-heyueguanli sidebar-icon',
         children: [
             { path: '/contract', component: contract, name: '合约IDE', nameKey: "contractIDE", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractList', component: oldContract, name: '合约列表', nameKey: "contractList", menuShow: true, meta: { requireAuth: true } },
-            // { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', enName: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
+            { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', nameKey: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
             // { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: false, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
-            // { path: '/onlineTools', component: onlineTools, name: '在线工具', nameKey: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
+            { path: '/toolsContract', component: toolsContract, name: '工具合约', nameKey: 'toolsContract', menuShow: false, meta: { requireAuth: false } }, 
         ]
     },
     {
@@ -161,11 +160,12 @@ const routes = [
         component: main,
         name: '系统管理',
         nameKey: "systemManager",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
             { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: true, meta: { requireAuth: true } },
-            { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
+            // { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
             { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } },
             // { path: '/committeeMgmt', component: committeeMgmt, name: '委员会管理', nameKey: "committeeMgmt", menuShow: true, meta: { requireAuth: true } },
@@ -190,6 +190,7 @@ const routes = [
         component: main,
         name: '系统监控',
         nameKey: "systemMonitor",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
@@ -204,6 +205,7 @@ const routes = [
         component: main,
         name: '交易审计',
         nameKey: "transactionAudit",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-regulatory sidebar-icon',
         children: [
@@ -219,6 +221,7 @@ const routes = [
         component: main,
         name: '订阅事件',
         nameKey: "subscribeEvent",
+        leaf: false,
         menuShow: true,
         iconCls: 'wbs-icon-dingyue sidebar-icon',
         children: [

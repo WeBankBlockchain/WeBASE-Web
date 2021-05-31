@@ -87,6 +87,13 @@ export default {
                         required: true,
                         message: this.$t("rule.contractName"),
                         trigger: "blur"
+                    },
+                    {
+                        required: true,
+                        min: 1,
+                        max: 100,
+                        message: this.$t("rule.textLong1_100"),
+                        trigger: "blur"
                     }
                 ]
             }

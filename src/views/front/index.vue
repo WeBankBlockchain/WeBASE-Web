@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%">
-        <newFront v-if='deployType == 0'></newFront>
+        <newFront v-show='deployType == 0'></newFront>
         <deployFront v-if='deployType == 1'></deployFront>
     </div>
 </template>
@@ -20,6 +20,7 @@ export default {
         }
     },
     created() {
+        console.log(localStorage.getItem("deployType"))
         if (localStorage.getItem("deployType")) {
             this.deployType = localStorage.getItem("deployType")
         } else {

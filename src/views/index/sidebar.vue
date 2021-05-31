@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div style="height: 100%;position: relative;box-sizing: border-box;">
+    <div style="height: 100%;position: relative;box-sizing: border-box">
         <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
             <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
@@ -25,7 +25,7 @@
             <div class="mini-sidebar-contract-icon" v-if="!menuShowC" style="padding-bottom:40px">
                 <i class="el-icon-caret-right font-color-aeb1b5" @click="hideMune(false)" style="font-size: 18px;"></i>
             </div>
-            <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" active-text-color="#37eef2" active-background-color="#1e293e" background-color="#0c1220" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
+            <el-menu default-active="999" router class="el-menu-vertical-demo" text-color="#9da2ab" :active-text-color="activeTextColor ? '#37eef2': ''" active-background-color="#1e293e" background-color="#0c1220" @select="select" :collapse="!menuShowC" @open="handleOpen" @close="handleClose">
                 <template v-for="(item,index) in routesListC" v-if="item.menuShow">
                     <el-submenu v-if="!item.leaf" :index="`${index}`" ref="ele" class="">
                         <template slot="title">
@@ -61,6 +61,7 @@
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
 import { versionfunegt } from "@/util/util.js";
+import { getFronts } from "@/util/api";
 export default {
     name: "sidebar",
     props: ["minMenu"],
@@ -72,7 +73,8 @@ export default {
             active: '',
             userRole: localStorage.getItem("root"),
             routesList: [],
-            versionfunegt: versionfunegt
+            versionfunegt: versionfunegt,
+            activeTextColor: true
         };
     },
     computed: {
@@ -168,12 +170,6 @@ export default {
                             case 'emailAlarmType':
                                 it.name = this.$t('title.emailAlarmType')
                                 break;
-                            // case 'externalAccount':
-                            //     it.name = this.$t('title.externalAccount')
-                            //     break;
-                            // case 'externalContract':
-                            //     it.name = this.$t('title.externalContract')
-                            //     break;
                             case 'blockEvent':
                                 it.name = this.$t('title.blockEvent')
                                 break;
@@ -194,6 +190,9 @@ export default {
                             case 'appManagement':
                                 it.name = this.$t('title.appManagement')
                                 break;
+                            case 'contractWarehouse':
+                                it.name = this.$t('title.contractWarehouse')
+                                break;
                         }
                     })
                 }
@@ -213,13 +212,16 @@ export default {
     },
     watch: {
         $route(to, from) {
-            console.log()
             if (this.$route.path !== to.path && to.path !== "/node/node" && to.path !== "/node/chain") {
                 this.active = this.$route.path
             } else if (to.path === "/node/node" || to.path === "/node/chain") {
                 this.active = '/front'
             } else {
-                this.active = this.$route.path
+                if (this.$route.path === '/front' || this.$route.path === '/newNode') {
+
+                } else {
+                    this.active = this.$route.path
+                }
             }
             if (this.$route.path === '/hostDetail') {
                 this.active = '/front'
@@ -227,48 +229,28 @@ export default {
             if (this.$route.path === '/parseAbi') {
                 this.active = '/contractList'
             }
-        },
-        // activeRoute(to, from) {
+            if (to.path != from.path) {
+                this.activeTextColor = false
+            }
 
-        //     // console.log(this.$route.path, to, from, this.activeRoute)
-        //     console.log(this.$route.path !== to, to === "/node/node" || to === "/node/chain", to)
-        //     if (this.$route.path !== to && to !== "/node/node" && to !== "/node/chain") {
-        //         this.activeRoute = this.$route.path
-        //     } else if (to === "/node/node" || to === "/node/chain") {
-        //         this.activeRoute = '/front'
-        //     }
-        //     console.log(this.activeRoute)
-        // }
+        },
     },
     mounted: function () {
-        this.$nextTick(function () {
+        this.$nextTick(() => {
             localStorage.setItem("sidebarHide", false);
+            this.getFrontTable();
             this.changeRouter();
         });
     },
     methods: {
         changeRouter: function () {
-            let list = this.$router.options.routes;
+            let list = this.$router.options.routes.map(item => {
+                return item
+            });
 
             list.forEach(item => {
                 if (this.userRole === "admin" && item.name === "帐号管理") {
                     item.menuShow = true;
-                }
-                if (item.nameKey == 'systemManager') {
-                    if (item.children) {
-                        item.children.forEach(it => {
-                            if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
-                                it.menuShow = false;
-                            } else if (it.nameKey == 'newPermission') {
-                                it.menuShow = true;
-                            } else {
-                                it.menuShow = true;
-                            }
-                            if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
-                                it.menuShow = false;
-                            }
-                        })
-                    }
                 }
             });
             if (localStorage.getItem("root") === "developer") {
@@ -301,12 +283,9 @@ export default {
                             if (it.nameKey == 'contractList') {
                                 it.menuShow = true;
                             }
-                            // if (it.nameKey == 'abiList') {
-                            //     it.menuShow = true;
-                            // }
-                            // if (it.nameKey == 'parseAbi') {
-                            //     it.menuShow = true;
-                            // }
+                            if (it.nameKey == 'checkEvent') {
+                                it.menuShow = true;
+                            }
                             if (it.nameKey == 'CNSmanager') {
                                 it.menuShow = true;
                             }
@@ -320,6 +299,62 @@ export default {
                     }
                 });
             } else {
+                for (let i = 0; i < list.length; i++) {
+                    if (!list[i]['leaf']) {
+                        if (list[i].children) {
+                            list[i].children.forEach(item => {
+                                if (item.nameKey == 'hostMgrTitle') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/front') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/newPermission') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/configManagement') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/contractWarehouse') {
+                                    item.menuShow = true
+                                }
+
+                                if (item.path == '/certificate') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/nodesMetric') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/hostMetric') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/emailAlarm') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/emailAlarmType') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/transactionCharts') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/unusualUser') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/unusualContract') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/blockEvent') {
+                                    item.menuShow = true
+                                }
+                                if (item.path == '/contractEvent') {
+                                    item.menuShow = true
+                                }
+                            })
+                        }
+                    }
+                }
+
+
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].name == '帐号管理') {
                         list[i].menuShow = false
@@ -338,6 +373,7 @@ export default {
                             if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
                                 it.menuShow = false;
                             }
+
                         })
                     }
                     if (list[i].nameKey == 'guide') {
@@ -348,25 +384,26 @@ export default {
                     if (this.userRole === "admin" && item.name === "帐号管理") {
                         item.menuShow = true;
                     }
-                    if (item.nameKey == 'systemManager') {
-                        if (item.children) {
-                            item.children.forEach(it => {
-                                if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
-                                    it.menuShow = false;
-                                } else if (it.nameKey == 'newPermission') {
-                                    it.menuShow = true;
-                                } else {
-                                    it.menuShow = true;
-                                }
-                                if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
-                                    it.menuShow = false;
-                                }
-                                if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
-                                    it.menuShow = false;
-                                }
-                            })
-                        }
-                    }
+
+                    // if (item.nameKey == 'systemManager') {
+                    //     if (item.children) {
+                    //         item.children.forEach(it => {
+                    //             if (it.nameKey == 'permission' && localStorage.getItem("nodeVersionChange")) {
+                    //                 it.menuShow = false;
+                    //             } else if (it.nameKey == 'newPermission') {
+                    //                 it.menuShow = true;
+                    //             } else {
+                    //                 it.menuShow = true;
+                    //             }
+                    //             if (it.nameKey == 'newPermission' && !localStorage.getItem("nodeVersionChange")) {
+                    //                 it.menuShow = false;
+                    //             }
+                    //             if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
+                    //                 it.menuShow = false;
+                    //             }
+                    //         })
+                    //     }
+                    // }
                 });
             }
             this.routesList = list;
@@ -392,7 +429,48 @@ export default {
                 localStorage.setItem("sidebarHide", false);
             }
         },
-        getAdmin: function () { }
+        getAdmin: function () { },
+        getFrontTable() {
+            let reqData = {
+                // frontId: this.frontId
+            }
+            getFronts(reqData)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        if (res.data.data.length > 0) {
+                            let num = 0;
+                            let versionKey;
+                            for (let i = 0; i < res.data.data.length; i++) {
+                                if (res.data.data[i].clientVersion || res.data.data[i].supportVersion) {
+                                    this.$store.dispatch('set_version_action', res.data.data[i].clientVersion);
+                                    this.$store.dispatch('set_support_version_action', res.data.data[i].supportVersion);
+                                    if (res.data.data[i].supportVersion) {
+                                        versionKey = res.data.data[i].supportVersion.substring(2, 3)
+                                        if (versionKey > 4) {
+                                            num++
+                                        }
+                                    }
+                                }
+                            }
+                            if (num > 0) {
+                                localStorage.setItem("nodeVersionChange", 1)
+                            } else {
+                                localStorage.setItem("nodeVersionChange", "")
+                            }
+
+                        }
+
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        }
     }
 };
 </script>

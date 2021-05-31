@@ -116,7 +116,8 @@
                                             <div class="right-warehouse-item" style="margin-top:14px;">
                                                 <el-button type="primary" size="small" @click="register(item)" style="margin-right:5px;" class="btn-item">{{$t('text.registerInfo')}}</el-button>
                                                 <el-button type="primary" size="small" @click="introduction(item)" style="margin-right:5px;" class="right-btn-item">{{$t('text.appIntroduction1')}}</el-button>
-                                                <el-button :disabled="item.appStatus=='2'" type="primary" size="small" @click="linkService(item)" class="right-btn-item">{{$t('text.appLinkService')}}</el-button>
+                                                <el-button :disabled="item.appStatus=='2'|| item.appStatus=='0'" type="primary" size="small" @click="linkService(item)" class="right-btn-item">{{linkText(item)}}</el-button>
+                                                <!-- <el-button :disabled="item.appStatus=='2'" type="primary" size="small" @click="linkService(item)" class="right-btn-item">{{$t('text.appLinkService')}}</el-button> -->
                                             </div>
                                         </div>
                                     </li>
@@ -248,6 +249,10 @@ export default {
             fetchDeleteApp(val.id)
                 .then(res => {
                     if (res.data.code === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.resetSuccess')
+                        })
                         this.queryAppList()
                     } else {
                         this.$message({
@@ -273,6 +278,20 @@ export default {
         },
         openProcess() {
 
+        },
+        linkText(item){
+            switch (item.appStatus) {
+                case 0:
+                    return this.$t('text.notRegister')
+                    break;
+            
+                case 1:
+                    return this.$t('text.appLinkService')
+                    break;
+                case 2:
+                    return this.$t('text.notAlive')
+                    break;
+            }
         }
     }
 }

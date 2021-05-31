@@ -46,7 +46,7 @@ export default {
             cnsVersionFrom: {
                 userId: "",
                 cnsVersion: this.mgmtCnsItem.version,
-                cnsName: this.mgmtCnsItem.contractName
+                cnsName: ""
             },
             reqVersion: ""
         }
@@ -231,6 +231,7 @@ export default {
                         if (res.data.data) {
                             this.reqVersion = res.data.data.version
                             this.cnsVersionFrom.cnsVersion = res.data.data.version
+                            this.cnsVersionFrom.cnsName = res.data.data.cnsName
                         }
                     } else {
                         this.$message({

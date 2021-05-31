@@ -39,25 +39,28 @@
             <ul>
                 <li v-for='item in contractArry' :key="item.contractId">
                     <div v-if='item.contractType == "file"' class="contract-file" :id='item.contractId'>
+
                         <i class="wbs-icon-file" @click='select(item)' v-if='!item.renameShow' :id='item.contractId'></i>
                         <span @contextmenu.prevent="handle($event,item)" @click='select(item)' :id='item.contractId' v-if='!item.renameShow' :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
                         <el-input v-model="contractName" v-focus maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
                         <div class="contract-menu-handle" v-if='!disabled &&item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul v-if="contractFile">
                                 <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
-                                <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li>
+                                <!-- <li class="contract-menu-handle-list" v-if='!item.renameShow && !item.contractAddress' @click="deleteFile(item)">{{$t("text.delete")}}</li> -->
+                                <li class="contract-menu-handle-list" @click="deleteFile(item)">{{$t("text.delete")}}</li>
                                 <li class="contract-menu-handle-list" @click="exportFile(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
                     </div>
                     <div v-if='item.contractType == "folder"' class="contract-folder" :id='item.folderId'>
                         <i :class="item.folderIcon" @contextmenu.prevent="handle($event,item)" @click='open(item)' v-if="!item.renameShow" :id='item.folderId'></i>
-                        <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
-                        <span :title="item.contractName" @contextmenu.prevent="handle($event,item)" :id='item.folderId' v-if="!item.renameShow" :class="{'colorActive': item.contractActive}">{{item.contractName}}</span>
+                        <i class="wbs-icon-folder" @contextmenu.prevent="handle($event,item)" @click='open(item)' v-if="!item.renameShow" style="color: #d19650" :id='item.folderId'></i>
+                        <span :title="item.contractName" @contextmenu.prevent="handle($event,item)" @click='open(item)' :id='item.folderId' v-if="!item.renameShow" :class="[{'colorActive': item.contractActive}, 'cursor-pointer']">{{item.contractName}}</span>
                         <div class="contract-menu-handle" v-if='!disabled && item.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                             <ul>
                                 <li class="contract-menu-handle-list" @click="addFiles(item)">{{$t('contracts.createFile')}}</li>
-                                <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
+                                <!-- <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li> -->
+                                <li class="contract-menu-handle-list" @click='deleteFolder(item)'>{{$t("text.delete")}}</li>
                                 <li class="contract-menu-handle-list" @click="exportFolder(item)">{{$t('contracts.exportSol')}}</li>
                             </ul>
                         </div>
@@ -70,7 +73,8 @@
                                 <div class="contract-menu-handle" v-if='!disabled &&list.handleModel' :style="{'top': clentY,'left': clentX}" v-Clickoutside="checkNull">
                                     <ul v-if="contractFile">
                                         <li class="contract-menu-handle-list" @click="rename">{{$t("contracts.rename")}}</li>
-                                        <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li>
+                                        <!-- <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li> -->
+                                        <li class="contract-menu-handle-list" @click="deleteFile(list)">{{$t("text.delete")}}</li>
                                         <li class="contract-menu-handle-list" @click="exportFile(list)">{{$t('contracts.exportSol')}}</li>
                                     </ul>
                                 </div>
@@ -83,12 +87,14 @@
         <add-folder v-if="foldershow" :foldershow="foldershow" @close='folderClose' @success='folderSuccess'></add-folder>
         <add-file v-if="fileshow" :data='selectFolderData' :fileshow="fileshow" @close='fileClose' @success='fileSucccess($event)' :id='folderId'></add-file>
         <select-catalog v-if='cataLogShow' :show='cataLogShow' @success='catalogSuccess($event)' @close='catalogClose'></select-catalog>
+        <export-project v-if='$store.state.exportProjectShow' :show='$store.state.exportProjectShow' :folderList='pathList' @close='exportProjectShowClose'></export-project>
     </div>
 </template>
 <script>
 import addFolder from "../dialog/addFolder"
 import addFile from "../dialog/addFile"
 import selectCatalog from "../dialog/selectCatalog"
+import exportProject from "../dialog/exportProject"
 import { searchContract, saveChaincode, deleteCode, getContractPathList, deletePath } from "@/util/api"
 import Bus from '@/bus'
 import errcode from "@/util/errcode";
@@ -103,6 +109,7 @@ export default {
         "add-folder": addFolder,
         "add-file": addFile,
         "select-catalog": selectCatalog,
+        exportProject
     },
     data: function () {
         return {
@@ -251,6 +258,10 @@ export default {
                 this.contractFolder = false;
                 this.handleModel = false;
             }
+        },
+        // 导出项目
+        exportProjectShowClose() {
+            this.$store.dispatch('set_exportProject_show_action', false)
         },
         /**
          * 重命名
@@ -489,6 +500,11 @@ export default {
             }
             await saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
+                    // if (localStorage.getItem("root") === "developer") {
+                        setTimeout(() => {
+                            this.getContractPaths()
+                        }, 200);
+                    // }
                     if (type) {
                         this.$refs.file.value = null;
                         this.getContracts(data.contractPath, res.data.data);
@@ -755,6 +771,7 @@ export default {
                 if (res.data.code == 0) {
                     this.contractList = []
                     let contractList = res.data.data || [];
+                    console.log('contractDataList:',this.$store.state.contractDataList)
                     let contractDataList = this.$store.state.contractDataList;
                     //查询的合约列表与存入的合约列表合并且除重处理
                     this.contractList = this.changeContractData(contractDataList, contractList, data.contractPath)
@@ -765,7 +782,6 @@ export default {
                         let result = [];
                         let arrry = []
                         let obj = {};
-
                         this.contractList.forEach(value => {
                             this.$set(value, "contractType", 'file')
                             this.$set(value, "contractActive", false)
@@ -961,8 +977,12 @@ export default {
          * 选中某个合约或文件夹
          */
         select: function (val, type) {
+            console.log(val, type);
+            if (!type) {
+                this.$store.dispatch('set_selected_contracts_action', val);
+                this.$store.dispatch('set_selected_contracts_info_action', val);
+            }
             let num = 0;
-
             this.contractArry.forEach(value => {
                 if (val && val.contractId && value.contractId == val.contractId) {
                     this.$set(value, 'contractActive', true)

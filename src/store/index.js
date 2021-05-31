@@ -34,7 +34,10 @@ const state = {
     worker: null,
     versionData: null,
     nodeList: [],
-    exportRivateKey: false
+    exportRivateKey: false,
+    exportProjectShow: false,
+    selectedContracts: {},
+    selectedContractInfo: {}
 }
 export default new Vuex.Store({
     state,
@@ -90,7 +93,16 @@ export default new Vuex.Store({
         },
         set_node_list(state, data) {
             state.nodeList = data
-        }
+        },
+        set_exportProject_show(state,data) {
+            state.exportProjectShow = data
+        }, 
+        set_selected_contracts(state, data) {
+            state.selectedContracts = data
+        }, 
+        set_selected_contracts_info(state, data) {
+            state.selectedContractInfo = data
+        },
     },
     actions: {
         switch_creat_user_dialog(context) {
@@ -121,6 +133,7 @@ export default new Vuex.Store({
             context.commit("set_folders", data)
         },
         set_contract_dataList_action(context, data) {
+            console.log('store:', data)
             context.commit('set_contract_dataList', data)
         },
         set_worker_action(context, data) {
@@ -131,6 +144,15 @@ export default new Vuex.Store({
         },
         set_node_list_action(context, data) {
             context.commit("set_node_list", data)
-        }
+        },
+        set_exportProject_show_action(context,data){
+            context.commit("set_exportProject_show",data)
+        },
+        set_selected_contracts_action(context, data) {
+            context.commit("set_selected_contracts", data)
+        },
+        set_selected_contracts_info_action(context, data) {
+            context.commit("set_selected_contracts_info", data)
+        },
     }
 })

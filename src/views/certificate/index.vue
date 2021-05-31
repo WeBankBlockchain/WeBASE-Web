@@ -176,10 +176,10 @@ export default {
                     if (res.data.code === 0) {
                         const { data } = res.data
                         if (data.length) {
-                            
+
                             this.frontId = data[0]['frontId']
                         }
-                        
+
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -312,10 +312,10 @@ export default {
         onUploadExceed(files, fileList) {
             this.$message.warning(this.$t('system.uploadWarning1') + files.length + this.$t('system.uploadWarning2')(files.length + fileList.length) + this.$t('system.uploadWarning3'));
         },
-        close(){
+        close() {
             this.frontDialogVisible = false
         },
-        submit(val){
+        submit(val) {
             this.frontDialogVisible = false
             this.sureExportSdk(val)
         },
@@ -323,23 +323,32 @@ export default {
             // this.frontDialogVisible = true
             this.sureExportSdk()
         },
-        sureExportSdk(){
+        sureExportSdk() {
             // const zip = new JSZip()
             exportCertSdk(this.frontId).then(res => {
-                const blob = new Blob([res.data])
-                const fileName = `sdk.zip`
-                if ('download' in document.createElement('a')) {
-                    const elink = document.createElement('a')
-                    elink.download = fileName
-                    elink.style.display = 'none'
-                    elink.href = URL.createObjectURL(blob)
-                    document.body.appendChild(elink)
-                    elink.click()
-                    URL.revokeObjectURL(elink.href)
-                    document.body.removeChild(elink)
-                } else { 
-                    navigator.msSaveBlob(blob, fileName)
+                const { status } = res;
+                if (status === 200) {
+                    const blob = new Blob([res.data])
+                    const fileName = `sdk.zip`
+                    if ('download' in document.createElement('a')) {
+                        const elink = document.createElement('a')
+                        elink.download = fileName
+                        elink.style.display = 'none'
+                        elink.href = URL.createObjectURL(blob)
+                        document.body.appendChild(elink)
+                        elink.click()
+                        URL.revokeObjectURL(elink.href)
+                        document.body.removeChild(elink)
+                    } else {
+                        navigator.msSaveBlob(blob, fileName)
+                    }
+                } else {
+                    this.$message({
+                        type: 'error',
+                        message: this.$t('text.haveCertSdk')
+                    })
                 }
+
             })
         },
         copyFingerPrint(val) {

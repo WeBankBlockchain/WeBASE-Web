@@ -19,8 +19,11 @@
             <tr>
                 <td style="width: 40px;text-align: right">{{this.$t('contracts.user')}}：</td>
                 <td>
-                    <el-select v-model="userName" :placeholder="placeholderText" style="width: 100%" :no-data-text="$t('text.goCreatPrivateKey')">
-                        <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'></el-option>
+                    <el-select v-model="userName" :placeholder="placeholderText" style="width: 300px" :no-data-text="$t('text.goCreatPrivateKey')">
+                        <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'>
+                            <span>{{item.userName}}</span>
+                            <span class="font-12">{{item.address}}</span>
+                        </el-option>
                     </el-select>
                 </td>
             </tr>
@@ -35,7 +38,7 @@
                 <td>
                     <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
                         <el-form-item prop="cnsName">
-                            <el-input v-model="cnsVersionFrom.cnsName">
+                            <el-input v-model="cnsVersionFrom.cnsName" style="width: 300px">
                                 <template slot="prepend">
                                     <span title="name">name</span>
                                 </template>
@@ -49,7 +52,7 @@
                 <td>
                     <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
                         <el-form-item prop="cnsVersion">
-                            <el-input v-model="cnsVersionFrom.cnsVersion">
+                            <el-input v-model="cnsVersionFrom.cnsVersion" style="width: 300px">
                                 <template slot="prepend">
                                     <span title="version">version</span>
                                 </template>
@@ -62,7 +65,7 @@
                 <td style="vertical-align: top;text-align: right;">{{this.$t('contracts.params')}}：</td>
                 <td>
                     <div v-for='(item,index) in inputs' :key='item.name' class="params-input">
-                        <el-input v-model="parameter[index]" style="margin-bottom:10px;" :placeholder="item.type">
+                        <el-input v-model="parameter[index]" style="margin-bottom:10px;width: 300px" :placeholder="item.type">
                             <template slot="prepend">
                                 <span :title="item.name">{{item.name}}</span>
                             </template>
@@ -72,7 +75,7 @@
             </tr>
             <tr v-if='inputs.length'>
                 <td></td>
-                <td>
+                <td style="width: 300px">
                     <p style="padding: 0px 0 0 0px;"><i class="el-icon-info" style="padding-right: 4px;"></i>{{this.$t('contracts.paramsInfo')}}</p>
                 </td>
             </tr>

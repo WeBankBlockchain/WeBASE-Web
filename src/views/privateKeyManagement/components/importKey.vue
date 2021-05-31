@@ -22,7 +22,7 @@
                 <el-input v-model="keyForm.privateKey" :placeholder="keyPlaceholderDec"></el-input>
             </el-form-item>
             <el-form-item :label="$t('privateKey.description')" prop="description" style="width: 546px;">
-                <el-input v-model="keyForm.description" :placeholder="$t('privateKey.inputDescription')"></el-input>
+                <el-input v-model="keyForm.description" maxlength="120" :placeholder="$t('privateKey.userLong')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('privateKey.file')" prop="fileList" style="width: 546px;" v-if="keyForm.fileType!='string'" ref="uploadKey">
                 <el-upload ref="upload" :accept="keyForm.fileType" action="" :http-request="uploadFile" :auto-upload="false" :file-list="keyForm.fileList" show-file-list :limit="1" :on-change="uploadChange" :on-remove="removeFile">

@@ -1,10 +1,18 @@
 <template>
 <div class="module-wrapper">
+    <div class="search-part">
+
+            <div class="search-part-right">
+                <el-input :placeholder="$t('privateKey.inputUserName')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
+                    <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                </el-input>
+            </div>
+        </div>
     <div class="search-table">
         <el-table :data="userList" tooltip-effect="dark" v-loading="loading">
             <el-table-column prop="address" :label="$t('privateKey.userAddress')" show-overflow-tooltip align="center">
                  <template slot-scope="scope">
-                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.signUserId)" :title="$t('privateKey.userAddress')"></i>
+                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.address)" :title="$t('privateKey.userAddress')"></i>
                     <span >{{scope.row.address}}</span>
                 </template>
             </el-table-column>
@@ -74,7 +82,8 @@ export default {
             total: 0,
             pageNumber: 1,
             pageSize: 10,
-            address: null
+            address: null,
+            contractData: ''
         }
     },
     mounted() {
@@ -107,6 +116,9 @@ export default {
             reqQuery = {
                 type: 1
             };
+            if (this.contractData) {
+                reqQuery['address'] = this.contractData;
+            }
             getAllUserList(reqData, reqQuery)
                 .then(res => {
                     if (res.data.code === 0) {
@@ -219,10 +231,40 @@ export default {
                 });
             }
         },
+        search: function () {
+            this.currentPage = 1
+            this.getList();
+        },
+        clearInput() {
+            this.contractName = "";
+            this.contractAddress = "";
+            this.contractData = "";
+            this.currentPage = 1;
+            this.getList()
+        }
     }
 }
 </script>
 
-<style>
-
+<style scoped>
+.input-with-select >>> .el-input__inner {
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border: 1px solid #eaedf3;
+    box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
+}
+.input-with-select >>> .el-input-group__append {
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 3px 11px 0 rgba(159, 166, 189, 0.11);
+}
+.input-with-select >>> .el-button {
+    border: 1px solid #20d4d9;
+    border-radius: inherit;
+    background: #20d4d9;
+    color: #fff;
+}
+.grayColor {
+    color: #666 !important;
+}
 </style>

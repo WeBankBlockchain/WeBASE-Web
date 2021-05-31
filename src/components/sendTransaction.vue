@@ -70,11 +70,21 @@
             <span class="send-item-title" style="position: relative;top: 5px;">{{this.$t("contracts.params")}}:</span>
             <ul style="position: relative;top: -25px;">
                 <li v-for="(item,index) in pramasData" style="margin-left:120px;margin-bottom: 5px;">
-                    <el-input v-model="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
-                        <template slot="prepend">
-                            <span class="">{{item.name}}</span>
-                        </template>
-                    </el-input>
+                    <template v-if="item.type=='string'">
+                        <el-input v-model="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
+                            <template slot="prepend">
+                                <span class="">{{item.name}}</span>
+                            </template>
+                        </el-input>
+                    </template>
+                    <template v-else>
+                        <el-input v-model.trim="transation.funcValue[index]" style="width: 260px;" :placeholder="item.type">
+                            <template slot="prepend">
+                                <span class="">{{item.name}}</span>
+                            </template>
+                        </el-input>
+                    </template>
+
                 </li>
                 <p style="padding: 5px 0 0 28px;"><i class="el-icon-info" style="padding-right: 4px;"></i>{{this.$t("contracts.paramsInfo")}}</p>
             </ul>

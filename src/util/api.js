@@ -617,7 +617,7 @@ export function nodesHostInfo(data, list) {
 export function nodesHealth(data, list) {
     const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/chain/mointorInfo/${params.str}`,
+        url: `${url.ORG_LIST}/chain/monitorInfo/${params.str}`,
         method: 'get',
         params: params.querys,
         headers: {
@@ -1521,7 +1521,7 @@ export function deleteHandleHistory(data) {
         }
     })
 }
-// coantarct path list
+// contract path list
 export function getContractPathList(data) {
     return post({
         url: `${url.ORG_LIST}/contract/contractPath/list/${data}`,
@@ -1622,7 +1622,7 @@ export function eventContractInfo(data, list) {
 // 仓库列表
 export function getContractStore() {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractStoreList`,
+        url: `${url.ORG_LIST}/warehouse/list`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1642,7 +1642,7 @@ export function getContractStoreById(storeId) {
 //
 export function getContractItemById(contractId) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractItemById/${contractId}`,
+        url: `${url.ORG_LIST}/warehouse/${contractId}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1652,7 +1652,7 @@ export function getContractItemById(contractId) {
 
 export function getContractFolderById(contractFolderId) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractFolderById/${contractFolderId}`,
+        url: `${url.ORG_LIST}/warehouse/folder/list/${contractFolderId}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1660,26 +1660,27 @@ export function getContractFolderById(contractFolderId) {
     })
 }
 // 通过文件ID获取文件下的合约
-export function getContractItemByFolderId(folderId) {
+export function getContractItemByFolderId(data) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getContractItemByFolderId/${folderId}`,
+        url: `${url.ORG_LIST}/warehouse/item/list`,
         method: 'get',
+        params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
-
-export function getFolderItemListByStoreId(storeId) {
+//获取合约仓库目录
+export function getFolderItemListByStoreId(data) {
     return get({
-        url: `${url.ORG_LIST}/contractStore/getFolderItemListByStoreId/${storeId}`,
+        url: `${url.ORG_LIST}/warehouse/folder/list`,
         method: 'get',
+        params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
-
 //在线工具
 //生成sign
 export function signHash(data) {
@@ -1695,7 +1696,7 @@ export function signHash(data) {
 
 export function batchSaveContract(data) {
     return post({
-        url: `${url.ORG_LIST}/contract/copyContracts`,
+        url: `${url.ORG_LIST}/contract/copy`,
         method: 'post',
         data: data,
         headers: {
@@ -2110,3 +2111,30 @@ export function fetchIsDeployedModifyEnable() {
         }
     })
 }
+/**
+ * @method 导出合约项目
+ */
+export function exportJavaProject(data) {
+    return get({
+        url: `${url.ORG_LIST}/scaffold/export`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+/**
+ * @method 获取channelport
+ */
+export function fetchChannelPort(data) {
+    return get({
+        url: `${url.ORG_LIST}/front/nodeConfig`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
