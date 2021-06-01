@@ -408,6 +408,10 @@ export default {
                     } else {
                         navigator.msSaveBlob(blob, fileName)
                     }
+                    this.$message({
+                        type: 'success',
+                        message: this.$t('text.exportSuccessed')
+                    })
                 }
             })
         },
