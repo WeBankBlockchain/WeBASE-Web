@@ -265,7 +265,7 @@ export default {
         modelClose() {
             this.$emit('close')
         },
-        handleExpand (row){
+        handleExpand(row) {
             this.getContractList(row, 'ExpandEvent')
         },
         clickTable: function (row, column, $event) {
@@ -273,7 +273,7 @@ export default {
             let nodeName = $event.target.nodeName;
             this.$refs.refTable.toggleRowExpansion(row);
             // this.$nextTick(() => {
-                
+
             // })
             if (nodeName === "I") {
                 return
@@ -368,7 +368,7 @@ export default {
                 }
             })
         },
-        handleSelectAll(selection){
+        handleSelectAll(selection) {
             // if(!selection.length){
             //     this.$message({
             //         type:"error",
@@ -412,6 +412,12 @@ export default {
                         type: 'success',
                         message: this.$t('text.exportSuccessed')
                     })
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: this.$chooseLang(res.data.code),
+                        customClass: 'zZindex'
+                    });
                 }
             })
         },
@@ -450,9 +456,9 @@ export default {
                     if (res.data.code === 0) {
                         if (res.data.data) {
                             if (res.data.data.channelPort) {
-                                if(res.data.data.channelPort == 'null'){
+                                if (res.data.data.channelPort == 'null') {
                                     this.projectFrom.channelPort = ''
-                                }else {
+                                } else {
                                     this.queryPort = true
                                     this.projectFrom.channelPort = res.data.data.channelPort
                                 }

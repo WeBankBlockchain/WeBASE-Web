@@ -369,7 +369,10 @@ let errCode = {
         en: "Unable to create instance of type, check input params",
         zh: '输入参数格式错误'
     },
-
+    "201161": {
+        en: "Generate project failed in scaffold",
+        zh: '项目Scaffold脚手架生成失败'
+    },
     "201213": {
         en: "address is invalid",
         zh: '地址无效'
