@@ -354,19 +354,21 @@ export default {
 
         },
         submit(formName) {
-            if (this.multipleSelection.length === 0) {
+            if (this.multipleSelectedId.length === 0) {
                 this.$message({
                     type: "error",
                     message: this.$t('rule.checkContract')
                 });
+            } else {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.export()
+                    } else {
+                        return false;
+                    }
+                })
             }
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    this.export()
-                } else {
-                    return false;
-                }
-            })
+
         },
         handleSelectAll(selection) {
             // if(!selection.length){
