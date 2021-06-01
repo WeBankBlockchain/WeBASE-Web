@@ -53,7 +53,8 @@
             <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width:260px">
                 <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='(item,index) in userList'>
                     <span>{{item.userName}}</span>
-                    <span class="font-12">{{splitString(item.address)}}...</span>
+                    <!-- <span class="font-12">{{splitString(item.address)}}...</span> -->
+                    <span class="font-12">{{item.address}}</span>
                 </el-option>
             </el-select>
         </div>

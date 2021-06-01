@@ -26,6 +26,9 @@
                 </el-form-item>
                 <el-form-item label="channelPort" prop="channelPort">
                     <el-input v-model="projectFrom.channelPort" :disabled="queryPort ? true : false " style="width: 415px"></el-input>
+                    <el-tooltip effect="dark" :content="$t('text.haveChannelPort')" placement="top-start">
+                        <i class="el-icon-info"></i>
+                    </el-tooltip>
                 </el-form-item>
                 <!-- </div> -->
                 <el-form-item :label="$t('text.projectUser')">
@@ -262,7 +265,7 @@ export default {
         modelClose() {
             this.$emit('close')
         },
-        handleExpand (row){
+        handleExpand(row) {
             this.getContractList(row, 'ExpandEvent')
         },
         clickTable: function (row, column, $event) {
@@ -270,7 +273,7 @@ export default {
             let nodeName = $event.target.nodeName;
             this.$refs.refTable.toggleRowExpansion(row);
             // this.$nextTick(() => {
-                
+
             // })
             if (nodeName === "I") {
                 return
@@ -365,7 +368,7 @@ export default {
                 }
             })
         },
-        handleSelectAll(selection){
+        handleSelectAll(selection) {
             // if(!selection.length){
             //     this.$message({
             //         type:"error",
@@ -405,6 +408,16 @@ export default {
                     } else {
                         navigator.msSaveBlob(blob, fileName)
                     }
+                    this.$message({
+                        type: 'success',
+                        message: this.$t('text.exportSuccessed')
+                    })
+                } else {
+                    this.$message({
+                        type: "error",
+                        message: this.$chooseLang(res.data.code),
+                        customClass: 'zZindex'
+                    });
                 }
             })
         },
@@ -443,9 +456,9 @@ export default {
                     if (res.data.code === 0) {
                         if (res.data.data) {
                             if (res.data.data.channelPort) {
-                                if(res.data.data.channelPort == 'null'){
+                                if (res.data.data.channelPort == 'null') {
                                     this.projectFrom.channelPort = ''
-                                }else {
+                                } else {
                                     this.queryPort = true
                                     this.projectFrom.channelPort = res.data.data.channelPort
                                 }

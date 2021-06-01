@@ -317,7 +317,8 @@ export default {
         projectTitle: '项目信息',
         haveAbi: 'abi信息不能为空',
         haveSelectionAll: '合约全未编译',
-        haveCertSdk: '获取SDK证书失败，请检查证书文件'
+        haveCertSdk: '获取SDK证书失败，请检查证书文件',
+        haveChannelPort: '根据节点前置对应channelPort填入',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
