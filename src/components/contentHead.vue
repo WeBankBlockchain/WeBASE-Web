@@ -339,7 +339,7 @@ export default {
     width: calc(100%);
     background-color: #181f2e;
     text-align: left;
-    line-height: 54px;
+    line-height: 30px;
     position: relative;
 }
 .content-head-wrapper::after {
