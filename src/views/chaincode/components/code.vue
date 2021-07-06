@@ -235,12 +235,14 @@ export default {
             mgmtCnsVisible: false,
             mgmtCnsItem: {},
             activeNames: ['0'],
-            isDeployedModifyEnable: false
+            isDeployedModifyEnable: false,
+            isFinishComplie: false
         };
     },
     beforeDestroy: function () {
         Bus.$off("select")
         Bus.$off("noData")
+        Bus.$off("javaProjectComplie")
     },
     beforeMount() {
 
@@ -296,6 +298,24 @@ export default {
             this.contractName = "";
             this.content = "";
             this.bin = "";
+        })
+        Bus.$on('javaProjectComplie', data=>{
+            this.contractName = data.contractName
+            this.content = Base64.decode(data.contractSource);
+            console.log(this.code)
+            this.abiFile = data.contractAbi;
+            this.bin = data.contractBin;
+            this.data.contractVersion = data.contractVersion;
+            this.data.contractAddress = data.contractAddress;
+            this.data.contractName = data.contractName;
+            this.data.contractAbi = data.contractAbi;
+            this.data.bytecodeBin = data.bytecodeBin;
+            this.data.contractBin = data.contractBin;
+            this.data.contractId = data.contractId;
+            this.data.contractPath = data.contractPath;
+            this.data.contractSource = data.contractSource;
+            localStorage.setItem("isFinishCompile", "no")
+            this.compile() 
         })
     },
     watch: {
@@ -549,11 +569,11 @@ export default {
                 }
             }
         },
-        compile() {
+        compile() { 
             this.loading = true;
             let version = this.$store.state.versionData;
             if (version && version.net !== 0) {
-                this.compileHighVersion()
+                this.compileHighVersion() 
             } else {
                 setTimeout(() => {
                     this.compileLowVersion()
@@ -561,7 +581,7 @@ export default {
 
             }
         },
-        compileHighVersion() {
+        compileHighVersion(callback) {
             let that = this
             this.refreshMessage();
             this.contractList = this.$store.state.contractDataList
@@ -605,7 +625,8 @@ export default {
                         that.errorMessage = output.errors;
                         that.errorInfo = that.$t("contracts.contractCompileFail");
                         that.loading = false;
-                    }
+                    } 
+                   
                 } else {
                     console.log(ev.data);
                     console.log(JSON.parse(ev.data.data))
@@ -616,7 +637,7 @@ export default {
                 that.errorMessage = ev;
                 that.compileShow = true;
                 that.loading = false;
-            })
+            }) 
             console.log('wwww:', w)
         },
         compileLowVersion: function () {
@@ -694,6 +715,7 @@ export default {
                     this.loading = false;
                     Bus.$emit("compile", this.data);
                     this.setMethod();
+                    localStorage.setItem("isFinishCompile", "yes")
                 } else {
                     this.$message({
                         type: "error",
@@ -1037,7 +1059,7 @@ export default {
         },
         handleChange(val) {
             console.log(val);
-        }
+        } 
     }
 };
 </script>

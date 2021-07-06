@@ -97,6 +97,13 @@ export default {
         }
     },
     mounted: function () {
+        if(localStorage.getItem("dataFrom") === "transactionDetail"){
+            localStorage.setItem("dataFrom","") 
+            this.$message({
+                type: "warning",
+                message: this.$t('text.importContractTip')
+            });
+        }
         this.allVersion = [
             {
                 solcName: "v0.4.25",
@@ -142,7 +149,7 @@ export default {
             }
         ];
         this.initWorker()
-        this.getEncryption(this.querySolcList);
+        this.getEncryption(this.querySolcList);  
     },
     methods: {
         initWorker() {

@@ -17,7 +17,7 @@
     <div class="chang-wrapper">
         <table class="opt-wrapper">
             <tr>
-                <td style="width: 40px;text-align: right">{{this.$t('contracts.user')}}：</td>
+                <td>{{this.$t('contracts.user')}}：</td>
                 <td>
                     <el-select v-model="userName" :placeholder="placeholderText" style="width: 300px" :no-data-text="$t('text.goCreatPrivateKey')">
                         <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'>
@@ -26,9 +26,15 @@
                         </el-option>
                     </el-select>
                 </td>
+                <td v-if="isUserNameShow" style="width: 60px;text-align: right;" class="text-td">
+                     <span class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
+                         <a target="_blank" style="text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                    </span>
+                    <!-- <el-button type="primary"  class="el-button modify-btn el-button--primary el-button--small" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t("privateKey.addUser")}}</el-button> -->
+                </td>
             </tr>
             <tr>
-                <td style="width: 100px;text-align: right" class="text-td"><span>CNS：</span></td>
+                <td  class="text-td"><span>CNS：</span></td>
                 <td>
                     <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
                 </td>
@@ -84,17 +90,26 @@
             <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
             <el-button type="primary" @click="submit">{{this.$t("text.sure")}}</el-button>
         </div>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
+        </el-dialog>	
     </div>
 </template>
 <script>
 import { sendTransation, getUserList } from "@/util/api";
 import errcode from "@/util/errcode";
-import { isJson } from "@/util/util"
+import { isJson } from "@/util/util";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
+
 export default {
+     components: {
+        "v-creatUser": creatUser,
+    },
     name: "changeUser",
     props: ["abi", "contractName"],
     data: function () {
         return {
+            isUserNameShow:false,
             userName: "",
             userList: [],
             userId: null,
@@ -232,9 +247,11 @@ export default {
                                 this.userList.push(value);
                             }
                         });
-                        if (this.userList.length) {
+                        if (this.userList.length) { 
                             this.userName = this.userList[0].address;
+                             this.isUserNameShow = false;
                         } else {
+                            this.isUserNameShow = true;
                             this.placeholderText = this.$t('placeholder.selectedNoUser')
                         }
                     } else {
@@ -255,7 +272,10 @@ export default {
         },
         changeCns() {
             this.cnsVersionFrom.cnsVersion = "";
-        }
+        },
+         creatUserClose() {
+            this.getUserData();
+        },
     }
 };
 </script>

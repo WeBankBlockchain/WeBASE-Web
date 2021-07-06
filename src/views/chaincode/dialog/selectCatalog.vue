@@ -23,6 +23,9 @@
                             <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
+                     <span v-if="isAddFloderShow" class="contract-code-done"  @click='addFolder' style="float:right;margin-right:-55px">
+                        <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t('contracts.createFolder')}}</a>
+                    </span>
                     </el-form-item>
                 </el-form>
             </div>
@@ -31,19 +34,24 @@
                 <el-button type="primary" @click="submit('folderFrom')">确 定</el-button>
             </div>
         </el-dialog>
+         <add-folder v-if="foldershow" :foldershow="foldershow" :isAddFile="isAddFile" @close='folderClose'></add-folder>
     </div>
 </template>
 <script>
 import { subStringToNumber } from "@/util/util";
 import { getContractPathList } from "@/util/api";
+import addFolder from "../dialog/addFolder"
 export default {
     name: "selectCatalog",
     props: ["show"],
+    components: {
+        "add-folder": addFolder
+    },
     data: function () {
         return {
             options: [],
             folderFrom: {
-                folderName: "",
+                folderName: "", 
             },
             rules: {
                 folderName: [
@@ -58,6 +66,9 @@ export default {
             pathList: [],
             folderList: [],
             userFolader: "",
+            isAddFloderShow: false,
+            foldershow: false,
+            isAddFile:""
         };
     },
     mounted: function () {
@@ -132,6 +143,9 @@ export default {
                         //     console.log(11111);
                         //     this.addPath();
                         // }
+                        if(this.pathList.length ===0){
+                            this.isAddFloderShow = true;
+                        }
                         this.changeOptions();
                     } else {
                         this.$message({
@@ -196,6 +210,21 @@ export default {
         },
         close: function () {
             this.$emit("close");
+        },
+
+           /**
+         * 关闭文件夹弹窗
+         */
+        folderClose: function () {
+            this.getContractPaths();
+            this.foldershow = false
+        },
+        /**
+         * 新增文件夹 打开文件夹弹窗
+         */
+        addFolder: function () {
+            // this.checkNull();
+            this.foldershow = true
         },
     },
 };

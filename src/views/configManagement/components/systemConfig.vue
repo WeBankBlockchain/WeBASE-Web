@@ -11,6 +11,9 @@
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
+                <span v-if="isAdminRivateKeyShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right">
+                     <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+               </span>
             </el-form-item>
             <el-form-item :label="$t('system.configValue')" prop="configValue">
                 <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? $t('system.gasLong') : ''"></el-input>
@@ -20,15 +23,21 @@
             <el-button @click="close">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" :loading="loading" @click="submit('modifyForm')">{{this.$t('text.sure')}}</el-button>
         </div>
+
+        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import { getUserList, querySysConfig } from "@/util/api";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 export default {
     name: 'SystemConfig',
 
     components: {
+        "v-creatUser": creatUser
     },
 
     props: {
@@ -45,6 +54,7 @@ export default {
                 adminRivateKey: '',
                 configValue: ''
             },
+            isAdminRivateKeyShow: false
         }
     },
 
@@ -158,7 +168,12 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if (this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                        if (this.adminRivateKeyList.length) {
+                            this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                             this.isAdminRivateKeyShow = false;
+                        }else{
+                            this.isAdminRivateKeyShow = true;
+                        }
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -174,6 +189,9 @@ export default {
                         duration: 2000
                     });
                 });
+        },
+        creatUserClose() {                              
+            this.getUserData();
         },
     }
 }

@@ -159,6 +159,7 @@ export default {
                 })
         },
         setMethod() {
+            debugger;
             let Web3EthAbi = web3;
             let arry = [];
             if (this.abiForm.contractAbi) {
