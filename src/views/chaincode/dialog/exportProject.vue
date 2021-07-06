@@ -369,10 +369,10 @@ export default {
                     }
                 })
             })
-            if(num>0){
+            if(num>0){  
                 setTimeout(() => {
                     num =0;
-                    this.getContractList(this.$store.state.selectedContracts,true);
+                    this.getContractList(val,true);
                }, 1000)
             }    
             this.multipleSelectedId = Array.from(new Set(this.multipleSelectedId))    
