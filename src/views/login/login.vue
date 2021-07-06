@@ -151,17 +151,10 @@ export default {
         },
     },
     created: function(){
-        this.checkIframe().then(res => {
-            if(this.useAutoLogin){
-                this.changeCode(this.autoLogin);
-            }
-            else{
-                this.changeCode();
-            }
-        });
+          window.addEventListener('message',this.listenMessage,true);  
     },
     mounted: function () {
-        window.addEventListener('message',this.listenMessage,true);  
+      
         localStorage.setItem("config", 0);
         this.getEncryption();
         // let soljson = document.getElementById('soljson')
@@ -169,6 +162,14 @@ export default {
         //     soljson.remove()
         //     location.reload()
         // }
+         this.checkIframe().then(res => {
+            if(this.useAutoLogin){
+                this.changeCode(this.autoLogin);
+            }
+            else{
+                this.changeCode();
+            }
+        });
     },
     methods: {
         handleEncryption: function () {
@@ -321,6 +322,7 @@ export default {
             await getConfigList({type:this.typeSupportIframe}).then(res => {
                 if (res.data.code === 0) {
                     this.supportIframe = res.data.data[0].configValue == 1;
+                    
                 }
             }).catch(err => {
                 this.$message({
@@ -342,13 +344,14 @@ export default {
             });
         },
         checkIframe: async function(){
+         
             await this.getConfigs().then(res =>{
                 if(self == top){
                     this.vueShow = true;
                     this.useAutoLogin = false;
                 }
-                else{
-                    if(this.supportIframe){
+                else{ 
+                    if(this.supportIframe){ 
                         let url = this.postFUrl;
                         let findUrl = this.supportUrls.find(function(item,index){
                             return url.indexOf(item.toString()) > -1;
@@ -363,8 +366,8 @@ export default {
                 }
             });
         },
-        listenMessage: function(e){            
-            if(e.data.router){
+        listenMessage: function(e){       
+            if(e.data.router){ 
                 this.destroyListenMessage();
                 this.routerUrl = e.data.router;
                 this.postFUrl = e.origin;
