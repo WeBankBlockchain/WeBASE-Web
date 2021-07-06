@@ -319,6 +319,9 @@ export default {
         haveSelectionAll: '合约全未编译',
         haveCertSdk: '获取SDK证书失败，请检查证书文件',
         haveChannelPort: '根据节点前置对应channelPort填入',
+        importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约',
+        pass:'验证通过',
+        no:'验证不通过'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -567,6 +570,7 @@ export default {
         chainStatus: "链状态",
         starting: "启动中",
         notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。",
+        addContract: "导入合约",
     },
     contracts: {
         createFile: "新建文件",

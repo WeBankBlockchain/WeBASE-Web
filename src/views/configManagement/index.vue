@@ -32,7 +32,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <el-dialog :title="$t('system.updateConfig')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+        <el-dialog :title="$t('system.updateConfig')" :visible.sync="modifyDialogVisible" width="450px" v-if="modifyDialogVisible" center>
             <system-config @close="close" @modifySuccess="modifySuccess" :configKey="configkey"></system-config>
         </el-dialog>
     </div>

@@ -68,6 +68,9 @@
                                 <div class="input-label">
                                     <span class="label">function</span>
                                     <span>{{funcData + "(" + abiType + outputType + ")"}}</span>
+                                     <el-tooltip v-if="funcData == '' " effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
+                                        <i class="el-icon-info"></i>
+                                    </el-tooltip>
                                 </div>
                                 <div class="input-label">
                                     <span class="label">methodId</span>
@@ -91,9 +94,16 @@
                         <div class="item" v-show="inputButtonShow">
                             <span class="label"></span>
                             <el-button @click="decode" type="primary">{{buttonTitle}}</el-button>
-                        </div>                       
+                            <span style="margin-left:20px"></span>
+                             <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
+                              <span style="margin-left:20px"></span>
+                             <el-button type="primary" class="search-part-left-btn" @click="generateContract">{{this.$t("nodes.addContract")}}</el-button>
+                        </div>  
                     </div>                   
                 </div>
+                <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
+                    <import-abi  @closeImport="closeImport"></import-abi>
+                </el-dialog>
             </el-tab-pane>
             <el-tab-pane :label="$t('table.transactionReceipt')" name="txReceiptInfo">
                 <el-row v-for="item in txReceiptInfoList" :key="item">
@@ -201,9 +211,13 @@ import {
 import { getDate, isNumber } from "@/util/util";
 import errcode from "@/util/errcode";
 import router from "@/router";
+import importAbi from "@/views/abiList/components/importAbi"
 
 export default {
     name: "transactionDetail",
+     components: {
+        importAbi
+    },
     props: {
         transHash: {
             type: String
@@ -258,7 +272,8 @@ export default {
             outputShow: false,
             showOutputDecode: false,
             transOutputData: "",
-            outputType: null
+            outputType: null,
+            importVisibility: false
         };
     },
     mounted: function () {
@@ -762,6 +777,17 @@ export default {
             }else {
                 return '#F56C6C'
             }
+        },
+         // 打开添加abi弹窗
+        generateAbi() {
+            this.importVisibility = true;
+        },
+         closeImport() {
+            this.importVisibility = false
+        },
+        generateContract(){
+            localStorage.setItem("dataFrom","transactionDetail");
+            router.push("/contract")
         }
     }
 };

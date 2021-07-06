@@ -36,7 +36,7 @@
 import { addContractPath } from "@/util/api"
 export default {
     name: "addFolder",
-    props: ['foldershow'],
+    props: ['foldershow','isAddFile'],
     computed: {
         rules() {
             let data = {
@@ -70,7 +70,7 @@ export default {
             dialogVisible: this.foldershow,
             folderList: [],
             userFolader: "",
-            pathList: []
+            pathList: [],
         }
     },
     mounted: function () {
@@ -99,7 +99,8 @@ export default {
             }
             addContractPath(reqData).then(res => {
                 if (res.data.code === 0) {
-                    this.$emit("success")
+                    // this.$emit("success")
+                    this.modelClose();
                 } else {
                     this.$message({
                         type: "error",
@@ -114,8 +115,19 @@ export default {
                     });
                 });
         },
-        modelClose: function () {
-            this.$emit("close")
+        // modelClose: function () {
+        //     // this.$emit("close")
+        // },
+          modelClose: function () {
+             this.folderFrom ={
+                folderName: ""
+            }
+            if(this.isAddFile == 'isAddFile'){
+                this.$emit("folderClose");
+            }else{
+                this.$emit("close");
+            }
+        //    this.dialogVisible = false;
         },
         handleFolder() {
             console.log('enter')

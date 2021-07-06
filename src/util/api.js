@@ -1685,7 +1685,7 @@ export function getFolderItemListByStoreId(data) {
 //生成sign
 export function signHash(data) {
     return post({
-        url: `${url.ORG_LIST}/trans/signMessageHash`,
+        url: `${url.ORG_LIST}/transaction/signMessageHash`,
         method: 'post',
         data: data,
         headers: {
@@ -2134,6 +2134,18 @@ export function fetchChannelPort(data) {
         params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+
+
+// get 单个 告警 配置 
+export function queryChannelIP(data) {
+    return get({
+        url: `${url.ORG_LIST}/scaffold/check?nodeIp=`+data.nodeIp+'&channelPort='+data.channelPort,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
