@@ -39,7 +39,7 @@
                                         <span>{{item.userName}}</span>
                                         <span class="font-12">{{item.address | splitString}}...</span>
                                     </el-option>
-                                </el-select>
+                                </el-select> 
                             </template>
                             <template v-else>
                                 <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -48,6 +48,11 @@
                                         <span class="font-12">{{item.address | splitString}}...</span>
                                     </el-option>
                                 </el-select>
+                                <!-- <div style="float:right;margin-right: 25px;">    -->
+                                    <span v-if="isShowPrivate" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                                        <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                                    </span>
+                                 <!-- </div> -->
                             </template>
                         </el-form-item>
                         <el-form-item :label="$t('govCommittee.user')" prop="address">
@@ -210,17 +215,22 @@
             <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="votePageSize" layout=" sizes, prev, pager, next, jumper" :total="voteTotal">
             </el-pagination>
         </div>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
+        </el-dialog>	
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 import { addCommittee, getUserList, committeeList, deleteCommittee, putCommitteeWeight, voteRecord, deleteVoteRecord, changeThreshold, getThreshold, getNetworkStatistics, getCommitteeWeight } from "@/util/api";
 export default {
     name: 'committeeMgmt',
 
     components: {
         "v-content-head": contentHead,
+        "v-creatUser": creatUser
     },
 
     props: {
@@ -341,7 +351,8 @@ export default {
                     "voteStatus": 0,
                     "voteType": 3
                 },
-            ]
+            ],
+            isShowPrivate: false
         }
     },
 
@@ -454,13 +465,18 @@ export default {
             };
             getUserList(reqData, {})
                 .then(res => {
-                    if (res.data.code === 0) {
+                    if (res.data.code === 0) { 
                         this.adminRivateKeyList = [];
                         res.data.data.forEach(value => {
                             // if (value.hasPk === 1) {
                             this.adminRivateKeyList.push(value);
                             // }
                         });
+                        if(this.adminRivateKeyList.length === 0){
+                            this.isShowPrivate = true;
+                        }else{
+                            this.isShowPrivate = false;
+                        } 
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -888,6 +904,9 @@ export default {
             val = val.replace(/[^0-9]/gi, "");
             // 此处还可以限制位数以及大小
             return val;
+        },
+        creatUserClose() {
+            this.getUserData();
         },
     }
 }

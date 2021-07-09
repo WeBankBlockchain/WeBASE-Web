@@ -94,15 +94,15 @@
                         <div class="item" v-show="inputButtonShow">
                             <span class="label"></span>
                             <el-button @click="decode" type="primary">{{buttonTitle}}</el-button>
+                            <span style="margin-left:20px" ></span>
+                            <el-button  v-show="exportContrctShow"  type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
                             <span style="margin-left:20px"></span>
-                             <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
-                              <span style="margin-left:20px"></span>
-                             <el-button type="primary" class="search-part-left-btn" @click="generateContract">{{this.$t("nodes.addContract")}}</el-button>
+                            <el-button v-show="exportContrctShow" type="primary" class="search-part-left-btn" @click="generateContract">{{this.$t("nodes.addContract")}}</el-button>
                         </div>  
                     </div>                   
                 </div>
                 <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
-                    <import-abi  @closeImport="closeImport"></import-abi>
+                    <import-abi  @closeImport="closeImport" @importSuccess="closeImport"></import-abi>
                 </el-dialog>
             </el-tab-pane>
             <el-tab-pane :label="$t('table.transactionReceipt')" name="txReceiptInfo">
@@ -273,7 +273,8 @@ export default {
             showOutputDecode: false,
             transOutputData: "",
             outputType: null,
-            importVisibility: false
+            importVisibility: false,
+            exportContrctShow: false
         };
     },
     mounted: function () {
@@ -344,7 +345,7 @@ export default {
                     
                 });
         },
-        getMethod: function (id,output) {
+        getMethod: function (id,output) { 
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 data: id.substring(0, 10)
@@ -483,7 +484,7 @@ export default {
 
             if (this.transactionTo) {
                 this.decodefun(input, this.transactionTo);
-            } else {
+            } else { 
                 this.methodId = input.substring(0, 10);
                 this.decodeDeloy(this.bin);
             }
@@ -500,8 +501,10 @@ export default {
                         this.txInfoReceiptMap = res.data.data;
                         this.eventLog = res.data.data.logs;
                         if (to && to != "0x0000000000000000000000000000000000000000") {
+                                this.exportContrctShow = false;
                                 this.getMethod(input,res.data.data.output)
                             } else {
+                                this.exportContrctShow = true;
                                 this.getDeloyAbi(input,res.data.data.output);
                             }
                     } else {
@@ -620,8 +623,8 @@ export default {
                         this.transactionData.user = value.userName;
                     }
                 });
-            }
-            this.methodId = input.substring(0, 10);
+            } 
+            this.methodId = input.substring(0, 10); 
             // this.methodId = data;
             let inputDatas = "0x" + input.substring(10);
             if (abiData) {
@@ -783,6 +786,7 @@ export default {
             this.importVisibility = true;
         },
          closeImport() {
+            this.getHashTransactionInfo()
             this.importVisibility = false
         },
         generateContract(){

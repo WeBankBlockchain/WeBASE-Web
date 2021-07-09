@@ -114,11 +114,12 @@ export default {
                 {
                     label: "sha256",
                     value: "sha256",
-                },
-                 {
-                    label: "sm3",
-                    value: "sm3",
                 }
+                // ,
+                //  {
+                //     label: "sm3",
+                //     value: "sm3",
+                // }
             ],
             privateKeyList: [],
             signUserId: "",
@@ -160,17 +161,17 @@ export default {
                     let result = CryptoJS.SHA256(content).toString();
                     this.inputHash = `0x${result}`
                 }
-
-            } else if (this.algorithm === 'sm3') {
-                let content;
-                if (this.inputText) {
-                    content = this.inputText;
-                } else {
-                    content = this.inputFile;
-                }
-                let result = gm.sm3Digest(content);
-                this.inputHash = `0x${result}`;
-            }
+            } 
+            // else if (this.algorithm === 'sm3') {
+            //     let content;
+            //     if (this.inputText) {
+            //         content = this.inputText;
+            //     } else {
+            //         content = this.inputFile;
+            //     }
+            //     let result = gm.sm3Digest(content);
+            //     this.inputHash = `0x${result}`;
+            // }
         },
         getLocalKeyStores() {
             queryUserInfo()
