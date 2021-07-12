@@ -6,7 +6,7 @@ import {
 
 let obj;
 
-export function complie(contract,that) {
+export function compile(contract,that) {
     obj = that;
     let version = obj.$store.state.versionData;
     if (version && version.net !== 0) {
@@ -51,10 +51,10 @@ function compileHighVersion(contract) {
                     );
                 }
             }else{
-                localStorage.setItem("complieStust","fail");
-                obj.$message({
+                // localStorage.setItem("complieStust","fail");
+                that.$message({
                     type: "error",
-                    message: obj.$t("contracts.contractCompileFail")
+                    message: that.$t("contracts.contractCompileFail")
                 })
             } 
         }  
@@ -65,6 +65,7 @@ function compileHighVersion(contract) {
  
 
 function changeOutput(obj,contract) {
+    debugger
     if (JSON.stringify(obj) !== "{}") {
         if (obj.hasOwnProperty(contract.contractName)) {
             let compiledMap = obj[contract.contractName]
@@ -99,11 +100,10 @@ function changeOutput(obj,contract) {
 }
 
 function setMethod(abiFile) {
-    debugger
     let Web3EthAbi = web3;
     let arry = [];
     if (abiFile) {
-        let list = JSON.parse(this.abiFile);
+        let list = JSON.parse(abiFile);
         list.forEach(value => {
             if (value.name && value.type == 'function') {
                 let data = {}

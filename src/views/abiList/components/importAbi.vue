@@ -136,6 +136,7 @@ export default {
             importAbi(data)
                 .then(res => {
                     this.loading = false;
+                    debugger
                     if (res.data.code === 0) {
                         this.setMethod()
                         this.$emit('importSuccess')
@@ -159,7 +160,6 @@ export default {
                 })
         },
         setMethod() {
-            debugger;
             let Web3EthAbi = web3;
             let arry = [];
             if (this.abiForm.contractAbi) {

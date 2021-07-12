@@ -618,7 +618,7 @@ export default {
         },
         contractStatusZh(val) {
             switch (val) {
-                case '0':
+                case '0':   
                     return this.$t('contracts.normal')
                     break;
                 case '1':

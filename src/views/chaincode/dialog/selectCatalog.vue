@@ -23,7 +23,7 @@
                             <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
-                     <span v-if="isAddFloderShow" class="contract-code-done"  @click='addFolder' style="float:right;margin-right:-55px">
+                     <span class="contract-code-done"  @click='addFolder' style="float:right;margin-right:-55px">
                         <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t('contracts.createFolder')}}</a>
                     </span>
                     </el-form-item>
@@ -65,8 +65,7 @@ export default {
             dialogVisible: this.show,
             pathList: [],
             folderList: [],
-            userFolader: "",
-            isAddFloderShow: false,
+            userFolader: "", 
             foldershow: false,
             isAddFile:""
         };
@@ -142,10 +141,7 @@ export default {
                         // if (num == 0 && localStorage.getItem("root") === "developer") {
                         //     console.log(11111);
                         //     this.addPath();
-                        // }
-                        if(this.pathList.length ===0){
-                            this.isAddFloderShow = true;
-                        }
+                        // } 
                         this.changeOptions();
                     } else {
                         this.$message({

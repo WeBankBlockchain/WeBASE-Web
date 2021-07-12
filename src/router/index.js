@@ -140,7 +140,7 @@ const routes = [
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
-            { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
+            // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
             { path: '/toolsContract', component: toolsContract, name: '工具合约', nameKey: 'toolsContract', menuShow: false, meta: { requireAuth: false } }, 
         ]
     },

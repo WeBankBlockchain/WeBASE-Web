@@ -70,8 +70,9 @@
                     <el-table-column :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
                             <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)" @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
+                            <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)"  @click="generateContract()" type="text" size="small">{{$t("nodes.addContract")}}</el-button>
                             <el-button v-if="disabled || scope.row.abiId > 0 || scope.row.abiId === 0" @click="routeLink(scope.row)" type="text" size="small">{{$t('text.checkData')}}</el-button>
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{$t('contracts.freeze')}}</el-button>
+                            <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -86,9 +87,9 @@
         <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
             <import-abi @importSuccess="importSuccess" @closeImport="closeImport" :address='address'></import-abi>
         </el-dialog>
-          <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
+          <!-- <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
             <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 
@@ -312,31 +313,34 @@ export default {
                 }
             })
         },
-        //   freezeThawBtn(val) {
-        //     switch (val.handleType) {
-        //         case '0':
-        //             return this.$t('contracts.freeze')
-        //             break;
-        //         case '1':
-        //             return this.$t('contracts.unfreeze')
-        //             break;
-        //     }
-        // },
+        freezeThawBtn(val) {
+        switch (val.handleType) {
+            case '0':
+                return this.$t('contracts.freeze')
+                break;
+            case '1':
+                return this.$t('contracts.unfreeze')
+                break;
+        }
+     },
 
-     handleStatusBtn(val) {
-            this.freezeThawVisible = true
-            this.contractInfo = val
-            // if (val.handleType == 0) {
-                this.handleFreezeThawType = 'freeze'
-            // }
-            //  else if (val.handleType == 1) {
-            //     this.handleFreezeThawType = 'unfreeze'
-            // }
+    //  handleStatusBtn(val) {
+    //         this.freezeThawVisible = true
+    //         this.contractInfo = val
+    //         if (val.handleType == 0) {
+    //             this.handleFreezeThawType = 'freeze'
+    //         }
+    //          else if (val.handleType == 1) {
+    //             this.handleFreezeThawType = 'unfreeze'
+    //         }
 
-        },
-         freezeThawClose() {
-            this.freezeThawVisible = false
-        },
+    //     },
+    //      freezeThawClose() {
+    //         this.freezeThawVisible = false
+    //     },
+        generateContract(){
+            this.$router.push("/contract")
+        }
     }
 };
 </script>

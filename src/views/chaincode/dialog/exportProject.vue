@@ -29,9 +29,7 @@
                     <el-tooltip effect="dark" :content="$t('text.haveChannelPort')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
-                     <span class="contract-code-done"  @click='checkChannelIP' style="float:right;margin-right:60px">
-                        <a target="_blank" style="font-size:12px;text-decoration:underline;">验证channelPort</a>
-                    </span>
+                    <el-button type="primary" size="small" @click="checkChannelIP()">验证节点存活</el-button>
                 </el-form-item>
                 <!-- </div> -->
                 <el-form-item :label="$t('text.projectUser')">
@@ -42,10 +40,8 @@
                     <el-select  v-model="projectFrom.userAddress"  class="filter-item"  :placeholder="$t('text.select')"  multiple style="width: 415px">
                         <el-option v-for="item in userList" :key="item.address" :label="item.userName"  :value="item.address">
                         </el-option>
-                    </el-select>
+                    </el-select> 
                 </el-form-item>
-
- 
                 <!-- <el-form-item :label="'p12密码'" prop="p12Password">
                   <el-input v-model="projectFrom.p12Password" style="width: 300px"></el-input>
               </el-form-item> -->
@@ -81,20 +77,24 @@
                 <el-button @click="modelClose">{{$t('text.cancel')}}</el-button>
                 <el-button type="primary" @click="submit('projectFrom')">{{$t('text.confirm')}}</el-button>
             </div>
-        </el-dialog>
+        </el-dialog> 	
     </div>
 </template>
 
 <script>
 import { searchContract, getUserList, getFronts, exportJavaProject, fetchChannelPort,addFunctionAbi,queryChannelIP} from "@/util/api";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 import web3 from "@/util/ethAbi";
 let Base64 = require("js-base64").Base64;
 import { unique } from "@/util/util";
 import {
-    complie
+    compile
 } from "@/util/compile";
 export default {
     name: 'exportProject',
+     components: {
+        "v-creatUser": creatUser,
+    },
     props: {
         folderList: {
             type: Array,
@@ -258,7 +258,7 @@ export default {
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
-                        this.userList = res.data.data || [];
+                        this.userList = res.data.data || []; 
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -365,7 +365,7 @@ export default {
                     this.multipleSelectedId.push(it.contractId)
                     if(!it.contractAbi){
                         num++
-                        complie(it,this);
+                        compile(it,this);
                     }
                 })
             })
@@ -373,7 +373,7 @@ export default {
                 setTimeout(() => {
                     num =0;
                     this.getContractList(val,true);
-               }, 1000)
+               }, 1500)
             }    
             this.multipleSelectedId = Array.from(new Set(this.multipleSelectedId))    
         },
@@ -415,7 +415,7 @@ export default {
                 channelIp: this.projectFrom.channelIp
             }
             if (this.projectFrom.userAddress) {
-                reqData.userAddressList = [this.projectFrom.userAddress]
+                reqData.userAddressList = this.projectFrom.userAddress
             }
             exportJavaProject(reqData).then(res => {
                 if (res.data.code === 0) {
@@ -538,7 +538,7 @@ export default {
                     }
                 })
 
-        }
+        }, 
     }
 }
 </script>
