@@ -11,7 +11,7 @@
                         </el-option>
                     </el-select>
                      <span v-if="isAdminRivateKeyShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;margin-left:20px">
-                        <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                        <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                     </span>
                 </el-form-item>
                 <el-form-item>

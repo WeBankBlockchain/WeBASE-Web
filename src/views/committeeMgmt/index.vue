@@ -49,8 +49,8 @@
                                     </el-option>
                                 </el-select>
                                 <!-- <div style="float:right;margin-right: 25px;">    -->
-                                    <span v-if="isShowPrivate" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
-                                        <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                                    <span v-if="isShowPrivate" class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                                        <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                                     </span>
                                  <!-- </div> -->
                             </template>

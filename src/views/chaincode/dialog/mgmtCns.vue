@@ -10,7 +10,7 @@
                 </el-select>
                  <!-- <td style="width: 100px;text-align: right;" class="text-td"> -->
                   <span  class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
-                     <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                     <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                  </span>
                 <!-- </td> -->
             </el-form-item>

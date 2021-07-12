@@ -27,8 +27,8 @@
                     </el-select>
                 </td>
                 <td v-if="isUserNameShow" style="width: 60px;text-align: right;" class="text-td">
-                     <span class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
-                         <a target="_blank" style="text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                    <span class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
+                         <span target="_blank" style="cursor:pointer;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                     </span>
                     <!-- <el-button type="primary"  class="el-button modify-btn el-button--primary el-button--small" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t("privateKey.addUser")}}</el-button> -->
                 </td>

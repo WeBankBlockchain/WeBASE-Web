@@ -9,7 +9,7 @@
                     </el-option>
                 </el-select>
                 <span v-if="isPermissionAdminShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;margin-right:40px">
-                     <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                     <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                </span>
             </el-form-item> 
             <el-form-item :label="$t('devOpsMgmt.devAddress')" prop="address" v-if="handleType =='add'">
