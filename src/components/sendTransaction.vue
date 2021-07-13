@@ -57,12 +57,12 @@
                     <span class="font-12">{{item.address}}</span>
                 </el-option>
             </el-select>
-            <span v-if="isUserNameShow"  class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
-                    <span target="_blank" style="cursor:pointer;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+            <span v-if="isUserNameShow" class="contract-code-done" @click="$store.dispatch('switch_creat_user_dialog')">
+                <span target="_blank" style="cursor:pointer;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
             </span>
         </div>
         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
-            <v-creatUser @creatUserClose="creatUserClose" ref="creatUser"></v-creatUser>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
         </el-dialog>	
         <div class="send-item">
             <span class="send-item-title">{{this.$t('contracts.method')}}:</span>
@@ -138,7 +138,7 @@ export default {
             cnsList: [],
             cnsVersion: "",
             cnsName: "",
-            isUserNameShow:true
+            isUserNameShow: false,
         };
     },
     computed: {
@@ -242,6 +242,10 @@ export default {
                         });
                         if (this.userList.length) {
                             this.transation.userName = this.userList[0].address;
+                            this.isUserNameShow = false;                            
+                        } else {
+                            this.isUserNameShow = true;
+                            this.placeholderText = this.$t('placeholder.selectedNoUser')
                         }
                         this.changeFunc();
                     } else {
