@@ -319,6 +319,7 @@ export default {
         haveSelectionAll: 'The contract is not compiled at all',
         haveCertSdk: 'Failed to get SDK certificate. Please check certificate file',
         haveChannelPort: 'Fill it in according to the node front corresponding ChannelPort',
+        addContractAddress: 'add',
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -389,7 +390,8 @@ export default {
         artifactName: 'Please enter project name',
         group: 'Please enter group name',
         frontId: 'Please check node',
-        checkContract: 'Please check contract'
+        checkContract: 'Please check contract',
+        addContractAddress: 'bind',
     },
     head: {
         helpText: "Document",
@@ -1046,6 +1048,7 @@ export default {
         cnsVersionPattern: "It can only be numbers, letters and '.'",
         cnsName: 'Please enter CNS name',
         length1_10: 'The length is between 1 and 10 character',
+        addContractAddress: 'Bind contract address',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash Calculator',

@@ -321,7 +321,8 @@ export default {
         haveChannelPort: '根据节点前置对应channelPort填入',
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约',
         pass:'验证通过',
-        no:'验证不通过'
+        no:'验证不通过',
+        addContractAddress: '绑定'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -1050,6 +1051,7 @@ export default {
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
         length1_10: '长度在 1 到 10 个字符',
+        addContractAddress: '绑定合约地址',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',

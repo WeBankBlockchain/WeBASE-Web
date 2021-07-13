@@ -681,6 +681,9 @@ export default {
             if (data.contractId) {
                 reqData.contractId = data.contractId
             }
+            if (data.contractAddress) {
+                reqData.contractAddress = data.contractAddress;
+            }
             saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.getContracts(data.contractPath, res.data.data);
