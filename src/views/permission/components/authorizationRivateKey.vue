@@ -9,6 +9,9 @@
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
+                <span v-if="isUserNameShow" class="contract-code-done" @click="$store.dispatch('switch_creat_user_dialog')">
+                    <span target="_blank" style="cursor:pointer;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+                </span>
             </el-form-item>
             <el-form-item :label="$t('system.outUserAddress')" prop="otherRivateKey" v-if="btnType==='addBtn'">
                 <el-select v-model.trim="permissionForm.otherRivateKey" :placeholder="$t('system.inputUser')" filterable>
@@ -26,15 +29,21 @@
             <el-button @click="close">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" :loading="loading" @click="submit('permissionForm')">{{this.$t('text.sure')}}</el-button>
         </div>
+        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
+            <v-creatUser @creatUserClose="creatUserClose"  :disablePub='true' ref='creatUser'></v-creatUser>
+        </el-dialog>
     </div>
 </template>
 
 <script>
 import { getUserList, postPermission, getPermissionFull, deletePermission } from "@/util/api";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
+
 export default {
     name: 'AuthorizationRivateKey',
 
     components: {
+        "v-creatUser": creatUser,
     },
 
     props: {
@@ -56,6 +65,7 @@ export default {
                 otherRivateKey: ''
             },
             authorType: 'permission',
+            isUserNameShow: true,
         }
     },
 
@@ -270,6 +280,9 @@ export default {
                         this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
                     }
                 }));
+        },
+        creatUserClose() {
+            this.getUserData();
         }
     }
 }
