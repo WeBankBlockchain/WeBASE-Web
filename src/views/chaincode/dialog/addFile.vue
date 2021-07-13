@@ -26,9 +26,9 @@
                             <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
-                    <span class="contract-code-done"  @click='addFolder' style="float:right;">
+                    <!-- <span class="contract-code-done"  @click='addFolder' style="float:right;">
                         <span target="_blank" style="cursor: pointer;text-decoration:underline;">{{this.$t('dialog.newFile')}}</span>
-                    </span>
+                    </span> -->
                     </el-form-item>
                 </el-form>
             </div>

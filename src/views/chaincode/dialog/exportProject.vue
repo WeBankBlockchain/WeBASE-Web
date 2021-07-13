@@ -42,9 +42,6 @@
                         </el-option>
                     </el-select> 
                 </el-form-item>
-                <!-- <el-form-item :label="'p12密码'" prop="p12Password">
-                  <el-input v-model="projectFrom.p12Password" style="width: 300px"></el-input>
-              </el-form-item> -->
             </el-form>
             <el-divider></el-divider>
             <h3 style="padding-left: 18px">{{$t('text.projectContract')}}</h3>
@@ -112,7 +109,6 @@ export default {
             if (value === '') {
                 callback(new Error(this.$t('rule.isPort')))
             } else {
-
                 if (!parten.test(value)) {
                     callback(new Error(this.$t('rule.portRule')))
                 } else {
@@ -363,13 +359,13 @@ export default {
             dynamicObject.forEach(item => {
                 item.forEach(it => {
                     this.multipleSelectedId.push(it.contractId)
-                    if(!it.contractAbi){
-                        num++
-                        compile(it,this);
+                    if (!it.contractAbi) {
+                        num++;
+                        compile(it, this);
                     }
                 })
             })
-            if(num>0){  
+            if (num > 0) { 
                 setTimeout(() => {
                     num =0;
                     this.getContractList(val,true);
