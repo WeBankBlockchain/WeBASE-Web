@@ -23,7 +23,8 @@
                 </el-input>
             </el-form-item>
         </el-form>
-         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper"
+          v-if='$store.state.creatUserVisible' center>
             <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>	
         <div slot="footer" class="dialog-footer" style="text-align: right;">
@@ -154,13 +155,12 @@ export default {
                         });
                         if (this.userList.length) {
                             this.cnsVersionFrom.userId = this.userList[0].address;
-                             this.isUserNameShow = false;
+                            this.isUserNameShow = false;
                         } else {
                             this.isUserNameShow = true;
                             this.placeholderText = this.$t('placeholder.selectedNoUser')
                         }
                     } else {
-                        console.log(4444);
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",

@@ -57,7 +57,13 @@
                     <span class="font-12">{{item.address}}</span>
                 </el-option>
             </el-select>
+            <span v-if="isUserNameShow"  class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
+                    <span target="_blank" style="cursor:pointer;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+            </span>
         </div>
+        <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
+            <v-creatUser @creatUserClose="creatUserClose" ref="creatUser"></v-creatUser>
+        </el-dialog>	
         <div class="send-item">
             <span class="send-item-title">{{this.$t('contracts.method')}}:</span>
             <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width:120px">
@@ -100,8 +106,13 @@
 <script>
 import { sendTransation, getUserList, findCnsInfo } from "@/util/api";
 import errcode from "@/util/errcode";
-import { isJson } from "@/util/util"
+import { isJson } from "@/util/util";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
+
 export default {
+    components: {
+        "v-creatUser": creatUser,
+    },
     name: "sendTransation",
     props: ["data", "dialogClose", "abi", 'version', 'address'],
     data: function () {
@@ -126,7 +137,8 @@ export default {
             isCNS: false,
             cnsList: [],
             cnsVersion: "",
-            cnsName: ""
+            cnsName: "",
+            isUserNameShow:true
         };
     },
     computed: {
@@ -382,6 +394,9 @@ export default {
                         });
                     }
                 })
+        },
+        creatUserClose() {
+            this.getUserData();
         }
     }
 };
