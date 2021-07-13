@@ -645,6 +645,7 @@ export default {
         folder: "Folder",
         cnsTitle: "On chain CNS query",
         localCnsTitle: "Local CNS",
+        checkNodeActive: "check"
     },
     privateKey: {
         addUser: "Add Users",
@@ -667,7 +668,7 @@ export default {
         privateKeyUser: "Private key user",
         publicKeyUser: "Public key user",
         publicKeyInfo: "Public key information",
-        inputUserName: "Please enter User Address",
+        inputUserName: "Please enter Username",
         inputPublicInfo: "Please enter public key information or public key address.",
         userLong: "Within 120 characters",
         inputPublic: "Please enter public key information",

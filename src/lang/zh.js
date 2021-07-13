@@ -649,6 +649,7 @@ export default {
         folder: "目录",
         cnsTitle: "链上CNS查询",
         localCnsTitle: "本地CNS",
+        checkNodeActive: "验证节点存活"
     },
     privateKey: {
         addUser: "新增用户",
@@ -671,7 +672,7 @@ export default {
         privateKeyUser: "私钥用户",
         publicKeyUser: "公钥用户",
         publicKeyInfo: "公钥信息",
-        inputUserName: "请输入用户地址",
+        inputUserName: "请输入用户名称",
         inputPublicInfo: "请输入公钥信息或公钥地址",
         userLong: "120个字符以内",
         inputPublic: "请输入公钥信息",
