@@ -44,15 +44,13 @@
                             <template v-else>
                                 <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
                                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-                                        <span>{{item.userName}} 2222</span>
+                                        <span>{{item.userName}}</span>
                                         <span class="font-12">{{item.address | splitString}}...</span>
                                     </el-option>
                                 </el-select>
-                                <!-- <div style="float:right;margin-right: 25px;">    -->
-                                    <span v-if="isShowPrivate" class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
-                                        <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
-                                    </span>
-                                 <!-- </div> -->
+                                <span v-if="isShowPrivate" class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                                    <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+                                </span>
                             </template>
                         </el-form-item>
                         <el-form-item :label="$t('govCommittee.user')" prop="address">
@@ -400,6 +398,11 @@ export default {
                     }
                 })
             })
+            if (committeeList.length) {
+                this.governForm.fromAddress = committeeList[0]['address'];
+            } else if (this.adminRivateKeyList.length) {
+                this.governForm.fromAddress = this.adminRivateKeyList[0]['address'];
+            }
             return committeeList
         }
     },
@@ -421,7 +424,7 @@ export default {
             this.queryCommitteeList()
             this.queryVoteRecordList()
             this.getUserData()
-
+            this.produceCommittee()
         }
     },
 
@@ -435,7 +438,7 @@ export default {
 
         },
         initGovernForm() {
-            this.governForm.fromAddress = ""
+            // this.governForm.fromAddress = ""
             this.governForm.address = ""
             this.weight = ""
         },
@@ -472,10 +475,11 @@ export default {
                             this.adminRivateKeyList.push(value);
                             // }
                         });
-                        if(this.adminRivateKeyList.length === 0){
+                        if (this.adminRivateKeyList.length === 0) {
                             this.isShowPrivate = true;
-                        }else{
+                        } else {
                             this.isShowPrivate = false;
+                            // this.governForm.fromAddress = this.adminRivateKeyList[0]['address'];
                         } 
                     } else {
                         this.$message({
