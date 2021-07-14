@@ -102,10 +102,10 @@
                             <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span>
                         </span>
                     </div>
-                    <div v-else class="contract-info-list">
-                        <span v-if="bytecodeBin && abiFile" class="contract-info-list-title" style="color: #0B8AEE">contractAddress
+                    <div v-else v-show="abiFile" class="contract-info-list">
+                        <span v-if="!abiEmpty" class="contract-info-list-title" style="color: #0B8AEE">contractAddress
                         </span>
-                        <span v-if="bytecodeBin && abiFile" style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="addContractAddress">{{$t('text.addContractAddress')}}</span>
+                        <span v-if="!abiEmpty" style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="addContractAddress">{{$t('text.addContractAddress')}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractName
@@ -214,6 +214,8 @@ export default {
             code: "",
             status: 0,
             abiFile: "",
+            // abi is empty list
+            abiEmpty: true,            
             bin: "",
             contractAddress: "",
             contractName: "",
@@ -266,14 +268,14 @@ export default {
                         trigger: "blur",
                     },
                     {
-                        min: 42,
-                        max: 42,
-                        message: this.$t("rule.contractAddressLong"),
+                        pattern: /^[0x|0X]+[A-Fa-f0-9]+$/,
+                        message: this.$t("rule.contractAddressHex"),
                         trigger: "blur",
                     },
                     {
-                        pattern: /^[0x|0X]+[A-Fa-f0-9]+$/,
-                        message: this.$t("rule.contractAddressHex"),
+                        min: 42,
+                        max: 42,
+                        message: this.$t("rule.contractAddressLong"),
                         trigger: "blur",
                     },
                 ]
@@ -303,6 +305,7 @@ export default {
             this.version = "";
             this.status = null;
             this.abiFile = "";
+            this.abiEmpty = true;
             this.contractAddress = "";
             this.errorMessage = "";
             this.contractName = "";
@@ -314,6 +317,9 @@ export default {
             this.aceEditor.setValue(this.content);
             this.status = data.contractStatus;
             this.abiFile = data.contractAbi;
+            if (this.abiFile && this.abiFile != '[]') {
+                this.abiEmpty = false
+            }
             this.contractAddress = data.contractAddress;
             this.errorMessage = data.description || "";
             this.contractName = data.contractName;
@@ -334,6 +340,7 @@ export default {
             this.version = "";
             this.status = null;
             this.abiFile = "";
+            this.abiEmpty = true;            
             this.contractAddress = "";
             this.errorMessage = "";
             this.contractName = "";
@@ -747,6 +754,9 @@ export default {
                     this.successInfo = this.$t("contracts.compileSuccess");
                     this.abiFile = compiledMap.abi;
                     this.abiFile = JSON.stringify(this.abiFile);
+                    if (this.abiFile && this.abiFile != '[]') {
+                        this.abiEmpty = false
+                    }
                     this.bin = compiledMap.evm.deployedBytecode.object;
                     this.bytecodeBin = compiledMap.evm.bytecode.object;
                     this.data.contractAbi = this.abiFile;
@@ -828,10 +838,18 @@ export default {
             this.contractAddress = "";
         },
         deploying: function () {
+            if (!this.bytecodeBin) {
+                this.$message({
+                    type: 'warning',
+                    message: this.$t('text.notHaveBin'),
+                    duration: 2000
+                })
+                return;
+            }
             if (JSON.parse(this.abiFile).length == 0 || !this.abiFile) {
                 this.$message({
                     type: 'error',
-                    message: this.$t('text.haveAbi')
+                    message: this.$t('text.notHaveAbi')
                 })
             } else {
                 if (this.data.contractStatus && this.data && this.data.contractStatus == 2) {
@@ -1027,7 +1045,7 @@ export default {
             if(JSON.parse(this.abiFile).length == 0 || !this.abiFile){
                 this.$message({
                     type: 'error',
-                    message: this.$t('text.haveAbi')
+                    message: this.$t('text.notHaveAbi')
                 })
             }else {
                 this.dialogVisible = true;
