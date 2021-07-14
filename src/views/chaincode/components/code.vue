@@ -103,9 +103,9 @@
                         </span>
                     </div>
                     <div v-else class="contract-info-list">
-                        <span v-if="bytecodeBin" class="contract-info-list-title" style="color: #0B8AEE">contractAddress
+                        <span v-if="bytecodeBin && abiFile" class="contract-info-list-title" style="color: #0B8AEE">contractAddress
                         </span>
-                        <span v-if="bytecodeBin" style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="addContractAddress">{{$t('text.addContractAddress')}}</span>
+                        <span v-if="bytecodeBin && abiFile" style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="addContractAddress">{{$t('text.addContractAddress')}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractName
@@ -145,7 +145,7 @@
             <mgmt-cns :mgmtCnsItem="mgmtCnsItem" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
         </el-dialog>
         <el-dialog :visible.sync="addContractAddressVisible" :title="$t('dialog.addContractAddress')" width="400px" class="dialog-wrapper" center v-if="addContractAddressVisible">
-            <el-form ref="contractForm" :model="contractForm">
+            <el-form ref="contractForm"  :rules="rules" :model="contractForm">
                 <el-form-item label="" prop="contractAddress">
                     <el-input v-model="contractForm.contractAddress" :placeholder="$t('contracts.contractAddressInput')"></el-input>
                 </el-form-item>
@@ -258,6 +258,26 @@ export default {
             contractForm: {
                 contractAddress: ""
             },
+            rules: {
+                contractAddress: [
+                     {
+                        required: true,
+                        message: this.$t("rule.contractAddress"),
+                        trigger: "blur",
+                    },
+                    {
+                        min: 42,
+                        max: 42,
+                        message: this.$t("rule.contractAddressLong"),
+                        trigger: "blur",
+                    },
+                    {
+                        pattern: /^[0x|0X]+[A-Fa-f0-9]+$/,
+                        message: this.$t("rule.contractAddressHex"),
+                        trigger: "blur",
+                    },
+                ]
+            }
         };
     },
     beforeDestroy: function () {

@@ -392,7 +392,9 @@ export default {
         artifactName: '请输入项目名称',
         group: '请输入包名称',
         frontId: '请选择节点',
-        checkContract: '请选择合约'
+        checkContract: '请选择合约',
+        contractAddressLong: '合约地址长度应该为42',
+        contractAddressHex: '合约地址以0x或0X开头且为十六进制'
     },
     head: {
         helpText: "帮助文档",

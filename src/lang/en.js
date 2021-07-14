@@ -393,6 +393,8 @@ export default {
         frontId: 'Please check node',
         checkContract: 'Please check contract',
         addContractAddress: 'bind',
+        contractAddressLong: 'contract address\' length supposed to be 42',
+        contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string'
     },
     head: {
         helpText: "Document",
