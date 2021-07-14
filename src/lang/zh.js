@@ -653,7 +653,7 @@ export default {
         folder: "目录",
         cnsTitle: "链上CNS查询",
         localCnsTitle: "本地CNS",
-        checkNodeActive: "验证节点存活"
+        checkNodeActive: "检测"
     },
     privateKey: {
         addUser: "新增用户",

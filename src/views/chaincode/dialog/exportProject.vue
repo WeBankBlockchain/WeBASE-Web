@@ -29,7 +29,7 @@
                     <el-tooltip effect="dark" :content="$t('text.haveChannelPort')" placement="top-start">
                         <i class="el-icon-info"></i>
                     </el-tooltip>
-                    <el-button type="primary" size="small" @click="checkChannelIP()">{{this.$t("contracts.checkNodeActive")}}</el-button>
+                    <el-button type="text" size="small" @click="checkChannelIP()">{{this.$t("contracts.checkNodeActive")}}</el-button>
                 </el-form-item>
                 <!-- </div> -->
                 <el-form-item :label="$t('text.projectUser')">
