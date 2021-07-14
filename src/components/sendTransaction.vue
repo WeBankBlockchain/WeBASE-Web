@@ -235,6 +235,12 @@ export default {
             getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
+                        if (res.data.data.length == 0) {
+                            this.$message({
+                                type: "info",
+                                message: this.$t("contracts.addPrivateKeyInfo")
+                            });
+                        }
                         res.data.data.forEach(value => {
                             if (value.hasPk === 1) {
                                 this.userList.push(value);

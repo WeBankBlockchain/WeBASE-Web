@@ -181,7 +181,7 @@ export default {
                         if (this.adminRivateKeyList.length) {
                             this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
                             this.isAdminRivateKeyShow = false;
-                        }else{
+                        } else {
                             this.isAdminRivateKeyShow = true;
                         }
                     } else {
