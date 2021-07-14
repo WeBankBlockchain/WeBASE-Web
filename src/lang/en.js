@@ -320,6 +320,7 @@ export default {
         haveCertSdk: 'Failed to get SDK certificate. Please check certificate file',
         haveChannelPort: 'Fill it in according to the node front corresponding ChannelPort',
         addContractAddress: 'add',
+        importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract'
     },
     rule: {
         textLong: "1 to 32 characters in length",

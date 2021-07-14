@@ -319,7 +319,7 @@ export default {
         haveSelectionAll: '合约全未编译',
         haveCertSdk: '获取SDK证书失败，请检查证书文件',
         haveChannelPort: '根据节点前置对应channelPort填入',
-        importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约',
+        importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         pass:'验证通过',
         no:'验证不通过',
         addContractAddress: '绑定'
