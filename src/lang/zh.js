@@ -1056,7 +1056,7 @@ export default {
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
         length1_10: '长度在 1 到 10 个字符',
-        addContractAddress: '绑定合约地址',
+        addContractAddress: '绑定',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',

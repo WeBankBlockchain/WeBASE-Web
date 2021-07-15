@@ -320,7 +320,7 @@ export default {
         haveSelectionAll: 'The contract is not compiled at all',
         haveCertSdk: 'Failed to get SDK certificate. Please check certificate file',
         haveChannelPort: 'Fill it in according to the node front corresponding ChannelPort',
-        addContractAddress: 'add',
+        addContractAddress: 'Bind',
         importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract',
         nodeActive:'Node active',
         nodeNotActive:'Node not active',
