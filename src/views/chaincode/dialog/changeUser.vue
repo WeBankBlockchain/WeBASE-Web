@@ -27,10 +27,9 @@
                     </el-select>
                 </td>
                 <td v-if="isUserNameShow" style="width: 60px;text-align: right;" class="text-td">
-                     <span class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
-                         <a target="_blank" style="text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                    <span class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')">
+                         <span target="_blank" style="cursor:pointer;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                     </span>
-                    <!-- <el-button type="primary"  class="el-button modify-btn el-button--primary el-button--small" @click="$store.dispatch('switch_creat_user_dialog')">{{this.$t("privateKey.addUser")}}</el-button> -->
                 </td>
             </tr>
             <tr>
@@ -90,8 +89,9 @@
             <el-button @click="close">{{this.$t("text.cancel")}}</el-button>
             <el-button type="primary" @click="submit">{{this.$t("text.sure")}}</el-button>
         </div>
-         <el-dialog :visible.sync="creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
-            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
+         
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true'  ref="creatUser"></v-creatUser>
         </el-dialog>	
     </div>
 </template>
@@ -102,7 +102,7 @@ import { isJson } from "@/util/util";
 import creatUser from "@/views/privateKeyManagement/components/creatUser";
 
 export default {
-     components: {
+    components: {
         "v-creatUser": creatUser,
     },
     name: "changeUser",
@@ -124,7 +124,8 @@ export default {
             cnsVersionFrom: {
                 cnsVersion: "",
                 cnsName: this.contractName
-            }
+            },
+            creatUserVisible: false
         };
     },
     computed: {
@@ -242,6 +243,12 @@ export default {
             getUserList(reqData, query)
                 .then(res => {
                     if (res.data.code === 0) {
+                        if (res.data.data.length == 0) {
+                            this.$message({
+                                type: "info",
+                                message: this.$t("contracts.addPrivateKeyInfo")
+                            });
+                        }
                         res.data.data.forEach(value => {
                             if (value.hasPk === 1) {
                                 this.userList.push(value);
@@ -249,7 +256,7 @@ export default {
                         });
                         if (this.userList.length) { 
                             this.userName = this.userList[0].address;
-                             this.isUserNameShow = false;
+                            this.isUserNameShow = false;
                         } else {
                             this.isUserNameShow = true;
                             this.placeholderText = this.$t('placeholder.selectedNoUser')
@@ -273,7 +280,7 @@ export default {
         changeCns() {
             this.cnsVersionFrom.cnsVersion = "";
         },
-         creatUserClose() {
+        creatUserClose() {
             this.getUserData();
         },
     }

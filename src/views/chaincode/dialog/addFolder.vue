@@ -118,8 +118,8 @@ export default {
         // modelClose: function () {
         //     // this.$emit("close")
         // },
-          modelClose: function () {
-             this.folderFrom ={
+        modelClose: function () {
+            this.folderFrom = {
                 folderName: ""
             }
             if(this.isAddFile == 'isAddFile'){

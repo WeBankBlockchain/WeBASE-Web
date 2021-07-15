@@ -9,8 +9,8 @@
                     </el-option>
                 </el-select>
                  <!-- <td style="width: 100px;text-align: right;" class="text-td"> -->
-                  <span  class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
-                     <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</a>
+                  <span class="contract-code-done" v-if="isUserNameShow" @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                     <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
                  </span>
                 <!-- </td> -->
             </el-form-item>
@@ -23,8 +23,9 @@
                 </el-input>
             </el-form-item>
         </el-form>
-         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
-            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper"
+          v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
         </el-dialog>	
         <div slot="footer" class="dialog-footer" style="text-align: right;">
             <el-button @click="modelClose">{{$t('text.cancel')}}</el-button>
@@ -154,13 +155,12 @@ export default {
                         });
                         if (this.userList.length) {
                             this.cnsVersionFrom.userId = this.userList[0].address;
-                             this.isUserNameShow = false;
+                            this.isUserNameShow = false;
                         } else {
                             this.isUserNameShow = true;
                             this.placeholderText = this.$t('placeholder.selectedNoUser')
                         }
                     } else {
-                        console.log(4444);
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",

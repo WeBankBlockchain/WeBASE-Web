@@ -18,7 +18,7 @@
         <div class="text-center">
             <el-radio-group v-model="timeGranularity" @change='changeKey'>
                 <el-radio :label="'RIV'" v-if='!address'>{{this.$t("privateKey.privateKeyUser")}}</el-radio>
-                <el-radio :label="'PUB'">{{this.$t('privateKey.publicKeyUser')}}</el-radio>
+                <el-radio :label="'PUB'" :disabled="disablePub" >{{this.$t('privateKey.publicKeyUser')}}</el-radio>
             </el-radio-group>
         </div>
         <div class="divide-line"></div>
@@ -50,8 +50,14 @@ export default {
         address: {
             type: String,
             default: null
-        }
+        },   
+        disablePub: {
+            type: Boolean,
+            require: true,
+            default: false
+        },     
     },
+        
     data: function () {
         return {
             loading: false,
@@ -63,7 +69,7 @@ export default {
                 publicKey: ""
             },
             timeGranularity: "RIV",
-            groupId: localStorage.getItem("groupId")
+            groupId: localStorage.getItem("groupId"),
         };
     },
     computed: {
@@ -105,6 +111,7 @@ export default {
             this.changeKey();
             this.userForm.publicKey = this.address;
         }
+        
     },
     methods: {
         changeKey: function () {

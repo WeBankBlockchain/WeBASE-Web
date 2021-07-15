@@ -23,8 +23,8 @@
                             <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
-                     <span class="contract-code-done"  @click='addFolder' style="float:right;margin-right:-55px">
-                        <a target="_blank" style="font-size:12px;text-decoration:underline;">{{this.$t('contracts.createFolder')}}</a>
+                    <span class="contract-code-done"  @click='addFolder' style="float:right;margin-right:-55px">
+                        <a target="_blank" style="font-size:12px;cursor:pointer;text-decoration:underline;">{{this.$t('contracts.createFolder')}}</a>
                     </span>
                     </el-form-item>
                 </el-form>

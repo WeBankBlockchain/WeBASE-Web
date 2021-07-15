@@ -62,6 +62,7 @@
                     <i :class="[showCompileText?'el-icon-caret-bottom':'el-icon-caret-top']" @click="collapse">
 
                     </i>
+                    
                 </div>
                 <div>
                     <div class="contract-info-list1" v-html="compileinfo">
@@ -91,7 +92,7 @@
                         </el-collapse>
                     </div>
                     <div style="color: #68E600;padding-bottom: 15px;" v-show="abiFileShow">{{successInfo}}</div>
-                    <div class="contract-info-list" v-show="contractAddress">
+                    <div class="contract-info-list" v-if="contractAddress">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractAddress
                             <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(contractAddress)" :title="$t('text.copy')"></i>
                         </span>
@@ -100,6 +101,11 @@
                             <span v-if="reqVersion" style="margin-left: 10px;">(CNS: {{cnsName}} {{reqVersion}})</span>
                             <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span>
                         </span>
+                    </div>
+                    <div v-else v-show="abiFile" class="contract-info-list">
+                        <span v-if="!abiEmpty" class="contract-info-list-title" style="color: #0B8AEE">contractAddress
+                        </span>
+                        <span v-if="!abiEmpty" style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="addContractAddress">{{$t('text.addContractAddress')}}</span>
                     </div>
                     <div class="contract-info-list" v-show="abiFile">
                         <span class="contract-info-list-title" style="color: #0B8AEE">contractName
@@ -137,6 +143,17 @@
         <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
         <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
             <mgmt-cns :mgmtCnsItem="mgmtCnsItem" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
+        </el-dialog>
+        <el-dialog :visible.sync="addContractAddressVisible" :title="$t('dialog.addContractAddress')" width="400px" class="dialog-wrapper" center v-if="addContractAddressVisible">
+            <el-form ref="contractForm"  :rules="rules" :model="contractForm">
+                <el-form-item label="" prop="contractAddress">
+                    <el-input v-model="contractForm.contractAddress" :placeholder="$t('contracts.contractAddressInput')"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="text-right">
+                <el-button @click="closeContractAddress">{{$t('dialog.cancel')}}</el-button>
+                <el-button type="primary" @click="sureContractAddress('contractForm')">{{$t('dialog.confirm')}}</el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -197,6 +214,8 @@ export default {
             code: "",
             status: 0,
             abiFile: "",
+            // abi is empty list
+            abiEmpty: true,            
             bin: "",
             contractAddress: "",
             contractName: "",
@@ -236,7 +255,31 @@ export default {
             mgmtCnsItem: {},
             activeNames: ['0'],
             isDeployedModifyEnable: false,
-            isFinishComplie: false
+            isFinishComplie: false,
+            addContractAddressVisible: false,
+            contractForm: {
+                contractAddress: ""
+            },
+            rules: {
+                contractAddress: [
+                     {
+                        required: true,
+                        message: this.$t("rule.contractAddress"),
+                        trigger: "blur",
+                    },
+                    {
+                        pattern: /^[0x|0X]+[A-Fa-f0-9]+$/,
+                        message: this.$t("rule.contractAddressHex"),
+                        trigger: "blur",
+                    },
+                    {
+                        min: 42,
+                        max: 42,
+                        message: this.$t("rule.contractAddressLong"),
+                        trigger: "blur",
+                    },
+                ]
+            }
         };
     },
     beforeDestroy: function () {
@@ -262,6 +305,7 @@ export default {
             this.version = "";
             this.status = null;
             this.abiFile = "";
+            this.abiEmpty = true;
             this.contractAddress = "";
             this.errorMessage = "";
             this.contractName = "";
@@ -273,6 +317,9 @@ export default {
             this.aceEditor.setValue(this.content);
             this.status = data.contractStatus;
             this.abiFile = data.contractAbi;
+            if (this.abiFile && this.abiFile != '[]') {
+                this.abiEmpty = false
+            }
             this.contractAddress = data.contractAddress;
             this.errorMessage = data.description || "";
             this.contractName = data.contractName;
@@ -293,6 +340,7 @@ export default {
             this.version = "";
             this.status = null;
             this.abiFile = "";
+            this.abiEmpty = true;            
             this.contractAddress = "";
             this.errorMessage = "";
             this.contractName = "";
@@ -706,6 +754,9 @@ export default {
                     this.successInfo = this.$t("contracts.compileSuccess");
                     this.abiFile = compiledMap.abi;
                     this.abiFile = JSON.stringify(this.abiFile);
+                    if (this.abiFile && this.abiFile != '[]') {
+                        this.abiEmpty = false
+                    }
                     this.bin = compiledMap.evm.deployedBytecode.object;
                     this.bytecodeBin = compiledMap.evm.bytecode.object;
                     this.data.contractAbi = this.abiFile;
@@ -735,6 +786,50 @@ export default {
         exportJava() {
             this.$store.dispatch('set_exportProject_show_action', true)
         },
+        addContractAddress(){
+            this.contractForm.contractAddress = "";
+            this.addContractAddressVisible = true;
+        },
+        closeContractAddress() {
+            this.addContractAddressVisible = false;
+            this.contractForm.contractAddress = "";
+        },
+        sureContractAddress(formName) {
+            this.$refs[formName].validate(valid => {
+                if (valid) {
+                    if (this.contractForm.contractAddress=='' || this.contractForm.contractAddress==null) {
+                        this.$message({
+                            type: "error",
+                            message: this.$t('contracts.contractAddressInput')
+                        });
+                    } else {
+                        this.addContractAddressVisible = false;
+                        this.addContract()
+                    }
+                } else {
+                    return false;
+                }
+            });
+        },
+        // todo add contract address all hex string and start with 0x 
+        // 正则判断
+        // todo 保存后加一个Close函数 刷新当前的ID数据
+        addContract: function () {
+             let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                contractName: this.data.contractName,
+                contractPath: this.data.contractPath,
+                contractSource: this.data.contractSource,
+                contractAbi: this.data.contractAbi,
+                contractBin: this.data.contractBin,
+                bytecodeBin: this.data.bytecodeBin,
+                contractAddress : this.contractForm.contractAddress
+            };
+            if (this.data.contractId) {
+                reqData.contractId = this.data.contractId;
+            }
+            Bus.$emit("save", reqData);
+        },
         refreshMessage: function () {
             this.abiFileShow = false;
             this.errorInfo = "";
@@ -743,10 +838,18 @@ export default {
             this.contractAddress = "";
         },
         deploying: function () {
+            if (!this.bytecodeBin) {
+                this.$message({
+                    type: 'warning',
+                    message: this.$t('text.notHaveBin'),
+                    duration: 2000
+                })
+                return;
+            }
             if (JSON.parse(this.abiFile).length == 0 || !this.abiFile) {
                 this.$message({
                     type: 'error',
-                    message: this.$t('text.haveAbi')
+                    message: this.$t('text.notHaveAbi')
                 })
             } else {
                 if (this.data.contractStatus && this.data && this.data.contractStatus == 2) {
@@ -942,7 +1045,7 @@ export default {
             if(JSON.parse(this.abiFile).length == 0 || !this.abiFile){
                 this.$message({
                     type: 'error',
-                    message: this.$t('text.haveAbi')
+                    message: this.$t('text.notHaveAbi')
                 })
             }else {
                 this.dialogVisible = true;

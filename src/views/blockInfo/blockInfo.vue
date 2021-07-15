@@ -181,6 +181,8 @@ export default {
 
         clearText: function () {
             this.getBlockList()
+            this.$route.query.blockNumber=""
+            this.searchKey.value=""            
         },
         copyPubilcKey(val) {
             if (!val) {

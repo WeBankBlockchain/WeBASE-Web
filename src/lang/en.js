@@ -315,10 +315,13 @@ export default {
         updateSuccess: 'update Success',
         actualChannelIp: 'Modify according to the actual channelip',
         projectTitle: 'Project Info',
-        haveAbi: 'The ABI information cannot be empty',
+        notHaveAbi: 'The ABI information cannot be empty',
+        notHaveBin: 'The BIN information cannot be empty',
         haveSelectionAll: 'The contract is not compiled at all',
         haveCertSdk: 'Failed to get SDK certificate. Please check certificate file',
         haveChannelPort: 'Fill it in according to the node front corresponding ChannelPort',
+        addContractAddress: 'add',
+        importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract'
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -389,7 +392,10 @@ export default {
         artifactName: 'Please enter project name',
         group: 'Please enter group name',
         frontId: 'Please check node',
-        checkContract: 'Please check contract'
+        checkContract: 'Please check contract',
+        addContractAddress: 'bind',
+        contractAddressLong: 'contract address\' length supposed to be 42',
+        contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string'
     },
     head: {
         helpText: "Document",
@@ -645,6 +651,7 @@ export default {
         folder: "Folder",
         cnsTitle: "On chain CNS query",
         localCnsTitle: "Local CNS",
+        checkNodeActive: "check"
     },
     privateKey: {
         addUser: "Add Users",
@@ -667,7 +674,7 @@ export default {
         privateKeyUser: "Private key user",
         publicKeyUser: "Public key user",
         publicKeyInfo: "Public key information",
-        inputUserName: "Please enter User Address",
+        inputUserName: "Please enter Username",
         inputPublicInfo: "Please enter public key information or public key address.",
         userLong: "Within 120 characters",
         inputPublic: "Please enter public key information",
@@ -1045,6 +1052,7 @@ export default {
         cnsVersionPattern: "It can only be numbers, letters and '.'",
         cnsName: 'Please enter CNS name',
         length1_10: 'The length is between 1 and 10 character',
+        addContractAddress: 'Bind contract address',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash Calculator',

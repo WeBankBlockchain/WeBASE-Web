@@ -68,7 +68,7 @@
                                 <div class="input-label">
                                     <span class="label">function</span>
                                     <span>{{funcData + "(" + abiType + outputType + ")"}}</span>
-                                     <el-tooltip v-if="funcData == '' " effect="dark" :content="$t('privateKey.addUserTips')" placement="top-start">
+                                     <el-tooltip v-if="funcData == '' " effect="dark" :content="$t('text.importContractTip')" placement="top-start">
                                         <i class="el-icon-info"></i>
                                     </el-tooltip>
                                 </div>
@@ -205,7 +205,7 @@ import {
     hashTransactionInfo,
     getBlockDetail,
     getUserList,
-    getFunctionAbi,
+    getFunctionAbi,// get method id
     getAbi
 } from "@/util/api";
 import { getDate, isNumber } from "@/util/util";
@@ -345,7 +345,8 @@ export default {
                     
                 });
         },
-        getMethod: function (id,output) { 
+        // decode method
+        getMethod: function (id, output) { 
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 data: id.substring(0, 10)
@@ -353,8 +354,14 @@ export default {
             getFunctionAbi(data, {}).then(res => {
 
                 if (res.data.code == 0) {
+                    // if cannot get abi from backend, show btn of import abi/contract
+                    if (!res.data.data) {
+                        this.exportContrctShow = true;
+                    }
                     this.decodefun(id, res.data.data);
-                    if(output){
+                    // if output not null, show decode/recover button
+                    if (output) {
+                        // decode method id
                         this.decodeOutPutfun(output,res.data.data);
                         this.outputShow = true
                     } else {
@@ -383,7 +390,7 @@ export default {
                 }
                 getAbi(data).then(res => {
                     if (res.data.code == 0) {
-                        this.decodeDeployOutput(output,res.data.data)
+                        this.decodeDeployOutput(output, res.data.data)
                         this.decodeDeloy(res.data.data)
                     } else {
                         this.$message({
@@ -500,12 +507,13 @@ export default {
                     if (res.data.code === 0) {
                         this.txInfoReceiptMap = res.data.data;
                         this.eventLog = res.data.data.logs;
+                        // if not deploy contract trans
                         if (to && to != "0x0000000000000000000000000000000000000000") {
                                 this.exportContrctShow = false;
                                 this.getMethod(input,res.data.data.output)
                             } else {
-                                this.exportContrctShow = true;
-                                this.getDeloyAbi(input,res.data.data.output);
+                                // else contract deploy trans not decode method
+                                this.getDeloyAbi(input, res.data.data.output);
                             }
                     } else {
                         this.$message({
@@ -689,10 +697,10 @@ export default {
                 this.buttonTitle = this.$t('transaction.reduction');
             }
         },
-        decodeDeployOutput: function(output,data){
+        decodeDeployOutput: function(output,data) {
             this.showOutputDecode = true;
         },
-        //解析uotput
+        //解析output(method id)
         decodeOutPutfun: function (output, abiData) {
             let web3 = new Web3(Web3.givenProvider);
             if (abiData) {
@@ -708,7 +716,7 @@ export default {
                     this.showOutputDecode = false
                     this.showOutDecode = true;
                     this.decodeOutData = web3.eth.abi.decodeParameters(abiData.abiInfo.outputs, output);
-                    console.log(this.decodeOutData)
+                    // console.log(this.decodeOutData)
                     if (JSON.stringify(this.decodeOutData) != "{}") {
                         for (const key in this.decodeOutData) {
                             for (let index = 0; index < abiData.abiInfo.outputs.length; index++) {
@@ -723,14 +731,14 @@ export default {
                             }
                         }
                     }
-                    console.log(this.outputData)
-                }else{
+                    // console.log(this.outputData)
+                } else {
                     this.showOutDecode = false;
                     this.showOutputDecode = true;
                     try {
                         let data = "0x" + output.substring(10)
                         this.decodeOutData = web3.eth.abi.decodeParameter('string', data);
-                        console.log(this.decodeOutData)
+                        // console.log(this.decodeOutData)
                     } catch (error) {
                         console.log(error)
                     }
@@ -785,7 +793,7 @@ export default {
         generateAbi() {
             this.importVisibility = true;
         },
-         closeImport() {
+        closeImport() {
             this.getHashTransactionInfo()
             this.importVisibility = false
         },

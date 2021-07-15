@@ -315,13 +315,15 @@ export default {
         updateSuccess: '成功',
         actualChannelIp: '根据实际channelIp修改',
         projectTitle: '项目信息',
-        haveAbi: 'abi信息不能为空',
+        notHaveAbi: 'abi信息不能为空',
+        notHaveBin: 'BIN不能为空',
         haveSelectionAll: '合约全未编译',
         haveCertSdk: '获取SDK证书失败，请检查证书文件',
         haveChannelPort: '根据节点前置对应channelPort填入',
-        importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约',
+        importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         pass:'验证通过',
-        no:'验证不通过'
+        no:'验证不通过',
+        addContractAddress: '绑定'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -391,7 +393,9 @@ export default {
         artifactName: '请输入项目名称',
         group: '请输入包名称',
         frontId: '请选择节点',
-        checkContract: '请选择合约'
+        checkContract: '请选择合约',
+        contractAddressLong: '合约地址长度应该为42',
+        contractAddressHex: '合约地址以0x或0X开头且为十六进制'
     },
     head: {
         helpText: "帮助文档",
@@ -649,6 +653,7 @@ export default {
         folder: "目录",
         cnsTitle: "链上CNS查询",
         localCnsTitle: "本地CNS",
+        checkNodeActive: "检测"
     },
     privateKey: {
         addUser: "新增用户",
@@ -671,7 +676,7 @@ export default {
         privateKeyUser: "私钥用户",
         publicKeyUser: "公钥用户",
         publicKeyInfo: "公钥信息",
-        inputUserName: "请输入用户地址",
+        inputUserName: "请输入用户名称",
         inputPublicInfo: "请输入公钥信息或公钥地址",
         userLong: "120个字符以内",
         inputPublic: "请输入公钥信息",
@@ -1049,6 +1054,7 @@ export default {
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
         length1_10: '长度在 1 到 10 个字符',
+        addContractAddress: '绑定合约地址',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',
