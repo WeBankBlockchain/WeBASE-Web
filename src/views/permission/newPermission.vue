@@ -42,7 +42,7 @@ export default {
     computed: {
         headHref() {
             let data = {
-                href: "https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/permission_control.html",
+                href: "https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/chain_governance.html",
                 content: this.$t('title.permissionHref')
             }
             return data
