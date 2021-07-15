@@ -136,7 +136,6 @@ export default {
             importAbi(data)
                 .then(res => {
                     this.loading = false;
-                    // debugger
                     if (res.data.code === 0) {
                         this.setMethod()
                         this.$emit('importSuccess')

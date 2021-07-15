@@ -205,12 +205,12 @@ export default {
             this.currentPage = 1;
             this.getUserInfoData();
         },
-        handleSizeChange: function (val) {
+        handleSizeChange(val) {
             this.pageSize = val;
             this.currentPage = 1;
             this.getUserInfoData();
         },
-        handleCurrentChange: function (val) {
+        handleCurrentChange(val) {
             this.currentPage = val;
             this.getUserInfoData();
         },
@@ -219,9 +219,6 @@ export default {
             this.getUserInfoData();
         },
         importPrivateKeySuccess() {
-            this.getUserInfoData();
-        },
-        bindUserClose() {
             this.getUserInfoData();
         },
         handleClose: function () {

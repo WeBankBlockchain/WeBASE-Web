@@ -68,7 +68,6 @@ export default {
             }
         },
         changGroup() {
-            debugger
             if (this.activeName == 0) {
                 if (localStorage.getItem("groupId")) {
                     this.$refs.committeeMgmt.adminRivateKeyList = [];

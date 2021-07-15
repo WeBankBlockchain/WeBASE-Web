@@ -431,7 +431,6 @@ export default {
             this.queryCommitteeList()
             this.queryVoteRecordList()
             this.getUserData()
-            this.produceCommittee()
         }
     },
 
