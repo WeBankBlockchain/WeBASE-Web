@@ -391,19 +391,24 @@ export default {
         produceCommittee() {
             let privateKeyList = this.adminRivateKeyList
             let committeeList = this.chainCommitteeList
+            // whether find committee in local private key list
+            let flagFind = false
             privateKeyList.forEach(item => {
                 committeeList.forEach(it => {
                     if (item.address == it.address) {
                         it.userName = item.userName
+                        flagFind = true
                     }
                 })
             })
-            if (committeeList.length && this.adminRivateKeyList.length) {
-                this.governForm.fromAddress = committeeList[0]['address'];
-            } else if (this.adminRivateKeyList.length) {
-                this.governForm.fromAddress = this.adminRivateKeyList[0]['address'];
-            } else {
-                committeeList = []
+            // if committee not empty
+            if (!committeeList.length) {
+                if (flagFind) {
+                    // 如果本地有committee私钥，则设置
+                    this.governForm.fromAddress = committeeList[0]['address'];                    
+                } else {
+                    // 如果本地没有committee私钥，则不选默认值
+                }
             }
             return committeeList
         }

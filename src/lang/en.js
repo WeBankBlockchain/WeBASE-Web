@@ -419,7 +419,7 @@ export default {
         CRUDServiceManagement: "CRUD",
         PrivateKey: "Private Key Mgmt",
         systemManager: "System Mgmt",
-        permission: "Privilege Mgmt",
+        permission: "Permission Mgmt",
         permissionTips: "Description of management authority: authority control is based on the access mechanism of external account (tx.origin), which controls the authority of contract deployment, table creation, table writing (insertion, update and deletion), and table reading is not controlled by authority.",
         permissionHref: "Specific documents: [permission control]",
         configManager: "Configuration Mgmt",
@@ -462,6 +462,8 @@ export default {
         appManagement: "App Mgmt",
         toolsContract: 'Tools Contract',
         selectDirectory: 'Select Directory',
+        registered: 'Registered',
+        all: 'All'
     },
     home: {
         nodes: "Nodes",

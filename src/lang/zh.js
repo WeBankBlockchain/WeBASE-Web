@@ -461,7 +461,9 @@ export default {
         externalContract: '链上合约',
         appManagement: "应用管理",
         toolsContract: '工具合约',
-        selectDirectory: '选择目录'
+        selectDirectory: '选择目录',
+        registered: '已登记',
+        all: '全量'
     },
     home: {
         nodes: "节点个数",
