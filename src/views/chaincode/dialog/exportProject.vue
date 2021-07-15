@@ -415,6 +415,7 @@ export default {
             }
             exportJavaProject(reqData).then(res => {
                 if (res.data.code === 0) {
+                    this.modelClose();
                     const content = Base64.toUint8Array(res.data.data.fileStreamBase64);
                     const blob = new Blob([content], { type: `application/zip;charset=utf-8` })
                     const fileName = res.data.data.fileName
