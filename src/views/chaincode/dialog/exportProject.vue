@@ -517,11 +517,11 @@ export default {
                         if (res.data.data) {
                             this.$message({
                                 type: 'success',
-                                message: this.$t('text.pass')
+                                message: this.$t('text.nodeActive')
                             })
                         }else{
                              this.$message({
-                                message: this.$t('text.no'),
+                                message: this.$t('text.nodeNotActive'),
                                 type: "error",
                             });
                         }

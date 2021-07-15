@@ -30,7 +30,7 @@
                 </el-table>
                 <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="450px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
+                <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="480px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <template v-if="chainCommitteeList.length > 0">
@@ -48,10 +48,10 @@
                                         <span class="font-12">{{item.address | splitString}}...</span>
                                     </el-option>
                                 </el-select>
-                                <span v-if="isShowPrivate" class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
-                                    <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
-                                </span>
                             </template>
+                             <span v-if="isShowPrivate" class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                                <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+                            </span>
                         </el-form-item>
                         <el-form-item :label="$t('govCommittee.user')" prop="address">
                             <el-select v-model="governForm.address" :placeholder="$t('text.select')">
@@ -68,7 +68,7 @@
                         <el-button type="primary" @click="sureAddCommittee">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="450px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
+                <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="480px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="144px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -93,7 +93,7 @@
                         <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="450px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
+                <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="480px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -121,7 +121,7 @@
                         <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="450px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
+                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="480px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -398,10 +398,12 @@ export default {
                     }
                 })
             })
-            if (committeeList.length) {
+            if (committeeList.length && this.adminRivateKeyList.length) {
                 this.governForm.fromAddress = committeeList[0]['address'];
             } else if (this.adminRivateKeyList.length) {
                 this.governForm.fromAddress = this.adminRivateKeyList[0]['address'];
+            } else {
+                committeeList = []
             }
             return committeeList
         }
