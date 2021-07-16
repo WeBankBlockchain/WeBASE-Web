@@ -320,8 +320,10 @@ export default {
         haveSelectionAll: 'The contract is not compiled at all',
         haveCertSdk: 'Failed to get SDK certificate. Please check certificate file',
         haveChannelPort: 'Fill it in according to the node front corresponding ChannelPort',
-        addContractAddress: 'add',
-        importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract'
+        addContractAddress: 'Bind',
+        importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract',
+        nodeActive:'Node active',
+        nodeNotActive:'Node not active',
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -417,7 +419,7 @@ export default {
         CRUDServiceManagement: "CRUD",
         PrivateKey: "Private Key Mgmt",
         systemManager: "System Mgmt",
-        permission: "Privilege Mgmt",
+        permission: "Permission Mgmt",
         permissionTips: "Description of management authority: authority control is based on the access mechanism of external account (tx.origin), which controls the authority of contract deployment, table creation, table writing (insertion, update and deletion), and table reading is not controlled by authority.",
         permissionHref: "Specific documents: [permission control]",
         configManager: "Configuration Mgmt",
@@ -460,6 +462,8 @@ export default {
         appManagement: "App Mgmt",
         toolsContract: 'Tools Contract',
         selectDirectory: 'Select Directory',
+        registered: 'Registered',
+        all: 'All'
     },
     home: {
         nodes: "Nodes",

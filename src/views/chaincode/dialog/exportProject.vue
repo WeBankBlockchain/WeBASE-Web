@@ -369,7 +369,7 @@ export default {
                 setTimeout(() => {
                     num =0;
                     this.getContractList(val,true);
-               }, 3000)
+               }, 4000)
             }    
             this.multipleSelectedId = Array.from(new Set(this.multipleSelectedId))    
         },
@@ -517,11 +517,11 @@ export default {
                         if (res.data.data) {
                             this.$message({
                                 type: 'success',
-                                message: this.$t('text.pass')
+                                message: this.$t('text.nodeActive')
                             })
                         }else{
                              this.$message({
-                                message: this.$t('text.no'),
+                                message: this.$t('text.nodeNotActive'),
                                 type: "error",
                             });
                         }

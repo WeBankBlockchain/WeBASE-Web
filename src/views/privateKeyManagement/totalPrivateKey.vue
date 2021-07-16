@@ -41,7 +41,7 @@
             <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
             <el-table-column fixed="right" :label="$t('nodes.operation')" width="160">
                 <template slot-scope="scope">
-                  <el-button v-if="!(disabled || scope.row.userId > 0)"   @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
+                  <el-button v-if="!(disabled || scope.row.userId > 0)"  @click="importData(scope.row)" type="text">{{$t("system.import")}}</el-button>
                   <el-button v-if="disabled || scope.row.userId > 0" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
                     <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                     <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
@@ -56,7 +56,7 @@
         </el-pagination>
     </div>
     <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
-        <creat-user @creatUserClose="creatUserClose" :disablePub='true'  ref="creatUser" :address='address'></creat-user>
+        <creat-user @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" :disablePub='true'  ref="creatUser" :address='address'></creat-user>
     </el-dialog>
     <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
         <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
@@ -105,6 +105,7 @@ export default {
             }
         },
         getList() {
+            debugger
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
@@ -156,10 +157,10 @@ export default {
             this.address = val.address;
             this.$store.dispatch('switch_creat_user_dialog')
         },
-         creatUserClose () {
+        creatUserClose() {
             this.getList();
         },
-        bindUserClose () {
+        bindUserClose() {
             this.getList();
         },
         modifyDescription(params) {

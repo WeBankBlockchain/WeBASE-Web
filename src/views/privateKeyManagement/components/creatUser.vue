@@ -166,7 +166,7 @@ export default {
                 }
             });
         },
-        addUser: function () {
+        addUser() {
             let reqData = {
                 groupId: this.groupId,
                 userName: this.userForm.name,
@@ -178,11 +178,11 @@ export default {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.$emit("success");
+                        this.$emit("creatUserClose");
                         this.$message({
                             type: "success",
                             message: this.$t("privateKey.addUserSuccess")
                         });
-                        this.$emit("creatUserClose");
                         this.modelClose();
                     } else {
                         this.modelClose();
@@ -214,11 +214,11 @@ export default {
                 .then(res => {
                     this.loading = false;
                     if (res.data.code == 0) {
+                        this.$emit("bindUserClose");
                         this.$message({
                             type: "success",
                             message: this.$t("privateKey.addUserSuccess")
                         });
-                        this.$emit("bindUserClose");
                         this.modelClose();
                     } else {
                         this.modelClose();

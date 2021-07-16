@@ -3,10 +3,10 @@
         <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead>
 
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="已登记" name="registered">
+            <el-tab-pane :label="$t('title.registered')" name="registered">
                 <registered-contract ref='registered' v-if='activeName === "registered"'></registered-contract>
             </el-tab-pane>
-            <el-tab-pane label="全量" name="total">
+            <el-tab-pane :label="$t('title.all')" name="total">
                 <total-contract ref='total' v-if='activeName === "total"'></total-contract>
             </el-tab-pane>
         </el-tabs>
@@ -26,7 +26,8 @@ export default {
     },
     data() {
         return {
-            activeName: null
+            activeName: null,
+
         }
     },
     created() {

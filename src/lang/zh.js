@@ -321,8 +321,8 @@ export default {
         haveCertSdk: '获取SDK证书失败，请检查证书文件',
         haveChannelPort: '根据节点前置对应channelPort填入',
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
-        pass:'验证通过',
-        no:'验证不通过',
+        nodeActive:'节点存活',
+        nodeNotActive:'节点未存活',
         addContractAddress: '绑定'
     },
     rule: {
@@ -461,7 +461,9 @@ export default {
         externalContract: '链上合约',
         appManagement: "应用管理",
         toolsContract: '工具合约',
-        selectDirectory: '选择目录'
+        selectDirectory: '选择目录',
+        registered: '已登记',
+        all: '全量'
     },
     home: {
         nodes: "节点个数",
@@ -1054,7 +1056,7 @@ export default {
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
         length1_10: '长度在 1 到 10 个字符',
-        addContractAddress: '绑定合约地址',
+        addContractAddress: '绑定',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',
