@@ -68,7 +68,7 @@
             </div>
         </div>
         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
-            <v-creatUser @creatUserClose="creatUserClose"  ref="creatUser"></v-creatUser>
+            <v-creatUser @creatUserClose="creatUserClose" @bindUserClose="bindUserClose" ref="creatUser"></v-creatUser>
         </el-dialog>
         <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
             <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
@@ -216,6 +216,9 @@ export default {
         },
         creatUserInfo() { },
         creatUserClose() {
+            this.getUserInfoData();
+        },
+        bindUserClose() {
             this.getUserInfoData();
         },
         importPrivateKeySuccess() {
