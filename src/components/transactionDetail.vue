@@ -68,6 +68,9 @@
                                 <div class="input-label">
                                     <span class="label">function</span>
                                     <span>{{funcData + "(" + abiType + outputType + ")"}}</span>
+                                     <el-tooltip v-if="funcData == '' " effect="dark" :content="$t('text.importContractTip')" placement="top-start">
+                                        <i class="el-icon-info"></i>
+                                    </el-tooltip>
                                 </div>
                                 <div class="input-label">
                                     <span class="label">methodId</span>
@@ -91,9 +94,16 @@
                         <div class="item" v-show="inputButtonShow">
                             <span class="label"></span>
                             <el-button @click="decode" type="primary">{{buttonTitle}}</el-button>
-                        </div>                       
+                            <span style="margin-left:20px" ></span>
+                            <el-button  v-show="exportContrctShow"  type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
+                            <span style="margin-left:20px"></span>
+                            <el-button v-show="exportContrctShow" type="primary" class="search-part-left-btn" @click="generateContract">{{this.$t("nodes.addContract")}}</el-button>
+                        </div>  
                     </div>                   
                 </div>
+                <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
+                    <import-abi  @closeImport="closeImport" @importSuccess="closeImport"></import-abi>
+                </el-dialog>
             </el-tab-pane>
             <el-tab-pane :label="$t('table.transactionReceipt')" name="txReceiptInfo">
                 <el-row v-for="item in txReceiptInfoList" :key="item">
@@ -195,15 +205,19 @@ import {
     hashTransactionInfo,
     getBlockDetail,
     getUserList,
-    getFunctionAbi,
+    getFunctionAbi,// get method id
     getAbi
 } from "@/util/api";
 import { getDate, isNumber } from "@/util/util";
 import errcode from "@/util/errcode";
 import router from "@/router";
+import importAbi from "@/views/abiList/components/importAbi"
 
 export default {
     name: "transactionDetail",
+     components: {
+        importAbi
+    },
     props: {
         transHash: {
             type: String
@@ -258,7 +272,9 @@ export default {
             outputShow: false,
             showOutputDecode: false,
             transOutputData: "",
-            outputType: null
+            outputType: null,
+            importVisibility: false,
+            exportContrctShow: false
         };
     },
     mounted: function () {
@@ -329,7 +345,8 @@ export default {
                     
                 });
         },
-        getMethod: function (id,output) {
+        // decode method
+        getMethod: function (id, output) { 
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 data: id.substring(0, 10)
@@ -337,8 +354,14 @@ export default {
             getFunctionAbi(data, {}).then(res => {
 
                 if (res.data.code == 0) {
+                    // if cannot get abi from backend, show btn of import abi/contract
+                    if (!res.data.data) {
+                        this.exportContrctShow = true;
+                    }
                     this.decodefun(id, res.data.data);
-                    if(output){
+                    // if output not null, show decode/recover button
+                    if (output) {
+                        // decode method id
                         this.decodeOutPutfun(output,res.data.data);
                         this.outputShow = true
                     } else {
@@ -367,7 +390,7 @@ export default {
                 }
                 getAbi(data).then(res => {
                     if (res.data.code == 0) {
-                        this.decodeDeployOutput(output,res.data.data)
+                        this.decodeDeployOutput(output, res.data.data)
                         this.decodeDeloy(res.data.data)
                     } else {
                         this.$message({
@@ -468,7 +491,7 @@ export default {
 
             if (this.transactionTo) {
                 this.decodefun(input, this.transactionTo);
-            } else {
+            } else { 
                 this.methodId = input.substring(0, 10);
                 this.decodeDeloy(this.bin);
             }
@@ -484,10 +507,13 @@ export default {
                     if (res.data.code === 0) {
                         this.txInfoReceiptMap = res.data.data;
                         this.eventLog = res.data.data.logs;
+                        // if not deploy contract trans
                         if (to && to != "0x0000000000000000000000000000000000000000") {
+                                this.exportContrctShow = false;
                                 this.getMethod(input,res.data.data.output)
                             } else {
-                                this.getDeloyAbi(input,res.data.data.output);
+                                // else contract deploy trans not decode method
+                                this.getDeloyAbi(input, res.data.data.output);
                             }
                     } else {
                         this.$message({
@@ -605,8 +631,8 @@ export default {
                         this.transactionData.user = value.userName;
                     }
                 });
-            }
-            this.methodId = input.substring(0, 10);
+            } 
+            this.methodId = input.substring(0, 10); 
             // this.methodId = data;
             let inputDatas = "0x" + input.substring(10);
             if (abiData) {
@@ -671,10 +697,10 @@ export default {
                 this.buttonTitle = this.$t('transaction.reduction');
             }
         },
-        decodeDeployOutput: function(output,data){
+        decodeDeployOutput: function(output,data) {
             this.showOutputDecode = true;
         },
-        //解析uotput
+        //解析output(method id)
         decodeOutPutfun: function (output, abiData) {
             let web3 = new Web3(Web3.givenProvider);
             if (abiData) {
@@ -690,7 +716,7 @@ export default {
                     this.showOutputDecode = false
                     this.showOutDecode = true;
                     this.decodeOutData = web3.eth.abi.decodeParameters(abiData.abiInfo.outputs, output);
-                    console.log(this.decodeOutData)
+                    // console.log(this.decodeOutData)
                     if (JSON.stringify(this.decodeOutData) != "{}") {
                         for (const key in this.decodeOutData) {
                             for (let index = 0; index < abiData.abiInfo.outputs.length; index++) {
@@ -705,14 +731,14 @@ export default {
                             }
                         }
                     }
-                    console.log(this.outputData)
-                }else{
+                    // console.log(this.outputData)
+                } else {
                     this.showOutDecode = false;
                     this.showOutputDecode = true;
                     try {
                         let data = "0x" + output.substring(10)
                         this.decodeOutData = web3.eth.abi.decodeParameter('string', data);
-                        console.log(this.decodeOutData)
+                        // console.log(this.decodeOutData)
                     } catch (error) {
                         console.log(error)
                     }
@@ -762,6 +788,18 @@ export default {
             }else {
                 return '#F56C6C'
             }
+        },
+         // 打开添加abi弹窗
+        generateAbi() {
+            this.importVisibility = true;
+        },
+        closeImport() {
+            this.getHashTransactionInfo()
+            this.importVisibility = false
+        },
+        generateContract(){
+            localStorage.setItem("dataFrom","transactionDetail");
+            router.push("/contract")
         }
     }
 };

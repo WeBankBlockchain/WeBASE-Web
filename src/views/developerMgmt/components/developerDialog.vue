@@ -8,14 +8,17 @@
                         <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
-            </el-form-item>
+                <span v-if="isPermissionAdminShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;margin-right:40px">
+                     <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+               </span>
+            </el-form-item> 
             <el-form-item :label="$t('devOpsMgmt.devAddress')" prop="address" v-if="handleType =='add'">
                 <el-select v-model="addDevForm.address" :placeholder="$t('text.select')">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
                         <span class="font-12">{{item.address | splitString}}...</span>
-                    </el-option>
-                </el-select>
+                    </el-option> 
+                </el-select> 
             </el-form-item>
             <el-form-item label="运维" v-if="handleType =='delete'">
                 <el-input v-model="devOpsAddress" disabled></el-input>
@@ -26,15 +29,20 @@
             <el-button @click="close">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" @click="submit('addDevForm')" :loading="loading">{{this.$t('text.sure')}}</el-button>
         </div>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true'  ref="creatUser"></v-creatUser>
+        </el-dialog>	
     </div>
 </template>
 
 <script>
 import { addDevOps, getUserList, deleteDevOps, committeeList } from "@/util/api";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 export default {
     name: 'developerDialog',
 
     components: {
+          "v-creatUser": creatUser
     },
 
     props: ['handleType', 'devOpsAddress'],
@@ -49,7 +57,8 @@ export default {
             addDevForm: {
                 fromAddress: '',
                 address: ''
-            }
+            },
+            isPermissionAdminShow: false
 
         }
     },
@@ -190,7 +199,8 @@ export default {
                             // if (value.hasPk === 1) {
                             this.adminRivateKeyList.push(value);
                             // }
-                        });
+
+                        }); 
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -233,7 +243,7 @@ export default {
                                     this.permissionAdminList.push(item)
                                 }
                             })
-                        })
+                        }) 
                         // if (this.permissionAdminList.length) {
                         //     this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
                         // } else {
@@ -243,8 +253,16 @@ export default {
                         this.permissionAdminList = userList;
                         // this.permissionForm.adminRivateKey = this.permissionAdminList[0].address;
                     }
+                     if(this.permissionAdminList.length === 0){
+                            this.isPermissionAdminShow = true;
+                    }else{
+                            this.isPermissionAdminShow = false;
+                    }
                 }));
-        }
+        },
+          creatUserClose() {
+            this.getAdminAddress();
+        },
     }
 }
 </script>

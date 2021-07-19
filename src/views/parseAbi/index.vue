@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-head :icon='true' :headTitle="$t('title.parseAbi')"  @changGroup="changGroup"></content-head>
+        <!-- <content-head :icon='true' :headTitle="$t('title.parseAbi')"  @changGroup="changGroup"></content-head> -->
         <div class="module-wrapper">
             <div class="ace-wrapper">
                 <h2 class="h2-inscription">{{this.$t('text.parseTitle')}}</h2>

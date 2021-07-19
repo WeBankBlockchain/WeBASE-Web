@@ -87,7 +87,7 @@
         <add-folder v-if="foldershow" :foldershow="foldershow" @close='folderClose' @success='folderSuccess'></add-folder>
         <add-file v-if="fileshow" :data='selectFolderData' :fileshow="fileshow" @close='fileClose' @success='fileSucccess($event)' :id='folderId'></add-file>
         <select-catalog v-if='cataLogShow' :show='cataLogShow' @success='catalogSuccess($event)' @close='catalogClose'></select-catalog>
-        <export-project v-if='$store.state.exportProjectShow' :show='$store.state.exportProjectShow' :folderList='pathList' @close='exportProjectShowClose'></export-project>
+        <export-project v-if='$store.state.exportProjectShow' :show='$store.state.exportProjectShow' :folderList='pathList' @close='exportProjectShowClose'  @javaProjectComplie="javaProjectComplie" ></export-project>
     </div>
 </template>
 <script>
@@ -156,6 +156,7 @@ export default {
             })
         }
         Bus.$on("compile", data => {
+             
             this.saveContract(data, this.$t("contracts.contractCompileSuccess"))
         })
         Bus.$on("save", data => {
@@ -680,6 +681,9 @@ export default {
             if (data.contractId) {
                 reqData.contractId = data.contractId
             }
+            if (data.contractAddress) {
+                reqData.contractAddress = data.contractAddress;
+            }
             saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.getContracts(data.contractPath, res.data.data);
@@ -1197,7 +1201,11 @@ export default {
                 }
             })
 
-        }
+        },
+
+        javaProjectComplie(val){
+            Bus.$emit('javaProjectComplie', val)
+        } 
     }
 }
 </script>

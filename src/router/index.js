@@ -51,7 +51,7 @@ const developerMgmt = resolve => require(['@/views/developerMgmt'], resolve);
 const newPermission = resolve => require(['@/views/permission/newPermission'], resolve);
 const eventCheck = resolve => require(['@/views/eventCheck'], resolve);
 const contractWarehouse = resolve => require(['@/views/contractWarehouse'], resolve);
-// const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
+const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 const appManagement = resolve => require(['@/views/appManagement'], resolve); 
 const toolsContract = resolve => require(['@/views/toolsContract'], resolve);
 Vue.use(Router);
@@ -140,6 +140,7 @@ const routes = [
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
+            // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
             { path: '/toolsContract', component: toolsContract, name: '工具合约', nameKey: 'toolsContract', menuShow: false, meta: { requireAuth: false } }, 
         ]
     },

@@ -315,10 +315,15 @@ export default {
         updateSuccess: '成功',
         actualChannelIp: '根据实际channelIp修改',
         projectTitle: '项目信息',
-        haveAbi: 'abi信息不能为空',
+        notHaveAbi: 'abi信息不能为空',
+        notHaveBin: 'BIN不能为空',
         haveSelectionAll: '合约全未编译',
         haveCertSdk: '获取SDK证书失败，请检查证书文件',
         haveChannelPort: '根据节点前置对应channelPort填入',
+        importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
+        nodeActive:'节点存活',
+        nodeNotActive:'节点未存活',
+        addContractAddress: '绑定'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -388,7 +393,9 @@ export default {
         artifactName: '请输入项目名称',
         group: '请输入包名称',
         frontId: '请选择节点',
-        checkContract: '请选择合约'
+        checkContract: '请选择合约',
+        contractAddressLong: '合约地址长度应该为42',
+        contractAddressHex: '合约地址以0x或0X开头且为十六进制'
     },
     head: {
         helpText: "帮助文档",
@@ -454,7 +461,9 @@ export default {
         externalContract: '链上合约',
         appManagement: "应用管理",
         toolsContract: '工具合约',
-        selectDirectory: '选择目录'
+        selectDirectory: '选择目录',
+        registered: '已登记',
+        all: '全量'
     },
     home: {
         nodes: "节点个数",
@@ -567,6 +576,7 @@ export default {
         chainStatus: "链状态",
         starting: "启动中",
         notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。",
+        addContract: "导入合约",
     },
     contracts: {
         createFile: "新建文件",
@@ -645,6 +655,7 @@ export default {
         folder: "目录",
         cnsTitle: "链上CNS查询",
         localCnsTitle: "本地CNS",
+        checkNodeActive: "检测"
     },
     privateKey: {
         addUser: "新增用户",
@@ -667,7 +678,7 @@ export default {
         privateKeyUser: "私钥用户",
         publicKeyUser: "公钥用户",
         publicKeyInfo: "公钥信息",
-        inputUserName: "请输入用户地址",
+        inputUserName: "请输入用户名称",
         inputPublicInfo: "请输入公钥信息或公钥地址",
         userLong: "120个字符以内",
         inputPublic: "请输入公钥信息",
@@ -1045,6 +1056,7 @@ export default {
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
         length1_10: '长度在 1 到 10 个字符',
+        addContractAddress: '绑定',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash计算器',

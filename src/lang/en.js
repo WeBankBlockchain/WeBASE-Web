@@ -315,10 +315,15 @@ export default {
         updateSuccess: 'update Success',
         actualChannelIp: 'Modify according to the actual channelip',
         projectTitle: 'Project Info',
-        haveAbi: 'The ABI information cannot be empty',
+        notHaveAbi: 'The ABI information cannot be empty',
+        notHaveBin: 'The BIN information cannot be empty',
         haveSelectionAll: 'The contract is not compiled at all',
         haveCertSdk: 'Failed to get SDK certificate. Please check certificate file',
         haveChannelPort: 'Fill it in according to the node front corresponding ChannelPort',
+        addContractAddress: 'Bind',
+        importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract',
+        nodeActive:'Node active',
+        nodeNotActive:'Node not active',
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -389,7 +394,10 @@ export default {
         artifactName: 'Please enter project name',
         group: 'Please enter group name',
         frontId: 'Please check node',
-        checkContract: 'Please check contract'
+        checkContract: 'Please check contract',
+        addContractAddress: 'bind',
+        contractAddressLong: 'contract address\' length supposed to be 42',
+        contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string'
     },
     head: {
         helpText: "Document",
@@ -411,7 +419,7 @@ export default {
         CRUDServiceManagement: "CRUD",
         PrivateKey: "Private Key Mgmt",
         systemManager: "System Mgmt",
-        permission: "Privilege Mgmt",
+        permission: "Permission Mgmt",
         permissionTips: "Description of management authority: authority control is based on the access mechanism of external account (tx.origin), which controls the authority of contract deployment, table creation, table writing (insertion, update and deletion), and table reading is not controlled by authority.",
         permissionHref: "Specific documents: [permission control]",
         configManager: "Configuration Mgmt",
@@ -454,6 +462,8 @@ export default {
         appManagement: "App Mgmt",
         toolsContract: 'Tools Contract',
         selectDirectory: 'Select Directory',
+        registered: 'Registered',
+        all: 'All'
     },
     home: {
         nodes: "Nodes",
@@ -565,7 +575,8 @@ export default {
         nodesNumber: "The number of deployment time nodes cannot be less than 2",
         chainStatus: "Chain status",
         starting: "starting",
-        notice: "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported."
+        notice: "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported.",
+        addContract: "Import Contract"
     },
     contracts: {
         createFile: "Create File",
@@ -644,6 +655,7 @@ export default {
         folder: "Folder",
         cnsTitle: "On chain CNS query",
         localCnsTitle: "Local CNS",
+        checkNodeActive: "check"
     },
     privateKey: {
         addUser: "Add Users",
@@ -666,7 +678,7 @@ export default {
         privateKeyUser: "Private key user",
         publicKeyUser: "Public key user",
         publicKeyInfo: "Public key information",
-        inputUserName: "Please enter User Address",
+        inputUserName: "Please enter Username",
         inputPublicInfo: "Please enter public key information or public key address.",
         userLong: "Within 120 characters",
         inputPublic: "Please enter public key information",
@@ -1044,6 +1056,7 @@ export default {
         cnsVersionPattern: "It can only be numbers, letters and '.'",
         cnsName: 'Please enter CNS name',
         length1_10: 'The length is between 1 and 10 character',
+        addContractAddress: 'Bind contract address',
     },
     onlineTools: {
         onlineHashCalculator: 'Hash Calculator',

@@ -10,6 +10,9 @@
                             <span class="font-12 text-float-right">{{item.address | splitString}}...</span>
                         </el-option>
                     </el-select>
+                     <span v-if="isAdminRivateKeyShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;margin-left:20px">
+                        <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+                    </span>
                 </el-form-item>
                 <el-form-item>
                     <div style="display:flex">
@@ -58,6 +61,9 @@
                 </div>
             </template>
         </div>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true'  ref="creatUser"></v-creatUser>
+        </el-dialog>	
     </div>
 </template>
 
@@ -70,11 +76,13 @@ import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/mode-sql";
 import contentHead from "@/components/contentHead";
 import { getUserList, queryCrudService } from "@/util/api";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 export default {
     name: 'ConfigManagement',
 
     components: {
         "v-content-head": contentHead,
+         "v-creatUser": creatUser,
     },
 
     props: {
@@ -101,7 +109,8 @@ export default {
             aceEditor: null,
             // themePath: "ace/theme/chrome",
             // modePath: "ace/mode/sql",
-            sqlExample: ""
+            sqlExample: "",
+            isAdminRivateKeyShow : false
         }
     },
 
@@ -169,7 +178,12 @@ export default {
                                 this.adminRivateKeyList.push(value);
                             }
                         });
-                        if (this.adminRivateKeyList.length) this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                        if (this.adminRivateKeyList.length) {
+                            this.sqlForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                            this.isAdminRivateKeyShow = false;
+                        } else {
+                            this.isAdminRivateKeyShow = true;
+                        }
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -256,6 +270,9 @@ export default {
                     });
                 });
             }
+        },
+        creatUserClose() {
+            this.getUserData();
         },
     }
 }

@@ -1,23 +1,32 @@
 <template>
     <div>
         <el-form ref="cnsVersionFrom" :model="cnsVersionFrom" :rules="rules" class="" size="medium" label-width="135px">
-            <el-form-item :label="$t('contracts.user')" prop="userId">
+            <el-form-item :label="$t('contracts.user')" prop="userId" label-width="110px">
                 <el-select v-model="cnsVersionFrom.userId" :placeholder="placeholderText" @change="changeId" style="width: 240px;">
                     <el-option :label="item.address" :value="item.address" :key="item.address" v-for='item in userList'>
                         <span class="font-12">{{item.userName}}</span>
                         <span>{{item.address}}</span>
                     </el-option>
                 </el-select>
+                 <!-- <td style="width: 100px;text-align: right;" class="text-td"> -->
+                  <span class="contract-code-done" v-if="isUserNameShow" @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                     <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+                 </span>
+                <!-- </td> -->
             </el-form-item>
-            <el-form-item :label="$t('text.cnsName')" prop="cnsName">
+            <el-form-item :label="$t('text.cnsName')" prop="cnsName" label-width="110px">
                 <el-input v-model="cnsVersionFrom.cnsName" style="width: 240px;">
                 </el-input>
             </el-form-item>
-            <el-form-item :label="$t('text.version')" prop="cnsVersion">
+            <el-form-item :label="$t('text.version')" prop="cnsVersion" label-width="110px">
                 <el-input v-model="cnsVersionFrom.cnsVersion" style="width: 240px;">
                 </el-input>
             </el-form-item>
         </el-form>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper"
+          v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
+        </el-dialog>	
         <div slot="footer" class="dialog-footer" style="text-align: right;">
             <el-button @click="modelClose">{{$t('text.cancel')}}</el-button>
             <el-button type="primary" @click="submit('cnsVersionFrom')">{{$t('text.register')}}</el-button>
@@ -26,11 +35,13 @@
 </template>
 
 <script>
-import { getUserList, findCnsInfo, registerCns } from "@/util/api"
+import { getUserList, findCnsInfo, registerCns } from "@/util/api";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 export default {
     name: 'mgmtCns',
 
     components: {
+         "v-creatUser": creatUser,
     },
 
     props: ['mgmtCnsItem'],
@@ -48,7 +59,8 @@ export default {
                 cnsVersion: this.mgmtCnsItem.version,
                 cnsName: ""
             },
-            reqVersion: ""
+            reqVersion: "",
+            isUserNameShow:false
         }
     },
 
@@ -143,11 +155,12 @@ export default {
                         });
                         if (this.userList.length) {
                             this.cnsVersionFrom.userId = this.userList[0].address;
+                            this.isUserNameShow = false;
                         } else {
+                            this.isUserNameShow = true;
                             this.placeholderText = this.$t('placeholder.selectedNoUser')
                         }
                     } else {
-                        console.log(4444);
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
@@ -240,7 +253,10 @@ export default {
                         });
                     }
                 })
-        }
+        },
+        creatUserClose() {
+            this.getLocalKeyStores();
+        },
     }
 }
 </script>

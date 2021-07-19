@@ -7,7 +7,7 @@
                     <div class="hash-wrapper">
                         <div class="calc-hash">
                             <el-tabs v-model="fileType" @tab-click="handleFileType">
-                                <el-tab-pane :label="$t('onlineTools.file')" name="file-first">
+                                <el-tab-pane :label="$t('onlineTools.file')" name="file-second">
                                     <div>
                                         <!-- <p class=" text-title">{{$t('onlineTools.file')}}</p> -->
                                         <div>
@@ -23,7 +23,7 @@
                                         </div>
                                     </div>
                                 </el-tab-pane>
-                                <el-tab-pane :label="$t('onlineTools.text')" name="file-second">
+                                <el-tab-pane :label="$t('onlineTools.text')" name="file-first">
                                     <div>
                                         <!-- <p class=" text-title">{{$t('onlineTools.text')}}</p> -->
                                         <el-input type="textarea" v-model="inputText" @input="textFocus" style="margin-bottom: 20px;"></el-input>
@@ -54,27 +54,30 @@
                         <el-input type="textarea" v-model="inputSignHash" style="margin-bottom: 20px;"></el-input>
                         <div>
                             <span></span>
-                            <el-select v-model="privateKey" placeholder="">
-                                <el-option v-for="item in privateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+                            <el-select v-model="signUserId" placeholder="">
+                                <el-option v-for="item in privateKeyList" :key="item.address" :label="item.userName" :value="item.signUserId">
                                 </el-option>
                             </el-select>
                             <el-button type="primary" style="margin-left:5px;" @click="querySignHash" v-loading="loading">{{$t('onlineTools.sign')}}</el-button>
                         </div>
                         <p class=" text-title">{{$t('onlineTools.result')}}</p>
                         <div class="result">
-                            <ul>
-                                <li v-for="(value, key) in inputSign">
+                             <ul>
+                                <li v-for="(value, key) in signKey">
                                     <span>
-                                        {{key}}:
+                                        {{value}}:
                                     </span>
                                     <span>
-                                        {{value}}
-                                        <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(value)" :title="$t('title.copy')"></i>
+                                        {{inputSign[value]}}
+                                        <i class="wbs-icon-copy font-12 copy-public-key" @click="copyKey(inputSign[value])" :title="$t('title.copy')"></i>
                                     </span>
                                 </li>
                             </ul>
                         </div>
                     </div>
+                </el-tab-pane>
+                <el-tab-pane :label="$t('title.parseAbi')" name="third">
+                    <parse-abi></parse-abi>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -83,14 +86,16 @@
 
 <script>
 import contentHead from "@/components/contentHead";
-import { queryLocalKeyStores, signHash } from "@/util/api";
+import { queryUserInfo, signHash,getUserList} from "@/util/api";
+import parseAbi from "../parseAbi/index.vue";
 const gm = require('@/util/SM2Sign');
 import CryptoJS from 'crypto-js'
 export default {
     name: 'onlineTools',
 
     components: {
-        contentHead
+        contentHead,
+        parseAbi
     },
 
     props: {
@@ -103,19 +108,26 @@ export default {
             inputHash: '',
             inputSignHash: '',
             inputSign: "",
+            signKey: ['v', 'r', 's'],
             algorithm: "sha256",
             algorithmOpt: [
                 {
                     label: "sha256",
-                    value: "sha256"
+                    value: "sha256",
                 }
+                // ,
+                //  {
+                //     label: "sm3",
+                //     value: "sm3",
+                // }
             ],
             privateKeyList: [],
-            privateKey: "",
+            signUserId: "",
             loading: false,
             activeName: 'first',
             fileList: [],
-            fileType: "file-first"
+            fileType: "file-first",
+            encryptionId: localStorage.getItem('encryptionId'),
         }
     },
 
@@ -129,31 +141,40 @@ export default {
     },
 
     mounted() {
-        this.getLocalKeyStores();
+        this.getUserData();
     },
 
     methods: {
         encryption() {
-            if (this.algorithm === 'sha256') {
+             if (this.algorithm === 'sha256') {
                 let content;
                 if (this.inputText) {
                     content = this.inputText;
-                } else {
+                    let result = CryptoJS.SHA256(content).toString();
+                    this.inputHash = `0x${result}`
+                } else if (this.inputFile) {
                     content = this.inputFile;
-                }
-                this.inputHash = CryptoJS.SHA256(content).toString();
-            } else if (this.algorithm === 'sm3') {
-                let content;
-                if (this.inputText) {
-                    content = this.inputText;
+                    let result = content.toString();
+                    this.inputHash = `0x${result}`
                 } else {
-                    content = this.inputFile;
+                    content = ""
+                    let result = CryptoJS.SHA256(content).toString();
+                    this.inputHash = `0x${result}`
                 }
-                this.inputHash = gm.sm3Digest(content)
-            }
+            } 
+            // else if (this.algorithm === 'sm3') {
+            //     let content;
+            //     if (this.inputText) {
+            //         content = this.inputText;
+            //     } else {
+            //         content = this.inputFile;
+            //     }
+            //     let result = gm.sm3Digest(content);
+            //     this.inputHash = `0x${result}`;
+            // }
         },
         getLocalKeyStores() {
-            queryLocalKeyStores()
+            queryUserInfo()
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
@@ -167,10 +188,13 @@ export default {
                 })
         },
         querySignHash() {
+              if(this.encryptionId == '1'){
+               this.signKey[0] = 'p'
+            }
             this.loading = true;
             let param = {
                 hash: this.inputSignHash,
-                user: this.privateKey
+                signUserId: this.signUserId
             }
             signHash(param)
                 .then(res => {
@@ -241,7 +265,45 @@ export default {
         },
         handleFileType() {
 
-        }
+        },
+
+         getUserData: function () {
+            let reqData = {
+                groupId: localStorage.getItem("groupId"),
+                pageNumber: 1,
+                pageSize: 1000
+            };
+            let query = {}
+            if (localStorage.getItem('root') === 'developer') {
+                query.account = localStorage.getItem("user")
+            }
+            getUserList(reqData, query)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        if (res.data.data.length === 0) {
+                            this.ruleTest = this.$t("text.ruleAddUser")
+                        }
+                        this.privateKeyList  = [];
+                        res.data.data.forEach(value => {
+                                this.privateKeyList .push(value);
+                        });
+                        // if (this.adminRivateKeyList.length) this.modifyForm.adminRivateKey = this.adminRivateKeyList[0]['address'];
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
     }
 }
 </script>

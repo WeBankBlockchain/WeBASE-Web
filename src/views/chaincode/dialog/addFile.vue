@@ -26,6 +26,9 @@
                             <el-option v-for="item in options" :key="item.folderName" :label="item.folderName" :value="item.folderName">
                             </el-option>
                         </el-select>
+                    <!-- <span class="contract-code-done"  @click='addFolder' style="float:right;">
+                        <span target="_blank" style="cursor: pointer;text-decoration:underline;">{{this.$t('dialog.newFile')}}</span>
+                    </span> -->
                     </el-form-item>
                 </el-form>
             </div>
@@ -38,14 +41,19 @@
                 }}</el-button>
             </div>
         </el-dialog>
+         <add-folder v-if="foldershow" :foldershow="foldershow"  :isAddFile="isAddFile" @close='folderClose'></add-folder>
     </div>
 </template>
 <script>
 import { subStringToNumber } from "@/util/util";
 import { getContractPathList, addContractPath } from "@/util/api";
+import addFolder from "../dialog/addFolder"
 export default {
     name: "addFile",
     props: ["fileshow", "data", "id"],
+    components: {
+        "add-folder": addFolder
+    },
     computed: {
         rules() {
             let data = {
@@ -84,6 +92,8 @@ export default {
             pathList: [],
             folderList: [],
             userFolader: "",
+            foldershow: false, 
+            isAddFile: ""
         };
     },
     mounted: function () {
@@ -172,7 +182,7 @@ export default {
                             localStorage.getItem("root") === "developer"
                         ) {
                             this.addPath();
-                        }
+                        } 
                         this.changeOptions();
                     } else {
                         this.$message({
@@ -265,7 +275,37 @@ export default {
         modelClose: function () {
             this.$emit("close");
         },
+          /**
+         * 关闭文件夹弹窗
+         */
+        folderClose: function () {
+            this.getContractPaths();
+            this.foldershow = false
+        },
+        /**
+         * 新增文件夹 打开文件夹弹窗
+         */
+        addFolder: function () {
+            // this.checkNull();
+            this.foldershow = true
+        },
+        //   /**
+        //  * @method 点击任意处清除右键弹窗
+        //  */
+        // checkNull: function (list) {
+        //     this.contractArry.forEach(value => {
+        //         value.handleModel = false;
+        //         if (value.contractType == 'folder') {
+        //             value.child.forEach(list => {
+        //                 list.handleModel = false;
+        //             })
+        //         }
+        //     })
+        //     this.ID = "";
+        //     this.contractFile = false;
+        //     this.contractFolder = false;
+        //     this.handleModel = false;
+        // },
     },
 };
 </script>
-

@@ -30,7 +30,7 @@
                 </el-table>
                 <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout=" sizes, prev, pager, next, jumper" :total="total">
                 </el-pagination>
-                <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="450px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
+                <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="480px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <template v-if="chainCommitteeList.length > 0">
@@ -39,16 +39,19 @@
                                         <span>{{item.userName}}</span>
                                         <span class="font-12">{{item.address | splitString}}...</span>
                                     </el-option>
-                                </el-select>
+                                </el-select> 
                             </template>
                             <template v-else>
                                 <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
                                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-                                        <span>{{item.userName}} 2222</span>
+                                        <span>{{item.userName}}</span>
                                         <span class="font-12">{{item.address | splitString}}...</span>
                                     </el-option>
                                 </el-select>
                             </template>
+                             <span v-if="isShowPrivate" class="contract-code-done"  @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
+                                <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+                            </span>
                         </el-form-item>
                         <el-form-item :label="$t('govCommittee.user')" prop="address">
                             <el-select v-model="governForm.address" :placeholder="$t('text.select')">
@@ -65,7 +68,7 @@
                         <el-button type="primary" @click="sureAddCommittee">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="450px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
+                <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="480px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="144px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -90,7 +93,7 @@
                         <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="450px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
+                <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="480px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -118,7 +121,7 @@
                         <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
                     </div>
                 </el-dialog>
-                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="450px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
+                <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="480px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
                     <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
                         <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
                             <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
@@ -210,17 +213,22 @@
             <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="votePageSize" layout=" sizes, prev, pager, next, jumper" :total="voteTotal">
             </el-pagination>
         </div>
+         <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
+            <v-creatUser @creatUserClose="creatUserClose" :disablePub='true'  ref="creatUser"></v-creatUser>
+        </el-dialog>	
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
+import creatUser from "@/views/privateKeyManagement/components/creatUser";
 import { addCommittee, getUserList, committeeList, deleteCommittee, putCommitteeWeight, voteRecord, deleteVoteRecord, changeThreshold, getThreshold, getNetworkStatistics, getCommitteeWeight } from "@/util/api";
 export default {
     name: 'committeeMgmt',
 
     components: {
         "v-content-head": contentHead,
+        "v-creatUser": creatUser
     },
 
     props: {
@@ -341,7 +349,8 @@ export default {
                     "voteStatus": 0,
                     "voteType": 3
                 },
-            ]
+            ],
+            isShowPrivate: false
         }
     },
 
@@ -382,13 +391,25 @@ export default {
         produceCommittee() {
             let privateKeyList = this.adminRivateKeyList
             let committeeList = this.chainCommitteeList
+            // whether find committee in local private key list
+            let flagFind = false
             privateKeyList.forEach(item => {
                 committeeList.forEach(it => {
                     if (item.address == it.address) {
                         it.userName = item.userName
+                        flagFind = true
                     }
                 })
             })
+            // if committee not empty
+            if (!committeeList.length) {
+                if (flagFind) {
+                    // 如果本地有committee私钥，则设置
+                    this.governForm.fromAddress = committeeList[0]['address'];                    
+                } else {
+                    // 如果本地没有committee私钥，则不选默认值
+                }
+            }
             return committeeList
         }
     },
@@ -410,7 +431,6 @@ export default {
             this.queryCommitteeList()
             this.queryVoteRecordList()
             this.getUserData()
-
         }
     },
 
@@ -424,7 +444,7 @@ export default {
 
         },
         initGovernForm() {
-            this.governForm.fromAddress = ""
+            // this.governForm.fromAddress = ""
             this.governForm.address = ""
             this.weight = ""
         },
@@ -454,13 +474,19 @@ export default {
             };
             getUserList(reqData, {})
                 .then(res => {
-                    if (res.data.code === 0) {
+                    if (res.data.code === 0) { 
                         this.adminRivateKeyList = [];
                         res.data.data.forEach(value => {
                             // if (value.hasPk === 1) {
                             this.adminRivateKeyList.push(value);
                             // }
                         });
+                        if (this.adminRivateKeyList.length === 0) {
+                            this.isShowPrivate = true;
+                        } else {
+                            this.isShowPrivate = false;
+                            // this.governForm.fromAddress = this.adminRivateKeyList[0]['address'];
+                        } 
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
@@ -888,6 +914,9 @@ export default {
             val = val.replace(/[^0-9]/gi, "");
             // 此处还可以限制位数以及大小
             return val;
+        },
+        creatUserClose() {
+            this.getUserData();
         },
     }
 }
