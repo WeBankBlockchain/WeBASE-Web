@@ -257,6 +257,7 @@ export default {
             isDeployedModifyEnable: false,
             isFinishComplie: false,
             addContractAddressVisible: false,
+            num:1,
             contractForm: {
                 contractAddress: ""
             },
@@ -282,7 +283,7 @@ export default {
             }
         };
     },
-    beforeDestroy: function () {
+    destroyed () {
         Bus.$off("select")
         Bus.$off("noData")
         Bus.$off("javaProjectComplie")
@@ -298,7 +299,7 @@ export default {
         }
         this.queryIsDeployedModifyEnable()
         this.initEditor();
-        Bus.$on('select', data => {
+        Bus.$once('select', data => {
             this.codeShow = true;
             this.refreshMessage();
             this.code = "";
@@ -333,7 +334,7 @@ export default {
             }
 
         })
-        Bus.$on("noData", data => {
+        Bus.$once("noData", data => {
             this.codeShow = false;
             this.refreshMessage();
             this.code = "";
@@ -347,7 +348,7 @@ export default {
             this.content = "";
             this.bin = "";
         })
-        Bus.$on('javaProjectComplie', data=>{
+        Bus.$once('javaProjectComplie', data=>{
             this.contractName = data.contractName
             this.content = Base64.decode(data.contractSource);
             console.log(this.code)
@@ -621,6 +622,7 @@ export default {
             this.loading = true;
             let version = this.$store.state.versionData;
             if (version && version.net !== 0) {
+                debugger
                 this.compileHighVersion() 
             } else {
                 setTimeout(() => {
@@ -652,19 +654,24 @@ export default {
                 content: this.content
             };
             let w = this.$store.state.worker;
+            
             w.postMessage({
                 cmd: "compile",
                 input: JSON.stringify(input),
                 list: this.$store.state.contractDataList,
                 path: this.data.contractPath
             });
-            w.addEventListener('message', function (ev) {
+            
+            // w.addEventListener('message', function (ev) {
+             w.onmessage =function(ev){
+                debugger
                 if (ev.data.cmd == 'compiled') {
                     that.loading = false
                     output = JSON.parse(ev.data.data);
                     if (output && output.contracts && JSON.stringify(output.contracts) != "{}") {
                         that.status = 1;
                         if (output.contracts[that.contractName + ".sol"]) {
+                            
                             that.changeOutput(
                                 output.contracts[that.contractName + ".sol"]
                             );
@@ -679,7 +686,8 @@ export default {
                     console.log(ev.data);
                     console.log(JSON.parse(ev.data.data))
                 }
-            });
+            // });
+             };
             w.addEventListener("error", function (ev) {
                 that.errorInfo = ev;
                 that.errorMessage = ev;
