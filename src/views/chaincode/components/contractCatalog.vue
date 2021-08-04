@@ -155,17 +155,17 @@ export default {
                 this.getContractPaths()
             })
         }
-        Bus.$on("compile", data => {
+        Bus.$once("compile", data => {
              
             this.saveContract(data, this.$t("contracts.contractCompileSuccess"))
         })
-        Bus.$on("save", data => {
+        Bus.$once("save", data => {
             this.saveContract(data)
         })
-        Bus.$on("deploy", data => {
+        Bus.$once("deploy", data => {
             this.getContracts("", data);
         })
-        Bus.$on("open", data => {
+        Bus.$once("open", data => {
             this.contractArry.forEach(value => {
                 if (value.contractName == data.contractPath && !value.folderActive) {
                     this.$set(value, 'folderActive', true)
@@ -174,7 +174,7 @@ export default {
             })
             this.select(data)
         })
-        Bus.$on("send", data => {
+        Bus.$once("send", data => {
             this.contractArry.forEach(value => {
                 if (value.contractId == data.contractId) {
                     this.$set(value, 'contractAddress', data.contractAddress)

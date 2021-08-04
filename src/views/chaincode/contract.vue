@@ -271,9 +271,11 @@ export default {
                         message: this.$chooseLang(res.data.code)
                     });
                 }
+                this.loading = false;
             })
 
                 .catch(err => {
+                    this.loading = false;
                     this.$message({
                         type: "error",
                         message: err.data || this.$t('text.systemError')
