@@ -18,4 +18,5 @@ EXPOSE 5000
 
 
 # start nginx commond
-ENTRYPOINT nginx -c /nginx/nginx.conf -g 'daemon off;'
+RUN echo "start nginx of webase-web"
+ENTRYPOINT nginx -c /data/WeBASE-Web/nginx/nginx.conf -g 'daemon off;'
