@@ -92,11 +92,9 @@ fi
 ########################### build docker image ##########################
 image_repository="${image_organization}/${image_name}"
 
-## compile project
+## cd WeBASE-Web dir, get solc js and start docker build
 cd "${__root}" && bash get_solc_js.sh
 
-## docker build
-cd "${__root}"/dist
 
 
 docker build -t ${image_repository}:${new_tag} -f "${__root}"/docker/build/Dockerfile .
