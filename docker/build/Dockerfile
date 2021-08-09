@@ -18,4 +18,4 @@ EXPOSE 5000
 
 
 # start nginx commond
-ENTRYPOINT nginx -c /nginx/nginx.conf
+ENTRYPOINT nginx -c /nginx/nginx.conf -g 'daemon off;'
