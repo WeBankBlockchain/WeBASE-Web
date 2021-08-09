@@ -11,7 +11,7 @@ RUN apt-get update \
 COPY docs        /nginx
 COPY dist        /dist
 # make dir of nginx log
-RUN mkdir -p /nginx/log
+RUN mkdir -p /usr/share/nginx/log
 
 WORKDIR /nginx
 EXPOSE 5000
