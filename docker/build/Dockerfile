@@ -8,12 +8,12 @@ RUN apt-get update \
 
 # copy nginx.conf in /nginx (use -v when start docker daemon to replace this)
 # nginx's logs in /nginx/logs
-COPY docs        /nginx
-COPY dist        /dist
+COPY docs        /data/WeBASE-Web/nginx
+COPY dist        /data/WeBASE-Web/dist
 # make dir of nginx log
 RUN mkdir -p /usr/share/nginx/log
 
-WORKDIR /nginx
+WORKDIR /data/WeBASE-Web/
 EXPOSE 5000
 
 
