@@ -36,7 +36,7 @@ __root=$(realpath -s "${__root}")
 
 
 ########################### properties config ##########################
-image_organization=fiscoorg
+image_organization=webase
 image_name="webase-web"
 docker_push="no"
 latest_tag=latest
@@ -54,7 +54,7 @@ Usage:
     -t          New tag for image, required.
 
     -p          Push image to docker hub, default no.
-    -i          Default organization, default fiscoorg.
+    -i          Default organization, default webase.
     -h          Show help info.
 USAGE
     exit 1
