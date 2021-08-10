@@ -8,15 +8,15 @@ RUN apt-get update \
 
 # copy nginx.conf in /nginx (use -v when start docker daemon to replace this)
 # nginx's logs in /nginx/logs
-COPY docs        /data/WeBASE-Web/nginx
-COPY dist        /data/WeBASE-Web/dist
+COPY docs        /data/webase-web/nginx
+COPY dist        /data/webase-web/dist
 # make dir of nginx log
 RUN mkdir -p /usr/share/nginx/log
 
-WORKDIR /data/WeBASE-Web/
+WORKDIR /data/webase-web/
 EXPOSE 5000
 
 
 # start nginx commond
 RUN echo "start nginx of webase-web"
-ENTRYPOINT nginx -c /data/WeBASE-Web/nginx/nginx.conf -g 'daemon off;'
+ENTRYPOINT nginx -c /data/webase-web/nginx/nginx.conf -g 'daemon off;'
