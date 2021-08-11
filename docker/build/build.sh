@@ -36,7 +36,7 @@ __root=$(realpath -s "${__root}")
 
 
 ########################### properties config ##########################
-image_organization=webase
+image_organization=webasepro
 image_name="webase-web"
 docker_push="no"
 latest_tag=latest
