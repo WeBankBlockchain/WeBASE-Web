@@ -11,7 +11,7 @@ RUN apt-get update \
 COPY docs        /data/webase-web/nginx
 COPY dist        /data/webase-web/dist
 # make dir of nginx log
-RUN mkdir -p /usr/share/nginx/log
+RUN mkdir -p /dist/log
 
 WORKDIR /data/webase-web/
 EXPOSE 5000
