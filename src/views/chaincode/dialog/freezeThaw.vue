@@ -3,9 +3,10 @@
         <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="165px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
-                    <el-option v-for="item in committeeAndDeploy" :key="item.address" :label="item.userName" :value="item.address">
-                        <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                    <el-option v-for="item in chainCommitteeList" :key="item" :label="item" :value="item">
+                        <span>{{item}}</span>
+                        <!-- <span class="font-12">{{item.address}}...</span> -->
+                        <!-- <span class="font-12">{{item | splitString}}...</span> -->
                     </el-option>
                 </el-select>
                 <i class="el-icon-info" :title="$t('contracts.freezeDes')"></i>
@@ -82,7 +83,7 @@ export default {
 
     mounted() {
         this.queryCommitteeList()
-        this.getUserData()
+        // this.getUserData()
     },
 
     methods: {
@@ -135,23 +136,27 @@ export default {
                 });
         },
         queryCommitteeList() {
+            
             let reqData = {
                 groupId: localStorage.getItem('groupId'),
-                pageNumber: 1,
-                pageSize: 1000
+                contractAddress:this.contractAddress,
+                // pageNumber: 1,
+                // pageSize: 1000
             }
             committeeList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
                         let data = res.data.data;
-                        let deployList = []
-                        deployList.push({
-                            userName: this.deployUserName,
-                            address: this.deployAddress,
-                        })
-                        this.chainCommitteeList = []
-                        this.chainCommitteeList = data.concat(deployList);
+                        // let deployList = []
+                        // deployList.push({
+                        //     userName: this.deployUserName,
+                        //     address: this.deployAddress,
+                        // })
+                        // this.chainCommitteeList = []
+                        // this.chainCommitteeList = data.concat(deployList);
+                       this.chainCommitteeList=data;
                     } else {
+                        
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",

@@ -403,6 +403,7 @@ export default {
         changePassword: "修改密码",
         exit: "退出",
         versionInfo: "版本信息",
+        dataBigScreen:"数据大屏"
     },
     title: {
         dataOverview: "数据概览",
@@ -672,6 +673,8 @@ export default {
         userAddress: "用户公钥地址信息",
         userStatus: "用户状态",
         inputDescription: "请输入用户描述",
+        inputimportPrivateKey:"请输入绑定私钥",
+        importPrivateKeySuccess:"绑定私钥成功",
         updateUserSuccess: "修改用户成功",
         normal: "正常",
         disable: "停用",

@@ -354,6 +354,17 @@ export function getUserDescription(data) {
         }
     })
 }
+/**Modify user description */
+export function bindPrivateKeyInterface(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/bind/privateKey`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 /**Send transaction */
 export function sendTransation(data) {
     return post({
@@ -496,6 +507,18 @@ export function getTransactionList(data, list) {
         }
     })
 }
+/** 查询每日交易数据 */
+export function getTransDaily(data, list) {
+    const params = reviseParam(data, list);
+    return get({
+        url: `${url.ORG_LIST}/transaction/transList/${params.str}`,
+        method: 'get',
+        params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 /** Supervised user list*/
 export function monitorUserList(data, list) {
     const params = reviseParam(data, list);
@@ -592,6 +615,7 @@ export function deleteNodes(data) {
 }
 /**  Collection node metric*/
 export function metricInfo(data, list) {
+    
     const params = reviseParam(data, list);
     return get({
         url: `${url.ORG_LIST}/performance/ratio/${params.str}`,
@@ -691,7 +715,7 @@ export function addFunctionAbi(data) {
 export function getFunctionAbi(data, list) {
     const params = reviseParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/method/findById/${params.str}`,
+        url: `${url.ORG_LIST}/method/findById/${params.str.substr(0,12)}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
@@ -1345,9 +1369,9 @@ export function getHostList() {
 //治理委员会list
 export function committeeList(data) {
     return get({
-        url: `${url.ORG_LIST}/governance/committee/list/sorted`,
+        url: `${url.ORG_LIST}/contract/listManager/`+data.groupId+`/`+data.contractAddress,
         method: "get",
-        params: data,
+        // params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
