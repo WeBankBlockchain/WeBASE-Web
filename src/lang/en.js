@@ -405,6 +405,7 @@ export default {
         changePassword: "Change Password",
         exit: "Exit",
         versionInfo: "Version",
+        dataBigScreen:"Large data screen"
     },
     title: {
         dataOverview: "Overview",
@@ -672,6 +673,8 @@ export default {
         userAddress: "Address",
         userStatus: "Status",
         inputDescription: "Please enter User Description",
+        inputimportPrivateKey:"Please enter public key information",
+        importPrivateKeySuccess:"binding private key succeeded",
         updateUserSuccess: "User modified successfully",
         normal: "Normal",
         disable: "Disable",

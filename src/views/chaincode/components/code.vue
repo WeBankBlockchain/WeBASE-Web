@@ -257,7 +257,6 @@ export default {
             isDeployedModifyEnable: false,
             isFinishComplie: false,
             addContractAddressVisible: false,
-            num:1,
             contractForm: {
                 contractAddress: ""
             },
@@ -283,7 +282,7 @@ export default {
             }
         };
     },
-    destroyed () {
+    beforeDestroy: function () {
         Bus.$off("select")
         Bus.$off("noData")
         Bus.$off("javaProjectComplie")
@@ -299,7 +298,7 @@ export default {
         }
         this.queryIsDeployedModifyEnable()
         this.initEditor();
-        Bus.$once('select', data => {
+        Bus.$on('select', data => {
             this.codeShow = true;
             this.refreshMessage();
             this.code = "";
@@ -334,7 +333,7 @@ export default {
             }
 
         })
-        Bus.$once("noData", data => {
+        Bus.$on("noData", data => {
             this.codeShow = false;
             this.refreshMessage();
             this.code = "";
@@ -348,7 +347,7 @@ export default {
             this.content = "";
             this.bin = "";
         })
-        Bus.$once('javaProjectComplie', data=>{
+        Bus.$on('javaProjectComplie', data=>{
             this.contractName = data.contractName
             this.content = Base64.decode(data.contractSource);
             console.log(this.code)
@@ -480,9 +479,18 @@ export default {
         },
         blurAce: function () {
             let data = Base64.encode(this.content);
-            if (this.data.contractSource != data && this.data.contractStatus != 2) {
-                this.saveCode()
-            }
+            // if (this.data.contractSource != data && this.data.contractStatus != 2) {
+            //     this.saveCode()
+            // }
+             if(this.data.contractSource!=data){
+                this.$confirm(`合约未保存是否保存？`, {
+                    center: true,
+                    dangerouslyUseHTMLString: true
+                })
+                    .then(() => {
+                         this.saveCode()
+                    })
+             }
         },
         saveCode: function () {
             this.data.contractSource = Base64.encode(this.content);
@@ -541,7 +549,35 @@ export default {
             this.editorShow = false;
         },
         changeAce: function () {
+                 this.$nextTick(() => {
             this.content = this.aceEditor.getSession().getValue();
+            //  console.log(this.code);
+            // console.log(this.content);
+            if(this.content.replace(/[\r\n\s]/g,"")==""){
+        //         console.log(this.code);
+        //    console.log(this.content);
+             
+              this.aceEditor.setValue(this.code);
+              this.content = this.aceEditor.getSession().getValue(); 
+             return
+            }
+              var id = this.data.id;
+            // this.$nextTick(() => {
+                if (Base64.decode(this.data.contractSource).length === this.content.length) {
+                    Bus.$emit('modifyState', {
+                        id: id,
+                        modifyState: false
+                    })
+                } else {
+                    
+                    Bus.$emit('modifyState', Object.assign({}, this.data, {
+                        id: id,
+                        modifyState: true,
+                        contractSource: Base64.encode(this.content)
+                    }))
+                }
+            // })
+            })
         },
 
         findImports: function (path) {
@@ -622,7 +658,6 @@ export default {
             this.loading = true;
             let version = this.$store.state.versionData;
             if (version && version.net !== 0) {
-                debugger
                 this.compileHighVersion() 
             } else {
                 setTimeout(() => {
@@ -654,24 +689,21 @@ export default {
                 content: this.content
             };
             let w = this.$store.state.worker;
-            
             w.postMessage({
                 cmd: "compile",
                 input: JSON.stringify(input),
                 list: this.$store.state.contractDataList,
                 path: this.data.contractPath
             });
-            
             // w.addEventListener('message', function (ev) {
-             w.onmessage =function(ev){
-                debugger
+            w.onmessage=function(ev){
                 if (ev.data.cmd == 'compiled') {
                     that.loading = false
                     output = JSON.parse(ev.data.data);
+                    console.log('次数')
                     if (output && output.contracts && JSON.stringify(output.contracts) != "{}") {
                         that.status = 1;
                         if (output.contracts[that.contractName + ".sol"]) {
-                            
                             that.changeOutput(
                                 output.contracts[that.contractName + ".sol"]
                             );
@@ -686,8 +718,7 @@ export default {
                     console.log(ev.data);
                     console.log(JSON.parse(ev.data.data))
                 }
-            // });
-             };
+            };
             w.addEventListener("error", function (ev) {
                 that.errorInfo = ev;
                 that.errorMessage = ev;
@@ -898,7 +929,7 @@ export default {
                                 inputs: value.inputs
                             });
                         }
-                        data.methodId = methodId;
+                        data.methodId = methodId.substr(0,10);;
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)
@@ -918,7 +949,7 @@ export default {
                                 inputs: value.inputs
                             });
                         }
-                        data.methodId = methodId;
+                        data.methodId = methodId.substr(0,10);;
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)
@@ -930,6 +961,7 @@ export default {
             }
         },
         addAbiMethod: function (list) {
+            
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 methodList: list
