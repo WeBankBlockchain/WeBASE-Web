@@ -72,6 +72,7 @@ export default {
                 yList = [],
                 yContrastList = [],
                 yContrastTitle = "";
+            
             xList = this.chartOption.data.lineDataList.timestampList.map(
                 item => {
                     return format(new Date(item).getTime(), "HH:mm:ss");

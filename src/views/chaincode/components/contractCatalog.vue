@@ -155,17 +155,17 @@ export default {
                 this.getContractPaths()
             })
         }
-        Bus.$once("compile", data => {
+        Bus.$on("compile", data => {
              
             this.saveContract(data, this.$t("contracts.contractCompileSuccess"))
         })
-        Bus.$once("save", data => {
+        Bus.$on("save", data => {
             this.saveContract(data)
         })
-        Bus.$once("deploy", data => {
+        Bus.$on("deploy", data => {
             this.getContracts("", data);
         })
-        Bus.$once("open", data => {
+        Bus.$on("open", data => {
             this.contractArry.forEach(value => {
                 if (value.contractName == data.contractPath && !value.folderActive) {
                     this.$set(value, 'folderActive', true)
@@ -174,7 +174,7 @@ export default {
             })
             this.select(data)
         })
-        Bus.$once("send", data => {
+        Bus.$on("send", data => {
             this.contractArry.forEach(value => {
                 if (value.contractId == data.contractId) {
                     this.$set(value, 'contractAddress', data.contractAddress)
@@ -687,10 +687,11 @@ export default {
             saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.getContracts(data.contractPath, res.data.data);
+                    
                     if (data.contractId) {
                         this.$message({
                             type: "success",
-                            message: title || this.$t("contracts.contractSaveSuccess")
+                            message: title || "合约保存成功！"
                         });
                     }
                 } else {
