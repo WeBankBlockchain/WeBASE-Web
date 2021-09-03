@@ -101,7 +101,7 @@ export default {
       chartParam: {
         gap: 60,
         beginDate: `${format(new Date().getTime(), "yyyy-MM-dd")}T${format(
-          new Date(new Date().getTime() - 6 * 60 * 60 * 1000),
+          new Date(new Date().getTime() - 12 * 60 * 60 * 1000),
           "HH:mm:ss"
         )}`,
         endDate: `${format(new Date().getTime(), "yyyy-MM-dd")}T${format(
@@ -124,11 +124,9 @@ export default {
     this.cityShow();
     window.addEventListener("resize", this.cityAdapter);
 
-
     this.fourReqUpdate();
     this.fiveInit();
     this.fiveReqUpdate();
-    
   },
   destroyed() {
     window.removeEventListener("resize", this.cityAdapter);
@@ -141,8 +139,8 @@ export default {
         align: "center",
         fontSize: "12",
         rowNum: 7,
-        oddRowBGC: "#3371D0",
-        evenRowBGC: "#3371D0",
+        oddRowBGC: "rgba(51, 113, 208, 0.3)",
+        evenRowBGC: "rgba(51, 113, 208, 0.3)",
         data: switchList,
       };
     },
@@ -193,8 +191,8 @@ export default {
           align: "center",
           fontSize: "12",
           rowNum: 7,
-          oddRowBGC: "#3371D0",
-          evenRowBGC: "#3371D0",
+          oddRowBGC: "rgba(51, 113, 208, 0.3)",
+          evenRowBGC: "rgba(51, 113, 208, 0.3)",
           data: this.blockList,
         };
       }
@@ -228,13 +226,12 @@ export default {
         fontFamily: "PingFang SC",
       };
       var pieOption = {
-        backgroundColor: "#3371D0",
         title: [
           {
             text: "CPU",
             left: "20%",
             bottom: "13%",
-            textAlign:"center",
+            textAlign: "center",
             textStyle: titleStyle,
           },
           {
@@ -261,19 +258,20 @@ export default {
           },
           {
             type: "pie",
-          }
+          },
         ],
       };
       this.pieVar.setOption(pieOption);
       var lineOption = {
-        backgroundColor: "#3371D0",
+        // backgroundColor: "rgba(51, 113, 208, 0.3)",
+        color: ["#93CC77", "#4F94FF"],
         tooltip: {
           trigger: false,
         },
         legend: {
           data: ["上行宽带", "下行宽带"],
           textStyle: {
-            color: "#FFFFFF",
+            color: "rgba(255, 255, 255, 0.75)",
             fontSize: 12,
           },
           top: 0,
@@ -295,12 +293,12 @@ export default {
           boundaryGap: false,
           axisLine: {
             lineStyle: {
-              color: "#FFFFFF",
+              color: "rgba(255, 255, 255, 0.3)",
             },
           },
           axisLabel: {
-            color: "#FFFFFF",
-            fontSize: "20",
+            //  color: "rgba(255, 255, 255, 0.75)",
+            fontSize: "12",
             fontFamily: "Noto Sans SC",
             fontWeight: "regular",
             // width:"31px",
@@ -314,15 +312,24 @@ export default {
           type: "value",
           axisLine: {
             lineStyle: {
-              color: "#FFFFFF",
+              color: "rgba(255, 255, 255, 0.3)",
             },
+
             axisLabel: {
-              color: "#FFFFFF",
-              fontSize: "20",
+              // color: "rgba(255, 255, 255, 0.75)",
+              fontSize: "12",
               fontFamily: "Noto Sans SC",
               fontWeight: "regular",
               // width:"31px",
               // height:"20px"
+            },
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(255, 255, 255, 0.3)",
+              width: 1,
+              type: "solid",
             },
           },
         },
@@ -331,7 +338,6 @@ export default {
             name: "上行宽带",
             type: "line",
             smooth: "true",
-
             showSymbol: false,
             areaStyle: {
               color: {
@@ -343,11 +349,11 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: "red", // 0% 处的颜色
+                    color: "#93CC77", // 0% 处的颜色
                   },
                   {
                     offset: 1,
-                    color: "blue", // 100% 处的颜色
+                    color: "#4F94FF ", // 100% 处的颜色
                   },
                 ],
                 global: false, // 缺省为 false
@@ -370,11 +376,11 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: "green", // 0% 处的颜色
+                    color: "#4F94FF", // 0% 处的颜色
                   },
                   {
                     offset: 1,
-                    color: "darkblue", // 100% 处的颜色
+                    color: "#4F94FF", // 100% 处的颜色
                   },
                 ],
                 global: false, // 缺省为 false
@@ -406,7 +412,11 @@ export default {
             };
           });
           this.nodeId = this.nodesOptions[0]["value"];
-          this.$set(this.choose, "frontIp", this.nodesOptions[0].label);
+          this.$set(
+            this.choose,
+            "frontIp",
+            "节点IP：" + this.nodesOptions[0].label
+          );
         } else {
           this.$message({
             message: this.$t("monitor.addFrontInfo"),
@@ -447,19 +457,19 @@ export default {
         });
         let color = function (item) {
           if (item > 75) {
-            return "red";
+            return "#953F2D";
           }
           if (item > 50) {
-            return "yellow";
+            return "#9C7131";
           }
-          return "green";
+          return "#4B7AC2";
         };
         let pieList = lastVal.map((item, index) => {
           return {
             type: "pie",
             center: positions[index],
             startAngle: 90,
-            radius: [52.5, 44.5],
+            radius: [52.5, 49.5],
             hoverAnimation: false,
             labelLine: {
               normal: {
@@ -486,7 +496,7 @@ export default {
                   textStyle: {
                     fontSize: 16,
                     fontFamily: "PingFang SC",
-                    color: "#34374E",
+                    color: "#FFFFFF",
                   },
                 },
               },
@@ -858,8 +868,7 @@ export default {
 .tradeNav {
   width: 100%;
   height: 0.45rem;
-  opacity: 0.5;
-  background: #3371d0;
+  background: rgba(51, 113, 208, 0.3);
   border: 1px solid #3371d0;
   margin-top: 0.3rem;
   line-height: 0.45rem;
@@ -885,8 +894,7 @@ export default {
   margin-top: 0.3rem;
   box-sizing: border-box;
   /* background-color: red; */
-  opacity: 0.5;
-  background: #3371d0;
+  background: rgba(51, 113, 208, 0.3);
   border: 1px solid #3371d0;
 }
 .pieUp {
@@ -900,6 +908,7 @@ export default {
   height: 2.2375rem;
   /* background-color: chartreuse; */
   position: relative;
+  /* background: rgba(51, 113, 208, 0.3); */
 }
 .lineChart {
   width: 7.0875rem;
@@ -932,14 +941,12 @@ export default {
 .listData {
   width: 6.7375rem;
   height: 3.9rem;
-  opacity: 0.5;
-  background: #3371d0;
   border: 1px solid #3371d0;
   margin-top: 0.125rem;
   box-sizing: border-box;
 }
 .listData .rows .row-item {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.75);
   font-family: PingFang SC;
   font-weight: medium;
   text-align: center;
@@ -1107,8 +1114,7 @@ export default {
 .ipSelect .el-input .el-input__inner {
   width: 2.35rem;
   height: 0.45rem;
-  opacity: 0.5;
-  background: #3371d0;
+  background: rgba(51, 113, 208, 0.3);
   border: 1px solid #3371d0;
   border-radius: 0;
   color: #4f94ff;
@@ -1124,7 +1130,7 @@ width: .15rem;
 height: .075rem;
 } */
 .tradeList span {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.75);
   font-family: PingFang SC;
   font-weight: medium;
   font-size: 0.25rem;
@@ -1148,9 +1154,8 @@ height: .075rem;
   width: 100%;
   height: 4.475rem;
   margin-top: 0.3rem;
-  opacity: 0.3;
+  background: rgba(51, 113, 208, 0.3);
   box-sizing: border-box;
-  background: #3371d0;
   border: 1px solid #3371d0;
 }
 .city1 {
@@ -1173,34 +1178,5 @@ height: .075rem;
     flex-wrap: wrap; */
   /* justify-content: space-around; */
   /* flex-direction: column; */
-}
-
-.item {
-  background: url("../../assets/largeScreen/data_bg.svg") no-repeat top center;
-  background-size: 100% 100%;
-  width: 3.225rem;
-  height: 1.425rem;
-  display: inline-block;
-}
-.item p {
-  margin-top: 0.3125rem;
-  margin-left: 0.3125rem;
-  color: #4f94ff;
-  font-family: PingFang SC;
-  font-weight: semibold;
-  font-size: 16px;
-  line-height: normal;
-  letter-spacing: 0px;
-  text-align: left;
-}
-.item div {
-  margin-left: 0.3125rem;
-  color: #ffffff;
-  font-family: Helvetica Neue;
-  font-weight: medium;
-  font-size: 30px;
-  line-height: normal;
-  letter-spacing: 0px;
-  text-align: left;
 }
 </style>

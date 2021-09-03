@@ -19,6 +19,7 @@
     "babel-polyfill": "^6.26.0",
     "crypto-js": "^4.0.0",
     "echarts": "^4.2.0-rc.1",
+    "element-china-area-data": "^5.0.2",
     "element-ui": "^2.4.7",
     "es6-promise": "^4.2.5",
     "file-saver": "^2.0.2",
