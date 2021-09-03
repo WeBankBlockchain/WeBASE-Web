@@ -323,7 +323,9 @@ export default {
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         nodeActive:'节点存活',
         nodeNotActive:'节点未存活',
-        addContractAddress: '绑定'
+        addContractAddress: '绑定',
+        remarks:'备注',
+        bindSuccessed:'绑定私钥成功'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -705,7 +707,8 @@ export default {
         validatorPrivateKey1: "请输入十六进制",
         validatorPrivateKey10: "请输入十进制",
         importType: "导入类型",
-        importFileValidator: '请上传文件'
+        importFileValidator: '请上传文件',
+        bindPrivateKey:'绑定私钥'
     },
     system: {
         chainManager: "链管理权限",
@@ -752,6 +755,9 @@ export default {
         uploadWarning3: "个文件.",
         to: "至",
         updateSuccess: "更新成功",
+        agency:'请输入机构名',
+        city:'请选择地址',
+
     },
     account: {
         addAccount: "新增账号",
@@ -974,6 +980,7 @@ export default {
         fileType: "导入类型",
         exportType: "导出类型",
         fileName: "私钥用户名",
+        baseSystem:"进制"
     },
     govCommittee: {
         addCommittee: '新增委员投票',

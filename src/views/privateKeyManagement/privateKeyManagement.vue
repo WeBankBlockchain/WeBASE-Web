@@ -55,7 +55,7 @@
                             </template>
                             <template v-else>
                                 <el-button v-if="scope.row['hasPk'] ==1" :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
-                                <el-button v-else :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="freezeThaw(scope.row)">{{$t('text.addContractAddress')}}</el-button>
+                                <el-button v-else :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}"  @click="bindPrivateKey(scope.row)">{{$t('text.addContractAddress')}}</el-button>
                                 <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
                                 <!-- <el-button v-else :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="freezeThaw(scope.row)">{{freezeOrThawBtn(1)}}</el-button> -->
                             </template>
@@ -77,6 +77,9 @@
         <el-dialog :visible.sync="$store.state.exportRivateKey" :title="$t('system.export')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.exportRivateKey' center>
             <export-key :exportInfo="exportInfo"></export-key>
         </el-dialog>
+        <el-dialog :visible.sync="$store.state.bindKey" :title="$t('privateKey.bindPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.bindKey' center>
+            <bind-key :bindInfo="bindInfo" @bindPrivateKeySuccess="importPrivateKeySuccess" ></bind-key>
+        </el-dialog>
     </div>
 </template>
 
@@ -86,6 +89,7 @@ import contentHead from "@/components/contentHead";
 import creatUser from "./components/creatUser.vue";
 import importKey from "./components/importKey.vue";
 import ExportKey from './components/exportKey.vue';
+import BindKey from './components/bindKey.vue';
 import { getUserList, getUserDescription,bindPrivateKeyInterface } from "@/util/api";
 let Base64 = require("js-base64").Base64;
 import errcode from "@/util/errcode";
@@ -95,7 +99,8 @@ export default {
         "v-contentHead": contentHead,
         "v-creatUser": creatUser,
         "v-importKey": importKey,
-        ExportKey
+        ExportKey,
+        BindKey
     },
     data() {
         return {
@@ -109,7 +114,8 @@ export default {
                 publicKey: 450
             },
             disabled: false,
-            exportInfo: {}
+            exportInfo: {},
+            bindInfo:{}
         };
     },
     computed: {
@@ -164,6 +170,10 @@ export default {
         }
     },
     methods: {
+        bindPrivateKey(row){
+            this.bindInfo = row;
+            this.$store.dispatch('switch_bind_key_dialog')
+        },
         changGroup() {
             this.getUserInfoData()
         },
@@ -251,37 +261,37 @@ export default {
             this.exportInfo = params
             this.$store.dispatch('switch_export_rivate_key_dialog')
         },
-        bindPrivateKey(value, params) {
-                let reqData = {           
-                groupId: params.groupId,
-                privateKey: Base64.encode(value),
-                userId: params.userId,
+        // bindPrivateKey(value, params) {
+        //         let reqData = {           
+        //         groupId: params.groupId,
+        //         privateKey: Base64.encode(value),
+        //         userId: params.userId,
               
-            };
-            bindPrivateKeyInterface(reqData)
-                .then(res => {
-                    if (res.data.code == 0) {
-                        this.getUserInfoData();
-                        this.$message({
-                            type: "success",
-                            message: this.$t("privateKey.importPrivateKeySuccess")
-                        });
-                    } else {
-                        this.$message({
-                            message: this.$chooseLang(res.data.code),
-                            type: "error",
-                            duration: 2000
-                        });
-                    }
-                })
-                .catch(err => {
-                    this.$message({
-                        message: err.data || this.$t('text.systemError'),
-                        type: "error",
-                        duration: 2000
-                    });
-                });
-        },
+        //     };
+        //     bindPrivateKeyInterface(reqData)
+        //         .then(res => {
+        //             if (res.data.code == 0) {
+        //                 this.getUserInfoData();
+        //                 this.$message({
+        //                     type: "success",
+        //                     message: this.$t("privateKey.importPrivateKeySuccess")
+        //                 });
+        //             } else {
+        //                 this.$message({
+        //                     message: this.$chooseLang(res.data.code),
+        //                     type: "error",
+        //                     duration: 2000
+        //                 });
+        //             }
+        //         })
+        //         .catch(err => {
+        //             this.$message({
+        //                 message: err.data || this.$t('text.systemError'),
+        //                 type: "error",
+        //                 duration: 2000
+        //             });
+        //         });
+        // },
         userDescriptionInfo(value, params) {
             let reqData = {
                 userId: params.userId,
@@ -321,8 +331,7 @@ export default {
                 // inputErrorMessage: this.$t('privateKey.validatorPrivateKey16')
                 inputPlaceholder :this.$t('privateKey.validatorPrivateKey16')
             })
-                .then(({ value }) => {
-                    
+                .then(({ value }) => {     
                     this.bindPrivateKey(value, params);
                 })
                 .catch(() => {

@@ -324,6 +324,7 @@ export default {
         importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract',
         nodeActive:'Node active',
         nodeNotActive:'Node not active',
+        remarks:'remarks'
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -705,7 +706,8 @@ export default {
         validatorPrivateKey1: "Please enter hexadecimal",
         validatorPrivateKey10: "Please enter decimal",
         importType: "Import Type",
-        importFileValidator: 'Please upload the file'
+        importFileValidator: 'Please upload the file',
+        bindPrivateKey:'Bind PrivateKey'
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -752,6 +754,8 @@ export default {
         uploadWarning3: "files.",
         to: "to",
         updateSuccess: "Successfully updated",
+        agency:'Please enter agency',
+        city:'Please enter address',
     },
     account: {
         addAccount: "Add Account",
@@ -974,6 +978,7 @@ export default {
         fileType: "Import Type",
         exportType: "Export Type",
         fileName: "PrivateKey Name",
+        baseSystem:"baseSystem"
     },
     govCommittee: {
         addCommittee: 'Grant Committee Vote',

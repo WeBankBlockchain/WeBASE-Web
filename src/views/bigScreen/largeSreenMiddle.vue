@@ -3,7 +3,7 @@
     <section class="middleOne">
       <div class="column1">
         <div
-          :class="'item item' + index"
+          :class="'items item' + index"
           v-for="(item, index) in dataV_item"
           :key="item.title"
         >
@@ -42,10 +42,7 @@
 
 <script>
 import to from "await-to-js";
-import {
-  getNetworkStatistics,
-  getChartData,
-} from "@/util/api";
+import { getNetworkStatistics, getChartData } from "@/util/api";
 import { changWeek, getDay } from "@/util/util";
 export default {
   name: "largeSreenMiddle",
@@ -150,6 +147,12 @@ export default {
         },
         xAxis: {
           type: "value",
+          axisLine: {
+            lineStyle: {
+              color: "rgb(255, 255, 255,0.3)",
+              width: 1,
+            },
+          },
           nameTextStyle: {
             color: "#FFFFFF",
           },
@@ -167,24 +170,31 @@ export default {
           axisTick: {
             show: false,
           },
+          axisLine: {
+            lineStyle: {
+              color: "rgb(255, 255, 255,0.3)",
+              width: 1,
+            },
+          },
           data: getDay(7).reverse(),
           type: "category",
-          nameTextStyle: {
-            color: "#FFFFFF",
+          axisLabel: {
+            color: "rgb(255, 255, 255,0.75)",
             fontFamily: "Noto Sans SC",
             fontWeight: "regular",
+            fontSize: 12,
           },
         },
         series: [
           {
             type: "bar",
             itemStyle: {
-              color: "darkblue",
+              color: "#3371D0",
             },
             label: {
               show: true,
               position: "right",
-              color: "#70A8FF",
+              color: "#3371D0",
               fontFamily: "Helvetica Neue",
               fontWeight: " bold",
               formatter: (num) => {
@@ -350,7 +360,7 @@ export default {
   display: flex;
 }
 .group_left {
-  color: #ffffff;
+  color: "rgb(255, 255, 255,0.55)";
   font-family: Helvetica Neue;
   font-weight: bold;
   font-size: 0.25rem;
@@ -378,6 +388,7 @@ export default {
 }
 .group_middle .middleGroup {
   display: inline-block;
+  color: "rgb(255, 255, 255,0.9)";
   width: 1.425rem;
   height: 0.375rem;
   top: calc(50% - 0.1875rem);
@@ -385,9 +396,9 @@ export default {
   position: absolute;
   background-image: linear-gradient(
     to right,
-    #3371d0 0%,
-    #4f94ff 50%,
-    #3371d0 100%
+    #0a1f3f 0%,
+    #1959b9 50%,
+    #2e82ff 100%
   );
   animation: gradualChange 1s infinite linear;
   background-size: 200% 100%;
@@ -402,7 +413,7 @@ export default {
 }
 .group_right {
   flex: 1;
-  color: #ffffff;
+  color: "rgb(255, 255, 255,0.55)";
   font-family: Helvetica Neue;
   font-weight: bold;
   font-size: 0.25rem;
@@ -472,7 +483,7 @@ export default {
   height: 0.35rem;
 }
 .tradeTip span {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.75);
   font-family: PingFang SC;
   font-weight: medium;
   font-size: 0.25rem;
@@ -494,9 +505,8 @@ export default {
   height: 4.3rem;
   position: absolute;
   bottom: 0;
-  opacity: 0.3;
   box-sizing: border-box;
-  background: #3371d0;
+  background: rgba(51, 113, 208, 0.3);
   border: 1px solid #3371d0;
 }
 .trade1 {
@@ -550,14 +560,14 @@ export default {
   right: 0;
   bottom: 0;
 }
-.item {
+.items {
   background: url("../../assets/largeScreen/data_bg.svg") no-repeat top center;
   background-size: 100% 100%;
   width: 3.225rem;
   height: 1.425rem;
   display: inline-block;
 }
-.item p {
+.items p {
   margin-top: 0.3125rem;
   margin-left: 0.3125rem;
   color: #4f94ff;
@@ -568,7 +578,7 @@ export default {
   letter-spacing: 0px;
   text-align: left;
 }
-.item div {
+.items div {
   margin-left: 0.3125rem;
   color: #ffffff;
   font-family: Helvetica Neue;
