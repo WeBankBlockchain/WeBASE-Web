@@ -156,6 +156,9 @@ export default {
                                 case "tx_count_limit":
                                     item.tips = this.$t('system.countLimit')
                                     break;
+                                case "consensus_timeout":
+                                    item.tips = this.$t('system.timeOut')
+                                    break;
                             }
                         })
                         this.configList = res.data.data;

@@ -367,7 +367,7 @@ export default {
         });
       [...document.querySelectorAll(".noBlur")].map((item)=>{
         item.onmousedown = (event) => {
-      event.preventDefault(); // 点击按钮不会失去焦点（阻止默认）
+        event.preventDefault(); // 点击按钮不会失去焦点（阻止默认）
     };
     });
 

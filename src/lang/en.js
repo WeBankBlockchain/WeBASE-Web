@@ -740,6 +740,7 @@ export default {
         configValue: "Value",
         gasLimit: "One transaction maximum gas limit",
         countLimit: "The maximum number of transactions that can be packaged in one block",
+        timeOut:'Consensus timeout (seconds)',
         gasLong: "Range from 100000 to 2147483647",
         addCertificate: "Import Certificate",
         export: "Export",

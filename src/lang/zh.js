@@ -741,6 +741,7 @@ export default {
         configValue: "配置值",
         gasLimit: "一个交易最大gas限制",
         countLimit: "一个区块中可打包的最大交易数目",
+        timeOut:'共识超时时间（秒）',
         gasLong: "范围从100000到2147483647",
         addCertificate: "导入证书",
         export: "导出",
