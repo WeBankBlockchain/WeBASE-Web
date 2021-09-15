@@ -17,6 +17,7 @@ import url from './url'
 import { post, get, patch, put, deleted } from './http'
 import { reviseParam } from './util'
 import qs from 'qs'
+import { debug } from 'request'
 
 //login
 export function login(data, code, token) {
@@ -111,6 +112,16 @@ export function getNodeList(data, list) {
         url: `${url.ORG_LIST}/node/nodeList/${params.str}`,
         method: 'get',
         params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/** nodeCity query node*/
+export function getCityList(data) {
+    return get({
+        url: `${url.ORG_LIST}/node/city/list`,
+        method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -1402,9 +1413,9 @@ export function getHostList() {
 //治理委员会list
 export function committeeList(data) {
     return get({
-        url: `${url.ORG_LIST}/contract/listManager/`+data.groupId+`/`+data.contractAddress,
+        url: `${url.ORG_LIST}/governance/committee/list/`,
         method: "get",
-        // params: data,
+        params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

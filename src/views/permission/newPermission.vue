@@ -55,6 +55,7 @@ export default {
             if (this.activeName == 0) {
                 this.$refs.committeeMgmt.adminRivateKeyList = [];
                 if (localStorage.getItem("groupId")) {
+                    debugger
                     this.$refs.committeeMgmt.queryGetThreshold()
                     this.$refs.committeeMgmt.getUserData()
                     this.$refs.committeeMgmt.queryCommitteeList()

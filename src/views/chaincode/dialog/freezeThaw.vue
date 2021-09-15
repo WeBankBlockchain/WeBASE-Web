@@ -3,9 +3,9 @@
         <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="165px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
-                    <el-option v-for="item in chainCommitteeList" :key="item" :label="item" :value="item">
-                        <span>{{item}}</span>
-                        <!-- <span class="font-12">{{item.address}}...</span> -->
+                    <el-option v-for="(item,index) in chainCommitteeList" :key="index" :label="item.table_name" :value="item.address">
+                        <!-- <span>{{addDeployUserName(item)}}</span> -->
+                        <span class="font-12">{{item.address}}...</span>
                         <!-- <span class="font-12">{{item | splitString}}...</span> -->
                     </el-option>
                 </el-select>
@@ -42,7 +42,7 @@ export default {
             },
             contractAddress: this.contractInfo.contractAddress,
             deployAddress: this.contractInfo.deployAddress,
-            deployUserName: this.contractInfo.deployUserName,
+            deployUserName: [this.contractInfo.deployUserName]
         }
     },
 
@@ -87,6 +87,9 @@ export default {
     },
 
     methods: {
+        addDeployUserName(item){
+            return this.deployUserName+'/'+item.address
+        },
         close() {
             this.$emit("freezeThawClose");
         },
@@ -139,22 +142,22 @@ export default {
             
             let reqData = {
                 groupId: localStorage.getItem('groupId'),
-                contractAddress:this.contractAddress,
-                // pageNumber: 1,
-                // pageSize: 1000
+              //  contractAddress:this.contractAddress,
+                pageNumber: 1,
+                pageSize: 1000
             }
             committeeList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
                         let data = res.data.data;
-                        // let deployList = []
-                        // deployList.push({
-                        //     userName: this.deployUserName,
-                        //     address: this.deployAddress,
-                        // })
-                        // this.chainCommitteeList = []
-                        // this.chainCommitteeList = data.concat(deployList);
-                       this.chainCommitteeList=data;
+                        let deployList = []
+                        deployList.push({
+                            userName: this.deployUserName,
+                            address: this.deployAddress,
+                        })
+                        this.chainCommitteeList = []
+                        this.chainCommitteeList = data.concat(deployList);
+                      // this.chainCommitteeList=data;
                     } else {
                         
                         this.$message({

@@ -131,7 +131,8 @@ export default {
                 contractAddress: this.abiForm.contractAddress,
                 contractAbi: JSON.parse(this.abiForm.contractAbi),
                 groupId: localStorage.getItem('groupId'),
-                account: localStorage.getItem('user')
+                //account: localStorage.getItem('user')
+                account:"jin1"
             }
             importAbi(data)
                 .then(res => {

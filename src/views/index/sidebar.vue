@@ -419,7 +419,7 @@ export default {
         },
         handleClose(key, keyPath) {
         },
-        hideMune: function (val) {
+        hideMune(val) {
             this.$emit("sidebarChange", val);
             if (this.menuShow) {
                 this.menuShow = false;

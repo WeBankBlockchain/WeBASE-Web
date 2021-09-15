@@ -60,7 +60,7 @@ const routes = [
     {
         path: '/',
         nameKey: "main",
-        redirect: '/login',
+        redirect: '/main',
     },
     {
         path: '/login',

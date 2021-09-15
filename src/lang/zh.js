@@ -325,7 +325,9 @@ export default {
         nodeNotActive:'节点未存活',
         addContractAddress: '绑定',
         remarks:'备注',
-        bindSuccessed:'绑定私钥成功'
+        bindSuccessed:'绑定私钥成功',
+        unsavedContract: '合约已修改，请对合约处理再进行下一步操作，是否保存',
+        noSave:'合约未保存，请进行下一步操作',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -408,6 +410,7 @@ export default {
         dataBigScreen:"数据大屏"
     },
     title: {
+        save: '保存',
         dataOverview: "数据概览",
         blockTitle: "区块信息",
         nodeTitle: "节点管理",

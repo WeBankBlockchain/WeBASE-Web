@@ -135,6 +135,7 @@ export default {
   created() {},
 
   mounted() {
+
     if (localStorage.getItem("deployType")) {
       this.deployType = localStorage.getItem("deployType");
     } else {

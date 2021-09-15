@@ -16,6 +16,8 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        unsavedContract: 'Contract modifed and unsaved. Save',
+        noSave:'The contract has not been saved, please proceed to the next step',
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',
         isRedeploy: 'Has the contract been deployed or redeployed?',
@@ -30,6 +32,7 @@ export default {
         copyHash: "Copy Hash",
         total: "Total",
         tiao: "",
+        save: 'Save',
         blockSearchMsg: "Search block hash does not support fuzzy query",
         delete: "Delete",
         update: "Change",
