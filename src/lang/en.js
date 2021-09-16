@@ -16,6 +16,8 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        unsavedContract: 'Contract modifed and unsaved. Save',
+        noSave:'The contract has not been saved, please proceed to the next step',
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',
         isRedeploy: 'Has the contract been deployed or redeployed?',
@@ -30,6 +32,7 @@ export default {
         copyHash: "Copy Hash",
         total: "Total",
         tiao: "",
+        save: 'Save',
         blockSearchMsg: "Search block hash does not support fuzzy query",
         delete: "Delete",
         update: "Change",
@@ -737,6 +740,7 @@ export default {
         configValue: "Value",
         gasLimit: "One transaction maximum gas limit",
         countLimit: "The maximum number of transactions that can be packaged in one block",
+        timeOut:'Consensus timeout (seconds)',
         gasLong: "Range from 100000 to 2147483647",
         addCertificate: "Import Certificate",
         export: "Export",

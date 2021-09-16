@@ -25,9 +25,25 @@ export default {
   data() {
     return {
       loadShow: false,
+      fullscreenFlag: true
     };
   },
-  methods: {},
+  mounted(){
+    this,this.fullscreen()
+  },
+  methods: {
+    fullscreen() {
+	// 需要全屏显示的dom元素
+	let dom = this.$el.querySelector('.videosList')     
+        // 调用全屏方法      
+        this.$fullscreen.enter(dom, {  
+        	wrap: false, 
+          	callback: f => {
+                	this.fullscreenFlag = f       
+          	}     
+        })    
+ }
+  },
 };
 </script>
 

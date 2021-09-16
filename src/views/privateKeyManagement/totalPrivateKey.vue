@@ -233,14 +233,14 @@ export default {
             }
         },
         search: function () {
-            this.currentPage = 1
+            this.pageNumber = 1
             this.getList();
         },
         clearInput() {
             this.contractName = "";
             this.contractAddress = "";
             this.contractData = "";
-            this.currentPage = 1;
+            
             this.getList()
         }
     }
