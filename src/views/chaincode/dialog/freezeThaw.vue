@@ -4,8 +4,8 @@
             <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
                     <el-option v-for="(item,index) in chainCommitteeList" :key="index" :label="item.table_name" :value="item.address">
-                        <!-- <span>{{addDeployUserName(item)}}</span> -->
-                        <span class="font-12">{{item.address}}...</span>
+                        <span>{{addDeployUserName(item)}}</span>
+                        <!-- <span class="font-12">{{item.address}}...</span> -->
                         <!-- <span class="font-12">{{item | splitString}}...</span> -->
                     </el-option>
                 </el-select>
@@ -88,7 +88,7 @@ export default {
 
     methods: {
         addDeployUserName(item){
-            return this.deployUserName+'/'+item.address
+            return this.deployUserName+' '+item.address
         },
         close() {
             this.$emit("freezeThawClose");
@@ -156,8 +156,8 @@ export default {
                             address: this.deployAddress,
                         })
                         this.chainCommitteeList = []
-                        this.chainCommitteeList = data.concat(deployList);
-                      // this.chainCommitteeList=data;
+                        //this.chainCommitteeList = data.concat(deployList);
+                       this.chainCommitteeList=data;
                     } else {
                         
                         this.$message({

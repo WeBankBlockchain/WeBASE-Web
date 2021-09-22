@@ -17,7 +17,7 @@
           <span>交易列表</span>
         </div>
         <div class="tradeNav">
-          <span>交易哈希</span>
+          <span>{{ whatHash }}</span>
           <span>交易时间</span>
         </div>
         <div class="listData">
@@ -598,6 +598,7 @@ export default {
         齐齐哈尔市: [123.987288942, 47.3476998134],
       },
       key: 1,
+      whatHash: "区块哈希",
     };
   },
   mounted() {
@@ -606,6 +607,7 @@ export default {
     this.fiveInit();
     this.fiveReqUpdate();
     this.sixReqUpdate();
+    this.pieAdapter();
     window.addEventListener("resize", this.pieAdapter);
     window.addEventListener("resize", this.cityAdapter);
   },
@@ -621,8 +623,8 @@ export default {
         align: "center",
         fontSize: "12",
         rowNum: 7,
-        oddRowBGC: "rgba(51, 113, 208, 0.3)",
-        evenRowBGC: "rgba(51, 113, 208, 0.3)",
+        oddRowBGC: "rgba(51, 113, 208, 0.15)",
+        evenRowBGC: "rgba(51, 113, 208, 0.15)",
         data: switchList,
       };
     },
@@ -673,14 +675,16 @@ export default {
           align: "center",
           fontSize: "12",
           rowNum: 7,
-          oddRowBGC: "rgba(51, 113, 208, 0.3)",
-          evenRowBGC: "rgba(51, 113, 208, 0.3)",
+          oddRowBGC: "rgba(51, 113, 208, 0.15)",
+          evenRowBGC: "rgba(51, 113, 208, 0.15)",
           data: this.blockList,
         };
       }
     },
     changeList() {
-      this.listChange == 0 ? (this.listChange = 1) : (this.listChange = 0);
+      this.listChange == 0
+        ? ((this.listChange = 1), (this.whatHash = "交易哈希"))
+        : ((this.listChange = 0), (this.whatHash = "区块哈希"));
     },
     fiveInit() {
       this.pieVar = this.$echarts.init(this.$refs.pieUp);
@@ -695,36 +699,36 @@ export default {
           {
             text: "CPU",
             left: "20%",
-            bottom: "13%",
+            bottom: "0",
             textAlign: "center",
             textStyle: titleStyle,
           },
           {
             text: "内存",
             left: "50%",
-            bottom: "13%",
+            bottom: "0",
             textAlign: "center",
             textStyle: titleStyle,
           },
           {
             text: "硬盘",
             left: "80%",
-            bottom: "13%",
+            bottom: "0",
             textAlign: "center",
             textStyle: titleStyle,
           },
         ],
-        series: [
-          {
-            type: "pie",
-          },
-          {
-            type: "pie",
-          },
-          {
-            type: "pie",
-          },
-        ],
+        // series: [
+        //   {
+        //     type: "pie",
+        //   },
+        //   {
+        //     type: "pie",
+        //   },
+        //   {
+        //     type: "pie",
+        //   },
+        //],
       };
       this.pieVar.setOption(pieOption);
       var lineOption = {
@@ -777,6 +781,7 @@ export default {
           },
           type: "value",
           axisLine: {
+            show: true,
             lineStyle: {
               color: "rgba(255, 255, 255, 0.3)",
             },
@@ -816,11 +821,11 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: "#93CC77", // 0% 处的颜色
+                    color: "rgba(147,204,119, 0.2)", // 0% 处的颜色
                   },
                   {
                     offset: 1,
-                    color: "#4F94FF ", // 100% 处的颜色
+                    color: "rgba(147,204,119, 0)", // 100% 处的颜色
                   },
                 ],
                 global: false, // 缺省为 false
@@ -843,11 +848,11 @@ export default {
                 colorStops: [
                   {
                     offset: 0,
-                    color: "#4F94FF", // 0% 处的颜色
+                    color: "rgba(79,148,255, 0.2)", // 0% 处的颜色
                   },
                   {
                     offset: 1,
-                    color: "#4F94FF", // 100% 处的颜色
+                    color: "rgba(79,148,255, 0)", // 100% 处的颜色
                   },
                 ],
                 global: false, // 缺省为 false
@@ -856,7 +861,6 @@ export default {
           },
         ],
       };
-      this.pieVar.resize();
       this.lineVar.setOption(lineOption);
       this.lineVar.resize();
     },
@@ -875,15 +879,11 @@ export default {
           this.nodesOptions = getFrontsRes.data.data.map((item) => {
             return {
               value: item.frontId,
-              label: item.frontIp,
+              label: "节点IP：" + item.frontIp,
             };
           });
+          this.$set(this.choose, "frontIp", this.nodesOptions[0].label);
           this.nodeId = this.nodesOptions[0]["value"];
-          this.$set(
-            this.choose,
-            "frontIp",
-            "节点IP：" + this.nodesOptions[0].label
-          );
         } else {
           this.$message({
             message: this.$t("monitor.addFrontInfo"),
@@ -911,11 +911,6 @@ export default {
           getHostMonitorRes.data.data[0]["data"]["lineDataList"][
             "timestampList"
           ];
-        let positions = [
-          ["20%", "41%"],
-          ["50%", "41%"],
-          ["80%", "41%"],
-        ];
         let pie = [0, 1, 2];
         let lastVal = pie.map((item, index) => {
           let val =
@@ -936,9 +931,7 @@ export default {
         let pieList = lastVal.map((item, index) => {
           return {
             type: "pie",
-            center: positions[index],
             startAngle: 90,
-            radius: ["52.5%", "49.5%"],
             hoverAnimation: false,
             labelLine: {
               normal: {
@@ -963,7 +956,6 @@ export default {
                   position: "center",
                   show: true,
                   textStyle: {
-                    fontSize: 16,
                     fontFamily: "PingFang SC",
                     color: "#FFFFFF",
                   },
@@ -1016,6 +1008,54 @@ export default {
     pieAdapter() {
       let _this = this;
       setTimeout(function () {
+        console.log(_this.$refs.pieUp.offsetWidth);
+        let dataSize = _this.$refs.pieUp.offsetWidth / 637;
+        console.log(dataSize);
+        let titleStyle = {
+          fontSize: 16 * dataSize,
+          color: "#4F94FF",
+          fontFamily: "PingFang SC",
+        };
+        let positions = [
+          ["20%", 73.5 * dataSize],
+          ["50%", 73.5 * dataSize],
+          ["80%", 73.5 * dataSize],
+        ];
+        let pie = [0, 1, 2];
+        let pieList = pie.map((item, index) => {
+          return {
+            type: "pie",
+            center: positions[index],
+            radius: [52.5 * dataSize, 47.5 * dataSize],
+          };
+        });
+        var pieOption = {
+          title: [
+            {
+              text: "CPU",
+              left: "20%",
+              bottom: "0",
+              textAlign: "center",
+              textStyle: titleStyle,
+            },
+            {
+              text: "内存",
+              left: "50%",
+              bottom: "0",
+              textAlign: "center",
+              textStyle: titleStyle,
+            },
+            {
+              text: "硬盘",
+              left: "80%",
+              bottom: "0",
+              textAlign: "center",
+              textStyle: titleStyle,
+            },
+          ],
+          series: pieList,
+        };
+        _this.pieVar.setOption(pieOption);
         _this.pieVar.resize();
         _this.lineVar.resize();
       }, 300);
@@ -1137,7 +1177,7 @@ export default {
             },
             showEffectOn: "render",
             rippleEffect: {
-              brushType: 'fill', // 波纹绘制方式 stroke, fill
+              brushType: "stroke", // 波纹绘制方式 stroke, fill
             },
             itemStyle: {
               normal: {
@@ -1266,7 +1306,7 @@ export default {
                     "</span>"
                   );
                 },
-                backgroundColor: "rgba(159,197,255, 0.5)",
+                backgroundColor: "rgba(159,197,255, 0.15)",
                 borderColor: "#3371D0",
                 borderWidth: 1,
                 extraCssText:
@@ -1362,7 +1402,7 @@ export default {
 .tradeNav {
   width: 100%;
   height: 0.45rem;
-  background: rgba(51, 113, 208, 0.3);
+  background: rgba(51, 113, 208, 0.15);
   border: 1px solid #3371d0;
   margin-top: 0.3rem;
   line-height: 0.45rem;
@@ -1388,7 +1428,7 @@ export default {
   margin-top: 0.3rem;
   box-sizing: border-box;
   /* background-color: red; */
-  background: rgba(51, 113, 208, 0.3);
+  background: rgba(51, 113, 208, 0.15);
   border: 1px solid #3371d0;
 }
 .pieUp {
@@ -1523,6 +1563,9 @@ export default {
 .column4 .chooseList span {
   color: #3371d0;
 }
+.chooseList {
+  pointer-events: none;
+}
 .chooseList .tradeImg {
   background: url("../../assets/largeScreen/title_nor.svg") no-repeat top center;
   background-size: 100% 100%;
@@ -1543,13 +1586,13 @@ export default {
 .ipSelect .el-input .el-input__inner {
   width: 2.35rem;
   height: 0.45rem;
-  background: rgba(51, 113, 208, 0.3);
+  background: rgba(51, 113, 208, 0.15);
   border: 1px solid #3371d0;
   border-radius: 0;
   color: #4f94ff;
   font-family: PingFang SC;
   font-weight: medium;
-  font-size: 16px;
+  font-size: 0.2rem;
   line-height: normal;
   letter-spacing: 0px;
   text-align: left;
@@ -1583,7 +1626,7 @@ height: .075rem;
   width: 100%;
   height: 4.475rem;
   margin-top: 0.3rem;
-  background: rgba(51, 113, 208, 0.3);
+  background: rgba(51, 113, 208, 0.15);
   box-sizing: border-box;
   border: 1px solid #3371d0;
 }
