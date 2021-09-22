@@ -1,5 +1,5 @@
 <template>
-  <div id="bigScreen" class="largeScreen">
+  <div id="bigScreen" class="largeScreen" ref='bigScreen'>
     <large-sreen-load v-if="loadShow"></large-sreen-load>
     <div v-else id="largeContent">
       <large-sreen-header></large-sreen-header>
@@ -25,21 +25,21 @@ export default {
   data() {
     return {
       loadShow: false,
-      fullscreenFlag: true
+      fullscreenFlag: false
     };
   },
   mounted(){
-    this,this.fullscreen()
+    this.fullscreen()
   },
   methods: {
     fullscreen() {
 	// 需要全屏显示的dom元素
-	let dom = this.$el.querySelector('.videosList')     
+	let dom = this.$refs.bigScreen  
         // 调用全屏方法      
         this.$fullscreen.enter(dom, {  
-        	wrap: false, 
+        	  wrap: false, 
           	callback: f => {
-                	this.fullscreenFlag = f       
+                	this.fullscreenFlag = true       
           	}     
         })    
  }

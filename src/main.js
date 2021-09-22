@@ -40,7 +40,7 @@ import i18n from './lang' // internationalization
 import './svgIcons'
 import dataV from '@jiaminghi/data-view';
 Vue.use(dataV);
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 import 'lib-flexible/flexible'
 import fullscreen from 'vue-fullscreen'

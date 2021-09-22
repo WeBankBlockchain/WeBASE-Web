@@ -256,7 +256,7 @@ export default {
             groupId: localStorage.getItem("groupId"),
             nodeData: [],
             blockData: [],
-            transactionList: []
+            transactionList: [],
         };
     },
     mounted: function () {

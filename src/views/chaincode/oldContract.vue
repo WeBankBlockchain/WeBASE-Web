@@ -599,7 +599,6 @@ export default {
             ;
         },
         handleStatusBtn(val) {
-            debugger
             this.freezeThawVisible = true
             this.contractInfo = val
             if (val.handleType == 0) {

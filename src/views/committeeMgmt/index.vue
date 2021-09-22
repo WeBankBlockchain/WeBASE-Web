@@ -428,7 +428,7 @@ export default {
         }
         if (localStorage.getItem("groupId")) {
             this.queryGetThreshold()
-            // this.queryCommitteeList()
+             this.queryCommitteeList()
             this.queryVoteRecordList()
             this.getUserData()
         }
@@ -439,7 +439,7 @@ export default {
             this.adminRivateKeyList = []
             this.queryGetThreshold()
             this.getUserData()
-            // this.queryCommitteeList()
+             this.queryCommitteeList()
             this.queryVoteRecordList()
 
         },
@@ -534,7 +534,7 @@ export default {
                             message: this.$t("govCommittee.success")
                         })
                         this.closeAddCommittee()
-                        // this.queryCommitteeList()
+                         this.queryCommitteeList()
                         this.queryVoteRecordList()
                     } else {
                         this.$message({
@@ -585,7 +585,7 @@ export default {
                         })
                         this.queryGetThreshold()
                         this.closeModifyThreshold()
-                        // this.queryCommitteeList()
+                         this.queryCommitteeList()
                         this.queryVoteRecordList()
                     } else {
                         this.$message({
@@ -626,7 +626,7 @@ export default {
                                     message: this.$t("govCommittee.success")
                                 })
                                 this.closeModifyWeight()
-                                // this.queryCommitteeList()
+                                 this.queryCommitteeList()
                                 this.queryVoteRecordList()
                             } else {
                                 this.$message({
@@ -713,7 +713,7 @@ export default {
                                     message: this.$t('govCommittee.success')
                                 })
                                 this.closeDeleteCommittee()
-                                // this.queryCommitteeList()
+                                 this.queryCommitteeList()
                                 this.queryVoteRecordList()
                             } else {
                                 this.$message({
@@ -807,11 +807,11 @@ export default {
         handleSizeChange(val) {
             this.pageSize = val;
             this.currentPage = 1;
-            // this.queryCommitteeList();
+             this.queryCommitteeList();
         },
         handleCurrentChange(val) {
             this.currentPage = val;
-            // this.queryCommitteeList();
+             this.queryCommitteeList();
         },
         voteSizeChange(val) {
             this.votePageSize = val;
