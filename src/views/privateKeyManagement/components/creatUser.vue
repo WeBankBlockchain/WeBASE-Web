@@ -140,7 +140,7 @@ export default {
                 publicKey: "",
                 explain: ""
             });
-            this.pubKey = true;
+            this.pubKey = false;
             this.loading = false;
             this.$store.state.creatUserVisible = false;
         },

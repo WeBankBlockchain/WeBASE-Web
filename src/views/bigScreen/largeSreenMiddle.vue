@@ -3,7 +3,7 @@
     <section class="middleOne">
       <div class="column1">
         <div
-          :class="'item item' + index"
+          :class="'items item' + index"
           v-for="(item, index) in dataV_item"
           :key="item.title"
         >
@@ -13,15 +13,17 @@
       </div>
       <div class="column2">
         <div class="data_group">
-          <div class="group_left">group1</div>
+          <div class="group_left">test1</div>
           <div class="group_middle">
             <div class="middle1"></div>
-            <div class="middleGroup">group2</div>
+            <div class="middleGroup">{{ groupMiddle }}</div>
             <div class="middle2"></div>
           </div>
-          <div class="group_right">group3</div>
+          <div class="group_right">test2</div>
         </div>
-        <div class="data_content"></div>
+        <div class="data_content">
+          <div id="groupCanvas" ref="groupCanvas"></div>
+        </div>
         <div class="leftArr"></div>
         <div class="rightArr"></div>
       </div>
@@ -42,11 +44,9 @@
 
 <script>
 import to from "await-to-js";
-import {
-  getNetworkStatistics,
-  getChartData,
-} from "@/util/api";
+import { getNetworkStatistics, getChartData, getNodeList } from "@/util/api";
 import { changWeek, getDay } from "@/util/util";
+import { creatBall } from "@/util/largeScreen";
 export default {
   name: "largeSreenMiddle",
   components: {},
@@ -55,11 +55,17 @@ export default {
       dataV_item: [],
       tradeVar: null,
       groupId: localStorage.getItem("groupId"),
+      groupVar: null,
+      ballArr: [],
+      balls: [],
+      nodeVar: null,
+      groupMiddle: localStorage.getItem("groupName"),
     };
   },
   mounted() {
     this.oneInit();
     this.oneReqUpdate();
+    this.twoInit();
     this.threeInit();
     this.threeReqUpdate();
     this.threeAdapter();
@@ -150,6 +156,13 @@ export default {
         },
         xAxis: {
           type: "value",
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: "rgb(255, 255, 255,0.3)",
+              width: 1,
+            },
+          },
           nameTextStyle: {
             color: "#FFFFFF",
           },
@@ -167,24 +180,31 @@ export default {
           axisTick: {
             show: false,
           },
+          axisLine: {
+            lineStyle: {
+              color: "rgb(255, 255, 255,0.3)",
+              width: 1,
+            },
+          },
           data: getDay(7).reverse(),
           type: "category",
-          nameTextStyle: {
-            color: "#FFFFFF",
+          axisLabel: {
+            color: "rgb(255, 255, 255,0.75)",
             fontFamily: "Noto Sans SC",
             fontWeight: "regular",
+            fontSize: 12,
           },
         },
         series: [
           {
             type: "bar",
             itemStyle: {
-              color: "darkblue",
+              color: "#3371D0",
             },
             label: {
               show: true,
               position: "right",
-              color: "#70A8FF",
+              color: "#3371D0",
               fontFamily: "Helvetica Neue",
               fontWeight: " bold",
               formatter: (num) => {
@@ -194,6 +214,7 @@ export default {
           },
         ],
       };
+
       this.tradeVar.setOption(option);
       this.tradeVar.resize();
     },
@@ -237,17 +258,19 @@ export default {
               order = 1;
               break;
             case 3:
-              order = 2;
+              order = 5;
               break;
             case 4:
               order = 0;
               break;
             case 5:
-              order = 5;
+              order = 2;
               break;
             default:
           }
-          this.$set(this.dataV_item[order], "number", item);
+          if (order != 3) {
+            this.$set(this.dataV_item[order], "number", item);
+          }
         });
       }
     },
@@ -271,6 +294,17 @@ export default {
         let xData = resData.map((item) => {
           return item.transCount;
         });
+        let todayVal = {
+          number: [xData[6]],
+          textAlign: "left",
+          style: {
+            fill: "#FFFFFF",
+            fontFamily: "Helvetica Neue",
+            fontSize: 30,
+          },
+          formatter: this.formatter,
+        };
+        this.$set(this.dataV_item[3], "number", todayVal);
         let option = {
           yAxis: {
             data: yData,
@@ -312,6 +346,313 @@ export default {
         _this.tradeVar.resize();
       }, 300);
     },
+    async twoInit() {
+      let reqData = {
+        groupId: this.groupId,
+        pageNumber: 1,
+        pageSize: 100,
+      };
+      let [err, res] = await to(getNodeList(reqData, {}));
+      console.log(err, res);
+      if (err) {
+        console.log("twoReqError");
+        return;
+      } else {
+        if (res.status != 200) {
+          console.log(res.data.message);
+          return;
+        }
+        let resData = res.data.data.map((item, index) => {
+          return {
+            agency: item.agency,
+            nodeIp: item.nodeIp,
+          };
+        });
+        console.log(resData);
+        this.ballArr = resData;
+      }
+      // let canvas = document.getElementById("groupCanvas");
+      // let ctx = canvas.getContext("2d");
+      // // 画文字
+      // function drawText(text, x, y) {
+      //   ctx.font = "16px";
+      //   ctx.textAlign = "center";
+      //   ctx.fillStyle = "#4F94FF";
+      //   ctx.fillText(text, x, y);
+      // }
+      // //画线
+      // function drawLine(x1, y1, x2, y2, color, width) {
+      //   // ctx.setLineDash([2, 2]);
+      //   ctx.beginPath();
+      //   ctx.moveTo(x1, y1);
+      //   ctx.lineTo(x2, y2);
+      //   ctx.strokeStyle = color;
+      //   ctx.lineWidth = width;
+      //   ctx.stroke();
+      //   ctx.closePath();
+      // }
+      // //画圆
+      // function drawCircle(x, y, r, color) {
+      //   setInterval(function () {
+      //     ctx.beginPath();
+      //     ctx.arc(x, y, r, 0, Math.PI * 2);
+      //     ctx.fillStyle = color || "#000";
+      //     ctx.fill();
+      //   }, 0);
+      // }
+      // //清除圆
+      // function clearCircle(x, y, r) {
+      //   for (var i = 0; i < Math.round(Math.PI * r); i++) {
+      //     var angle = (i / Math.round(Math.PI * r)) * 360;
+      //     ctx.clearRect(
+      //       x,
+      //       y,
+      //       Math.sin(angle * (Math.PI / 180)) * r,
+      //       Math.cos(angle * (Math.PI / 180)) * r
+      //     );
+      //   }
+      // }
+      // //画圆环
+      // function drawCirque(x, y, r, color) {
+      //   setInterval(function () {
+      //     ctx.beginPath();
+      //     ctx.strokeStyle = "rgba(51, 113, 208, " + 1 * Math.random() + ")";
+      //     r += 5;
+      //     if (r >= 25) {
+      //       clearCircle(x, y, r);
+      //       r = 10;
+      //     }
+      //     ctx.arc(x, y, r, 0, Math.PI * 2);
+      //     ctx.stroke();
+      //     ctx.closePath();
+      //   }, 500);
+      // }
+      // function render(x1, y1, r1) {
+      //   /*
+      //    * createRadialGradient 圆形渐变效果
+      //    * 参数 (x , y , r , x2 , y2 , r2)
+      //    * 因为用的圆形渐变 所以有 开始 和 结束 两个圆连接为渐变过程路径
+      //    * x y 与 x2 y2 设置为同心 与 不同心 效果差距会很大
+      //    * addColorStop 渐变填充的节点
+      //    * 可以插入多个 制作出吊炸天的效果（配合图形外发光的效果）性能是个问题 需要考虑 emmm...
+      //    */
+      //   var grid = ctx.createRadialGradient(x1, y1, r1, x1, y1, r1 + 3); //渐变填充器
+      //   grid.addColorStop(0, "rgba(255,255,0,0)"); //渐变节点
+      //   grid.addColorStop(1, "rgba(255,255,0,1)"); //渐变节点
+
+      //   ctx.beginPath(); //新的圆必须要新的路径
+      //   //画圆
+      //   ctx.arc(x1, y1, r1 + 3, 0, Math.PI * 2);
+      //   ctx.fillStyle = grid; //填充样式 放入 渐变填充器
+      //   ctx.stroke(); //调用填充
+      //   //context.stroke();
+      // }
+
+      // //   for(let i=0;i<this.ballArr.length;i++){
+      // //   drawCircle(r(100)+50,r(100)+50, 10, "rgba(51, 113, 208, 1)");
+      // // }
+      // //随机半径
+      // function r(num) {
+      //   return parseInt(Math.random() * num);
+      // }
+      // //创建小球类
+      // function Ball(text) {
+      //   this.x = r(100) + 20;
+      //   this.y = r(100) + 20;
+      //   this.r = 10;
+      //   this.color = "rgba(51, 113, 208, 1)";
+      //   this.text = text;
+      // }
+      // Ball.prototype.show = function () {
+      //   drawCircle(this.x, this.y, this.r, this.color);
+      //   drawCirque(this.x, this.y, this.r, this.color);
+      //   drawText(this.text, this.x, this.y + this.r * 2);
+      //   //render(this.x,this.y,this.r)
+      // };
+      // let balls = [];
+      // function creatBall(text) {
+      //   const ball = new Ball(text);
+      //   balls.push(ball);
+      //   for (let i = 0; i < balls.length; i++) {
+      //     drawLine(ball.x, ball.y, balls[i].x, balls[i].y, "#4F94FF", 1);
+      //   }
+
+      //   return ball;
+      // }
+      // this.ballArr.map((item, index) => {
+      //   creatBall(item.agency).show();
+      // });
+      console.log(this.ballArr);
+
+      if (this.ballArr.length == 0) {
+        return false;
+      }
+
+      let showBalls = this.ballArr.map((item, index, arr) => {
+        switch (arr.length) {
+          case 1:
+            return [
+              Math.random() * 20 + 280,
+              Math.random() * 150 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+          case 2:
+            return [
+              Math.random() * 20 + 120 * index + 40,
+              Math.random() * 150 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+          case 3:
+            return [
+              Math.random() * 20 + 100 * index + 40,
+              Math.random() * 150 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+          case 4:
+            return [
+              Math.random() * 30 + 90 * index + 40,
+              Math.random() * 90 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+          case 5:
+            return [
+              Math.random() * 20 + 80 * index + 40,
+              Math.random() * 150 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+          case 6:
+            return [
+              Math.random() * 20 + 60 * index + 40,
+              Math.random() * 150 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+
+          default:
+            return [
+              Math.random() * 100 + 50 * index,
+              Math.random() * 180 + 40,
+              item.agency,
+              item.nodeIp,
+            ];
+        }
+      });
+      let ballsPoint = showBalls.map((item, index) => {
+        return [item[0], item[1]];
+      });
+      console.log(showBalls);
+      let showPoint = [];
+      for (let i = 0; i < showBalls.length - 1; i++) {
+        for (let j = showBalls.length - 1; j > i; j--) {
+          showPoint.push([
+            {
+              coord: showBalls[i],
+            },
+            {
+              coord: showBalls[j],
+            },
+          ]);
+        }
+      }
+      this.nodeVar = this.$echarts.init(this.$refs.groupCanvas);
+      let option = {
+        grid: {
+          x: 0,
+          y: 0,
+          x2: 0,
+          y2: 0,
+          show: false,
+        },
+        xAxis: {
+          show: false,
+        },
+        yAxis: {
+          show: false,
+        },
+        tooltip: {
+          trigger: "item",
+        },
+        series: [
+          {
+            type: "effectScatter",
+            coordinateSystem: "cartesian2d",
+            data: showBalls,
+            symbol: "circle",
+            symbolSize: function (value) {
+              return value[2] == "jinzhiwen" ? 40 : 30;
+            },
+            color: "#4F94FF",
+            label: {
+              color: "#4F94FF",
+              position: "bottom",
+              show: true,
+              fontSize: 16,
+              offset: [0, 10],
+              fontFamily: "PingFang SC",
+              fontWeight: "medium",
+              formatter: function (p) {
+                console.log(p);
+                return p.value[2];
+              },
+            },
+            tooltip: {
+              // position: function (p) {
+              //   //其中p为当前鼠标的位置
+              //   return [0, 0];
+              // },
+              trigger: "item",
+              formatter(params) {
+                console.log(params);
+                let arr = [params.value[2], "节点数：/s", params.value[3]];
+                return (
+                  "机构IP：" +
+                  params.value[3] +
+                  "<br/>" +
+                  '<span style=" display: inline-block;margin-top:42px;">' +
+                  params.value[2] +
+                  "</span>"
+                );
+              },
+              backgroundColor: "rgba(159,197,255, 0.15)",
+              borderColor: "#3371D0",
+              borderWidth: 1,
+              extraCssText:
+                "width:160px;height:73px;border-radius:0;border: 1px solid #3371D0;",
+              padding: [12, 10],
+              textStyle: {
+                color: "#FFFFFF",
+                fontFamily: "PingFang SC",
+                fontWeight: "medium",
+                fontSize: "16px",
+              },
+            },
+            showEffectOn: "render",
+            rippleEffect: {
+              brushType: "stroke",
+              number: 2,
+              scale: 2,
+            },
+            emphasis: {
+              show: true,
+              focus: "self",
+              scale: true,
+            },
+            markLine: {
+              data: showPoint,
+              silent: true,
+              symbol: "none",
+            },
+          },
+        ],
+      };
+
+      this.nodeVar.setOption(option);
+    },
   },
 };
 </script>
@@ -350,7 +691,7 @@ export default {
   display: flex;
 }
 .group_left {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.55);
   font-family: Helvetica Neue;
   font-weight: bold;
   font-size: 0.25rem;
@@ -362,7 +703,7 @@ export default {
   flex: 1;
 }
 .group_middle {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.9);
   font-family: Helvetica Neue;
   font-weight: bold;
   font-size: 0.3rem;
@@ -370,7 +711,6 @@ export default {
   text-align: center;
   height: 100%;
   text-align: center;
-
   display: inline-block;
   vertical-align: middle;
   flex: 2;
@@ -378,16 +718,18 @@ export default {
 }
 .group_middle .middleGroup {
   display: inline-block;
+  color: rgba(255, 255, 255, 0.9);
   width: 1.425rem;
   height: 0.375rem;
+  line-height: 0.375rem;
   top: calc(50% - 0.1875rem);
   left: calc(50% - 0.7125rem);
   position: absolute;
   background-image: linear-gradient(
     to right,
-    #3371d0 0%,
-    #4f94ff 50%,
-    #3371d0 100%
+    #2e82ff 0%,
+    #1959b9 50%,
+    #0a1f3f 100%
   );
   animation: gradualChange 1s infinite linear;
   background-size: 200% 100%;
@@ -402,7 +744,7 @@ export default {
 }
 .group_right {
   flex: 1;
-  color: #ffffff;
+  color: rgb(255, 255, 255, 0.55);
   font-family: Helvetica Neue;
   font-weight: bold;
   font-size: 0.25rem;
@@ -441,6 +783,10 @@ export default {
   height: 3.525rem;
   margin: 0.3125rem 0.45rem;
 }
+#groupCanvas {
+  width: 100%;
+  height: 100%;
+}
 .leftArr {
   background: url("../../assets/largeScreen/group_previous.svg") no-repeat top
     center;
@@ -450,6 +796,7 @@ export default {
   height: 1.1rem;
   top: calc(50% - 0.05625rem);
   left: 0.675rem;
+  cursor: pointer;
 }
 .rightArr {
   background: url("../../assets/largeScreen/group_next.svg") no-repeat top
@@ -460,6 +807,7 @@ export default {
   height: 1.1rem;
   top: calc(50% - 0.05625rem);
   right: 0.675rem;
+  cursor: pointer;
 }
 .column3 {
   width: 6.7375rem;
@@ -472,7 +820,7 @@ export default {
   height: 0.35rem;
 }
 .tradeTip span {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.75);
   font-family: PingFang SC;
   font-weight: medium;
   font-size: 0.25rem;
@@ -494,9 +842,8 @@ export default {
   height: 4.3rem;
   position: absolute;
   bottom: 0;
-  opacity: 0.3;
   box-sizing: border-box;
-  background: #3371d0;
+  background: rgba(51, 113, 208, 0.15);
   border: 1px solid #3371d0;
 }
 .trade1 {
@@ -550,14 +897,14 @@ export default {
   right: 0;
   bottom: 0;
 }
-.item {
+.items {
   background: url("../../assets/largeScreen/data_bg.svg") no-repeat top center;
   background-size: 100% 100%;
   width: 3.225rem;
   height: 1.425rem;
   display: inline-block;
 }
-.item p {
+.items p {
   margin-top: 0.3125rem;
   margin-left: 0.3125rem;
   color: #4f94ff;
@@ -568,13 +915,14 @@ export default {
   letter-spacing: 0px;
   text-align: left;
 }
-.item div {
+.items div {
   margin-left: 0.3125rem;
+  margin-top: 0.05rem;
   color: #ffffff;
   font-family: Helvetica Neue;
   font-weight: medium;
   font-size: 30px;
-  line-height: normal;
+  line-height: 0.5rem;
   letter-spacing: 0px;
   text-align: left;
 }

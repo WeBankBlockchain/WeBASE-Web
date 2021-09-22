@@ -16,6 +16,8 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        unsavedContract: 'Contract modifed and unsaved. Save',
+        noSave:'The contract has not been saved, please proceed to the next step',
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',
         isRedeploy: 'Has the contract been deployed or redeployed?',
@@ -30,6 +32,7 @@ export default {
         copyHash: "Copy Hash",
         total: "Total",
         tiao: "",
+        save: 'Save',
         blockSearchMsg: "Search block hash does not support fuzzy query",
         delete: "Delete",
         update: "Change",
@@ -324,6 +327,7 @@ export default {
         importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract',
         nodeActive:'Node active',
         nodeNotActive:'Node not active',
+        remarks:'remarks'
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -705,7 +709,8 @@ export default {
         validatorPrivateKey1: "Please enter hexadecimal",
         validatorPrivateKey10: "Please enter decimal",
         importType: "Import Type",
-        importFileValidator: 'Please upload the file'
+        importFileValidator: 'Please upload the file',
+        bindPrivateKey:'Bind PrivateKey'
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -735,6 +740,7 @@ export default {
         configValue: "Value",
         gasLimit: "One transaction maximum gas limit",
         countLimit: "The maximum number of transactions that can be packaged in one block",
+        timeOut:'Consensus timeout (seconds)',
         gasLong: "Range from 100000 to 2147483647",
         addCertificate: "Import Certificate",
         export: "Export",
@@ -752,6 +758,8 @@ export default {
         uploadWarning3: "files.",
         to: "to",
         updateSuccess: "Successfully updated",
+        agency:'Please enter agency',
+        city:'Please enter address',
     },
     account: {
         addAccount: "Add Account",
@@ -974,6 +982,7 @@ export default {
         fileType: "Import Type",
         exportType: "Export Type",
         fileName: "PrivateKey Name",
+        baseSystem:"baseSystem"
     },
     govCommittee: {
         addCommittee: 'Grant Committee Vote',

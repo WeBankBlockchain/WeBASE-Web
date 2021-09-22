@@ -323,7 +323,11 @@ export default {
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         nodeActive:'节点存活',
         nodeNotActive:'节点未存活',
-        addContractAddress: '绑定'
+        addContractAddress: '绑定',
+        remarks:'备注',
+        bindSuccessed:'绑定私钥成功',
+        unsavedContract: '合约已修改，请对合约处理再进行下一步操作，是否保存',
+        noSave:'合约未保存，请进行下一步操作',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -406,6 +410,7 @@ export default {
         dataBigScreen:"数据大屏"
     },
     title: {
+        save: '保存',
         dataOverview: "数据概览",
         blockTitle: "区块信息",
         nodeTitle: "节点管理",
@@ -705,7 +710,8 @@ export default {
         validatorPrivateKey1: "请输入十六进制",
         validatorPrivateKey10: "请输入十进制",
         importType: "导入类型",
-        importFileValidator: '请上传文件'
+        importFileValidator: '请上传文件',
+        bindPrivateKey:'绑定私钥'
     },
     system: {
         chainManager: "链管理权限",
@@ -735,6 +741,7 @@ export default {
         configValue: "配置值",
         gasLimit: "一个交易最大gas限制",
         countLimit: "一个区块中可打包的最大交易数目",
+        timeOut:'共识超时时间（秒）',
         gasLong: "范围从100000到2147483647",
         addCertificate: "导入证书",
         export: "导出",
@@ -752,6 +759,9 @@ export default {
         uploadWarning3: "个文件.",
         to: "至",
         updateSuccess: "更新成功",
+        agency:'请输入机构名',
+        city:'请选择地址',
+
     },
     account: {
         addAccount: "新增账号",
@@ -974,6 +984,7 @@ export default {
         fileType: "导入类型",
         exportType: "导出类型",
         fileName: "私钥用户名",
+        baseSystem:"进制"
     },
     govCommittee: {
         addCommittee: '新增委员投票',

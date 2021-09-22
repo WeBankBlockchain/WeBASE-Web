@@ -50,6 +50,7 @@ export default {
       }, 1000);
     },
     backHome() {
+      //this.$emit('cancelfullScreen');
       this.$router.replace("/home");
     },
   },

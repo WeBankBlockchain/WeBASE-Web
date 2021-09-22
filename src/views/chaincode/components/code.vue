@@ -21,13 +21,13 @@
                 <span>{{contractName + '.sol'}}</span>
             </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" v-if="(!contractAddress && !disabled) || (contractAddress && !disabled &&isDeployedModifyEnable)" @click="saveCode">
+                <span class="contract-code-done noBlur" v-if="(!contractAddress && !disabled) || (contractAddress && !disabled &&isDeployedModifyEnable)" @click="saveCode">
                     <el-tooltip class="item" effect="dark" :content="$t('contracts.contractSaveTips')" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
                     <span>{{this.$t("text.save")}}</span>
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="(!contractAddress && !disabled && !loading )|| (contractAddress && !disabled && !loading &&isDeployedModifyEnable)">
+                <span class="contract-code-done noBlur" @click="compile" v-if="(!contractAddress && !disabled && !loading )|| (contractAddress && !disabled && !loading &&isDeployedModifyEnable)">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>{{this.$t("text.compile")}}</span>
                 </span>
@@ -364,7 +364,13 @@ export default {
             this.data.contractSource = data.contractSource;
             localStorage.setItem("isFinishCompile", "no")
             this.compile() 
-        })
+        });
+      [...document.querySelectorAll(".noBlur")].map((item)=>{
+        item.onmousedown = (event) => {
+        event.preventDefault(); // 点击按钮不会失去焦点（阻止默认）
+    };
+    });
+
     },
     watch: {
         content: function (val) {
@@ -477,21 +483,36 @@ export default {
             this.aceEditor.on("blur", this.blurAce);
             this.aceEditor.resize();
         },
-        blurAce: function () {
-            let data = Base64.encode(this.content);
-            // if (this.data.contractSource != data && this.data.contractStatus != 2) {
-            //     this.saveCode()
-            // }
-             if(this.data.contractSource!=data){
-                this.$confirm(`合约未保存是否保存？`, {
-                    center: true,
-                    dangerouslyUseHTMLString: true
-                })
-                    .then(() => {
-                         this.saveCode()
-                    })
-             }
-        },
+    blurAce: function (callback) {
+      console.log("blur");
+      let data = Base64.encode(this.content);
+      // if (this.data.contractSource != data) {
+      //     this.saveCode()
+      // }
+      //  this.saveShow = true;
+      if (this.data.contractSource != data) {
+        console.log("合约改变弹框提示");
+        this.$confirm(
+          `${this.$t("text.unsavedContract")}？`,
+          `${this.$t("text.title")}`,
+          {
+            confirmButtonText: this.$t("title.save"),
+            center: true,
+            type: "warning",
+            dangerouslyUseHTMLString: true,
+          }
+        )
+          .then(() => {
+            this.saveCode();
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: this.$t("text.noSave"),
+            });
+          });
+      }
+    },
         saveCode: function () {
             this.data.contractSource = Base64.encode(this.content);
             Bus.$emit("save", this.data)

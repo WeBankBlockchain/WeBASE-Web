@@ -17,6 +17,7 @@ import url from './url'
 import { post, get, patch, put, deleted } from './http'
 import { reviseParam } from './util'
 import qs from 'qs'
+import { debug } from 'request'
 
 //login
 export function login(data, code, token) {
@@ -59,6 +60,18 @@ export function resetPassword(data) {
         }
     })
 }
+//
+export function putCityIpAengcy(data) {
+    return put({
+        url: `${url.ORG_LIST}/node/description`,
+        method: 'put',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 
 /**daily transaction data */
 export function getChartData(data) {
@@ -99,6 +112,16 @@ export function getNodeList(data, list) {
         url: `${url.ORG_LIST}/node/nodeList/${params.str}`,
         method: 'get',
         params: params.querys,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/** nodeCity query node*/
+export function getCityList(data) {
+    return get({
+        url: `${url.ORG_LIST}/node/city/list`,
+        method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -355,13 +378,34 @@ export function getUserDescription(data) {
     })
 }
 /**Modify user description */
-export function bindPrivateKeyInterface(data) {
+export function bindPrivateKey(data) {
     return post({
         url: `${url.ORG_LIST}/user/bind/privateKey`,
         method: 'post',
         data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function bindPrivateKeyPm(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/bind/privateKey/pem`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function bindPrivateKeyP12(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/bind/privateKey/p12`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+            'Content-Type': "multipart/form-data"
         }
     })
 }
@@ -1369,9 +1413,9 @@ export function getHostList() {
 //治理委员会list
 export function committeeList(data) {
     return get({
-        url: `${url.ORG_LIST}/contract/listManager/`+data.groupId+`/`+data.contractAddress,
+        url: `${url.ORG_LIST}/governance/committee/list/`,
         method: "get",
-        // params: data,
+        params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
