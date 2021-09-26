@@ -60,6 +60,17 @@ export function resetPassword(data) {
         }
     })
 }
+//init changeDescription
+export function changeDescription(data) {
+    return put({
+        url: `${url.ORG_LIST}/group/description `,
+        method: 'put',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 //
 export function putCityIpAengcy(data) {
     return put({
@@ -1416,6 +1427,17 @@ export function committeeList(data) {
         url: `${url.ORG_LIST}/governance/committee/list/`,
         method: "get",
         params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//合约连委员和部署者list
+export function listManagerList(data) {
+    return get({
+        url: `${url.ORG_LIST}/contract/listManager/`+`${data.groupId}/`+`${data.contractAddress}`,
+        method: "get",
+        //params: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

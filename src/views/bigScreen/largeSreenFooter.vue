@@ -39,6 +39,8 @@
             v-model="choose.frontIp"
             placeholder="请选择"
             class="ipSelect"
+            popper-class="select-option"
+            :popper-append-to-body="false"
           >
             <el-option
               v-for="item in nodesOptions"
@@ -610,6 +612,7 @@ export default {
     this.pieAdapter();
     window.addEventListener("resize", this.pieAdapter);
     window.addEventListener("resize", this.cityAdapter);
+    this.reRender();
   },
   destroyed() {
     window.removeEventListener("resize", this.pieAdapter);
@@ -620,7 +623,7 @@ export default {
       let switchList = this.listChange == 0 ? this.transList : this.blockList;
       this.listData = {
         columnWidth: [356, 183],
-        align: "center",
+        align: "left",
         fontSize: "12",
         rowNum: 7,
         oddRowBGC: "rgba(51, 113, 208, 0.15)",
@@ -672,7 +675,7 @@ export default {
         // this.$set(this.listData,'data',replaceData);
         this.listData = {
           columnWidth: [356, 183],
-          align: "center",
+          align: "left",
           fontSize: "12",
           rowNum: 7,
           oddRowBGC: "rgba(51, 113, 208, 0.15)",
@@ -699,7 +702,7 @@ export default {
           {
             text: "CPU",
             left: "20%",
-            bottom: "0",
+            bottom: "10",
             textAlign: "center",
             textStyle: titleStyle,
           },
@@ -798,7 +801,7 @@ export default {
           splitLine: {
             show: true,
             lineStyle: {
-              color: "rgba(255, 255, 255, 0.3)",
+              color: "rgba(255, 255, 255, 0.15)",
               width: 1,
               type: "solid",
             },
@@ -958,13 +961,14 @@ export default {
                   textStyle: {
                     fontFamily: "PingFang SC",
                     color: "#FFFFFF",
+                    fontSize: "16px",
                   },
                 },
               },
               {
                 value: 100 - item,
                 itemStyle: {
-                  color: "#3371D0",
+                  color: "#0B3067",
                 },
                 label: {
                   show: false,
@@ -1033,22 +1037,22 @@ export default {
           title: [
             {
               text: "CPU",
-              left: "20%",
-              bottom: "0",
+              left: "19.5%",
+              bottom: "12%",
               textAlign: "center",
               textStyle: titleStyle,
             },
             {
               text: "内存",
-              left: "50%",
-              bottom: "0",
+              left: "49.5%",
+              bottom: "12%",
               textAlign: "center",
               textStyle: titleStyle,
             },
             {
               text: "硬盘",
-              left: "80%",
-              bottom: "0",
+              left: "79.5%",
+              bottom: "12%",
               textAlign: "center",
               textStyle: titleStyle,
             },
@@ -1121,16 +1125,16 @@ export default {
               },
             },
             roam: false,
-            itemStyle: {
-              normal: {
-                areaColor: "#081D3E",
-                borderColor: "#3371D0",
-                borderWidth: 1,
-              },
-              emphasis: {
-                areaColor: "#081D3E",
-              },
-            },
+            // itemStyle: {
+            //   normal: {
+            //     areaColor: "#081D3E",
+            //     borderColor: "#3371D0",
+            //     borderWidth: 1,
+            //   },
+            //   emphasis: {
+            //     areaColor: "#3371D0",
+            //   },
+            // },
           },
           {
             type: "effectScatter",
@@ -1252,6 +1256,13 @@ export default {
           tooltip: {
             trigger: "item",
           },
+          itemStyle: {
+            normal: {
+              areaColor: "#081D3E",
+              borderColor: "#3371D0",
+              borderWidth: 1,
+            },
+          },
           series: [
             {
               type: "map",
@@ -1263,12 +1274,24 @@ export default {
               tooltip: {
                 show: false,
               },
+
+              select: {
+                itemStyle: {
+                  areaColor: "#3371D0",
+                  borderColor: "#3371D0",
+                  borderWidth: 1,
+                },
+                label: {
+                  color: "#fff",
+                },
+              },
               label: {
                 normal: {
                   show: false,
                 },
                 emphasis: {
-                  show: false,
+                  show: true,
+                  color: "#fff",
                 },
               },
               roam: false,
@@ -1279,7 +1302,12 @@ export default {
                   borderWidth: 1,
                 },
                 emphasis: {
-                  areaColor: "#081D3E",
+                  areaColor: "#3371D0",
+                  borderColor: "#3371D0",
+                  borderWidth: 1,
+                  label: {
+                    color: "#fff",
+                  },
                 },
               },
             },
@@ -1288,7 +1316,15 @@ export default {
               coordinateSystem: "geo",
               data: this.convertData(lastCityList),
               symbol: "circle",
-              symbolSize: 10,
+              symbolSize: (params) => {
+                if (params[2] > 20) {
+                  return 30;
+                } else if (params[2] > 10) {
+                  return 20;
+                } else {
+                  return 10;
+                }
+              },
               tooltip: {
                 position: function (p) {
                   //其中p为当前鼠标的位置
@@ -1300,8 +1336,8 @@ export default {
                   return (
                     params.name +
                     "<br/>" +
-                    '<span style="margin-top:42px; display: inline-block;">节点数：</span>' +
-                    '<span style=" display: inline-block;margin-top:42px;margin-left:24px;">' +
+                    '<span style="margin-top:10px; display: inline-block;">节点数：</span>' +
+                    '<span style=" display: inline-block;margin-top:10px;margin-left:24px;">' +
                     params.value[2] +
                     "</span>"
                   );
@@ -1309,8 +1345,7 @@ export default {
                 backgroundColor: "rgba(159,197,255, 0.15)",
                 borderColor: "#3371D0",
                 borderWidth: 1,
-                extraCssText:
-                  "width:125px;height:73px;border-radius:0;border: 1px solid #3371D0;",
+                extraCssText: "border-radius:0;border: 1px solid #3371D0;",
                 padding: 10,
                 textStyle: {
                   color: "#FFFFFF",
@@ -1368,6 +1403,15 @@ export default {
         _this.cityVar.resize();
       }, 300);
     },
+    reRender() {
+      let _this = this;
+      setInterval(function () {
+        _this.fourReqUpdate();
+        // _this.fiveInit();
+         _this.fiveReqUpdate();
+        _this.sixReqUpdate();
+      }, 10000);
+    },
   },
 };
 </script>
@@ -1403,13 +1447,13 @@ export default {
   width: 100%;
   height: 0.45rem;
   background: rgba(51, 113, 208, 0.15);
-  border: 1px solid #3371d0;
+  border: 1px solid rgba(51, 113, 208, 0.5);
   margin-top: 0.3rem;
   line-height: 0.45rem;
   box-sizing: border-box;
 }
 .tradeNav span:nth-child(1) {
-  margin-left: 0.30625rem;
+  margin-left: 0.3rem;
   color: #4f94ff;
   font-family: PingFang SC;
   font-weight: medium;
@@ -1429,7 +1473,7 @@ export default {
   box-sizing: border-box;
   /* background-color: red; */
   background: rgba(51, 113, 208, 0.15);
-  border: 1px solid #3371d0;
+  border: 1px solid rgba(51, 113, 208, 0.5);
 }
 .pieUp {
   width: 7.9625rem;
@@ -1475,7 +1519,7 @@ export default {
 .listData {
   width: 6.7375rem;
   height: 3.9rem;
-  border: 1px solid #3371d0;
+  border: 1px solid rgba(51, 113, 208, 0.5);
   margin-top: 0.125rem;
   box-sizing: border-box;
 }
@@ -1487,10 +1531,16 @@ export default {
   color: rgba(255, 255, 255, 0.75);
   font-family: PingFang SC;
   font-weight: medium;
-  text-align: center;
   font-size: 12px;
   height: 0.55rem !important;
   line-height: 0.55rem !important;
+  padding-left: 0.3rem;
+}
+.dv-scroll-board .rows .ceil {
+  padding: 0;
+}
+.dv-scroll-board .rows .ceil:nth-child(2) {
+  padding-left: 0.3rem;
 }
 .listClass {
   width: 100%;
@@ -1563,9 +1613,7 @@ export default {
 .column4 .chooseList span {
   color: #3371d0;
 }
-.chooseList {
-  pointer-events: none;
-}
+
 .chooseList .tradeImg {
   background: url("../../assets/largeScreen/title_nor.svg") no-repeat top center;
   background-size: 100% 100%;
@@ -1587,7 +1635,7 @@ export default {
   width: 2.35rem;
   height: 0.45rem;
   background: rgba(51, 113, 208, 0.15);
-  border: 1px solid #3371d0;
+  border: 1px solid rgba(51, 113, 208, 0.5);
   border-radius: 0;
   color: #4f94ff;
   font-family: PingFang SC;
@@ -1628,7 +1676,7 @@ height: .075rem;
   margin-top: 0.3rem;
   background: rgba(51, 113, 208, 0.15);
   box-sizing: border-box;
-  border: 1px solid #3371d0;
+  border: 1px solid rgba(51, 113, 208, 0.5);
 }
 .city1 {
   width: 100%;
@@ -1650,5 +1698,35 @@ height: .075rem;
     flex-wrap: wrap; */
   /* justify-content: space-around; */
   /* flex-direction: column; */
+}
+.ipSelect .el-input .el-select__caret {
+  color: #4f94ff !important;
+}
+.select-option {
+  margin-top: 0.025rem !important;
+  background: #000000ff;
+  border: 1px solid rgba(51, 113, 208, 0.5);
+  border-radius:0 !important;
+}
+.select-option .popper__arrow {
+  display: none;
+}
+.select-option .el-select-dropdown__item {
+  height: 0.375rem;
+  line-height: 0.375rem;
+  padding-left: 0.15rem;
+  color: #4f94ffff;
+  font-family: PingFang SC;
+  font-weight: medium;
+  font-size: 0.175rem;
+}
+.select-option .hover {
+  background: rgba(51, 113, 208, 0.3);
+}
+.select-option .el-select-dropdown__list{
+  padding:0 !important;
+}
+.el-select .el-input.is-focus .el-input__inner {
+    border-color: #409EFF !important;
 }
 </style>
