@@ -1,4 +1,26 @@
 
+v1.5.3(2021-09-27)
+
+**Add**
+- 新增数据监控大屏
+- 新增导出私钥功能，导出格式为p12
+- 新增公钥用户绑定私钥功能
+- 新增系统管理中的共识超时时间配置
+- 新增WeBASE-Web docker镜像，`webasepro/webase-web:v1.5.3`
+
+**Fix**
+- 优化合约IDE回退问题，仅回退到后台记录版本
+- 修复合约IDE页面事件bus重复问题
+- 修复全量合约/全量用户搜索问题
+- 修复合约IDE创建文件夹未自动刷新问题
+- 修复交易回执解析中int类型显示为string的显示问题
+
+**兼容性**
+- 支持FISCO-BCOS v2.4.x 及以上版本
+- WeBASE-Node-Manager v1.5.3+
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/latest/)。
+
 ### v1.5.2(2021-07-16)
 
 **Add**
