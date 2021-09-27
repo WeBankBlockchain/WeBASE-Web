@@ -34,7 +34,7 @@
                 <el-button type="primary" @click="submit('folderFrom')">确 定</el-button>
             </div>
         </el-dialog>
-         <add-folder v-if="foldershow" :foldershow="foldershow" :isAddFile="isAddFile" @close='folderClose'  @success='folderSuccess'></add-folder>
+         <add-folder v-if="foldershow" :foldershow="foldershow" :isAddFile="isAddFile" @close='folderClose'></add-folder>
     </div>
 </template>
 <script>
@@ -222,10 +222,6 @@ export default {
             // this.checkNull();
             this.foldershow = true
         },
-        folderSuccess(){
-             this.folderClose()
-           
-        }
     },
 };
 </script>

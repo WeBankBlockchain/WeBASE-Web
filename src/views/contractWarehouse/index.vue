@@ -106,22 +106,22 @@ export default {
                     this.loading = false;
                     if (res.data.code === 0) {
                         var list = res.data.data;
-                        // var iconList = ["tools", "supply", "points"];
-                        // list.forEach((item, index) => {
-                        //     switch (item.warehouseIcon) {
-                        //         case "toolboxId":
-                        //             item.warehouseIcon = "tools"
-                        //             break;
-                        //         case "evidenceId":
-                        //             item.warehouseIcon = "supply"
-                        //             break;
-                        //         case "pointsId":
-                        //             item.warehouseIcon = "points"
-                        //             break;
-                        //         default:
-                        //             break;
-                        //     }
-                        // });
+                        var iconList = ["tools", "supply", "points"];
+                        list.forEach((item, index) => {
+                            switch (item.warehouseIcon) {
+                                case "toolboxId":
+                                    item.warehouseIcon = "tools"
+                                    break;
+                                case "evidenceId":
+                                    item.warehouseIcon = "supply"
+                                    break;
+                                case "pointsId":
+                                    item.warehouseIcon = "points"
+                                    break;
+                                default:
+                                    break;
+                            }
+                        });
                         this.wareHouseList = list;
 
                     } else {

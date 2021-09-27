@@ -54,7 +54,6 @@ export default {
                 ],
                 sshPath: [
                     { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
-                    { pattern: /^\//, message: this.$t('nodes.sshPathError'), trigger: 'blur' }
                 ]
             }
             return data

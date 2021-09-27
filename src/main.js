@@ -38,14 +38,6 @@ import filters from './util/filter.js'
 import Cookies from 'js-cookie'
 import i18n from './lang' // internationalization
 import './svgIcons'
-import dataV from '@jiaminghi/data-view';
-Vue.use(dataV);
-import * as echarts from 'echarts'
-Vue.prototype.$echarts = echarts
-import 'lib-flexible/flexible'
-import fullscreen from 'vue-fullscreen'
-Vue.use(fullscreen)
-
 
 import ace from 'ace-builds'
 import { chooseLang } from "./util/errcode.js";

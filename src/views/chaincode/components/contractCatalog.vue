@@ -687,11 +687,10 @@ export default {
             saveChaincode(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.getContracts(data.contractPath, res.data.data);
-                    
                     if (data.contractId) {
                         this.$message({
                             type: "success",
-                            message: title || "合约保存成功！"
+                            message: title || this.$t("contracts.contractSaveSuccess")
                         });
                     }
                 } else {

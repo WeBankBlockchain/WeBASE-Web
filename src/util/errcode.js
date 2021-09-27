@@ -1654,19 +1654,7 @@ let errCode = {
     "500": {
         en: "system exception",
         zh: '系统异常'
-    },
-    "202541": {
-        en: "Developer account cannot modify data of other account",
-        zh: '当前账号无权限操作其他账户数据'
-    },
-    "202542": {
-        en: "No private key of contract manager address in webase",
-        zh: '无链管理员或合约部署者私钥，无法操作合约'
-    },
-    "202543": {
-        en: "Binding private key not match this user's address",
-        zh: '绑定私钥与此用户的地址不匹配'
-    },
+    }
 }
 export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')
