@@ -9,8 +9,7 @@
             <el-form-item :label="$t('table.fileName')" prop="fileName" style="width: 546px;">
                 <el-input v-model="keyForm.fileName" :placeholder="$t('privateKey.inputFileName')" clearable></el-input>
             </el-form-item>
-            <!-- <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'"> -->
-            <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;">
+            <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
                 <el-input v-model="keyForm.password" type="password" :placeholder="$t('privateKey.placeholderPassword')"></el-input>
             </el-form-item>
             <!-- <el-form-item :label="$t('table.privateKey')" prop="privateKey" style="width: 546px;" v-if="keyForm.fileType=='string'">
@@ -45,23 +44,23 @@ export default {
             disabled: false,
             keyForm: {
                 fileName: this.exportInfo.userName,
-                fileType: ".p12",
+                fileType: ".txt",
                 password: "",
                 privateKey: "",
             },
             fileTypeList: [
-                // {
-                //     enName: '.txt',
-                // },
-                // {
-                //     enName: '.pem',
-                // },
+                {
+                    enName: '.txt',
+                },
+                {
+                    enName: '.pem',
+                },
                 {
                     enName: '.p12',
                 },
-                // {
-                //     enName: this.$t('text.decimal'),
-                // },
+                {
+                    enName: this.$t('text.decimal'),
+                },
             ],
         }
     },
