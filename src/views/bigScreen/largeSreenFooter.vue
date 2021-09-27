@@ -623,7 +623,6 @@ export default {
   },
   watch: {
     listChange() {
-      
       let switchList = this.listChange == 1 ? this.transList : this.blockList;
       this.listData = {
         columnWidth: [356, 183],
@@ -644,7 +643,7 @@ export default {
       let reqData = {
         groupId: this.groupId,
         pageNumber: 1,
-        pageSize: 4,
+        pageSize: 10,
       };
       let [getBlockPageErr, getBlockPageRes] = await to(
         getBlockPage(reqData, {})
@@ -684,7 +683,7 @@ export default {
           rowNum: 7,
           oddRowBGC: "rgba(51, 113, 208, 0.15)",
           evenRowBGC: "rgba(51, 113, 208, 0.15)",
-          data: this.blockList,
+          data: this.listChange == 1 ? this.transList : this.blockList
         };
       }
     },
@@ -738,6 +737,9 @@ export default {
         //],
       };
       this.pieVar.setOption(pieOption);
+      //  let xList = timestampList.map((item) => {
+      //     return format(new Date(item).getTime(), "HH:mm:ss").substr(0, 2);
+      //   });
       var lineOption = {
         // backgroundColor: "rgba(51, 113, 208, 0.3)",
         color: ["#93CC77", "#4F94FF"],
@@ -766,7 +768,8 @@ export default {
             show: false,
           },
           type: "category",
-          data: [0],
+            //data: Array.from(new Set(xList)),
+            data: [0],
           boundaryGap: false,
           axisLine: {
             lineStyle: {
@@ -1004,7 +1007,7 @@ export default {
         }
         let bpsOption = {
           xAxis: {
-            data: Array.from(new Set(xList)),
+            data: Array.from(new Set(xList))?Array.from(new Set(xList)):['01','02','03','04','05','06','07','08','09','10','11','12'],
           },
           series: [{ data: txBps }, { data: rxBps }],
         };

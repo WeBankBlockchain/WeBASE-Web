@@ -367,8 +367,8 @@ export default {
         }
         let resData = res.data.data.map((item, index) => {
           return {
-            agency: item.agency,
-            nodeIp: item.nodeIp,
+            agency: item.agency?item.agency:'-',
+            nodeIp: item.nodeIp?item.nodeIp:'-',
           };
         });
         console.log(resData);

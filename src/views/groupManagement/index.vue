@@ -185,7 +185,7 @@
                 <el-button type="primary" @click="changeDescriptions"
                   >修改</el-button
                 >
-                <el-button>取消</el-button>
+                <el-button @click='closeThis'>取消</el-button>
               </el-form-item>
             </el-form>
           </el-dialog>
@@ -498,6 +498,9 @@ export default {
       this.descriptionShow = true;
       this.nodes.description = val.description;
       this.nodes.groupId = val.groupId;
+    },
+    closeThis(){
+          this.descriptionShow = false;
     },
     changeDescriptions() {
       let reqData = {
