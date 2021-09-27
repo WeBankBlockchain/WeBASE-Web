@@ -3,8 +3,9 @@
         <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="165px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
-                    <el-option v-for="(item,index) in chainCommitteeList" :key="index" :label="item.table_name" :value="item.address">
-                        <span>{{addDeployUserName(item)}}</span>
+                    <el-option v-for="(item,index) in chainCommitteeList" :key="index" :label="item.userName" :value="item.address">
+                        <span>{{item.userName}}</span>
+                        <span>{{item.address}}</span>
                         <!-- <span class="font-12">{{item.address}}...</span> -->
                         <!-- <span class="font-12">{{item | splitString}}...</span> -->
                     </el-option>
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-import { getContractStatus, committeeList, getUserList } from "@/util/api"
+import { getContractStatus, listManagerList, getUserList } from "@/util/api"
 export default {
     name: 'freezeThaw',
 
@@ -60,18 +61,18 @@ export default {
             return data
         },
         committeeAndDeploy() {
-            var committeeList = [];
+            var listManagerList = [];
             let privateKeyList = this.adminRivateKeyList
-            committeeList = this.chainCommitteeList
+            listManagerList = this.chainCommitteeList
             privateKeyList.forEach(item => {
-                committeeList.forEach(it => {
+                listManagerList.forEach(it => {
                     if (item.address == it.address) {
                         it.userName = item.userName
                     }
                 })
             })
 
-            return committeeList
+            return listManagerList
         }
     },
 
@@ -142,11 +143,10 @@ export default {
             
             let reqData = {
                 groupId: localStorage.getItem('groupId'),
-              //  contractAddress:this.contractAddress,
-                pageNumber: 1,
-                pageSize: 1000
+                contractAddress:this.contractAddress,
+               
             }
-            committeeList(reqData)
+            listManagerList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
                         let data = res.data.data;
