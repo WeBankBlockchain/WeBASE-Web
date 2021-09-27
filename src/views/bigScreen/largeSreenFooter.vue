@@ -41,6 +41,7 @@
             class="ipSelect"
             popper-class="select-option"
             :popper-append-to-body="false"
+            :change='changeIp()'
           >
             <el-option
               v-for="item in nodesOptions"
@@ -601,6 +602,7 @@ export default {
       },
       key: 1,
       whatHash: "区块哈希",
+      renderTwo:null
     };
   },
   mounted() {
@@ -617,10 +619,12 @@ export default {
   destroyed() {
     window.removeEventListener("resize", this.pieAdapter);
     window.removeEventListener("resize", this.cityAdapter);
+    clearInterval(this.renderTwo)
   },
   watch: {
     listChange() {
-      let switchList = this.listChange == 0 ? this.transList : this.blockList;
+      
+      let switchList = this.listChange == 1 ? this.transList : this.blockList;
       this.listData = {
         columnWidth: [356, 183],
         align: "left",
@@ -640,7 +644,7 @@ export default {
       let reqData = {
         groupId: this.groupId,
         pageNumber: 1,
-        pageSize: 10,
+        pageSize: 4,
       };
       let [getBlockPageErr, getBlockPageRes] = await to(
         getBlockPage(reqData, {})
@@ -1405,13 +1409,16 @@ export default {
     },
     reRender() {
       let _this = this;
-      setInterval(function () {
+    this.renderTwo=  setInterval(function () {
         _this.fourReqUpdate();
         // _this.fiveInit();
          _this.fiveReqUpdate();
         _this.sixReqUpdate();
       }, 10000);
     },
+    changeIp(){
+
+    }
   },
 };
 </script>

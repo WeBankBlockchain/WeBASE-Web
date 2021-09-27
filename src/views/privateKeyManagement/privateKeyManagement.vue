@@ -78,7 +78,7 @@
             <export-key :exportInfo="exportInfo"></export-key>
         </el-dialog>
         <el-dialog :visible.sync="$store.state.bindKey" :title="$t('privateKey.bindPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.bindKey' center>
-            <bind-key :bindInfo="bindInfo" @bindPrivateKeySuccess="importPrivateKeySuccess" ></bind-key>
+            <bind-key :bindInfo="bindInfo" @importPrivateKeySuccess="importPrivateKeySuccess" ></bind-key>
         </el-dialog>
     </div>
 </template>
