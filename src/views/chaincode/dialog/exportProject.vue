@@ -408,7 +408,8 @@ export default {
                 artifactName: this.projectFrom.artifactName,
                 frontId: this.projectFrom.frontId,
                 groupId: localStorage.getItem("groupId"),
-                channelIp: this.projectFrom.channelIp
+                channelIp: this.projectFrom.channelIp,
+                channelPort:this.projectFrom.channelPort
             }
             if (this.projectFrom.userAddress) {
                 reqData.userAddressList = this.projectFrom.userAddress

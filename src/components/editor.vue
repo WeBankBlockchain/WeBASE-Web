@@ -120,7 +120,7 @@
                                             <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                                                 <template slot-scope="scope">
                                                     <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
-                                                    <span>{{scope.row.data}}</span>
+                                                   <span>{{ abc(scope.row.data) }}</span>
                                                 </template>
                                             </el-table-column>
                                         </el-table>
@@ -213,6 +213,26 @@ export default {
         }
     },
     methods: {
+         abc(arr) {
+          if(!Array.isArray(arr)){return arr}
+          return '['+arr.toString()+']'
+      //     if(arr !=Array){return arr}
+      //     var str = "[";
+      //     arr.forEach(function(item,index,arr){
+      //       str += item+',';
+      //   })
+      //      var a= str.substring(0,(str.length-1));
+      //    return a+"]";
+      // },
+      //  abc(arr){
+      //     arr.forEach(function(item,index,arrs){
+      //       if(Number(item)){
+      //           arrs[index]=Number(item)
+      //       }
+      //   })
+      // //   return arr
+      // },
+    },
         decodeOutput: function () {
             if (this.showDecode) {
                 this.showDecode = false;
