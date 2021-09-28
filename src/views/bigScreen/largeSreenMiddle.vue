@@ -372,6 +372,7 @@ export default {
           };
         });
         console.log(resData);
+        //this.ballArr = resData.slice(2);
         this.ballArr = resData;
       }
       // let canvas = document.getElementById("groupCanvas");
@@ -503,7 +504,7 @@ export default {
           case 2:
             return [
               Math.random() * 20 + 110 * index + 40,
-              Math.random() * 80 + 10,
+              Math.random() * 100 + 30 ,
               item.agency,
               item.nodeIp,
             ];
@@ -565,17 +566,20 @@ export default {
       this.nodeVar = this.$echarts.init(this.$refs.groupCanvas);
       let option = {
         grid: {
-          x: 0,
-          y: 0,
-          x2: 0,
-          y2: 0,
+          x: '5%',
+          y: '10%',
+          x2: '5%',
+          y2: '5%',
           show: false,
         },
         xAxis: {
           show: false,
+        //data:[0,100,200,300,400,500,600]
         },
         yAxis: {
           show: false,
+          //type: 'value',
+         // data:[0,100,200,300]
         },
         tooltip: {
           trigger: "item",
