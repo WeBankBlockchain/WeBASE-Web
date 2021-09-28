@@ -243,11 +243,11 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('bindPrivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.modelClose()
                         this.$message({
                             type: 'success',
-                            message: this.$t('privateKey.importPrivateKeySuccess')
+                            message: this.$t('text.bindSuccessed')
                         })
                     } else {
                         this.$message({
@@ -273,10 +273,10 @@ export default {
                 .then(res => {
                     const { data, status } = res;
                     if (status === 200) {
-                        this.$emit('bindPrivateKeySuccess')
+                        this.$emit('importPrivateKeySuccess')
                         this.$message({
                             type: 'success',
-                            message: this.$t('text.importPrivateKeySuccess')
+                            message: this.$t('text.bindSuccessed')
                         });
                         this.modelClose()
                     } else {

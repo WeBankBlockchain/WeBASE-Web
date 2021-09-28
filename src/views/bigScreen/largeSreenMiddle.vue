@@ -503,7 +503,7 @@ export default {
           case 2:
             return [
               Math.random() * 20 + 110 * index + 40,
-              Math.random() * 80 + 40,
+              Math.random() * 80 + 10,
               item.agency,
               item.nodeIp,
             ];
