@@ -256,7 +256,7 @@ export default {
             groupId: localStorage.getItem("groupId"),
             nodeData: [],
             blockData: [],
-            transactionList: [],
+            transactionList: []
         };
     },
     mounted: function () {
@@ -823,8 +823,8 @@ export default {
         height: 120px;
         padding: 28px 12px;
         margin: 8px 15px 16px 0;
-        background-color: #fff;
-        box-shadow: 0 4px 12px 0 #dfe2e9;
+        /* background-color: #fff;
+        box-shadow: 0 4px 12px 0 #dfe2e9; */
         border-radius: 2px;
         box-sizing: border-box;
     }
@@ -851,8 +851,8 @@ export default {
         height: 120px;
         padding: 28px 6px;
         margin: 8px 15px 16px 0;
-        background-color: #fff;
-        box-shadow: 0 4px 12px 0 #dfe2e9;
+        /* background-color: #fff;
+        box-shadow: 0 4px 12px 0 #dfe2e9; */
         border-radius: 2px;
         box-sizing: border-box;
     }
@@ -879,8 +879,8 @@ export default {
         height: 120px;
         padding: 28px 16px;
         margin: 8px 15px 16px 0;
-        background-color: #fff;
-        box-shadow: 0 4px 12px 0 #dfe2e9;
+        /* background-color: #fff;
+        box-shadow: 0 4px 12px 0 #dfe2e9; */
         border-radius: 2px;
         box-sizing: border-box;
     }

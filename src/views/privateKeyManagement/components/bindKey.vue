@@ -10,7 +10,7 @@
                 <el-input v-model="keyForm.fileName" disabled maxlength="12"></el-input>
             </el-form-item>
             <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
-                <el-input type="password" v-model="keyForm.password" ></el-input>
+                <el-input type="password" v-model="keyForm.password"  :placeholder="$t('privateKey.placeholderPassword')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('table.baseSystem')" prop="radio" style="width: 546px;" v-if="keyForm.fileType==='string'">
                 <el-radio-group v-model="keyForm.radio" @change="changeJzType">
@@ -218,7 +218,6 @@ export default {
                                     }
                                     break;
                                 case '.pem':
-
                                     self.pemPrivateKey(fileContent)
                                     break;
                                 case '.p12':
@@ -309,7 +308,7 @@ export default {
                         this.$emit('importPrivateKeySuccess')
                         this.$message({
                             type: 'success',
-                            message: this.$t('text.importSuccessed')
+                            message: this.$t('text.bindSuccessed')
                         });
                         this.modelClose()
                     } else {

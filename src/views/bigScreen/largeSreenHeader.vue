@@ -10,7 +10,7 @@
         </div>
         <div class="leftLine"></div>
         <div class="navMiddle">
-          <span>WeBASE数据大屏</span>
+          <span>{{ groupName }}</span>
         </div>
         <div class="rightLine"></div>
         <div class="navRight">
@@ -24,7 +24,9 @@
 
 <script>
 // import backHome from '@/assets/logo.png'
+import { getGroupName } from "@/util/api";
 import { format } from "@/util/util";
+import to from "await-to-js";
 export default {
   name: "largeSreenHeader",
   components: {},
@@ -32,10 +34,13 @@ export default {
     return {
       nowTime1: "",
       nowTime2: "",
+      groupId: localStorage.getItem("groupId"),
+      groupName: "WeBASE数据大屏",
     };
   },
   mounted() {
     this.getTime();
+    this.getGroupNames();
   },
   methods: {
     getTime() {
@@ -52,6 +57,28 @@ export default {
     backHome() {
       //this.$emit('cancelfullScreen');
       this.$router.replace("/home");
+    },
+    async getGroupNames() {
+      let groupId = this.groupId;
+      let [err, res] = await to(getGroupName(groupId));
+      if (err) {
+        console.log("getgroupReqError");
+        return;
+      } else {
+        if (res.status != 200) {
+          console.log(res.data.message);
+          return;
+        }
+        if (
+          res.data.data.description == "" ||
+          res.data.data.description == null ||
+          res.data.data.description == "synchronous"
+        ) {
+          this.groupName = "WeBASE数据大屏";
+        } else {
+          this.groupName = res.data.data.description;
+        }
+      }
     },
   },
 };

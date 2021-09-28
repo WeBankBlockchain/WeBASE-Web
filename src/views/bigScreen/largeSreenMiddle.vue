@@ -60,6 +60,7 @@ export default {
       balls: [],
       nodeVar: null,
       groupMiddle: localStorage.getItem("groupName"),
+      renderOne:null
     };
   },
   mounted() {
@@ -74,6 +75,7 @@ export default {
   },
   destroyed() {
     window.removeEventListener("resize", this.threeAdapter);
+    clearInterval(this.renderOne)
   },
   methods: {
     formatter(number) {
@@ -365,8 +367,8 @@ export default {
         }
         let resData = res.data.data.map((item, index) => {
           return {
-            agency: item.agency,
-            nodeIp: item.nodeIp,
+            agency: item.agency?item.agency:'-',
+            nodeIp: item.nodeIp?item.nodeIp:'-',
           };
         });
         console.log(resData);
@@ -669,7 +671,7 @@ export default {
     },
     reRender() {
       let _this = this;
-      setInterval(function () {
+     this.renderOne = setInterval(function () {
         //_this.oneInit();
         _this.oneReqUpdate();
         _this.twoInit();
@@ -804,7 +806,7 @@ export default {
   background-size: 100% 100%;
   width: 7.075rem;
   height: 3.525rem;
-  margin: 0.3125rem 0.45rem;
+  margin: .125rem 0.45rem;
 }
 #groupCanvas {
   width: 100%;
