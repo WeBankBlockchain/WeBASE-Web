@@ -989,9 +989,9 @@ export default {
         };
         this.pieVar.setOption(pieOption);
         this.pieVar.resize();
-        if (timestampList.length == 0) {
-          timestampList = [0];
-        }
+        // if (timestampList.length == 0) {
+        //   timestampList = [0];
+        // }
         let xList = timestampList.map((item) => {
           return format(new Date(item).getTime(), "HH:mm:ss").substr(0, 2);
         });
@@ -1007,7 +1007,7 @@ export default {
         }
         let bpsOption = {
           xAxis: {
-            data: Array.from(new Set(xList))?Array.from(new Set(xList)):['01','02','03','04','05','06','07','08','09','10','11','12'],
+            data: Array.from(new Set(xList)).length!=0?Array.from(new Set(xList)):['01','02','03','04','05','06','07','08','09','10','11','12'],
           },
           series: [{ data: txBps }, { data: rxBps }],
         };
