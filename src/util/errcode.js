@@ -42,6 +42,10 @@ let errCode = {
         en: "When webase is v1.3.2 above(inclusive),fisco-bcos node must be v2.4.1 above(inclusive)",
         zh: "当webase为v1.3.2以上版本（含）时，fisco bcos节点必须为v2.4.1以上版本（含）"
     },
+    "102004": {
+        en: "Get check code fail, please check the log of WeBASE-Node-Manager for details",
+        zh: "获取验证码失败，请结合后台日志获取详细错误信息"
+    },
     "101003": {
         en: "web3j instance of current group is null",
         zh: '当前群组的web3j为空'
@@ -530,6 +534,22 @@ let errCode = {
         en: "get event callback error",
         zh: '获取事件回调错误'
     },
+"201321": {
+    en: "query cns info fail",
+    zh: '查询cns信息失败'
+},
+"201322": {
+    en: "contract funcParam size not match with ABI",
+    zh: '合同函数参数大小与ABI不匹配'
+},
+"201323": {
+    en: "contract funcParam bytes array size not match",
+    zh: '协定funcParam字节数组大小不匹配'
+},
+"201324": {
+    en: "contract funcParam bytes array not support high dimensional array",
+    zh: '协定funcParam字节数组不支持高维数组'
+},
     "201501": {
         en: "web3sdk create key pair fail and return null",
         zh: 'sdk创建私钥对失败并返回Null'
@@ -1386,6 +1406,10 @@ let errCode = {
     "202497": {
         "en": "Host not exist or already been deleted.",
         "zh": "主机不存在或已被删除。"
+    },
+    "202498": {
+        "en": "Host's rootDir must be absolute path",
+        "zh": "主机的rootDir必须是绝对路径"
     },
 
 
