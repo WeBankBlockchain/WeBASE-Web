@@ -113,7 +113,7 @@ export default {
       pieVar: null,
       chartParam: {
         gap: 60,
-        beginDate: `${format(new Date().getTime(), "yyyy-MM-dd")}T${format(
+        beginDate: `${format(new Date(new Date().getTime() - 12 * 60 * 60 * 1000), "yyyy-MM-dd")}T${format(
           new Date(new Date().getTime() - 12 * 60 * 60 * 1000),
           "HH:mm:ss"
         )}`,
