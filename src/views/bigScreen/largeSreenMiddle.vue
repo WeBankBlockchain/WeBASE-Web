@@ -372,7 +372,7 @@ export default {
           };
         });
         console.log(resData);
-        this.ballArr = resData;
+        this.ballArr = resData.slice(2);
       }
       // let canvas = document.getElementById("groupCanvas");
       // let ctx = canvas.getContext("2d");
@@ -502,8 +502,8 @@ export default {
             ];
           case 2:
             return [
-              Math.random() * 20 + 120 * index + 40,
-              Math.random() * 150 + 40,
+              Math.random() * 20 + 110 * index + 40,
+              Math.random() * 80 + 40,
               item.agency,
               item.nodeIp,
             ];
