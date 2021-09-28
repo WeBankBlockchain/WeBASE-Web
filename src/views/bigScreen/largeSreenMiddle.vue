@@ -372,7 +372,8 @@ export default {
           };
         });
         console.log(resData);
-        this.ballArr = resData.slice(2);
+        //this.ballArr = resData.slice(2);
+        this.ballArr = resData;
       }
       // let canvas = document.getElementById("groupCanvas");
       // let ctx = canvas.getContext("2d");

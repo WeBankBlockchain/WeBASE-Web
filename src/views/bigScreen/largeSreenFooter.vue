@@ -1007,7 +1007,7 @@ export default {
         }
         let bpsOption = {
           xAxis: {
-            data: Array.from(new Set(xList)).length==7?Array.from(new Set(xList)):['01','02','03','04','05','06','07','08','09','10','11','12'],
+            data: Array.from(new Set(xList)).length==13?Array.from(new Set(xList)):['01','02','03','04','05','06','07','08','09','10','11','12'],
           },
           series: [{ data: txBps }, { data: rxBps }],
         };
