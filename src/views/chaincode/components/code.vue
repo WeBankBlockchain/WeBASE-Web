@@ -21,13 +21,13 @@
                 <span>{{contractName + '.sol'}}</span>
             </span>
             <span class="contract-code-handle" v-show="codeShow">
-                <span class="contract-code-done" v-if="(!contractAddress && !disabled) || (contractAddress && !disabled &&isDeployedModifyEnable)" @click="saveCode">
+                <span class="contract-code-done noBlur" v-if="(!contractAddress && !disabled) || (contractAddress && !disabled &&isDeployedModifyEnable)" @click="saveCode">
                     <el-tooltip class="item" effect="dark" :content="$t('contracts.contractSaveTips')" placement="top-start">
                         <i class="wbs-icon-baocun font-16"></i>
                     </el-tooltip>
                     <span>{{this.$t("text.save")}}</span>
                 </span>
-                <span class="contract-code-done" @click="compile" v-if="(!contractAddress && !disabled && !loading )|| (contractAddress && !disabled && !loading &&isDeployedModifyEnable)">
+                <span class="contract-code-done noBlur" @click="compile" v-if="(!contractAddress && !disabled && !loading )|| (contractAddress && !disabled && !loading &&isDeployedModifyEnable)">
                     <i class="wbs-icon-bianyi font-16"></i>
                     <span>{{this.$t("text.compile")}}</span>
                 </span>
@@ -364,7 +364,13 @@ export default {
             this.data.contractSource = data.contractSource;
             localStorage.setItem("isFinishCompile", "no")
             this.compile() 
-        })
+        });
+      [...document.querySelectorAll(".noBlur")].map((item)=>{
+        item.onmousedown = (event) => {
+        event.preventDefault(); // 点击按钮不会失去焦点（阻止默认）
+    };
+    });
+
     },
     watch: {
         content: function (val) {
@@ -477,12 +483,36 @@ export default {
             this.aceEditor.on("blur", this.blurAce);
             this.aceEditor.resize();
         },
-        blurAce: function () {
-            let data = Base64.encode(this.content);
-            if (this.data.contractSource != data && this.data.contractStatus != 2) {
-                this.saveCode()
-            }
-        },
+    blurAce: function (callback) {
+      console.log("blur");
+      let data = Base64.encode(this.content);
+      // if (this.data.contractSource != data) {
+      //     this.saveCode()
+      // }
+      //  this.saveShow = true;
+      if (this.data.contractSource != data) {
+        console.log("合约改变弹框提示");
+        this.$confirm(
+          `${this.$t("text.unsavedContract")}？`,
+          `${this.$t("text.title")}`,
+          {
+            confirmButtonText: this.$t("title.save"),
+            center: true,
+            type: "warning",
+            dangerouslyUseHTMLString: true,
+          }
+        )
+          .then(() => {
+            this.saveCode();
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: this.$t("text.noSave"),
+            });
+          });
+      }
+    },
         saveCode: function () {
             this.data.contractSource = Base64.encode(this.content);
             Bus.$emit("save", this.data)
@@ -530,17 +560,45 @@ export default {
             this.editorData = val.resData;
             this.editorInput = val.input;
             this.editorOutput = val.data.outputs;
-            if (val && val.contractAddress) {
-                this.contractAddress = val.contractAddress;
-                this.data.contractAddress = val.contractAddress;
-                Bus.$emit("send", this.data)
-            }
+            // if (val && val.contractAddress) {
+            //     this.contractAddress = val.contractAddress;
+            //     this.data.contractAddress = val.contractAddress;
+            //     Bus.$emit("send", this.data)
+            // }
         },
         editorClose: function () {
             this.editorShow = false;
         },
         changeAce: function () {
+                 this.$nextTick(() => {
             this.content = this.aceEditor.getSession().getValue();
+            //  console.log(this.code);
+            // console.log(this.content);
+            if(this.content.replace(/[\r\n\s]/g,"")==""){
+        //         console.log(this.code);
+        //    console.log(this.content);
+             
+              this.aceEditor.setValue(this.code);
+              this.content = this.aceEditor.getSession().getValue(); 
+             return
+            }
+              var id = this.data.id;
+            // this.$nextTick(() => {
+                if (Base64.decode(this.data.contractSource).length === this.content.length) {
+                    Bus.$emit('modifyState', {
+                        id: id,
+                        modifyState: false
+                    })
+                } else {
+                    
+                    Bus.$emit('modifyState', Object.assign({}, this.data, {
+                        id: id,
+                        modifyState: true,
+                        contractSource: Base64.encode(this.content)
+                    }))
+                }
+            // })
+            })
         },
 
         findImports: function (path) {
@@ -658,10 +716,12 @@ export default {
                 list: this.$store.state.contractDataList,
                 path: this.data.contractPath
             });
-            w.addEventListener('message', function (ev) {
+            // w.addEventListener('message', function (ev) {
+            w.onmessage=function(ev){
                 if (ev.data.cmd == 'compiled') {
                     that.loading = false
                     output = JSON.parse(ev.data.data);
+                    console.log('次数')
                     if (output && output.contracts && JSON.stringify(output.contracts) != "{}") {
                         that.status = 1;
                         if (output.contracts[that.contractName + ".sol"]) {
@@ -679,7 +739,7 @@ export default {
                     console.log(ev.data);
                     console.log(JSON.parse(ev.data.data))
                 }
-            });
+            };
             w.addEventListener("error", function (ev) {
                 that.errorInfo = ev;
                 that.errorMessage = ev;
@@ -890,7 +950,7 @@ export default {
                                 inputs: value.inputs
                             });
                         }
-                        data.methodId = methodId;
+                        data.methodId = methodId.substr(0,10);;
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)
@@ -910,7 +970,7 @@ export default {
                                 inputs: value.inputs
                             });
                         }
-                        data.methodId = methodId;
+                        data.methodId = methodId.substr(0,10);;
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)
@@ -922,6 +982,7 @@ export default {
             }
         },
         addAbiMethod: function (list) {
+            
             let data = {
                 groupId: localStorage.getItem("groupId"),
                 methodList: list

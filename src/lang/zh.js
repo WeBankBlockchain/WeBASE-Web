@@ -323,7 +323,11 @@ export default {
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         nodeActive:'节点存活',
         nodeNotActive:'节点未存活',
-        addContractAddress: '绑定'
+        addContractAddress: '绑定',
+        remarks:'备注',
+        bindSuccessed:'绑定私钥成功',
+        unsavedContract: '合约已修改，请对合约处理再进行下一步操作，是否保存',
+        noSave:'合约未保存，请进行下一步操作',
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -403,8 +407,10 @@ export default {
         changePassword: "修改密码",
         exit: "退出",
         versionInfo: "版本信息",
+        dataBigScreen:"数据大屏"
     },
     title: {
+        save: '保存',
         dataOverview: "数据概览",
         blockTitle: "区块信息",
         nodeTitle: "节点管理",
@@ -494,6 +500,7 @@ export default {
         frontPort: "前置端口",
         agency: "所属机构",
         modifyTime: "修改时间",
+        description:"描述",
         nodeStyle: "节点类型",
         operation: "操作",
         sealer: "共识",
@@ -551,6 +558,7 @@ export default {
         hostList: "主机列表",
         inputHostIp: "请输入主机IP地址",
         ipError: "IP格式不正确",
+        sshPathError:'安装目录需以"/"开头',
         hostIp: "主机IP地址",
         inputNodesNumber: "请输入部署节点数量",
         thanOne: "必须大于1",
@@ -672,6 +680,8 @@ export default {
         userAddress: "用户公钥地址信息",
         userStatus: "用户状态",
         inputDescription: "请输入用户描述",
+        inputimportPrivateKey:"请输入绑定私钥",
+        importPrivateKeySuccess:"绑定私钥成功",
         updateUserSuccess: "修改用户成功",
         normal: "正常",
         disable: "停用",
@@ -691,8 +701,8 @@ export default {
         fileType: "文件类型",
         importFile: "选择文件",
         copy: "复制",
-        password: "密码",
-        placeholderPassword: "请输入密码",
+        password: "p12密码",
+        placeholderPassword: "请输入P12文件的密码",
         passwordError: "密码不能是汉字",
         file: "文件",
         thaw: "解冻",
@@ -702,7 +712,8 @@ export default {
         validatorPrivateKey1: "请输入十六进制",
         validatorPrivateKey10: "请输入十进制",
         importType: "导入类型",
-        importFileValidator: '请上传文件'
+        importFileValidator: '请上传文件',
+        bindPrivateKey:'绑定私钥'
     },
     system: {
         chainManager: "链管理权限",
@@ -732,6 +743,7 @@ export default {
         configValue: "配置值",
         gasLimit: "一个交易最大gas限制",
         countLimit: "一个区块中可打包的最大交易数目",
+        timeOut:'共识超时时间（秒）',
         gasLong: "范围从100000到2147483647",
         addCertificate: "导入证书",
         export: "导出",
@@ -749,6 +761,9 @@ export default {
         uploadWarning3: "个文件.",
         to: "至",
         updateSuccess: "更新成功",
+        agency:'请输入机构名',
+        city:'请选择地址',
+
     },
     account: {
         addAccount: "新增账号",
@@ -971,6 +986,7 @@ export default {
         fileType: "导入类型",
         exportType: "导出类型",
         fileName: "私钥用户名",
+        baseSystem:"进制"
     },
     govCommittee: {
         addCommittee: '新增委员投票',

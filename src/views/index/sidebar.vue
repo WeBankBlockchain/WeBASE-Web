@@ -379,6 +379,9 @@ export default {
                     if (list[i].nameKey == 'guide') {
                         list[i].menuShow = false
                     }
+                    if (list[i].nameKey == 'bigScreen') {
+                        list[i].menuShow = false
+                    }
                 }
                 list.forEach(item => {
                     if (this.userRole === "admin" && item.name === "帐号管理") {
@@ -416,7 +419,7 @@ export default {
         },
         handleClose(key, keyPath) {
         },
-        hideMune: function (val) {
+        hideMune(val) {
             this.$emit("sidebarChange", val);
             if (this.menuShow) {
                 this.menuShow = false;
