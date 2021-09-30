@@ -70,7 +70,8 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./dist
+          # context is in root dir of webase-web repository
+          context: .
           push: true
           file: ./docker/build/Dockerfile
           platforms: linux/amd64
