@@ -111,6 +111,7 @@
                                 <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="restartNode(scope.row)">{{$t("text.restart")}}</el-button>
+                                <el-button   type="text" size="small" :style="{'color': disabled?'#666':''}" @click="remarks(scope.row)">{{$t("text.remarks")}}</el-button>
                             </template>
                             <template v-else>
                                 <span>{{scope.row[head.enName]}}</span>
@@ -129,6 +130,19 @@
                 <!-- <delete-node v-if='deleteNodeShow' :show='deleteNodeShow' @close='deleteNodeClose' :data='nodeData'></delete-node> -->
                 <set-config :show='configShow' v-if='configShow' @close='closeConfig' @success='successConfig'></set-config>
                 <host-info v-if='hostInfoShow' :show='hostInfoShow' @close='hostInfoClose'></host-info>
+                   <el-dialog
+          :title="$t('text.remarks')"
+          :visible.sync="remarkDialogVisible"
+          width="500px"
+          v-if="remarkDialogVisible"
+          center
+        >
+          <remark-node
+            @nodeRemarkClose="nodeRemarkClose"
+            @nodeRemarkSuccess="nodeRemarkSuccess"
+            :remarkNode="remarkNode"
+          ></remark-node>
+        </el-dialog>
             </div>
         </div>
     </div>
@@ -152,6 +166,7 @@ import updateNode from "./dialog/updateNode"
 import Bus from "@/bus"
 import guideImg from "@/../static/image/guide.69e4d090.png"
 import hostInfo from "./dialog/hostInfo"
+import remarkNode from "./components/remarkNode";
 export default {
     name: "node",
     components: {
@@ -162,7 +177,8 @@ export default {
         'new-node': newNode,
         'update-node': updateNode,
         'set-config': setConfig,
-        "host-info": hostInfo
+        "host-info": hostInfo,
+        remarkNode
     },
     watch: {
         $route() {
@@ -211,7 +227,8 @@ export default {
             chainList: null,
             hostInfoShow: false,
             loadingTxt: this.$t('text.loading'),
-            optShow: false
+            optShow: false,
+            remarkDialogVisible: false,
         };
     },
     computed: {
@@ -314,6 +331,18 @@ export default {
         this.getData();
     },
     methods: {
+      remarks(param) {
+      this.remarkNode = param;
+      this.remarkDialogVisible = true;
+    },
+     nodeRemarkClose() {
+      this.remarkDialogVisible = false;
+    },
+    nodeRemarkSuccess() {
+      this.remarkDialogVisible = false;
+      this.getFrontTable();
+      this.getNodeTable();
+    },
         changeDate(val) {
             let data;
             data = format(val, "yyyy-MM-dd HH:mm:ss")
@@ -435,7 +464,9 @@ export default {
                         clearInterval(this.frontInterval)
                         localStorage.setItem("configData", 0)
                     }
+                    this.loadingNodes = false;
                     this.getFrontTable();
+                    this.getNodeTable()
                 } else {
                     clearInterval(this.progressInterval)
                     clearInterval(this.frontInterval)
@@ -1009,10 +1040,18 @@ export default {
                                 item.nodeActive = 1;
                             }
                         });
-                        this.nodeData = unique(this.nodeData, 'nodeId')
+                        this.nodeData = unique(this.nodeData, 'nodeId');
+                        console.log(this.frontData)
+                        this.nodeData.forEach((item,index)=>{
+                        //  debugger
+                        // this.frontData[index].nodeIp=item.nodeIp?item.nodeIp:this.frontData[index].frontIp;
+                        // this.frontData[index].city=item.city;
+                        })
                     } else {
                         this.nodeData = [];
                     }
+                     this.loadingNodes = false;
+
 
                 }))
         },

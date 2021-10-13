@@ -1268,6 +1268,13 @@ export function getConfigList(data) {
         }
     })
 }
+//鉴权是否启用接口，无需登录就可以访问
+export function getConfigAuth() {
+    return get({
+        url: `${url.ORG_LIST}/config/auth`,
+        method: "get",    
+    })
+}
 
 //部署接口
 export function deployConfig(data) {

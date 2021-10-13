@@ -21,6 +21,9 @@
                         <el-form-item :label="$t('table.toBlock')" prop="toBlock">
                             <el-input v-model.number="contractEventForm.toBlock" clearable style="width: 195px;"></el-input>
                         </el-form-item>
+                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start">
+                        <i class="el-icon-info contract-icon font-15"></i>
+                    </el-tooltip>
                     </div>
                     <el-form-item :label="$t('table.eventName')" prop="eventName" class="event-option">
                         <el-select v-model="contractEventForm.eventName" :placeholder="$t('placeholder.selected')" style="width: 500px;" @change="changeEventName" class="event-name">
@@ -122,16 +125,16 @@ export default {
                 }
             }
             var validateBlock = (rule, value, callback) => {
-                if (value == '' || value == undefined || value == null) {
+                if (value === '' || value == undefined || value == null) {
                     callback();
                 } else {
                     if (!Number.isInteger(value)) {
                         callback(new Error(this.$t('rule.inputIsNumber')));
                     } else {
-                        if (value <= 0) {
-                            callback(new Error(this.$t('rule.blockNumber')));
-                        } else {
+                        if (value > 0||value==-1) {
                             callback();
+                        } else {
+                            callback(new Error(this.$t('rule.blockNumber')));
                         }
                     }
                 }

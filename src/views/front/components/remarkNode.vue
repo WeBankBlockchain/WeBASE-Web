@@ -7,13 +7,13 @@
       label-width="110px"
       class="demo-ruleForm"
     >
-      <el-form-item :label="$t('nodes.ip')" prop="nodeIp" style="width: 320px">
+      <el-form-item :label="$t('nodes.nodeIp')" prop="nodeIp" style="width: 320px">
         <el-input v-model="remarkForm.nodeIp"></el-input>
       </el-form-item>
       <el-form-item :label="$t('text.org')" prop="agency" style="width: 320px">
         <el-input v-model="remarkForm.agency"></el-input>
       </el-form-item>
-      <p class="info" v-if="deployType == 1">{{ $t("nodes.notice") }}</p>
+      <!-- <p class="info" v-if="deployType == 1">{{ $t("nodes.notice") }}</p> -->
       <el-form-item
         :label="$t('system.address')"
         prop="city"
@@ -82,7 +82,7 @@ export default {
         },
       ],
       remarkForm: {
-        nodeIp: this.remarkNode.nodeIp,
+        nodeIp: this.remarkNode.frontIp,
         agency: this.remarkNode.agency,
         city: this.remarkNode.city
           ? [this.remarkNode.city.substr(0, 3) + "000", this.remarkNode.city]
