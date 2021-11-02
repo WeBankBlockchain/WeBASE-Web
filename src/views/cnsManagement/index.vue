@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')"></nav-menu>
         <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
             <span class="cns-title">{{$t('contracts.cnsTitle')}}</span>
             <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">
@@ -41,6 +42,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import { queryCnsList, findCnsInfoList } from "@/util/api";
 export default {
@@ -48,6 +50,7 @@ export default {
 
     components: {
         "v-content-head": contentHead,
+        'nav-menu':NavMenu
     },
 
     props: {

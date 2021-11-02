@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head> -->
         <div class="module-wrapper">
             <div class="search-part" style="display: flex;">
                 <div class="search-part-left">

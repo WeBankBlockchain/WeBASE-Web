@@ -663,6 +663,7 @@ export default {
             committeeList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
+                        debugger
                         let data = res.data.data
                         this.chainCommitteeList = data;
                         this.chainRivateKeyList = []

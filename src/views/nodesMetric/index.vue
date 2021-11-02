@@ -15,7 +15,8 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemMonitor')" :headSubTitle="$t('title.nodesMonitor')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.systemMonitor')" :headSubTitle="$t('title.nodesMonitor')" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.systemMonitor')" :headSubTitle="$t('title.nodesMonitor')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-nodes-list">
                 <div class="serch-nodes">
@@ -80,14 +81,13 @@ import { metricInfo, nodesHealth, getFronts, fetchNodeMonitor } from "@/util/api
 import { format, numberFormat, formatData } from "@/util/util.js";
 import errcode from "@/util/errcode";
 import Bus from "@/bus"
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     name: "nodesMetric",
     components: {
         "v-content-head": contentHead,
-        "v-metric-chart": metricChart
-    },
-    computed:{
-        
+        "v-metric-chart": metricChart,
+        'nav-menu':NavMenu
     },
     data() {
         return {

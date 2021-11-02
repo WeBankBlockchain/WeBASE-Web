@@ -15,10 +15,10 @@
  */
 <template>
   <div>
-    <v-content-head
+    <!-- <v-content-head
       :headTitle="$t('title.nodeTitle')"
       @changGroup="changGroup"
-    ></v-content-head>
+    ></v-content-head> -->
     <div class="module-wrapper">
       <h3 style="padding: 20px 0 0 40px">{{ this.$t("nodes.nodeFront") }}</h3>
       <div class="search-part" style="padding-top: 20px">

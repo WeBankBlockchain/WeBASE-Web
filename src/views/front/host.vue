@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changeGroup="changeGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changeGroup="changeGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part">
                 <!-- <div class="search-part-left" v-if='!disabled'>
@@ -39,6 +40,7 @@
 import contentHead from "@/components/contentHead";
 import addHost from "./dialog/addHost"
 import { getHosts, checkHost, getAnsible, pingHostData, deleteHost } from "@/util/api"
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     data() {
         return {
@@ -56,7 +58,8 @@ export default {
     },
     components: {
         "v-content-head": contentHead,
-        "add-host": addHost
+        "add-host": addHost,
+        'nav-menu':NavMenu
     },
     mounted() {
         this.checkAnsible()

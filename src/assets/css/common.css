@@ -45,7 +45,7 @@
 
 .module-wrapper {
     min-width: 540px;
-    margin: 15px 15px 0 15px;
+    /* margin: 0 15px 0 15px; */
     background-color: #fff;
     box-shadow: 0 4px 12px 0 #dfe2e9;
     border-radius: 10px;
@@ -210,6 +210,7 @@
 
 .bg-f7f7f7 {
     background-color: #f7f7f7;
+    margin:0 24px 0 24px
 }
 
 .cursor-context-menu {
@@ -381,7 +382,8 @@
 }
 
 .el-dialog__header {
-    padding-bottom: 0;
+    padding: 24px 24px 0 24px;
+    text-align: left;
 }
 
 .el-dialog__title {
@@ -392,8 +394,9 @@
 }
 
 .el-dialog__body {
-    padding-top: 20px;
-    padding-bottom: 20px;
+   padding: 24px 24px 0 24px;
+   max-height: 500px;
+   /* overflow-y: scroll; */
 }
 
 /* element-ui select*/

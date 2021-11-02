@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.alarmTypeConfig')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.alarmTypeConfig')" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.alarmTypeConfig')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <div style="padding-bottom: 10px;">
                 <span>{{$t('alarm.enableAlarm')}}</span>
@@ -77,12 +78,15 @@ import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
 import emailAlarmTypeDetail from "./dialog/emailAlarmTypeDetail"
 import emailAlarmDetail from "./dialog/emailAlarmDetail"
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     name: "emailAlarmType",
     components: {
         "v-content-head": contentHead,
         "emailAlarmType-detail": emailAlarmTypeDetail,
-        "emailAlarm-detail": emailAlarmDetail
+        "emailAlarm-detail": emailAlarmDetail,
+        'nav-menu':NavMenu
+
     },
     data: function () {
         return {

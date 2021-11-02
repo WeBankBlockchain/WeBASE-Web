@@ -15,7 +15,7 @@
  */
 <template>
     <div class="bg-f7f7f7">
-        <v-content-head :headTitle="$t('title.transactionInfo')" :icon="true" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.transactionInfo')" :icon="true" @changGroup="changGroup"></v-content-head> -->
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left-bg">
