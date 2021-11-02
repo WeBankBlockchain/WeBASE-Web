@@ -15,7 +15,8 @@
  */
 <template>
     <div style="height:100%">
-        <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
@@ -94,6 +95,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import transactionDetail from "@/components/transactionDetail";
 import { unusualContractList, getAllContractList } from "@/util/api";
@@ -106,7 +108,8 @@ export default {
         contentHead,
         transactionDetail,
         importAbi,
-        freezeThaw
+        freezeThaw,
+        'nav-menu':NavMenu
     },
     data() {
         return {

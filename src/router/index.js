@@ -546,36 +546,37 @@ Router.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
   return originalPush.call(this, location).catch(err => err)
 }
-router.beforeEach((to, from, next) => {
-  console.log(to);
-  console.log(from);
-  if (to.path == "/login") { // 判断该路由是否需要登录权限
-    next()
-  } else {
-    getConfigAuth().then(
-      res => {
-        if (res.data.data == true) {
-          next({
-            path: '/login'
-          })
-        } else {
-          next()
-        }
-      }).catch((err) => {
-      console.log(err)
-      next()
-    })
-  }
-  /*如果本地 存在 token 则 不允许直接跳转到 登录页面*/
-  // if(to.fullPath == "/login"){
-  //   if(localStorage.getItem('access_token')){
-  //     next({
-  //       path:from.fullPath
-  //     });
-  //   }else {
-  //     next();
-  //   }
-  // }
-});
+// router.beforeEach((to, from, next) => {
+//   console.log(to);
+//   console.log(from);
+//   if (to.path == "/login") { // 判断该路由是否需要登录权限
+//     next()
+//   } else {
+//     getConfigAuth().then(
+
+//       res => {
+//         if (res.data.data == true) {
+//           next({
+//             path: '/login'
+//           })
+//         } else {
+//           next()
+//         }
+//       }).catch((err) => {
+//       console.log(err)
+//       next()
+//     })
+//   }
+//   /*如果本地 存在 token 则 不允许直接跳转到 登录页面*/
+//   // if(to.fullPath == "/login"){
+//   //   if(localStorage.getItem('access_token')){
+//   //     next({
+//   //       path:from.fullPath
+//   //     });
+//   //   }else {
+//   //     next();
+//   //   }
+//   // }
+// });
 
 export default router

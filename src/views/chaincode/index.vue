@@ -1,7 +1,7 @@
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead>
-
+        <!-- <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead> -->
+        <nav-menu :headTitle="$t('title.contractList')" :headSubTitle="$t('title.contractList')"></nav-menu>
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane :label="$t('title.registered')" name="registered">
                 <registered-contract ref='registered' v-if='activeName === "registered"'></registered-contract>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import NavMenu from '@/components/navs/navMenu'
 import registeredContract from './oldContract'
 import totalContract from './totalContract'
 import contentHead from "@/components/contentHead";
@@ -23,6 +24,7 @@ export default {
         registeredContract,
         totalContract,
         "v-contentHead": contentHead,
+        'nav-menu':NavMenu
     },
     data() {
         return {

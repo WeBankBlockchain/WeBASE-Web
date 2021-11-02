@@ -196,6 +196,16 @@ export function addnodes(data) {
         }
     })
 }
+/**get nodeInfo */
+export function getNodeInfo(groupId,nodeId) {
+    return get({
+        url: `${url.ORG_LIST}/node/nodeInfo/${groupId}/${nodeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 /**Increase organization */
 export function addgroup(data) {
     return post({
@@ -1431,7 +1441,7 @@ export function getHostList() {
 //治理委员会list
 export function committeeList(data) {
     return get({
-        url: `${url.ORG_LIST}/governance/committee/list/`,
+        url: `${url.ORG_LIST}/governance/committee/list/sorted/`,
         method: "get",
         params: data,
         headers: {

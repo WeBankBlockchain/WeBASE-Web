@@ -15,11 +15,11 @@
  */
 <template>
   <div>
-    <v-content-head
+    <!-- <v-content-head
       :headTitle="$t('title.blockTitle')"
       :icon="true"
       @changGroup="changGroup"
-    ></v-content-head>
+    ></v-content-head> -->
     <div class="module-wrapper">
       <div class="search-part">
         <div class="search-part-left-bg">

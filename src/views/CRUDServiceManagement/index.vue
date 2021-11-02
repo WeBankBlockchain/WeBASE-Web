@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.adminUser')" prop="adminRivateKey" class="item-form">
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import ace from "ace-builds";
 // import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -83,6 +85,7 @@ export default {
     components: {
         "v-content-head": contentHead,
          "v-creatUser": creatUser,
+        'nav-menu':NavMenu
     },
 
     props: {

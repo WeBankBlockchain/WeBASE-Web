@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="`${nodesQuery.nodeIp}`" :icon="true" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="`${nodesQuery.nodeIp}`" :icon="true" @changGroup="changGroup"></v-content-head> -->
         <div class="module-wrapper">
             <div class="more-search-table">
                 <div class="search-item">

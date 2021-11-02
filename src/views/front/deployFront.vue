@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="height: 100%">
-            <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')"></v-content-head>
+            <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')"></v-content-head> -->
             <div v-loading='loading'></div>
         </div>
     </div>

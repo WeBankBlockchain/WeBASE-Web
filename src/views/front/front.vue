@@ -15,7 +15,8 @@
  */
 <template>
     <div class="front-module">
-        <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head> -->
+        <nav-menu :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')"></nav-menu>
         <!-- <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
@@ -122,6 +123,7 @@
                 </el-table>
                 <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+                    
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
                 <add-node v-if='addNodeShow' :show='addNodeShow' @close='addNodeClose'></add-node>
@@ -167,6 +169,7 @@ import Bus from "@/bus"
 import guideImg from "@/../static/image/guide.69e4d090.png"
 import hostInfo from "./dialog/hostInfo"
 import remarkNode from "./components/remarkNode";
+import navMenu from '@/components/navs/navMenu'
 export default {
     name: "node",
     components: {
@@ -178,7 +181,8 @@ export default {
         'update-node': updateNode,
         'set-config': setConfig,
         "host-info": hostInfo,
-        remarkNode
+        remarkNode,
+        'nav-menu':navMenu
     },
     watch: {
         $route() {

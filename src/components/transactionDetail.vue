@@ -49,8 +49,8 @@
                         <span v-if="transactionData.to">{{transactionData.to | contractSource}}</span>
                     </div>
                     <div class="item">
-                        <span class="label">nonceRaw:</span>
-                        <span>{{transactionData.nonceRaw || ""}}</span>
+                        <span class="label">nonce:</span>
+                        <span>{{transactionData.nonce || ""}}</span>
                     </div>
                     <div class="item">
                         <span class="label">Hash:</span>
@@ -259,6 +259,7 @@ export default {
                 "logsBloom",
                 "transactionHash",
                 "status",
+                "message",
                 "logs"
             ],
             txInfoReceiptMap: {},

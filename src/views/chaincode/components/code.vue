@@ -294,11 +294,12 @@
       v-dialogDrag
       :title="$t('contracts.sendTransaction')"
       :visible.sync="dialogVisible"
-      width="580px"
+      width="600px"
       :before-close="sendClose"
       v-if="dialogVisible"
       center
       class="send-dialog"
+      :modal-append-to-body="true"
     >
       <v-transaction
         @success="sendSuccess($event)"
@@ -1614,9 +1615,7 @@ export default {
 .titleActive {
   padding-left: 40px;
 }
-.send-dialog >>> .el-dialog--center .el-dialog__body {
-  padding: 5px 25px 20px;
-}
+
 .showText {
   display: inline-block;
   width: calc(100% - 120px);

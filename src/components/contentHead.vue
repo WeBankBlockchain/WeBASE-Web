@@ -15,7 +15,7 @@
  */
 <template>
     <div class="content-head-wrapper">
-        <div class="content-head-title">
+        <!-- <div class="content-head-title">
             <span class="content-head-icon" v-if="icon" @click="skip">
                 <i class="wbs-icon-back"></i>
             </span>
@@ -27,7 +27,13 @@
                 <i class="el-icon-info contract-icon font-15"></i>
             </el-tooltip>
             <a v-if="headHref" target="_blank" :href="headHref.href" class="font-color-fff font-12">{{headHref.content}}</a>
-        </div>
+        </div> -->
+        <div class="content-head-title justify-center center" style="top: 20%;position:absolute;">
+                <img :src="maxLog" alt="" style="width:120px">
+                <!-- <span class="sidebar-contract-icon">
+                    <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
+                </span> -->
+            </div>
         <div class="content-head-network">
             <!-- <span class="content-head-version" v-if='$store.state.version'>链版本: </span>
             <span class="content-head-version content-head-version-data">{{$store.state.version}}</span>
@@ -98,6 +104,7 @@
 </template>
 
 <script>
+import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
 import { loginOut, groupStatus4, getGroupsInvalidIncluded, deleteChain } from "@/util/api";
@@ -138,13 +145,14 @@ export default {
         headTitle: function (val) {
             this.title = val;
         },
-        updateGroup: function (val) {
+        updateGroup: function (val) { 
             this.getGroupList();
         }
 
     },
     data: function () {
         return {
+            maxLog: maxLog,
             title: this.headTitle,
             groupName: "-",
             accountName: "-",
@@ -341,7 +349,10 @@ export default {
     background-color: #181f2e;
     text-align: left;
     line-height: 54px;
-    position: relative;
+    position: fixed;
+    top:0;
+    left:0;
+    z-index: 999;
 }
 .content-head-wrapper::after {
     display: block;
@@ -461,4 +472,5 @@ export default {
 .version-item {
     line-height: 22px;
 }
+
 </style>

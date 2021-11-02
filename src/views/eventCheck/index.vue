@@ -1,6 +1,7 @@
 <template>
     <div class="rivate-key-management-wrapper">
-        <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part ">
                 <el-form :model="contractEventForm" :rules="rules" ref="contractEventForm" class="demo-ruleForm" label-width="110px">
@@ -21,7 +22,7 @@
                         <el-form-item :label="$t('table.toBlock')" prop="toBlock">
                             <el-input v-model.number="contractEventForm.toBlock" clearable style="width: 195px;"></el-input>
                         </el-form-item>
-                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start">
+                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start" style="margin-top:12px">
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
                     </div>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import decodeLog from "@/components/decodeLog";
 import { contractFindOne, contractListAll, checkEvent, getNetworkStatistics, listAddress, eventContractInfo } from "@/util/api"
@@ -81,7 +83,8 @@ export default {
 
     components: {
         contentHead,
-        decodeLog
+        decodeLog,
+        'nav-menu':NavMenu
     },
 
     props: {
@@ -520,6 +523,7 @@ export default {
             };
         },
         querySearch(queryString, cb) {
+            debugger
             var restaurants = this.restaurants;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据

@@ -58,6 +58,7 @@ axios.defaults.withCredentials = true;
 // axios.defaults.timeout = 60 * 1000;
 Vue.use(router);
 Vue.use(VueClipboard);
+ElementUI.Dialog.props.closeOnClickModal.default=false
 Vue.use(ElementUI, {
     size: Cookies.get('size') || 'medium', // set element-ui default size
     i18n: (key, value) => i18n.t(key, value)

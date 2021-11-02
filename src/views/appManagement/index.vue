@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-head :headTitle="$t('title.appManagement')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.appManagement')" @changGroup="changGroup"></content-head> -->
         <div class="module-wrapper">
             <div class="desc-wrapper">
                 <p class="desc-content">

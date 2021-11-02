@@ -1,7 +1,8 @@
 <template>
     <div>
-        <contents  @changGroup="changGroup" :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')" :headHref="headHref">
-        </contents>
+        <!-- <contents  @changGroup="changGroup" :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')" :headHref="headHref">
+        </contents> -->
+        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')"></nav-menu>
         <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
                 <el-tab-pane :label="$t('title.committeeMgmt')">
@@ -19,6 +20,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contents from "@/components/contentHead";
 import committeeMgmt from "@/views/committeeMgmt/index";
 import developerMgmt from "@/views/developerMgmt/index";
@@ -30,7 +32,8 @@ export default {
          contents,
         committeeMgmt,
         developerMgmt,
-        permission
+        permission,
+        'nav-menu':NavMenu
     },
     data() {
         return {

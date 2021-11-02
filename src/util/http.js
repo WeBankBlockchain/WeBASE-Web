@@ -16,10 +16,14 @@
 import Axios from 'axios'
 import router from '../router'
 import Cookies from 'js-cookie'
+import { debug } from 'request';
 let axiosIns = Axios.create({
-    timeout: 60 * 1000
+    timeout: 60 * 1000,
+    headers:{
+        'Cache-Control':'no-cache',
+    }
 });
-// axiosIns.defaults.baseURL = 'http://127.0.0.1:8081';
+// axiosIns.defaults.baseURL = 'http://127.0.0.1:3006';
 axiosIns.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 // axiosIns.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
 axiosIns.defaults.responseType = 'json';
@@ -31,11 +35,11 @@ axiosIns.defaults.validateStatus = function () {
 axiosIns.interceptors.response.use(
     response => {
         if (response.data && response.data.code === 302000) {
-            router.push({
-                path: '/login',
+            router.push({   
+                path: '/login', 
                 query: { redirect: router.currentRoute.fullPath }
             })
-        }
+        }   
         if (response.data && (response.data.code === 202052 || response.data.code === 202053)) {
             router.push({
                 path: "/login"

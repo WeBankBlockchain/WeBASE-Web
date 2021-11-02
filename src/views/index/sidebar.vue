@@ -16,12 +16,15 @@
 <template>
     <div style="height: 100%;position: relative;box-sizing: border-box">
         <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
-            <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
+            <!-- <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
                     <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
                 </span>
-            </div>
+            </div> -->
+              <span class="sidebar-contract-icon">
+                    <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
+                </span>
             <div class="mini-sidebar-contract-icon" v-if="!menuShowC" style="padding-bottom:40px">
                 <i class="el-icon-caret-right font-color-aeb1b5" @click="hideMune(false)" style="font-size: 18px;"></i>
             </div>
@@ -58,6 +61,7 @@
 </template>
 
 <script>
+import Bus from "@/bus";
 import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
 import { versionfunegt } from "@/util/util.js";
@@ -207,6 +211,7 @@ export default {
             }
         },
         activeRoute() {
+            Bus.$emit("closeNav", true);
             return this.active ? this.active : this.$route.path
         }
     },
@@ -577,8 +582,8 @@ export default {
 .sidebar-contract-icon {
     position: absolute;
     display: inline-block;
-    left: 180px;
-    top: 18px;
+    left: 90%;
+    top: 10px;
     font-size: 12px;
     letter-spacing: 0;
     text-align: right;
