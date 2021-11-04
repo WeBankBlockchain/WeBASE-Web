@@ -77,7 +77,7 @@ export default {
       groupVisible: false,
       versionInfoVisible: false,
       contentShow: true,
-      activeNames:['1'],
+      activeNames:[],
       contents:[],
       currentRoute:''
     };
@@ -92,6 +92,12 @@ export default {
     if(this.$route.path=='/node/chain'){
     this.contents=navContent['newNode'];
     }
+    if(this.contents){
+        this.contents.map((item,index)=>{
+    this.activeNames.push(index);
+    })
+    }
+  
     },
     skip: function () {
       if (this.route) {

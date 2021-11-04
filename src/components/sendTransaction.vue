@@ -253,7 +253,7 @@ export default {
         },
         {
           pattern: `^0[xX][0-9a-fA-F]{${i*2}}$`,
-          message: "必须是十六进制的数字或字母，长度是2N",
+          message: "必须是十六进制的数字或字母，长度是"+2*i,
           trigger: "blur",
         },
       ];
@@ -514,7 +514,7 @@ export default {
         this.transation.funcName = this.data.contractName;
       }
           for(let item in this.ruleForm){
-          let data = this.ruleForm[item].replace(/^\s+|\s+$/g, "");
+          let data = this.ruleForm[item];
           if (data && isJson(data)) {
             try {
                this.ruleForm[item] = JSON.parse(data);
@@ -564,8 +564,8 @@ export default {
       sendTransation(data)
         .then((res) => {
           this.buttonClick = false;
-          this.close();
           if (res.data.code === 0) {
+            this.close();
             var resData = res.data.data;
             let successData = {
               resData: resData,
@@ -612,12 +612,10 @@ export default {
               type: "error",
               duration: 2000,
             });
-            this.close();
           }
         })
         .catch((err) => {
           this.buttonClick = false;
-          this.close();
           this.$message({
             message: err.data || this.$t("text.systemError"),
             type: "error",

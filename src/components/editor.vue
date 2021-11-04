@@ -16,10 +16,10 @@
 <template>
     <el-dialog v-dialogDrag :title="$t('contracts.transactionReceipt')" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh">
         <div v-if='!transationData'>{{$t('text.noData')}}</div>
-        <div v-if='transationData && !transationData.logs' slot :style="{'height':editorHeight + 'px'}" style="overflow-y:auto">
+        <div v-if='transationData && !transationData.logs' slot style="overflow-y:scroll;height:500px">
             <json-viewer :value="transationData" :expand-depth='5' copyable></json-viewer>
         </div>
-        <div v-if='transationData && transationData.logs' slot :style="{'height':editorHeight + 'px'}" style="overflow-y:auto">
+        <div v-if='transationData && transationData.logs' slot  style="overflow-y:scroll;height:500px">
             <div>{</div>
             <div v-for="(val,key) in transationData" :key='key' style="padding-left: 10px;">
                 <div v-if='key != "logs"&& key != "output"'>

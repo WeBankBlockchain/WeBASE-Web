@@ -83,10 +83,10 @@
                 </a>
             </el-popover>
         </div>
-        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
+        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="600px" center :modal-append-to-body='false' v-dialogDrag >
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
-        <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">
+        <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible"  width="600px" center :modal-append-to-body='false' v-dialogDrag>
             <p class="version-item">
                 <span>{{$t("text.chainVersion")}}: </span>
                 <span>{{$store.state.version}}</span>
@@ -339,7 +339,10 @@ export default {
                     return '#F56C6C'
                     break;
             }
-        }
+        },
+        sendClose: function () {
+      this.$refs.send.close();
+    },
     }
 };
 </script>

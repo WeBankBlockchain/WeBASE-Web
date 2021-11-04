@@ -1,6 +1,7 @@
 <template>
     <div>
         <!-- <content-head :headTitle="$t('title.appManagement')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.appManagement')" ></nav-menu>
         <div class="module-wrapper">
             <div class="desc-wrapper">
                 <p class="desc-content">
@@ -142,13 +143,17 @@ import ContentHead from "@/components/contentHead";
 import { fetchAppList, fetchAppServerInfo, fetchDeleteApp } from "@/util/api";
 import AppDialog from './components/appDialog.vue';
 import RegisterDialog from './components/registerDialog.vue';
+import NavMenu from '../../components/navs/navMenu.vue';
+
 
 export default {
     name: "AppManagement",
     components: {
         ContentHead,
         AppDialog,
-        RegisterDialog
+        RegisterDialog,
+        'nav-menu':NavMenu,
+
     },
     data() {
         return {

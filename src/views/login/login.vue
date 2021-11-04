@@ -166,7 +166,7 @@ export default {
       },
       authToken: null,
       encryption: "hash",
-      pictureCheckCodeErrShow:true
+      pictureCheckCodeErrShow:false
     };
   },
   computed: {

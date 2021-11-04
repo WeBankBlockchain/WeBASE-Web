@@ -1,7 +1,7 @@
 <template>
     <div class="rivate-key-management-wrapper">
         <!-- <v-contentHead :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></v-contentHead> -->
-        <nav-menu :headTitle="$t('title.contractList')" :headSubTitle="$t('title.contractList')"></nav-menu>
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractList')" @changGroup="changGroup"></nav-menu>
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane :label="$t('title.registered')" name="registered">
                 <registered-contract ref='registered' v-if='activeName === "registered"'></registered-contract>
