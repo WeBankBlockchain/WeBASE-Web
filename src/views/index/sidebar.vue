@@ -15,7 +15,7 @@
  */
 <template>
     <div style="height: 100%;position: relative;box-sizing: border-box">
-        <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
+        <div style="height: 100%;background-color: #0c1220;box-sizing: border-box;overflow-y: auto;" class="sidebar-content">
             <!-- <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
@@ -540,8 +540,8 @@ export default {
 .mini-sidebar-contract-icon i {
     position: absolute;
     top: 20px;
-    right: 10px;
-    z-index: 9999;
+    right: 20px;
+    z-index: 999;
     cursor: pointer;
 }
 

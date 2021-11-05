@@ -24,7 +24,7 @@
         >{{ headHref.content }}</a
       >
     </div>
-    <div :class="['guideLine',{'guideCheck':navContentShow}]">
+    <div :class="['guideLine',{'guideCheck':navContentShow}]" v-if="noShow">
       <el-button
         size="small"
         type=""
@@ -79,6 +79,7 @@ export default {
       groupVisible: false,
       versionInfoVisible: false,
       navContentShow: false,
+      noShow:true
     };
   },
   watch: {
@@ -91,6 +92,11 @@ export default {
     Bus.$on("closeContent", () => {
       that.navContentShow = false;
     });
+     this.currentRoute=this.$route.path;
+   let pre=this.currentRoute.substring(1)
+   if(pre=='contractWarehouse'||pre=='appManagement'||pre=='contract'||pre=='hostMetric'||pre=='nodesMetric'){
+     this.noShow=false
+   }
   },
   methods: {
     skip: function () {

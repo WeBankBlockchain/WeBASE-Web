@@ -16,6 +16,7 @@
 <template>
     <div class="contract-content" v-loading='loading'>
         <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')"></nav-menu>
         <div style="height: calc(100% - 56px)">
             <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
                 <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
@@ -43,12 +44,16 @@ import codes from "./components/code";
 import contentHead from "@/components/contentHead";
 import { encryption } from "@/util/api";
 import webworkify from 'webworkify-webpack'
+import NavMenu from '../../components/navs/navMenu.vue';
+
 export default {
     name: "contract",
     components: {
         "v-menu": menu,
         "v-code": codes,
-        "v-content-head": contentHead
+        "v-content-head": contentHead,
+        'nav-menu':NavMenu
+
     },
     watch: {
         $route: function () {

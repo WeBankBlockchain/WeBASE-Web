@@ -9,18 +9,22 @@
       ></el-button>
     </div>
     <div class="contents">
-     <el-collapse v-model="activeNames" v-for="(item,index) in contents" :key='index'>
-  <el-collapse-item :title="item.title" :name="index">
-   <div>{{item.content}}</div>
-  </el-collapse-item>
-</el-collapse>
+      <el-collapse
+        v-model="activeNames"
+        v-for="(item, index) in contents"
+        :key="index"
+      >
+        <el-collapse-item :title="item.title" :name="index">
+          <div v-html="item.content"></div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
   </div>
 </template>
 
 <script>
 import Bus from "@/bus";
-import navContent from '@/../static/navContents/zh.js'
+import navContent from "@/../static/navContents/zh.js";
 export default {
   props: {
     headTitle: {
@@ -42,13 +46,11 @@ export default {
       console.log(that.contentShow);
       that.contentShow = !that.contentShow;
     });
-  Bus.$on("closeNav", () => {
-      that.contentShow = true
+    Bus.$on("closeNav", () => {
+      that.contentShow = true;
     });
-    console.log(navContent)
-    this.getContents()
-    
-    
+    console.log(navContent);
+    this.getContents();
   },
   watch: {
     headTitle: function (val) {
@@ -57,9 +59,9 @@ export default {
     updateGroup: function (val) {
       this.getGroupList();
     },
-    $route:function(){
-    this.getContents()
-    }
+    $route: function () {
+      this.getContents();
+    },
   },
   data: function () {
     return {
@@ -77,21 +79,28 @@ export default {
       groupVisible: false,
       versionInfoVisible: false,
       contentShow: true,
-      activeNames:['1'],
-      contents:[],
-      currentRoute:''
+      activeNames: [],
+      contents: [],
+      currentRoute: "",
     };
   },
   methods: {
-    getContents(){
-        console.log(this.$route.path)
-   this.currentRoute=this.$route.path;
-   let pre=this.currentRoute.substring(1)
-    this.contents=navContent[pre];
-    console.log(this.contents);
-    if(this.$route.path=='/node/chain'){
-    this.contents=navContent['newNode'];
-    }
+    getContents() {
+      this.currentRoute = this.$route.path;
+      let pre = this.currentRoute.substring(1);
+      this.contents = navContent[pre];
+      if (this.$route.path == "/node/chain") {
+        if (localStorage.getItem("deployType")) {
+          this.contents = navContent["newNodes"];
+        } else {
+          this.contents = navContent["newNode"];
+        }
+      }
+      if (this.contents) {
+        this.contents.map((item, index) => {
+          this.activeNames.push(index);
+        });
+      }
     },
     skip: function () {
       if (this.route) {
@@ -101,7 +110,7 @@ export default {
       }
     },
     closeContent() {
-      Bus.$emit("closeContent",true);
+      Bus.$emit("closeContent", true);
     },
   },
 };
@@ -125,14 +134,14 @@ export default {
   width: 272px;
   line-height: 54px;
   position: relative;
-    padding: 0 24px 0 24px;
+  padding: 0 24px 0 24px;
 }
 .contents {
   width: 272px;
   height: 95%;
   overflow: scroll;
-    padding: 0 24px 0 24px;
-        border-top: 1px solid #f7f7f7; 
+  padding: 0 24px 0 24px;
+  border-top: 1px solid #f7f7f7;
   /* background-color: gray; */
   /* padding: 24px 24px 0 24px; */
 }
@@ -145,7 +154,7 @@ export default {
   padding: 0;
   border: 0;
 }
-.closeNav:hover{
+.closeNav:hover {
   background-color: white;
 }
 .contentShows {

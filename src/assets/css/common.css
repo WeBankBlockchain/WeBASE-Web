@@ -394,8 +394,9 @@
 }
 
 .el-dialog__body {
-   padding: 24px 24px 0 24px;
+   padding: 24px 24px 0 24px !important;
    max-height: 500px;
+   margin-bottom: 24px;
    /* overflow-y: scroll; */
 }
 
@@ -475,6 +476,9 @@ td {
 
 .el-submenu__title {
     text-align: left;
+}
+.el-menu-item{
+    color:white
 }
 
 .el-menu-item-group__title {

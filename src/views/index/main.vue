@@ -86,7 +86,7 @@
           viewHide: menuHide && contentShow,
         }"
       >
-        <router-view class="bg-f7f7f7"></router-view>
+        <router-view v-if="isRouterAlive" class="bg-f7f7f7"></router-view>
       </div>
       <nav-content></nav-content>
       <!-- <div class="tipContent"></div>
@@ -158,6 +158,7 @@ export default {
       configShow: false,
       tipShow: false,
       contentShow: false,
+      isRouterAlive: true
     };
   },
   computed: {
@@ -248,20 +249,16 @@ export default {
     });
   },
   methods: {
+    reload() {
+     this.isRouterAlive = false
+     this.$nextTick(() => (this.isRouterAlive = true))
+   },
     tipIfShow() {
       this.tipShow = !this.tipShow;
     },
     changGroup(val) {
       this.groupId = val;
-      this.getNetworkDetails();
-      this.getNodeTable();
-      this.getBlockList();
-      this.getTransaction();
-      this.$nextTick(function () {
-        this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
-        this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
-        this.getChart();
-      });
+      this.reload()
     },
     getNetworkDetails: function () {
       this.loadingNumber = true;
@@ -745,13 +742,14 @@ export default {
   height: 96%;
   overflow-x: hidden;
   overflow-y: auto;
-  z-index: 99999;
+  z-index: 666;
   position: fixed;
   left: 0;
 }
 .view-wrapper {
   height: 100%;
   display: inline-block;
+  overflow-y: scroll;
   position: relative;
   /* vertical-align: top; */
 }
