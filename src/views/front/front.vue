@@ -166,7 +166,7 @@ import addNode from "./dialog/addNode"
 import newNode from "./dialog/newNode"
 import updateNode from "./dialog/updateNode"
 import Bus from "@/bus"
-import guideImg from "@/../static/image/guide.69e4d090.png"
+import guideImg from "../../../static/image/guide.69e4d090.png"
 import hostInfo from "./dialog/hostInfo"
 import remarkNode from "./components/remarkNode";
 import navMenu from '@/components/navs/navMenu'
@@ -1047,7 +1047,6 @@ export default {
                         this.nodeData = unique(this.nodeData, 'nodeId');
                         console.log(this.frontData)
                         this.nodeData.forEach((item,index)=>{
-                        //  debugger
                         // this.frontData[index].nodeIp=item.nodeIp?item.nodeIp:this.frontData[index].frontIp;
                         // this.frontData[index].city=item.city;
                         })

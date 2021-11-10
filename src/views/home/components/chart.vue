@@ -74,13 +74,14 @@ export default {
                     show: true,
                     trigger: "axis",
                     formatter: function(data) {
+                        console.log(data)
                         return (
                             '<span style="font-size:10px">' +
                             data[0].name +
-                            '</span><br><table ><tr><td style="padding:0">' +
-                            '<span style="font-size:10px;color:white">' + that.$t("home.chartTransactions") + '：' +
+                            '</span><br>' +
+                            '<span style="font-size:10px;">' + that.$t("home.chartTransactions") + '：' +
                             data[0].value + that.$t('transaction.stroke') +
-                            "</a></span><br></td></tr></table>"
+                            "</span>"
                         );
                     }
                 },

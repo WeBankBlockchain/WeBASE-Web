@@ -24,7 +24,7 @@
 
 <script>
 import Bus from "@/bus";
-import navContent from "@/../static/navContents/zh.js";
+import navContent from "../../../static/navContents/zh.js";
 export default {
   props: {
     headTitle: {

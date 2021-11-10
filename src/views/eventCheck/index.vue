@@ -523,7 +523,6 @@ export default {
             };
         },
         querySearch(queryString, cb) {
-            debugger
             var restaurants = this.restaurants;
             var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
             // 调用 callback 返回建议列表的数据

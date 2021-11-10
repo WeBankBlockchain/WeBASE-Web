@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
+import maxLog from "../../static/image/logo-2 copy@1.5x.jpg";
 import changePasswordDialog from "./changePasswordDialog";
 import router from "@/router";
 import { loginOut, groupStatus4, getGroupsInvalidIncluded, deleteChain } from "@/util/api";

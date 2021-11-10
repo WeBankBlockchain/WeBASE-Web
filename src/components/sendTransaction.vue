@@ -17,175 +17,175 @@
   <div class="send-wrapper">
     <div class="send-body">
       <div class="send-item">
-      <span class="send-item-title"
-        >{{ this.$t("contracts.contractName") }}:</span
-      >
-      <span>{{ data.contractName }}</span>
-    </div>
-    <div class="send-item">
-      <span class="send-item-title">CNS:</span>
-      <span>
-        <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
-      </span>
-    </div>
-    <div class="send-item" v-if="isCNS">
-      <span class="send-item-title"></span>
-      <el-input
-        v-model.trim="cnsName"
-        style="width: 400px; margin-bottom: 4px"
-        :placeholder="$t('dialog.cnsName')"
-      >
-        <template slot="prepend">
-          <span class="">name</span>
-        </template>
-      </el-input>
-    </div>
-    <div class="send-item" v-if="isCNS">
-      <span class="send-item-title"></span>
-      <el-input
-        v-model.trim="cnsVersion"
-        style="width: 400px; margin-bottom: 4px"
-        :placeholder="$t('dialog.cnsVersion')"
-      >
-        <template slot="prepend">
-          <span class="">version</span>
-        </template>
-      </el-input>
-    </div>
-    <div class="send-item" v-else>
-      <span class="send-item-title"
-        >{{ this.$t("contracts.contractAddress") }}:</span
-      >
-      <el-input
-        v-model="contractAddress"
-        style="width: 400px"
-        :placeholder="$t('contracts.contractAddressInput')"
-      ></el-input>
-      <el-tooltip
-        class="item"
-        effect="dark"
-        :content="$t('contracts.contractAddressInfo')"
-        placement="top-start"
-      >
-        <i class="el-icon-info"></i>
-      </el-tooltip>
-    </div>
-    <div class="send-item" v-show="showUser">
-      <span class="send-item-title">{{ this.$t("contracts.user") }}:</span>
-      <el-select
-        v-model="transation.userName"
-        :placeholder="$t('contracts.selectUser')"
-        style="width: 400px"
-      >
-        <el-option
-          :label="item.userName"
-          :value="item.address"
-          :key="item.userId"
-          v-for="(item, index) in userList"
+        <span class="send-item-title"
+          >{{ this.$t("contracts.contractName") }}:</span
         >
-          <span>{{ item.userName }}</span>
-          <!-- <span class="font-12">{{splitString(item.address)}}...</span> -->
-          <span class="font-12">{{ item.address }}</span>
-        </el-option>
-      </el-select>
-      <span
-        v-if="isUserNameShow"
-        class="contract-code-done"
-        @click="$store.dispatch('switch_creat_user_dialog')"
-      >
-        <span
-          target="_blank"
-          style="cursor: pointer; text-decoration: underline"
-          >{{ this.$t("privateKey.addUser") }}</span
-        >
-      </span>
-    </div>
-    <el-dialog
-      :visible.sync="$store.state.creatUserVisible"
-      :title="$t('privateKey.createUser')"
-      width="640px"
-      :append-to-body="true"
-      class="dialog-wrapper"
-      center
-    >
-      <v-creatUser
-        @creatUserClose="creatUserClose"
-        :disablePub="true"
-        ref="creatUser"
-      ></v-creatUser>
-    </el-dialog>
-    <div class="send-item">
-      <span class="send-item-title">{{ this.$t("contracts.method") }}:</span>
-      <el-select
-        v-model="transation.funcType"
-        :placeholder="$t('contracts.methodType')"
-        @change="changeType($event)"
-        style="width: 100px"
-      >
-        <el-option label="function" :value="'function'"></el-option>
-      </el-select>
-      <el-select
-        v-model="transation.funcName"
-        :placeholder="$t('contracts.methodName')"
-        filterable
-        v-show="funcList.length > 0"
-        @change="changeFunc"
-        style="width: 300px"
-      >
-        <el-option
-          :label="item.name"
-          :key="item.funcId"
-          :value="item.funcId"
-          v-for="item in funcList"
-        ></el-option>
-      </el-select>
-    </div>
-    <el-form
-      class="send-item"
-      v-show="pramasData.length"
-      style="line-height: 25px"
-      :rules="rules"
-      :model="ruleForm"
-      ref="sendTransation"
-    >
-      <span class="send-item-title" style="position: relative; top: 5px"
-        >{{ this.$t("contracts.params") }}:</span
-      >
-      <el-form-item
-        style="position: relative; top: -25px"
-        v-for="(item, index) in pramasData"
-        :prop="item.type"
-        :key="item.name"
-      >
-        <span class="send-item-title"></span>
-        <template v-if="item.type == 'string'">
-          <el-input
-            v-model="ruleForm[item.type]"
-            style="width: 400px"
-            :placeholder="item.type"
-          >
-            <template slot="prepend">
-              <span class="">{{ item.name }}</span>
-            </template>
-          </el-input>
-        </template>
-        <template v-else>
-          <el-input
-            v-model="ruleForm[item.type]"
-            style="width: 400px"
-            :placeholder="placeholderText(item.type)"
-          >
-            <template slot="prepend">
-              <span class="">{{ item.name }}</span>
-            </template>
-          </el-input>
-        </template>
-      </el-form-item>
-      <div style="padding: 5px 0 0 28px; color: 'gray'">
-        <i class="el-icon-info" style="padding-right: 4px"></i
-        >{{ this.$t("contracts.paramsInfo") }}
+        <span>{{ data.contractName }}</span>
       </div>
-    </el-form> 
+      <div class="send-item">
+        <span class="send-item-title">CNS:</span>
+        <span>
+          <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
+        </span>
+      </div>
+      <div class="send-item" v-if="isCNS">
+        <span class="send-item-title"></span>
+        <el-input
+          v-model.trim="cnsName"
+          style="width: 400px; margin-bottom: 4px"
+          :placeholder="$t('dialog.cnsName')"
+        >
+          <template slot="prepend">
+            <span class="">name</span>
+          </template>
+        </el-input>
+      </div>
+      <div class="send-item" v-if="isCNS">
+        <span class="send-item-title"></span>
+        <el-input
+          v-model.trim="cnsVersion"
+          style="width: 400px; margin-bottom: 4px"
+          :placeholder="$t('dialog.cnsVersion')"
+        >
+          <template slot="prepend">
+            <span class="">version</span>
+          </template>
+        </el-input>
+      </div>
+      <div class="send-item" v-else>
+        <span class="send-item-title"
+          >{{ this.$t("contracts.contractAddress") }}:</span
+        >
+        <el-input
+          v-model="contractAddress"
+          style="width: 400px"
+          :placeholder="$t('contracts.contractAddressInput')"
+        ></el-input>
+        <el-tooltip
+          class="item"
+          effect="dark"
+          :content="$t('contracts.contractAddressInfo')"
+          placement="top-start"
+        >
+          <i class="el-icon-info"></i>
+        </el-tooltip>
+      </div>
+      <div class="send-item" v-show="showUser">
+        <span class="send-item-title">{{ this.$t("contracts.user") }}:</span>
+        <el-select
+          v-model="transation.userName"
+          :placeholder="$t('contracts.selectUser')"
+          style="width: 400px"
+        >
+          <el-option
+            :label="item.userName"
+            :value="item.address"
+            :key="item.userId"
+            v-for="(item, index) in userList"
+          >
+            <span>{{ item.userName }}</span>
+            <!-- <span class="font-12">{{splitString(item.address)}}...</span> -->
+            <span class="font-12">{{ item.address }}</span>
+          </el-option>
+        </el-select>
+        <span
+          v-if="isUserNameShow"
+          class="contract-code-done"
+          @click="$store.dispatch('switch_creat_user_dialog')"
+        >
+          <span
+            target="_blank"
+            style="cursor: pointer; text-decoration: underline"
+            >{{ this.$t("privateKey.addUser") }}</span
+          >
+        </span>
+      </div>
+      <el-dialog
+        :visible.sync="$store.state.creatUserVisible"
+        :title="$t('privateKey.createUser')"
+        width="640px"
+        :append-to-body="true"
+        class="dialog-wrapper"
+        center
+      >
+        <v-creatUser
+          @creatUserClose="creatUserClose"
+          :disablePub="true"
+          ref="creatUser"
+        ></v-creatUser>
+      </el-dialog>
+      <div class="send-item">
+        <span class="send-item-title">{{ this.$t("contracts.method") }}:</span>
+        <el-select
+          v-model="transation.funcType"
+          :placeholder="$t('contracts.methodType')"
+          @change="changeType($event)"
+          style="width: 100px"
+        >
+          <el-option label="function" :value="'function'"></el-option>
+        </el-select>
+        <el-select
+          v-model="transation.funcName"
+          :placeholder="$t('contracts.methodName')"
+          filterable
+          v-show="funcList.length > 0"
+          @change="changeFunc"
+          style="width: 300px"
+        >
+          <el-option
+            :label="item.name"
+            :key="item.funcId"
+            :value="item.funcId"
+            v-for="item in funcList"
+          ></el-option>
+        </el-select>
+      </div>
+      <el-form
+        class="send-item"
+        v-show="pramasData.length"
+        style="line-height: 25px"
+        :rules="rules"
+        :model="ruleForm"
+        ref="sendTransation"
+      >
+        <span class="send-item-title" style="position: relative; top: 5px"
+          >{{ this.$t("contracts.params") }}:</span
+        >
+        <el-form-item
+          style="position: relative; top: -25px"
+          v-for="(item, index) in pramasData"
+          :prop="item.type"
+          :key="item.name"
+        >
+          <span class="send-item-title"></span>
+          <template v-if="item.type == 'string'">
+            <el-input
+              v-model="ruleForm[item.type]"
+              style="width: 400px"
+              :placeholder="item.type"
+            >
+              <template slot="prepend">
+                <span class="">{{ item.name }}</span>
+              </template>
+            </el-input>
+          </template>
+          <template v-else>
+            <el-input
+              v-model="ruleForm[item.type]"
+              style="width: 400px"
+              :placeholder="placeholderText(item.type)"
+            >
+              <template slot="prepend">
+                <span class="">{{ item.name }}</span>
+              </template>
+            </el-input>
+          </template>
+        </el-form-item>
+        <div style="padding: 5px 0 0 28px; color: 'gray'">
+          <i class="el-icon-info" style="padding-right: 4px"></i
+          >{{ this.$t("contracts.paramsInfo") }}
+        </div>
+      </el-form>
     </div>
     <div class="text-right send-btn">
       <el-button @click="close">{{ this.$t("text.cancel") }}</el-button>
@@ -252,8 +252,8 @@ export default {
           trigger: "blur",
         },
         {
-          pattern: `^0[xX][0-9a-fA-F]{${i*2}}$`,
-          message: "必须是十六进制的数字或字母，长度是"+2*i,
+          pattern: `^0[xX][0-9a-fA-F]{${i * 2}}$`,
+          message: "必须是十六进制的数字或字母，长度是" + 2 * i,
           trigger: "blur",
         },
       ];
@@ -282,8 +282,7 @@ export default {
       cnsVersion: "",
       cnsName: "",
       isUserNameShow: false,
-      ruleForm: {
-      },
+      ruleForm: {},
       rules: {
         int: [
           {
@@ -306,6 +305,18 @@ export default {
           {
             pattern: /^[1-9]\d*$/,
             message: "不可以是负数",
+            trigger: "blur",
+          },
+        ],
+        address: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+          {
+            pattern: `^0[xX][0-9a-fA-F]{40}$`,
+            message: "必须是十六进制的数字或字母,长度是42",
             trigger: "blur",
           },
         ],
@@ -363,6 +374,25 @@ export default {
     this.formatAbi();
   },
   methods: {
+    arrayLimit() {
+      console.log(this.pramasData);
+      this.pramasData.map((item, index) => {
+        if (item.type.indexOf("[]") != -1) {
+          this.rules[item.type] = [
+            {
+              required: true,
+              message: this.$t("text.sendInput"),
+              trigger: "blur",
+            },
+            {
+              pattern: `^\\[.*?\\]$`,
+              message: "必须是以[开头,以]结尾的数组",
+              trigger: "blur",
+            },
+          ];
+        }
+      });
+    },
     placeholderText(type) {
       if (type.length > 5 && type.substring(0, 5) == "bytes") {
         return "十六进制";
@@ -385,27 +415,26 @@ export default {
       }
     },
     submit: function (formName) {
-    //   if (this.isCNS) {
-    //     if (!this.cnsName || !this.cnsVersion) {
-    //       this.$message({
-    //         type: "error",
-    //         message: this.$t("text.cnsNameVersion"),
-    //       });
-    //       return;
-    //     } else {
-    //       this.send();
-    //     }
-    //   } else {
-    //     this.send();
-    //   }
+      //   if (this.isCNS) {
+      //     if (!this.cnsName || !this.cnsVersion) {
+      //       this.$message({
+      //         type: "error",
+      //         message: this.$t("text.cnsNameVersion"),
+      //       });
+      //       return;
+      //     } else {
+      //       this.send();
+      //     }
+      //   } else {
+      //     this.send();
+      //   }
       this.$refs.sendTransation.validate((valid) => {
-          if (valid) {
-            this.send();
-          } else {
-            return false;
-          }
-        });
-      
+        if (valid) {
+          this.send();
+        } else {
+          return false;
+        }
+      });
     },
     close: function (formName) {
       this.$emit("close", false);
@@ -424,6 +453,7 @@ export default {
           if (value.type === val) {
             this.pramasData = value.inputs;
             this.pramasObj = value;
+            this.arrayLimit();
           }
         });
       } else {
@@ -453,6 +483,7 @@ export default {
           this.constant = value.constant;
           this.pramasObj = value;
           this.stateMutability = value.stateMutability;
+          this.arrayLimit();
         }
       });
       this.funcList.sort(function (a, b) {
@@ -513,27 +544,25 @@ export default {
       if (this.transation.funcType === "constructor") {
         this.transation.funcName = this.data.contractName;
       }
-          for(let item in this.ruleForm){
-          let data = this.ruleForm[item];
-          if (data && isJson(data)) {
-            try {
-               this.ruleForm[item] = JSON.parse(data);
-            } catch (error) {
-              console.log(error);
-            }
-          } else {
-              this.ruleForm[item] = data;
+      for (let item in this.ruleForm) {
+        let data = this.ruleForm[item];
+        if (data && isJson(data)) {
+          try {
+            this.ruleForm[item] = JSON.parse(data);
+          } catch (error) {
+            console.log(error);
           }
-          }
-        let rules=[];
-        for(var i in this.pramasData){
-          for(var key in this.ruleForm){
-            if(this.pramasData[i].type==key)
-          rules.push(this.ruleForm[key])
+        } else {
+          this.ruleForm[item] = data;
         }
+      }
+      let rules = [];
+      for (var i in this.pramasData) {
+        for (var key in this.ruleForm) {
+          if (this.pramasData[i].type == key) rules.push(this.ruleForm[key]);
         }
-        
-       
+      }
+
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {
@@ -660,7 +689,6 @@ export default {
 
 <style scoped>
 .send-wrapper {
-
 }
 .send-item {
   line-height: 30px;
@@ -678,14 +706,14 @@ export default {
   height: 32px;
   line-height: 32px;
 }
-.send-body{
+.send-body {
   overflow-y: scroll;
   max-height: 400px;
-    min-height: 200px;
+  min-height: 200px;
 }
 .send-btn {
   margin-bottom: 24px;
-    margin-top: 24px;
+  margin-top: 24px;
 }
 .send-btn >>> .el-button {
   padding: 9px 16px;
@@ -693,10 +721,10 @@ export default {
 .send-item >>> .el-form-item__error {
   left: 180px !important;
 }
-.send-item >>>.el-input-group__prepend{
+.send-item >>> .el-input-group__prepend {
   width: 60px;
 }
-.send-item >>>.el-form-item{
+.send-item >>> .el-form-item {
   line-height: 30px;
   margin-bottom: 24px;
 }

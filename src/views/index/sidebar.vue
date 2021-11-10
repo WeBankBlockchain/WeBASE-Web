@@ -62,7 +62,7 @@
 
 <script>
 import Bus from "@/bus";
-import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
+import maxLog from "../../../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
 import { versionfunegt } from "@/util/util.js";
 import { getFronts } from "@/util/api";
