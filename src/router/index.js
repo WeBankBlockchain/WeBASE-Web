@@ -162,7 +162,7 @@ const routes = [
         name: '系统管理',
         nameKey: "systemManager",
         leaf: false,
-        menuShow: true,
+        menuShow: false,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
             { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: true, meta: { requireAuth: true } },
@@ -196,7 +196,7 @@ const routes = [
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
             { path: '/nodesMetric', component: nodesMetric, name: '节点监控', nameKey: "nodesMonitor", menuShow: true, meta: { requireAuth: false } },
-            { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: true, meta: { requireAuth: false } },
+            { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: false, meta: { requireAuth: false } },
             { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', nameKey: "emailAlarm", menuShow: true, meta: { requireAuth: false } },
             { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', nameKey: "emailAlarmType", menuShow: true, meta: { requireAuth: false } }
         ]

@@ -326,7 +326,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/hostMetric') {
-                                    item.menuShow = true
+                                    item.menuShow = false
                                 }
                                 if (item.path == '/emailAlarm') {
                                     item.menuShow = true
@@ -376,7 +376,7 @@ export default {
 
                         })
                     }
-                    if (list[i].nameKey == 'guide') {
+                    if (list[i].nameKey == 'guide'||list[i].nameKey == 'appManagement') {
                         list[i].menuShow = false
                     }
                 }
