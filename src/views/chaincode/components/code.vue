@@ -299,7 +299,6 @@
       v-if="dialogVisible"
       center
       class="send-dialog"
-      :modal-append-to-body="true"
     >
       <v-transaction
         @success="sendSuccess($event)"

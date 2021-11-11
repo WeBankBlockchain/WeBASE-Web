@@ -137,8 +137,8 @@ import {
 } from "@/util/api";
 import url from "@/util/url";
 import router from "@/router";
-import bg from "@/../static/image/banner.png";
-import logo from "@/../static/image/logo-2 copy@1.5x.jpg";
+import bg from "../../../static/image/banner.png";
+import logo from "../../../static/image/logo-2 copy@1.5x.jpg";
 import { delCookie } from "@/util/util";
 import errcode from "@/util/errcode";
 const sha256 = require("js-sha256").sha256;

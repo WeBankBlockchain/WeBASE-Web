@@ -269,8 +269,8 @@ import {
 import { changWeek, numberFormat, unique } from "@/util/util";
 import router from "@/router";
 import errcode from "@/util/errcode";
-import sRight from "@/../static/image/s-right.png";
-import artboard from "@/../static/image/artboard.png";
+import sRight from "../../../static/image/s-right.png";
+import artboard from "../../../static/image/artboard.png";
 import constant from "@/util/constant";
 import { toContractName } from "@/util/util";
 export default {

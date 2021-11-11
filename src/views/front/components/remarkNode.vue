@@ -207,7 +207,6 @@ export default {
     getNodeInfo: function () {
       getNodeInfo(this.groupId, this.nodeId)
         .then((res) => {
-          debugger
           if (res.data.code === 0) {
             this.remarkForm.nodeIp=res.data.data.nodeIp
             this.remarkForm.agency=res.data.data.agency
