@@ -232,11 +232,11 @@
 }
 
 .search-table {
-    padding: 0 40px 0 41px;
+    padding: 0 40px 0 40px;
 }
 
 .search-part {
-    padding: 30px 41px 18px 42px;
+    padding:0 40px 0 40px;
     overflow: hidden;
 }
 
@@ -318,6 +318,7 @@
     color: #fff;
     background-color: #20D4D9 !important;
     border-color: #20D4D9 !important;
+    border-radius: 20px;
 }
 
 .el-button--primary.is-active, .el-button--primary:active, .el-button--primary:focus, .el-button--primary:hover {

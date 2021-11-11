@@ -3,7 +3,7 @@
         <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head> -->
         <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')"></nav-menu>
         <div class="module-wrapper">
-            <div class="search-part" style="display: flex;">
+            <div class="search-part" style="display: flex;padding:20px 40px">
                 <div class="search-part-left">
                     <el-upload ref="upload" multiple action :limit="10" accept=".crt,.cer,.der" :http-request="uploadCrt" :before-upload="onBeforeUpload" :on-exceed="onUploadExceed">
                         <el-button size="small" type="primary" :disabled="disabled">{{this.$t('system.addCertificate')}}</el-button>

@@ -2,6 +2,7 @@
     <div class="rivate-key-management-wrapper">
         <!-- <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead> -->
         <nav-menu :headTitle="$t('title.PrivateKey')"></nav-menu>
+         <div class="module-wrapper" style="padding: 20px 0px;">
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="已登记" name="registered">
                 <privateKey ref='registered' v-if='activeName === "registered"'></privateKey>
@@ -10,6 +11,7 @@
                 <total-privateKey ref='total' v-if='activeName === "total"'></total-privateKey>
             </el-tab-pane>
         </el-tabs>
+        </div>
     </div>
 </template>
 
@@ -24,7 +26,7 @@ export default {
         privateKey,
         totalPrivateKey,
         "v-contentHead": contentHead,
-        'nav-menu':NavMenu
+        'nav-menu':NavMenu,
     },
     data() {
         return {

@@ -76,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="module-wrapper">
+        <div class="module-wrapper" style="margin-top: 10px;">
             <div class="desc-wrapper">
                 <div style="margin-top: 0px;">
                     <p class="access-process">
@@ -303,7 +303,7 @@ export default {
 </script>
 <style scoped>
 .desc-wrapper {
-    padding: 24px;
+    padding: 20px;
 }
 .desc-content {
     padding: 13px 14px;

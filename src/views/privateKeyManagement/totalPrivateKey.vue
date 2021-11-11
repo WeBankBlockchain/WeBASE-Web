@@ -1,6 +1,6 @@
 <template>
 <div class="module-wrapper">
-    <div class="search-part">
+    <div class="search-part" style="padding:20px">
 
             <div class="search-part-right">
                 <el-input :placeholder="$t('privateKey.searchUser')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">

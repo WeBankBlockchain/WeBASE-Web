@@ -2,7 +2,7 @@
     <div>
         <!-- <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.alarmTypeConfig')" @changGroup="changGroup"></v-content-head> -->
         <nav-menu :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.alarmTypeConfig')" @changGroup="changGroup"></nav-menu>
-        <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
+        <div class="module-wrapper" style="padding: 20px;">
             <div style="padding-bottom: 10px;">
                 <span>{{$t('alarm.enableAlarm')}}</span>
                 <el-switch v-model="enable" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="0" @change='authChange($event)'>
@@ -31,7 +31,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
+        <div class="module-wrapper" style="padding: 20px;margin-top:10px">
             <h3>{{$t('alarm.alarmLogList')}}</h3>
             <el-table :data="alarmLogList" tooltip-effect="dark" class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column :label="$t('alarm.alarmType')" prop='alertType' show-overflow-tooltip align="center">

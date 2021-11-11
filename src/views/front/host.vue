@@ -239,4 +239,7 @@ export default {
 .table-no-date {
     text-align: center;
 }
+.search-part-left-btn{
+    border-radius: 20px;
+}
 </style>

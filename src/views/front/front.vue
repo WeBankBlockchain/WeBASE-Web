@@ -27,7 +27,7 @@
                 </div>
         </div> -->
         <div class="module-wrapper">
-            <div class="search-part" style="padding-top: 30px;" v-if='!disabled'>
+            <div class="search-part" style="padding-top: 20px;" v-if='!disabled'>
                 <div class="search-part-left">
                     <!-- <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button> -->
                     <el-button type="primary" class="search-part-left-btn" :disabled="!(configData && configData.chainStatus == 3)" @click="createFront">{{$t('text.addNode')}}</el-button>
@@ -1139,7 +1139,7 @@ export default {
     height: 100%;
 }
 .search-part {
-    padding: 30px 41px 18px 42px;
+    /* padding: 30px 41px 18px 42px; */
     overflow: hidden;
 }
 .search-part::after {
