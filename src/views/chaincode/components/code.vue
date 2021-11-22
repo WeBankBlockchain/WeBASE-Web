@@ -98,8 +98,8 @@
                         </span>
                         <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">
                             {{contractAddress}}
-                            <span v-if="reqVersion" style="margin-left: 10px;">(CNS: {{cnsName}} {{reqVersion}})</span>
-                            <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span>
+                            <!-- <span v-if="reqVersion" style="margin-left: 10px;">(CNS: {{cnsName}} {{reqVersion}})</span>
+                            <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span> -->
                         </span>
                     </div>
                     <div v-else v-show="abiFile" class="contract-info-list">

@@ -38,6 +38,7 @@ export default {
         confirmDorp2: "Deleting group data will delete the node data, block and transaction data, contract data, etc. corresponding to the local database (does not affect the data on the chain). Are you sure to delete the group data?",
         confirmStop: "Also, make sure that the number of groups the currently selected node belongs to is greater than 1. Otherwise, stopping the node's group will result in abnormal node consensus",
         sure: "Ok",
+        next: "next",
         cancel: "Cancel",
         select: "Please select",
         tips: "Tips",

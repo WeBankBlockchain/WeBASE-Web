@@ -142,7 +142,7 @@ export default {
     mounted: function () {
         localStorage.setItem("config", 0);
         this.changeCode();
-        this.getEncryption();
+        // this.getEncryption();
         // let soljson = document.getElementById('soljson')
         // if(soljson){
         //     soljson.remove()
@@ -223,7 +223,9 @@ export default {
                         localStorage.setItem("selectData", "");
                         localStorage.setItem("solcName", '')
                         localStorage.setItem("versionId", null)
-                        this.getConfigType();
+                        //this.getConfigType();
+                        localStorage.setItem("deployType", 0);
+                        router.push("/main");
                     } else {
                         this.changeCode();
                         this.msgErrorContent = this.$chooseLang(res.data.code);

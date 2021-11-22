@@ -40,10 +40,11 @@
                             <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="140">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="200">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">{{$t('text.delete')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="exportSdk(scope.row)" type="text" size="small">{{$t('text.exportSdk')}}</el-button>
+                            <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="prcModify(scope.row)" type="text" size="small">{{$t('text.RPC')}}</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -90,6 +91,9 @@
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
+                 <el-dialog :title="$t('nodes.modifyPRC')" :visible.sync="PrcDialogVisible" width="600px" v-if="PrcDialogVisible" center>
+                    <modify-prc @prcClose="prcClose" @prcSuccess="prcSuccess" :prcParam="prcParam"></modify-prc>
+                </el-dialog>
             </div>
         </div>
     </div>
@@ -98,6 +102,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
+import modifyPrc from "./components/modifyPrc";
 import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -110,7 +115,8 @@ export default {
     components: {
         "v-content-head": contentHead,
         "v-setFront": setFront,
-        modifyNodeType
+        modifyNodeType,
+        modifyPrc
     },
     watch: {
         $route() {
@@ -140,7 +146,8 @@ export default {
             urlQuery: this.$root.$route.query,
             disabled: false,
             modifyNode: {},
-            modifyDialogVisible: false
+            modifyDialogVisible: false,
+            PrcDialogVisible: false
         };
     },
     computed: {
@@ -529,6 +536,16 @@ export default {
         },
         nodeModifyClose() {
             this.modifyDialogVisible = false
+        },
+        prcModify(){
+            this.PrcDialogVisible=true
+        },
+        prcSuccess() {
+            this.PrcDialogVisible = false
+            this.getNodeTable()
+        },
+        prcClose() {
+            this.PrcDialogVisible = false
         }
     }
 };

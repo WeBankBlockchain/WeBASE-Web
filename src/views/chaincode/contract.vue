@@ -149,7 +149,7 @@ export default {
             }
         ];
         this.initWorker()
-        this.getEncryption(this.querySolcList);  
+        //this.getEncryption(this.querySolcList);  
     },
     methods: {
         initWorker() {

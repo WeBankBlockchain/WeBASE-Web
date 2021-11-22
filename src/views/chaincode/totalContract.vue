@@ -46,8 +46,8 @@
                         <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)" @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
                         <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)' @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                         <el-button v-if="!disabled &&scope.row.contractAddress && scope.row.haveEvent" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
-                        <el-button v-if="!disabled" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
-                        <el-button v-if="!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                        <!-- <el-button v-if="!disabled" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
+                        <!-- <el-button v-if="!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button> -->
                         <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)' @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                         <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button> -->
                     </template>

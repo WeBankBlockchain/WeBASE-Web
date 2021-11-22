@@ -310,7 +310,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/newPermission') {
-                                    item.menuShow = true
+                                    item.menuShow = false
                                 }
                                 if (item.path == '/configManagement') {
                                     item.menuShow = true
