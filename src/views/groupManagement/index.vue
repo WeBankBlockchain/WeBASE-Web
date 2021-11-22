@@ -1,56 +1,194 @@
 <template>
-    <div>
-        <content-head :headTitle="$t('title.groupManagement')" :icon="true" @changGroup="changGroup" :updateGroup="updateGroup" :updateGroupType="updateGroupType"></content-head>
-        <div class="module-wrapper">
-            <div class="search-part" style="padding-top: 20px;">
-                <!-- <div class="search-part-left">
-                    <el-button type="primary" class="search-part-left-btn" @click="generateGroup">{{this.$t("nodes.addGroup")}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="addHadGroup">{{this.$t("nodes.addHadGroup")}}</el-button>
-                    <el-button type="text" icon="el-icon-refresh" @click="queryUpdateGroup" v-preventReClick :title="$t('alarm.refresh')"></el-button>
-                </div> -->
-                <div class="">
-                    <el-table :data="groupList" class="search-table-content" v-loading="loading">
-                        <el-table-column v-for="head in groupHead" :label="head.name" :key="head.enName" :prop="head.enName" show-overflow-tooltip>
-                            <template slot-scope="scope">
-                                <span v-if='head.enName === "groupName"' class="cursor-pointer font-color-00c1d4">
-                                    <span @click="queryCrudGroup(scope.row)">
-                                        {{scope.row[head.enName]}}
-                                    </span>
-                                </span>
-                                <span v-else-if='head.enName === "groupStatus"' :style="{'color': groupStatusColor(scope.row[head.enName])}">
-                                    <span class="cursor-pointer" @click="queryCrudGroup(scope.row)">
-                                        {{status(scope.row[head.enName])}}
-                                    </span>
-                                    <i :class="scope.row['icon']" :title="scope.row['icon_text']"></i>
-                                </span>
-                                <span v-else>{{scope.row[head.enName]}}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column fixed="right" :label="$t('nodes.operation')" width="250">
-                            <template slot-scope="scope">
-                                <!-- <el-button type="text" size="small" @click="queryCrudGroup(scope.row)">{{$t('text.update')}}</el-button>
-                                <el-button type="text" size="small" :loading="dropLoading&&dropIndex===scope.row.groupId" @click="queryDeleteGroupData(scope.row)">{{$t('text.dropGroupData')}}</el-button> -->
-                                <el-button type="text" size="small" v-if='scope.row.groupType!==1' :disabled="scope.row.groupType===1 ? true : false" @click="exportFile(scope.row)">{{$t('system.export')}}</el-button>
-                                <el-tooltip effect="light" :content="$t('text.noExportGroup')" placement="bottom-end">
-                                    <i v-if="scope.row.groupType!==1" class="el-icon-warning"></i>
-                                </el-tooltip>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-                    </el-pagination>
-                    <el-dialog :title="$t('nodes.addGroup')" :visible.sync="generateGroupVisibility" v-if="generateGroupVisibility" center :close-on-click-modal='false' :close-on-press-escape='false' :show-close='false'>
-                        <generate-group @generateSuccess="generateSuccess" @close="close"></generate-group>
-                    </el-dialog>
-                    <el-dialog :title="$t('nodes.modifyGroup')+'('+'ID:'+' '+`${modifyGroupId}`+')'" :visible.sync="modifyGroupVisibility" v-if="modifyGroupVisibility" center>
-                        <modify-group @modifySuccess="modifySuccess" @modifyClose="modifyClose" :itemGroupData="itemGroupData"></modify-group>
-                    </el-dialog>
-                    <el-dialog :title="$t('text.joinExitedGroup')" :visible.sync="joinGroupTipsVisibility" v-if="joinGroupTipsVisibility" center>
-                        <join-group-tips @joinGroupTipsSuccess="joinGroupTipsSuccess"></join-group-tips>
-                    </el-dialog>
-                </div>
-
-            </div>
+  <div>
+    <content-head
+      :headTitle="$t('title.groupManagement')"
+      :icon="true"
+      @changGroup="changGroup"
+      :updateGroup="updateGroup"
+      :updateGroupType="updateGroupType"
+    ></content-head>
+    <div class="module-wrapper">
+      <div class="search-part" style="padding-top: 20px">
+        <div class="search-part-left">
+          <el-button
+            type="primary"
+            class="search-part-left-btn"
+            @click="generateGroup"
+            >{{ this.$t("nodes.addGroup") }}</el-button
+          >
+          <el-button
+            type="primary"
+            class="search-part-left-btn"
+            @click="addHadGroup"
+            >{{ this.$t("nodes.addHadGroup") }}</el-button
+          >
+          <el-button
+            type="text"
+            icon="el-icon-refresh"
+            @click="queryUpdateGroup"
+            v-preventReClick
+            :title="$t('alarm.refresh')"
+          ></el-button>
+        </div>
+        <div class="">
+          <el-table
+            :data="groupList"
+            class="search-table-content"
+            v-loading="loading"
+          >
+            <el-table-column
+              v-for="head in groupHead"
+              :label="head.name"
+              :key="head.enName"
+              :prop="head.enName"
+              show-overflow-tooltip
+            >
+              <template slot-scope="scope">
+                <span
+                  v-if="head.enName === 'groupName'"
+                  class="cursor-pointer font-color-00c1d4"
+                >
+                  <span @click="queryCrudGroup(scope.row)">
+                    {{ scope.row[head.enName] }}
+                  </span>
+                </span>
+                <span
+                  v-else-if="head.enName === 'groupStatus'"
+                  :style="{ color: groupStatusColor(scope.row[head.enName]) }"
+                >
+                  <span
+                    class="cursor-pointer"
+                    @click="queryCrudGroup(scope.row)"
+                  >
+                    {{ status(scope.row[head.enName]) }}
+                  </span>
+                  <i
+                    :class="scope.row['icon']"
+                    :title="scope.row['icon_text']"
+                  ></i>
+                </span>
+                <span v-else>{{ scope.row[head.enName] }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              fixed="right"
+              :label="$t('nodes.operation')"
+              width="250"
+            >
+              <template slot-scope="scope">
+                <el-button
+                  type="text"
+                  size="small"
+                  @click="queryCrudGroup(scope.row)"
+                  >{{ $t("text.update") }}</el-button
+                >
+                <el-button
+                  type="text"
+                  size="small"
+                  :loading="dropLoading && dropIndex === scope.row.groupId"
+                  @click="queryDeleteGroupData(scope.row)"
+                  >{{ $t("text.dropGroupData") }}</el-button
+                >
+                <el-button
+                  type="text"
+                  size="small"
+                  v-if="scope.row.groupType !== 1"
+                  :disabled="scope.row.groupType === 1 ? true : false"
+                  @click="exportFile(scope.row)"
+                  >{{ $t("system.export") }}</el-button
+                >
+                <el-button
+                  type="text"
+                  size="small"
+                  @click="remarks(scope.row)"
+                  >{{ $t("text.remarks") }}</el-button
+                >
+                <el-tooltip
+                  effect="light"
+                  :content="$t('text.noExportGroup')"
+                  placement="bottom-end"
+                >
+                  <i
+                    v-if="scope.row.groupType !== 1"
+                    class="el-icon-warning"
+                  ></i>
+                </el-tooltip>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            class="page"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="currentPage"
+            :page-sizes="[10, 20, 30, 50]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
+          >
+          </el-pagination>
+          <el-dialog
+            :title="$t('nodes.addGroup')"
+            :visible.sync="generateGroupVisibility"
+            v-if="generateGroupVisibility"
+            center
+            :close-on-click-modal="false"
+            :close-on-press-escape="false"
+            :show-close="false"
+          >
+            <generate-group
+              @generateSuccess="generateSuccess"
+              @close="close"
+            ></generate-group>
+          </el-dialog>
+          <el-dialog
+            :title="
+              $t('nodes.modifyGroup') +
+              '(' +
+              'ID:' +
+              ' ' +
+              `${modifyGroupId}` +
+              ')'
+            "
+            :visible.sync="modifyGroupVisibility"
+            v-if="modifyGroupVisibility"
+            center
+          >
+            <modify-group
+              @modifySuccess="modifySuccess"
+              @modifyClose="modifyClose"
+              :itemGroupData="itemGroupData"
+            ></modify-group>
+          </el-dialog>
+          <el-dialog
+            :title="$t('text.joinExitedGroup')"
+            :visible.sync="joinGroupTipsVisibility"
+            v-if="joinGroupTipsVisibility"
+            center
+          >
+            <join-group-tips
+              @joinGroupTipsSuccess="joinGroupTipsSuccess"
+            ></join-group-tips>
+          </el-dialog>
+          <el-dialog
+            :title="$t('nodes.description')"
+            :visible.sync="descriptionShow"
+            v-if="descriptionShow"
+            center
+            class="descr"
+          >
+            <el-form ref="form" :model="nodes" label-width="80px">
+              <el-form-item label="群组描述">
+                <el-input v-model="nodes.description"></el-input>
+              </el-form-item>
+              <el-form-item class="btn">
+                <el-button type="primary" @click="changeDescriptions"
+                  >修改</el-button
+                >
+                <el-button @click='closeThis'>取消</el-button>
+              </el-form-item>
+            </el-form>
+          </el-dialog>
         </div>
     </div>
 </template>

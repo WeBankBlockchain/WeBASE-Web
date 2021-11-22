@@ -1982,6 +1982,18 @@ export function exportCertSdk(frontId) {
 }
 
 
+// 导出cert sdk
+export function getGroupName(groupId) {
+    return get({
+        url: `${url.ORG_LIST}/group/detail/${groupId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
 /**
  * 链上合约的数据
  * @params {*} data  {groupId} 、{pageNumber}、 {pageSize}
