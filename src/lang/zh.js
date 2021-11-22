@@ -38,6 +38,7 @@ export default {
         confirmDorp2: "删除群组数据将删除本地数据库对应的节点数据、区块与交易数据、合约数据等（不影响链上数据）是否确认删除群组数据？",
         confirmStop: "请确保当前选中节点所属群组数大于1个，否则停止该节点的群组将导致节点共识异常",
         sure: "确定",
+        next: "下一步",
         cancel: "取消",
         select: "请选择",
         tips: "提示",
@@ -248,6 +249,7 @@ export default {
         restartIndfo2: "确认节点重启?",
         initChainTimeout: "拉取镜像超时，请切换镜像拉取方式为手动",
         exportSdk: 'SDK证书下载',
+        RPC:'RPC',
         gmssl: '使用国密SSL时，需要将sdk证书放置于名为"gm"的文件夹',
         registerInfo: '注册信息',
         appIntroduction1: '应用文档',
@@ -323,11 +325,7 @@ export default {
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         nodeActive:'节点存活',
         nodeNotActive:'节点未存活',
-        addContractAddress: '绑定',
-        remarks:'备注',
-        bindSuccessed:'绑定私钥成功',
-        unsavedContract: '合约已修改，请对合约处理再进行下一步操作，是否保存',
-        noSave:'合约未保存，请进行下一步操作',
+        addContractAddress: '绑定'
     },
     rule: {
         textLong: "长度在 1 到 32 个字符",
@@ -407,10 +405,8 @@ export default {
         changePassword: "修改密码",
         exit: "退出",
         versionInfo: "版本信息",
-        dataBigScreen:"数据大屏"
     },
     title: {
-        save: '保存',
         dataOverview: "数据概览",
         blockTitle: "区块信息",
         nodeTitle: "节点管理",
@@ -500,7 +496,6 @@ export default {
         frontPort: "前置端口",
         agency: "所属机构",
         modifyTime: "修改时间",
-        description:"描述",
         nodeStyle: "节点类型",
         operation: "操作",
         sealer: "共识",
@@ -510,6 +505,7 @@ export default {
         nodeList: "节点列表",
         nodeDescription: "节点管理说明：可以通过节点管理设置节点类型。包括：1、根据节点NodeID设置对应节点为共识节点。2、 根据节点NodeID设置对应节点为观察节点。3、根据节点NodeID设置对应节点为游离节点。",
         updateNodesType: "修改节点类型",
+        modifyPRC: "修改PRC",
         frontConfig: "节点前置配置",
         addFrontSuccessMsg: "添加前置成功",
         addFrontErrMsg: "添加前置失败",
@@ -558,7 +554,6 @@ export default {
         hostList: "主机列表",
         inputHostIp: "请输入主机IP地址",
         ipError: "IP格式不正确",
-        sshPathError:'安装目录需以"/"开头',
         hostIp: "主机IP地址",
         inputNodesNumber: "请输入部署节点数量",
         thanOne: "必须大于1",
@@ -680,8 +675,6 @@ export default {
         userAddress: "用户公钥地址信息",
         userStatus: "用户状态",
         inputDescription: "请输入用户描述",
-        inputimportPrivateKey:"请输入绑定私钥",
-        importPrivateKeySuccess:"绑定私钥成功",
         updateUserSuccess: "修改用户成功",
         normal: "正常",
         disable: "停用",
@@ -712,8 +705,7 @@ export default {
         validatorPrivateKey1: "请输入十六进制",
         validatorPrivateKey10: "请输入十进制",
         importType: "导入类型",
-        importFileValidator: '请上传文件',
-        bindPrivateKey:'绑定私钥'
+        importFileValidator: '请上传文件'
     },
     system: {
         chainManager: "链管理权限",
@@ -743,7 +735,6 @@ export default {
         configValue: "配置值",
         gasLimit: "一个交易最大gas限制",
         countLimit: "一个区块中可打包的最大交易数目",
-        timeOut:'共识超时时间（秒）',
         gasLong: "范围从100000到2147483647",
         addCertificate: "导入证书",
         export: "导出",
@@ -761,9 +752,6 @@ export default {
         uploadWarning3: "个文件.",
         to: "至",
         updateSuccess: "更新成功",
-        agency:'请输入机构名',
-        city:'请选择地址',
-
     },
     account: {
         addAccount: "新增账号",
@@ -986,7 +974,6 @@ export default {
         fileType: "导入类型",
         exportType: "导出类型",
         fileName: "私钥用户名",
-        baseSystem:"进制"
     },
     govCommittee: {
         addCommittee: '新增委员投票',

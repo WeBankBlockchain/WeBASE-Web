@@ -16,8 +16,6 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
-        unsavedContract: 'Contract modifed and unsaved. Save',
-        noSave:'The contract has not been saved, please proceed to the next step',
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',
         isRedeploy: 'Has the contract been deployed or redeployed?',
@@ -32,7 +30,6 @@ export default {
         copyHash: "Copy Hash",
         total: "Total",
         tiao: "",
-        save: 'Save',
         blockSearchMsg: "Search block hash does not support fuzzy query",
         delete: "Delete",
         update: "Change",
@@ -41,6 +38,7 @@ export default {
         confirmDorp2: "Deleting group data will delete the node data, block and transaction data, contract data, etc. corresponding to the local database (does not affect the data on the chain). Are you sure to delete the group data?",
         confirmStop: "Also, make sure that the number of groups the currently selected node belongs to is greater than 1. Otherwise, stopping the node's group will result in abnormal node consensus",
         sure: "Ok",
+        next: "next",
         cancel: "Cancel",
         select: "Please select",
         tips: "Tips",
@@ -327,7 +325,6 @@ export default {
         importContractTip: 'Decoding transaction output requires compiling contract in IDE or import abi of contract',
         nodeActive:'Node active',
         nodeNotActive:'Node not active',
-        remarks:'remarks'
     },
     rule: {
         textLong: "1 to 32 characters in length",
@@ -409,7 +406,6 @@ export default {
         changePassword: "Change Password",
         exit: "Exit",
         versionInfo: "Version",
-        dataBigScreen:"Large data screen"
     },
     title: {
         dataOverview: "Overview",
@@ -499,7 +495,6 @@ export default {
         frontPort: "Front Port",
         agency: "Agency",
         modifyTime: "Modify Time",
-        description:"describe",
         nodeStyle: "Node Type",
         operation: "Actions",
         sealer: "Sealer",
@@ -557,7 +552,6 @@ export default {
         hostList: "The host list",
         inputHostIp: "Please enter the host IP address",
         ipError: "The IP format is incorrect",
-        sshPathError:'Installation directory should start with /',
         hostIp: "Host IP address",
         inputNodesNumber: "Enter the number of deployment nodes",
         thanOne: "It has to be greater than 1",
@@ -679,8 +673,6 @@ export default {
         userAddress: "Address",
         userStatus: "Status",
         inputDescription: "Please enter User Description",
-        inputimportPrivateKey:"Please enter public key information",
-        importPrivateKeySuccess:"binding private key succeeded",
         updateUserSuccess: "User modified successfully",
         normal: "Normal",
         disable: "Disable",
@@ -711,8 +703,7 @@ export default {
         validatorPrivateKey1: "Please enter hexadecimal",
         validatorPrivateKey10: "Please enter decimal",
         importType: "Import Type",
-        importFileValidator: 'Please upload the file',
-        bindPrivateKey:'Bind PrivateKey'
+        importFileValidator: 'Please upload the file'
     },
     system: {
         chainManager: "Chain Management Permission",
@@ -742,7 +733,6 @@ export default {
         configValue: "Value",
         gasLimit: "One transaction maximum gas limit",
         countLimit: "The maximum number of transactions that can be packaged in one block",
-        timeOut:'Consensus timeout (seconds)',
         gasLong: "Range from 100000 to 2147483647",
         addCertificate: "Import Certificate",
         export: "Export",
@@ -760,8 +750,6 @@ export default {
         uploadWarning3: "files.",
         to: "to",
         updateSuccess: "Successfully updated",
-        agency:'Please enter agency',
-        city:'Please enter address',
     },
     account: {
         addAccount: "Add Account",
@@ -984,7 +972,6 @@ export default {
         fileType: "Import Type",
         exportType: "Export Type",
         fileName: "PrivateKey Name",
-        baseSystem:"baseSystem"
     },
     govCommittee: {
         addCommittee: 'Grant Committee Vote',

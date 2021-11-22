@@ -155,8 +155,8 @@ export default {
         }
     },
     mounted() {
-        this.getRefreshFront()
-        this.getEncryption();
+        //this.getRefreshFront()
+        //this.getEncryption();
         this.getGroupList();
         this.getFrontTable();
         // this.getVersionList()
@@ -390,7 +390,7 @@ export default {
     bottom: 0;
     overflow-x: hidden;
     overflow-y: auto;
-    z-index: 1;
+    z-index: 99999;
 }
 .view-wrapper {
     height: 100%;

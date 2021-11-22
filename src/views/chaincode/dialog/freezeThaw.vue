@@ -3,11 +3,9 @@
         <el-form :model="freezeThawFrom" :rules="rules" ref="freezeThawFrom" label-width="165px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.committeeAndDeploy')" prop="fromAddress">
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
-                    <el-option v-for="(item,index) in chainCommitteeList" :key="index" :label="item.userName" :value="item.address">
+                    <el-option v-for="item in committeeAndDeploy" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span>{{item.address}}</span>
-                        <!-- <span class="font-12">{{item.address}}...</span> -->
-                        <!-- <span class="font-12">{{item | splitString}}...</span> -->
+                        <span class="font-12">{{item.address | splitString}}...</span>
                     </el-option>
                 </el-select>
                 <i class="el-icon-info" :title="$t('contracts.freezeDes')"></i>
@@ -24,7 +22,7 @@
 </template>
 
 <script>
-import { getContractStatus, listManagerList, getUserList } from "@/util/api"
+import { getContractStatus, committeeList, getUserList } from "@/util/api"
 export default {
     name: 'freezeThaw',
 
@@ -43,7 +41,7 @@ export default {
             },
             contractAddress: this.contractInfo.contractAddress,
             deployAddress: this.contractInfo.deployAddress,
-            deployUserName: [this.contractInfo.deployUserName]
+            deployUserName: this.contractInfo.deployUserName,
         }
     },
 
@@ -61,18 +59,18 @@ export default {
             return data
         },
         committeeAndDeploy() {
-            var listManagerList = [];
+            var committeeList = [];
             let privateKeyList = this.adminRivateKeyList
-            listManagerList = this.chainCommitteeList
+            committeeList = this.chainCommitteeList
             privateKeyList.forEach(item => {
-                listManagerList.forEach(it => {
+                committeeList.forEach(it => {
                     if (item.address == it.address) {
                         it.userName = item.userName
                     }
                 })
             })
 
-            return listManagerList
+            return committeeList
         }
     },
 
@@ -84,13 +82,10 @@ export default {
 
     mounted() {
         this.queryCommitteeList()
-        // this.getUserData()
+        this.getUserData()
     },
 
     methods: {
-        addDeployUserName(item){
-            return this.deployUserName+' '+item.address
-        },
         close() {
             this.$emit("freezeThawClose");
         },
@@ -140,13 +135,12 @@ export default {
                 });
         },
         queryCommitteeList() {
-            
             let reqData = {
                 groupId: localStorage.getItem('groupId'),
-                contractAddress:this.contractAddress,
-               
+                pageNumber: 1,
+                pageSize: 1000
             }
-            listManagerList(reqData)
+            committeeList(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
                         let data = res.data.data;
@@ -156,10 +150,8 @@ export default {
                             address: this.deployAddress,
                         })
                         this.chainCommitteeList = []
-                        //this.chainCommitteeList = data.concat(deployList);
-                       this.chainCommitteeList=data;
+                        this.chainCommitteeList = data.concat(deployList);
                     } else {
-                        
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",

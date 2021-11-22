@@ -65,7 +65,7 @@ function compileHighVersion(contract) {
  
 
 function changeOutput(obj,contract) {
-    
+    debugger
     if (JSON.stringify(obj) !== "{}") {
         if (obj.hasOwnProperty(contract.contractName)) {
             let compiledMap = obj[contract.contractName]
@@ -121,7 +121,7 @@ function setMethod(abiFile) {
                         inputs: value.inputs
                     });
                 }
-                data.methodId = methodId.substr(0,10);
+                data.methodId = methodId;
                 data.abiInfo = JSON.stringify(value);
                 data.methodType = value.type
                 arry.push(data)
@@ -141,7 +141,7 @@ function setMethod(abiFile) {
                         inputs: value.inputs
                     });
                 }
-                data.methodId = methodId.substr(0,10);
+                data.methodId = methodId;
                 data.abiInfo = JSON.stringify(value);
                 data.methodType = value.type
                 arry.push(data)

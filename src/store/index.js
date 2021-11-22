@@ -26,7 +26,6 @@ const state = {
     loading: false,
     language: getLanguage(),
     importPrivateKey: false,
-    bindKey:false,
     version: null,
     mgrVersion: null,
     supportVersion: null,
@@ -54,9 +53,6 @@ export default new Vuex.Store({
         },
         switch_import_private_key_dialog(state) {
             state.importPrivateKey = !state.importPrivateKey
-        },
-        switch_bind_key_dialog(state) {
-            state.bindKey = !state.bindKey
         },
         switch_export_rivate_key_dialog(state) {
             state.exportRivateKey = !state.exportRivateKey
@@ -115,9 +111,6 @@ export default new Vuex.Store({
         switch_import_private_key_dialog(context) {
             context.commit('switch_import_private_key_dialog')
         }, 
-        switch_bind_key_dialog(context) {
-            context.commit('switch_bind_key_dialog')
-        },
         switch_export_rivate_key_dialog(context) {
             context.commit('switch_export_rivate_key_dialog')
         },

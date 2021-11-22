@@ -190,9 +190,7 @@
             </el-form>
           </el-dialog>
         </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -200,346 +198,293 @@ import contentHead from "@/components/contentHead";
 import generateGroup from "./components/generateGroup";
 import modifyGroup from "./components/modifyGroup";
 import joinGroupTips from "./components/joinGroupTips";
-import {
-  crudGroup,
-  getUpdateGroup,
-  getGroupsInvalidIncluded,
-  deleteGroupData,
-  changeDescription,
-} from "@/util/api";
+import { crudGroup, getUpdateGroup, getGroupsInvalidIncluded, deleteGroupData } from "@/util/api"
 const FileSaver = require("file-saver");
 export default {
-  name: "groupManagement",
+    name: 'groupManagement',
 
-  components: {
-    contentHead,
-    generateGroup,
-    modifyGroup,
-    joinGroupTips,
-  },
+    components: {
+        contentHead,
+        generateGroup,
+        modifyGroup,
+        joinGroupTips
+    },
 
-  props: {},
+    props: {
+    },
 
-  data() {
-    return {
-      disabled: false,
-      loading: false,
-      generateGroupVisibility: false,
-      modifyGroupVisibility: false,
-      updateGroup: 0,
-      groupList: [],
-      typeList: ["start", "stop", "remove", "recover"],
-      itemGroupData: {},
-      currentPage: 1,
-      pageSize: 10,
-      total: 0,
-      dropLoading: false,
-      dropIndex: "",
-      updateGroupType: "",
-      modifyGroupId: "",
-      joinGroupTipsVisibility: false,
-      descriptionShow: false,
-      nodes: {
-        description: "",
-        groupId: "",
-      },
-    };
-  },
+    data() {
+        return {
+            disabled: false,
+            loading: false,
+            generateGroupVisibility: false,
+            modifyGroupVisibility: false,
+            updateGroup: 0,
+            groupList: [],
+            typeList: ['start', 'stop', 'remove', 'recover'],
+            itemGroupData: {},
+            currentPage: 1,
+            pageSize: 10,
+            total: 0,
+            dropLoading: false,
+            dropIndex: '',
+            updateGroupType: '',
+            modifyGroupId: '',
+            joinGroupTipsVisibility: false
+        }
+    },
 
-  computed: {
-    groupHead() {
-      let data = [
-        {
-          enName: "groupId",
-          name: this.$t("nodes.groupId"),
-          width: "",
+    computed: {
+        groupHead() {
+            let data = [
+                {
+                    enName: "groupId",
+                    name: this.$t("nodes.groupId"),
+                    width: ''
+                },
+                {
+                    enName: "groupName",
+                    name: this.$t("nodes.groupName"),
+                    width: ''
+                },
+                {
+                    enName: "nodeCount",
+                    name: this.$t("nodes.nodeCount"),
+                    width: ''
+                },
+                {
+                    enName: "groupStatus",
+                    name: this.$t("nodes.groupStatus"),
+                    width: ''
+                },
+                {
+                    enName: "modifyTime",
+                    name: this.$t("nodes.modifyTime"),
+                    width: ''
+                },
+            ];
+            return data
+        }
+    },
+
+    watch: {
+    },
+
+    created() {
+    },
+
+    mounted() {
+        this.queryGroupTable()
+    },
+
+    methods: {
+        changGroup() {
+
         },
-        {
-          enName: "groupName",
-          name: this.$t("nodes.groupName"),
-          width: "",
+        generateGroup() {
+            this.generateGroupVisibility = true;
         },
-        {
-          enName: "nodeCount",
-          name: this.$t("nodes.nodeCount"),
-          width: "",
+        addHadGroup() {
+            this.joinGroupTipsVisibility = true;
         },
-        {
-          enName: "groupStatus",
-          name: this.$t("nodes.groupStatus"),
-          width: "",
+        modify() {
+            this.modifyGroupVisibility = true;
         },
-        {
-          enName: "modifyTime",
-          name: this.$t("nodes.modifyTime"),
-          width: "",
+        close() {
+            this.generateGroupVisibility = false
         },
-        {
-          enName: "description",
-          name: this.$t("nodes.description"),
-          width: "",
-        },
-      ];
-      return data;
-    },
-  },
-
-  watch: {},
-
-  created() {},
-
-  mounted() {
-    this.queryGroupTable();
-  },
-
-  methods: {
-    changGroup() {},
-    generateGroup() {
-      this.generateGroupVisibility = true;
-    },
-    addHadGroup() {
-      this.joinGroupTipsVisibility = true;
-    },
-    modify() {
-      this.modifyGroupVisibility = true;
-    },
-    close() {
-      this.generateGroupVisibility = false;
-    },
-    generateSuccess() {
-      this.generateGroupVisibility = false;
-      this.queryGroupTable();
-      this.updateGroup++;
-      // this.updateGroupType = 'update'
-    },
-    modifyClose() {
-      this.modifyGroupVisibility = false;
-      this.queryGroupTable();
-    },
-    modifySuccess() {
-      // this.modifyGroupVisibility = false;
-      this.queryGroupTable();
-      this.updateGroup++;
-      // this.updateGroupType = 'update'
-    },
-    joinGroupTipsSuccess() {
-      this.joinGroupTipsVisibility = false;
-      this.queryGroupTable();
-    },
-    queryGroupTable() {
-      let reqData = {
-          pageNumber: this.currentPage,
-          pageSize: this.pageSize,
-        },
-        reqQuery = {};
-      getGroupsInvalidIncluded(reqData, reqQuery)
-        .then((res) => {
-          if (res.data.code === 0) {
-            this.groupList = res.data.data;
-            this.total = res.data.totalCount;
-            var abnormalList = [];
-            this.groupList.forEach((item) => {
-              if (item.groupStatus === 3) {
-                abnormalList.push(item.groupId);
-                item.icon = "el-icon-warning";
-                item.icon_text = `${this.$t("text.group")}${this.$t(
-                  "text.groupConf"
-                )}`;
-              }
-              if (item.groupStatus === 4) {
-                item.icon = "el-icon-warning";
-                item.icon_text = `${this.$t("text.groupConf4_all")}`;
-              }
-            });
-            if (abnormalList.length > 0) {
-              this.$notify({
-                type: "error",
-                message: `${this.$t("text.group")} ${abnormalList} ${this.$t(
-                  "text.groupConf"
-                )}`,
-                duration: 9500,
-                offset: 55,
-              });
-            }
-          } else {
-            this.$message({
-              type: "error",
-              message: this.$chooseLang(res.data.code),
-            });
-          }
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.$message({
-            type: "error",
-            message: err.data || this.$t("text.systemError"),
-          });
-        });
-    },
-    queryUpdateGroup() {
-      this.loading = true;
-      getUpdateGroup()
-        .then((res) => {
-          this.loading = false;
-          if (res.data.code === 0) {
+        generateSuccess() {
+            this.generateGroupVisibility = false
             this.queryGroupTable();
             this.updateGroup++;
-            this.updateGroupType = "update";
-          } else {
-            this.$message({
-              type: "error",
-              message: this.$chooseLang(res.data.code),
-            });
-          }
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.$message({
-            type: "error",
-            message: err.data || this.$t("text.systemError"),
-          });
-        });
-    },
-    queryCrudGroup(row) {
-      this.itemGroupData = row;
-      this.modifyGroupId = row.groupId;
-      this.modifyGroupVisibility = true;
-    },
-    queryDeleteGroupData(val) {
-      this.$confirm(this.$t("text.confirmDorp"), {
-        type: "warning",
-      })
-        .then((_) => {
-          this.$confirm(this.$t("text.confirmDorp2"), {
-            type: "warning",
-          })
-            .then((_) => {
-              this.sureDeleteGroupData(val);
+            // this.updateGroupType = 'update'
+        },
+        modifyClose() {
+            this.modifyGroupVisibility = false;
+            this.queryGroupTable()
+        },
+        modifySuccess() {
+            // this.modifyGroupVisibility = false;
+            this.queryGroupTable();
+            this.updateGroup++;
+            // this.updateGroupType = 'update'
+        },
+        joinGroupTipsSuccess() {
+            this.joinGroupTipsVisibility = false
+            this.queryGroupTable()
+        },
+        queryGroupTable() {
+            let reqData = {
+                pageNumber: this.currentPage,
+                pageSize: this.pageSize
+            },
+                reqQuery = {};
+            getGroupsInvalidIncluded(reqData, reqQuery)
+                .then(res => {
+                    if (res.data.code === 0) {
+                        this.groupList = res.data.data;
+                        this.total = res.data.totalCount;
+                        var abnormalList = []
+                        this.groupList.forEach(item => {
+                            if (item.groupStatus === 3) {
+                                abnormalList.push(item.groupId)
+                                item.icon = 'el-icon-warning';
+                                item.icon_text = `${this.$t('text.group')}${this.$t('text.groupConf')}`
+                            }
+                            if (item.groupStatus === 4) {
+                                item.icon = 'el-icon-warning'
+                                item.icon_text = `${this.$t('text.groupConf4_all')}`
+                            }
+                        });
+                        if (abnormalList.length > 0) {
+                            this.$notify({
+                                type: 'error',
+                                message: `${this.$t('text.group')} ${abnormalList} ${this.$t('text.groupConf')}`,
+                                duration: 9500,
+                                offset: 55
+                            });
+                        }
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        })
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError')
+                    })
+                })
+        },
+        queryUpdateGroup() {
+            this.loading = true;
+            getUpdateGroup()
+                .then(res => {
+                    this.loading = false;
+                    if (res.data.code === 0) {
+                        this.queryGroupTable()
+                        this.updateGroup++;
+                        this.updateGroupType = 'update'
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        })
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError')
+                    })
+                })
+        },
+        queryCrudGroup(row) {
+            this.itemGroupData = row;
+            this.modifyGroupId = row.groupId
+            this.modifyGroupVisibility = true;
+        },
+        queryDeleteGroupData(val) {
+            this.$confirm(this.$t("text.confirmDorp"), {
+                type: 'warning'
             })
-            .catch((_) => {});
-        })
-        .catch((_) => {});
-    },
-    sureDeleteGroupData(val) {
-      this.dropLoading = true;
-      this.dropIndex = val.groupId;
-      var groupId = val.groupId;
-      deleteGroupData(groupId)
-        .then((res) => {
-          this.dropLoading = false;
-          if (res.data.code === 0) {
-            this.queryGroupTable();
-            this.updateGroup++;
-            this.updateGroupType = "update";
-          } else {
-            this.$message({
-              type: "error",
-              message: this.$chooseLang(res.data.code),
-            });
-          }
-        })
-        .catch((err) => {
-          this.dropLoading = false;
-          this.$message({
-            type: "error",
-            message: err.data || this.$t("text.systemError"),
-          });
-        });
-    },
-    exportFile(itemGroupData) {
-      let str = JSON.stringify(itemGroupData);
-      var blob = new Blob([str], { type: "text;charset=utf-8" });
-      FileSaver.saveAs(blob, itemGroupData.groupName);
-    },
-    status(key) {
-      switch (key) {
-        case 1:
-          return this.$t("text.running");
-          break;
+                .then(_ => {
+                    this.$confirm(this.$t("text.confirmDorp2"), {
+                        type: 'warning'
+                    })
+                        .then(_ => {
 
-        case 2:
-          return this.$t("text.maintaining");
-          break;
-        case 3:
-          return this.$t("text.abnormal");
-          break;
-        case 4:
-          return this.$t("text.abnormal");
-          break;
-      }
-    },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.currentPage = 1;
-      this.queryGroupTable();
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.queryGroupTable();
-    },
-    groupStatusColor(key) {
-      switch (key) {
-        case 1:
-          return "rgb(88, 203, 125)";
-          break;
+                            this.sureDeleteGroupData(val)
+                        })
+                        .catch(_ => { });
 
-        case 2:
-          return "#E6A23C";
-          break;
-        case 3:
-          return "#F56C6C";
-          break;
-        case 4:
-          return "#F56C6C";
-          break;
-      }
-    },
-    remarks(val) {
-      this.descriptionShow = true;
-      this.nodes.description = val.description;
-      this.nodes.groupId = val.groupId;
-    },
-    closeThis(){
-          this.descriptionShow = false;
-    },
-    changeDescriptions() {
-      let reqData = {
-        groupId: this.nodes.groupId,
-        description: this.nodes.description,
-      };
-      changeDescription(reqData)
-        .then((res) => {
-          if (res.data.code === 0) {
-            this.$message({
-              type: "success",
-              message: "修改成功",
-            });
-            this.descriptionShow = false;
+                })
+                .catch(_ => { });
+        },
+        sureDeleteGroupData(val) {
+            this.dropLoading = true;
+            this.dropIndex = val.groupId;
+            var groupId = val.groupId
+            deleteGroupData(groupId)
+                .then(res => {
+                    this.dropLoading = false;
+                    if (res.data.code === 0) {
+                        this.queryGroupTable()
+                        this.updateGroup++;
+                        this.updateGroupType = 'update'
+                    } else {
+                        this.$message({
+                            type: "error",
+                            message: this.$chooseLang(res.data.code)
+                        })
+                    }
+                })
+                .catch(err => {
+                    this.dropLoading = false;
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError')
+                    })
+                })
+        },
+        exportFile(itemGroupData) {
+            let str = JSON.stringify(itemGroupData);
+            var blob = new Blob([str], { type: "text;charset=utf-8" });
+            FileSaver.saveAs(blob, itemGroupData.groupName);
+        },
+        status(key) {
+            switch (key) {
+                case 1:
+                    return this.$t('text.running')
+                    break;
+
+                case 2:
+                    return this.$t('text.maintaining')
+                    break;
+                case 3:
+                    return this.$t('text.abnormal')
+                    break;
+                case 4:
+                    return this.$t('text.abnormal')
+                    break;
+            }
+        },
+        handleSizeChange(val) {
+            this.pageSize = val;
+            this.currentPage = 1;
             this.queryGroupTable();
-          }
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.$message({
-            type: "error",
-            message: err.data || this.$t("text.systemError"),
-          });
-          this.descriptionShow = false;
-        });
-    },
-  },
-};
+        },
+        handleCurrentChange(val) {
+            this.currentPage = val;
+            this.queryGroupTable();
+        },
+        groupStatusColor(key) {
+            switch (key) {
+                case 1:
+                    return 'rgb(88, 203, 125)'
+                    break;
+
+                case 2:
+                    return '#E6A23C'
+                    break;
+                case 3:
+                    return '#F56C6C'
+                    break;
+                case 4:
+                    return '#F56C6C'
+                    break;
+            }
+        }
+    }
+}
 </script>
 
 <style scoped>
 .search-part-left-btn {
-  border-radius: 20px;
-}
-.descr {
-  width: 50%;
-  margin: 0 auto;
-}
-.btn {
-  margin: 0 auto;
+    border-radius: 20px;
 }
 </style>

@@ -310,7 +310,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/newPermission') {
-                                    item.menuShow = true
+                                    item.menuShow = false
                                 }
                                 if (item.path == '/configManagement') {
                                     item.menuShow = true
@@ -326,7 +326,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/hostMetric') {
-                                    item.menuShow = true
+                                    item.menuShow = false
                                 }
                                 if (item.path == '/emailAlarm') {
                                     item.menuShow = true
@@ -376,10 +376,7 @@ export default {
 
                         })
                     }
-                    if (list[i].nameKey == 'guide') {
-                        list[i].menuShow = false
-                    }
-                    if (list[i].nameKey == 'bigScreen') {
+                    if (list[i].nameKey == 'guide'||list[i].nameKey == 'appManagement') {
                         list[i].menuShow = false
                     }
                 }
@@ -419,7 +416,7 @@ export default {
         },
         handleClose(key, keyPath) {
         },
-        hideMune(val) {
+        hideMune: function (val) {
             this.$emit("sidebarChange", val);
             if (this.menuShow) {
                 this.menuShow = false;

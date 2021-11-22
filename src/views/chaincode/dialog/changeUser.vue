@@ -32,7 +32,7 @@
                     </span>
                 </td>
             </tr>
-            <tr>
+            <!-- <tr>
                 <td  class="text-td"><span>CNS：</span></td>
                 <td>
                     <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
@@ -65,7 +65,7 @@
                         </el-form-item>
                     </el-form>
                 </td>
-            </tr>
+            </tr> -->
             <tr v-if='inputs.length'>
                 <td style="vertical-align: top;text-align: right;">{{this.$t('contracts.params')}}：</td>
                 <td>

@@ -71,7 +71,7 @@ export default {
     data() {
         return {
             wareHouseList: [],
-            language: localStorage.getItem('lang'),
+            language: localStorage.getItem('lang')?localStorage.getItem('lang'):'zh',
             folderVisible: false,
             folderName: false,
             loading: false,

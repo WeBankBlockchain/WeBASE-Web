@@ -19,35 +19,35 @@
             <span class="send-item-title">{{this.$t('contracts.contractName')}}:</span>
             <span>{{data.contractName}}</span>
         </div>
-        <div class="send-item">
+        <!-- <div class="send-item">
             <span class="send-item-title">CNS:</span>
             <span>
                 <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
             </span>
-        </div>
-        <div class="send-item" v-if="isCNS">
+        </div> -->
+        <!-- <div class="send-item" v-if="isCNS">
             <span class="send-item-title"></span>
             <el-input v-model.trim="cnsName" style="width: 260px;margin-bottom:4px;" :placeholder="$t('dialog.cnsName')">
                 <template slot="prepend">
                     <span class="">name</span>
                 </template>
             </el-input>
-        </div>
-        <div class="send-item" v-if="isCNS">
+        </div> -->
+        <!-- <div class="send-item" v-if="isCNS">
             <span class="send-item-title"></span>
             <el-input v-model.trim="cnsVersion" style="width: 260px;margin-bottom:4px;" :placeholder="$t('dialog.cnsVersion')">
                 <template slot="prepend">
                     <span class="">version</span>
                 </template>
             </el-input>
-        </div>
-        <div class="send-item" v-else>
+        </div>-->
+        <div class="send-item">
             <span class="send-item-title">{{this.$t('contracts.contractAddress')}}:</span>
             <el-input v-model="contractAddress" style="width: 260px;" :placeholder="$t('contracts.contractAddressInput')"></el-input>
             <el-tooltip class="item" effect="dark" :content="$t('contracts.contractAddressInfo')" placement="top-start">
                 <i class="el-icon-info"></i>
             </el-tooltip>
-        </div>
+        </div> 
         <div class="send-item" v-show="showUser">
             <span class="send-item-title">{{this.$t('contracts.user')}}:</span>
             <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width:260px">
@@ -121,8 +121,7 @@ export default {
                 userName: "",
                 funcName: "",
                 funcValue: [],
-                funcType: "function",
-                reqVal:[]
+                funcType: "function"
             },
             userId: "",
             userList: [],
@@ -286,12 +285,12 @@ export default {
                     );
                     if (data && isJson(data)) {
                         try {
-                            this.transation.reqVal[i] = JSON.parse(data)
+                            this.transation.funcValue[i] = JSON.parse(data)
                         } catch (error) {
                             console.log(error)
                         }
                     } else {
-                        this.transation.reqVal[i] = data;
+                        this.transation.funcValue[i] = data;
                     }
 
                 }
@@ -308,7 +307,7 @@ export default {
                 user: this.constant || this.stateMutability === 'view' || this.stateMutability === 'pure' ? '' : this.transation.userName,
                 contractName: this.data.contractName,
                 funcName: functionName || "",
-                funcParam: this.transation.reqVal,
+                funcParam: this.transation.funcValue,
                 contractId: this.data.contractId,
                 contractAbi: [this.pramasObj],
                 useCns: this.isCNS,

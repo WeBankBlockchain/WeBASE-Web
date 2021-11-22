@@ -31,7 +31,7 @@
             </div>
             <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button v-if='closeVisible' @click="modelClose">{{this.$t("text.cancel")}}</el-button>
-                <el-button type="primary" :loading="loading" @click="submit('frontFrom')">{{this.$t("text.sure")}}</el-button>
+                <el-button type="primary" :loading="loading" @click="submit('frontFrom')">{{this.$t("text.next")}}</el-button>
             </div>
         </el-dialog>
     </div>

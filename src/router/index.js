@@ -54,33 +54,18 @@ const contractWarehouse = resolve => require(['@/views/contractWarehouse'], reso
 const onlineTools = resolve => require(['@/views/onlineTools'], resolve); 
 const appManagement = resolve => require(['@/views/appManagement'], resolve); 
 const toolsContract = resolve => require(['@/views/toolsContract'], resolve);
-const bigScreen = resolve => require(['@/views/bigScreen/index'], resolve);
 Vue.use(Router);
 const routes = [
     {
         path: '/',
         nameKey: "main",
-        redirect: '/main',
+        redirect: '/login',
     },
     {
         path: '/login',
         nameKey: "login",
         name: 'login',
         component: resolve => require(['@/views/login/login'], resolve),
-    },
-    {
-        path: '/bigScreen',
-        nameKey: "bigScreen",
-        name: 'bigScreen',
-        component: bigScreen,
-        menuShow: false,
-        leaf:false,
-        iconCls: 'wbs-icon-overview sidebar-icon',
-        // children: [
-        //     {
-        //         path: '/bigScreen', component: bigScreen, name: '数据大屏', nameKey: "bigScreen", menuShow: false, meta: { requireAuth: true }
-        //     }
-        // ]
     },
     {
         path: '/main',
@@ -152,7 +137,7 @@ const routes = [
             { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', nameKey: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
             // { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: false, meta: { requireAuth: true } },
-            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: false, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
             // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
@@ -177,10 +162,10 @@ const routes = [
         name: '系统管理',
         nameKey: "systemManager",
         leaf: false,
-        menuShow: true,
+        menuShow: false,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
-            { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: true, meta: { requireAuth: true } },
+            { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: false, meta: { requireAuth: true } },
             // { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
             { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } },
@@ -211,7 +196,7 @@ const routes = [
         iconCls: 'wbs-icon-monitor sidebar-icon',
         children: [
             { path: '/nodesMetric', component: nodesMetric, name: '节点监控', nameKey: "nodesMonitor", menuShow: true, meta: { requireAuth: false } },
-            { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: true, meta: { requireAuth: false } },
+            { path: '/hostMetric', component: hostMetric, name: '主机监控', nameKey: "hostMonitor", menuShow: false, meta: { requireAuth: false } },
             { path: '/emailAlarm', component: emailAlarm, name: '邮件告警配置', nameKey: "emailAlarm", menuShow: true, meta: { requireAuth: false } },
             { path: '/emailAlarmType', component: emailAlarmType, name: '告警类型配置', nameKey: "emailAlarmType", menuShow: true, meta: { requireAuth: false } }
         ]

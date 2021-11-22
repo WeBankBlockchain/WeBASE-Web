@@ -3,7 +3,7 @@
     <div class="search-part">
 
             <div class="search-part-right">
-                <el-input :placeholder="$t('privateKey.searchUser')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
+                <el-input :placeholder="$t('privateKey.inputUserName')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                     <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                 </el-input>
             </div>
@@ -105,20 +105,20 @@ export default {
             }
         },
         getList() {
-            
+            debugger
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {
                 groupId: groupId,
                 pageNumber: this.pageNumber,
-                pageSize: this.pageSize,
+                pageSize: this.pageSize
             },
                 reqQuery = {};
             reqQuery = {
                 type: 1
             };
             if (this.contractData) {
-                reqQuery['commParam'] = this.contractData;
+                reqQuery['address'] = this.contractData;
             }
             getAllUserList(reqData, reqQuery)
                 .then(res => {
@@ -233,14 +233,14 @@ export default {
             }
         },
         search: function () {
-            this.pageNumber = 1
+            this.currentPage = 1
             this.getList();
         },
         clearInput() {
             this.contractName = "";
             this.contractAddress = "";
             this.contractData = "";
-            
+            this.currentPage = 1;
             this.getList()
         }
     }
