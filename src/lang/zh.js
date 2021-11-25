@@ -16,6 +16,8 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        back:'上一步',
+        updateSDKsucess:'配置成功',
         changeTmp: '选择应用模板', 
         customApplication: '自定义应用',
         isRedeploy: '合约已部署 是否重新部署？',
@@ -407,6 +409,7 @@ export default {
         versionInfo: "版本信息",
     },
     title: {
+        addSDK:'配置SDK',
         dataOverview: "数据概览",
         blockTitle: "区块信息",
         nodeTitle: "节点管理",
@@ -950,7 +953,18 @@ export default {
         input1_300: '请输入300字符以内的详情',
         input1_62: '请输入62字符以内的简介',
     },
+    sdk:{
+        caCertStr:'caCert',
+        sdkCertStr:'sdkCert',
+        sdkKeyStr:'sdkKey',
+        smCaCertStr:'smCaCert',
+        smEnSdkCertStr:'smEnSdkCert',
+        smEnSdkKeyStr:'smEnSdkKey',
+        smSdkCertStr:'smSdkCert',
+        smSdkKeyStr:'smSdkKey',
+    },
     table: {
+        type: '类型',
         contractAddress: '合约地址',
         contractAbi: '合约ABI',
         appId: "应用编号",

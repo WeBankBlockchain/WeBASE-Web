@@ -227,6 +227,7 @@ export default {
                             var timestampList = data[0]["data"]["contrastDataList"]["timestampList"] || [];
                         }
                         this.nodesHealthData = data;
+                        this.nodesHealthData.splice(1,1)
                         this.nodesHealthData.forEach(item => {
                             if (item.metricType === "blockHeight") {
                                 item.metricName = this.$t('monitor.blockHeight');

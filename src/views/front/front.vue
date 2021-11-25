@@ -211,7 +211,10 @@ export default {
             chainList: null,
             hostInfoShow: false,
             loadingTxt: this.$t('text.loading'),
-            optShow: false
+            optShow: false,
+            groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
+            sdkDialogVisible: false,
+            sdkParam:{}
         };
     },
     computed: {
@@ -326,7 +329,7 @@ export default {
             this.hostInfoShow = true
         },
         getEncryption: function () {
-            encryption().then(res => {
+            encryption(this.groupId).then(res => {
                 if (res.data.code === 0) {
                     // if(res.data.data == 1){
                     //     this.encryption = 'guomi'

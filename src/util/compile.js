@@ -65,7 +65,6 @@ function compileHighVersion(contract) {
  
 
 function changeOutput(obj,contract) {
-    debugger
     if (JSON.stringify(obj) !== "{}") {
         if (obj.hasOwnProperty(contract.contractName)) {
             let compiledMap = obj[contract.contractName]

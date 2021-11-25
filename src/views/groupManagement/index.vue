@@ -9,7 +9,7 @@
     ></content-head>
     <div class="module-wrapper">
       <div class="search-part" style="padding-top: 20px">
-        <div class="search-part-left">
+        <!-- <div class="search-part-left">
           <el-button
             type="primary"
             class="search-part-left-btn"
@@ -29,7 +29,7 @@
             v-preventReClick
             :title="$t('alarm.refresh')"
           ></el-button>
-        </div>
+        </div> -->
         <div class="">
           <el-table
             :data="groupList"
@@ -76,12 +76,12 @@
               width="250"
             >
               <template slot-scope="scope">
-                <el-button
+                <!-- <el-button
                   type="text"
                   size="small"
                   @click="queryCrudGroup(scope.row)"
                   >{{ $t("text.update") }}</el-button
-                >
+                > -->
                 <el-button
                   type="text"
                   size="small"
@@ -89,7 +89,7 @@
                   @click="queryDeleteGroupData(scope.row)"
                   >{{ $t("text.dropGroupData") }}</el-button
                 >
-                <el-button
+                <!-- <el-button
                   type="text"
                   size="small"
                   v-if="scope.row.groupType !== 1"
@@ -102,7 +102,7 @@
                   size="small"
                   @click="remarks(scope.row)"
                   >{{ $t("text.remarks") }}</el-button
-                >
+                > -->
                 <el-tooltip
                   effect="light"
                   :content="$t('text.noExportGroup')"
@@ -191,6 +191,8 @@
           </el-dialog>
         </div>
     </div>
+     </div>
+     </div>
 </template>
 
 <script>

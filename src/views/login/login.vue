@@ -109,6 +109,8 @@ export default {
             },
             authToken: null,
             encryption: "hash",
+            groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
+
         };
     },
     computed: {
@@ -142,7 +144,7 @@ export default {
     mounted: function () {
         localStorage.setItem("config", 0);
         this.changeCode();
-        // this.getEncryption();
+        //this.getEncryption();
         // let soljson = document.getElementById('soljson')
         // if(soljson){
         //     soljson.remove()
@@ -242,7 +244,7 @@ export default {
                 });
         },
         getEncryption: function () {
-            encryption()
+            encryption(this.groupId)
                 .then((res) => {
                     if (res.data.code === 0) {
                         if (res.data.data == 1) {

@@ -15,7 +15,7 @@
  */
 
 /* customize class */
-
+body { overflow-y: scroll;overflow: auto !important; }
 .span-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
