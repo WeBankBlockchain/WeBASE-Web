@@ -117,6 +117,7 @@ export default {
 .navMenu {
   width: 100%;
   line-height: 54px;
+  height: 54px;
   display: inline-block;
   /* background-color: pink; */
   position: relative;

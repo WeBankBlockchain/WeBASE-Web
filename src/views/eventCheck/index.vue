@@ -22,7 +22,7 @@
                         <el-form-item :label="$t('table.toBlock')" prop="toBlock">
                             <el-input v-model.number="contractEventForm.toBlock" clearable style="width: 195px;"></el-input>
                         </el-form-item>
-                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start" style="margin-top:12px">
+                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start" style="padding-top: 20px;">
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
                     </div>
@@ -574,5 +574,11 @@ export default {
     position: absolute;
     top: 100%;
     left: 0;
+}
+.el-form-item{
+    margin: 10px 0 10px 0;
+}
+.search-part{
+    padding: 0;
 }
 </style>

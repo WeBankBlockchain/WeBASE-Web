@@ -18,7 +18,7 @@
         <!-- <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></content-head> -->
         <nav-menu :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
-            <div class="search-part">
+            <div class="search-part" style="padding: 20px 40px 20px 40px;">
                 <div class="search-part-left">
                     <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>

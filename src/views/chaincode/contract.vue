@@ -323,7 +323,7 @@ export default {
 </script>
 <style scoped>
 .contract-content {
-    width: 100%;
+    width: 97%;
     height: 100%;
     font-size: 0;
 }

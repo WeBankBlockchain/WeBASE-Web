@@ -2,7 +2,7 @@
     <div>
         <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head> -->
         <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')"></nav-menu>
-        <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
+        <div class="module-wrapper" style="padding: 20px 40px 20px;">
             <span class="cns-title">{{$t('contracts.cnsTitle')}}</span>
             <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.contractName')" prop="contractName" class="item-form">
@@ -26,7 +26,7 @@
             <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
-        <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
+        <div class="module-wrapper" style="padding: 20px 40px 20px;margin-top:10px">
             <span class="cns-title">{{$t('contracts.localCnsTitle')}}</span>
             <el-table :data="localCnsList" tooltip-effect="dark" v-loading="loadingLocal" class="search-table-content">
                 <el-table-column v-for="head in localCnsHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width="head.width">

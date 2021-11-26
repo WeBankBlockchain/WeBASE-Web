@@ -17,11 +17,11 @@
     <div>
         <div class="module-wrapper">
             <div class="search-part">
-                <div class="search-part-left" style="padding-top: 20px;">
+                <div class="search-part-left" style="padding-top: 20px;display: inline-block;">
                     <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
                     <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
                 </div>
-                <div class="search-part-right">
+                <div class="search-part-right" style="margin-top: 20px;">
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
@@ -719,6 +719,7 @@ export default {
 .el-tooltip__popper {
     max-width: 80%;
 }
+
 </style>
 
 

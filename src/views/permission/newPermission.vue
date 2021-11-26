@@ -3,7 +3,7 @@
         <!-- <contents  @changGroup="changGroup" :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')" :headHref="headHref">
         </contents> -->
         <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')"></nav-menu>
-        <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 20px 40px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
                 <el-tab-pane :label="$t('title.committeeMgmt')">
                     <committeeMgmt ref='committeeMgmt'></committeeMgmt>
@@ -13,7 +13,7 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <div v-else class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <div v-else class="module-wrapper" style="padding:20px 20px 0px;">
              <permission ref='permission'></permission>
         </div>
     </div>

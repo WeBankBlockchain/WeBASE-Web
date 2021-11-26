@@ -123,7 +123,7 @@ export default {
   background-color: white;
   width: 320px;
   box-sizing: border-box;
-  transition: width 0.5s;
+  transition: width 1s;
   /* transition: 'display' 10s linear; */
 }
 .content-head-title {
