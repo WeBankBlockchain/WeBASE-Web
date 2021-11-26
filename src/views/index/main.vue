@@ -82,7 +82,9 @@ export default {
                 checkPass: ""
             },
             configType: 1,
-            configShow: false
+            configShow: false,
+            groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
+
         };
     },
     computed: {
@@ -160,7 +162,7 @@ export default {
         }
     },
     mounted() {
-        // this.getEncryption();
+       // this.getEncryption();
         this.getConfigList();
     },
     methods: {
@@ -408,7 +410,7 @@ export default {
         //         });
         // },
         getEncryption: function () {
-            encryption().then(res => {
+            encryption(this.groupId).then(res => {
                 if (res.data.code === 0) {
                     if (res.data.data != localStorage.getItem("encryptionId")) {
                         localStorage.removeItem('solcName')

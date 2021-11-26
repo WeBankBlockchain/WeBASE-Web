@@ -42,10 +42,23 @@ export function loginOut() {
     })
 }
 //
-export function encryption() {
+export function encryption(groupId) {
     return get({
-        url: `${url.ORG_LIST}/config/encrypt`,
-        method: 'get'
+        url: `${url.ORG_LIST}/group/encrypt/${groupId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function updateSDK(data) {
+    return post({
+        url: `${url.ORG_LIST}/config/bcosSDK`,
+        method: 'post',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        },
+        data: data
     })
 }
 //init change passWord
@@ -639,11 +652,10 @@ export function fetchNodeMonitor(data, list) {
 }
 
 
-export function addFront(data) {
+export function addFront(frontIp,frontPort) {
     return get({
-        url: `${url.ORG_LIST}/front/new`,
-        method: 'post',
-        data: data,
+        url: `${url.ORG_LIST}/front/connected?frontIp=${frontIp}&frontPort=${frontPort}`,
+        method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

@@ -55,6 +55,7 @@ import { resetPassword, addnodes, getGroups, encryption, getGroupsInvalidInclude
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha"
+import Bus from "@/bus"
 export default {
     name: "newMain",
     components: {
@@ -78,6 +79,8 @@ export default {
                 pass: "",
                 checkPass: ""
             },
+            groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
+
         };
     },
     computed: {
@@ -156,7 +159,7 @@ export default {
     },
     mounted() {
         //this.getRefreshFront()
-        //this.getEncryption();
+       // this.getEncryption();
         this.getGroupList();
         this.getFrontTable();
         // this.getVersionList()
@@ -333,7 +336,7 @@ export default {
                 });
         },
         getEncryption: function () {
-            encryption().then(res => {
+            encryption(this.groupId).then(res => {
                 if (res.data.code === 0) {
                     if (res.data.data != localStorage.getItem("encryptionId")) {
                         localStorage.removeItem('solcName')

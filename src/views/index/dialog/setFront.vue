@@ -15,8 +15,7 @@
  */
 <template>
     <div>
-        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="dialogVisible" :before-close="modelClose" class="dialog-wrapper" width="433px" :center="true" :show-close='false'>
-            <div>
+          <div>
                 <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="ip" prop="ip" style="width:330px">
                         <el-input v-model="frontFrom.ip"></el-input>
@@ -33,7 +32,7 @@
                 <el-button v-if='closeVisible' @click="modelClose">{{this.$t("text.cancel")}}</el-button>
                 <el-button type="primary" :loading="loading" @click="submit('frontFrom')">{{this.$t("text.next")}}</el-button>
             </div>
-        </el-dialog>
+      
     </div>
 </template>
 <script>
@@ -125,14 +124,16 @@ export default {
                 frontIp: this.frontFrom.ip,
                 frontPort: this.frontFrom.port
             }
-            addFront(reqData).then(res => {
+            addFront(reqData['frontIp'],reqData['frontPort']).then(res => {
                 this.loading = false;
-                if (res.data.code === 0) {
+                if (res.data.data === true) {
                     this.$message({
                         message: this.$t("nodes.addFrontSuccessMsg"),
                         type: "success"
                     });
                     this.$emit("close")
+                    this.$emit("updateSDK")
+
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),

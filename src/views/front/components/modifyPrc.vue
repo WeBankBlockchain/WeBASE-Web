@@ -9,13 +9,7 @@
                     </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item :label="$t('nodes.nodeStyle')" prop="nodeType" style="width: 320px;">
-                <el-select v-model="modifyForm.nodeType" :placeholder="$t('text.select')">
-                    <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <p class="info" v-if='deployType == 1'>{{$t('nodes.notice')}}</p>
+            
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="close">{{this.$t("text.cancel")}}</el-button>

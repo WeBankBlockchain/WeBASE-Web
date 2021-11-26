@@ -105,7 +105,6 @@ export default {
             }
         },
         getList() {
-            debugger
             this.loading = true;
             let groupId = localStorage.getItem("groupId");
             let reqData = {

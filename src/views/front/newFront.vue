@@ -87,13 +87,18 @@
                 </el-table>
                 <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
                 </el-pagination>
-                <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
+        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="frontShow" v-if="frontShow"  class="dialog-wrapper" width="600px" :center="true" :show-close='false'>
+                <v-setFront  :showClose='true' @close='close' @updateSDK='getSDK'></v-setFront>
+                    </el-dialog>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
                  <el-dialog :title="$t('nodes.modifyPRC')" :visible.sync="PrcDialogVisible" width="600px" v-if="PrcDialogVisible" center>
                     <modify-prc @prcClose="prcClose" @prcSuccess="prcSuccess" :prcParam="prcParam"></modify-prc>
                 </el-dialog>
+                <el-dialog :show-close='false' :close-on-click-modal="false" :title="$t('title.addSDK')" :visible.sync="sdkDialogVisible" width="600px" v-if="sdkDialogVisible" center>
+               <update-sdk @updateSDKsucess="sdkSuccess" :sdkParam="sdkParam" @backSetfront='backSetfront'></update-sdk>                                                                                                                               
+        </el-dialog>
             </div>
         </div>
     </div>
@@ -103,6 +108,7 @@
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import modifyPrc from "./components/modifyPrc";
+import updateSDK from "./components/updateSDK";
 import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk } from "@/util/api";
 import { date, unique } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -116,7 +122,7 @@ export default {
         "v-content-head": contentHead,
         "v-setFront": setFront,
         modifyNodeType,
-        modifyPrc
+        'update-sdk':updateSDK
     },
     watch: {
         $route() {
@@ -147,7 +153,9 @@ export default {
             disabled: false,
             modifyNode: {},
             modifyDialogVisible: false,
-            PrcDialogVisible: false
+            PrcDialogVisible: false,
+            sdkDialogVisible: false,
+            sdkParam:{}
         };
     },
     computed: {
@@ -238,6 +246,16 @@ export default {
         this.getNodeTable();
     },
     methods: {
+        backSetfront(){
+            this.sdkDialogVisible=false;
+            this.frontShow = true;
+        },
+                sdkSuccess(){
+            this.sdkDialogVisible=false;
+        },
+          getSDK(){
+             this.sdkDialogVisible=true
+            },
         getVersionList() {
             getVersion().then(res => {
                 if (res.status == 200) {

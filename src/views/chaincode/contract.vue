@@ -79,6 +79,7 @@ export default {
             versionData: null,
             loading: false,
             host: location.host,
+            groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
         };
     },
     computed: {
@@ -149,7 +150,7 @@ export default {
             }
         ];
         this.initWorker()
-        //this.getEncryption(this.querySolcList);  
+        this.getEncryption(this.querySolcList);  
     },
     methods: {
         initWorker() {
@@ -261,7 +262,7 @@ export default {
         },
         getEncryption: function (callback) {
             this.loading = true
-            encryption().then(res => {
+            encryption(this.groupId).then(res => {
                 if (res.status == 200) {
                     localStorage.setItem("encryptionId", res.data.data)
                     callback();
@@ -280,8 +281,11 @@ export default {
                     });
                 });
         },
-        changGroup: function () {
-            this.$refs.menu.getContractPaths()
+        changGroup: function (){
+            this.initVersion()
+            this.versionList=[];
+            this.getEncryption(this.querySolcList); 
+            //this.$refs.menu.getContractPaths()
         },
         dragDetailWeight: function (e) {
             let startX = e.clientX,
