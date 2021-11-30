@@ -39,10 +39,10 @@
                     <i class="wbs-icon-send font-16"></i>
                     <span>{{this.$t("text.send")}}</span>
                 </span>
-                <span class="contract-code-done" @click="exportJava" v-if="(!contractAddress && abiFile && bin && !disabled)|| (contractAddress && !disabled)">
+                <!-- <span class="contract-code-done" @click="exportJava" v-if="(!contractAddress && abiFile && bin && !disabled)|| (contractAddress && !disabled)">
                     <i class="el-icon-download contract-icon-style font-16"></i>
                     <span>{{this.$t("text.exportJavaProject")}}</span>
-                </span>
+                </span> -->
             </span>
         </div>
         <div class="contract-code-content" :class="{infoHide: !successHide}">
@@ -910,7 +910,7 @@ export default {
                                 inputs: value.inputs
                             });
                         }
-                        data.methodId = methodId;
+                        data.methodId = methodId.substr(0, 10);;
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)

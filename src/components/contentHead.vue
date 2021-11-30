@@ -76,7 +76,7 @@
                 </a>
             </el-popover>
         </div>
-        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%" style="text-align: center;">
+        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%"  style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
         <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">

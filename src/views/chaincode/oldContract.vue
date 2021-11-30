@@ -274,7 +274,8 @@ export default {
                             }
                         }
                     });
-                    // console.log(dataArray);
+                   this.contractList = dataArray ;
+                     console.log(dataArray);
                    // this.queryAllContractStatus(contractAddressList, dataArray)
                 } else {
                     this.$message({

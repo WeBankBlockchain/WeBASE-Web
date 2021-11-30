@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 "use strict"
+
+import { debug } from "request";
+
 let changeDate = function (date) {
     let newData = new Date(date);
     let Y = newData.getFullYear();
@@ -94,6 +97,12 @@ export function reviseParam(necessary, query) {
     }
     str = arr.join('/');
     return { str, querys }
+}
+export function resizeParam(necessary, query) {
+    let params = arguments[0],
+        querys = arguments[1],
+        param =params.groupId+'/'+params.data.substring(0,10)
+    return param
 }
 
 

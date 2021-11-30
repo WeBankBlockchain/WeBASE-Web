@@ -162,8 +162,8 @@ export default {
         }
     },
     mounted() {
-       // this.getEncryption();
-        this.getConfigList();
+      this.getEncryption();
+        //this.getConfigList();
     },
     methods: {
         getConfigList: function () {

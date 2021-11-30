@@ -16,6 +16,7 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        detail:"detail",
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',
         isRedeploy: 'Has the contract been deployed or redeployed?',

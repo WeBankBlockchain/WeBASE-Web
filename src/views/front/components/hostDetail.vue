@@ -45,17 +45,17 @@
             </div>
             <div class="metric-content">
                 <el-button-group class="tab-list">
-                    <el-button :class="tab==='hostInfo'?'active':''" @click="changeTab('hostInfo')">{{$t('monitor.hostInfo')}}</el-button>
+                    <!-- <el-button :class="tab==='hostInfo'?'active':''" @click="changeTab('hostInfo')">{{$t('monitor.hostInfo')}}</el-button> -->
                     <el-button :class="tab==='chainInfo'?'active':''" @click="changeTab('chainInfo')">{{$t('monitor.nodeInfo')}}</el-button>
                 </el-button-group>
                 <div class="tab-metric">
-                    <el-row v-show="tab==='hostInfo'" v-loading="loadingInit">
+                    <!-- <el-row v-show="tab==='hostInfo'" v-loading="loadingInit">
                         <template v-for="item in metricData">
                             <el-col :xs='24' :sm="24" :md="24" :lg="12" :xl="12">
                                 <v-metric-chart :chartOption="item" :reload="reloadNum" v-loading="loading"></v-metric-chart>
                             </el-col>
                         </template>
-                    </el-row>
+                    </el-row> -->
                     <el-row v-show="tab==='chainInfo'">
                         <template v-for="item in nodesHealthData">
                             <el-col :xs='24' :sm="24" :md="24" :lg="12" :xl="12">
@@ -106,7 +106,7 @@ export default {
             reloadNum: 1,
             nodesReloadNum: 1,
             colNum: 12,
-            tab: "hostInfo",
+            tab: "chainInfo",
             chartParam: {
                 gap: 60,
                 beginDate: `${format(new Date().getTime(), 'yyyy-MM-dd')}T${format(new Date(formatData()).getTime(), 'HH:mm:ss')}`,
@@ -144,7 +144,7 @@ export default {
         Bus.$off("chooselanguage")
     },
     mounted() {
-        this.getChartData();
+        this.getHealthData();
         Bus.$on("changeGroup", data => {
             this.changGroup(localStorage.getItem('groupId'))
         })
@@ -158,7 +158,7 @@ export default {
             if (this.tab == 'chainInfo') {
                 this.getHealthData()
             } else {
-                this.getChartData()
+                //this.getChartData()
             }
         },
         getChartData() {

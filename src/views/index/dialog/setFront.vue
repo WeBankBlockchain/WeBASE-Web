@@ -16,11 +16,11 @@
 <template>
     <div>
           <div>
-                <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="ip" prop="ip" style="width:330px">
+                <el-form :model="frontFrom" :rules="rules" ref="frontFrom" label-width="135px" class="demo-ruleForm">
+                    <el-form-item label="ip" prop="ip" >
                         <el-input v-model="frontFrom.ip"></el-input>
                     </el-form-item>
-                    <el-form-item :label="$t('nodes.frontPort')" prop="port" style="width:330px">
+                    <el-form-item :label="$t('nodes.frontPort')" prop="port" >
                         <el-input v-model="frontFrom.port" :placeholder="$t('text.port5002')"></el-input>
                     </el-form-item>
                     <!-- <el-form-item :label="$t('nodes.agency')" prop="company" style="width:330px">
@@ -30,7 +30,7 @@
             </div>
             <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button v-if='closeVisible' @click="modelClose">{{this.$t("text.cancel")}}</el-button>
-                <el-button type="primary" :loading="loading" @click="submit('frontFrom')">{{this.$t("text.next")}}</el-button>
+                <el-button type="primary" :loading="loading" @click="submit('frontFrom')">{{this.$t("text.confirm")}}</el-button>
             </div>
       
     </div>
@@ -124,7 +124,32 @@ export default {
                 frontIp: this.frontFrom.ip,
                 frontPort: this.frontFrom.port
             }
-            addFront(reqData['frontIp'],reqData['frontPort']).then(res => {
+            // addFront(reqData.frontIp,reqData.frontPort).then(res => {
+            // // addFront(reqData['frontIp'],reqData['frontPort']).then(res => {
+            //     this.loading = false;
+            //     if (res.data.data === true) {
+            //         this.$message({
+            //             message: this.$t("nodes.addFrontSuccessMsg"),
+            //             type: "success"
+            //         });
+            //         this.$emit("close")
+            //         this.$emit("updateSDK")
+
+            //     } else {
+            //         this.$message({
+            //             message: this.$chooseLang(res.data.code),
+            //             type: "error"
+            //         });
+            //     }
+            // }).catch(err => {
+            //     this.loading = false;
+            //     this.$message({
+            //         message: err.data || this.$t('text.systemError'),
+            //         type: "error"
+            //     });
+            // })
+              addFront(reqData).then(res => {
+            // addFront(reqData['frontIp'],reqData['frontPort']).then(res => {
                 this.loading = false;
                 if (res.data.data === true) {
                     this.$message({
@@ -132,8 +157,7 @@ export default {
                         type: "success"
                     });
                     this.$emit("close")
-                    this.$emit("updateSDK")
-
+                 
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -147,7 +171,8 @@ export default {
                     type: "error"
                 });
             })
-        },
+       
+       },
         modelClose: function () {
             this.$emit("close")
         }
