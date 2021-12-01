@@ -16,6 +16,7 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        detail:"详情",
         back:'上一步',
         updateSDKsucess:'配置成功',
         changeTmp: '选择应用模板', 

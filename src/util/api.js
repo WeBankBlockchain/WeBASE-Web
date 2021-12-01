@@ -15,7 +15,7 @@
  */
 import url from './url'
 import { post, get, patch, put, deleted } from './http'
-import { reviseParam } from './util'
+import { reviseParam,resizeParam } from './util'
 import qs from 'qs'
 
 //login
@@ -652,15 +652,25 @@ export function fetchNodeMonitor(data, list) {
 }
 
 
-export function addFront(frontIp,frontPort) {
-    return get({
-        url: `${url.ORG_LIST}/front/connected?frontIp=${frontIp}&frontPort=${frontPort}`,
-        method: 'get',
+export function addFront(data) {
+        return post({
+            url: `${url.ORG_LIST}/front/new`,
+            method: 'post',
+            data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
+// export function addFront(frontIp,frontPort) {
+//     return get({
+//         url: `${url.ORG_LIST}/front/connected?frontIp=${frontIp}&frontPort=${frontPort}`,
+//         method: 'get',
+//         headers: {
+//             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+//         }
+//     })
+// }
 export function getGroups() {
     return get({
         url: `${url.ORG_LIST}/group/all`,
@@ -675,6 +685,15 @@ export function getFronts(data) {
         url: `${url.ORG_LIST}/front/find`,
         method: 'get',
         params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function getDetail(data) {
+    return get({
+        url: `${url.ORG_LIST}/front/groupInfo?frontId=${data.frontId}&groupId=${data.groupId}`,
+        method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -701,9 +720,9 @@ export function addFunctionAbi(data) {
     })
 }
 export function getFunctionAbi(data, list) {
-    const params = reviseParam(data, list);
+    const params = resizeParam(data, list);
     return get({
-        url: `${url.ORG_LIST}/method/findById/${params.str}`,
+        url: `${url.ORG_LIST}/method/findById/${params}`,
         method: 'get',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""

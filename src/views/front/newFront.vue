@@ -44,6 +44,7 @@
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deletedFront(scope.row)" type="text" size="small">{{$t('text.delete')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="exportSdk(scope.row)" type="text" size="small">{{$t('text.exportSdk')}}</el-button>
+                            <el-button  @click="viewDetail(scope.row)" type="text" size="small">{{$t('text.detail')}}</el-button>
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="prcModify(scope.row)" type="text" size="small">{{$t('text.RPC')}}</el-button> -->
                         </template>
                     </el-table-column>
@@ -72,7 +73,7 @@
                                     <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" :title="$t('text.copy')"></i>
                                     {{scope.row[head.enName]}}
                                 </span>
-                                <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row[head.enName])}}</span>
+                                <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row)}}</span>
                                 <span v-else-if="head.enName==='pbftView'">
                                     {{scope.row[head.enName]}}
                                 </span>
@@ -99,6 +100,9 @@
                 <el-dialog :show-close='false' :close-on-click-modal="false" :title="$t('title.addSDK')" :visible.sync="sdkDialogVisible" width="600px" v-if="sdkDialogVisible" center>
                <update-sdk @updateSDKsucess="sdkSuccess" :sdkParam="sdkParam" @backSetfront='backSetfront'></update-sdk>                                                                                                                               
         </el-dialog>
+        <el-dialog  :close-on-click-modal="false" :title="$t('text.detail')" :visible.sync="detailDialogVisible" width="600px" v-if="detailDialogVisible" center>
+              <detail-page @detailClose="detailClose" @detailSuccess="detailSuccess" :detailParam="detailParam"></detail-page>                                                                                                                           
+        </el-dialog>
             </div>
         </div>
     </div>
@@ -107,7 +111,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
-import modifyPrc from "./components/modifyPrc";
+import detailPage from "./components/detailPage";
 import updateSDK from "./components/updateSDK";
 import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk } from "@/util/api";
 import { date, unique } from "@/util/util";
@@ -122,7 +126,8 @@ export default {
         "v-content-head": contentHead,
         "v-setFront": setFront,
         modifyNodeType,
-        'update-sdk':updateSDK
+        'update-sdk':updateSDK,
+        detailPage
     },
     watch: {
         $route() {
@@ -144,6 +149,7 @@ export default {
             loading: false,
             nodesLoading: false,
             nodesDialogVisible: false,
+            detailDialogVisible: false,
             nodesDialogTitle: "",
             nodesDialogOptions: {},
             frontId: null,
@@ -155,7 +161,8 @@ export default {
             modifyDialogVisible: false,
             PrcDialogVisible: false,
             sdkDialogVisible: false,
-            sdkParam:{}
+            sdkParam:{},
+            detailParam:{},
         };
     },
     computed: {
@@ -246,6 +253,16 @@ export default {
         this.getNodeTable();
     },
     methods: {
+        viewDetail(param){
+            this.detailParam=param
+            this.detailDialogVisible=true
+        },
+        detailClose(){
+            this.detailDialogVisible=false
+        },
+        detailSuccess(){
+            this.detailDialogVisible=true;
+        },
         backSetfront(){
             this.sdkDialogVisible=false;
             this.frontShow = true;
@@ -389,10 +406,11 @@ export default {
             return transString;
         },
         nodeText(key) {
+            
             var str = '';
-            switch (key) {
+            switch (key.nodeType) {
                 case 'sealer':
-                    str = this.$t("nodes.sealer");
+                    str = this.$t("nodes.sealer")+'('+key.weight+")";
                     break;
                 case 'observer':
                     str = this.$t("nodes.observer");

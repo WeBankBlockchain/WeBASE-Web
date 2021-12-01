@@ -15,6 +15,12 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+             <el-form-item :label="$t('govCommittee.weight')" prop="weight" style="width: 320px;">
+                <el-input v-model="modifyForm.weight" :placeholder="$t('text.select')">
+            
+               
+                </el-input>
+            </el-form-item>
             <p class="info" v-if='deployType == 1'>{{$t('nodes.notice')}}</p>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
@@ -57,8 +63,9 @@ export default {
                 },
             ],
             modifyForm: {
-                adminRivateKey: '',
-                nodeType: ''
+                adminRivateKey: this.modifyNode.adminRivateKey,
+                nodeType: this.modifyNode.nodeType,
+                weight:this.modifyNode.weight,
             },
             deployType: null,
             ruleTest: this.$t("rule.adminRule")
@@ -78,6 +85,13 @@ export default {
                     {
                         required: true,
                         message: this.$t("rule.nodeType"),
+                        trigger: "blur"
+                    }
+                ],
+                 weight: [
+                    {
+                        required: true,
+                        message: this.$t("rule.weightRule"),
                         trigger: "blur"
                     }
                 ]
@@ -157,6 +171,7 @@ export default {
                 nodeType: this.modifyForm.nodeType,
                 nodeId: this.modifyNode.nodeId,
                 fromAddress: this.modifyForm.adminRivateKey,
+                weight:this.modifyForm.weight,
             }
             consensusNodeId(reqData)
                 .then(res => {

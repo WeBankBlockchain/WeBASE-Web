@@ -62,7 +62,8 @@
                     </el-table-column>
                     <el-table-column v-for="head in unusualUserHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" v-if="head.enName!=='hashs'">
                         <template slot-scope="scope">
-                            <span>{{scope.row[head.enName]}}</span>
+                            <span v-if="head.enName=='address'">{{scope.row[head.enName]=='0x'?'':scope.row[head.enName]}}</span>
+                            <span v-else>{{scope.row[head.enName]}}</span>
                         </template>
                     </el-table-column>
                     <el-table-column  :label="$t('nodes.operation')" width="200">

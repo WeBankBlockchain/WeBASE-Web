@@ -26,8 +26,10 @@
                 <el-input type="password" v-model="rulePasswordForm.checkPass" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item>
+                   <div class="text-right sure-btn" style="margin-top:10px">
                 <el-button type="primary" @click="submitForm('rulePasswordForm')">{{$t('main.submit')}}</el-button>
                 <el-button @click="resetForm('rulePasswordForm')">{{$t('main.reset')}}</el-button>
+                </div>
             </el-form-item>
         </el-form>
     </div>

@@ -241,7 +241,7 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         // return res.data.data.contractAddress;
-                        this.eventLog = res.data.data.logs;
+                        this.eventLog = res.data.data.logEntries;
                         this.getBin(res.data.data.contractAddress,res.data.data.blockNumber);
                         // this.contractAddress = res.data.data.contractAddress
                         

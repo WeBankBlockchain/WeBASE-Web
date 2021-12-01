@@ -18,18 +18,18 @@
         <el-tabs type="border-card" @tab-click="handleClick">
             <el-tab-pane :label="$t('table.transactionInfo')">
                 <div>
-                    <div class="item">
+                    <!-- <div class="item">
                         <span class="label">Block Hash:</span>
                         <span>{{transactionData.blockHash || ""}}</span>
-                    </div>
-                    <div class="item">
+                    </div>-->
+                    <!-- <div class="item">
                         <span class="label">Block Height:</span>
                         <span>{{transactionData.blockNumber || ""}}</span>
-                    </div>
-                    <div class="item">
+                    </div> -->
+                   <!--  <div class="item">
                         <span class="label">Gas:</span>
                         <span>{{transactionData.gas || ""}}</span>
-                    </div>
+                    </div> -->
                     <div class="item">
                         <span class="label">From:</span>
                         <span class="input-data-from">
@@ -49,17 +49,17 @@
                         <span v-if="transactionData.to">{{transactionData.to | contractSource}}</span>
                     </div>
                     <div class="item">
-                        <span class="label">nonceRaw:</span>
-                        <span>{{transactionData.nonceRaw || ""}}</span>
+                        <span class="label">nonce:</span>
+                        <span>{{transactionData.nonce || ""}}</span>
                     </div>
                     <div class="item">
                         <span class="label">Hash:</span>
                         <span>{{transactionData.hash || ""}}</span>
                     </div>
-                    <div class="item">
-                        <span class="label">Timestamp:</span>
+                    <!-- <div class="item">
+                        <span class="label">importTime:</span>
                         <span>{{createTime || ""}}</span>
-                    </div>
+                    </div> -->
                     <div class="item" style="font-size: 0">
                         <span class="label">Input:</span>
                         <div class="detail-input-content">
@@ -144,7 +144,7 @@
                                     </div>
                             </div>
                         </template>
-                        <template v-else-if="item == 'logs'">
+                        <template v-else-if="item == 'logEntries'">
                             <span v-if="txInfoReceiptMap[item]&& !txInfoReceiptMap[item].length">{{txInfoReceiptMap[item]}}</span>
                             <div v-for="(item,num) in eventLog" v-if="eventSHow">
                                 <div class="item">
@@ -158,7 +158,7 @@
                                 <div class="item">
                                     <span class="label">Topics :</span>
                                     <div style="display: inline-block;width:800px;">
-                                        <div v-for="(val,index) in item.topics " :key='val'>[{{index}}] {{val}}</div>
+                                        <div v-for="(val,index) in item.topic " :key='val'>[{{index}}] {{val}}</div>
                                     </div>
                                 </div>
                                 <div class="item">
@@ -249,17 +249,17 @@ export default {
             unEvent: false,
             txReceiptInfoList: [
                 "output",
-                "blockHash",
+                // "blockHash",
                 "gasUsed",
                 "blockNumber",
                 "contractAddress",
                 "from",
-                "transactionIndex",
+                //"transactionIndex",
                 "to",
-                "logsBloom",
+                //"logsBloom",
                 "transactionHash",
                 "status",
-                "logs"
+                "logEntries"
             ],
             txInfoReceiptMap: {},
             showReceiptDecode: true,
@@ -322,7 +322,7 @@ export default {
                     if (res.data.code === 0) {
                         this.transactionData = res.data.data;
                         if (res.data.data) {
-                            this.getCreatTime(res.data.data.blockNumber);
+                            this.getCreatTime(res.data.data.blockLimit);
                             this.getAdderss(res.data.data.to,res.data.data.input);
                         } else {
                             this.$message({
@@ -434,12 +434,12 @@ export default {
         getCreatTime: function (number) {
             let data = {
                 groupId: localStorage.getItem("groupId"),
-                blockNumber: number
+                blockLimit: number
             };
             getBlockDetail(data)
                 .then(res => {
                     if (res.data.code === 0) {
-                        this.createTime = getDate(res.data.data.timestamp);
+                        //this.createTime = getDate(res.data.data.importTime);
                     } else {
                         this.$message({
                             type: "error",
@@ -506,7 +506,8 @@ export default {
                 .then(res => {
                     if (res.data.code === 0) {
                         this.txInfoReceiptMap = res.data.data;
-                        this.eventLog = res.data.data.logs;
+                        this.eventLog = res.data.data.logEntries;
+                        
                         // if not deploy contract trans
                         if (to && to != "0x0000000000000000000000000000000000000000") {
                                 this.exportContrctShow = false;
@@ -538,14 +539,16 @@ export default {
                 }
                 let data = {
                     groupId: localStorage.getItem("groupId"),
-                    data: this.eventLog[i].topics[0]
+                    data: this.eventLog[i].topic[0]
                 }
                 getFunctionAbi(data).then(res => {
+                    
                     if (res.data.code == 0 && res.data.data) {
                         this.eventLog[i] = this.decodeEvent(res.data.data, this.eventLog[i])
-                        setTimeout(() => {
-                            this.eventSHow = true;
-                        }, 200)
+                         setTimeout(() => {
+                this.eventSHow = true;
+              }, 200);
+                       
                     } else if (res.data.code !== 0) {
                         this.$message({
                             type: "error",
@@ -590,7 +593,7 @@ export default {
             }
             list.eventName = list.eventName + ")";
             console.log(eventData.abiInfo.inputs,'=====');
-            let eventResult = Web3EthAbi.decodeLog(eventData.abiInfo.inputs, list.data, list.topics.slice(1));
+            let eventResult = Web3EthAbi.decodeLog(eventData.abiInfo.inputs, list.data, list.topic.slice(1));
             list.outData = {};
             list.eventLgData = [];
             for (const key in eventResult) {
@@ -685,7 +688,7 @@ export default {
                                 } else if (val) {
                                     if (index == key) {
                                         this.inputData[index] = {};
-                                        this.inputData[index].type = val;
+                                        this.inputData[index].type = val.type;
                                         this.inputData[index].data = this.decodeData[key];
                                     }
                                 }
