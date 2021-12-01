@@ -530,6 +530,10 @@ let errCode = {
         en: "get event callback error",
         zh: '获取事件回调错误'
     },
+    "201323": {
+        en: "contract funcParam bytes array size not match",
+        zh: '合同funcParam字节数组大小不匹配'
+    },
     "201501": {
         en: "web3sdk create key pair fail and return null",
         zh: 'sdk创建私钥对失败并返回Null'

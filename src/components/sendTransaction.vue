@@ -121,7 +121,8 @@ export default {
                 userName: "",
                 funcName: "",
                 funcValue: [],
-                funcType: "function"
+                funcType: "function",
+                reqVal:[]
             },
             userId: "",
             userList: [],
@@ -283,14 +284,18 @@ export default {
                         /^\s+|\s+$/g,
                         ""
                     );
+                    
                     if (data && isJson(data)) {
                         try {
-                            this.transation.funcValue[i] = JSON.parse(data)
+                            this.transation.reqVal[i] = JSON.parse(data)
                         } catch (error) {
                             console.log(error)
                         }
-                    } else {
-                        this.transation.funcValue[i] = data;
+                    } else if(data === 'true' || data === 'false'){
+                             this.transation.reqVal[i] =  eval(data.toLowerCase())
+                    }
+                    else{
+                        this.transation.reqVal[i] = data;
                     }
 
                 }
@@ -307,7 +312,7 @@ export default {
                 user: this.constant || this.stateMutability === 'view' || this.stateMutability === 'pure' ? '' : this.transation.userName,
                 contractName: this.data.contractName,
                 funcName: functionName || "",
-                funcParam: this.transation.funcValue,
+                funcParam: this.transation.reqVal,
                 contractId: this.data.contractId,
                 contractAbi: [this.pramasObj],
                 useCns: this.isCNS,
