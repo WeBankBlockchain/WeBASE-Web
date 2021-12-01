@@ -10,12 +10,12 @@
                 </el-select>
             </el-form-item>
             <el-form-item :label="$t('nodes.nodeStyle')" prop="nodeType" style="width: 320px;">
-                <el-select v-model="modifyForm.nodeType" :placeholder="$t('text.select')">
+                <el-select v-model="modifyForm.nodeType"  @change="weightIfShow" :placeholder="$t('text.select')">
                     <el-option v-for="item in nodeTypeList" :key="item.type" :label="item.name" :value="item.type">
                     </el-option>
                 </el-select>
             </el-form-item>
-             <el-form-item :label="$t('govCommittee.weight')" prop="weight" style="width: 320px;">
+             <el-form-item :label="$t('govCommittee.weight')" prop="weight" style="width: 320px;" v-if="weightShow">
                 <el-input v-model="modifyForm.weight" :placeholder="$t('text.select')">
             
                
@@ -46,6 +46,7 @@ export default {
 
     data() {
         return {
+            weightShow:false,
             loading: false,
             adminRivateKeyList: [],
             nodeTypeList: [
@@ -73,6 +74,23 @@ export default {
     },
     computed: {
         rules() {
+            var validateWeight = (rule, value, callback) => {
+                if (value == '' || value == undefined || value == null) {
+                    callback();
+                } else {
+                    if (Number(value)==0) {
+                          callback(new Error(this.$t('rule.blockNumber')));
+                    } else if(!Number(value)){
+                        callback(new Error(this.$t('rule.inputIsNumber')));
+                    }else {
+                        if (value <= 0||value>=2147483647) {
+                            callback(new Error(this.$t('rule.weightNumber')));
+                        } else {
+                            callback();
+                        }
+                    }
+                }
+            }
             let data = {
                 adminRivateKey: [
                     {
@@ -92,6 +110,11 @@ export default {
                     {
                         required: true,
                         message: this.$t("rule.weightRule"),
+                        trigger: "blur"
+                    },
+                     {
+                        required: true,
+                        validator:validateWeight,
                         trigger: "blur"
                     }
                 ]
@@ -114,10 +137,14 @@ export default {
         } else {
             this.deployType = 0
         }
+        this.modifyNode.nodeType === 'sealer'?this.weightShow=true:this.weightShow=false
         this.getUserData();
     },
 
     methods: {
+        weightIfShow() {
+                this.modifyForm.nodeType === 'sealer'?this.weightShow=true:this.weightShow=false
+        },
         close() {
             this.$emit("nodeModifyClose");
         },

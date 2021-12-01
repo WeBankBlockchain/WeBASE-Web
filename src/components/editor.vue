@@ -57,8 +57,8 @@
               </el-table>
             </div>
           </div>
-          <div class="item">
             <!-- <div class="item" v-show="inputButtonShow"> -->
+                 <div class="item" v-show="!showDecode">
             <span class="label"></span>
             <el-button @click="decodeOutput" type="primary">{{buttonTitle}}</el-button>
           </div>
@@ -232,6 +232,7 @@ export default {
     }
     if (!this.sendConstant) {
       if (this.typesArray && this.transationData.output != "0x") {
+        debugger
         this.decodefun();
       }
     }

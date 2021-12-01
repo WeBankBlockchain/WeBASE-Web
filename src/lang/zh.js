@@ -387,6 +387,7 @@ export default {
         fromBlock: "请输入起始区块",
         toBlock: "请输入末区块",
         blockNumber: "值需要大于0",
+        weightNumber:'值需要大于0,小于2147483647',
         inputIsNumber: '输入不是数字',
         inputIsAddress: '输入不是Address',
         inputIsJson: '输入不是JSON',

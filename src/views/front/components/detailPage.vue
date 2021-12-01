@@ -25,7 +25,7 @@ export default {
 
     data() {
         return {
-        details:null,
+        details:'',
           groupId:localStorage.getItem('groupId')
         }
     },
@@ -55,7 +55,7 @@ export default {
           getDetail(reqData)
           .then(res => {
                 if (res.status == 200) {
-                    this.details = JSON.parse(res.data);
+                    this.details = res.data.data;
                 }
           })
           .catch(err => {

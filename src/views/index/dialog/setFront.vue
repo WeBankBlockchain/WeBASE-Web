@@ -151,7 +151,7 @@ export default {
               addFront(reqData).then(res => {
             // addFront(reqData['frontIp'],reqData['frontPort']).then(res => {
                 this.loading = false;
-                if (res.data.data === true) {
+                if (res.data.code === 0) {
                     this.$message({
                         message: this.$t("nodes.addFrontSuccessMsg"),
                         type: "success"

@@ -384,6 +384,7 @@ export default {
         fromBlock: "Please enter from block",
         toBlock: "Please enter to block",
         blockNumber: "Greater than 0",
+        weightNumber:'Greater than 0,less than 2147483647',
         inputIsNumber: 'Input is not a number',
         inputIsAddress: 'Input is not address',
         inputIsJson: 'Input is not JSON',

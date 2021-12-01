@@ -184,14 +184,14 @@ export default {
                     enName: "nodeId",
                     name: this.$t("home.nodeId")
                 },
-                {
-                    enName: "clientVersion",
-                    name: this.$t("nodes.version")
-                },
-                {
-                    enName: "agency",
-                    name: this.$t("nodes.agency")
-                },
+                // {
+                //     enName: "clientVersion",
+                //     name: this.$t("nodes.version")
+                // },
+                // {
+                //     enName: "agency",
+                //     name: this.$t("nodes.agency")
+                // },
                 {
                     enName: "createTime",
                     name: this.$t("home.createTime")
