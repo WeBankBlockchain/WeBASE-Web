@@ -408,6 +408,7 @@ export default {
         changePassword: "Change Password",
         exit: "Exit",
         versionInfo: "Version",
+        dataBigScreen:"Large data screen"
     },
     title: {
         dataOverview: "Overview",

@@ -33,6 +33,7 @@
             <span class="content-head-version content-head-version-data">{{$store.state.version}}</span>
             <span class="content-head-version" v-if='$store.state.mgrVersion'>WeBASE版本: </span>
             <span class="content-head-version content-head-version-data">{{$store.state.mgrVersion}}</span> -->
+            <a  class="content-head-network-link"><router-link to="bigScreen" style="color:white;text-decoration: none;">{{this.$t("head.dataBigScreen")}}</router-link></a>
             <a v-if="$store.state.version>=2.5" class="content-head-network-link" target="_blank" href="https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/design/security_control/chain_governance.html">{{this.$t("head.helpText")}}</a>
             <a v-else class="content-head-network-link" target="_blank" href="https://webasedoc.readthedocs.io/zh_CN/latest/">{{this.$t("head.helpText")}}</a>
             <!-- <el-button type='text' size='small' @click='deleteConfig'>删除</el-button> -->
@@ -76,7 +77,7 @@
                 </a>
             </el-popover>
         </div>
-        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="30%"  style="text-align: center;">
+        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="500px"  style="text-align: center;">
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
         <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">

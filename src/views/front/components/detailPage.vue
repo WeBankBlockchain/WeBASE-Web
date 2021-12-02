@@ -1,12 +1,6 @@
 <template>
-    <div>
-     <json-viewer
-                    :value="details"
-                    :expand-depth=5
-                    copyable
-                    sort
-                    boxed></json-viewer>
-    </div>
+  <json-viewer :value="details" :expand-depth='10' copyable boxed ></json-viewer>
+   
 </template>
 
 <script>
@@ -25,7 +19,10 @@ export default {
 
     data() {
         return {
-        details:'',
+            chainId:'',
+            groupId:'',
+            nodeList:[],
+            details:'',
           groupId:localStorage.getItem('groupId')
         }
     },
@@ -55,6 +52,10 @@ export default {
           getDetail(reqData)
           .then(res => {
                 if (res.status == 200) {
+                    if(res.data.data.genesisConfig){
+                                    delete res.data.data.genesisConfig        
+                    }
+
                     this.details = res.data.data;
                 }
           })

@@ -12,8 +12,8 @@
         <el-table :data="userList" tooltip-effect="dark" v-loading="loading">
             <el-table-column prop="address" :label="$t('privateKey.userAddress')" show-overflow-tooltip align="center">
                  <template slot-scope="scope">
-                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address' @click="copyPubilcKey(scope.row.address)" :title="$t('privateKey.userAddress')"></i>
-                    <span >{{scope.row.address}}</span>
+                    <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.address&&scope.row.address!="0x"' @click="copyPubilcKey(scope.row.address)" :title="$t('privateKey.userAddress')"></i>
+                     <span>{{scope.row.address=='0x'?'':scope.row.address}}</span>
                 </template>
             </el-table-column>
             <el-table-column prop="userName" :label='$t("privateKey.userName")' show-overflow-tooltip align="center">
