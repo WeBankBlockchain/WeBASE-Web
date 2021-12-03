@@ -77,6 +77,7 @@ import {
     getPictureCheckCode,
     encryption,
     getDeployType,
+    getConfigAuth
 } from "@/util/api";
 import url from "@/util/url";
 import router from "@/router";
@@ -143,7 +144,20 @@ export default {
     },
     mounted: function () {
         localStorage.setItem("config", 0);
-        this.changeCode();
+      getConfigAuth()
+      .then((res) => {
+        if (res.data.data == false) {
+           this.$router.push({
+                path: '/home',
+            })
+        } else {
+        this.loginOpera();
+        }
+      })
+      .catch((err) => {
+       console.log(err);
+        this.loginOpera();
+      });
         //this.getEncryption();
         // let soljson = document.getElementById('soljson')
         // if(soljson){
@@ -153,6 +167,12 @@ export default {
         this.$store.dispatch('set_contract_dataList_action', []);
     },
     methods: {
+         loginOpera:function(){
+        localStorage.setItem("config", 0);
+        this.changeCode();
+        this.getEncryption();
+        this.$store.dispatch("set_contract_dataList_action", []);
+    },
         handleEncryption: function () {
             if (this.encryption == "guomi") {
                 localStorage.setItem("encryptionId", 1);
@@ -244,6 +264,7 @@ export default {
                 });
         },
         getEncryption: function () {
+            this.groupId=localStorage.getItem('groupId')
             encryption(this.groupId)
                 .then((res) => {
                     if (res.data.code === 0) {
