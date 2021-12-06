@@ -180,10 +180,10 @@ export default {
                     enName: "frontPort",
                     name: this.$t("nodes.frontPort")
                 },
-                {
-                    enName: "nodeId",
-                    name: this.$t("home.nodeId")
-                },
+                // {
+                //     enName: "nodeId",
+                //     name: this.$t("home.nodeId")
+                // },
                 // {
                 //     enName: "clientVersion",
                 //     name: this.$t("nodes.version")
@@ -219,25 +219,25 @@ export default {
                     name: this.$t("nodes.nodeStyle"),
                     width: 180
                 },
-                  {
-                    enName: "weight",
-                    name: this.$t("govCommittee.weight"),
-                    width: 180
-                },
                 {
                     enName: "blockNumber",
                     name: this.$t("home.blockHeight"),
                     width: 180
                 },
-                {
-                    enName: "pbftView",
-                    name: "pbftView",
-                    width: 180
-                },
+                // {
+                //     enName: "pbftView",
+                //     name: "pbftView",
+                //     width: 180
+                // },
                 {
                     enName: "nodeActive",
                     name: this.$t("home.status"),
                     width: 150
+                },
+                  {
+                    enName: "weight",
+                    name: this.$t("govCommittee.weight"),
+                    width: 180
                 },
                 {
                     enName: "operate",

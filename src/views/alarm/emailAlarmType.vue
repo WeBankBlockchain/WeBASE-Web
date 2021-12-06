@@ -270,7 +270,7 @@ export default {
             if (!row.enable && row.userList) {
                 this.$confirm(this.$t('alarm.enableAlarm'), this.$t('alarm.tip'), {
                     confirmButtonText: this.$t('alarm.sure'),
-                    cancelButtonText: this.$t('alarm.cnacel'),
+                    cancelButtonText: this.$t('alarm.cancel'),
                     type: 'warning'
                 }).then(() => {
                     this.start(row, 1)

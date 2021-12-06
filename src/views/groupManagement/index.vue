@@ -3,8 +3,8 @@
     <content-head :headTitle="$t('title.groupManagement')" :icon="true" @changGroup="changGroup" :updateGroup="updateGroup" :updateGroupType="updateGroupType"></content-head>
     <div class="module-wrapper">
       <div class="search-part" style="padding-top: 20px">
-        <!-- <div class="search-part-left">
-          <el-button
+        <div class="search-part-right">
+          <!-- <el-button
             type="primary"
             class="search-part-left-btn"
             @click="generateGroup"
@@ -15,7 +15,7 @@
             class="search-part-left-btn"
             @click="addHadGroup"
             >{{ this.$t("nodes.addHadGroup") }}</el-button
-          >
+          > -->
           <el-button
             type="text"
             icon="el-icon-refresh"
@@ -23,7 +23,7 @@
             v-preventReClick
             :title="$t('alarm.refresh')"
           ></el-button>
-        </div> -->
+        </div>
         <div class="">
           <el-table :data="groupList" class="search-table-content" v-loading="loading">
             <el-table-column v-for="head in groupHead" :label="head.name" :key="head.enName" :prop="head.enName" show-overflow-tooltip>
