@@ -328,9 +328,9 @@ export default {
             this.version = data.contractVersion;
             this.complieAbiTextHeight = false;
             this.complieBinTextHeight = false;
-            if (this.data.contractAddress) {
-                this.queryFindCnsInfo()
-            }
+            // if (this.data.contractAddress) {
+            //     this.queryFindCnsInfo()
+            // }
 
         })
         Bus.$on("noData", data => {
@@ -658,7 +658,8 @@ export default {
                 list: this.$store.state.contractDataList,
                 path: this.data.contractPath
             });
-            w.addEventListener('message', function (ev) {
+           // w.addEventListener('message', function (ev) {
+                   w.onmessage = function (ev) {
                 if (ev.data.cmd == 'compiled') {
                     that.loading = false
                     output = JSON.parse(ev.data.data);
@@ -679,7 +680,7 @@ export default {
                     console.log(ev.data);
                     console.log(JSON.parse(ev.data.data))
                 }
-            });
+            };
             w.addEventListener("error", function (ev) {
                 that.errorInfo = ev;
                 that.errorMessage = ev;
@@ -990,9 +991,9 @@ export default {
                         this.data.contractSource = Base64.encode(this.content);
                         this.data.contractAddress = this.contractAddress;
                         this.data.contractVersion = this.version;
-                        if (cns.saveEnabled) {
-                            this.queryRegisterCns(val, cns)
-                        }
+                        // if (cns.saveEnabled) {
+                        //     this.queryRegisterCns(val, cns)
+                        // }
                         Bus.$emit("deploy", this.data)
                     } else {
                         this.status = 3;

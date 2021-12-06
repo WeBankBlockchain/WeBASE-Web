@@ -86,14 +86,17 @@
                 <span>{{$t("text.chainVersion")}}: </span>
                 <span>{{$store.state.version}}</span>
             </p>
-            <p class="version-item">
+            <!-- <p class="version-item">
                 <span>{{$t('text.supportVersion')}}: </span>
                 <span>{{$store.state.supportVersion}}</span>
-            </p>
+            </p> -->
             <p class="version-item">
                 <span>{{$t("text.webaseVersion")}}: </span>
                 <span>{{$store.state.mgrVersion}}</span>
             </p>
+             <el-tooltip class="item" effect="dark" :content="$t('text.versionInfo')" placement="top-start">
+                        <i class="el-icon-info" style="color: #fff;font-size: 18px;margin: 12px 0 0 15px;"></i>
+            </el-tooltip>
         </el-dialog>
     </div>
 </template>
@@ -253,6 +256,8 @@ export default {
             localStorage.setItem("groupName", val.groupName);
             localStorage.setItem("groupId", val.groupId);
             this.$emit('changGroup', val.groupId);
+            Bus.$emit("changGroup",  val.groupId);
+
             // this.dialogShow = true;
         },
         skip: function () {

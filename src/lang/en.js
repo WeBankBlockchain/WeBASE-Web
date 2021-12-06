@@ -16,6 +16,7 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        versionInfo:'Please view the node version according to the "details" button in the front list ',
         detail:"detail",
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',

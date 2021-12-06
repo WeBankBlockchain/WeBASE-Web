@@ -16,6 +16,7 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        versionInfo:'节点版本请根据前置列表中的‘详情’按钮查看',
         detail:"详情",
         back:'上一步',
         updateSDKsucess:'配置成功',
