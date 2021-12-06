@@ -88,7 +88,7 @@
                 </el-table>
                 <el-pagination v-show='nodetotal > 10' class="page" @size-change="nodeSizeChange" @current-change="nodeCurrentChange" :current-page="nodecurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="nodepageSize" layout="total, sizes, prev, pager, next, jumper" :total="nodetotal">
                 </el-pagination>
-        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="frontShow" v-if="frontShow"  class="dialog-wrapper" width="600px" :center="true" :show-close='false'>
+        <el-dialog :title="$t('nodes.frontConfig')" :visible.sync="frontShow" v-if="frontShow"  class="dialog-wrapper" width="500px" :center="true" :show-close='false'>
                 <v-setFront  :showClose='true' @close='close' @updateSDK='getSDK'></v-setFront>
                     </el-dialog>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
@@ -217,6 +217,11 @@ export default {
                 {
                     enName: "nodeType",
                     name: this.$t("nodes.nodeStyle"),
+                    width: 180
+                },
+                  {
+                    enName: "weight",
+                    name: this.$t("govCommittee.weight"),
                     width: 180
                 },
                 {
@@ -406,11 +411,10 @@ export default {
             return transString;
         },
         nodeText(key) {
-            
             var str = '';
             switch (key.nodeType) {
                 case 'sealer':
-                    str = this.$t("nodes.sealer")+'('+key.weight+")";
+                    str = this.$t("nodes.sealer");
                     break;
                 case 'observer':
                     str = this.$t("nodes.observer");

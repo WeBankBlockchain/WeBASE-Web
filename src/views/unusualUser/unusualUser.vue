@@ -261,7 +261,7 @@ export default {
         clearText: function () {
             this.getUnusualUserList()
         },
-        importData(val) {
+        importData(val) {   
             this.address = val.address;
             this.$store.dispatch('switch_creat_user_dialog')
         },

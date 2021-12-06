@@ -609,9 +609,9 @@ export default {
     // this.sixInit()
     this.fourReqUpdate();
     this.fiveInit();
-    this.fiveReqUpdate();
+    //this.fiveReqUpdate();
     this.sixReqUpdate();
-    this.pieAdapter();
+    // this.pieAdapter();
     window.addEventListener("resize", this.pieAdapter);
     window.addEventListener("resize", this.cityAdapter);
     this.reRender();
@@ -1415,7 +1415,7 @@ export default {
     this.renderTwo=  setInterval(function () {
         _this.fourReqUpdate();
         // _this.fiveInit();
-         _this.fiveReqUpdate();
+        // _this.fiveReqUpdate();
         _this.sixReqUpdate();
       }, 10000);
     },

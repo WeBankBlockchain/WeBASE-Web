@@ -271,6 +271,7 @@ export default {
               break;
             default:
           }
+          
           if (order != 3) {
             this.$set(this.dataV_item[order], "number", item);
           }

@@ -336,6 +336,7 @@ export default {
                 });
         },
         getEncryption: function () {
+            this.groupId=localStorage.getItem('groupId')
             encryption(this.groupId).then(res => {
                 if (res.data.code === 0) {
                     if (res.data.data != localStorage.getItem("encryptionId")) {

@@ -141,6 +141,8 @@ export function format(d, fmt) {
     let date = {};
     if (!(d instanceof Date)) {
         date = new Date(parseInt(d));
+    }else{
+        date=d;
     }
     let o = {
         "M+": date.getMonth() + 1, //month
@@ -425,4 +427,15 @@ export function dynamicPoint(val, num) {
         return `${val}······`
     }
 
+}
+export function getDay (beforeDate) {
+    const temp = [];
+    for (let i = 0; i < beforeDate; i++) {
+        const time = new Date(new Date().setDate(new Date().getDate() - i));
+        const month = `0${time.getMonth() + 1}`.slice(-2);
+        const strDate = `0${time.getDate()}`.slice(-2);
+        temp.push(`${month}-${strDate}`)
+    }
+    console.log(temp);
+    return temp;
 }

@@ -109,7 +109,8 @@ export default {
         if (this.address) {
             this.timeGranularity = 'PUB'
             this.changeKey();
-            this.userForm.publicKey = this.address;
+            this.address!='0x'? this.userForm.publicKey = this.address:""
+            //this.userForm.publicKey = this.address;
         }
         
     },
@@ -140,7 +141,7 @@ export default {
                 publicKey: "",
                 explain: ""
             });
-            this.pubKey = true;
+            this.pubKey = false;
             this.loading = false;
             this.$store.state.creatUserVisible = false;
         },

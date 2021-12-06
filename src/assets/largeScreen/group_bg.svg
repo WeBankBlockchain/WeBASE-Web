@@ -1,0 +1,27 @@
+<svg width="567" height="282" viewBox="0 0 567 282" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect opacity="0.5" x="1.02802" y="0.5" width="565.472" height="281" fill="#3371D0" fill-opacity="0.3" stroke="#3371D0"/>
+<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="567" height="282">
+<rect x="0.528015" width="566.472" height="282" fill="#C4C4C4"/>
+</mask>
+<g mask="url(#mask0)">
+<g opacity="0.4">
+<line x1="-393.582" y1="27.0586" x2="935.123" y2="27.0586" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="-393.582" y1="83.8379" x2="935.123" y2="83.8379" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="-393.582" y1="140.617" x2="935.123" y2="140.617" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="-393.582" y1="197.396" x2="935.123" y2="197.396" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="-393.582" y1="254.176" x2="935.123" y2="254.176" stroke="#3371D0" stroke-dasharray="4 4"/>
+</g>
+<g opacity="0.4">
+<line x1="463.703" y1="-86" x2="463.703" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="24.7728" y1="-86" x2="24.7728" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="408.723" y1="-86" x2="408.723" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="353.742" y1="-86" x2="353.741" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="298.761" y1="-86" x2="298.761" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="243.78" y1="-86" x2="243.78" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="188.799" y1="-86" x2="188.799" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="133.818" y1="-86" x2="133.818" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="78.8374" y1="-86" x2="78.8374" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+<line x1="517.768" y1="-86" x2="517.768" y2="400.408" stroke="#3371D0" stroke-dasharray="4 4"/>
+</g>
+</g>
+</svg>

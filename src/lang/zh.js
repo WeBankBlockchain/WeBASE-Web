@@ -409,6 +409,7 @@ export default {
         changePassword: "修改密码",
         exit: "退出",
         versionInfo: "版本信息",
+        dataBigScreen:"数据大屏"
     },
     title: {
         addSDK:'配置SDK',

@@ -218,11 +218,11 @@ export default {
                     name: this.$t('home.blockHeight'),
                     width: 180
                 },
-                {
-                    enName: "pbftView",
-                    name: this.$t("home.pbftView"),
-                    width: 180
-                },
+                // {
+                //     enName: "pbftView",
+                //     name: this.$t("home.pbftView"),
+                //     width: 180
+                // },
                 {
                     enName: "nodeActive",
                     name: this.$t("home.status"),

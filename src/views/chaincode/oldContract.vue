@@ -47,11 +47,11 @@
                             <span  v-if='!scope.row.contractPath'>-</span>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="handleType" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
+                    <!-- <el-table-column prop="contractStatus" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
                         <template slot-scope="scope">
-                            <span>{{contractStatusZh(scope.row.handleType) }}</span>
+                            <span>{{contractStatusZh(scope.row.contractStatus) }}</span>
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column prop="contractAbi" :label="$t('contracts.contractAbi')" show-overflow-tooltip align="center">
                         <template slot-scope="scope">
                             <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractAbi' @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
@@ -65,14 +65,14 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="360">
+                    <el-table-column fixed="right" :label="$t('nodes.operation')" width="300">
                         <template slot-scope="scope">
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button> -->
-                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
+                             <!-- <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -309,7 +309,7 @@ export default {
                                     item.bin = item.contractBin
                                 }
                                 if (key == item.contractAddress) {
-                                    item.handleType = statusList[key]
+                                    item.contractStatus = statusList[key]
                                 }
                             })
                         }
@@ -602,9 +602,9 @@ export default {
         handleStatusBtn(val) {
             this.freezeThawVisible = true
             this.contractInfo = val
-            if (val.handleType == 0) {
+            if (val.contractStatus == 0) {
                 this.handleFreezeThawType = 'freeze'
-            } else if (val.handleType == 1) {
+            } else if (val.contractStatus == 1) {
                 this.handleFreezeThawType = 'unfreeze'
             }
 
@@ -638,11 +638,11 @@ export default {
             }
         },
         freezeThawBtn(val) {
-            switch (val.handleType) {
+            switch (val.contractStatus) {
                 case '0':
                     return this.$t('contracts.freeze')
                     break;
-                case '1':
+                case '2':
                     return this.$t('contracts.unfreeze')
                     break;
             }

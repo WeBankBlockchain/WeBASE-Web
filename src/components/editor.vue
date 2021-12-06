@@ -51,14 +51,14 @@
                 <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                   <template slot-scope="scope">
                     <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
-                    <span>{{scope.row.data}}</span>
+                    <span>{{abc(scope.row.data)}}</span>
                   </template>
                 </el-table-column>
               </el-table>
             </div>
           </div>
             <!-- <div class="item" v-show="inputButtonShow"> -->
-                 <div class="item" v-show="!showDecode">
+                 <div class="item" v-show="inputButtonShow">
             <span class="label"></span>
             <el-button @click="decodeOutput" type="primary">{{buttonTitle}}</el-button>
           </div>
@@ -79,7 +79,7 @@
                 <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                   <template slot-scope="scope">
                     <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
-                    <span>{{scope.row.data}}</span>
+                    <span>{{abc(scope.row.data)}}</span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -149,7 +149,7 @@
                       <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                         <template slot-scope="scope">
                           <i class="wbs-icon-baocun font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" :title="$t('text.copy')"></i>
-                          <span>{{scope.row.data}}</span>
+                          <span>{{abc(scope.row.data)}}</span>
                         </template>
                       </el-table-column>
                     </el-table>
@@ -202,6 +202,7 @@ export default {
       modePath: "ace/mode/solidity",
       editorDialog: this.show || false,
       eventSHow: false,
+      outputButtonShow:false,
       eventTitle: this.$t("transaction.reduction"),
       inputTitle: this.$t("transaction.reduction"),
       funcData: "",
@@ -227,12 +228,12 @@ export default {
     } else {
       this.inputButtonShow = true;
     }
+    this.decodeInputApi(this.transationData.input);
     if (this.transationData && this.transationData.logEntries) {
       this.decodeEvent();
     }
     if (!this.sendConstant) {
       if (this.typesArray && this.transationData.output != "0x") {
-        debugger
         this.decodefun();
       }
     }
@@ -246,6 +247,10 @@ export default {
     }
   },
   methods: {
+     abc(arr) {
+          if(!Array.isArray(arr)){return arr}
+          return '['+arr.toString()+']'
+     },
     decodeOutput: function () {
       if (this.showDecode) {
         this.showDecode = false;
@@ -357,7 +362,6 @@ export default {
               setTimeout(() => {
                 this.eventSHow = true;
               }, 200);
-              this.decodeInputApi(this.transationData.input);
             } else if (res.data.code !== 0) {
               this.$message({
                 type: "error",
@@ -445,7 +449,7 @@ export default {
           }
         }
         this.showDecodeInput = false;
-        this.inputTitle = this.$t("transaction.decode");
+        this.inputTitle = this.$t("transaction.reduction");
       }
     },
     decodeLogs: function (eventData, data) {

@@ -26,7 +26,7 @@
                     </el-tooltip>
                 </div>
                 <div class="search-part-right">
-                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" clearable style="width: 370px;">
+                    <el-input :placeholder="$t('privateKey.searchUser')" v-model="userName" class="input-with-select" clearable style="width: 370px;" @clear="clearText">
                         <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                 </div>
@@ -202,6 +202,10 @@ export default {
                 });
         },
         search() {
+            this.currentPage = 1;
+            this.getUserInfoData();
+        },
+        clearText() {
             this.currentPage = 1;
             this.getUserInfoData();
         },
