@@ -238,7 +238,7 @@ const routes = [
         name: '订阅事件',
         nameKey: "subscribeEvent",
         leaf: false,
-        menuShow: true,
+        menuShow: false,
         iconCls: 'wbs-icon-dingyue sidebar-icon',
         children: [
             { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: true, meta: { requireAuth: true } },

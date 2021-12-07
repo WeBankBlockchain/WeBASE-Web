@@ -16,6 +16,13 @@
 
 /* customize class */
 body { overflow-y: scroll;overflow: auto !important; }
+
+.el-tooltip__popper{
+    font-size: 14px;
+     max-width:50% !important;
+     max-height:40% !important;
+   overflow: hidden;
+}
 .span-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;

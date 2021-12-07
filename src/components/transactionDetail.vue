@@ -178,7 +178,7 @@
                                 </div>
                                 <div class="item" v-show='item.eventButtonShow'>
                                     <span class="label"></span>
-                                    <el-button @click="decodeButtonEvent(num)" type="primary">{{eventTitle}}</el-button>
+                                    <el-button @click="decodeButtonEvent(num)" type="primary">{{item.eventTitle}}</el-button>
                                 </div>
                             </div>
                         </template>
@@ -258,6 +258,7 @@ export default {
                 "to",
                 //"logsBloom",
                 "transactionHash",
+                "message",
                 "status",
                 "logEntries"
             ],
@@ -278,6 +279,7 @@ export default {
         };
     },
     mounted: function () {
+        debugger
         this.getHashTransactionInfo();
         this.getUser();
     },
@@ -317,6 +319,7 @@ export default {
                 groupId: localStorage.getItem("groupId"),
                 transHash: this.transHash
             };
+            debugger
             hashTransactionInfo(reqdata, {})
                 .then(res => {
                     if (res.data.code === 0) {
@@ -412,6 +415,7 @@ export default {
                 pageNumber: 1,
                 pageSize: 1000
             };
+            debugger
             getUserList(reqData)
                 .then(res => {
 
