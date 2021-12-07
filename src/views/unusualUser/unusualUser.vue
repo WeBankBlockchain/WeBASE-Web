@@ -211,7 +211,7 @@ export default {
                 };
 
             if (this.userName) {
-                reqQuery['address'] = this.userName;
+                reqQuery['commParam'] = this.userName;
             }
             getAllUserList(reqData, reqQuery)
                 .then(res => {

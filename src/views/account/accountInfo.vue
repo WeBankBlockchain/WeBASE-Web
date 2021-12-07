@@ -32,7 +32,8 @@
                             </template>
                             <template v-else>
                                 <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')" style="color:#ed5454">{{$t('text.delete')}}</el-button>
-                                <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">{{$t('text.update')}}</el-button>
+                           <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">{{$t('text.updatePassword')}}</el-button>
+                                <el-button type="text" size="small" @click="modifyEmail(scope.row,'email')">{{$t('text.email')}}</el-button>
                             </template>
                         </template>
 
@@ -101,6 +102,14 @@ export default {
         this.getAccountList();
     },
     methods: {
+          modifyEmail(val, type) {
+            this.accountDialogOptions = {
+                type: type,
+                data: val
+            }
+            this.accountDialogVisible = true
+            this.accountDialogTitle = this.$t('account.updataEmail')
+        },
         success() {
             this.getAccountList()
         },

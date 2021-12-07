@@ -151,6 +151,7 @@ export default {
         ];
         this.initWorker()
         this.getEncryption(this.querySolcList);  
+
     },
     methods: {
         initWorker() {
@@ -158,18 +159,19 @@ export default {
             console.log('w:', w);
             this.$store.state.worker = w
         },
-        querySolcList() {
+        querySolcList() {0
             for (let i = 0; i < this.allVersion.length; i++) {
                 if (localStorage.getItem("encryptionId") == this.allVersion[i].encryptType) {
                     this.versionList.push(this.allVersion[i])
                 }
             }
-            if (!localStorage.getItem('solcName')) {
+           
+            //if (!localStorage.getItem('solcName')) {
                 this.version = this.versionList[0]['solcName'];
                 this.versionId = this.versionList[0]['id'];
                 localStorage.setItem("solcName", this.versionList[0]['solcName'])
                 localStorage.setItem("versionId", this.versionList[0]['versionId'])
-            }
+            //}
             this.initSolc(localStorage.getItem("versionId"))
         },
         initSolc(versionId) {

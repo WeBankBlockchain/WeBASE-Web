@@ -379,7 +379,7 @@ export default {
                     if (list[i].nameKey == 'guide'||list[i].nameKey == 'appManagement') {
                         list[i].menuShow = false
                     }
-                    if (list[i].nameKey == 'bigScreen') {
+                    if (list[i].nameKey == 'bigScreen'||list[i].nameKey == 'subscribeEvent') {
                         list[i].menuShow = false
                     }
                 }

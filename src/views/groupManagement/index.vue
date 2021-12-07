@@ -22,7 +22,8 @@
             @click="queryUpdateGroup"
             v-preventReClick
             :title="$t('alarm.refresh')"
-          ></el-button>
+          >{{ this.$t('alarm.refresh') }}
+          </el-button>
         </div>
         <div class="">
           <el-table :data="groupList" class="search-table-content" v-loading="loading">

@@ -16,6 +16,8 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        updatePassword: "Change Password",
+        email: "Change",
         versionInfo:'Please view the node version according to the "details" button in the front list ',
         detail:"detail",
         changeTmp: 'Select Tmp',
@@ -55,6 +57,11 @@ export default {
         transactionFail: "Transaction Failed!",
         noData: "No Data",
         input: "Please Input",
+        sendInput: "Please Param Input",
+        intEight:'Value range -128 to 127',
+        intSixTeen:'Value range -32768 to 32767',
+        uintEight:'Value range 0 to 255',
+        uintSixTeen:'Value range 0 to 65535',
         search: "Search",
         example: "For Example",
         implement: "Run",
@@ -692,6 +699,7 @@ export default {
         signUserId: 'Sign User Id',
         inputFileName: "Please enter privateKey name",
         inputFileType: "Please enter privateKey type",
+        PublicAddress: "Please enter user  public key address",
         fileName: "PrivateKey Name",
         fileType: "File Type",
         importFile: "Import file",
@@ -764,6 +772,7 @@ export default {
         updataAccount: "Modify Account",
         email: "Email",
         inputEmail: "Please enter Email",
+        updataEmail: "Modify Email",
         emailTypeError: "E-mail format is incorrect"
     },
     transaction: {

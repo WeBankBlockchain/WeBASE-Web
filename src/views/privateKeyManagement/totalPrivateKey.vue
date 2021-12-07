@@ -3,7 +3,7 @@
     <div class="search-part">
 
             <div class="search-part-right">
-                <el-input :placeholder="$t('privateKey.inputUserName')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
+                <el-input :placeholder="$t('privateKey.PublicAddress')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
                     <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
                 </el-input>
             </div>
@@ -117,7 +117,7 @@ export default {
                 type: 1
             };
             if (this.contractData) {
-                reqQuery['address'] = this.contractData;
+                reqQuery['commParam'] = this.contractData;
             }
             getAllUserList(reqData, reqQuery)
                 .then(res => {

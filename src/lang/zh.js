@@ -16,6 +16,8 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        updatePassword: "修改密码",
+        email: "修改",
         versionInfo:'节点版本请根据前置列表中的‘详情’按钮查看',
         detail:"详情",
         back:'上一步',
@@ -57,6 +59,11 @@ export default {
         transactionFail: "交易失败！",
         noData: "暂无数据",
         input: "请输入",
+        sendInput: "请输入参数内容",
+        intEight:'取值范围-128到127',
+        intSixTeen:'取值范围-32768到32767',
+        uintEight:'取值范围0到255',
+        uintSixTeen:'取值范围0到65535',
         search: "查询",
         example: "例如",
         implement: "执行",
@@ -692,6 +699,7 @@ export default {
         inputPublicInfo: "请输入公钥信息或公钥地址",
         userLong: "120个字符以内",
         inputPublic: "请输入公钥信息",
+        PublicAddress: "请输入用户公钥地址",
         addUserSuccess: "添加用户成功！",
         addUserFail: "添加用户失败！",
         signUserId: 'Sign User Id',
@@ -769,7 +777,8 @@ export default {
         updataAccount: "修改账号",
         email: "邮箱",
         inputEmail: "请输入邮箱",
-        emailTypeError: "邮箱格式不正确"
+        emailTypeError: "邮箱格式不正确",
+        updataEmail: "修改邮箱",
     },
     transaction: {
         time: "时长",
