@@ -18,7 +18,7 @@ export default {
     text: {
         updatePassword: "修改密码",
         email: "修改",
-        versionInfo:'节点版本请根据前置列表中的‘详情’按钮查看',
+        versionInfo:'请根据前置列表中的‘详情’按钮查看',
         detail:"详情",
         back:'上一步',
         updateSDKsucess:'配置成功',

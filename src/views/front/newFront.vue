@@ -74,8 +74,8 @@
                                     {{scope.row[head.enName]}}
                                 </span>
                                 <span v-else-if="head.enName==='nodeType'">{{nodeText(scope.row)}}</span>
-                                <span v-else-if="head.enName==='pbftView'">
-                                    {{scope.row[head.enName]}}
+                                <span v-else-if="head.enName==='weight'">
+                                    {{weightText(scope.row)}}
                                 </span>
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
@@ -103,7 +103,7 @@
         <el-dialog  :close-on-click-modal="false" :title="$t('text.detail')" :visible.sync="detailDialogVisible" width="600px" v-if="detailDialogVisible" center>
               <detail-page @detailClose="detailClose" @detailSuccess="detailSuccess" :detailParam="detailParam"></detail-page>                                                                                                                           
         </el-dialog>
-            </div>
+            </div> 
         </div>
     </div>
 </template>
@@ -421,6 +421,21 @@ export default {
                     break;
                 case 'remove':
                     str = this.$t("nodes.remove");
+                    break;
+            }
+            return str;
+        },
+        weightText(key) {
+            var str = '';
+            switch (key.nodeType) {
+                case 'sealer':
+                    str = key.weight;
+                    break;
+                case 'observer':
+                    str = '-';
+                    break;
+                case 'remove':
+                    str = '-';
                     break;
             }
             return str;

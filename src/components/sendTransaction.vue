@@ -394,22 +394,22 @@ export default {
     },
     placeholderText(type) {
       if (type.length > 5 && type.substring(0, 5) == "bytes") {
-        return "十六进制";
+        return "bytes,十六进制";
       }
       switch (type) {
         case "string":
-          return "";
+          return "string";
           break;
         case "bytes":
-          return "";
+          return "bytes";
           break;
         case "int":
-          return "整数";
+          return "int,整数";
           break;
         case "unit":
-          return "大于等于0的整数";
+          return "unit,大于等于0的整数";
           break;
-        default:
+        default:return type
           break;
       }
     },
@@ -543,7 +543,9 @@ export default {
       if (this.transation.funcType === "constructor") {
         this.transation.funcName = this.data.contractName;
       }
+      
       for (let item in this.ruleForm) {
+          
         let data = this.ruleForm[item];
         if (data && isJson(data)) {
           try {
@@ -555,12 +557,18 @@ export default {
           this.ruleForm[item] = data;
         }
       }
-      let rules = [];
-      for (var i in this.pramasData) {
+      let rules;
+      if(this.pramasData>1){
+           for (var i in this.pramasData) {
         for (var key in this.ruleForm) {
           if (this.pramasData[i].type == key) rules.push(this.ruleForm[key]);
         }
+      }  
+      }else{
+     rules= this.ruleForm[0]
       }
+   
+      
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {

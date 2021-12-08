@@ -85,9 +85,6 @@ export default {
         nodeIp: function () {
             this.getNodeIpDetail();
         },
-        $route: function () {
-            this.nodesQuery = this.$root.$route.query;
-        }
     },
     data() {
         return {
@@ -136,7 +133,7 @@ export default {
             },
             metricData: [],
             nodesHealthData: [],
-            nodesQuery: this.$root.$route.query
+            nodesQuery: ''
         };
     },
     beforeDestroy: function () {
@@ -144,6 +141,7 @@ export default {
         Bus.$off("chooselanguage")
     },
     mounted() {
+        this.nodesQuery = this.$root.$route.query;
         this.getHealthData();
         Bus.$on("changeGroup", data => {
             this.changGroup(localStorage.getItem('groupId'))
