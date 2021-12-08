@@ -109,7 +109,7 @@ export default {
             let groupId = localStorage.getItem("groupId");
             let reqData = {
                 groupId: groupId,
-                pageNumber: this.pageNumber,
+                pageNumber: 1,
                 pageSize: this.pageSize
             },
                 reqQuery = {};

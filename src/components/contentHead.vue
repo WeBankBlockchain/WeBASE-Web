@@ -83,10 +83,10 @@
       <change-password-dialog @success="success"></change-password-dialog>
     </el-dialog>
     <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible" width="30%" style="text-align: center;">
-      <p class="version-item">
+      <!-- <p class="version-item">
         <span>{{$t("text.chainVersion")}}: </span>
         <span>{{$store.state.version}}</span>
-      </p>
+      </p> -->
       <!-- <p class="version-item">
                 <span>{{$t('text.supportVersion')}}: </span>
                 <span>{{$store.state.supportVersion}}</span>

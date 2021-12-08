@@ -530,11 +530,11 @@ export default {
             this.editorData = val.resData;
             this.editorInput = val.input;
             this.editorOutput = val.data.outputs;
-            if (val && val.contractAddress) {
-                this.contractAddress = val.contractAddress;
-                this.data.contractAddress = val.contractAddress;
-                Bus.$emit("send", this.data)
-            }
+            // if (val && val.contractAddress) {
+            //     this.contractAddress = val.contractAddress;
+            //     this.data.contractAddress = val.contractAddress;
+            //     Bus.$emit("send", this.data)
+            // }
         },
         editorClose: function () {
             this.editorShow = false;
@@ -911,7 +911,7 @@ export default {
                                 inputs: value.inputs
                             });
                         }
-                        data.methodId = methodId.substr(0, 10);;
+                        data.methodId = methodId;
                         data.abiInfo = JSON.stringify(value);
                         data.methodType = value.type
                         arry.push(data)

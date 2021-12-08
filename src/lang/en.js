@@ -18,7 +18,7 @@ export default {
     text: {
         updatePassword: "Change Password",
         email: "Change",
-        versionInfo:'Please view the node version according to the "details" button in the front list ',
+        versionInfo:'Please view according to the "details" button in the front list ',
         detail:"detail",
         changeTmp: 'Select Tmp',
         customApplication: 'Custom App',

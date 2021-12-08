@@ -165,9 +165,9 @@ export default {
         Bus.$on("deploy", data => {
             this.getContracts("", data);
         })
-        Bus.$on("changGroup", data => {
-            this.getContracts();
-        })
+        // Bus.$on("changGroup", data => {
+        //     this.getContracts("");
+        // })
         Bus.$on("open", data => {
             this.contractArry.forEach(value => {
                 if (value.contractName == data.contractPath && !value.folderActive) {
@@ -629,6 +629,7 @@ export default {
                     }
                 })
             })
+            
             result = newFileList.concat(folderArry);
             this.contractArry = result;
             if (this.contractList.length && !val) {
@@ -777,6 +778,7 @@ export default {
                 this.loading = false;
                 if (res.data.code == 0) {
                     this.contractList = []
+                    
                     let contractList = res.data.data || [];
                     console.log('contractDataList:',this.$store.state.contractDataList)
                     let contractDataList = this.$store.state.contractDataList;

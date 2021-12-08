@@ -279,7 +279,7 @@ export default {
         };
     },
     mounted: function () {
-        debugger
+        
         this.getHashTransactionInfo();
         this.getUser();
     },
@@ -319,7 +319,7 @@ export default {
                 groupId: localStorage.getItem("groupId"),
                 transHash: this.transHash
             };
-            debugger
+            
             hashTransactionInfo(reqdata, {})
                 .then(res => {
                     if (res.data.code === 0) {
@@ -415,7 +415,7 @@ export default {
                 pageNumber: 1,
                 pageSize: 1000
             };
-            debugger
+            
             getUserList(reqData)
                 .then(res => {
 

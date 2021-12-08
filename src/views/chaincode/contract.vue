@@ -288,7 +288,7 @@ export default {
             this.initVersion()
             this.versionList=[];
             this.getEncryption(this.querySolcList); 
-            //this.$refs.menu.getContractPaths()
+            this.$refs.menu.getContractPaths()
         },
         dragDetailWeight: function (e) {
             let startX = e.clientX,
