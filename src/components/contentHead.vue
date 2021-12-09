@@ -91,7 +91,7 @@
                 <span>{{$t('text.supportVersion')}}: </span>
                 <span>{{$store.state.supportVersion}}</span>
             </p> -->
-      <div class="version-item">
+      <div class="version-item" style="margin-top: -25px;">
         <span>{{$t("text.webaseVersion")}}: </span>
         <span>{{$store.state.mgrVersion}}</span>
         <el-tooltip class="item" :content="$t('text.versionInfo')" placement="top-start">

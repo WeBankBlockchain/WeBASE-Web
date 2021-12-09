@@ -394,7 +394,8 @@ export default {
       });
     },
     placeholderText(type) {
-      if (type.length > 5 && type.substring(0, 5) == "bytes") {
+        
+      if (type.length > 5 && type.substring(0, 5) == "bytes"&&type.substring(type.length,type.length-2) != "[]") {
         return "bytes,十六进制";
       }
       switch (type) {
