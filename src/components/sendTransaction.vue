@@ -76,6 +76,7 @@
           v-model="transation.userName"
           :placeholder="$t('contracts.selectUser')"
           style="width: 400px"
+          :class="{'ifselectUser':isUserNameShow}"
         >
           <el-option
             :label="item.userName"
@@ -544,29 +545,32 @@ export default {
         this.transation.funcName = this.data.contractName;
       }
       
-      for (let item in this.ruleForm) {
+      for (let i in this.ruleForm) {
           
-        let data = this.ruleForm[item];
+        let data = this.ruleForm[i];
         if (data && isJson(data)) {
           try {
-            this.ruleForm[item] = JSON.parse(data);
+            this.transation.reqVal[i] = JSON.parse(data);
           } catch (error) {
             console.log(error);
           }
-        } else {
-          this.ruleForm[item] = data;
+        }  else if (data === "true" || data === "false") {
+            this.transation.reqVal[i] = eval(data.toLowerCase());
+          }
+        else {
+           this.transation.reqVal[i] = data;
         }
       }
-      let rules;
-      if(this.pramasData>1){
+      let rules=[];
+    //  if(this.pramasData>1){
            for (var i in this.pramasData) {
         for (var key in this.ruleForm) {
-          if (this.pramasData[i].type == key) rules.push(this.ruleForm[key]);
+          if (this.pramasData[i].type == key) rules.push( this.transation.reqVal[key]);
         }
       }  
-      }else{
-     rules= this.ruleForm[0]
-      }
+    //   }else{
+    //   rules= this.ruleForm[0]
+    //   }
    
       
       let functionName = "";
@@ -732,5 +736,8 @@ export default {
 .send-item >>> .el-form-item {
   line-height: 30px;
   margin-bottom: 24px;
+}
+.ifselectUser{
+    width: 360px !important;
 }
 </style>
