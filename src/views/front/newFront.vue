@@ -100,7 +100,7 @@
                 <el-dialog :show-close='false' :close-on-click-modal="false" :title="$t('title.addSDK')" :visible.sync="sdkDialogVisible" width="600px" v-if="sdkDialogVisible" center>
                <update-sdk @updateSDKsucess="sdkSuccess" :sdkParam="sdkParam" @backSetfront='backSetfront'></update-sdk>                                                                                                                               
         </el-dialog>
-        <el-dialog  :close-on-click-modal="false" :title="$t('text.detail')" :visible.sync="detailDialogVisible" width="600px" v-if="detailDialogVisible" center>
+        <el-dialog  :close-on-click-modal="false" :title="$t('text.detail')" :visible.sync="detailDialogVisible" width="900px" v-if="detailDialogVisible" center>
               <detail-page @detailClose="detailClose" @detailSuccess="detailSuccess" :detailParam="detailParam"></detail-page>                                                                                                                           
         </el-dialog>
             </div> 

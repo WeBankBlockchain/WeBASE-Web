@@ -143,7 +143,7 @@ export default {
             let groupId = localStorage.getItem("groupId");
             let reqData = {
                 groupId: groupId,
-                pageNumber: 1,
+                pageNumber: this.pageNumber,
                 pageSize: this.pageSize
             },
                 reqQuery = {};
@@ -327,7 +327,7 @@ export default {
             }
         },
         search: function () {
-            this.currentPage = 1
+            this.pageNumber= 1
             this.getList();
         },
         clearInput() {

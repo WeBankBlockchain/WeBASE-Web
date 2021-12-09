@@ -66,7 +66,7 @@ export default {
             modifyForm: {
                 adminRivateKey: this.modifyNode.adminRivateKey,
                 nodeType: this.modifyNode.nodeType,
-                weight:this.modifyNode.weight,
+                weight:this.modifyNode.weight==0?1:this.modifyNode.weight,
             },
             deployType: null,
             ruleTest: this.$t("rule.adminRule")
