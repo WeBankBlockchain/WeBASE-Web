@@ -290,7 +290,10 @@ export default {
                         } catch (error) {
                             console.log(error)
                         }
-                    } else {
+                    } else if (data === "true" || data === "false") {
+            this.transation.reqVal[i] = eval(data.toLowerCase());
+          }
+                    else {
                         this.transation.reqVal[i] = data;
                     }
 
