@@ -520,7 +520,7 @@ export default {
               this.isUserNameShow = false;
             } else {
               this.isUserNameShow = true;
-              this.placeholderText = this.$t("placeholder.selectedNoUser");
+              //this.placeholderText = this.$t("placeholder.selectedNoUser");
             }
             this.changeFunc();
           } else {
