@@ -251,11 +251,8 @@ export default {
         replaceData.forEach((item, index) => {
           let order = 0;
           switch (index) {
-            case 0:
-              order = 4;
-              break;
             case 1:
-              order = 3;
+              order = 4;
               break;
             case 2:
               order = 1;
@@ -264,14 +261,13 @@ export default {
               order = 5;
               break;
             case 4:
-              order = 0;
-              break;
-            case 5:
               order = 2;
+              break; 
+            case 5:
+              order = 0;
               break;
             default:
           }
-          
           if (order != 3) {
             this.$set(this.dataV_item[order], "number", item);
           }
