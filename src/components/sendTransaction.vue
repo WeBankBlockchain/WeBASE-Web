@@ -17,9 +17,7 @@
   <div class="send-wrapper">
     <div class="send-body">
       <div class="send-item">
-        <span class="send-item-title"
-          >{{ this.$t("contracts.contractName") }}:</span
-        >
+        <span class="send-item-title">{{ this.$t("contracts.contractName") }}:</span>
         <span>{{ data.contractName }}</span>
       </div>
       <!-- <div class="send-item">
@@ -30,11 +28,7 @@
       </div> -->
       <div class="send-item" v-if="isCNS">
         <span class="send-item-title"></span>
-        <el-input
-          v-model.trim="cnsName"
-          style="width: 400px; margin-bottom: 4px"
-          :placeholder="$t('dialog.cnsName')"
-        >
+        <el-input v-model.trim="cnsName" style="width: 400px; margin-bottom: 4px" :placeholder="$t('dialog.cnsName')">
           <template slot="prepend">
             <span class="">name</span>
           </template>
@@ -42,140 +36,58 @@
       </div>
       <div class="send-item" v-if="isCNS">
         <span class="send-item-title"></span>
-        <el-input
-          v-model.trim="cnsVersion"
-          style="width: 400px; margin-bottom: 4px"
-          :placeholder="$t('dialog.cnsVersion')"
-        >
+        <el-input v-model.trim="cnsVersion" style="width: 400px; margin-bottom: 4px" :placeholder="$t('dialog.cnsVersion')">
           <template slot="prepend">
             <span class="">version</span>
           </template>
         </el-input>
       </div>
       <div class="send-item" v-else>
-        <span class="send-item-title"
-          >{{ this.$t("contracts.contractAddress") }}:</span
-        >
-        <el-input
-          v-model="contractAddress"
-          style="width: 400px"
-          :placeholder="$t('contracts.contractAddressInput')"
-        ></el-input>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="$t('contracts.contractAddressInfo')"
-          placement="top-start"
-        >
+        <span class="send-item-title">{{ this.$t("contracts.contractAddress") }}:</span>
+        <el-input v-model="contractAddress" style="width: 400px" :placeholder="$t('contracts.contractAddressInput')"></el-input>
+        <el-tooltip class="item" effect="dark" :content="$t('contracts.contractAddressInfo')" placement="top-start">
           <i class="el-icon-info"></i>
         </el-tooltip>
       </div>
       <div class="send-item" v-show="showUser">
         <span class="send-item-title">{{ this.$t("contracts.user") }}:</span>
-        <el-select
-          v-model="transation.userName"
-          :placeholder="$t('contracts.selectUser')"
-          style="width: 400px"
-          :class="{'ifselectUser':isUserNameShow}"
-        >
-          <el-option
-            :label="item.userName"
-            :value="item.address"
-            :key="item.userId"
-            v-for="(item, index) in userList"
-          >
+
+        <el-select v-model="transation.userName" :placeholder="$t('contracts.selectUser')" style="width: 400px" :class="{'ifselectUser':isUserNameShow}">
+          <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for="(item, index) in userList">
             <span>{{ item.userName }}</span>
             <!-- <span class="font-12">{{splitString(item.address)}}...</span> -->
             <span class="font-12">{{ item.address }}</span>
           </el-option>
         </el-select>
-        <span
-          v-if="isUserNameShow"
-          class="contract-code-done"
-          @click="$store.dispatch('switch_creat_user_dialog')"
-        >
-          <span
-            target="_blank"
-            style="cursor: pointer; text-decoration: underline"
-            >{{ this.$t("privateKey.addUser") }}</span
-          >
+        <span v-if="isUserNameShow" class="contract-code-done" @click="$store.dispatch('switch_creat_user_dialog')">
+          <span target="_blank" style="cursor: pointer; text-decoration: underline">{{ this.$t("privateKey.addUser") }}</span>
         </span>
       </div>
-      <el-dialog
-        :visible.sync="$store.state.creatUserVisible"
-        :title="$t('privateKey.createUser')"
-        width="640px"
-        :append-to-body="true"
-        class="dialog-wrapper"
-        center
-      >
-        <v-creatUser
-          @creatUserClose="creatUserClose"
-          :disablePub="true"
-          ref="creatUser"
-        ></v-creatUser>
+      <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
+        <v-creatUser @creatUserClose="creatUserClose" :disablePub="true" ref="creatUser"></v-creatUser>
       </el-dialog>
       <div class="send-item">
         <span class="send-item-title">{{ this.$t("contracts.method") }}:</span>
-        <el-select
-          v-model="transation.funcType"
-          :placeholder="$t('contracts.methodType')"
-          @change="changeType($event)"
-          style="width: 100px"
-        >
+        <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width: 100px">
           <el-option label="function" :value="'function'"></el-option>
         </el-select>
-        <el-select
-          v-model="transation.funcName"
-          :placeholder="$t('contracts.methodName')"
-          filterable
-          v-show="funcList.length > 0"
-          @change="changeFunc"
-          style="width: 300px"
-        >
-          <el-option
-            :label="item.name"
-            :key="item.funcId"
-            :value="item.funcId"
-            v-for="item in funcList"
-          ></el-option>
+        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px">
+          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
         </el-select>
       </div>
-      <el-form
-        class="send-item"
-        v-show="pramasData.length"
-        style="line-height: 25px"
-        :rules="rules"
-        :model="ruleForm"
-        ref="sendTransation"
-      >
-        <span class="send-item-title" style="position: relative; top: 5px"
-          >{{ this.$t("contracts.params") }}:</span
-        >
-        <el-form-item
-          style="position: relative; top: -25px"
-          v-for="(item, index) in pramasData"
-          :prop="item.type"
-          :key="item.name"
-        >
+      <el-form class="send-item" v-show="pramasData.length" style="line-height: 25px"   ref="sendTransation">
+        <span class="send-item-title" style="position: relative; top: 5px">{{ this.$t("contracts.params") }}:</span>
+        <el-form-item style="position: relative; top: -25px" v-for="(item, index) in pramasData"  :key="item.name">
           <span class="send-item-title"></span>
           <template v-if="item.type == 'string'">
-            <el-input
-              v-model="ruleForm[item.type]"
-              style="width: 400px"
-              :placeholder="item.type"
-            >
+            <el-input v-model="ruleForm[index]" style="width: 400px" :placeholder="item.type">
               <template slot="prepend">
                 <span class="">{{ item.name }}</span>
               </template>
             </el-input>
           </template>
           <template v-else>
-            <el-input
-              v-model="ruleForm[item.type]"
-              style="width: 400px"
-              :placeholder="placeholderText(item.type)"
-            >
+            <el-input v-model="ruleForm[index]" style="width: 400px" :placeholder="placeholderText(item.type)">
               <template slot="prepend">
                 <span class="">{{ item.name }}</span>
               </template>
@@ -183,19 +95,13 @@
           </template>
         </el-form-item>
         <div style="padding: 5px 0 0 28px; color: 'gray'">
-          <i class="el-icon-info" style="padding-right: 4px"></i
-          >{{ this.$t("contracts.paramsInfo") }}
+          <i class="el-icon-info" style="padding-right: 4px"></i>{{ this.$t("contracts.paramsInfo") }}
         </div>
       </el-form>
     </div>
     <div class="text-right send-btn">
       <el-button @click="close">{{ this.$t("text.cancel") }}</el-button>
-      <el-button
-        type="primary"
-        @click="submit('sendTransation')"
-        :disabled="buttonClick"
-        >{{ this.$t("text.sure") }}</el-button
-      >
+      <el-button type="primary" @click="submit('sendTransation')" :disabled="buttonClick">{{ this.$t("text.sure") }}</el-button>
     </div>
   </div>
 </template>
@@ -282,7 +188,7 @@ export default {
       cnsVersion: "",
       cnsName: "",
       isUserNameShow: false,
-      ruleForm: {},
+      ruleForm: [],
       rules: {
         int: [
           {
@@ -394,9 +300,13 @@ export default {
       });
     },
     placeholderText(type) {
+      if (
+        type.length > 5 &&
+        type.substring(0, 5) == "bytes" &&
+        type.substring(type.length, type.length - 2) != "[]"
+      ) {
         
-      if (type.length > 5 && type.substring(0, 5) == "bytes"&&type.substring(type.length,type.length-2) != "[]") {
-        return "bytes,十六进制";
+        return type +"(十六进制，长度是" +type.substring(5, type.length)*2+")";
       }
       switch (type) {
         case "string":
@@ -411,31 +321,20 @@ export default {
         case "unit":
           return "unit,大于等于0的整数";
           break;
-        default:return type
+        default:
+          return type;
           break;
       }
     },
     submit: function (formName) {
-      //   if (this.isCNS) {
-      //     if (!this.cnsName || !this.cnsVersion) {
-      //       this.$message({
-      //         type: "error",
-      //         message: this.$t("text.cnsNameVersion"),
-      //       });
-      //       return;
-      //     } else {
-      //       this.send();
-      //     }
-      //   } else {
+            this.send()
+      // this.$refs.sendTransation.validate((valid) => {
+      //   if (valid) {
       //     this.send();
+      //   } else {
+      //     return false;
       //   }
-      this.$refs.sendTransation.validate((valid) => {
-        if (valid) {
-          this.send();
-        } else {
-          return false;
-        }
-      });
+      // });
     },
     close: function (formName) {
       this.$emit("close", false);
@@ -545,9 +444,8 @@ export default {
       if (this.transation.funcType === "constructor") {
         this.transation.funcName = this.data.contractName;
       }
-      
+
       for (let i in this.ruleForm) {
-          
         let data = this.ruleForm[i];
         if (data && isJson(data)) {
           try {
@@ -555,25 +453,33 @@ export default {
           } catch (error) {
             console.log(error);
           }
-        }  else if (data === "true" || data === "false") {
-            this.transation.reqVal[i] = eval(data.toLowerCase());
-          }
-        else {
-           this.transation.reqVal[i] = data;
+        } else if (data === "true" || data === "false") {
+          this.transation.reqVal[i] = eval(data.toLowerCase());
+        } else {
+          this.transation.reqVal[i] = data;
         }
       }
-      let rules=[];
-    //  if(this.pramasData>1){
-           for (var i in this.pramasData) {
-        for (var key in this.ruleForm) {
-          if (this.pramasData[i].type == key) rules.push( this.transation.reqVal[key]);
+      this.ruleForm.map((item,index)=>{
+        if(item=="true"||item=="false"){
+          this.ruleForm[index]=eval(item.toLowerCase());
         }
-      }  
-    //   }else{
-    //   rules= this.ruleForm[0]
-    //   }
-   
-      
+        if(item.substring(0,1)=='['){
+          
+          this.ruleForm[index]=eval(item.toLowerCase());
+        }
+      })
+      let rules = [];
+      //  if(this.pramasData>1){
+      for (var i in this.pramasData) {
+        for (var key in this.ruleForm) {
+          if (this.pramasData[i].type == key)
+            rules.push(this.transation.reqVal[key]);
+        }
+      }
+      //   }else{
+      //   rules= this.ruleForm[0]
+      //   }
+
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {
@@ -590,7 +496,7 @@ export default {
             : this.transation.userName,
         contractName: this.data.contractName,
         funcName: functionName || "",
-        funcParam: rules,
+        funcParam: this.ruleForm,
         contractId: this.data.contractId,
         contractAbi: [this.pramasObj],
         useCns: this.isCNS,
@@ -738,7 +644,7 @@ export default {
   line-height: 30px;
   margin-bottom: 24px;
 }
-.ifselectUser{
-    width: 360px !important;
+.ifselectUser {
+  width: 360px !important;
 }
 </style>

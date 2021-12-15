@@ -4,17 +4,9 @@
       <div class="column4">
         <div
           :class="['tradeList', { chooseList: listChange == 1 }]"
-          @click="changeList"
         >
           <div class="tradeImg"></div>
           <span>区块列表</span>
-        </div>
-        <div
-          :class="['tradeList', { chooseList: listChange == 0 }]"
-          @click="changeList"
-        >
-          <div class="tradeImg"></div>
-          <span>交易列表</span>
         </div>
         <div class="tradeNav">
           <span>{{ whatHash }}</span>
@@ -29,7 +21,7 @@
           />
         </div>
       </div>
-      <div class="column5">
+      <!-- <div class="column5">
         <div class="tradeList">
           <div class="tradeImg"></div>
           <span>主机监控</span>
@@ -58,8 +50,8 @@
             <div class="lineChart" ref="line"></div>
           </div>
         </div>
-      </div>
-      <div class="column6">
+      </div> -->
+      <div class="column5">
         <div class="tradeTip">
           <div class="tradeImg"></div>
           <span>节点城市分布</span>
@@ -68,6 +60,24 @@
           <div class="city1">
             <div class="city2" ref="cityShow"></div>
           </div>
+        </div>
+      </div>
+       <div class="column6">
+        <div class="tradeList">
+          <div class="tradeImg"></div>
+          <span>交易列表</span>
+        </div>
+        <div class="tradeNav">
+          <span>{{ tradeHash }}</span>
+          <span>交易时间</span>
+        </div>
+        <div class="listData">
+          <dv-scroll-board
+            :config="tradeData"
+            class="listClass"
+            ref="scrollBoard"
+            :key="key"
+          />
         </div>
       </div>
     </section>
@@ -92,7 +102,7 @@ import {
   getTransactionList,
   metricInfo,
   getFronts,
-  getCityList,
+  getCityList
 } from "@/util/api";
 import to from "await-to-js";
 import { format, formatData } from "@/util/util.js";
@@ -106,6 +116,7 @@ export default {
       lineVar: null,
       groupId: localStorage.getItem("groupId"),
       listData: {},
+      tradeData: {},
       blockList: [],
       transList: [],
       listChange: 0,
@@ -602,13 +613,14 @@ export default {
       },
       key: 1,
       whatHash: "区块哈希",
+      tradeHash: "交易哈希",
       renderTwo:null
     };
   },
   mounted() {
     // this.sixInit()
     this.fourReqUpdate();
-    this.fiveInit();
+    //this.fiveInit();
     //this.fiveReqUpdate();
     this.sixReqUpdate();
     // this.pieAdapter();
@@ -683,7 +695,16 @@ export default {
           rowNum: 7,
           oddRowBGC: "rgba(51, 113, 208, 0.15)",
           evenRowBGC: "rgba(51, 113, 208, 0.15)",
-          data: this.listChange == 1 ? this.transList : this.blockList
+          data: this.blockList
+        };
+        this.tradeData = {
+          columnWidth: [356, 183],
+          align: "left",
+          fontSize: "12",
+          rowNum: 7,
+          oddRowBGC: "rgba(51, 113, 208, 0.15)",
+          evenRowBGC: "rgba(51, 113, 208, 0.15)",
+          data: this.transList
         };
       }
     },
@@ -1237,7 +1258,7 @@ export default {
       let [getCityListtErr, getCityListRes] = await to(getCityList());
       console.log(getCityListtErr, getCityListRes);
       if (getCityListtErr) {
-        console.log("fiveGetFrontReqError");
+        console.log("sixReqError");
         return;
       } else {
         if (getCityListRes.status != 200) {
