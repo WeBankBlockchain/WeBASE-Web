@@ -16,6 +16,7 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        remarks:'备注',
         updatePassword: "修改密码",
         email: "修改",
         versionInfo:'请根据前置列表中的‘详情’按钮查看',
@@ -503,6 +504,7 @@ export default {
         createTime: "创建时间",
     },
     nodes: {
+        nodeIp: "节点ip",
         nodeFront: "节点前置",
         addFront: "新增节点前置",
         frontId: "前置编号",
@@ -767,6 +769,8 @@ export default {
         uploadWarning3: "个文件.",
         to: "至",
         updateSuccess: "更新成功",
+        agency:'请输入机构名',
+        city:'请选择地址',
     },
     account: {
         addAccount: "新增账号",

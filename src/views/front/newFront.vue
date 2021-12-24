@@ -81,6 +81,14 @@
                             </template>
                             <template v-else>
                                 <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
+                             <el-button
+                  :disabled="disabled"
+                  type="text"
+                  size="small"
+                  :style="{ color: disabled ? '#666' : '' }"
+                  @click="remarks(scope.row)"
+                  >{{ $t("text.remarks") }}</el-button
+                >
                             </template>
                         </template>
 
@@ -103,12 +111,26 @@
         <el-dialog  :close-on-click-modal="false" :title="$t('text.detail')" :visible.sync="detailDialogVisible" width="900px" v-if="detailDialogVisible" center>
               <detail-page @detailClose="detailClose" @detailSuccess="detailSuccess" :detailParam="detailParam"></detail-page>                                                                                                                           
         </el-dialog>
+            <el-dialog
+          :title="$t('text.remarks')"
+          :visible.sync="remarkDialogVisible"
+          width="500px"
+          v-if="remarkDialogVisible"
+          center
+        >
+          <remark-node
+            @nodeRemarkClose="nodeRemarkClose"
+            @nodeRemarkSuccess="nodeRemarkSuccess"
+            :remarkNode="remarkNode"
+          ></remark-node>
+        </el-dialog>
             </div> 
         </div>
     </div>
 </template>
 
 <script>
+import remarkNode from "./components/remarkNode";
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import detailPage from "./components/detailPage";
@@ -127,7 +149,8 @@ export default {
         "v-setFront": setFront,
         modifyNodeType,
         'update-sdk':updateSDK,
-        detailPage
+        detailPage,
+            remarkNode,
     },
     watch: {
         $route() {
@@ -163,6 +186,7 @@ export default {
             sdkDialogVisible: false,
             sdkParam:{},
             detailParam:{},
+            remarkDialogVisible: false,
         };
     },
     computed: {
@@ -258,6 +282,10 @@ export default {
         this.getNodeTable();
     },
     methods: {
+         remarks(param) {
+      this.remarkNode = param;
+      this.remarkDialogVisible = true;
+    },
         viewDetail(param){
             this.detailParam=param
             this.detailDialogVisible=true
@@ -601,7 +629,14 @@ export default {
         },
         prcClose() {
             this.PrcDialogVisible = false
-        }
+        },
+            nodeRemarkSuccess() {
+      this.remarkDialogVisible = false;
+      this.getNodeTable();
+    },
+    nodeRemarkClose() {
+      this.remarkDialogVisible = false;
+    },
     }
 };
 </script>

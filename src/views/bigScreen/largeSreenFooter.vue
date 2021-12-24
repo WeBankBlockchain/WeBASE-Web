@@ -1719,7 +1719,7 @@ height: .075rem;
   height: 4.05rem;
   position: absolute;
   top: 0.1875rem;
-  left: 0.625rem;
+  left: 1.23125rem;
 }
 .column1 {
   width: 6.7375rem;

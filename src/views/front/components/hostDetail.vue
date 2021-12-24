@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="`${nodesQuery.nodeIp}`" :icon="true" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="nodeIp" :icon="true" @changGroup="changGroup"></v-content-head>
         <div class="module-wrapper">
             <div class="more-search-table">
                 <div class="search-item">
@@ -133,7 +133,8 @@ export default {
             },
             metricData: [],
             nodesHealthData: [],
-            nodesQuery: ''
+            nodesQuery: '',
+            nodeIp: localStorage.getItem('nodeIp')
         };
     },
     beforeDestroy: function () {
@@ -142,6 +143,10 @@ export default {
     },
     mounted() {
         this.nodesQuery = this.$root.$route.query;
+        if(this.nodesQuery.nodeId){
+        localStorage.setItem('nodeId',this.nodesQuery.nodeId)            
+        localStorage.setItem('nodeIp',this.nodesQuery.nodeIp)            
+        }
         this.getHealthData();
         Bus.$on("changeGroup", data => {
             this.changGroup(localStorage.getItem('groupId'))
@@ -166,7 +171,7 @@ export default {
             this.loading = true;
             this.sureing = true;
             var reqData = {
-                nodeId: this.nodesQuery.nodeId
+                nodeId: localStorage.getItem('nodeId')
             },
                 reqQurey = {};
             reqQurey = this.chartParam;
@@ -244,7 +249,7 @@ export default {
             this.loading = true;
             this.sureing = true;
             var reqData = {
-                nodeId: this.nodesQuery.nodeId
+                nodeId: localStorage.getItem('nodeId')
             },
                 reqQurey = {};
             reqQurey = this.chartParam;

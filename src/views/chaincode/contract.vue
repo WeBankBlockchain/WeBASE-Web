@@ -159,7 +159,7 @@ export default {
             console.log('w:', w);
             this.$store.state.worker = w
         },
-        querySolcList() {0
+        querySolcList() {
             for (let i = 0; i < this.allVersion.length; i++) {
                 if (localStorage.getItem("encryptionId") == this.allVersion[i].encryptType) {
                     this.versionList.push(this.allVersion[i])
