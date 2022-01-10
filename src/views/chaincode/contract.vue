@@ -51,7 +51,7 @@ export default {
         "v-content-head": contentHead
     },
     watch: {
-        $route: function () {
+        $route: function () {                              
             this.urlQuery = this.$root.$route.query;
         },
         menuHide: function (val) {
