@@ -15,7 +15,7 @@
  */
 <template>
     <div>
-        <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="135px" class="demo-ruleForm">
+        <el-form :model="rulePasswordForm" status-icon :rules="rules2" ref="rulePasswordForm" label-width="80px" class="demo-ruleForm">
             <el-form-item :label="$t('main.oldPassword')" prop="oldPass">
                 <el-input type="password" v-model="rulePasswordForm.oldPass" autocomplete="off"></el-input>
             </el-form-item>
@@ -25,11 +25,12 @@
             <el-form-item :label="$t('main.confirmPassword')" prop="checkPass">
                 <el-input type="password" v-model="rulePasswordForm.checkPass" autocomplete="off"></el-input>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="submitForm('rulePasswordForm')">{{$t('main.submit')}}</el-button>
-                <el-button @click="resetForm('rulePasswordForm')">{{$t('main.reset')}}</el-button>
-            </el-form-item>
+            
         </el-form>
+        <div class="text-right send-btn">
+      <el-button type="primary" @click="submitForm('rulePasswordForm')">{{$t('main.submit')}}</el-button>
+                <el-button @click="resetForm('rulePasswordForm')">{{$t('main.reset')}}</el-button>
+    </div>
     </div>
 </template>
 

@@ -16,6 +16,12 @@
 
 /* customize class */
 
+.el-tooltip__popper{
+    font-size: 14px;
+     max-width:50% !important;
+     max-height:40% !important;
+   overflow: hidden;
+}
 .span-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -398,7 +404,7 @@
    padding: 24px 24px 0 24px !important;
    max-height: 500px;
    margin-bottom: 24px;
-   /* overflow-y: scroll; */
+   overflow-y: scroll;
 }
 
 /* element-ui select*/
