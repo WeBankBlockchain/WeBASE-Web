@@ -59,6 +59,8 @@ import NavMenu from '../../components/navs/navMenu.vue';
 import charts from "./components/chart";
 import contentHead from "@/components/contentHead";
 import { format, completionDateData } from "@/util/util";
+import Bus from "@/bus"
+
 import {
     monitorUserList,
     monitorUserInterfaceList,
@@ -149,7 +151,20 @@ export default {
             }
 
         });
+    Bus.$on("changGroup", (item) => {
+            this.groupId = item
+            this.userName = ""
+            this.$nextTick(() => {
+                this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+                this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+                this.getMonitorTransactionInfo();
+                this.getMonitorUserList();
+            });
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changGroup(val) {
             this.groupId = val

@@ -58,6 +58,8 @@ import contentHead from "@/components/contentHead";
 import { accountList, modifyAccountInfo } from "@/util/api";
 import accountDialog from "./components/accountDialog";
 import NavMenu from '../../components/navs/navMenu.vue';
+import Bus from "@/bus"
+
 export default {
     name: "accountList",
     components: {
@@ -101,8 +103,14 @@ export default {
             return data
         }
     },
+     beforeDestroy() {
+        Bus.$off("changGroup")
+    },
     mounted() {
         this.getAccountList();
+         Bus.$on("changGroup", data => {
+            this.getAccountList()
+        })
     },
     methods: {
         success() {

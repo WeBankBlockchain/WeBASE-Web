@@ -72,6 +72,8 @@ import { deleteCert, certList, exportCert, importCert, exportCertSdk, getFronts 
 import { format } from "@/util/util";
 import JSZip from 'jszip'
 import FileSaver from 'file-saver'
+import Bus from "@/bus"
+
 export default {
     name: 'Certificate',
 
@@ -164,8 +166,16 @@ export default {
             this.getCertList()
         }
         this.queryFronts()
+    Bus.$on("changGroup", (item) => {
+    if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getCertList()
+        }
+        this.queryFronts()
+    })
     },
-
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changGroup() {
 

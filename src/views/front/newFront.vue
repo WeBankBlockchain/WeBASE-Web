@@ -381,6 +381,14 @@ export default {
     }
     this.getFrontTable();
     this.getNodeTable();
+      Bus.$on("changGroup", () => {
+    this.getFrontTable();
+    this.getNodeTable();
+    })
+
+  },
+   destroyed() {
+     Bus.$off("changGroup");
   },
   methods: {
     getVersionList() {

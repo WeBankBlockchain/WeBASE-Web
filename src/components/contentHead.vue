@@ -261,6 +261,8 @@ export default {
             localStorage.setItem("groupId", val.groupId);
             this.$emit('changGroup', val.groupId);
             // this.dialogShow = true;
+             Bus.$emit("changGroup", val.groupId);
+
         },
         skip: function () {
             if (this.route) {

@@ -45,6 +45,8 @@
 import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import { queryCnsList, findCnsInfoList } from "@/util/api";
+import Bus from "@/bus";
+
 export default {
     name: 'ConfigManagement',
 
@@ -151,7 +153,16 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.queryLocalCns();
         }
+         Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+           this.getCnsList()
+            this.queryLocalCns()
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
 
     methods: {
         changGroup() {

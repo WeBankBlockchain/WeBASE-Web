@@ -671,14 +671,14 @@ export default {
                     this.outputType = ""
                 }
                 this.funcData = abiData.abiInfo.name;
-                debugger
+                
                 if (abiData.abiInfo.inputs.length) {
                     this.decodeData = Web3EthAbi.decodeParameters(abiData.abiInfo.inputs, inputDatas);
                     if (JSON.stringify(this.decodeData) != "{}") {
                         for (const key in this.decodeData) {
                             abiData.abiInfo.inputs.forEach((val, index) => {
                                 if (val && val.name && val.type) {
-                                    debugger
+                                    
                                     if (key === val.name) {
                                         this.inputData[index] = {};
                                         this.inputData[index].name = val.name;

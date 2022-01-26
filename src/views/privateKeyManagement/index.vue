@@ -20,6 +20,8 @@ import NavMenu from '../../components/navs/navMenu.vue';
 import privateKey from './privateKeyManagement'
 import totalPrivateKey from './totalPrivateKey'
 import contentHead from "@/components/contentHead";
+import Bus from "@/bus"
+
 export default {
     name: "privateKeyManagement",
     components: {
@@ -55,7 +57,18 @@ export default {
                 this.$refs.registered.changGroup(data)
             }
         },
-    }
+    },
+    mounted(){
+     Bus.$on("changGroup", (item) => {
+        
+           this.changGroup()
+       
+    })
+    },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
+   
 }
 </script>
 

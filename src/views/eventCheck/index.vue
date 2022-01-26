@@ -241,8 +241,16 @@ export default {
         if (localStorage.getItem("groupId")) {
             this.queryInit()
         }
+        Bus.$on("changGroup", (item) => {
+            this.groupId=item;
+          if (localStorage.getItem("groupId")) {
+           this.queryInit()
+        }
+    })
     },
-
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         queryInit() {
             if (this.$route.query.type) {

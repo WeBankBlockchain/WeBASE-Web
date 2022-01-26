@@ -45,7 +45,6 @@ axiosIns.interceptors.response.use(
                 path: "/login"
             })
         }
-        
         return response;
     },
     error => {

@@ -14,58 +14,25 @@
  * limitations under the License.
  */
 <template>
-  <div
-    class="contract-menu"
-    style="position: relative; height: 100%"
-    v-loading="loading"
-  >
+  <div class="contract-menu" style="position: relative; height: 100%" v-loading="loading">
     <div class="contract-menu-header noBlurs">
       <div style="padding-left: 20px">
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="$t('contracts.createFile')"
-          v-if="!disabled"
-          placement="top-start"
-        >
+        <el-tooltip class="item" effect="dark" :content="$t('contracts.createFile')" v-if="!disabled" placement="top-start">
           <i class="wbs-icon-Addfile icon contract-icon" @click="addFile"></i>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          v-if="!disabled"
-          :content="$t('contracts.createFolder')"
-          placement="top-start"
-        >
-          <i
-            class="wbs-icon-Addfolder icon contract-icon"
-            @click="addFolder"
-          ></i>
+        <el-tooltip class="item" effect="dark" v-if="!disabled" :content="$t('contracts.createFolder')" placement="top-start">
+          <i class="wbs-icon-Addfolder icon contract-icon" @click="addFolder"></i>
         </el-tooltip>
-        <el-tooltip
-          class="item"
-          effect="dark"
-          :content="$t('contracts.upLoadFile')"
-          v-if="!disabled"
-          placement="top-start"
-        >
-          <i
-            class="wbs-icon-shangchuan contract-icon"
-            style="position: relative"
-          >
-            <input
-              multiple
-              title=""
-              type="file"
-              id="file"
-              ref="file"
-              name="chaincodes"
-              class="uploads"
-              @change="upload($event)"
-            />
+        <el-tooltip class="item" effect="dark" :content="$t('contracts.upLoadFile')" v-if="!disabled" placement="top-start">
+          <i class="wbs-icon-shangchuan contract-icon" style="position: relative">
+            <input multiple title="" type="file" id="file" ref="file" name="chaincodes" class="uploads" @change="upload($event)" />
           </i>
         </el-tooltip>
-        <div>
+        <el-select v-model="Highlight" class="langChoose" @change="langChange">
+          <el-option v-for="item in Language" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <div v-show="Highlight==0">
           <slot name="footer"></slot>
         </div>
       </div>
@@ -74,38 +41,11 @@
     <div class="contract-menu-content">
       <ul>
         <li v-for="item in contractArry" :key="item.contractId">
-          <div
-            v-if="item.contractType == 'file'"
-            class="contract-file"
-            :id="item.contractId"
-          >
-            <i
-              class="wbs-icon-file"
-              @click="select(item)"
-              v-if="!item.renameShow"
-              :id="item.contractId"
-            ></i>
-            <span
-              @contextmenu.prevent="handle($event, item)"
-              @click="select(item)"
-              :id="item.contractId"
-              v-if="!item.renameShow"
-              :class="{ colorActive: item.contractActive }"
-              >{{ item.contractName }}</span
-            >
-            <el-input
-              v-model="contractName"
-              v-focus
-              maxlength="32"
-              @blur="changeName(item)"
-              v-if="item.renameShow"
-            ></el-input>
-            <div
-              class="contract-menu-handle"
-              v-if="!disabled && item.handleModel"
-              :style="{ top: clentY, left: clentX }"
-              v-Clickoutside="checkNull"
-            >
+          <div v-if="item.contractType == 'file'" class="contract-file" :id="item.contractId">
+            <i class="wbs-icon-file" @click="select(item)" v-if="!item.renameShow" :id="item.contractId"></i>
+            <span @contextmenu.prevent="handle($event, item)" @click="select(item)" :id="item.contractId" v-if="!item.renameShow" :class="{ colorActive: item.contractActive }">{{ item.contractName }}</span>
+            <el-input v-model="contractName" v-focus maxlength="32" @blur="changeName(item)" v-if="item.renameShow"></el-input>
+            <div class="contract-menu-handle" v-if="!disabled && item.handleModel" :style="{ top: clentY, left: clentX }" v-Clickoutside="checkNull">
               <ul v-if="contractFile">
                 <li class="contract-menu-handle-list" @click="rename">
                   {{ $t("contracts.rename") }}
@@ -120,108 +60,41 @@
               </ul>
             </div>
           </div>
-          <div
-            v-if="item.contractType == 'folder'"
-            class="contract-folder"
-            :id="item.folderId"
-          >
-            <i
-              :class="item.folderIcon"
-              @contextmenu.prevent="handle($event, item)"
-              @click="open(item)"
-              v-if="!item.renameShow"
-              :id="item.folderId"
-            ></i>
-            <i
-              class="wbs-icon-folder"
-              @contextmenu.prevent="handle($event, item)"
-              @click="open(item)"
-              v-if="!item.renameShow"
-              style="color: #d19650"
-              :id="item.folderId"
-            ></i>
-            <span
-              :title="item.contractName"
-              @contextmenu.prevent="handle($event, item)"
-              @click="open(item)"
-              :id="item.folderId"
-              v-if="!item.renameShow"
-              :class="[{ colorActive: item.contractActive }, 'cursor-pointer']"
-              >{{ item.contractName }}</span
-            >
-            <div
-              class="contract-menu-handle"
-              v-if="!disabled && item.handleModel"
-              :style="{ top: clentY, left: clentX }"
-              v-Clickoutside="checkNull"
-            >
+          <div v-if="item.contractType == 'folder'" class="contract-folder" :id="item.folderId">
+            <i :class="item.folderIcon" @contextmenu.prevent="handle($event, item)" @click="open(item)" v-if="!item.renameShow" :id="item.folderId"></i>
+            <i class="wbs-icon-folder" @contextmenu.prevent="handle($event, item)" @click="open(item)" v-if="!item.renameShow" style="color: #d19650" :id="item.folderId"></i>
+            <span :title="item.contractName" @contextmenu.prevent="handle($event, item)" @click="open(item)" :id="item.folderId" v-if="!item.renameShow"
+              :class="[{ colorActive: item.contractActive }, 'cursor-pointer']">{{ item.contractName }}</span>
+            <div class="contract-menu-handle" v-if="!disabled && item.handleModel" :style="{ top: clentY, left: clentX }" v-Clickoutside="checkNull">
               <ul>
                 <li class="contract-menu-handle-list" @click="addFiles(item)">
                   {{ $t("contracts.createFile") }}
                 </li>
                 <!-- <li class="contract-menu-handle-list" v-if="!item.renameShow" @click='deleteFolder(item)'>{{$t("text.delete")}}</li> -->
-                <li
-                  class="contract-menu-handle-list"
-                  @click="deleteFolder(item)"
-                >
+                <li class="contract-menu-handle-list" @click="deleteFolder(item)">
                   {{ $t("text.delete") }}
                 </li>
-                <li
-                  class="contract-menu-handle-list"
-                  @click="exportFolder(item)"
-                >
+                <li class="contract-menu-handle-list" @click="exportFolder(item)">
                   {{ $t("contracts.exportSol") }}
                 </li>
               </ul>
             </div>
             <br />
             <ul v-if="item.folderActive" style="padding-left: 20px">
-              <li
-                class="contract-file"
-                v-for="list in item.child"
-                :key="list.contractId"
-              >
-                <i
-                  class="wbs-icon-file"
-                  v-if="!list.renameShow"
-                  @click="select(list)"
-                ></i>
-                <span
-                  @click="select(list)"
-                  @contextmenu.prevent="handle($event, list)"
-                  :id="list.contractId"
-                  v-if="!list.renameShow"
-                  :class="{ colorActive: list.contractActive }"
-                  >{{ list.contractName }}</span
-                >
-                <el-input
-                  v-model="contractName"
-                  v-focus
-                  maxlength="32"
-                  @blur="changeName(list)"
-                  v-if="list.renameShow"
-                ></el-input>
-                <div
-                  class="contract-menu-handle"
-                  v-if="!disabled && list.handleModel"
-                  :style="{ top: clentY, left: clentX }"
-                  v-Clickoutside="checkNull"
-                >
+              <li class="contract-file" v-for="list in item.child" :key="list.contractId">
+                <i class="wbs-icon-file" v-if="!list.renameShow" @click="select(list)"></i>
+                <span @click="select(list)" @contextmenu.prevent="handle($event, list)" :id="list.contractId" v-if="!list.renameShow" :class="{ colorActive: list.contractActive }">{{ list.contractName }}</span>
+                <el-input v-model="contractName" v-focus maxlength="32" @blur="changeName(list)" v-if="list.renameShow"></el-input>
+                <div class="contract-menu-handle" v-if="!disabled && list.handleModel" :style="{ top: clentY, left: clentX }" v-Clickoutside="checkNull">
                   <ul v-if="contractFile">
                     <li class="contract-menu-handle-list" @click="rename">
                       {{ $t("contracts.rename") }}
                     </li>
                     <!-- <li class="contract-menu-handle-list" v-if='!list.renameShow && !list.contractAddress' @click="deleteFile(list)">{{$t("text.delete")}}</li> -->
-                    <li
-                      class="contract-menu-handle-list"
-                      @click="deleteFile(list)"
-                    >
+                    <li class="contract-menu-handle-list" @click="deleteFile(list)">
                       {{ $t("text.delete") }}
                     </li>
-                    <li
-                      class="contract-menu-handle-list"
-                      @click="exportFile(list)"
-                    >
+                    <li class="contract-menu-handle-list" @click="exportFile(list)">
                       {{ $t("contracts.exportSol") }}
                     </li>
                   </ul>
@@ -232,33 +105,10 @@
         </li>
       </ul>
     </div>
-    <add-folder
-      v-if="foldershow"
-      :foldershow="foldershow"
-      @close="folderClose"
-      @success="folderSuccess"
-    ></add-folder>
-    <add-file
-      v-if="fileshow"
-      :data="selectFolderData"
-      :fileshow="fileshow"
-      @close="fileClose"
-      @success="fileSucccess($event)"
-      :id="folderId"
-    ></add-file>
-    <select-catalog
-      v-if="cataLogShow"
-      :show="cataLogShow"
-      @success="catalogSuccess($event)"
-      @close="catalogClose"
-    ></select-catalog>
-    <export-project
-      v-if="$store.state.exportProjectShow"
-      :show="$store.state.exportProjectShow"
-      :folderList="pathList"
-      @close="exportProjectShowClose"
-      @javaProjectComplie="javaProjectComplie"
-    ></export-project>
+    <add-folder v-if="foldershow" :foldershow="foldershow" @close="folderClose" @success="folderSuccess"></add-folder>
+    <add-file v-if="fileshow" :data="selectFolderData" :fileshow="fileshow" @close="fileClose" @success="fileSucccess($event)" :id="folderId"></add-file>
+    <select-catalog v-if="cataLogShow" :show="cataLogShow" @success="catalogSuccess($event)" @close="catalogClose"></select-catalog>
+    <export-project v-if="$store.state.exportProjectShow" :show="$store.state.exportProjectShow" :folderList="pathList" @close="exportProjectShowClose" @javaProjectComplie="javaProjectComplie"></export-project>
   </div>
 </template>
 <script>
@@ -313,6 +163,14 @@ export default {
       selectFolderData: null,
       folderData: null,
       loading: false,
+      Highlight:"0",
+      Language:[{
+          value: '0',
+          label: 'javascript'
+        }, {
+          value: '1',
+          label: 'rust'
+        }],
     };
   },
   beforeDestroy: function () {
@@ -388,6 +246,11 @@ export default {
     },
   },
   methods: {
+    langChange(item){
+      console.log(item)
+      this.$emit('langChange',item);
+      Bus.$emit('langChange',item)
+    },
     /**
      * @method 点击任意处清除右键弹窗
      */
@@ -1606,6 +1469,10 @@ export default {
 }
 .contract-menu-handle-list:hover {
   color: rgb(55, 238, 242);
+}
+.langChoose{
+    width: 110px;
+    padding-left: 7px;
 }
 </style>
 

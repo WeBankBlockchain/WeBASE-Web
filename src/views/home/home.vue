@@ -245,7 +245,7 @@
                   <p class="color-8798AD text-right">
                     {{ item.blockTimestamp }}
                   </p>
-                </div>
+                </div>      
               </div>
             </div>
           </el-col>
@@ -273,6 +273,8 @@ import sRight from "../../../static/image/s-right.png";
 import artboard from "../../../static/image/artboard.png";
 import constant from "@/util/constant";
 import { toContractName } from "@/util/util";
+import Bus from "@/bus";
+
 export default {
   name: "home",
   components: {
@@ -367,9 +369,10 @@ export default {
     };
   },
   mounted: function () {
+    
     this.groupId = localStorage.getItem("groupId");
     if (
-      this.groupId &&
+      this.groupId ||
       (localStorage.getItem("configData") == 3 ||
         localStorage.getItem("deployType") == 0)
     ) {
@@ -383,8 +386,22 @@ export default {
         this.getChart();
       });
     }
+      Bus.$on("changGroup", val => {
+      this.groupId = val;
+      this.getNetworkDetails();
+      this.getNodeTable();
+      this.getBlockList();
+      this.getTransaction();
+      this.$nextTick(function () {
+        this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+        this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+        this.getChart();
+      });
+        })
   },
-  destroyed() {},
+  destroyed() {
+     Bus.$off("changGroup");
+  },
   methods: {
     changGroup(val) {
       this.groupId = val;

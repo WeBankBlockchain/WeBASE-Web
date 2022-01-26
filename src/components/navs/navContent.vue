@@ -123,7 +123,7 @@ export default {
   background-color: white;
   width: 320px;
   box-sizing: border-box;
-  transition: width 1s;
+    transition: width 0.5s;
   /* transition: 'display' 10s linear; */
 }
 .content-head-title {
@@ -160,5 +160,6 @@ export default {
 .contentShows {
   width: 0;
   display: none;
+  transition: width 0.5s;
 }
 </style>
