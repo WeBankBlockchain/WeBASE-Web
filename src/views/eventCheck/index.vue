@@ -22,7 +22,7 @@
                         <el-form-item :label="$t('table.toBlock')" prop="toBlock">
                             <el-input v-model.number="contractEventForm.toBlock" clearable style="width: 195px;"></el-input>
                         </el-form-item>
-                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start" style="padding-top: 20px;">
+                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start"  style="margin-top: 20px;">
                         <i class="el-icon-info contract-icon font-15"></i>
                     </el-tooltip>
                     </div>
@@ -241,8 +241,16 @@ export default {
         if (localStorage.getItem("groupId")) {
             this.queryInit()
         }
+        Bus.$on("changGroup", (item) => {
+            this.groupId=item;
+          if (localStorage.getItem("groupId")) {
+           this.queryInit()
+        }
+    })
     },
-
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         queryInit() {
             if (this.$route.query.type) {
@@ -576,7 +584,7 @@ export default {
     left: 0;
 }
 .el-form-item{
-    margin: 10px 0 10px 0;
+    margin: 10px 0 20px 0;
 }
 .search-part{
     padding: 0;

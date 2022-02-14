@@ -283,6 +283,7 @@ export default {
       cnsName: "",
       isUserNameShow: false,
       ruleForm: {},
+      ruleForms: {},
       rules: {
         int: [
           {
@@ -394,23 +395,29 @@ export default {
       });
     },
     placeholderText(type) {
-      if (type.length > 5 && type.substring(0, 5) == "bytes") {
-        return "十六进制";
+      if (
+        type.length > 5 &&
+        type.substring(0, 5) == "bytes" &&
+        type.substring(type.length, type.length - 2) != "[]"
+      ) {
+        
+        return type +"(十六进制，长度是" +type.substring(5, type.length)*2+")";
       }
       switch (type) {
         case "string":
-          return "";
+          return "string";
           break;
         case "bytes":
-          return "";
+          return "bytes";
           break;
         case "int":
-          return "整数";
+          return "int,整数";
           break;
         case "unit":
-          return "大于等于0的整数";
+          return "unit,大于等于0的整数";
           break;
         default:
+          return type;
           break;
       }
     },
@@ -548,18 +555,21 @@ export default {
         let data = this.ruleForm[item];
         if (data && isJson(data)) {
           try {
-            this.ruleForm[item] = JSON.parse(data);
+            this.ruleForms[item] = JSON.parse(data);
           } catch (error) {
             console.log(error);
           }
-        } else {
-          this.ruleForm[item] = data;
+        } else if (data === "true" || data === "false") {
+          this.ruleForms[item] = eval(data.toLowerCase());
         }
-      }
+         else {
+          this.ruleForms[item] = data;
+        }
+      } 
       let rules = [];
       for (var i in this.pramasData) {
-        for (var key in this.ruleForm) {
-          if (this.pramasData[i].type == key) rules.push(this.ruleForm[key]);
+        for (var key in this.ruleForms) {
+          if (this.pramasData[i].type == key) rules.push(this.ruleForms[key]);
         }
       }
 

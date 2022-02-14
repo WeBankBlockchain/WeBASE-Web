@@ -79,6 +79,8 @@ import "ace-builds/src-noconflict/mode-sql";
 import contentHead from "@/components/contentHead";
 import { getUserList, queryCrudService } from "@/util/api";
 import creatUser from "@/views/privateKeyManagement/components/creatUser";
+import Bus from "@/bus";
+
 export default {
     name: 'ConfigManagement',
 
@@ -130,7 +132,20 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserData()
         }
+        Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+           this.getUserData()
+            this.sqlForm = {
+                adminRivateKey: ''
+            }
+            this.aceEditor.setValue('')
+            this.runSqlResult = ""
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
 
     methods: {
         changGroup() {

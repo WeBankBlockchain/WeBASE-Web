@@ -240,7 +240,6 @@ export default {
             this.contractName = "";
             this.contractAddress = "";
             this.contractData = "";
-            
             this.getList()
         }
     }

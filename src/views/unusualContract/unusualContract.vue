@@ -102,6 +102,8 @@ import { unusualContractList, getAllContractList } from "@/util/api";
 import importAbi from "../abiList/components/importAbi"
 import freezeThaw from "../chaincode/dialog/freezeThaw"
 import { getDate } from "@/util/util"
+import Bus from "@/bus"
+
 export default {
     name: "unusualContract", 
     components: {
@@ -215,7 +217,15 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualContractList();
         }
+   Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getUnusualContractList();
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changeDate(val) {
             const value = getDate(val)

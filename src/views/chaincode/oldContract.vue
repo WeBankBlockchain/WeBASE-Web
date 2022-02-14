@@ -117,6 +117,8 @@ import { getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiLi
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
+import Bus from "@/bus";
+
 export default {
     name: "registeredContract",
     components: {
@@ -224,7 +226,14 @@ export default {
         if (localStorage.getItem("groupId")) {
             this.getContracts()
         }
+          Bus.$on("changGroup", (item) => {
+             this.groupId=item;
+            this.getContracts()
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         formatterPath: function(row) {
             let str = row ? row : "-"

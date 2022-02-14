@@ -26,6 +26,8 @@ import committeeMgmt from "@/views/committeeMgmt/index";
 import developerMgmt from "@/views/developerMgmt/index";
 import permission from "@/views/permission/index";
 import {getFronts} from "@/util/api";
+import Bus from "@/bus";
+
 export default {
     name: 'newPermission',
     components: {
@@ -86,7 +88,28 @@ export default {
                 }
             }
         } 
-      }
+      },
+      mounted(){
+      Bus.$on("changGroup", (item) => {
+         if (this.activeName == 0) {
+                if (localStorage.getItem("groupId")) {
+                    this.$refs.committeeMgmt.adminRivateKeyList = [];
+                    this.$refs.committeeMgmt.queryGetThreshold()
+                    this.$refs.committeeMgmt.getUserData()
+                    this.$refs.committeeMgmt.queryCommitteeList()
+                    this.$refs.committeeMgmt.queryVoteRecordList()
+                }
+            } else {
+                if (localStorage.getItem("groupId")) {
+                    this.$refs.developerMgmt.queryOperatorList()
+                    this.$refs.developerMgmt.getUserData()
+                }
+            }
+    })
+    },
+     destroyed() {
+     Bus.$off("changGroup");
+     }
     
 }
 </script>

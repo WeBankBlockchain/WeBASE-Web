@@ -391,8 +391,9 @@ import ace from "ace-builds";
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/mode-javascript";
+import "ace-builds/src-noconflict/mode-rust";
 import "ace-builds/src-noconflict/ext-language_tools";
-require("ace-mode-solidity/build/remix-ide/mode-solidity");
+//require("ace-mode-solidity/build/remix-ide/mode-solidity");
 let Mode = require("ace-mode-solidity/build/remix-ide/mode-solidity").Mode;
 import errcode from "@/util/errcode";
 let Base64 = require("js-base64").Base64;
@@ -527,6 +528,15 @@ export default {
     }
     this.queryIsDeployedModifyEnable();
     this.initEditor();
+    Bus.$on("langChange", (item) => {
+    if(item==1){
+      this.modePath='ace/mode/rust'
+    }else{
+      this.modePath='ace/mode/solidity'
+    }
+    this.aceEditor.session.setMode(this.modePath);
+    //this.initEditor();
+    })
     Bus.$on("select", (data) => {
       this.codeShow = true;
       this.refreshMessage();
@@ -659,10 +669,10 @@ export default {
     },
     initEditor: function () {
       let _this = this;
+      this.aceEditor=null
       this.aceEditor = ace.edit(this.$refs.ace, {
         fontSize: 14,
         fontFamily: "Consolas,Monaco,monospace",
-
         theme: this.themePath,
         mode: this.modePath,
         tabSize: 4,
@@ -987,7 +997,7 @@ export default {
         let wrapper = require("solc/wrapper");
         var solc = wrapper(window.Module);
       } catch (error) {
-        this.$message({
+        this.$message({                                                                
           type: "error",
           message: this.$t("text.versionError"),
           duration: 3000,

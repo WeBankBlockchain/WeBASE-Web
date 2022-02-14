@@ -83,7 +83,7 @@
                 </a>
             </el-popover>
         </div>
-        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="600px" center :modal-append-to-body='false' v-dialogDrag >
+        <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible"       class="send-dialog" width="500px" center :modal-append-to-body='false' v-dialogDrag >
             <change-password-dialog @success="success"></change-password-dialog>
         </el-dialog>
         <el-dialog :title="$t('head.versionInfo')" :visible.sync="versionInfoVisible"  width="600px" center :modal-append-to-body='false' v-dialogDrag>
@@ -261,6 +261,8 @@ export default {
             localStorage.setItem("groupId", val.groupId);
             this.$emit('changGroup', val.groupId);
             // this.dialogShow = true;
+             Bus.$emit("changGroup", val.groupId);
+
         },
         skip: function () {
             if (this.route) {

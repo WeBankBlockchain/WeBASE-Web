@@ -89,8 +89,8 @@ export default {
       this.currentRoute = this.$route.path;
       let pre = this.currentRoute.substring(1);
       this.contents = navContent[pre];
-      if (this.$route.path == "/node/chain") {
-        if (localStorage.getItem("deployType")) {
+      if (this.$route.path == "/front") {
+        if (localStorage.getItem("deployType")==0) {
           this.contents = navContent["newNodes"];
         } else {
           this.contents = navContent["newNode"];
@@ -123,7 +123,7 @@ export default {
   background-color: white;
   width: 320px;
   box-sizing: border-box;
-  transition: width 1s;
+    transition: width 0.5s;
   /* transition: 'display' 10s linear; */
 }
 .content-head-title {
@@ -160,5 +160,6 @@ export default {
 .contentShows {
   width: 0;
   display: none;
+  transition: width 0.5s;
 }
 </style>

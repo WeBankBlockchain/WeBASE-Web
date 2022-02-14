@@ -132,14 +132,14 @@ export default {
         };
     },
     beforeDestroy: function () {
-        Bus.$off("changeGroup")
+        Bus.$off("changGroup")
         Bus.$off("chooselanguage")
     },
     mounted() {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getFrontTable();
         }
-        Bus.$on("changeGroup", data => {
+        Bus.$on("changGroup", data => {
             this.changGroup()
         })
         Bus.$on("chooselanguage", data => {

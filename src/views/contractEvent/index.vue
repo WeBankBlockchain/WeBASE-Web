@@ -91,10 +91,10 @@ export default {
     created() {
     },
     beforeDestroy() {
-        Bus.$off("changeGroup")
+        Bus.$off("changGroup")
     },
     mounted() {
-        Bus.$on("changeGroup", data => {
+        Bus.$on("changGroup", data => {
             this.changeGroup(data)
         })
         if (this.group && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {

@@ -89,6 +89,8 @@ import contentHead from "@/components/contentHead";
 import transactionDetail from "@/components/transactionDetail";
 import creatUser from "../privateKeyManagement/components/creatUser.vue";
 import NavMenu from '../../components/navs/navMenu.vue';
+import Bus from "@/bus"
+
 export default {
     name: "unusualUser",
     components: {
@@ -187,7 +189,15 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualUserList();
         }
+     Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getUnusualUserList();
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changeUserList(val) {
             console.log(val)

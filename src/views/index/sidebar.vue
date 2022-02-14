@@ -375,7 +375,8 @@ export default {
                             } else {
                                 it.menuShow = false;
                             }
-                            if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
+                            
+                            if ((localStorage.getItem("deployType") == 0||localStorage.getItem("deployType") == null) && it.nameKey == 'hostMgrTitle') {
                                 it.menuShow = false;
                             }
 

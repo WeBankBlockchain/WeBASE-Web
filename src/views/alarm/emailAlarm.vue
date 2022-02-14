@@ -44,6 +44,8 @@ import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
 import NavMenu from '../../components/navs/navMenu.vue';
 let Base64 = require("js-base64").Base64;
+import Bus from "@/bus"
+
 export default {
     name: "emailAlarm",
     components: {
@@ -131,7 +133,13 @@ export default {
     },
     mounted: function () {
         this.getEmailConfig();
+   Bus.$on("changGroup", (item) => {
+           this.getEmailConfig()
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changGroup: function () {
 

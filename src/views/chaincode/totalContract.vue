@@ -45,9 +45,9 @@
                     <template slot-scope="scope">
                         <el-button v-if="!(disabled || scope.row.abiId > 0 || scope.row.abiId === 0)" @click="importData(scope.row)" type="text" size="small">{{$t('nodes.addAbi')}}</el-button>
                         <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)' @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
-                        <el-button v-if="!disabled &&scope.row.contractAddress && scope.row.haveEvent" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
-                        <el-button v-if="!disabled" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
-                        <el-button v-if="!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                        <!-- <el-button v-if="!disabled &&scope.row.contractAddress && scope.row.haveEvent" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button> -->
+                        <!-- <el-button v-if="!disabled" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
+                        <!-- <el-button v-if="!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button> -->
                         <el-button v-if='!disabled && (scope.row.abiId > 0 || scope.row.abiId === 0)' @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                         <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button> -->
                     </template>
@@ -85,6 +85,8 @@ import sendTransation from "@/components/sendTransaction";
 import freezeThaw from "./dialog/freezeThaw"
 import mgmtCns from "./dialog/mgmtCns"
 import updateAbi from "../abiList/components/updateAbi"
+import Bus from "@/bus";
+
 export default {
     name: "totalContract",
     components: {
@@ -136,7 +138,16 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getList()
         }
+
+         Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getList()
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         getList() {
             this.loading = true;
@@ -322,12 +333,12 @@ export default {
                         showClose: true,
                         message: this.$t("text.copySuccessMsg"),
                         duration: 2000
-                    });
+                    });                                                                                                                                       
                 });
             }
         },
         search: function () {
-            this.currentPage = 1
+            this.pageNumber= 1
             this.getList();
         },
         clearInput() {

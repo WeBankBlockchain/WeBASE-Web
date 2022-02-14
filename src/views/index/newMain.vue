@@ -36,7 +36,7 @@
                 </el-form-item>
             </el-form>
         </div>
-        <v-content-head :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></v-content-head>
+        <v-content-head :headTitle="$t('title.dataOverview')" ></v-content-head>
         <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
             <v-menu @sidebarChange="change($event)" :minMenu="show" ref='menu'></v-menu>
         </div>
@@ -78,11 +78,12 @@ import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
 import contentHead from "@/components/contentHead";
-import { resetPassword, addnodes, getGroups, encryption, getGroupsInvalidIncluded, getFronts, getVersion, refreshFront } from "@/util/api";
+import { resetPassword, getNodeList, getConsensusNodeId, encryption, getGroupsInvalidIncluded, getFronts, getVersion, refreshFront,getNetworkStatistics,getBlockPage,getTransactionList,} from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
 import NavContent from "../../components/navs/navContent.vue";
 import utils from "@/util/sm_sha"
+import { unique } from "@/util/util";
 import Bus from "@/bus";
 export default {
     name: "newMain",
@@ -110,6 +111,15 @@ export default {
                 checkPass: ""
             },
       contentShow: false,
+        chartStatistics: {
+        show: false,
+        date: [],
+        dataArr: [],
+        chartSize: {
+          width: 0,
+          height: 0,
+        },
+      },
         };
     },
     computed: {
@@ -628,8 +638,8 @@ export default {
     padding-left: 200px;
     overflow: scroll;
 }
-.contentShow {
-  width: calc(100% - 520px) !important;
+.contentShow {  
+  width: calc(100% - 520px) ;
 }
 .viewHide {
   width: calc(100% - 376px) !important;
@@ -649,15 +659,12 @@ export default {
   transition: width 0.5s;
   -moz-transition: width 0.5s;
   -webkit-transition: width 0.5s;
-  -o-transition: width 2s;
+  -o-transition: width 0.5s;
 }
 .view-show {
   padding-left: 200px;
   width: calc(100% - 200px);
-  transition: width 0.5s;
-  -moz-transition: width 0.5s;
-  -webkit-transition: width 0.5s;
-  -o-transition: width 0.5s;
+  transition: width 0.5s
 }
 .view-hide {
   width: calc(100% - 56px);
@@ -665,7 +672,7 @@ export default {
   transition: width 0.5s;
   -moz-transition: width 0.5s;
   -webkit-transition: width 0.5s;
-  -o-transition: width 2s;
+  -o-transition: width 0.5s;
 }
 #shade {
     position: absolute;

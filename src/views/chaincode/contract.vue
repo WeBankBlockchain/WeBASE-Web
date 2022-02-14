@@ -19,7 +19,7 @@
         <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')"></nav-menu>
         <div style="height: calc(100% - 56px)">
             <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
-                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
+                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide" @langChange='langChange'>
                     <template #footer>
                         <div class="version-selector">
                             <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion">
@@ -45,6 +45,8 @@ import contentHead from "@/components/contentHead";
 import { encryption } from "@/util/api";
 import webworkify from 'webworkify-webpack'
 import NavMenu from '../../components/navs/navMenu.vue';
+import Bus from "@/bus";
+
 
 export default {
     name: "contract",
@@ -61,7 +63,7 @@ export default {
         },
         menuHide: function (val) {
             if (val) {
-                this.menuWidth = 180;
+                this.menuWidth = 330;
             } else {
                 this.menuWidth = 0;
             }
@@ -74,7 +76,7 @@ export default {
             menuHide: true,
             changeWidth: false,
             contractHide: false,
-            menuWidth: 240,
+            menuWidth: 330,
             urlQuery: this.$root.$route.query,
             allVersion: [],
             versionList: [],
@@ -100,6 +102,7 @@ export default {
             this.$store.state.worker.terminate()
             this.$store.state.worker = null
         }
+     Bus.$off("changGroup");
     },
     mounted: function () {
         if(localStorage.getItem("dataFrom") === "transactionDetail"){
@@ -155,8 +158,15 @@ export default {
         ];
         this.initWorker()
         this.getEncryption(this.querySolcList);  
+        Bus.$on("changGroup", () => {
+            this.$refs.menu.getContractPaths()
+    })
     },
     methods: {
+        langChange(item){
+        console.log(item);
+        item==0?this.menuWidth=330:this.menuWidth=240
+        },
         initWorker() {
             let w = webworkify(require.resolve('@/util/file.worker'));
             console.log('w:', w);
@@ -213,7 +223,7 @@ export default {
                     that.$message({
                         type: "error",
                         message: this.$t('text.versionError')
-                    });
+                    }); 
                     that.loading = false
                     console.log(ev)
                 })
@@ -386,13 +396,13 @@ export default {
 }
 .version-selector {
     position: absolute;
-    top: 1px;
-    right: 5px;
+    top: 0px;
+    right: 2px;
     z-index: 1;
     box-sizing: border-box;
 }
 .version-selector >>> .el-select {
     width: 100%;
-    max-width: 118px;
+    max-width: 95px;
 }
 </style>
