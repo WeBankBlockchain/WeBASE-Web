@@ -63,7 +63,7 @@ export default {
         },
         menuHide: function (val) {
             if (val) {
-                this.menuWidth = 330;
+                this.menuWidth = 180;
             } else {
                 this.menuWidth = 0;
             }
@@ -76,7 +76,7 @@ export default {
             menuHide: true,
             changeWidth: false,
             contractHide: false,
-            menuWidth: 330,
+            menuWidth: 240,
             urlQuery: this.$root.$route.query,
             allVersion: [],
             versionList: [],

@@ -28,7 +28,7 @@
             <input multiple title="" type="file" id="file" ref="file" name="chaincodes" class="uploads" @change="upload($event)" />
           </i>
         </el-tooltip>
-        <el-select v-model="Highlight" class="langChoose" @change="langChange">
+        <el-select v-model="Highlight" class="langChoose" @change="langChange" v-if='false'>
           <el-option v-for="item in Language" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
