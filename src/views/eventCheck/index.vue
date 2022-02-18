@@ -392,7 +392,9 @@ export default {
                             return
                         }
                         eventList.forEach(item => {
+                            if(item!=null){
                             newEventList.push(item)
+                            }
                         })
                         if (newEventList && newEventList.length) {
                             newEventList.forEach(item => {

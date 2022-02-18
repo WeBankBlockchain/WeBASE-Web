@@ -136,7 +136,7 @@ export default {
         Bus.$off("chooselanguage")
     },
     mounted() {
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getFrontTable();
         }
         Bus.$on("changGroup", data => {

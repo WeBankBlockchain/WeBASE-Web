@@ -21,6 +21,7 @@ let axiosIns = Axios.create({
     timeout: 60 * 1000,
     headers:{
         'Cache-Control':'no-cache',
+       'X-Requested-With': 'XMLHttpRequest'
     }
 });
 // axiosIns.defaults.baseURL = 'http://127.0.0.1:3006';
