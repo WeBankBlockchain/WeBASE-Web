@@ -259,6 +259,7 @@
 import contentHead from "@/components/contentHead";
 import charts from "./components/chart";
 import {
+  getDeployType,
   getChartData,
   getNetworkStatistics,
   getNodeList,
@@ -369,13 +370,13 @@ export default {
     };
   },
   mounted: function () {
-    
+     this.getConfigType();
     this.groupId = localStorage.getItem("groupId");
     if (
       this.groupId ||
       (localStorage.getItem("configData") == 3 ||
         localStorage.getItem("deployType") == 0)
-    ) {
+    ) {            
       this.getNetworkDetails();
       this.getNodeTable();
       this.getBlockList();
@@ -403,6 +404,28 @@ export default {
      Bus.$off("changGroup");
   },
   methods: {
+        getConfigType: function () {
+      getDeployType()
+        .then((res) => {
+          if (res.data.code == 0) {
+            localStorage.setItem("deployType", res.data.data);
+         
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
     changGroup(val) {
       this.groupId = val;
       this.getNetworkDetails();
