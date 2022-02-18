@@ -520,7 +520,8 @@ export default {
   mounted: function () {
     if (
       localStorage.getItem("root") === "admin" ||
-      localStorage.getItem("root") === "developer"
+      localStorage.getItem("root") === "developer" ||
+      localStorage.getItem("groupId")
     ) {
       this.disabled = false;
     } else {
