@@ -362,7 +362,7 @@ export default {
 
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].name == '帐号管理') {
-                        list[i].menuShow = false
+                        list[i].menuShow = true
                     } else if (list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' || list[i].nameKey == 'groupManagement') {
                         list[i].menuShow = false;
                     } else {
@@ -379,7 +379,6 @@ export default {
                             if ((localStorage.getItem("deployType") == 0||localStorage.getItem("deployType") == null) && it.nameKey == 'hostMgrTitle') {
                                 it.menuShow = false;
                             }
-
                         })
                     }
                     if (list[i].nameKey == 'guide') {
