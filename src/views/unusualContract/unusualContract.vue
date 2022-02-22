@@ -15,9 +15,10 @@
  */
 <template>
     <div style="height:100%">
-        <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualContract')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
-            <div class="search-part">
+            <div class="search-part" style="padding: 20px 40px 20px 40px;">
                 <div class="search-part-left">
                     <el-tooltip effect="dark" :content="$t('transaction.unusualTips')" placement="top-start">
                         <i class="el-icon-info contract-icon font-15">Tips</i>
@@ -94,19 +95,23 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import transactionDetail from "@/components/transactionDetail";
 import { unusualContractList, getAllContractList } from "@/util/api";
 import importAbi from "../abiList/components/importAbi"
 import freezeThaw from "../chaincode/dialog/freezeThaw"
 import { getDate } from "@/util/util"
+import Bus from "@/bus"
+
 export default {
     name: "unusualContract", 
     components: {
         contentHead,
         transactionDetail,
         importAbi,
-        freezeThaw
+        freezeThaw,
+        'nav-menu':NavMenu
     },
     data() {
         return {
@@ -204,15 +209,23 @@ export default {
         }
     },
     mounted() {
-        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") || localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUnusualContractList();
         }
+   Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getUnusualContractList();
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changeDate(val) {
             const value = getDate(val)

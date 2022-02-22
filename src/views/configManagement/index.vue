@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
@@ -39,15 +40,19 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import systemConfig from "./components/systemConfig";
 import { getUserList, querySysConfig, querySysConfigList } from "@/util/api";
+import Bus from "@/bus"
+
 export default {
     name: 'ConfigManagement',
 
     components: {
         "v-content-head": contentHead,
-        systemConfig
+        systemConfig,
+        'nav-menu':NavMenu
     },
 
     props: {
@@ -121,16 +126,26 @@ export default {
 
 
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin"||localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserData()
             this.getSysConfigList()
         }
+    Bus.$on("changGroup", (item) => {
+       if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getUserData()
+            this.getSysConfigList()
+        }
+       
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
 
     methods: {
         changGroup() {

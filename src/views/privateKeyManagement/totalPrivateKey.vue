@@ -1,6 +1,6 @@
 <template>
 <div class="module-wrapper">
-    <div class="search-part">
+    <div class="search-part" style="padding:20px">
 
             <div class="search-part-right">
                 <el-input :placeholder="$t('privateKey.searchUser')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
@@ -87,12 +87,12 @@ export default {
         }
     },
     mounted() {
-        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") || localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getList()
         }
     },
@@ -240,7 +240,6 @@ export default {
             this.contractName = "";
             this.contractAddress = "";
             this.contractData = "";
-            
             this.getList()
         }
     }

@@ -1,7 +1,8 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head>
-        <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
+        <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')"></nav-menu>
+        <div class="module-wrapper" style="padding: 20px 40px 20px;">
             <span class="cns-title">{{$t('contracts.cnsTitle')}}</span>
             <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.contractName')" prop="contractName" class="item-form">
@@ -25,7 +26,7 @@
             <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
-        <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
+        <div class="module-wrapper" style="padding: 20px 40px 20px;margin-top:10px">
             <span class="cns-title">{{$t('contracts.localCnsTitle')}}</span>
             <el-table :data="localCnsList" tooltip-effect="dark" v-loading="loadingLocal" class="search-table-content">
                 <el-table-column v-for="head in localCnsHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width="head.width">
@@ -41,13 +42,17 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import { queryCnsList, findCnsInfoList } from "@/util/api";
+import Bus from "@/bus";
+
 export default {
     name: 'ConfigManagement',
 
     components: {
         "v-content-head": contentHead,
+        'nav-menu':NavMenu
     },
 
     props: {
@@ -140,15 +145,24 @@ export default {
     },
 
     mounted() {
-        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") || localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.queryLocalCns();
         }
+         Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+           this.getCnsList()
+            this.queryLocalCns()
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
 
     methods: {
         changGroup() {

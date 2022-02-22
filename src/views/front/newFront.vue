@@ -15,10 +15,11 @@
  */
 <template>
   <div>
-    <v-content-head
+    <!-- <v-content-head
       :headTitle="$t('title.nodeTitle')"
       @changGroup="changGroup"
-    ></v-content-head>
+    ></v-content-head> -->
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')"></nav-menu>
     <div class="module-wrapper">
       <h3 style="padding: 20px 0 0 40px">{{ this.$t("nodes.nodeFront") }}</h3>
       <div class="search-part" style="padding-top: 20px">
@@ -235,6 +236,7 @@
 import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import remarkNode from "./components/remarkNode";
+import navMenu from '@/components/navs/navMenu'
 import {
   getFronts,
   addnodes,
@@ -257,6 +259,8 @@ export default {
     "v-setFront": setFront,
     modifyNodeType,
     remarkNode,
+        'nav-menu':navMenu
+
   },
   watch: {
     $route() {
@@ -370,13 +374,21 @@ export default {
     },
   },
   mounted() {
-    if (localStorage.getItem("root") === "admin") {
+    if (localStorage.getItem("root") === "admin"|| localStorage.getItem("groupId")) {
       this.disabled = false;
     } else {
       this.disabled = true;
     }
     this.getFrontTable();
     this.getNodeTable();
+      Bus.$on("changGroup", () => {
+    this.getFrontTable();
+    this.getNodeTable();
+    })
+
+  },
+   destroyed() {
+     Bus.$off("changGroup");
   },
   methods: {
     getVersionList() {

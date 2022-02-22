@@ -15,10 +15,11 @@
  */
 <template>
     <div class="contract-content" v-loading='loading'>
-        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')"></nav-menu>
         <div style="height: calc(100% - 56px)">
             <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
-                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
+                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide" @langChange='langChange'>
                     <template #footer>
                         <div class="version-selector">
                             <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion">
@@ -43,12 +44,18 @@ import codes from "./components/code";
 import contentHead from "@/components/contentHead";
 import { encryption } from "@/util/api";
 import webworkify from 'webworkify-webpack'
+import NavMenu from '../../components/navs/navMenu.vue';
+import Bus from "@/bus";
+
+
 export default {
     name: "contract",
     components: {
         "v-menu": menu,
         "v-code": codes,
-        "v-content-head": contentHead
+        "v-content-head": contentHead,
+        'nav-menu':NavMenu
+
     },
     watch: {
         $route: function () {
@@ -95,6 +102,7 @@ export default {
             this.$store.state.worker.terminate()
             this.$store.state.worker = null
         }
+     Bus.$off("changGroup");
     },
     mounted: function () {
         if(localStorage.getItem("dataFrom") === "transactionDetail"){
@@ -150,8 +158,15 @@ export default {
         ];
         this.initWorker()
         this.getEncryption(this.querySolcList);  
+        Bus.$on("changGroup", () => {
+            this.$refs.menu.getContractPaths()
+    })
     },
     methods: {
+        langChange(item){
+        console.log(item);
+        item==0?this.menuWidth=330:this.menuWidth=240
+        },
         initWorker() {
             let w = webworkify(require.resolve('@/util/file.worker'));
             console.log('w:', w);
@@ -208,7 +223,7 @@ export default {
                     that.$message({
                         type: "error",
                         message: this.$t('text.versionError')
-                    });
+                    }); 
                     that.loading = false
                     console.log(ev)
                 })
@@ -318,7 +333,7 @@ export default {
 </script>
 <style scoped>
 .contract-content {
-    width: 100%;
+    width: 97%;
     height: 100%;
     font-size: 0;
 }
@@ -381,13 +396,13 @@ export default {
 }
 .version-selector {
     position: absolute;
-    top: 1px;
-    right: 5px;
+    top: 0px;
+    right: 2px;
     z-index: 1;
     box-sizing: border-box;
 }
 .version-selector >>> .el-select {
     width: 100%;
-    max-width: 118px;
+    max-width: 95px;
 }
 </style>

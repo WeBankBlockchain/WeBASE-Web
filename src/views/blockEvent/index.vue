@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.blockEvent')" @changeGroup="changeGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.blockEvent')" @changeGroup="changeGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.blockEvent')" @changeGroup="changeGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-table">
                 <el-table :data="eventList" v-loading="loading">
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import { blockEventList } from "@/util/api";
 import contentHead from "@/components/contentHead";
 import Bus from "@/bus"
@@ -25,7 +27,8 @@ export default {
     name: 'blockEvent',
 
     components: {
-        "v-content-head": contentHead
+        "v-content-head": contentHead,
+        'nav-menu':NavMenu,
     },
 
     props: {
@@ -80,10 +83,10 @@ export default {
     created() {
     },
     beforeDestroy() {
-        Bus.$off("changeGroup")
+        Bus.$off("changGroup")
     },
     mounted() {
-        Bus.$on("changeGroup", data => {
+        Bus.$on("changGroup", data => {
             this.changeGroup(data)
         })
         if (this.group && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {

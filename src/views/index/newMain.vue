@@ -36,12 +36,38 @@
                 </el-form-item>
             </el-form>
         </div>
+        <v-content-head :headTitle="$t('title.dataOverview')" ></v-content-head>
         <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
             <v-menu @sidebarChange="change($event)" :minMenu="show" ref='menu'></v-menu>
         </div>
-        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
-            <router-view class="bg-f7f7f7" @versionChange='versionChange'></router-view>
-        </div>
+         <div class="content">
+      <div
+        class="menu-wrapper header"
+        :class="{ 'menu-show': menuShow, 'menu-hide': menuHide }"
+      >
+        <v-menu
+          @sidebarChange="change($event)"
+          :minMenu="show"
+          ref="menu"
+        ></v-menu>
+      </div>
+      <div
+        class="view-wrapper"
+        :class="{
+          'view-show': menuShow,
+          'view-hide': menuHide,
+          'contentShow': contentShow,
+          viewHide: menuHide && contentShow,
+        }"
+      >
+        <router-view class="bg-f7f7f7"></router-view>
+      </div>
+      <nav-content></nav-content>
+      <!-- <div class="tipContent"></div>
+        <div class="tips">
+        <i class="el-icon-info" style="cursor:pointer" @click="tipIfShow"></i>   
+        </div> -->
+    </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
         <v-guide :show='guideShow' v-if='guideShow' @close='closeGuide'></v-guide>
     </div>
@@ -51,16 +77,22 @@
 import sidebar from "./sidebar";
 import setFront from "./dialog/setFront"
 import guide from "./dialog/guide"
-import { resetPassword, addnodes, getGroups, encryption, getGroupsInvalidIncluded, getFronts, getVersion, refreshFront } from "@/util/api";
+import contentHead from "@/components/contentHead";
+import { resetPassword, getNodeList, getConsensusNodeId, encryption, getGroupsInvalidIncluded, getFronts, getVersion, refreshFront,getNetworkStatistics,getBlockPage,getTransactionList,} from "@/util/api";
 import router from "@/router";
 const sha256 = require("js-sha256").sha256;
+import NavContent from "../../components/navs/navContent.vue";
 import utils from "@/util/sm_sha"
+import { unique } from "@/util/util";
+import Bus from "@/bus";
 export default {
     name: "newMain",
     components: {
         "v-menu": sidebar,
         "set-front": setFront,
-        'v-guide': guide
+        'v-guide': guide,
+         "v-content-head": contentHead,
+    "nav-content": NavContent,
     },
     data: function () {
         return {
@@ -78,6 +110,16 @@ export default {
                 pass: "",
                 checkPass: ""
             },
+      contentShow: false,
+        chartStatistics: {
+        show: false,
+        date: [],
+        dataArr: [],
+        chartSize: {
+          width: 0,
+          height: 0,
+        },
+      },
         };
     },
     computed: {
@@ -160,8 +202,209 @@ export default {
         this.getGroupList();
         this.getFrontTable();
         // this.getVersionList()
+          this.contentShow=false;
+    let that = this;
+    Bus.$on("navIfShow", () => {
+      console.log(that.contentShow);
+      that.contentShow = !that.contentShow;
+    });
+      Bus.$on("closeNav", () => {
+      that.contentShow = false
+    });
     },
     methods: {
+         changGroup(val) {
+            this.groupId = val
+            this.getNetworkDetails();
+            this.getNodeTable();
+            this.getBlockList();
+            this.getTransaction();
+            this.$nextTick(function () {
+                this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+                this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+                this.getChart();
+            });
+        },
+          getNetworkDetails: function () {
+            this.loadingNumber = true;
+            let groupId = this.groupId;
+            getNetworkStatistics(groupId)
+                .then(res => {
+                    this.loadingNumber = false;
+                    if (res.data.code === 0) {
+                        this.detailsList.forEach(function (value, index) {
+                            for (let i in res.data.data) {
+                                if (value.name === i) {
+                                    value.value = res.data.data[i];
+                                }
+                            }
+                        });
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        getChart: function () {
+            this.loadingCharts = true;
+            this.chartStatistics.show = false;
+            this.chartStatistics.date = [];
+            this.chartStatistics.dataArr = [];
+            let groupId = localStorage.getItem("groupId");
+            getChartData(groupId)
+                .then(res => {
+                    this.loadingCharts = false;
+                    if (res.data.code === 0) {
+                        let resData = changWeek(res.data.data);
+                        for (let i = 0; i < resData.length; i++) {
+                            this.chartStatistics.date.push(resData[i].day);
+                            this.chartStatistics.dataArr.push(
+                                resData[i].transCount
+                            );
+                        }
+                        this.$set(this.chartStatistics, "show", true);
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        getNodeTable: function () {
+            this.loadingNodes = true;
+            let groupId = localStorage.getItem("groupId");
+            let reqData = {
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 100
+            },
+                reqQuery = {},
+
+                reqParam = {
+                    groupId: groupId,
+                    pageNumber: 1,
+                    pageSize: 100
+                };
+            this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
+                .then(this.$axios.spread((acct, perms) => {
+                    this.loadingNodes = false;
+                    if (acct.data.code === 0 && perms.data.code === 0) {
+                        var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
+                        var nodesStatusIdList = nodesStatusList.map(item => {
+                            return item.nodeId
+                        })
+                        this.nodeData = [];
+                        nodesAuthorList.forEach((item, index) => {
+                            if (item.nodeType != 'remove') {
+                                nodesStatusList.forEach(it => {
+                                    if (nodesStatusIdList.includes(item.nodeId)) {
+                                        if (item.nodeId === it.nodeId) {
+                                            this.nodeData.push(Object.assign({}, item, it))
+                                        }
+                                    } else {
+                                        this.nodeData.push(item)
+                                    }
+                                })
+                            }
+
+                        })
+                        this.nodeData.forEach(item => {
+                            if (item.nodeType === "observer") {
+                                item.pbftView = '--';
+                            }
+                        });
+                        this.nodeData = unique(this.nodeData, 'nodeId')
+                    } else {
+                        this.nodeData = [];
+                    }
+
+
+                }))
+        },
+        getBlockList: function () {
+            this.loadingBlock = true;
+            let groupId = localStorage.getItem("groupId");
+            let reqData = {
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 6
+            },
+                reqQuery = {};
+            getBlockPage(reqData, reqQuery)
+                .then(res => {
+                    this.loadingBlock = false;
+                    if (res.data.code === 0) {
+                        this.blockData = res.data.data;
+                    } else {
+
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
+        getTransaction: function () {
+            this.loadingTransaction = true;
+            let groupId = localStorage.getItem("groupId");
+            let reqData = {
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 6
+            },
+                reqQuery = {};
+            getTransactionList(reqData, reqQuery)
+                .then(res => {
+                    this.loadingTransaction = false;
+                    if (res.data.code === 0) {
+                        this.transactionList = res.data.data;
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+
+                });
+        },
         getRefreshFront() {
             refreshFront().then(res => {
                 console.log(res)
@@ -383,49 +626,53 @@ export default {
     clear: both;
 }
 .menu-wrapper {
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 1;
+    height: 96%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 998;
+  position: fixed;
+  left: 0;
 }
 .view-wrapper {
-    height: 100%;
+    height: 95%;
     padding-left: 200px;
+    overflow: scroll;
+}
+.contentShow {  
+  width: calc(100% - 520px) ;
+}
+.viewHide {
+  width: calc(100% - 376px) !important;
 }
 .menu-show {
-    width: 200px;
-    transition: width 0.5s;
-    -moz-transition: width 0.5s;
-    -webkit-transition: width 0.5s;
-    -o-transition: width 0.5s;
+  width: 200px;
+  display: inline-block;
+  transition: width 0.5s;
+  -moz-transition: width 0.5s;
+  -webkit-transition: width 0.5s;
+  -o-transition: width 0.5s;
 }
 .menu-hide {
-    /* width: 56px; */
-    width: 56px;
-    transition: width 0.5s;
-    -moz-transition: width 0.5s;
-    -webkit-transition: width 0.5s;
-    -o-transition: width 2s;
+  width: 56px;
+  /* width: 56px; */
+  display: inline-block;
+  transition: width 0.5s;
+  -moz-transition: width 0.5s;
+  -webkit-transition: width 0.5s;
+  -o-transition: width 0.5s;
 }
 .view-show {
-    /* padding-left: 200px; */
-    width: calc(100% - 200px);
-    transition: width 0.5s;
-    -moz-transition: width 0.5s;
-    -webkit-transition: width 0.5s;
-    -o-transition: width 0.5s;
+  padding-left: 200px;
+  width: calc(100% - 200px);
+  transition: width 0.5s
 }
 .view-hide {
-    padding-left: 56px;
-    /* width: calc(100% - 56px); */
-    transition: width 0.5s;
-    -moz-transition: width 0.5s;
-    -webkit-transition: width 0.5s;
-    -o-transition: width 2s;
+  width: calc(100% - 56px);
+  padding-left: 56px;
+  transition: width 0.5s;
+  -moz-transition: width 0.5s;
+  -webkit-transition: width 0.5s;
+  -o-transition: width 0.5s;
 }
 #shade {
     position: absolute;
@@ -481,5 +728,11 @@ export default {
 }
 .demo-ruleForm {
     padding-right: 25px;
+}
+.content {
+  width: 100%;
+  height: calc(100vh - 56px);
+  padding-top: 56px;
+  display: flex;
 }
 </style>

@@ -20,7 +20,7 @@
                 <el-input v-model="accountForm.name" :placeholder="$t('system.inputUser')" maxlength="12" :disabled="accountForm['disabled']"></el-input>
             </el-form-item>
             <el-form-item :label="$t('login.password')" prop="password" style="width: 300px;" v-if="accountForm['dShow']">
-                <el-input v-model="accountForm.password" :placeholder="$t('inputText.password')" minlength="6" maxlength="12" :type="inputType">
+                <el-input v-model="accountForm.password" :placeholder="$t('inputText.newPassword')" minlength="6" maxlength="12" :type="inputType">
                     <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']" @click.stop.prevent="showPassword"></i>
                 </el-input>
             </el-form-item>
@@ -90,12 +90,25 @@ export default {
                     case "modify":
                         this.accountForm = {
                             name: this.accountDialogOptions.data["account"],
-                            password: "",
+                            password:this.accountDialogOptions.data["accountPwd"],
                             role: this.accountDialogOptions.data["roleId"],
                             disabled: true,
                             mDisabled: false,
                             dShow: true,
                             mShow: false,
+                            // email: this.accountDialogOptions.data["email"],
+                            // emailshow: true
+                        };
+                        break;
+                         case "email":
+                        this.accountForm = {
+                             name: this.accountDialogOptions.data["account"],
+                            // password:this.accountDialogOptions.data["accountPwd"],
+                             role: this.accountDialogOptions.data["roleId"],
+                            disabled: true,
+                            mDisabled: false,
+                            // dShow: true,
+                            // mShow: false,
                             email: this.accountDialogOptions.data["email"],
                             emailshow: true
                         };
@@ -243,6 +256,9 @@ export default {
                 case "delete":
                     this.getDeleteAccountInfo();
                     break;
+                case "email":
+                    this.getModifyEmailInfo();
+                    break;
             }
         },
         getCreatAccountInfo: function () {
@@ -301,6 +317,57 @@ export default {
             let reqData = {
                 account: this.accountForm.name,
                 accountPwd: sha256(this.accountForm.password),
+                roleId: this.accountForm.role,
+            };
+            // if(localStorage.getItem("encryptionId") == 1){
+            //     reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password)
+            // }else{
+            //     reqData.accountPwd = sha256(this.accountForm.password)
+            // }
+            if (this.accountForm.email) {
+                let pattern = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+                if (!pattern.test(this.accountForm.email)) {
+                    this.$message({
+                        type: "error",
+                        message: this.$t('account.emailTypeError')
+                    });
+                    this.loading = false;
+                    return
+                } else {
+                    reqData.email = this.accountForm.email
+                }
+            }
+            modifyAccountInfo(reqData, {})
+                .then(res => {
+                    this.loading = false;
+                    if (res.data.code === 0) {
+                        this.$message({
+                            type: "success",
+                            message: this.$t('text.updateSuccessMsg')
+                        });
+                        this.modelClose();
+                        this.$emit("success");
+                    } else {
+                        this.modelClose();
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.modelClose();
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+        },
+         getModifyEmailInfo: function () {
+            let reqData = {
+                account: this.accountForm.name,
                 roleId: this.accountForm.role,
             };
             // if(localStorage.getItem("encryptionId") == 1){

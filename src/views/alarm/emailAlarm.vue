@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.emailAlarmConfig')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.emailAlarmConfig')" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('alarm.alarmCofig')" :headSubTitle="$t('alarm.emailAlarmConfig')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="emailForm" :rules="rules" ref="emailForm" label-width="150px" class="demo-ruleForm">
                 <el-form-item :label="$t('alarm.agreementType')" prop="serverType" style="width: 420px;display: inline-block">
@@ -41,11 +42,15 @@
 import { getEmailList, changeEmailConfig, testEmail } from "@/util/api"
 import errcode from "@/util/errcode"
 import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 let Base64 = require("js-base64").Base64;
+import Bus from "@/bus"
+
 export default {
     name: "emailAlarm",
     components: {
         "v-content-head": contentHead,
+        'nav-menu':NavMenu
     },
     data: function () {
         return {
@@ -128,7 +133,13 @@ export default {
     },
     mounted: function () {
         this.getEmailConfig();
+   Bus.$on("changGroup", (item) => {
+           this.getEmailConfig()
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changGroup: function () {
 

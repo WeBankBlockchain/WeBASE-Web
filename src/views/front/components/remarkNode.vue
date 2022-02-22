@@ -7,13 +7,13 @@
       label-width="110px"
       class="demo-ruleForm"
     >
-      <el-form-item :label="$t('nodes.ip')" prop="nodeIp" style="width: 320px">
+      <el-form-item :label="$t('nodes.nodeIp')" prop="nodeIp" style="width: 320px">
         <el-input v-model="remarkForm.nodeIp"></el-input>
       </el-form-item>
       <el-form-item :label="$t('text.org')" prop="agency" style="width: 320px">
         <el-input v-model="remarkForm.agency"></el-input>
       </el-form-item>
-      <p class="info" v-if="deployType == 1">{{ $t("nodes.notice") }}</p>
+      <!-- <p class="info" v-if="deployType == 1">{{ $t("nodes.notice") }}</p> -->
       <el-form-item
         :label="$t('system.address')"
         prop="city"
@@ -49,7 +49,7 @@ import {
   CodeToText,
   TextToCode,
 } from "element-china-area-data";
-import { getUserList, consensusNodeId, putCityIpAengcy } from "@/util/api";
+import { getUserList, consensusNodeId, putCityIpAengcy,getNodeInfo } from "@/util/api";
 export default {
   name: "remarkNodeType",
 
@@ -77,18 +77,21 @@ export default {
           name: this.$t("nodes.observer"),
         },
         {
+
+
           type: "remove",
           name: this.$t("nodes.remove"),
         },
       ],
       remarkForm: {
-        nodeIp: this.remarkNode.nodeIp,
+        nodeIp: this.remarkNode.frontIp,
         agency: this.remarkNode.agency,
         city: this.remarkNode.city
           ? [this.remarkNode.city.substr(0, 3) + "000", this.remarkNode.city]
           : "",
       },
       nodeId: this.remarkNode.nodeId,
+      groupId: localStorage.getItem("groupId"),
       deployType: null,
       ruleTest: this.$t("rule.adminRule"),
       rules: {
@@ -141,7 +144,7 @@ export default {
     } else {
       this.deployType = 0;
     }
-    this.getUserData();
+    this.getNodeInfo();
   },
 
   methods: {
@@ -201,31 +204,25 @@ export default {
     changeRivateKey(val) {
       this.adminRivateKey = val;
     },
-    getUserData: function () {
-      let reqData = {
-        groupId: localStorage.getItem("groupId"),
-        pageNumber: 1,
-        pageSize: 1000,
-      };
-      let query = {};
-      if (localStorage.getItem("root") === "developer") {
-        query.account = localStorage.getItem("user");
-      }
-      getUserList(reqData, query)
+    getNodeInfo: function () {
+      getNodeInfo(this.groupId, this.nodeId)
         .then((res) => {
           if (res.data.code === 0) {
-            if (res.data.data.length === 0) {
-              this.ruleTest = this.$t("text.ruleAddUser");
-            }
-            this.adminRivateKeyList = [];
-            res.data.data.forEach((value) => {
-              if (value.hasPk === 1) {
-                this.adminRivateKeyList.push(value);
-              }
-            });
-            if (this.adminRivateKeyList.length)
-              this.remarkForm.adminRivateKey =
-                this.adminRivateKeyList[0]["address"];
+            this.remarkForm.nodeIp=res.data.data.nodeIp
+            this.remarkForm.agency=res.data.data.agency
+            this.remarkForm.city=res.data.data.city
+            // if (res.data.data.length === 0) {
+            //   this.ruleTest = this.$t("text.ruleAddUser");
+            // }
+            // this.adminRivateKeyList = [];
+            // res.data.data.forEach((value) => {
+            //   if (value.hasPk === 1) {
+            //     this.adminRivateKeyList.push(value);
+            //   }
+            // });
+            // if (this.adminRivateKeyList.length)
+            //   this.remarkForm.adminRivateKey =
+            //     this.adminRivateKeyList[0]["address"];
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -233,8 +230,7 @@ export default {
               duration: 2000,
             });
           }
-        })
-        .catch((err) => {
+        }).catch((err) => {
           this.$message({
             message: err.data || this.$t("text.systemError"),
             type: "error",

@@ -1,8 +1,9 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')"></nav-menu>
         <div class="module-wrapper">
-            <div class="search-part" style="display: flex;">
+            <div class="search-part" style="display: flex;padding:20px 40px">
                 <div class="search-part-left">
                     <el-upload ref="upload" multiple action :limit="10" accept=".crt,.cer,.der" :http-request="uploadCrt" :before-upload="onBeforeUpload" :on-exceed="onUploadExceed">
                         <el-button size="small" type="primary" :disabled="disabled">{{this.$t('system.addCertificate')}}</el-button>
@@ -64,18 +65,22 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import frontDialog from "./components/frontDialog";
 import { deleteCert, certList, exportCert, importCert, exportCertSdk, getFronts } from "@/util/api";
 import { format } from "@/util/util";
 import JSZip from 'jszip'
 import FileSaver from 'file-saver'
+import Bus from "@/bus"
+
 export default {
     name: 'Certificate',
 
     components: {
         "v-content-head": contentHead,
-        frontDialog
+        frontDialog,
+        'nav-menu':NavMenu,
     },
 
     props: {
@@ -152,17 +157,25 @@ export default {
     },
 
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin"||localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getCertList()
         }
         this.queryFronts()
+    Bus.$on("changGroup", (item) => {
+    if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            this.getCertList()
+        }
+        this.queryFronts()
+    })
     },
-
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changGroup() {
 

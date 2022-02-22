@@ -63,6 +63,7 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     color: #2E384D;
     min-width: 1280px;
+    overflow: hidden;
 }
 ul,
 li {

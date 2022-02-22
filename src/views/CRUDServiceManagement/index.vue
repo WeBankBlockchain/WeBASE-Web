@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.adminUser')" prop="adminRivateKey" class="item-form">
@@ -68,6 +69,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import ace from "ace-builds";
 // import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/ext-language_tools";
@@ -77,12 +79,15 @@ import "ace-builds/src-noconflict/mode-sql";
 import contentHead from "@/components/contentHead";
 import { getUserList, queryCrudService } from "@/util/api";
 import creatUser from "@/views/privateKeyManagement/components/creatUser";
+import Bus from "@/bus";
+
 export default {
     name: 'ConfigManagement',
 
     components: {
         "v-content-head": contentHead,
          "v-creatUser": creatUser,
+        'nav-menu':NavMenu
     },
 
     props: {
@@ -118,16 +123,29 @@ export default {
     },
 
     mounted() {
-        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") || localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
         this.initEditor()
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getUserData()
         }
+        Bus.$on("changGroup", (item) => {
+          if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+           this.getUserData()
+            this.sqlForm = {
+                adminRivateKey: ''
+            }
+            this.aceEditor.setValue('')
+            this.runSqlResult = ""
+        }
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
 
     methods: {
         changGroup() {

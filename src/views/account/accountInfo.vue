@@ -15,7 +15,8 @@
  */
 <template>
     <div class="account-wrapper">
-        <content-head :headTitle="$t('title.accountManagement')"></content-head>
+        <!-- <content-head :headTitle="$t('title.accountManagement')"></content-head> -->
+        <nav-menu :headTitle="$t('title.accountManagement')"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part">
                 <div class="search-part-left">
@@ -32,7 +33,8 @@
                             </template>
                             <template v-else>
                                 <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')" style="color:#ed5454">{{$t('text.delete')}}</el-button>
-                                <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">{{$t('text.update')}}</el-button>
+                                <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">{{$t('text.updatePassword')}}</el-button>
+                                <el-button type="text" size="small" @click="modifyEmail(scope.row,'email')">{{$t('text.email')}}</el-button>
                             </template>
                         </template>
 
@@ -55,11 +57,15 @@
 import contentHead from "@/components/contentHead";
 import { accountList, modifyAccountInfo } from "@/util/api";
 import accountDialog from "./components/accountDialog";
+import NavMenu from '../../components/navs/navMenu.vue';
+import Bus from "@/bus"
+
 export default {
     name: "accountList",
     components: {
         contentHead,
-        accountDialog
+        accountDialog,
+        'nav-menu':NavMenu,
     },
     data() {
         return {
@@ -97,8 +103,14 @@ export default {
             return data
         }
     },
+     beforeDestroy() {
+        Bus.$off("changGroup")
+    },
     mounted() {
         this.getAccountList();
+         Bus.$on("changGroup", data => {
+            this.getAccountList()
+        })
     },
     methods: {
         success() {
@@ -175,6 +187,14 @@ export default {
             }
             this.accountDialogVisible = true
             this.accountDialogTitle = this.$t('account.updataAccount')
+        },
+        modifyEmail(val, type) {
+            this.accountDialogOptions = {
+                type: type,
+                data: val
+            }
+            this.accountDialogVisible = true
+            this.accountDialogTitle = this.$t('account.updataEmail')
         },
         translate(val) {
             var str = '';

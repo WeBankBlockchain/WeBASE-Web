@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import addFront from "@/../static/image/add-front.png";
-import addUser from "@/../static/image/add-user.png";
-import createContract from "@/../static/image/create-contract.png";
+import addFront from "../../../../static/image/add-front.png";
+import addUser from "../../../../static/image/add-user.png";
+import createContract from "../../../../static/image/create-contract.png";
 export default {
     name: "guide",
     props: ['show'],

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-head :headTitle="$t('title.abiList')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.abiList')" @changGroup="changGroup"></content-head> -->
         <div class="module-wrapper">
             <div class="search-table">
                 <div class="search-part-left" style="padding-top: 20px;">
@@ -133,12 +133,12 @@ export default {
     },
 
     mounted() {
-        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") && localStorage.getItem("groupId")) {
+        if ((localStorage.getItem("root") === "admin" || localStorage.getItem("root") === "developer") || localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem('groupId') && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        if (localStorage.getItem('groupId') || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.queryAbiList()
         }
     },

@@ -15,7 +15,8 @@
  */
 <template>
     <div class="front-module">
-        <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head> -->
+        <nav-menu :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')"></nav-menu>
         <!-- <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
@@ -26,7 +27,7 @@
                 </div>
         </div> -->
         <div class="module-wrapper">
-            <div class="search-part" style="padding-top: 30px;" v-if='!disabled'>
+            <div class="search-part" style="padding-top: 20px;" v-if='!disabled'>
                 <div class="search-part-left">
                     <!-- <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button> -->
                     <el-button type="primary" class="search-part-left-btn" :disabled="!(configData && configData.chainStatus == 3)" @click="createFront">{{$t('text.addNode')}}</el-button>
@@ -111,6 +112,7 @@
                                 <el-button v-if='scope.row.status == 5 || ((scope.row.nodeType == "remove" || !scope.row.nodeType) && scope.row.status == 2 && (configData && configData.chainStatus  == 3))' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleted(scope.row)">{{$t("text.delete")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyNodeType(scope.row)">{{$t("text.update")}}</el-button>
                                 <el-button v-if='scope.row.status == 1 && (configData && configData.chainStatus  == 3)' :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="restartNode(scope.row)">{{$t("text.restart")}}</el-button>
+                                <el-button   type="text" size="small" :style="{'color': disabled?'#666':''}" @click="remarks(scope.row)">{{$t("text.remarks")}}</el-button>
                             </template>
                             <template v-else>
                                 <span>{{scope.row[head.enName]}}</span>
@@ -121,6 +123,7 @@
                 </el-table>
                 <v-setFront :show='frontShow' v-if='frontShow' :showClose='true' @close='close'></v-setFront>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
+                    
                     <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
                 </el-dialog>
                 <add-node v-if='addNodeShow' :show='addNodeShow' @close='addNodeClose'></add-node>
@@ -129,6 +132,19 @@
                 <!-- <delete-node v-if='deleteNodeShow' :show='deleteNodeShow' @close='deleteNodeClose' :data='nodeData'></delete-node> -->
                 <set-config :show='configShow' v-if='configShow' @close='closeConfig' @success='successConfig'></set-config>
                 <host-info v-if='hostInfoShow' :show='hostInfoShow' @close='hostInfoClose'></host-info>
+                   <el-dialog
+          :title="$t('text.remarks')"
+          :visible.sync="remarkDialogVisible"
+          width="500px"
+          v-if="remarkDialogVisible"
+          center
+        >
+          <remark-node
+            @nodeRemarkClose="nodeRemarkClose"
+            @nodeRemarkSuccess="nodeRemarkSuccess"
+            :remarkNode="remarkNode"
+          ></remark-node>
+        </el-dialog>
             </div>
         </div>
     </div>
@@ -150,8 +166,10 @@ import addNode from "./dialog/addNode"
 import newNode from "./dialog/newNode"
 import updateNode from "./dialog/updateNode"
 import Bus from "@/bus"
-import guideImg from "@/../static/image/guide.69e4d090.png"
+import guideImg from "../../../static/image/guide.69e4d090.png"
 import hostInfo from "./dialog/hostInfo"
+import remarkNode from "./components/remarkNode";
+import navMenu from '@/components/navs/navMenu'
 export default {
     name: "node",
     components: {
@@ -162,7 +180,9 @@ export default {
         'new-node': newNode,
         'update-node': updateNode,
         'set-config': setConfig,
-        "host-info": hostInfo
+        "host-info": hostInfo,
+        remarkNode,
+        'nav-menu':navMenu
     },
     watch: {
         $route() {
@@ -211,7 +231,8 @@ export default {
             chainList: null,
             hostInfoShow: false,
             loadingTxt: this.$t('text.loading'),
-            optShow: false
+            optShow: false,
+            remarkDialogVisible: false,
         };
     },
     computed: {
@@ -314,6 +335,18 @@ export default {
         this.getData();
     },
     methods: {
+      remarks(param) {
+      this.remarkNode = param;
+      this.remarkDialogVisible = true;
+    },
+     nodeRemarkClose() {
+      this.remarkDialogVisible = false;
+    },
+    nodeRemarkSuccess() {
+      this.remarkDialogVisible = false;
+      this.getFrontTable();
+      this.getNodeTable();
+    },
         changeDate(val) {
             let data;
             data = format(val, "yyyy-MM-dd HH:mm:ss")
@@ -435,7 +468,9 @@ export default {
                         clearInterval(this.frontInterval)
                         localStorage.setItem("configData", 0)
                     }
+                    this.loadingNodes = false;
                     this.getFrontTable();
+                    this.getNodeTable()
                 } else {
                     clearInterval(this.progressInterval)
                     clearInterval(this.frontInterval)
@@ -1009,10 +1044,17 @@ export default {
                                 item.nodeActive = 1;
                             }
                         });
-                        this.nodeData = unique(this.nodeData, 'nodeId')
+                        this.nodeData = unique(this.nodeData, 'nodeId');
+                        console.log(this.frontData)
+                        this.nodeData.forEach((item,index)=>{
+                        // this.frontData[index].nodeIp=item.nodeIp?item.nodeIp:this.frontData[index].frontIp;
+                        // this.frontData[index].city=item.city;
+                        })
                     } else {
                         this.nodeData = [];
                     }
+                     this.loadingNodes = false;
+
 
                 }))
         },
@@ -1097,7 +1139,7 @@ export default {
     height: 100%;
 }
 .search-part {
-    padding: 30px 41px 18px 42px;
+    /* padding: 30px 41px 18px 42px; */
     overflow: hidden;
 }
 .search-part::after {

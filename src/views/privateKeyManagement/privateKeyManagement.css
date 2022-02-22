@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 .search-part {
-    padding: 30px 41px 18px 42px;
+    padding: 20px;
     overflow: hidden;
 }
 .search-part::after {

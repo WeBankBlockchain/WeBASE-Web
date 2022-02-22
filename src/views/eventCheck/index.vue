@@ -1,6 +1,7 @@
 <template>
     <div class="rivate-key-management-wrapper">
-        <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part ">
                 <el-form :model="contractEventForm" :rules="rules" ref="contractEventForm" class="demo-ruleForm" label-width="110px">
@@ -21,6 +22,9 @@
                         <el-form-item :label="$t('table.toBlock')" prop="toBlock">
                             <el-input v-model.number="contractEventForm.toBlock" clearable style="width: 195px;"></el-input>
                         </el-form-item>
+                        <el-tooltip effect="dark" :content="$t('transaction.blockTips')" placement="top-start"  style="margin-top: 20px;">
+                        <i class="el-icon-info contract-icon font-15"></i>
+                    </el-tooltip>
                     </div>
                     <el-form-item :label="$t('table.eventName')" prop="eventName" class="event-option">
                         <el-select v-model="contractEventForm.eventName" :placeholder="$t('placeholder.selected')" style="width: 500px;" @change="changeEventName" class="event-name">
@@ -66,6 +70,7 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import contentHead from "@/components/contentHead";
 import decodeLog from "@/components/decodeLog";
 import { contractFindOne, contractListAll, checkEvent, getNetworkStatistics, listAddress, eventContractInfo } from "@/util/api"
@@ -78,7 +83,8 @@ export default {
 
     components: {
         contentHead,
-        decodeLog
+        decodeLog,
+        'nav-menu':NavMenu
     },
 
     props: {
@@ -122,16 +128,16 @@ export default {
                 }
             }
             var validateBlock = (rule, value, callback) => {
-                if (value == '' || value == undefined || value == null) {
+                if (value === '' || value == undefined || value == null) {
                     callback();
                 } else {
                     if (!Number.isInteger(value)) {
                         callback(new Error(this.$t('rule.inputIsNumber')));
                     } else {
-                        if (value <= 0) {
-                            callback(new Error(this.$t('rule.blockNumber')));
-                        } else {
+                        if (value > 0||value==-1) {
                             callback();
+                        } else {
+                            callback(new Error(this.$t('rule.blockNumber')));
                         }
                     }
                 }
@@ -235,8 +241,16 @@ export default {
         if (localStorage.getItem("groupId")) {
             this.queryInit()
         }
+        Bus.$on("changGroup", (item) => {
+            this.groupId=item;
+          if (localStorage.getItem("groupId")) {
+           this.queryInit()
+        }
+    })
     },
-
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         queryInit() {
             if (this.$route.query.type) {
@@ -378,7 +392,9 @@ export default {
                             return
                         }
                         eventList.forEach(item => {
+                            if(item!=null){
                             newEventList.push(item)
+                            }
                         })
                         if (newEventList && newEventList.length) {
                             newEventList.forEach(item => {
@@ -568,5 +584,11 @@ export default {
     position: absolute;
     top: 100%;
     left: 0;
+}
+.el-form-item{
+    margin: 10px 0 20px 0;
+}
+.search-part{
+    padding: 0;
 }
 </style>

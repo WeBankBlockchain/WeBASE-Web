@@ -1,6 +1,7 @@
 <template>
     <div>
-        <content-head :headTitle="$t('title.appManagement')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.appManagement')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.appManagement')" ></nav-menu>
         <div class="module-wrapper">
             <div class="desc-wrapper">
                 <p class="desc-content">
@@ -75,7 +76,7 @@
                 </div>
             </div>
         </div>
-        <div class="module-wrapper">
+        <div class="module-wrapper" style="margin-top: 10px;">
             <div class="desc-wrapper">
                 <div style="margin-top: 0px;">
                     <p class="access-process">
@@ -142,13 +143,17 @@ import ContentHead from "@/components/contentHead";
 import { fetchAppList, fetchAppServerInfo, fetchDeleteApp } from "@/util/api";
 import AppDialog from './components/appDialog.vue';
 import RegisterDialog from './components/registerDialog.vue';
+import NavMenu from '../../components/navs/navMenu.vue';
+
 
 export default {
     name: "AppManagement",
     components: {
         ContentHead,
         AppDialog,
-        RegisterDialog
+        RegisterDialog,
+        'nav-menu':NavMenu,
+
     },
     data() {
         return {
@@ -171,7 +176,7 @@ export default {
         clearInterval(this.timer)
     },
     mounted() {
-        if (localStorage.getItem("root") === "admin") {
+        if (localStorage.getItem("root") === "admin"||localStorage.getItem("groupId")) {
             this.disabled = false
         } else {
             this.disabled = true
@@ -298,7 +303,7 @@ export default {
 </script>
 <style scoped>
 .desc-wrapper {
-    padding: 24px;
+    padding: 20px;
 }
 .desc-content {
     padding: 13px 14px;

@@ -16,6 +16,12 @@
 
 /* customize class */
 
+.el-tooltip__popper{
+    font-size: 14px;
+     max-width:50% !important;
+     max-height:40% !important;
+   overflow: hidden;
+}
 .span-ellipsis {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -45,7 +51,7 @@
 
 .module-wrapper {
     min-width: 540px;
-    margin: 15px 15px 0 15px;
+    /* margin: 0 15px 0 15px; */
     background-color: #fff;
     box-shadow: 0 4px 12px 0 #dfe2e9;
     border-radius: 10px;
@@ -210,6 +216,7 @@
 
 .bg-f7f7f7 {
     background-color: #f7f7f7;
+    margin:0 24px 0 24px
 }
 
 .cursor-context-menu {
@@ -231,11 +238,11 @@
 }
 
 .search-table {
-    padding: 0 40px 0 41px;
+    padding: 0 40px 0 40px;
 }
 
 .search-part {
-    padding: 30px 41px 18px 42px;
+    padding:0 40px 0 40px;
     overflow: hidden;
 }
 
@@ -317,6 +324,7 @@
     color: #fff;
     background-color: #20D4D9 !important;
     border-color: #20D4D9 !important;
+    border-radius: 20px;
 }
 
 .el-button--primary.is-active, .el-button--primary:active, .el-button--primary:focus, .el-button--primary:hover {
@@ -381,7 +389,8 @@
 }
 
 .el-dialog__header {
-    padding-bottom: 0;
+    padding: 24px 24px 0 24px;
+    text-align: left;
 }
 
 .el-dialog__title {
@@ -392,8 +401,10 @@
 }
 
 .el-dialog__body {
-    padding-top: 20px;
-    padding-bottom: 20px;
+   padding: 24px 24px 0 24px !important;
+   max-height: 500px;
+   margin-bottom: 24px;
+   overflow-y: scroll;
 }
 
 /* element-ui select*/
@@ -472,6 +483,9 @@ td {
 
 .el-submenu__title {
     text-align: left;
+}
+.el-menu-item{
+    color:white
 }
 
 .el-menu-item-group__title {

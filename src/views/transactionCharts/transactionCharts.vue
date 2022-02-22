@@ -15,7 +15,8 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="more-search-table search-min-width">
                 <div class="text-left">
@@ -54,9 +55,12 @@
 </template>
 
 <script>
+import NavMenu from '../../components/navs/navMenu.vue';
 import charts from "./components/chart";
 import contentHead from "@/components/contentHead";
 import { format, completionDateData } from "@/util/util";
+import Bus from "@/bus"
+
 import {
     monitorUserList,
     monitorUserInterfaceList,
@@ -66,7 +70,8 @@ export default {
     name: "transactionCharts",
     components: {
         "v-content-head": contentHead,
-        "v-chart": charts
+        "v-chart": charts,
+        'nav-menu':NavMenu
     },
     data() {
         return {
@@ -140,13 +145,26 @@ export default {
         this.$nextTick(() => {
             this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
             this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
-            if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+            if (localStorage.getItem("groupId") || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
                 this.getMonitorTransactionInfo();
                 this.getMonitorUserList();
             }
 
         });
+    Bus.$on("changGroup", (item) => {
+            this.groupId = item
+            this.userName = ""
+            this.$nextTick(() => {
+                this.chartStatistics.chartSize.width = this.$refs.chart.offsetWidth;
+                this.chartStatistics.chartSize.height = this.$refs.chart.offsetHeight;
+                this.getMonitorTransactionInfo();
+                this.getMonitorUserList();
+            });
+    })
     },
+     destroyed() {
+     Bus.$off("changGroup");
+  },
     methods: {
         changGroup(val) {
             this.groupId = val

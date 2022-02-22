@@ -1,6 +1,6 @@
 <template>
     <div>
-        <content-head :headTitle="$t('title.onlineTools')"></content-head>
+        <!-- <content-head :headTitle="$t('title.onlineTools')"></content-head> -->
         <div class="module-wrapper" style="padding: 20px 20px 20px 20px;">
             <el-tabs v-model="activeName" @tab-click="handleClick">
                 <el-tab-pane :label="$t('onlineTools.onlineHashCalculator')" name="first">
