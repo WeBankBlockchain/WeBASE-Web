@@ -203,7 +203,6 @@ import { sendTransation, getUserList, findCnsInfo } from "@/util/api";
 import errcode from "@/util/errcode";
 import { isJson } from "@/util/util";
 import creatUser from "@/views/privateKeyManagement/components/creatUser";
-
 export default {
   components: {
     "v-creatUser": creatUser,
@@ -572,14 +571,12 @@ export default {
           if (this.pramasData[i].type == key) rules.push(this.ruleForms[key]);
         }
       }
-
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {
           functionName = value.name;
         }
       });
-
       let data = {
         groupId: localStorage.getItem("groupId"),
         user:
