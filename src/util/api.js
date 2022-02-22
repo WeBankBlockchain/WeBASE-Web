@@ -282,6 +282,26 @@ export function getUserList(data, list) {
         }
     })
 }
+/**get nodeInfo */
+export function getNodeInfo(groupId,nodeId) {
+    return get({
+        url: `${url.ORG_LIST}/node/nodeInfo/${groupId}/${nodeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })                                                                             
+}
+/** nodeCity query node*/
+export function getCityList(data) {
+    return get({
+        url: `${url.ORG_LIST}/node/city/list`,
+        method: 'get',      
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 /**add users */
 export function getAddUser(data) {
     return post({
@@ -2195,6 +2215,17 @@ export function queryChannelIP(data) {
     return get({
         url: `${url.ORG_LIST}/scaffold/check?nodeIp=`+data.nodeIp+'&channelPort='+data.channelPort,
         method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function putCityIpAengcy(data) {
+    return put({
+        url: `${url.ORG_LIST}/node/description`,
+        method: 'put',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

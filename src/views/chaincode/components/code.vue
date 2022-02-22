@@ -133,7 +133,7 @@
                 </div>
             </div>
         </div>
-        <el-dialog v-dialogDrag :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
+        <el-dialog v-dialogDrag :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" top='' width="600px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <v-transaction @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiFile' :version='version' :address='uploadAddress'></v-transaction>
         </el-dialog>
         <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="550px" v-if="dialogUser" center class="send-dialog">
@@ -163,7 +163,8 @@ import ace from "ace-builds";
 // require("ace-builds/webpack-resolver");
 import "ace-builds/webpack-resolver";
 import "ace-builds/src-noconflict/theme-chrome";
-import "ace-builds/src-noconflict/mode-javascript";
+ import "ace-builds/src-noconflict/mode-javascript";
+//import "ace-builds/src-noconflict/mode-rust";
 import "ace-builds/src-noconflict/ext-language_tools";
 require("ace-mode-solidity/build/remix-ide/mode-solidity");
 let Mode = require("ace-mode-solidity/build/remix-ide/mode-solidity").Mode;
@@ -279,7 +280,8 @@ export default {
                         trigger: "blur",
                     },
                 ]
-            }
+            },
+            dialogHeight:''
         };
     },
     beforeDestroy: function () {
@@ -365,6 +367,7 @@ export default {
             localStorage.setItem("isFinishCompile", "no")
             this.compile() 
         })
+        this.dialogHeight=document.body.clientHeight;
     },
     watch: {
         content: function (val) {
@@ -381,6 +384,9 @@ export default {
             } else {
                 this.infoHeight = 0;
             }
+        },
+        dialogHeight:function (val) {
+            console.log(val)
         }
     },
     computed: {
@@ -419,6 +425,7 @@ export default {
         },
         initEditor: function () {
             let _this = this
+            ace.require("ace/ext/language_tools");
             this.aceEditor = ace.edit(this.$refs.ace, {
                 fontSize: 14,
                 fontFamily: "Consolas,Monaco,monospace",
@@ -428,12 +435,13 @@ export default {
                 tabSize: 4,
                 useSoftTabs: true
             });
+             //this.aceEditor.session.setMode("ace/mode/rust");
             this.aceEditor.setOptions({
                 enableSnippets: true,
                 enableLiveAutocompletion: true,
                 enableBasicAutocompletion: true,
                 autoScrollEditorIntoView: true,
-                copyWithEmptySelection: true
+                copyWithEmptySelection: true,
             });
             this.aceEditor.commands.addCommand({
                 name: 'save',

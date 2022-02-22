@@ -310,7 +310,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/newPermission') {
-                                    item.menuShow = false
+                                    item.menuShow = true
                                 }
                                 if (item.path == '/configManagement') {
                                     item.menuShow = true
@@ -379,7 +379,7 @@ export default {
                     if (list[i].nameKey == 'guide'||list[i].nameKey == 'appManagement') {
                         list[i].menuShow = false
                     }
-                    if (list[i].nameKey == 'bigScreen'||list[i].nameKey == 'subscribeEvent') {
+                    if (list[i].nameKey == 'bigScreen') {
                         list[i].menuShow = false
                     }
                 }

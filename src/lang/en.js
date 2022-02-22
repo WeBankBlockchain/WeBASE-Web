@@ -16,6 +16,7 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        remarks:'remarks',
         updatePassword: "Change Password",
         email: "Change",
         versionInfo:'Please view according to the "details" button in the front list ',
@@ -499,6 +500,7 @@ export default {
         createTime: "Create Time"
     },
     nodes: {
+        nodeIp: "Node Ip",
         nodeFront: "Front Node",
         addFront: "Add",
         frontId: "Front ID",
@@ -762,6 +764,8 @@ export default {
         uploadWarning3: "files.",
         to: "to",
         updateSuccess: "Successfully updated",
+        agency:'Please enter agency',
+        city:'Please enter address',
     },
     account: {
         addAccount: "Add Account",

@@ -385,6 +385,16 @@ body { overflow-y: scroll;overflow: auto !important; }
     border: 1px solid #eaedf3;
     box-shadow: 0 12px 27px 0 rgba(159, 166, 189, 0.33);
     border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    margin:0 !important;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    /*height:600px;*/
+    max-height:calc(100% - 40px);
+ 
 }
 
 .el-dialog__header {
@@ -552,7 +562,7 @@ td {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #e8e8e8;
+    background-color: #B4BFCC;
     background-clip: padding-box;
     min-height: 28px;
 }

@@ -20,7 +20,7 @@
                 <el-input v-model="accountForm.name" :placeholder="$t('system.inputUser')" maxlength="12" :disabled="accountForm['disabled']"></el-input>
             </el-form-item>
             <el-form-item :label="$t('login.password')" prop="password" style="width: 300px;" v-if="accountForm['dShow']">
-                <el-input v-model="accountForm.password" :placeholder="$t('inputText.password')" minlength="6" maxlength="12" :type="inputType">
+                <el-input v-model="accountForm.password" :placeholder="$t('inputText.password')" minlength="6" maxlength="12" :type="inputType"  >
                     <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']" @click.stop.prevent="showPassword"></i>
                 </el-input>
             </el-form-item>
