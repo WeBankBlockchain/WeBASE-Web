@@ -18,7 +18,7 @@
         <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head>
         <div style="height: calc(100% - 56px)">
             <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
-                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
+                <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide" @langChange='langChange'>
                     <template #footer>
                         <div class="version-selector">
                             <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion">
@@ -56,9 +56,9 @@ export default {
         },
         menuHide: function (val) {
             if (val) {
-                this.menuWidth = 180;
+                this.menuWidth = 357;
             } else {
-                this.menuWidth = 0;
+                this.menuWidth = 240;
             }
         }
     },
@@ -69,7 +69,7 @@ export default {
             menuHide: true,
             changeWidth: false,
             contractHide: false,
-            menuWidth: 240,
+            menuWidth: 357,
             urlQuery: this.$root.$route.query,
             allVersion: [],
             versionList: [],
@@ -154,6 +154,9 @@ export default {
 
     },
     methods: {
+        langChange(item){
+        item==0?this.menuWidth=357:this.menuWidth=240
+        },
         initWorker() {
             let w = webworkify(require.resolve('@/util/file.worker'));
             console.log('w:', w);
@@ -386,7 +389,7 @@ export default {
 }
 .version-selector {
     position: absolute;
-    top: 1px;
+    top: 0px;
     right: 5px;
     z-index: 1;
     box-sizing: border-box;

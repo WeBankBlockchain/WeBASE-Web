@@ -856,7 +856,7 @@ export function querySysConfig(data) {
 // sys config list
 export function querySysConfigList(data) {
     return get({
-        url: `${url.ORG_LIST}/sys/config/list`,
+        url: `${url.ORG_LIST}/precntauth/precompiled/sys/config/list`,
         method: 'get',
         params: data,
         headers: {
