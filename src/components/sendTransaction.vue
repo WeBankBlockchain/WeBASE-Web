@@ -160,7 +160,7 @@
           <span class="send-item-title"></span>
           <template v-if="item.type == 'string'">
             <el-input
-              v-model="ruleForm[item.type]"
+              v-model="ruleForm[item.name]"
               style="width: 400px"
               :placeholder="item.type"
             >
@@ -171,7 +171,7 @@
           </template>
           <template v-else>
             <el-input
-              v-model="ruleForm[item.type]"
+              v-model="ruleForm[item.name]"
               style="width: 400px"
               :placeholder="placeholderText(item.type)"
             >
@@ -568,7 +568,7 @@ export default {
       let rules = [];
       for (var i in this.pramasData) {
         for (var key in this.ruleForms) {
-          if (this.pramasData[i].type == key) rules.push(this.ruleForms[key]);
+          if (this.pramasData[i].name == key) rules.push(this.ruleForms[key]);
         }
       }
       let functionName = "";
