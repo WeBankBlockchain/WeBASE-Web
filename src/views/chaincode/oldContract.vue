@@ -20,6 +20,9 @@
                 <div class="search-part-left" style="padding-top: 20px;">
                     <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
                     <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="checkDeploy">{{$t('title.checkDeploy')}}</el-button>
+                    <el-button type="primary" class="search-part-left-btn" @click="checkMethod">{{$t('title.checkMethod')}}</el-button>
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
@@ -70,6 +73,8 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button> -->
                              <!-- <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button> -->
@@ -100,6 +105,21 @@
         <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
             <import-abi @importSuccess="importSuccess" @closeImport="closeImport"></import-abi>
         </el-dialog>
+        <el-dialog :title="$t('title.resetContractUser')" :visible.sync="resetVisibility" width="500px" v-if="resetVisibility" center class="send-dialog">
+            <reset-dialog @resetSuccess="resetSuccess" @closeReset="closeReset"></reset-dialog>
+        </el-dialog>
+        <el-dialog :title="$t('title.checkDeploy')" :visible.sync="checkVisibility" width="500px" v-if="checkVisibility" center class="send-dialog">
+            <check-deploy @checkSuccess="checkSuccess" @closeCheck="closeCheck"></check-deploy>
+        </el-dialog>
+         <el-dialog :title="$t('contracts.setPolicy')" :visible.sync="setPolicyVisibility" width="500px" v-if="setPolicyVisibility" center class="send-dialog">
+            <set-policy @setPolicySuccess="setPolicySuccess" @closeSetPolicy="closeSetPolicy" :setPolicyItem='setPolicyItem'></set-policy>
+        </el-dialog>
+        <el-dialog :title="$t('contracts.setAdmin')" :visible.sync="setAdminVisibility" width="500px" v-if="setAdminVisibility" center class="send-dialog">
+            <set-admin @setAdminSuccess="setAdminSuccess" @closeSetAdmin="closeSetAdmin" :setPolicyItem='setPolicyItem'></set-admin>
+        </el-dialog>
+        <el-dialog :title="$t('title.checkMethod')" :visible.sync="checkMethodVisibility" width="500px" v-if="checkMethodVisibility" center class="send-dialog">
+            <check-method @checkMethodSuccess="checkMethodSuccess" @closeCheckMethod="closeCheckMethod"></check-method>
+        </el-dialog>
         <el-dialog :title="$t('nodes.updateAbi')" :visible.sync="updateVisibility" width="500px" v-if="updateVisibility" center class="send-dialog">
             <update-abi @updateSuccess="updateSuccess" @closeUpdate="closeUpdate" :updateItem="updateItem"></update-abi>
         </el-dialog>
@@ -109,6 +129,11 @@
 import sendTransation from "@/components/sendTransaction";
 import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
+import resetDialog from "./dialog/resetDialog.vue"
+import checkDeploy from "./dialog/checkDeploy.vue"
+import checkMethod from "./dialog/checkMethod.vue"
+import setPolicy from "./dialog/setPolicy.vue"
+import setAdmin from "./dialog/setAdmin.vue"
 import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
@@ -128,7 +153,12 @@ export default {
         checkEventResult,
         mgmtCns,
         importAbi,
-        updateAbi
+        updateAbi,
+        resetDialog,
+        checkDeploy,
+        checkMethod,
+        setPolicy,
+        setAdmin
     },
     data: function () {
         return {
@@ -207,7 +237,14 @@ export default {
             mgmtCnsItem: {},
             importVisibility: false,
             updateVisibility: false,
-            updateItem: null
+            resetVisibility: false,
+            checkVisibility:false,
+            checkMethodVisibility:false,
+            setPolicyVisibility:false,
+            setAdminVisibility:false,
+            checkMethodVisibility:false,
+            updateItem: null,
+            setPolicyItem:null
         }
     },
     created() {
@@ -412,12 +449,59 @@ export default {
             this.updateItem = val;
             this.updateVisibility = true;
         },
+        setPolicy(val){
+            this.setPolicyItem=val;
+           this.setPolicyVisibility=true
+        },
+        setAdmin(val){
+            this.setPolicyItem=val;
+           this.setAdminVisibility=true   
+        },
         updateSuccess() {
             this.updateVisibility = false;
             this.getContracts()
         },
         routeAbi() {
             this.$router.push("/parseAbi")
+        },
+        resetSuccess(){
+           this.resetVisibility=false
+        },
+        checkSuccess(){
+           this.checkVisibility=false
+        },
+        setPolicySuccess(){
+           this.setPolicyVisibility=false
+        },
+        setAdminSuccess(){
+           this.setAdminVisibility=false
+        },
+        checkMethodSuccess(){
+           this.checkMethodVisibility=false
+        },
+        closeCheckMethod(){
+           this.checkMethodVisibility=false
+        },
+        closeCheck(){
+           this.checkVisibility=false
+        },
+        closeSetPolicy(){
+           this.setPolicyVisibility=false
+        },
+        closeSetAdmin(){
+           this.setAdminVisibility=false
+        },
+         closeReset(){
+           this.resetVisibility=false
+        },
+        resetContractUser(){
+           this.resetVisibility=true
+        },
+        checkDeploy(){
+           this.checkVisibility=true
+        },
+        checkMethod(){
+           this.checkMethodVisibility=true
         },
         deleteAbi(val) {
             this.$confirm(this.$t('text.confirmDelete'))

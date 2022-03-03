@@ -864,12 +864,23 @@ export function querySysConfigList(data) {
         }
     })
 }
-// cns list
-export function queryCnsList(data) {
-    return get({
-        url: `${url.ORG_LIST}/precompiled/cns/list`,
-        method: 'get',
-        params: data,
+// cns list by name
+export function queryCnsListByName(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/cns/queryCnsByName`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// cns list by name version
+export function queryCnsListByNameVersion(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/cns/queryCnsByNameVersion`,
+        method: 'post',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -1404,7 +1415,7 @@ export function getHostList() {
 //治理委员会list
 export function committeeList(data) {
     return get({
-        url: `${url.ORG_LIST}/governance/committee/list/sorted`,
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
         method: "get",
         params: data,
         headers: {
@@ -1416,7 +1427,107 @@ export function committeeList(data) {
 //增加链治理委员
 export function addCommittee(data) {
     return post({
-        url: `${url.ORG_LIST}/governance/committee`,
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/governor`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//委员投票
+export function voteCommittee(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/vote`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//撤销提案
+export function voteRevoke(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/revoke`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//修改阈值
+export function modifyRate(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/rate`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//重置合约管理员
+export function resetAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/contract/admin`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//查询合约管理员
+export function queryAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/admin`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//设置合约方法策略
+export function setPolicy(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/admin/method/auth/type`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//设置合约方法权限
+export function setAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/admin/method/auth/set`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//检查合约管理权限
+export function checkDeploy(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/usr/deploy`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//检查方法调用权限
+export function checkMethod(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/method/auth`,
         method: "post",
         data: data,
         headers: {
@@ -1483,10 +1594,10 @@ export function putCommitteeWeight(data) {
 }
 //  投票  
 export function voteRecord(data) {
-    return get({
-        url: `${url.ORG_LIST}/vote/record/list`,
-        method: "get",
-        params: data,
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/proposalInfoList`,
+        method: "post",
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

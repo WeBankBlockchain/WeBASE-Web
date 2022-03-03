@@ -2,7 +2,8 @@
     <div>
         <contents  @changGroup="changGroup" :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')" :headHref="headHref">
         </contents>
-        <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <!-- <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 30px 29px 0 29px;"> -->
+        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
                 <el-tab-pane :label="$t('title.committeeMgmt')">
                     <committeeMgmt ref='committeeMgmt'></committeeMgmt>
@@ -12,9 +13,9 @@
                 </el-tab-pane>
             </el-tabs>
         </div>
-        <div v-else class="module-wrapper" style="padding: 30px 29px 0 29px;">
+        <!-- <div v-else class="module-wrapper" style="padding: 30px 29px 0 29px;">
              <permission ref='permission'></permission>
-        </div>
+        </div> -->
     </div>
 </template>
 
