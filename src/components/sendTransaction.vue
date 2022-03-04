@@ -203,7 +203,7 @@ export default {
           },
           {
             pattern: /^-?[1-9]\d*$/,
-            message: "可以是负数",
+            message: "必须是数字，可以是负数",
             trigger: "blur",
           },
         ],
@@ -220,8 +220,25 @@ export default {
             message: this.$t("text.sendInput"),
             trigger: "blur",
           },
+          {
+            pattern: /^-?[1-9]\d*$/,
+            message: "必须是数字，可以是负数",
+            trigger: "blur",
+          },
         ],
           uint256: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+          {
+            pattern: /^[1-9]\d*$/,
+            message: "必须是数字，不可以是负数",
+            trigger: "blur",
+          },
+        ],
+        bool: [
           {
             required: true,
             message: this.$t("text.sendInput"),
@@ -250,7 +267,7 @@ export default {
           },
           {
             pattern: /^[1-9]\d*$/,
-            message: "不可以是负数",
+            message: "必须是数字，不可以是负数",
             trigger: "blur",
           },
         ],
@@ -497,29 +514,22 @@ export default {
       if (this.transation.funcType === "constructor") {
         this.transation.funcName = this.data.contractName;
       }
-        for (let item in this.form.pramasData) {
+      let rules = [];
+      for (let item in this.form.pramasData) {
         let data = this.form.pramasData[item].value;
         if (data && isJson(data)) {
           try {
-             this.form.pramasData[item].value = JSON.parse(data);
+             rules.push(JSON.parse(data))
           } catch (error) {
             console.log(error);
           }
         } else if (data === "true" || data === "false") {
-          this.form.pramasData[item].value = eval(data.toLowerCase());
+             rules.push(eval(data.toLowerCase()))
         }
          else {
-          this.form.pramasData[item].value = data;
+          rules.push(data)
         }
       } 
-      let rules = [];
-       this.form.pramasData.map((item,index)=>{
-         if(item.value){
-                  rules.push(item.value);  
-         }else{
-                  rules.push('');  
-         }
-       })
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {
