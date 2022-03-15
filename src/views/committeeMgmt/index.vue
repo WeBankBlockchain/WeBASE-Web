@@ -187,12 +187,12 @@
                   -
                 </span>
               </span>
-              <span v-else-if="head.enName=='newValue'">
-                <span v-if="scope.row['detail']">
-                  {{changValueZh(scope.row['detail'])}}
+              <span v-else-if="head.enName=='status'">
+                <span v-if="scope.row['status']=='notEnoughVotes'" style="color:#f56c6c">
+                  {{(scope.row['status'])}}
                 </span>
                 <span v-else>
-                  -
+                  {{(scope.row['status'])}}
                 </span>
               </span>
               <span v-else-if="head.enName=='timeLimit'">
@@ -213,9 +213,9 @@
               </span>
             </template>
             <template v-else>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">{{$t('govCommittee.Committee')}}
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">{{$t('govCommittee.Committee')}}
               </el-button>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
                 {{$t('govCommittee.revokeVote')}}</el-button>
             </template>
           </template>

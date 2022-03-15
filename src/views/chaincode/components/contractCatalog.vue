@@ -28,11 +28,11 @@
             <input multiple title="" type="file" id="file" ref="file" name="chaincodes" class="uploads" @change="upload($event)" />
           </i>
         </el-tooltip>
-        <el-select v-model="Highlight" class="langChoose" @change="langChange">
+        <!-- <el-select v-model="Highlight" class="langChoose" @change="langChange">
           <el-option v-for="item in Language" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
-        </el-select>
-        <div v-show="Highlight==0">
+        </el-select> -->
+        <div>
           <slot name="footer"></slot>
         </div>
       </div>
@@ -163,12 +163,12 @@ export default {
       selectFolderData: null,
       folderData: null,
       loading: false,
-      Highlight:"0",
+      Highlight:true,
       Language:[{
-          value: '0',
+          value: true,
           label: 'javascript'
         }, {
-          value: '1',
+          value: false,
           label: 'rust'
         }],
     };
@@ -246,11 +246,6 @@ export default {
     },
   },
   methods: {
-    langChange(item){
-      console.log(item)
-      this.$emit('langChange',item);
-     // Bus.$emit('langChange',item)
-    },
     /**
      * @method 点击任意处清除右键弹窗
      */
@@ -1136,7 +1131,7 @@ export default {
       this.folderData = null;
       if (!type) {
         localStorage.setItem("selectData", JSON.stringify(val));
-        Bus.$emit("select", val);
+        Bus.$emit("select", val,this.Highlight);
       }
     },
     /**

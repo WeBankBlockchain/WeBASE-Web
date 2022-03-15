@@ -159,6 +159,29 @@ export function getContractList(data) {
         }
     })
 }
+/**Contract check */
+export function checkIsWasm(groupId) {
+    return get({
+        url: `${url.ORG_LIST}/front/${groupId}/isWasm`,
+        method: 'get',
+       // params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**Contract check */
+export function liquidCompile(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/liquid/compile`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 
 // search contract list for contract path
 export function searchContract(data) {
@@ -718,6 +741,26 @@ export function getFronts(data) {
         }
     })
 }
+export function liquidCheck(data) {
+    return get({
+        url: `${url.ORG_LIST}/contract/liquid/check/${data}`,
+        method: 'get',
+        //params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function liquidCompileCheck(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/liquid/compile/check`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 export function getDetail(data) {
     return get({
         url: `${url.ORG_LIST}/front/groupInfo?frontId=${data.frontId}&groupId=${data.groupId}`,
@@ -918,6 +961,54 @@ export function postPermissionSorted(data) {
         url: `${url.ORG_LIST}/permission/sorted`,
         method: 'post',
         data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//获取pwd路径
+export function getPwdRoute(data) {
+    return post({
+        url: `${url.ORG_LIST}/`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//修改pwd路径
+export function modfiyPwdRoute(data) {
+    return post({
+        url: `${url.ORG_LIST}/`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//查询当前路径下的内容
+export function queryBfsPath(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/bfs/query`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//创建目录
+export function createBfsPath(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/bfs/create`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

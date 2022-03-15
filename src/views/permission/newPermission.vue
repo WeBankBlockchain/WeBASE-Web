@@ -8,9 +8,9 @@
                 <el-tab-pane :label="$t('title.committeeMgmt')">
                     <committeeMgmt ref='committeeMgmt'></committeeMgmt>
                 </el-tab-pane>
-                <el-tab-pane :label="$t('title.developerMgmt')">
+                <!-- <el-tab-pane :label="$t('title.developerMgmt')">
                     <developerMgmt ref='developerMgmt'></developerMgmt>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
         </div>
         <!-- <div v-else class="module-wrapper" style="padding: 30px 29px 0 29px;">

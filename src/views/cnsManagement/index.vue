@@ -183,7 +183,7 @@ export default {
                     this.loading = false;
                     this.loading1 = false;
                     if (res.data.code === 0) {
-                        this.cnsList = res.data.data;
+                        this.cnsList = JSON.parse(res.data.data);
                         this.total = res.data.totalCount
                         if (handleType == 'handleSearch') {
                             this.$message({
@@ -215,7 +215,7 @@ export default {
                     this.loading = false;
                     this.loading1 = false;
                     if (res.data.code === 0) {
-                        this.cnsList = res.data.data;
+                        this.cnsList = JSON.parse(res.data.data);
                         this.total = res.data.totalCount
                         if (handleType == 'handleSearch') {
                             this.$message({

@@ -412,7 +412,8 @@ export default {
         checkContract: '请选择合约',
         contractAddressLong: '合约地址长度应该为42',
         contractAddressHex: '合约地址以0x或0X开头且为十六进制',
-        weightRules:"值需要0~100"
+        weightRules:"值需要0~100",
+        routeParam:"请输入路径参数"
     },
     head: {
         helpText: "帮助文档",
@@ -423,6 +424,8 @@ export default {
         dataBigScreen:"数据大屏"
     },
     title: {
+        contractCompiling:"合约编译中，请稍等...",
+        bfs:"BFS",
         checkMethod:"检查方法调用权限",
         checkDeploy:"检查部署权限",
         addSDK:'配置SDK',
@@ -687,8 +690,20 @@ export default {
         exportToIde: "导出到IDE",
         folder: "目录",
         cnsTitle: "链上CNS查询",
+        bfsTitle: "BFS合约资源寻址功能",
         localCnsTitle: "本地CNS",
         checkNodeActive: "检测"
+    },
+    bfs:{
+        pwdRoute:'pwd当前路径:',
+        routeParam:'路径参数',
+        cd:"CD",
+        ls:"LS",
+        mkdir:"mkDir",
+        routeName:'路径',
+        userAddress:'用户地址',
+        creatSuccess:"创建成功"
+        
     },
     privateKey: {
         addUser: "新增用户",

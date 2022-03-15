@@ -411,7 +411,8 @@ export default {
         contractAddressLong: 'contract address\' length supposed to be 42',
         contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string',
         proposalId:'Please enter proposalId',
-        weightRules:"value 0~100"
+        weightRules:"value 0~100",
+        routeParam:"Please enter routeParam"
 
     },
     head: {
@@ -423,6 +424,8 @@ export default {
         dataBigScreen:"Large data screen"
     },
     title: {
+        Contractcompiling: "contract compilation, please wait...",
+        bfs:"BFS",
         checkMethod:"Check Method Auth",
         checkDeploy:"Check Deploy",
         dataOverview: "Overview",
@@ -681,8 +684,21 @@ export default {
         exportToIde: "Export To IDE",
         folder: "Folder",
         cnsTitle: "On chain CNS query",
+        bfsTitle: "BFS contract resource addressing function",
         localCnsTitle: "Local CNS",
         checkNodeActive: "check"
+    },
+    bfs:{
+        pwdRoute:'pwd Route:',
+        routeParam:'route Param',
+        cd:"CD",
+        ls:"LS",
+        mkdir:"mkDir",
+        routeName:'route',
+        userAddress:'user Address',
+        creatSuccess:"Create Success"
+
+
     },
     privateKey: {
         addUser: "Add Users",
