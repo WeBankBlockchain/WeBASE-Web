@@ -173,7 +173,7 @@ export default {
                         trigger: "blur"
                     },
                     {
-                        validator: validateBlock, trigger: 'blur'
+                        validator: validateBlock, trigger: 'blur' 
                     }
                 ],
                 toBlock: [

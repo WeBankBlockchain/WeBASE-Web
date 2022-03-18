@@ -19,6 +19,7 @@ import { getCookie } from '@/util/util'
 const main = resolve => require(['@/views/index/index'], resolve);
 const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
+const bfs = resolve => require(['@/views/bfs/index'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
 const front = resolve => require(['@/views/front/index'], resolve);
 const host = resolve => require(['@/views/front/host'], resolve);
@@ -155,6 +156,7 @@ const routes = [
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
+            { path: '/BFS', component: bfs, name: 'BFS', nameKey: "BFS", menuShow: true, meta: { requireAuth: false } },
             // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
             { path: '/toolsContract', component: toolsContract, name: '工具合约', nameKey: 'toolsContract', menuShow: false, meta: { requireAuth: false } }, 
         ]

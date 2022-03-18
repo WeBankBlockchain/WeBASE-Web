@@ -140,8 +140,8 @@ export default {
         getSysConfigList() {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
-                pageNumber: this.currentPage,
-                pageSize: this.pageSize,
+                // pageNumber: this.currentPage,
+                // pageSize: this.pageSize,
             }
             querySysConfigList(reqData)
                 .then(res => {

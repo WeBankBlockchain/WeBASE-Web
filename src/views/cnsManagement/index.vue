@@ -25,7 +25,8 @@
             <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
         </div>
-        <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
+        <!-- 本地cns注释 -->
+        <!-- <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
             <span class="cns-title">{{$t('contracts.localCnsTitle')}}</span>
             <el-table :data="localCnsList" tooltip-effect="dark" v-loading="loadingLocal" class="search-table-content">
                 <el-table-column v-for="head in localCnsHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width="head.width">
@@ -36,13 +37,13 @@
             </el-table>
             <el-pagination class="page" @size-change="localSizeChange" @current-change="localCurrentChange" :current-page="currentPageLocal" :page-sizes="[10, 20, 30, 50]" :page-size="pageSizeLocal" layout="total, sizes, prev, pager, next, jumper" :total="totalLocal">
             </el-pagination>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
 import contentHead from "@/components/contentHead";
-import { queryCnsList, findCnsInfoList } from "@/util/api";
+import { queryCnsListByName,queryCnsListByNameVersion,findCnsInfoList } from "@/util/api";
 export default {
     name: 'ConfigManagement',
 
@@ -145,15 +146,16 @@ export default {
         } else {
             this.disabled = true
         }
-        if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
-            this.queryLocalCns();
-        }
+        // 本地cns查询注释
+        // if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+        //     this.queryLocalCns();
+        // }
     },
 
     methods: {
         changGroup() {
             this.getCnsList()
-            this.queryLocalCns()
+            //this.queryLocalCns()
         },
         searchCns(formName) {
             this.$refs[formName].validate(valid => {
@@ -170,20 +172,18 @@ export default {
             this.loading = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
-                pageNumber: this.currentPage,
-                pageSize: this.pageSize,
+                // pageNumber: this.currentPage,
+                // pageSize: this.pageSize,
             }
             if (this.cnsForm.contractVersion) {
-                reqData.contractNameAndVersion = `${this.cnsForm.contractName}:${this.cnsForm.contractVersion}`
-            } else {
-                reqData.contractNameAndVersion = `${this.cnsForm.contractName}`
-            }
-            queryCnsList(reqData)
+                reqData.contractNameAndVersion = `${this.cnsForm.contractVersion}`;
+                reqData.contractName = `${this.cnsForm.contractName}`
+                queryCnsListByNameVersion(reqData)
                 .then(res => {
                     this.loading = false;
                     this.loading1 = false;
                     if (res.data.code === 0) {
-                        this.cnsList = res.data.data;
+                        this.cnsList = JSON.parse(res.data.data);
                         this.total = res.data.totalCount
                         if (handleType == 'handleSearch') {
                             this.$message({
@@ -208,6 +208,39 @@ export default {
                         duration: 2000
                     });
                 });
+            } else {
+                reqData.contractName = `${this.cnsForm.contractName}`
+                queryCnsListByName(reqData)
+                .then(res => {
+                    this.loading = false;
+                    this.loading1 = false;
+                    if (res.data.code === 0) {
+                        this.cnsList = JSON.parse(res.data.data);
+                        this.total = res.data.totalCount
+                        if (handleType == 'handleSearch') {
+                            this.$message({
+                                type: 'success',
+                                message: this.$t('text.selectSuccess')
+                            })
+                        }
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.loading1 = false;
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+            }
         },
         handleSizeChange(val) {
             this.pageSize = val;
@@ -222,10 +255,8 @@ export default {
             this.loadingLocal = true;
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
-                pageNumber: this.currentPageLocal,
-                pageSize: this.pageSizeLocal,
+                contractName: "",
             }
-
             findCnsInfoList(reqData)
                 .then(res => {
                     this.loadingLocal = false;

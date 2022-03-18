@@ -13,9 +13,12 @@
                                 <span v-if="head.enName =='user'">{{userName(scope.row['address'])}}</span>
                                 <span v-else>{{scope.row[head.enName]}}</span>
                             </template>
-                            <template v-else>
-                                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteDeveloper(scope.row,'delete')">{{$t('devOpsMgmt.deleteDeveloper')}}</el-button>
-                            </template>
+                           <template v-else>
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">{{$t('govCommittee.Committee')}}
+              </el-button>
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVote(scope.row)">
+                {{$t('govCommittee.revokeVote')}}</el-button>
+            </template>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -93,7 +96,7 @@ export default {
             this.disabled = true
         }
         if (localStorage.getItem("groupId")) {
-            this.queryOperatorList()
+            //this.queryOperatorList()
             this.getUserData()
         }
     },

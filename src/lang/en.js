@@ -409,7 +409,11 @@ export default {
         checkContract: 'Please check contract',
         addContractAddress: 'bind',
         contractAddressLong: 'contract address\' length supposed to be 42',
-        contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string'
+        contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string',
+        proposalId:'Please enter proposalId',
+        weightRules:"value 0~100",
+        routeParam:"Please enter routeParam"
+
     },
     head: {
         helpText: "Document",
@@ -420,10 +424,15 @@ export default {
         dataBigScreen:"Large data screen"
     },
     title: {
+        Contractcompiling: "contract compilation, please wait...",
+        bfs:"BFS",
+        checkMethod:"Check Method Auth",
+        checkDeploy:"Check Deploy",
         dataOverview: "Overview",
         blockTitle: "Block Information",
         nodeTitle: "Node Mgmt",
         contractTitle: "Contract Mgmt",
+        resetContractUser: "Reset Constract User",
         contractIDE: "Contract IDE",
         contractList: "Contract List",
         CNSmanager: "CNS Query",
@@ -593,6 +602,13 @@ export default {
         addContract: "Import Contract"
     },
     contracts: {
+        openAdmin:'Open Admin',
+        closeAdmin:'Close Admin',
+        set:'set',
+        WhiteList:'White List',
+        blackList:'black List',
+        setPolicy:"Set contract method policy",
+        setAdmin:"Set contract method permissions",
         createFile: "Create File",
         createFolder: "Create Folder",
         upLoadFile: "Upload File",
@@ -668,8 +684,21 @@ export default {
         exportToIde: "Export To IDE",
         folder: "Folder",
         cnsTitle: "On chain CNS query",
+        bfsTitle: "BFS contract resource addressing function",
         localCnsTitle: "Local CNS",
         checkNodeActive: "check"
+    },
+    bfs:{
+        pwdRoute:'pwd Route:',
+        routeParam:'route Param',
+        cd:"CD",
+        ls:"LS",
+        mkdir:"mkDir",
+        routeName:'route',
+        userAddress:'user Address',
+        creatSuccess:"Create Success"
+
+
     },
     privateKey: {
         addUser: "Add Users",
@@ -991,13 +1020,18 @@ export default {
         fileName: "PrivateKey Name",
     },
     govCommittee: {
+        haveAdmin:"have jurisdiction",
+        noAdmin:"no jurisdiction",
         addCommittee: 'Grant Committee Vote',
         modifyThreshold: 'Modify Threshold Vote',
+        Committee: 'Committee Vote',
+        revokeVote: 'revoke Vote',
         fromUser: 'Chain Committee',
         user: 'New Committee',
         address: 'Address',
         weight: 'Weight',
         weightRatio: 'Weight Ratio(%)',
+        participatesRate:"participatesRate",
         enableNum: 'Enable Num',
         modifyWeight: 'Modify Weight Vote',
         deleteCommittee: 'Revoke Committee Vote',
@@ -1008,6 +1042,7 @@ export default {
         modifyUserAddress: 'Modify Address',
         newValue: 'New Value',
         voteType: 'Vote Type',
+        voteNum: 'vote Number',
         voteStatus: 'Vote Status',
         updatetime: 'Update Time',
         threshold: 'Threshold%',
