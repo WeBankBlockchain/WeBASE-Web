@@ -1698,7 +1698,63 @@ let errCode = {
     "500": {
         en: "system exception",
         zh: '系统异常'
-    }
+    },
+    "201631": {
+        en: "Java Command exec timeout",
+        zh: "Java命令执行超时"
+    },
+    "201632": {
+        en: "Java Command return error",
+        zh: "Java命令返回错误"
+    },
+    "201633": {
+        en: "When deploying liquid, contract address must not be empty",
+        zh: "部署liquid时，合同地址不得为空"
+    },
+    "202550": {
+        en: "Liquid compile error",
+        zh: "liquid编译错误"
+    },
+    "202551": {
+        en: "When deploying liquid, contract address must not be empty",
+        zh: "部署liquid时，合同地址不得为空"
+    },
+    "201610": {
+        en: "Contract compile task not exist",
+        zh: "合同编译任务不存在"
+    },
+    "201608": {
+        en: "Deploying contract not match with the group(solidity/liquid)",
+        zh: "部署合同与群组不匹配(solidity/liquid)"
+    },
+     "201609": {
+        en: "This liquid contract already compiling, please wait...",
+        zh: "liquid合同已编译，请稍候..."
+    },
+    "201014": {
+        en: "ContractAddress Already Used",
+        zh: "合约地址已被使用"
+    },
+    "201622": {
+        en: "Proposal is voting, the previous vote need to be finished",
+        zh: "提案正在投票，需要完成上一次投票"
+    },
+    "201623": {
+        en: "The proposal is not votable , please ensure the proposal",
+        zh: "提案不可投票，请确保提案有效"
+    },
+    "201624": {
+        en: "The account address has already voted the proposal",
+        zh: "账户地址已对提案进行投票"
+    },
+    "201625": {
+        en: "The proposal is not exist",
+        zh: "提案不存在"
+    },
+    "-53001": {
+        en: "Path of file not exist",
+        zh: "文件路径不存在"
+    },
 }
 export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')

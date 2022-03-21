@@ -37,8 +37,16 @@
             </div>
           </li>
         </el-form-item>
-        <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+        <!-- <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
           <el-input v-model="checkMethodForm.userAddress" :rows="1" type="textarea" style="width: 300px;"></el-input>
+        </el-form-item> -->
+        <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+          <el-select v-model="checkMethodForm.userAddress" :placeholder="$t('text.select')" style="width: 300px;">
+            <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+              <span>{{item.userName}}</span>
+              <span class="font-12">{{item.address}}...</span>
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <div class="text-center" style="width: 500px;">
@@ -78,6 +86,7 @@ import {
   getNetworkStatistics,
   listAddress,
   eventContractInfo,
+  getUserList,
 } from "@/util/api";
 import { validateEvent } from "@/util/validate";
 import { isJson } from "@/util/util";
@@ -115,6 +124,7 @@ export default {
       queryTypeParam: {},
       isSearch: false,
       searchMessage: "",
+      adminRivateKeyList: [],
     };
   },
 
@@ -199,7 +209,13 @@ export default {
             trigger: "blur",
           },
         ],
-
+        userAddress: [
+          {
+            required: true,
+            message: this.$t("rule.userAddress"),
+            trigger: "change",
+          },
+        ],
         eventName: [
           {
             required: true,
@@ -245,9 +261,47 @@ export default {
     if (localStorage.getItem("groupId")) {
       this.queryInit();
     }
+    this.getUserData();
   },
 
   methods: {
+    getUserData() {
+      let reqData = {
+        groupId: localStorage.getItem("groupId"),
+        pageNumber: 1,
+        pageSize: 1000,
+      };
+      getUserList(reqData, {})
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.adminRivateKeyList = [];
+            res.data.data.forEach((value) => {
+              // if (value.hasPk === 1) {
+              this.adminRivateKeyList.push(value);
+              // }
+            });
+            if (this.adminRivateKeyList.length === 0) {
+              this.isShowPrivate = true;
+            } else {
+              this.isShowPrivate = false;
+              // this.resetForm.fromAddress = this.adminRivateKeyList[0]['address'];
+            }
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
     queryInit() {
       if (this.$route.query.type) {
         this.queryTypeParam = this.$route.query;
@@ -331,13 +385,13 @@ export default {
           if (indexedArr.includes(false)) {
             return;
           }
-          this.queryAdd();
+          this.checkMethoding();
         } else {
           return false;
         }
       });
     },
-    queryAdd() {
+    checkMethoding() {
       try {
         JSON.parse(this.checkMethodForm.contractAbi);
       } catch (error) {
@@ -378,8 +432,8 @@ export default {
             this.$message({
               type: "success",
               message: res.data.data
-                ? this.$t("govCommittee.haveAdmin")
-                : this.$t("govCommittee.noAdmin"),
+                ? this.$t("govCommittee.haveMethodAdmin")
+                : this.$t("govCommittee.noMethodAdmin"),
             });
             this.$emit("checkMethodSuccess");
           } else {

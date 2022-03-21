@@ -16,7 +16,7 @@
                </span>
             </el-form-item>
             <el-form-item :label="$t('system.configValue')" prop="configValue">
-                <el-input v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? $t('system.gasLong') : ''"></el-input>
+                <el-input style="width: 245px;" v-model.number="modifyForm.configValue" :placeholder="configKey ==='tx_gas_limit'? $t('system.gasLong') : ''"></el-input>
             </el-form-item>
         </el-form>
         <div class="text-right sure-btn" style="margin-top:10px">
@@ -115,14 +115,19 @@ export default {
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 configKey: this.configKey,
-                configValue: this.modifyForm.configValue,
+                configValue: this.modifyForm.configValue.toString(),
                 fromAddress: this.modifyForm.adminRivateKey,
+                signUserId:''
             }
             querySysConfig(reqData)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
                         this.$emit('modifySuccess')
+                        this.$message({
+                            type: 'success',
+                            message: this.$t('text.updateSuccessMsg')
+                        })
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),

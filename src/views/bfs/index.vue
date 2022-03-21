@@ -74,38 +74,35 @@ export default {
     var paramRule = (rule, value, callback) => {
       let valArray = value.trim().replace(/\s+/g, " ").split(" ");
       console.log(valArray[0]);
-      let valArr=[]
-      if(valArray.length>1){
-      valArr = valArray[1].split("/");
+      let valArr = [];
+      if (valArray.length > 1) {
+        valArr = valArray[1].split("/");
       }
       if (
         valArray[0] != "cd" &&
         valArray[0] != "ls" &&
         valArray[0] != "mkdir"
       ) {
-        callback(new Error("操作命令必须为cd/ls/mkdir"));
-      } else if (valArray.length < 2||valArray.length != 2) {
-        callback(new Error("路径有误,请重新输入!"));
+        callback(new Error(this.$t("bfs.tip1")));
+      } else if (valArray.length < 2 || valArray.length != 2) {
+        callback(new Error(this.$t("bfs.tip2")));
+      } else if (!/^[0-9a-zA-Z_/.]{0,}$/.test(valArray[1])) {
+        //console.log(1)
+        callback(new Error(this.$t("bfs.tip2")));
       } else if (
-        valArray[1].substr(0, 1) == "/" &&
-        !/^[0-9a-zA-Z_/]{1,}$/.test(valArray[1].substr(1))
-      ) {
-        callback(new Error("路径有误,请重新输入!"));
-      } else if (
-        valArray[1].substr(0, 2) == "./" &&
-        !/^[0-9a-zA-Z_/]{1,}$/.test(valArray[1].substr(2))
-      ) {
-        callback(new Error("路径有误,请重新输入!"));
-      } else if (
-        valArray[1].substr(0, 1) != "/" &&
         valArray[1].substr(0, 2) != "./" &&
-        !/^[0-9a-zA-Z_/]{1,}$/.test(valArray[1].substr(0))
+        !/^[0-9a-zA-Z_/]{1,}$/.test(valArray[1])
       ) {
-        callback(new Error("路径有误,请重新输入!"));
+        //console.log(2)
+        callback(new Error(this.$t("bfs.tip2")));
       } else if (valArr.includes("") && valArr[0] != "") {
-        callback(new Error("路径有误,请重新输入!"));
-      }else if (valArray[0] == "mkdir"&&(valArray[1].substr(0,4)!='apps'&&valArray[1].substr(0,6)!='tables')) {
-        callback(new Error("创建路径必须以'apps'或'tables'开头!"));
+        callback(new Error(this.$t("bfs.tip2")));
+      } else if (
+        valArray[0] == "mkdir" &&
+        valArray[1].substr(0, 4) != "apps" &&
+        valArray[1].substr(0, 6) != "tables"
+      ) {
+        callback(new Error(this.$t("bfs.tip3")));
       } else {
         callback();
       }
@@ -214,8 +211,8 @@ export default {
 
   mounted() {
     if (
-      (localStorage.getItem("root") === "admin" ||
-        localStorage.getItem("root") === "developer") &&
+      localStorage.getItem("root") === "admin" ||
+      localStorage.getItem("root") === "developer" ||
       localStorage.getItem("groupId")
     ) {
       this.disabled = false;
@@ -240,13 +237,12 @@ export default {
       let commond = valArray[0];
       this.routeParamCommond = commond;
       this.routeParamValue = valArray[1];
-
       if (this.bfsForm.pwdRoute != "/") {
         if (this.routeParamValue.substr(0, 2) == "./") {
           this.handleValue =
             this.bfsForm.pwdRoute + "/" + this.routeParamValue.substr(2);
         } else if (this.routeParamValue.substr(0, 1) == "/") {
-          this.handleValue = this.routeParamValue.substr(0);
+          this.handleValue = this.routeParamValue;
         } else {
           this.handleValue = this.bfsForm.pwdRoute + "/" + this.routeParamValue;
         }
@@ -255,7 +251,7 @@ export default {
           this.handleValue =
             this.bfsForm.pwdRoute + this.routeParamValue.substr(2);
         } else if (this.routeParamValue.substr(0, 1) == "/") {
-          this.handleValue = this.routeParamValue.substr(0);
+          this.handleValue = this.routeParamValue;
         } else {
           this.handleValue = this.bfsForm.pwdRoute + this.routeParamValue;
         }
@@ -267,7 +263,7 @@ export default {
           } else if (commond == "ls") {
             this.ls();
           } else if (commond == "mkdir") {
-              this.mkdir()
+            this.mkdir();
           }
         } else {
           //alert("error");
@@ -327,7 +323,7 @@ export default {
           //this.loadingLocal = false;
           if (res.data.code === 0) {
             this.$message({
-              message: this.$t('bfs.creatSuccess'),
+              message: this.$t("bfs.creatSuccess"),
               type: "success",
               duration: 2000,
             });
@@ -358,6 +354,10 @@ export default {
           //this.loadingLocal = false;
           if (res.data.code === 0) {
             this.bfsData = res.data.data;
+            this.$message({
+              type: "success",
+              message: this.$t("bfs.lsSucess"),
+            });
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -386,6 +386,10 @@ export default {
           if (res.data.code === 0) {
             this.bfsData = res.data.data;
             this.bfsForm.pwdRoute = this.handleValue;
+            this.$message({
+              type: "success",
+              message: this.$t("bfs.cdSucess"),
+            });
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),

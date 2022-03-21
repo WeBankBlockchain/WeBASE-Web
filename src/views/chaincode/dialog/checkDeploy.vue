@@ -1,31 +1,9 @@
 <template>
   <div>
     <el-form :model="checkDeployForm" :rules="rules" ref="checkDeployForm" label-width="130px" class="demo-ruleForm">
-      <!-- <el-form-item :label="$t('govCommittee.fromUser')" prop="governorAddress">
-              <el-select v-model="checkDeployForm.governorAddress" :placeholder="$t('text.select')">
-                <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.governorAddress}}</span>
-                  <span class="font-12">{{item.governorAddress}}...</span>
-                </el-option>
-              </el-select>
-            </el-form-item> -->
-      <!-- <el-form-item :label="$t('govCommittee.toCommittee')" prop="governorAddress">
-              <el-select v-model="checkDeployForm.governorAddress" :placeholder="$t('text.select')" @change="changeAddress">
-                <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
-                  <span>{{item.governorAddress}}</span>
-                  <span class="font-12">{{item.governorAddress}}...</span>
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="checkDeployForm.weight" @input="e => (checkDeployForm.weight = isnumber(e))" class="form-item-input"></el-input>
-            </el-form-item> -->
-      <el-form-item :label="$t('contracts.contractAddress')" prop="weight">
+      <el-form-item :label="$t('contracts.contractAddress')" prop="contractAddress">
         <el-input v-model="checkDeployForm.contractAddress" style="width:214px" class="form-item-input"></el-input>
       </el-form-item>
-      <!-- <el-form-item :label="$t('contracts.userAddress')" prop="weight">
-              <el-input v-model="checkDeployForm.userAddress"  style="width:214px"  class="form-item-input"></el-input>
-            </el-form-item>  -->
     </el-form>
     <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
     <div class="text-right sure-btn" style="margin-top:10px">
@@ -179,8 +157,8 @@ export default {
                 this.$message({
                   type: "success",
                   message: res.data.data
-                    ? this.$t("govCommittee.haveAdmin")
-                    : this.$t("govCommittee.noAdmin"),
+                    ? this.$t("govCommittee.haveDeployAdmin")
+                    : this.$t("govCommittee.noDeployAdmin"),
                 });
                 this.$emit("checkSuccess");
               } else {

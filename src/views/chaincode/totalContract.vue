@@ -60,7 +60,7 @@
                 <import-abi @importSuccess="importSuccess" @closeImport="closeImport" :address='address'></import-abi>
             </el-dialog>
             <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-                <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
+                <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send"   :liquidChecks='liquidCheck' :data="data" :abi='abiData' :version='version'></send-transation>
             </el-dialog>
             <editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></editor>
             <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import { getAllContractList } from "@/util/api"
+import { getAllContractList,getFronts,checkIsWasm } from "@/util/api"
 import abiDialog from "./dialog/abiDialog"
 import importAbi from "../abiList/components/importAbi"
 import editor from "@/components/editor"
@@ -125,6 +125,8 @@ export default {
             updateVisibility: false,
             updateItem: null,
             contractData: "",
+            liquidCheck: false,
+
         }
     },
     mounted() {
@@ -136,8 +138,54 @@ export default {
         if (localStorage.getItem("groupId") && (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
             this.getList()
         }
+        this.getfrontList()
+
     },
     methods: {
+          getfrontList() {
+      let reqData = {
+        frontId: this.frontId,
+      };
+      getFronts(reqData)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.frontList = res.data.data || [];
+            this.frontId = this.frontList[0].frontId;
+            this.loading = false;
+            this.liquidCheckMethod();
+          } else {
+            this.loading = false;
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
+    liquidCheckMethod() {
+      let groupId = localStorage.getItem("groupId");
+      checkIsWasm(this.frontId,groupId)
+        .then((res) => {
+          if (res.data.data == true) {
+            this.liquidCheck = true;
+          } 
+        })
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: err.data || this.$t("text.systemError"),
+          });
+        });
+    },
         getList() {
             this.loading = true;
             let groupId = localStorage.getItem("groupId");

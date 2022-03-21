@@ -20,11 +20,16 @@
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
               <el-input v-model="resetForm.weight" @input="e => (resetForm.weight = isnumber(e))" class="form-item-input"></el-input>
             </el-form-item> -->
-      <el-form-item :label="$t('contracts.contractAddress')" prop="weight">
-        <el-input v-model="resetForm.contractAddress" style="width:214px" class="form-item-input"></el-input>
+      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+        <el-select v-model="resetForm.userAddress" :placeholder="$t('text.select')">
+          <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+            <span>{{item.userName}}</span>
+            <span class="font-12">{{item.address}}...</span>
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item :label="$t('contracts.userAddress')" prop="weight">
-        <el-input v-model="resetForm.userAddress" style="width:214px" class="form-item-input"></el-input>
+      <el-form-item :label="$t('contracts.contractAddress')" prop="contractAddress">
+        <el-input v-model="resetForm.contractAddress" style="width:214px" class="form-item-input"></el-input>
       </el-form-item>
     </el-form>
     <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
@@ -108,18 +113,18 @@ export default {
             trigger: "blur",
           },
         ],
-        contractName: [
+        userAddress: [
           {
             required: true,
-            message: this.$t("rule.contractName"),
-            trigger: "blur",
+            message: this.$t("rule.userAddress"),
+            trigger: "change",
           },
+        ],
+        fromAddress: [
           {
             required: true,
-            min: 1,
-            max: 100,
-            message: this.$t("rule.textLong1_100"),
-            trigger: "blur",
+            message: this.$t("rule.fromAddress"),
+            trigger: "change",
           },
         ],
       };
@@ -185,7 +190,7 @@ export default {
               if (res.data.code === 0) {
                 this.$message({
                   type: "success",
-                  message: this.$t("govCommittee.success"),
+                  message: this.$t("govCommittee.resetSuccess"),
                 });
                 this.$emit("resetSuccess");
               } else {
@@ -211,7 +216,7 @@ export default {
       });
     },
     closeReset() {
-      this.$emit("closeReset")
+      this.$emit("closeReset");
     },
     getUserData() {
       let reqData = {

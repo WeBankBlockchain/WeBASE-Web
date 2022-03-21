@@ -160,9 +160,9 @@ export function getContractList(data) {
     })
 }
 /**Contract check */
-export function checkIsWasm(groupId) {
+export function checkIsWasm(frontId,groupId) {
     return get({
-        url: `${url.ORG_LIST}/front/${groupId}/isWasm`,
+        url: `${url.ORG_LIST}/front/isWasm/${frontId}/${groupId}`,
         method: 'get',
        // params: data,
         headers: {
@@ -741,7 +741,7 @@ export function getFronts(data) {
         }
     })
 }
-export function liquidCheck(data) {
+export function liquidCheckMethod(data) {
     return get({
         url: `${url.ORG_LIST}/contract/liquid/check/${data}`,
         method: 'get',
@@ -888,7 +888,7 @@ export function getConsensusNodeId(data) {
 // sys config 
 export function querySysConfig(data) {
     return post({
-        url: `${url.ORG_LIST}/sys/config`,
+        url: `${url.ORG_LIST}/precntauth/precompiled/sys/config`,
         method: 'post',
         data: data,
         headers: {
@@ -1507,6 +1507,16 @@ export function getHostList() {
 export function committeeList(data) {
     return get({
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function getCount(data) {
+    return get({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/proposalInfoCount`,
         method: "get",
         params: data,
         headers: {

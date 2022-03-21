@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :model="policyData" :rules="rules" ref="policyData" label-width="130px" class="demo-ruleForm">
-      <el-form-item :label="$t('contracts.contractAdmin')" prop="fromAddress">
+      <el-form-item :label="$t('contracts.contractAdmin')" prop="contractAdmin">
         <el-input v-model="policyData.contractAdmin" style="width:300px" class="form-item-input"></el-input>
       </el-form-item>
       <!-- <el-form-item :label="$t('govCommittee.toCommittee')" prop="governorAddress">
@@ -32,8 +32,13 @@
         </el-select>
 
       </el-form-item>
-      <el-form-item :label="$t('contracts.userAddress')" prop="weight">
-        <el-input v-model="policyData.userAddress" style="width:300px" class="form-item-input"></el-input>
+      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+        <el-select v-model="policyData.userAddress" :placeholder="$t('text.select')" style="width:300px;">
+          <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+            <span>{{item.userName}}</span>
+            <span class="font-12">{{item.address}}...</span>
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :label="$t('contracts.set')" prop="set">
         <el-radio v-model="policyData.authType" :label=1>{{this.$t('contracts.WhiteList')}}</el-radio>
@@ -116,11 +121,32 @@ export default {
             trigger: "blur",
           },
         ],
+        contractAdmin: [
+          {
+            required: true,
+            message: this.$t("rule.contractAdmin"),
+            trigger: "blur",
+          },
+        ],
+        eventName: [
+          {
+            required: true,
+            message: this.$t("rule.eventName"),
+            trigger: "blur",
+          },
+        ],
         contractAddress: [
           {
             required: true,
             message: this.$t("rule.contractAddress"),
             trigger: "blur",
+          },
+        ],
+        userAddress: [
+          {
+            required: true,
+            message: this.$t("rule.userAddress"),
+            trigger: "change",
           },
         ],
         contractName: [
@@ -203,6 +229,7 @@ export default {
     }
     this.queryAdminMethod();
     this.policyData.eventName = this.eventNameList[0]["value"];
+    this.getUserData();
   },
 
   methods: {

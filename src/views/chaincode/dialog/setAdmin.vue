@@ -1,26 +1,9 @@
 <template>
   <div>
     <el-form :model="adminData" :rules="rules" ref="adminData" label-width="130px" class="demo-ruleForm">
-      <el-form-item :label="$t('contracts.contractAdmin')" prop="fromAddress">
+      <el-form-item :label="$t('contracts.contractAdmin')" prop="contractAdmin">
         <el-input v-model="adminData.contractAdmin" style="width:300px" class="form-item-input"></el-input>
       </el-form-item>
-      <!-- <el-form-item :label="$t('govCommittee.toCommittee')" prop="governorAddress">
-              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" @change="changeAddress">
-                <el-option v-for="item in produceCommittee" :key="item.address" :label="item.userName" :value="item.address">
-                  <span>{{item.governorAddress}}</span>
-                  <span class="font-12">{{item.governorAddress}}...</span>
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" class="form-item-input"></el-input>
-            </el-form-item> -->
-      <!-- <el-form-item :label="$t('contracts.contractAddress')" prop="weight">
-              <el-input v-model="governForm.contractAddress" style="width:300px"  class="form-item-input"></el-input>
-            </el-form-item>  -->
-      <!-- <el-form-item :label="$t('contracts.userAddress')" prop="weight">
-              <el-input v-model="governForm.userAddress"  style="width:300px"  class="form-item-input"></el-input>
-            </el-form-item>  -->
 
       <el-form-item :label="$t('table.contractAddress')" prop="contractAddress">
         <el-input v-model="adminData.contractAddress" style="width:300px" class="form-item-input"></el-input>
@@ -31,8 +14,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('contracts.userAddress')" prop="weight">
-        <el-input v-model="adminData.userAddress" style="width:300px" class="form-item-input"></el-input>
+      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+        <el-select v-model="adminData.userAddress" :placeholder="$t('text.select')" style="width:300px;">
+          <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
+            <span>{{item.userName}}</span>
+            <span class="font-12">{{item.address}}...</span>
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item :label="$t('contracts.set')" prop="set">
         <el-radio v-model="adminData.isOpen" :label=true>{{this.$t('contracts.openAdmin')}}</el-radio>
@@ -115,11 +103,32 @@ export default {
             trigger: "blur",
           },
         ],
+        contractAdmin: [
+          {
+            required: true,
+            message: this.$t("rule.contractAdmin"),
+            trigger: "blur",
+          },
+        ],
+        eventName: [
+          {
+            required: true,
+            message: this.$t("rule.eventName"),
+            trigger: "blur",
+          },
+        ],
         contractAddress: [
           {
             required: true,
             message: this.$t("rule.contractAddress"),
             trigger: "blur",
+          },
+        ],
+        userAddress: [
+          {
+            required: true,
+            message: this.$t("rule.userAddress"),
+            trigger: "change",
           },
         ],
         contractName: [
@@ -202,6 +211,7 @@ export default {
     }
     this.queryAdminMethod();
     this.adminData.eventName = this.eventNameList[0]["value"];
+    this.getUserData();
   },
 
   methods: {

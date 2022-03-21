@@ -154,7 +154,7 @@ const routes = [
             // { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: false, meta: { requireAuth: true } },
             { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
-            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: true, meta: { requireAuth: true } },
+            { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: false, meta: { requireAuth: true } },
             { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
             { path: '/BFS', component: bfs, name: 'BFS', nameKey: "BFS", menuShow: true, meta: { requireAuth: false } },
             // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
@@ -243,7 +243,7 @@ const routes = [
         menuShow: true  ,
         iconCls: 'wbs-icon-dingyue sidebar-icon',
         children: [
-            { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: true, meta: { requireAuth: true } },
+            { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: false, meta: { requireAuth: true } },
             { path: '/contractEvent', component: contractEvent, name: '合约Event事件', nameKey: "contractEvent", menuShow: true, meta: { requireAuth: true } },
 
         ]

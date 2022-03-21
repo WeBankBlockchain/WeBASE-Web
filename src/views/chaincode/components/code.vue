@@ -21,7 +21,11 @@
         <span v-if="liquidCheck==false">{{contractName + '.sol'}}</span>
         <span v-else>{{contractName + '.rs'}}</span>
       </span>
-      <span class="contract-code-handle" v-show="codeShow">
+      <span class="contract-code-handle" v-show="navShow">
+         <el-select  v-model="frontId" v-if="liquidCheck==true" style="width:150px" @change="complieCheck">
+                <el-option v-for="item in frontList" :key="item.frontIp" :label="item.frontIp+':'+item.frontPort" :value="item.frontId">
+                </el-option>
+        </el-select>
         <span class="contract-code-done" v-if="(!contractAddress && !disabled) || (contractAddress && !disabled &&isDeployedModifyEnable)" @click="saveCode">
           <el-tooltip class="item" effect="dark" :content="$t('contracts.contractSaveTips')" placement="top-start">
             <i class="wbs-icon-baocun font-16"></i>
@@ -192,6 +196,8 @@ import {
   fetchIsDeployedModifyEnable,
   liquidCompile,
   liquidCompileCheck,
+  getFronts,
+  liquidCheckMethod
 } from "@/util/api";
 import transaction from "@/components/sendTransaction";
 import changeUser from "../dialog/changeUser";
@@ -239,6 +245,7 @@ export default {
       modePath: "ace/mode/solidity",
       data: null,
       codeShow: false,
+      navShow: false,
       version: "",
       saveShow: false,
       editorShow: false,
@@ -294,13 +301,55 @@ export default {
       contractType: true,
       liquidCheckTimer: null,
       firstCall: true,
-      loadingText: this.$t("title.contractCompiling"),
+      loadingText: this.$t("text.contractCompiling"),
+       frontList: null,
+      frontId: "",
     };
+  },
+   watch: {
+    liquidChecks: function (val) {
+      this.liquidCheck = val;
+      if (this.liquidCheck == true) {
+        this.aceEditor.session.setMode("ace/mode/rust");
+        if (this.contractName && this.firstCall && this.liquidCheck) {
+          this.compileCheckEnter();
+        }
+      } else {
+        this.aceEditor.session.setMode("ace/mode/solidity");
+      }
+    },
+    frontIds: function (val) {
+      this.frontId = val;
+    },
+    content: function (val) {
+      let data = Base64.decode(this.data.contractSource);
+      if (data != val) {
+        this.saveShow = true;
+      } else {
+        this.saveShow = false;
+      }
+    },
+    successHide: function (val) {
+      if (val) {
+        this.infoHeight = 250;
+      } else {
+        this.infoHeight = 0;
+      }
+    },
+    // contractName: function (val) {
+    //     if (this.contractName && this.firstCall && this.liquidCheck) {
+    //     this.compileCheckEnter();
+    //   }
+    // },
+    dialogHeight: function (val) {
+      console.log(val);
+    },
   },
   beforeDestroy: function () {
     Bus.$off("select");
     Bus.$off("noData");
     Bus.$off("javaProjectComplie");
+    clearInterval(this.liquidCheckTimer);
   },
   beforeMount() {},
   mounted: function () {
@@ -310,14 +359,16 @@ export default {
     ) {
       this.disabled = false;
     } else {
-      this.disabled = true;
+      this.disabled = false;
     }
+    let _this = this;
     this.queryIsDeployedModifyEnable();
     this.initEditor();
-    Bus.$on("select", (data, Highlight) => {
-      console.log(data, Highlight);
-      this.contractType = Highlight;
+    this.getfrontList()
+    Bus.$on("select",(data)=> {
+      console.log(data);
       this.codeShow = true;
+      this.navShow = true;
       this.refreshMessage();
       this.code = "";
       this.version = "";
@@ -362,6 +413,9 @@ export default {
       //   type: 'warning'
       // });
       //     }
+        if (this.data.contractAddress) {
+        this.queryFindCnsInfo();
+      }
     });
     Bus.$on("noData", (data) => {
       this.codeShow = false;
@@ -396,42 +450,8 @@ export default {
       this.compile();
     });
     this.dialogHeight = document.body.clientHeight;
-    this.$nextTick(() => {
-      if (this.contractName && this.firstCall && this.liquidCheck) {
-        this.compileCheck();
-      }
-    });
-  },
-  watch: {
-    frontIds: function (val) {
-      this.frontId = val;
-    },
-    liquidChecks: function (val) {
-      this.liquidCheck = val;
-      if (this.liquidCheck == true) {
-        this.aceEditor.session.setMode("ace/mode/rust");
-      } else {
-        this.aceEditor.session.setMode("ace/mode/solidity");
-      }
-    },
-    content: function (val) {
-      let data = Base64.decode(this.data.contractSource);
-      if (data != val) {
-        this.saveShow = true;
-      } else {
-        this.saveShow = false;
-      }
-    },
-    successHide: function (val) {
-      if (val) {
-        this.infoHeight = 250;
-      } else {
-        this.infoHeight = 0;
-      }
-    },
-    dialogHeight: function (val) {
-      console.log(val);
-    },
+
+  
   },
   computed: {
     codeHight: function () {
@@ -453,6 +473,62 @@ export default {
     },
   },
   methods: {
+    getfrontList() {
+      let reqData = {
+        frontId: this.frontId,
+      };
+      getFronts(reqData)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.frontList = res.data.data || [];
+            this.frontId = this.frontList[0].frontId;
+            this.loading = false;
+            this.complieCheck();
+          } else {
+            this.loading = false;
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
+     complieCheck() {
+      let reqData = {
+        frontId: this.frontId,
+      };
+      liquidCheckMethod(reqData.frontId)
+        .then((res) => {
+          if (res.data.code === 0) {
+          } else {
+            //this.navShow=false
+            this.loading = false;
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.navShow=false
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
     queryIsDeployedModifyEnable() {
       fetchIsDeployedModifyEnable().then((res) => {
         if (res.data.code == 0) {
@@ -667,8 +743,44 @@ export default {
         }
       }
     },
-    compileCheck() {
+    compileCheckEnter() {
       this.firstCall = false;
+      let reqData = {
+        groupId: localStorage.getItem("groupId"),
+        contractName: this.contractName,
+        contractPath: this.contractPath,
+        contractSource: Base64.encode(this.code),
+        contractAbi: this.abiFile,
+        contractBin: this.bin,
+        bytecodeBin: this.bytecodeBin,
+        version: this.version,
+        contractId: this.contractId,
+        contractAddress: this.contractAddress,
+        isWasm: true,
+        frontId:this.frontId
+      };
+      let _this = this;
+        liquidCompileCheck(reqData)
+          .then((res) => {
+            if (res.data.code === 0 && res.data.data.status == 1) {
+            _this.loading = true;
+              this.compileCheck()
+              // _this.$message({
+              //   message: _this.$t("text.compiling"),
+              //   duration: 2000,
+              // });
+            }
+          })
+          .catch((err) => {
+            _this.loading = false;
+            _this.$message({
+              message: err.data || _this.$t("text.systemError"),
+              type: "error",
+              duration: 2000,
+            });
+          });
+    },
+    compileCheck() {
       let reqData = {
         groupId: localStorage.getItem("groupId"),
         contractName: this.contractName,
@@ -710,20 +822,24 @@ export default {
                 Bus.$emit("compile", _this.data);
                 clearInterval(_this.liquidCheckTimer);
               }
-            } else if (res.data.code === 0 && res.data.data.status == 3) {
+            } else if ((res.data.code === 0 && res.data.data.status == 3)||(res.data.code === 0 && res.data.data.status == 4)) {
               _this.loading = false;
               clearInterval(_this.liquidCheckTimer);
-              // _this.$message({
-              //   message: _this.$chooseLang(res.data.code),
-              //   type: "error",
-              //   duration: 2000,
-              // });
+               _this.$message({
+                message: _this.$chooseLang(res.data.code),
+                type: "error",
+                duration: 2000,
+              })
             } else if (res.data.code === 0 && res.data.data.status == 1) {
+              _this.loading = true;
+              _this.loadingText = _this.$t("text.waitingTip");
               // _this.$message({
               //   message: _this.$t("text.compiling"),
               //   duration: 2000,
               // });
             } else {
+                clearInterval(_this.liquidCheckTimer);
+              _this.loading = false;
               _this.$message({
                 message: _this.$chooseLang(res.data.code),
                 type: "error",
@@ -732,6 +848,7 @@ export default {
             }
           })
           .catch((err) => {
+            clearInterval(_this.liquidCheckTimer);
             _this.loading = false;
             _this.$message({
               message: err.data || _this.$t("text.systemError"),
@@ -742,7 +859,7 @@ export default {
       }, 5000);
     },
     compile(callback) {
-      this.loadingText = this.$t("title.contractCompiling");
+      this.loadingText = this.$t("text.contractCompiling");
       let version = this.$store.state.versionData;
       if (this.liquidCheck) {
         this.loading = true;
@@ -767,7 +884,7 @@ export default {
               if (res.data.data != {}) {
                 let compiledMap = res.data.data;
                 this.abiFileShow = true;
-                this.successInfo = `< ${this.$t("text.compilationSucceeded")}`;
+                this.successInfo = `< ${this.$t("text.compilationSucceeded")}>`;
                 this.abiFile = compiledMap.abi;
                 // this.abiFile = JSON.parse(this.abiFile);
                 if (!(!this.abiFile || this.abiFile == "[]")) {
@@ -780,10 +897,11 @@ export default {
                 this.data.contractSource = Base64.encode(this.content);
                 this.$set(this.data, "bytecodeBin", this.bytecodeBin);
                 // this.$emit("compile", false)
-
                 Bus.$emit("compile", this.data);
+                this.setMethod();
               }
             } else if (res.data.code === 0 && res.data.data.status == 1) {
+              this.loading = true;
               this.compileCheck();
             } else {
               this.loading = false;
@@ -1134,10 +1252,10 @@ export default {
             type: "error",
             duration: 2000,
           });
-        });
+        })
     },
     deployContract($event) {
-      this.loadingText = "";
+      this.loadingText = ""
       var val = $event[0],
         cns = $event[1],
         liquid = $event[2];
