@@ -16,6 +16,9 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        waitingTip:"contract compilation,it will take about a few minutes, please wait...",
+        Contractcompiling: "contract compilation, please wait...",
+        compilationSucceeded: 'Contract compilation succeeded',
         remarks:'remarks',
         updatePassword: "Change Password",
         email: "Change",
@@ -337,6 +340,7 @@ export default {
         nodeNotActive:'Node not active',
     },
     rule: {
+        eventName:'please enter the event name',
         textLong: "1 to 32 characters in length",
         textLong1_12: "1 to 12 digits in length",
         textLong1_62: "1 to 62 digits in length",
@@ -358,7 +362,10 @@ export default {
         adminRule: "Please select private key",
         nodeType: "Please select a node type",
         contractName: "Please enter the contract name",
+        contractAdmin:"Please enter the contract administrator",
         contractAddress: "Please enter the contract address",
+        userAddress: "please select a user address",
+        fromAddress: "Please select a chain User",
         contractAbi: "Please enter the contract ABI",
         contractLong: "1 to 32 characters in length",
         contractRule: "Contains letters, numbers, and '_', starts with a letter, cannot end with '_', as in COM_WEBANK",
@@ -696,9 +703,12 @@ export default {
         mkdir:"mkDir",
         routeName:'route',
         userAddress:'user Address',
-        creatSuccess:"Create Success"
-
-
+        creatSuccess:"Create Success",
+        tip1:"the operation command must be cd/ls/mkdir!",
+        tip2:"the path is incorrect, please re-enter!",
+        tip3:"the creation path must start with 'apps' or'tables'!",
+        cdSucess:'Contract resource jump succeeded',
+        lsSucess:'Contract resource query succeeded',
     },
     privateKey: {
         addUser: "Add Users",
@@ -1022,10 +1032,17 @@ export default {
     govCommittee: {
         haveAdmin:"have jurisdiction",
         noAdmin:"no jurisdiction",
+        haveMethodAdmin:"Have Call Jurisdiction",
+        noMethodAdmin:"Not Have Call Jurisdiction",
+        haveDeployAdmin:"Have Deploy Jurisdiction",
+        noDeployAdmin:"Not Have Deploy Jurisdiction",
         addCommittee: 'Grant Committee Vote',
+        CommitteeSuccess: 'Committee Vote Success',
         modifyThreshold: 'Modify Threshold Vote',
+        modifyThresholdSuccess: 'Modify Threshold Vote Success',
         Committee: 'Committee Vote',
         revokeVote: 'revoke Vote',
+        revokeVoteSuccess: 'revoke Vote Success',
         fromUser: 'Chain Committee',
         user: 'New Committee',
         address: 'Address',
@@ -1034,7 +1051,10 @@ export default {
         participatesRate:"participatesRate",
         enableNum: 'Enable Num',
         modifyWeight: 'Modify Weight Vote',
+        modifySuccess: 'Modify Weight Vote Success',
         deleteCommittee: 'Revoke Committee Vote',
+        deleteSuccess: 'Revoke Committee Vote Success',
+        addSuccess: 'Add Committee Vote Success',
         votingList: 'Voting Record List',
         id: 'ID',
         governUserId: 'Govern User',
@@ -1051,6 +1071,7 @@ export default {
         agree: 'Agree',
         refuse: 'Refuse',
         success: 'Success',
+        resetSuccess: 'Reset Success',
         delete: 'Delete',
         blockNum: 'Block Number',
         toCommittee: 'To Committee',
@@ -1070,6 +1091,7 @@ export default {
         devAddress: 'Developer Address'
     },
     dialog: {
+        liquidTip:"the address format of the liquid contract starts with / and is composed of numbers, letters and underscores",
         cnsVersion: 'Please enter CNS version',
         cnsVersionPattern: "It can only be numbers, letters and'.'",
         cnsName: 'Please enter CNS name',

@@ -87,7 +87,7 @@
         </div>
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-            <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
+            <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send"  :liquidChecks='liquidCheck' :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
         <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
@@ -138,7 +138,7 @@ import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
 import mgmtCns from "./dialog/mgmtCns"
-import { getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode } from "@/util/api"
+import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode,checkIsWasm } from "@/util/api"
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
@@ -244,7 +244,8 @@ export default {
             setAdminVisibility:false,
             checkMethodVisibility:false,
             updateItem: null,
-            setPolicyItem:null
+            setPolicyItem:null,
+            liquidCheck: false,
         }
     },
     created() {
@@ -261,8 +262,53 @@ export default {
         if (localStorage.getItem("groupId")) {
             this.getContracts()
         }
+        this.getfrontList()
     },
     methods: {
+      getfrontList() {
+      let reqData = {
+        frontId: this.frontId,
+      };
+      getFronts(reqData)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.frontList = res.data.data || [];
+            this.frontId = this.frontList[0].frontId;
+            this.loading = false;
+            this.liquidCheckMethod();
+          } else {
+            this.loading = false;
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
+    liquidCheckMethod() {
+      let groupId = localStorage.getItem("groupId");
+      checkIsWasm(this.frontId,groupId)
+        .then((res) => {
+          if (res.data.data == true) {
+            this.liquidCheck = true;
+          } 
+        })
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: err.data || this.$t("text.systemError"),
+          });
+        });
+    },
         formatterPath: function(row) {
             let str = row ? row : "-"
             return str

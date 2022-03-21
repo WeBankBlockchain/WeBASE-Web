@@ -138,8 +138,10 @@ export default {
     "select-catalog": selectCatalog,
     exportProject,
   },
+   props: ["liquidChecks"],
   data: function () {
     return {
+      liquidCheck: this.liquidChecks,
       pathList: [],
       foldershow: false,
       fileshow: false,
@@ -179,6 +181,11 @@ export default {
     Bus.$off("open");
     Bus.$off("save");
   },
+    watch: {
+    liquidChecks: function (val) {
+      this.liquidCheck = val;
+    }
+    },
   mounted: function () {
     if (
       (localStorage.getItem("root") === "admin" ||
@@ -756,6 +763,9 @@ export default {
       };
       if (data.contractId) {
         reqData.contractId = data.contractId;
+      }
+        if (this.liquidCheck) {
+        reqData.isWasm = true;
       }
       if (data.contractAddress) {
         reqData.contractAddress = data.contractAddress;

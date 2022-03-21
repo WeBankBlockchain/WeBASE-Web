@@ -16,6 +16,8 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        waitingTip:"合约编译中，大约需要几分钟，请稍等...",
+        contractCompiling:"合约编译中，请稍等...",
         remarks:'备注',
         updatePassword: "修改密码",
         email: "修改",
@@ -93,6 +95,7 @@ export default {
         argument: "参数",
         value: "值",
         dropGroupData: "删除群组数据",
+        compilationSucceeded: '合约编译成功',
         running: "运行",
         maintaining: "维护中",
         abnormal: "异常",
@@ -340,6 +343,7 @@ export default {
         addContractAddress: '绑定'
     },
     rule: {
+        eventName:'请输入Event名',
         textLong: "长度在 1 到 32 个字符",
         textLong1_12: "长度在 1 到 12 位",
         textLong1_62: "长度在 1 到 62 位",
@@ -361,7 +365,10 @@ export default {
         adminRule: "请选择管理员账号",
         nodeType: "请选择节点类型",
         contractName: "请输入合约名称",
+        contractAdmin:"请输入合约管理员",
         contractAddress: "请输入合约地址",
+        userAddress: "请选择用户地址",
+        fromAddress: "请选择链委员",
         contractAbi: "请输入合约ABI",
         contractLong: "长度在 1 到 32 个字符",
         contractRule: "包含字母，数字和‘_’，以字母开头，不能以“_”结尾,如com_webank",
@@ -424,7 +431,6 @@ export default {
         dataBigScreen:"数据大屏"
     },
     title: {
-        contractCompiling:"合约编译中，请稍等...",
         bfs:"BFS",
         checkMethod:"检查方法调用权限",
         checkDeploy:"检查部署权限",
@@ -702,8 +708,12 @@ export default {
         mkdir:"mkDir",
         routeName:'路径',
         userAddress:'用户地址',
-        creatSuccess:"创建成功"
-        
+        creatSuccess:"创建成功",
+        tip1:"操作命令必须为cd/ls/mkdir!",
+        tip2:"路径有误,请重新输入!",
+        tip3:"创建路径必须以'apps'或'tables'开头!",
+        cdSucess:'合约资源跳转成功',
+        lsSucess:'合约资源查询成功',
     },
     privateKey: {
         addUser: "新增用户",
@@ -1037,11 +1047,18 @@ export default {
     },
     govCommittee: {
         haveAdmin:"有权限",
+        haveDeployAdmin:"有部署权限",
+        haveMethodAdmin:"有调用权限",
+        noMethodAdmin:"无调用权限",
         noAdmin:"无权限",
+        noDeployAdmin:"无部署权限",
         addCommittee: '新增委员投票',
         Committee: '委员投票',
+        CommitteeSuccess: '委员投票成功',
         revokeVote: '撤销提案',
-        modifyThreshold: '修改阈值  ',
+        revokeVoteSuccess: '撤销提案成功',
+        modifyThreshold: '修改阈值',
+        modifyThresholdSuccess: '修改阈值成功',
         fromUser: '链委员',
         user: '新委员',
         address: '账户地址',
@@ -1049,7 +1066,10 @@ export default {
         weightRatio: '权重比(%)',
         enableNum: '生效区块高度',
         modifyWeight: '设置委员权重',
+        modifySuccess: '设置委员权重成功',
         deleteCommittee: '撤销委员投票',
+        deleteSuccess: '撤销委员投票成功',
+        addSuccess: '新增委员投票成功',
         importUserprivateKey:'导入链委员私钥',
         votingList: '提案记录列表',
         id: '提案ID',
@@ -1068,6 +1088,7 @@ export default {
         agree: '同意',
         refuse: '拒绝',
         success: '成功',
+        resetSuccess: '重置成功',
         delete: '删除',
         blockNum: '当前块高',
         toCommittee: '待修改委员',
@@ -1087,6 +1108,7 @@ export default {
         devAddress: '用户地址'
     },
     dialog: {
+        liquidTip:"liquid合约的地址格式为/开头，由数字字母下划线组成",
         cnsVersion: '请输入CNS版本',
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',

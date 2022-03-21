@@ -19,7 +19,7 @@
       <tr>
         <td style="width: 100px;text-align: right" class="text-td"><span>{{$t('contracts.user')}}：</span></td>
         <td>
-          <el-select v-model="userName" :placeholder="placeholderText" style="width: 300px" :no-data-text="$t('text.goCreatPrivateKey')">
+          <el-select v-model="userId" :placeholder="placeholderText" style="width: 300px" :no-data-text="$t('text.goCreatPrivateKey')">
             <el-option :label="item.userName" :value="item.address" :key="item.userId" v-for='item in userList'>
               <span>{{item.userName}}</span>
               <span class="font-12">{{item.address}}</span>
@@ -32,40 +32,40 @@
           </span>
         </td>
       </tr>
-      <!-- <tr>
-                <td  class="text-td"><span>CNS：</span></td>
-                <td>
-                    <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
-                </td>
-            </tr>
-            <tr v-if="isCNS">
-                <td style="width: 100px;text-align: right;" class="text-td"><span style=""></span></td>
-                <td>
-                    <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
-                        <el-form-item prop="cnsName">
-                            <el-input v-model="cnsVersionFrom.cnsName" style="width: 300px">
-                                <template slot="prepend">
-                                    <span title="name">name</span>
-                                </template>
-                            </el-input>
-                        </el-form-item>
-                    </el-form>
-                </td>
-            </tr>
-            <tr v-if="isCNS">
-                <td style="width: 100px;text-align: right;" class="text-td"><span></span></td>
-                <td>
-                    <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
-                        <el-form-item prop="cnsVersion">
-                            <el-input v-model="cnsVersionFrom.cnsVersion" style="width: 300px">
-                                <template slot="prepend">
-                                    <span title="version">version</span>
-                                </template>
-                            </el-input>
-                        </el-form-item>
-                    </el-form>
-                </td>
-            </tr> -->
+      <tr>
+        <td style="width: 100px;text-align: right;" class="text-td"><span>CNS：</span></td>
+        <td>
+          <el-checkbox v-model="isCNS" @change="changeCns"></el-checkbox>
+        </td>
+      </tr>
+      <tr v-if="isCNS">
+        <td style="width: 100px;text-align: right;" class="text-td"><span style=""></span></td>
+        <td>
+          <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
+            <el-form-item prop="cnsName">
+              <el-input v-model="cnsVersionFrom.cnsName" style="width: 300px">
+                <template slot="prepend">
+                  <span title="name">name</span>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </td>
+      </tr>
+      <tr v-if="isCNS">
+        <td style="width: 100px;text-align: right;" class="text-td"><span></span></td>
+        <td>
+          <el-form :model="cnsVersionFrom" :rules="rules" ref="cnsVersionFrom" class="demo-ruleForm">
+            <el-form-item prop="cnsVersion">
+              <el-input v-model="cnsVersionFrom.cnsVersion" style="width: 300px">
+                <template slot="prepend">
+                  <span title="version">version</span>
+                </template>
+              </el-input>
+            </el-form-item>
+          </el-form>
+        </td>
+      </tr>
       <tr v-if='ifLiquid'>
         <td style="width: 100px;text-align: right" class="text-td"><span>{{$t('contracts.contractAddress')}}：</span></td>
         <td>
@@ -81,6 +81,10 @@
           <!-- <el-input v-model="contractAddress" style="width: 310px;margin-bottom:15px;" prop='contractAddress'>
                         </el-input> -->
         </td>
+      </tr>
+      <tr>
+        <td style="width: 100px;text-align: right"></td>
+        <td><span>{{$t('dialog.liquidTip')}}</span></td>
       </tr>
       <tr v-if='inputs.length'>
         <td style="vertical-align: top;text-align: right;">{{this.$t('contracts.params')}}：</td>
@@ -129,6 +133,8 @@ export default {
       console.log(val);
       if (val.substr(0, 1) != "/") {
         callback(new Error("合约地址必须以/开头"));
+      } else if (val.length > 64) {
+        callback(new Error("合约地址长度不能超过64位"));
       } else {
         callback();
       }
@@ -235,6 +241,14 @@ export default {
             return false;
           }
         });
+      } else if (this.ifLiquid) {
+        this.$refs["contractAddress"].validate((valid) => {
+          if (valid) {
+            this.queryDeploy();
+          } else {
+            return false;
+          }
+        });
       } else {
         this.queryDeploy();
       }
@@ -255,8 +269,9 @@ export default {
         }
       }
       let data = {
-        userId: this.userName,
+        userId: this.userId,
         params: params,
+        userName: this.userName,
       };
       let cnsObj = {
         version: this.cnsVersionFrom.cnsVersion,
@@ -295,7 +310,8 @@ export default {
               }
             });
             if (this.userList.length) {
-              this.userName = this.userList[0].address;
+              this.userId = this.userList[0].address;
+              this.userName = this.userList[0].userName;
               this.isUserNameShow = false;
             } else {
               this.isUserNameShow = true;

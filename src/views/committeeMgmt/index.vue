@@ -213,7 +213,8 @@
               </span>
             </template>
             <template v-else>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">{{$t('govCommittee.Committee')}}
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
+                {{$t('govCommittee.Committee')}}
               </el-button>
               <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
                 {{$t('govCommittee.revokeVote')}}</el-button>
@@ -221,8 +222,8 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" :page-size="votePageSize"
-        layout=" sizes, prev, pager, next, jumper" :total="voteTotal">
+      <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" layout=" sizes, prev, pager, next, jumper"
+        :total="voteTotal">
       </el-pagination>
       <el-dialog :title="$t('govCommittee.Committee')" :visible.sync="CommitteeVisible" width="480px" v-if="CommitteeVisible" center @close="closeCommittee">
         <el-form :model="govCommittee" :rules="rules" ref="govCommittee" label-width="130px" class="demo-ruleForm">
@@ -293,6 +294,7 @@ import {
   voteCommittee,
   voteRevoke,
   modifyRate,
+  getCount,
 } from "@/util/api";
 export default {
   name: "committeeMgmt",
@@ -530,6 +532,7 @@ export default {
       this.queryCommitteeList();
       this.queryVoteRecordList();
       this.getUserData();
+      this.queryVoteRecordListCount();
     }
   },
 
@@ -640,7 +643,7 @@ export default {
           if (res.data.code === 0) {
             this.$message({
               type: "success",
-              message: this.$t("govCommittee.success"),
+              message: this.$t("govCommittee.CommitteeSuccess"),
             });
             this.closeCommittee();
             this.queryCommitteeList();
@@ -683,7 +686,7 @@ export default {
           if (res.data.code === 0) {
             this.$message({
               type: "success",
-              message: this.$t("govCommittee.success"),
+              message: this.$t("govCommittee.revokeVoteSuccess"),
             });
             this.closerevokeVote();
             this.queryCommitteeList();
@@ -727,7 +730,7 @@ export default {
           if (res.data.code === 0) {
             this.$message({
               type: "success",
-              message: this.$t("govCommittee.success"),
+              message: this.$t("govCommittee.addSuccess"),
             });
             this.closeAddCommittee();
             this.queryCommitteeList();
@@ -779,7 +782,7 @@ export default {
           if (res.data.code === 0) {
             this.$message({
               type: "success",
-              message: this.$t("govCommittee.success"),
+              message: this.$t("govCommittee.modifyThresholdSuccess"),
             });
             // this.queryGetThreshold();
             this.closeModifyThreshold();
@@ -822,7 +825,7 @@ export default {
               if (res.data.code === 0) {
                 this.$message({
                   type: "success",
-                  message: this.$t("govCommittee.success"),
+                  message: this.$t("govCommittee.modifySuccess"),
                 });
                 this.closeModifyWeight();
                 this.queryCommitteeList();
@@ -874,7 +877,7 @@ export default {
 
             //     })
             // })
-            this.total = res.data.totalCount;
+            //this.total = res.data.totalCount;
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -917,7 +920,7 @@ export default {
               if (res.data.code === 0) {
                 this.$message({
                   type: "success",
-                  message: this.$t("govCommittee.success"),
+                  message: this.$t("govCommittee.deleteSuccess"),
                 });
                 this.closeDeleteCommittee();
                 this.queryCommitteeList();
@@ -944,6 +947,31 @@ export default {
         }
       });
     },
+    queryVoteRecordListCount() {
+      let reqData = {
+        groupId: localStorage.getItem("groupId"),
+      };
+      getCount(reqData)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.voteTotal = res.data.data;
+            // this.getNetworkDetails()
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
     queryVoteRecordList() {
       let reqData = {
         groupId: localStorage.getItem("groupId"),
@@ -954,7 +982,7 @@ export default {
         .then((res) => {
           if (res.data.code === 0) {
             this.voteList = res.data.data;
-            this.voteTotal = res.data.totalCount;
+            //this.voteTotal = res.data.totalCount;
             // this.getNetworkDetails()
           } else {
             this.$message({
@@ -1030,10 +1058,12 @@ export default {
       this.votePageSize = val;
       this.voteCurrentPage = 1;
       this.queryVoteRecordList();
+      this.queryVoteRecordListCount();
     },
     voteCurrentChange(val) {
       this.voteCurrentPage = val;
       this.queryVoteRecordList();
+      this.queryVoteRecordListCount();
     },
     getNetworkDetails() {
       let groupId = localStorage.getItem("groupId");

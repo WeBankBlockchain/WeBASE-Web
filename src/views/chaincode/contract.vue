@@ -18,15 +18,11 @@
     <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractIDE')" style="font-size: 14px;" @changGroup="changGroup"></v-content-head>
     <div style="height: calc(100% - 56px)">
       <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
-        <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide">
+        <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide" :liquidChecks='liquidCheck'>
           <template #footer>
             <div class="version-selector">
-              <el-select v-if='!liquidCheck' v-model="version" placeholder="请选择" @change="onchangeLoadVersion">
+              <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion" >
                 <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
-                </el-option>
-              </el-select>
-              <el-select v-else v-model="frontId">
-                <el-option v-for="item in frontList" :key="item.frontIp" :label="item.frontIp" :value="item.frontId">
                 </el-option>
               </el-select>
             </div>
@@ -170,16 +166,17 @@ export default {
     ];
     // this.initWorker()
     // this.getEncryption(this.querySolcList);
-    this.liquidList();
-    this.liquidCheck = true;
+    // this.liquidList();
+    // this.liquidCheck = true;
+    this.getfrontList()
     //this.liquidCheckMethod()
   },
   methods: {
     liquidCheckMethod() {
-      let group = localStorage.getItem("groupId");
-      checkIsWasm(group)
+      let groupId = localStorage.getItem("groupId");
+      checkIsWasm(this.frontId,groupId)
         .then((res) => {
-          if (res.data == true) {
+          if (res.data.data == true) {
             this.liquidList();
             this.liquidCheck = true;
           } else {
@@ -195,6 +192,17 @@ export default {
         });
     },
     liquidList() {
+      this.versionList = [
+        {
+          solcName: "liquid",
+          versionId: 0,
+        },
+      ];
+      this.version = "liquid";
+      localStorage.setItem("solcName", "liquid");
+      //this.frontList();
+    },
+    getfrontList() {
       let reqData = {
         frontId: this.frontId,
       };
@@ -204,7 +212,7 @@ export default {
             this.frontList = res.data.data || [];
             this.frontId = this.frontList[0].frontId;
             this.loading = false;
-            this.complieCheck();
+            this.liquidCheckMethod();
           } else {
             this.loading = false;
             this.$message({

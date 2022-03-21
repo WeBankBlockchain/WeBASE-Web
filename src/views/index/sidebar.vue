@@ -15,13 +15,17 @@
  */
 <template>
     <div style="height: 100%;position: relative;box-sizing: border-box">
-        <div style="height: 100%;background-color: #0c1220;box-sizing: border-box" class="sidebar-content">
-            <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
+        <div style="height: 100%;background-color: #0c1220;box-sizing: border-box;overflow-y: auto;" class="sidebar-content">
+            <!-- <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
                     <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
                 </span>
-            </div>
+            </div> -->
+              <span v-if="version" class="font-12 text-center version">{{version}}</span>
+              <span class="sidebar-contract-icon">
+                    <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
+                </span>
             <div class="mini-sidebar-contract-icon" v-if="!menuShowC" style="padding-bottom:40px">
                 <i class="el-icon-caret-right font-color-aeb1b5" @click="hideMune(false)" style="font-size: 18px;"></i>
             </div>
@@ -58,7 +62,8 @@
 </template>
 
 <script>
-import maxLog from "@/../static/image/logo-2 copy@1.5x.jpg";
+import Bus from "@/bus";
+import maxLog from "../../../static/image/logo-2 copy@1.5x.jpg";
 import router from "@/router";
 import { versionfunegt } from "@/util/util.js";
 import { getFronts } from "@/util/api";
@@ -74,7 +79,8 @@ export default {
             userRole: localStorage.getItem("root"),
             routesList: [],
             versionfunegt: versionfunegt,
-            activeTextColor: true
+            activeTextColor: true,
+            version: "3.0.0-rc2",
         };
     },
     computed: {
@@ -207,6 +213,7 @@ export default {
             }
         },
         activeRoute() {
+            Bus.$emit("closeNav", true);
             return this.active ? this.active : this.$route.path
         }
     },
@@ -326,7 +333,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/hostMetric') {
-                                    item.menuShow = false
+                                    item.menuShow = true
                                 }
                                 if (item.path == '/emailAlarm') {
                                     item.menuShow = true
@@ -344,7 +351,7 @@ export default {
                                     item.menuShow = true
                                 }
                                 if (item.path == '/blockEvent') {
-                                    item.menuShow = true
+                                    item.menuShow = false
                                 }
                                 if (item.path == '/contractEvent') {
                                     item.menuShow = true
@@ -357,7 +364,7 @@ export default {
 
                 for (let i = 0; i < list.length; i++) {
                     if (list[i].name == '帐号管理') {
-                        list[i].menuShow = false
+                        list[i].menuShow = true
                     } else if (list[i].nameKey == 'main' || list[i].nameKey == 'login' || list[i].nameKey == 'blockBrowsing' || list[i].nameKey == 'groupManagement') {
                         list[i].menuShow = false;
                     } else {
@@ -370,13 +377,13 @@ export default {
                             } else {
                                 it.menuShow = false;
                             }
-                            if (localStorage.getItem("deployType") == 0 && it.nameKey == 'hostMgrTitle') {
-                                it.menuShow = false;
-                            }
-
+                            
+                            // if ((localStorage.getItem("deployType") == 0||localStorage.getItem("deployType") == null) && it.nameKey == 'hostMgrTitle') {
+                            //     it.menuShow = false;
+                            // }
                         })
                     }
-                    if (list[i].nameKey == 'guide'||list[i].nameKey == 'appManagement') {
+                    if (list[i].nameKey == 'guide') {
                         list[i].menuShow = false
                     }
                     if (list[i].nameKey == 'bigScreen') {
@@ -419,12 +426,15 @@ export default {
         },
         handleClose(key, keyPath) {
         },
-        hideMune: function (val) {
+        hideMune(val) {
             this.$emit("sidebarChange", val);
             if (this.menuShow) {
                 this.menuShow = false;
+                this.version="3.0.0-rc2"
+    
             } else {
                 this.menuShow = true;
+                this.version=""
             }
             if (this.$route.path === "contract" && val) {
                 localStorage.setItem("sidebarHide", true);
@@ -535,8 +545,8 @@ export default {
 .mini-sidebar-contract-icon i {
     position: absolute;
     top: 20px;
-    right: 10px;
-    z-index: 9999;
+    right: 20px;
+    z-index: 999;
     cursor: pointer;
 }
 
@@ -577,8 +587,8 @@ export default {
 .sidebar-contract-icon {
     position: absolute;
     display: inline-block;
-    left: 180px;
-    top: 18px;
+    left: 90%;
+    top: 10px;
     font-size: 12px;
     letter-spacing: 0;
     text-align: right;
@@ -587,5 +597,15 @@ export default {
 }
 .sidebar-contract-icon i {
     cursor: pointer;
+}
+.version{
+    color: rgb(157, 162, 171);
+    font-size: 18px;
+    position: absolute;
+    display: inline-block;
+    left: 10%;
+    top: 10px;
+    width: 100px;
+    z-index: 999;
 }
 </style>
