@@ -7,7 +7,7 @@
         <el-form-item :label="$t('table.contractAddress')" prop="contractAddress">
           <el-autocomplete v-model.trim="checkMethodForm.contractAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
             <template slot-scope="{ item }">
-              <div class="name">{{ item.contractAddress }} {{item.contractName}}</div>
+              <div class="name"> {{item.contractName}} / {{ item.contractAddress | splitString}}...</div>
             </template>
           </el-autocomplete>
         </el-form-item>
@@ -41,12 +41,11 @@
           <el-input v-model="checkMethodForm.userAddress" :rows="1" type="textarea" style="width: 300px;"></el-input>
         </el-form-item> -->
         <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
-          <el-select v-model="checkMethodForm.userAddress" :placeholder="$t('text.select')" style="width: 300px;">
-            <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-              <span>{{item.userName}}</span>
-              <span class="font-12">{{item.address}}...</span>
-            </el-option>
-          </el-select>
+          <el-autocomplete v-model.trim="checkMethodForm.userAddress" :fetch-suggestions="querySearchUser" @select="selectAddressUser" style="width: 300px;" clearable>
+            <template slot-scope="{ item }">
+              <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
+            </template>
+          </el-autocomplete>
         </el-form-item>
         <el-form-item>
           <div class="text-center" style="width: 500px;">
@@ -583,6 +582,15 @@ export default {
         );
       };
     },
+    createFilters(queryString) {
+      return (adminRivateKeyList) => {
+        return (
+          adminRivateKeyList.address
+            .toLowerCase()
+            .indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
     querySearch(queryString, cb) {
       var restaurants = this.restaurants;
       var results = queryString
@@ -590,6 +598,18 @@ export default {
         : restaurants;
       // 调用 callback 返回建议列表的数据
       cb(results);
+    },
+    querySearchUser(queryString, cb) {
+      var adminRivateKeyList = this.adminRivateKeyList;
+      var results = queryString
+        ? adminRivateKeyList.filter(this.createFilters(queryString))
+        : adminRivateKeyList;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    selectAddressUser(item) {
+      console.log(item);
+      this.checkMethodForm.userAddress = item.address;
     },
     selectAddress(item) {
       this.inputList = [];

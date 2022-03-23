@@ -2,10 +2,10 @@
   <div>
     <el-form :model="resetForm" :rules="rules" ref="resetForm" label-width="130px" class="demo-ruleForm">
       <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
-        <el-select v-model="resetForm.fromAddress" :placeholder="$t('text.select')">
+        <el-select v-model="resetForm.fromAddress" :placeholder="$t('text.select')" style="width:300px">
           <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
             <span>{{item.userName}}</span>
-            <span class="font-12">{{item.governorAddress}}...</span>
+            <span>{{item.governorAddress| splitString}}...</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -20,16 +20,21 @@
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
               <el-input v-model="resetForm.weight" @input="e => (resetForm.weight = isnumber(e))" class="form-item-input"></el-input>
             </el-form-item> -->
+      <el-form-item :label="$t('contracts.contractAddress')" prop="contractAddress">
+        <el-input v-model="resetForm.contractAddress" style="width:300px" class="form-item-input" :placeholder="$t('rule.contractAddress')"></el-input>
+      </el-form-item>
       <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
-        <el-select v-model="resetForm.userAddress" :placeholder="$t('text.select')">
+        <!-- <el-select v-model="resetForm.userAddress" :placeholder="$t('text.select')">
           <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
             <span>{{item.userName}}</span>
             <span class="font-12">{{item.address}}...</span>
           </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item :label="$t('contracts.contractAddress')" prop="contractAddress">
-        <el-input v-model="resetForm.contractAddress" style="width:214px" class="form-item-input"></el-input>
+        </el-select> -->
+        <el-autocomplete v-model.trim="resetForm.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
+          <template slot-scope="{ item }">
+            <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
+          </template>
+        </el-autocomplete>
       </el-form-item>
     </el-form>
     <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
@@ -173,6 +178,27 @@ export default {
   },
 
   methods: {
+    createFilter(queryString) {
+      return (adminRivateKeyList) => {
+        return (
+          adminRivateKeyList.address
+            .toLowerCase()
+            .indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    selectAddress(item) {
+      console.log(item);
+      this.resetForm.userAddress = item.address;
+    },
+    querySearch(queryString, cb) {
+      var adminRivateKeyList = this.adminRivateKeyList;
+      var results = queryString
+        ? adminRivateKeyList.filter(this.createFilter(queryString))
+        : adminRivateKeyList;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
     sureReset() {
       this.$refs["resetForm"].validate((valid) => {
         if (valid) {

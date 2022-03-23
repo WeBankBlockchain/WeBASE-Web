@@ -33,12 +33,11 @@
 
       </el-form-item>
       <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
-        <el-select v-model="policyData.userAddress" :placeholder="$t('text.select')" style="width:300px;">
-          <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-            <span>{{item.userName}}</span>
-            <span class="font-12">{{item.address}}...</span>
-          </el-option>
-        </el-select>
+        <el-autocomplete v-model.trim="policyData.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
+          <template slot-scope="{ item }">
+            <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
+          </template>
+        </el-autocomplete>
       </el-form-item>
       <el-form-item :label="$t('contracts.set')" prop="set">
         <el-radio v-model="policyData.authType" :label=1>{{this.$t('contracts.WhiteList')}}</el-radio>
@@ -233,6 +232,27 @@ export default {
   },
 
   methods: {
+    createFilter(queryString) {
+      return (adminRivateKeyList) => {
+        return (
+          adminRivateKeyList.address
+            .toLowerCase()
+            .indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    selectAddress(item) {
+      console.log(item);
+      this.policyData.userAddress = item.address;
+    },
+    querySearch(queryString, cb) {
+      var adminRivateKeyList = this.adminRivateKeyList;
+      var results = queryString
+        ? adminRivateKeyList.filter(this.createFilter(queryString))
+        : adminRivateKeyList;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
     labelParam(it) {
       if (it.indexed) {
         return `${it.type} indexed ${it.name} `;

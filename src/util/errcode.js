@@ -1701,15 +1701,15 @@ let errCode = {
     },
     "201631": {
         en: "Java Command exec timeout",
-        zh: "Java命令执行超时"
+        zh: "Liquid命令执行超时"
     },
     "201632": {
         en: "Java Command return error",
-        zh: "Java命令返回错误"
+        zh: "Liquid命令返回错误，请检查日志"
     },
     "201633": {
         en: "When deploying liquid, contract address must not be empty",
-        zh: "部署liquid时，合同地址不得为空"
+        zh: "部署liquid时，合约地址不得为空"
     },
     "202550": {
         en: "Liquid compile error",
@@ -1717,19 +1717,19 @@ let errCode = {
     },
     "202551": {
         en: "When deploying liquid, contract address must not be empty",
-        zh: "部署liquid时，合同地址不得为空"
+        zh: "部署liquid时，合约地址不得为空"
     },
     "201610": {
         en: "Contract compile task not exist",
-        zh: "合同编译任务不存在"
+        zh: "合约编译任务不存在"
     },
     "201608": {
         en: "Deploying contract not match with the group(solidity/liquid)",
-        zh: "部署合同与群组不匹配(solidity/liquid)"
+        zh: "部署合约与群组不匹配(solidity/liquid)"
     },
      "201609": {
         en: "This liquid contract already compiling, please wait...",
-        zh: "liquid合同已编译，请稍候..."
+        zh: "liquid合约编译中，请稍候..."
     },
     "201014": {
         en: "ContractAddress Already Used",
@@ -1754,6 +1754,10 @@ let errCode = {
     "-53001": {
         en: "Path of file not exist",
         zh: "文件路径不存在"
+    },
+    "-53002": {
+        en: "File already existed",
+        zh: "文件已存在"
     },
 }
 export function chooseLang(code, value) {
