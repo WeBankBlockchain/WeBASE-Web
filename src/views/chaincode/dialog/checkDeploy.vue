@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form :model="checkDeployForm" :rules="rules" ref="checkDeployForm" label-width="130px" class="demo-ruleForm">
-      <el-form-item :label="$t('contracts.contractAddress')" prop="contractAddress">
-        <el-input v-model="checkDeployForm.contractAddress" style="width:214px" class="form-item-input"></el-input>
+      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+        <el-input v-model="checkDeployForm.userAddress" style="width:300px" class="form-item-input" :placeholder="$t('rule.userAddress')"></el-input>
       </el-form-item>
     </el-form>
     <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
@@ -42,7 +42,7 @@ export default {
       abiContent: "",
       checkDeployForm: {
         contractAbi: null,
-        contractAddress: "",
+        userAddress: "",
         contractName: "",
       },
       loading: false,
@@ -79,10 +79,10 @@ export default {
             trigger: "blur",
           },
         ],
-        contractAddress: [
+        userAddress: [
           {
             required: true,
-            message: this.$t("rule.contractAddress"),
+            message: this.$t("rule.userAddress"),
             trigger: "blur",
           },
         ],
@@ -148,7 +148,7 @@ export default {
           this.btnLoading = true;
           let reqData = {
             groupId: localStorage.getItem("groupId"),
-            userAddress: this.checkDeployForm.contractAddress,
+            userAddress: this.checkDeployForm.userAddress,
           };
           checkDeploy(reqData)
             .then((res) => {

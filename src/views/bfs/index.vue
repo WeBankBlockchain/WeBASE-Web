@@ -7,6 +7,13 @@
         <el-form-item :label="$t('bfs.pwdRoute')" class="item-form">
           <el-input readonly v-model.trim="bfsForm.pwdRoute" class="select-31" style="width: 200px;"></el-input>
         </el-form-item>
+        <el-form-item :label="$t('bfs.operate')" class="item-form">
+          <el-select v-model="bfsForm.operate" style="width: 100PX;">
+            <el-option :label="item.operate" :value="item.operate" :key="item.operate" v-for='item in operateList'>
+              <span>{{item.operate}}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item :label="$t('bfs.routeParam')" class="item-form" ref='routeParam' prop="routeParam">
           <el-input v-model="bfsForm.routeParam" @input="routeParamChange" :placeholder="$t('text.input')" style="width: 200px;"></el-input>
           <!-- <div :class="{'errorShow':inputNullTip,'errorNotShow':!inputNullTip}">{{this.$t('rule.routeParam')}}</div> -->
@@ -15,40 +22,24 @@
           <el-select v-model="bfsForm.fromAddress" :placeholder="placeholderText" style="width: 200px;">
             <el-option :label="item.address" :value="item.address" :key="item.address" v-for='item in userList'>
               <span class="font-12">{{item.userName}}</span>
-              <span>{{item.address}}</span>
+              <span>{{item.address | splitString}}...</span>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" @click="implement" class="modify-btn" :disabled="disabled" :loading="loading1">{{this.$t('text.implement')}}</el-button>
-          <!-- <el-button size="small" type="primary" @click="ls" class="modify-btn" :disabled="disabled" :loading="loading1">{{this.$t('bfs.ls')}}</el-button> -->
-          <!-- <el-button size="small" type="primary" @click="mkdir" class="modify-btn" :disabled="disabled" :loading="loading1">{{this.$t('bfs.mkdir')}}</el-button> -->
         </el-form-item>
       </el-form>
-      <json-viewer :value="bfsData" :expand-depth='5' copyable></json-viewer>
-      <!-- <el-table :data="bfsList" tooltip-effect="dark" v-loading="loading" class="search-table-content">
-                <el-table-column v-for="head in bfsHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width="head.width">
-                    <template slot-scope="scope">
-                        <span>{{scope.row[head.enName]}}</span>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination> -->
+      <div class="contents">
+        <json-viewer :value="bfsData" :expand-depth='5' copyable class='jsonViewer'></json-viewer>
+        <div class="tip">
+          <span>Tips:</span>
+          <p>*{{$t('bfs.Tip1')}}</p>
+          <p>*{{$t('bfs.Tip2')}}</p>
+          <p>*{{$t('bfs.Tip3')}}</p>
+        </div>
+      </div>
     </div>
-    <!-- 本地cns注释 -->
-    <!-- <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
-            <span class="cns-title">{{$t('contracts.localCnsTitle')}}</span>
-            <el-table :data="localCnsList" tooltip-effect="dark" v-loading="loadingLocal" class="search-table-content">
-                <el-table-column v-for="head in localCnsHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center" :width="head.width">
-                    <template slot-scope="scope">
-                        <span>{{scope.row[head.enName]}}</span>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-pagination class="page" @size-change="localSizeChange" @current-change="localCurrentChange" :current-page="currentPageLocal" :page-sizes="[10, 20, 30, 50]" :page-size="pageSizeLocal" layout="total, sizes, prev, pager, next, jumper" :total="totalLocal">
-            </el-pagination>
-        </div> -->
   </div>
 </template>
 
@@ -72,35 +63,35 @@ export default {
 
   data() {
     var paramRule = (rule, value, callback) => {
-      let valArray = value.trim().replace(/\s+/g, " ").split(" ");
-      console.log(valArray[0]);
-      let valArr = [];
-      if (valArray.length > 1) {
-        valArr = valArray[1].split("/");
+      let val = value.trim().replace(/\s+/g, " ");
+      console.log(val);
+      let valArr = val.split("/");
+      let valArr2 = val.substr(1).split("/");
+      if (this.bfsForm.operate != "mkdir" && val == "/") {
+        callback();
       }
-      if (
-        valArray[0] != "cd" &&
-        valArray[0] != "ls" &&
-        valArray[0] != "mkdir"
-      ) {
-        callback(new Error(this.$t("bfs.tip1")));
-      } else if (valArray.length < 2 || valArray.length != 2) {
+      if (!/^[0-9a-zA-Z_/.]{0,}$/.test(val)) {
+        console.log(1);
         callback(new Error(this.$t("bfs.tip2")));
-      } else if (!/^[0-9a-zA-Z_/.]{0,}$/.test(valArray[1])) {
-        //console.log(1)
+      } else if (val.substr(0, 2) != "./" && !/^[0-9a-zA-Z_/]{1,}$/.test(val)) {
+        console.log(2);
         callback(new Error(this.$t("bfs.tip2")));
-      } else if (
-        valArray[1].substr(0, 2) != "./" &&
-        !/^[0-9a-zA-Z_/]{1,}$/.test(valArray[1])
-      ) {
-        //console.log(2)
+      } else if (valArr.includes("") && val.substr(0, 1) != "/") {
         callback(new Error(this.$t("bfs.tip2")));
-      } else if (valArr.includes("") && valArr[0] != "") {
+      } else if (valArr2.includes("") && val.substr(0, 2) != "./") {
         callback(new Error(this.$t("bfs.tip2")));
       } else if (
-        valArray[0] == "mkdir" &&
-        valArray[1].substr(0, 4) != "apps" &&
-        valArray[1].substr(0, 6) != "tables"
+        this.bfsForm.operate == "mkdir" &&
+        valArr[0] != "apps" &&
+        valArr[0] != "tables" &&
+        val.substr(0, 1) != "/"
+      ) {
+        callback(new Error(this.$t("bfs.tip3")));
+      } else if (
+        this.bfsForm.operate == "mkdir" &&
+        valArr2[0] != "apps" &&
+        valArr2[0] != "tables" &&
+        val.substr(0, 1) == "/"
       ) {
         callback(new Error(this.$t("bfs.tip3")));
       } else {
@@ -118,6 +109,7 @@ export default {
         pwdRoute: "/",
         routeParam: "",
         fromAddress: "",
+        operate: "cd",
       },
       bfsList: [],
       loadingLocal: false,
@@ -153,6 +145,7 @@ export default {
       routeParamCommond: "",
       routeParamValue: "",
       handleValue: "",
+      operateList: [{ operate: "cd" }, { operate: "ls" }, { operate: "mkdir" }],
     };
   },
 
@@ -230,13 +223,8 @@ export default {
 
   methods: {
     implement() {
-      let valArray = this.bfsForm.routeParam
-        .trim()
-        .replace(/\s+/g, " ")
-        .split(" ");
-      let commond = valArray[0];
-      this.routeParamCommond = commond;
-      this.routeParamValue = valArray[1];
+      let val = this.bfsForm.routeParam.trim().replace(/\s+/g, " ");
+      this.routeParamValue = val;
       if (this.bfsForm.pwdRoute != "/") {
         if (this.routeParamValue.substr(0, 2) == "./") {
           this.handleValue =
@@ -258,11 +246,11 @@ export default {
       }
       this.$refs["bfsForm"].validate((val) => {
         if (val) {
-          if (commond == "cd") {
+          if (this.bfsForm.operate == "cd") {
             this.cd();
-          } else if (commond == "ls") {
+          } else if (this.bfsForm.operate == "ls") {
             this.ls();
-          } else if (commond == "mkdir") {
+          } else if (this.bfsForm.operate == "mkdir") {
             this.mkdir();
           }
         } else {
@@ -625,5 +613,28 @@ export default {
 }
 .errorBoder >>> .el-input__inner {
   border: 1px solid #f56c6c;
+}
+.contents {
+  width: 100%;
+  height: 500px;
+  position: relative;
+}
+.jsonViewer {
+  width: 600px;
+  height: 500px;
+}
+.tip {
+  position: absolute;
+  left: 600px;
+  top: 0;
+  width: 50%;
+  height: 50%;
+}
+.tip span {
+  font-size: 18px;
+}
+.tip p {
+  font-size: 16px;
+  padding-left: 35px;
 }
 </style>

@@ -14,7 +14,6 @@
           <el-table-column v-for="head in chainCommitteeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
             <template slot-scope="scope">
               <template v-if="head.enName!='operate'">
-
                 <span v-if="head.enName =='userId'">{{userName(scope.row['governorAddress'])}}</span>
                 <span v-else-if="head.enName =='governorAddress'">
                   <i class="wbs-icon-copy font-12 copy-public-key" v-show="scope.row[head.enName]" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
@@ -32,19 +31,19 @@
         <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize"
           layout=" sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
-        <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="480px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
+        <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="500px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
               <template v-if="chainCommitteeList.length > 0">
-                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
-                  <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.governorAddress" :value="item.governorAddress">
+                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
+                  <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                     <span>{{item.userName}}</span>
-                    <span class="font-12">{{item.governorAddress | splitString}}...</span>
+                    <span>{{item.governorAddress | splitString}}...</span>
                   </el-option>
                 </el-select>
               </template>
               <template v-else>
-                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
+                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
                   <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                     <span>{{item.userName}}</span>
                     <span class="font-12">{{item.address | splitString}}...</span>
@@ -56,15 +55,15 @@
               </span>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.user')" prop="address">
-              <el-select v-model="governForm.address" :placeholder="$t('text.select')">
+              <el-select v-model="governForm.address" :placeholder="$t('text.select')" style="width:300px;">
                 <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                   <span>{{item.userName}}</span>
-                  <span class="font-12">{{item.address | splitString}}...</span>
+                  <span>{{item.address | splitString}}...</span>
                 </el-option>
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" class="form-item-input"></el-input>
+              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:300px;"></el-input>
             </el-form-item>
           </el-form>
           <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p>
@@ -73,13 +72,13 @@
             <el-button type="primary" @click="sureAddCommittee">{{this.$t('text.sure')}}</el-button>
           </div>
         </el-dialog>
-        <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="480px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
+        <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="500px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="144px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="governorAddress">
-              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')">
+              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" style="width:300px;">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.governorAddress}}</span>
-                  <span class="font-12">{{item.governorAddress | splitString}}...</span>
+                  <span>{{item.userName}}</span>
+                  <span>{{item.governorAddress | splitString}}...</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -92,19 +91,19 @@
               </el-select>
             </el-form-item> -->
           </el-form>
-          <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p>
+          <p style="padding-left: 50px">*{{$t('govCommittee.dialogTips')}}</p>
           <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="closeDeleteCommittee">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
           </div>
         </el-dialog>
-        <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="480px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
+        <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="500px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="governorAddress">
-              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')">
+              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" style="width:300px">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.governorAddress}}</span>
-                  <span class="font-12">{{item.governorAddress}}...</span>
+                  <span>{{item.userName}}</span>
+                  <span>{{item.governorAddress | splitString}}...</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -117,7 +116,7 @@
               </el-select>
             </el-form-item> -->
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" class="form-item-input"></el-input>
+              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:300px"></el-input>
             </el-form-item>
           </el-form>
           <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
@@ -126,10 +125,10 @@
             <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
           </div>
         </el-dialog>
-        <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="480px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
+        <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="500px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
-              <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')">
+              <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
                   <span class="font-12">{{item.governorAddress | splitString}}...</span>
@@ -137,10 +136,10 @@
               </el-select>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
-              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" class="form-item-input"></el-input>
+              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" style="width:300px;"></el-input>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.participatesRate')" prop="participatesRate">
-              <el-input v-model="governForm.participatesRate" @input="e => (governForm.participatesRate = isnumber(e))" class="form-item-input"></el-input>
+              <el-input v-model="governForm.participatesRate" @input="e => (governForm.participatesRate = isnumber(e))" style="width:300px;"></el-input>
             </el-form-item>
           </el-form>
           <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
@@ -225,13 +224,14 @@
       <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" layout=" sizes, prev, pager, next, jumper"
         :total="voteTotal">
       </el-pagination>
-      <el-dialog :title="$t('govCommittee.Committee')" :visible.sync="CommitteeVisible" width="480px" v-if="CommitteeVisible" center @close="closeCommittee">
+      <el-dialog :title="$t('govCommittee.Committee')" :visible.sync="CommitteeVisible" width="500px" v-if="CommitteeVisible" center @close="closeCommittee">
         <el-form :model="govCommittee" :rules="rules" ref="govCommittee" label-width="130px" class="demo-ruleForm">
           <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
             <template v-if="chainCommitteeList.length > 0">
-              <el-select v-model="govCommittee.fromAddress" :placeholder="$t('text.select')">
+              <el-select v-model="govCommittee.fromAddress" :placeholder="$t('text.select')" style="width:300px">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.governorAddress}}</span>
+                  <span>{{item.userName}}</span>
+                  <span>{{item.governorAddress | splitString}}...</span>
                 </el-option>
               </el-select>
             </template>
@@ -247,19 +247,21 @@
           <el-button type="primary" @click="sureCommittee">{{this.$t('text.sure')}}</el-button>
         </div>
       </el-dialog>
-      <el-dialog :title="$t('govCommittee.revokeVote')" :visible.sync="revokeVoteVisible" width="480px" v-if="revokeVoteVisible" center @close="closerevokeVote">
+      <el-dialog :title="$t('govCommittee.revokeVote')" :visible.sync="revokeVoteVisible" width="500px" v-if="revokeVoteVisible" center @close="closerevokeVote">
         <el-form :model="revokeVote" :rules="rules" ref="revokeVote" label-width="130px" class="demo-ruleForm">
-          <el-form-item :label="$t('govCommittee.fromUser')" prop="user">
+          <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
             <template v-if="chainCommitteeList.length > 0">
-              <el-select v-model="govCommittee.fromAddress" :placeholder="$t('text.select')">
+              <el-select v-model="revokeVote.fromAddress" :placeholder="$t('text.select')" style="width:300px">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.governorAddress}}</span>
+                  <span>{{item.userName}}</span>
+                  <span>{{item.governorAddress | splitString}}...</span>
                 </el-option>
               </el-select>
             </template>
           </el-form-item>
         </el-form>
         <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+        <p style="padding-left: 50px">*{{$t('govCommittee.dialogTips')}}</p>
         <div class="text-right sure-btn" style="margin-top:10px">
           <el-button @click="closerevokeVote">{{this.$t('text.cancel')}}</el-button>
           <el-button type="primary" @click="sureRevokeVote">{{this.$t('text.sure')}}</el-button>
@@ -452,14 +454,14 @@ export default {
           {
             required: true,
             message: this.$t("rule.fromUserRule"),
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         address: [
           {
             required: true,
             message: this.$t("rule.userRule"),
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         threshold: [
@@ -498,7 +500,7 @@ export default {
       let flagFind = false;
       privateKeyList.forEach((item) => {
         committeeList.forEach((it) => {
-          if (item.address == it.address) {
+          if (item.address == it.governorAddress) {
             it.userName = item.userName;
             flagFind = true;
           }
@@ -508,7 +510,7 @@ export default {
       if (!committeeList.length) {
         if (flagFind) {
           // 如果本地有committee私钥，则设置
-          this.governForm.fromAddress = committeeList[0]["address"];
+          this.governForm.fromAddress = committeeList[0]["governorAddress"];
         } else {
           // 如果本地没有committee私钥，则不选默认值
         }
