@@ -329,9 +329,9 @@ export default {
           if (res.data.code === 0) {
             this.adminRivateKeyList = [];
             res.data.data.forEach((value) => {
-              // if (value.hasPk === 1) {
+               if (value.hasPk === 1) {
               this.adminRivateKeyList.push(value);
-              // }
+               }
             });
             if (this.adminRivateKeyList.length === 0) {
               this.isShowPrivate = true;

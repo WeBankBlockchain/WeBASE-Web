@@ -7,7 +7,7 @@
         <el-form-item :label="$t('table.contractAddress')" prop="contractAddress">
           <el-autocomplete v-model.trim="checkMethodForm.contractAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
             <template slot-scope="{ item }">
-              <div class="name"> {{item.contractName}} / {{ item.contractAddress | splitString}}...</div>
+              <div class="name"> {{item.contractName}} / {{ item.contractAddress | splitString}}</div>
             </template>
           </el-autocomplete>
         </el-form-item>
@@ -43,7 +43,7 @@
         <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
           <el-autocomplete v-model.trim="checkMethodForm.userAddress" :fetch-suggestions="querySearchUser" @select="selectAddressUser" style="width: 300px;" clearable>
             <template slot-scope="{ item }">
-              <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
+              <div class="name"> {{item.userName}} / {{ item.address | splitString}}</div>
             </template>
           </el-autocomplete>
         </el-form-item>

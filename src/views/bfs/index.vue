@@ -22,7 +22,7 @@
           <el-select v-model="bfsForm.fromAddress" :placeholder="placeholderText" style="width: 200px;">
             <el-option :label="item.address" :value="item.address" :key="item.address" v-for='item in userList'>
               <span class="font-12">{{item.userName}}</span>
-              <span>{{item.address | splitString}}...</span>
+              <span>{{item.address | splitString}}</span>
             </el-option>
           </el-select>
         </el-form-item>

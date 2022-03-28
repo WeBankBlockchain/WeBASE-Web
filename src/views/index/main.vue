@@ -163,7 +163,7 @@ export default {
     },
     mounted() {
       this.getEncryption();
-        //this.getConfigList();
+      this.getConfigList();
     },
     methods: {
         getConfigList: function () {

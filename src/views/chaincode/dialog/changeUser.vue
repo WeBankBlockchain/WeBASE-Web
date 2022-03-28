@@ -82,7 +82,7 @@
                         </el-input> -->
         </td>
       </tr>
-      <tr>
+      <tr v-if='ifLiquid'>
         <td style="width: 100px;text-align: right"></td>
         <td><span>{{$t('dialog.liquidTip')}}</span></td>
       </tr>

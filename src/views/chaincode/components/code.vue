@@ -144,7 +144,7 @@
     <el-dialog v-dialogDrag :title="$t('contracts.changeUser')" :visible.sync="dialogUser" width="550px" v-if="dialogUser" center class="send-dialog">
       <v-user @change="deployContract(arguments)" @close="userClose" :liquidChecks='liquidCheck' :abi='abiFile' :contractName="contractName"></v-user>
     </el-dialog>
-    <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
+    <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :liquidChecks='liquidCheck' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
     <v-upload v-if='uploadFileAdrShow' :show='uploadFileAdrShow' @close='uploadClose' @success='uploadSuccess($event)'></v-upload>
     <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
       <mgmt-cns :mgmtCnsItem="mgmtCnsItem" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
@@ -1279,11 +1279,16 @@ export default {
         contractId: this.data.contractId,
         contractPath: this.data.contractPath,
         account: localStorage.getItem("user"),
-        isWasm: true,
+       // isWasm: true,
         contractAddress: liquid.contractAddress,
         frontId: this.frontId,
       };
       this.version = val.version;
+      if(liquid.ifLiquid){
+        reqData.isWasm=true
+      }else {
+        reqData.isWasm = false
+      }
       if (val.params.length) {
         reqData.constructorParams = val.params;
       } else {
