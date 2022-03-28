@@ -44,7 +44,7 @@
 
 <script>
 import to from "await-to-js";
-import { getNetworkStatistics, getChartData, getNodeList } from "@/util/api";
+import { getNetworkStatistics, getChartData, getNodeList ,getAllUserList} from "@/util/api";
 import { changWeek, getDay } from "@/util/util";
 import { creatBall } from "@/util/largeScreen";
 export default {
@@ -223,18 +223,31 @@ export default {
     },
     async oneReqUpdate() {
       let groupId = this.groupId;
+         let reqData = {
+                groupId: groupId,
+                pageNumber: 1,
+                pageSize: 100
+            },
+            reqQuery = {};
+            reqQuery = {
+                type: 1
+            };
       let [err, res] = await to(getNetworkStatistics(groupId));
+      let [err1, res1] = await to(getAllUserList(reqData,reqQuery));
+      console.log(err1, res1);
       console.log(err, res);
-      if (err) {
+      if (err||err1) {
         console.log("oneReqError");
         return;
       } else {
-        if (res.status != 200) {
+        if (res.status != 200||res1.status !=200) {
           console.log(res.data.message);
           return;
         }
         let allData = Object.values(res.data.data);
+        let totalCount= res1.data.totalCount
         console.log(allData);
+        allData[1]=totalCount;
         let replaceData = allData.map((item, index) => {
           return {
             number: [item],
@@ -272,6 +285,7 @@ export default {
             this.$set(this.dataV_item[order], "number", item);
           }
         });
+
       }
     },
     async threeReqUpdate() {

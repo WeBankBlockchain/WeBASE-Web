@@ -7,7 +7,7 @@
                     <el-select v-model="sqlForm.adminRivateKey" :placeholder="$t('text.select')" class="select-32">
                         <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                             <span>{{item.userName}}</span>
-                            <span class="font-12 text-float-right">{{item.address | splitString}}...</span>
+                            <span class="font-12 text-float-right">{{item.address | splitString}}</span>
                         </el-option>
                     </el-select>
                      <span v-if="isAdminRivateKeyShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;margin-left:20px">

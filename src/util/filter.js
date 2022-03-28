@@ -18,7 +18,7 @@ import Vue from 'vue'
  * 截取字符串前8位
  */
 Vue.filter('splitString', function (value) {
-    return value.substring(0, 8)
+    return value.substring(0, 10)+'...'+value.substring(value.length-4)
 });
 /**
  * 截取字符串前8位

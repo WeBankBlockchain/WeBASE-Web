@@ -16,13 +16,14 @@
 <template>
     <div style="height: 100%;position: relative;box-sizing: border-box">
         <div style="height: 100%;background-color: #0c1220;box-sizing: border-box;overflow-y: auto;" class="sidebar-content">
-            <!-- <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
+            <div class="image-flex justify-center center" style="height: 54px;position:relative;" v-if="menuShowC">
                 <img :src="maxLog" alt="" style="width:120px">
                 <span class="sidebar-contract-icon">
                     <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
                 </span>
-            </div> -->
-              <span v-if="version" class="font-12 text-center version">{{version}}</span>
+                            <span v-if="version" class="font-12 text-center version">({{version}})</span>  
+            </div>
+
               <span class="sidebar-contract-icon">
                     <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
                 </span>
@@ -80,7 +81,7 @@ export default {
             routesList: [],
             versionfunegt: versionfunegt,
             activeTextColor: true,
-            version: "3.0.0-rc2",
+            version: this.$store.state.mgrVersion
         };
     },
     computed: {
@@ -430,7 +431,7 @@ export default {
             this.$emit("sidebarChange", val);
             if (this.menuShow) {
                 this.menuShow = false;
-                this.version="3.0.0-rc2"
+                this.version=this.$store.state.mgrVersion
     
             } else {
                 this.menuShow = true;
@@ -600,12 +601,11 @@ export default {
 }
 .version{
     color: rgb(157, 162, 171);
-    font-size: 18px;
+    font-size: 14px;
     position: absolute;
     display: inline-block;
-    left: 10%;
-    top: 10px;
-    width: 100px;
+    bottom: -10px;
+    /* width: 100px; */
     z-index: 999;
 }
 </style>

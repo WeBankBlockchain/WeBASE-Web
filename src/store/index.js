@@ -37,7 +37,8 @@ const state = {
     exportRivateKey: false,
     exportProjectShow: false,
     selectedContracts: {},
-    selectedContractInfo: {}
+    selectedContractInfo: {},
+    bindKey:false,
 }
 export default new Vuex.Store({
     state,
@@ -53,6 +54,9 @@ export default new Vuex.Store({
         },
         switch_import_private_key_dialog(state) {
             state.importPrivateKey = !state.importPrivateKey
+        },
+        switch_bind_key_dialog(state) {
+            state.bindKey = !state.bindKey
         },
         switch_export_rivate_key_dialog(state) {
             state.exportRivateKey = !state.exportRivateKey
@@ -105,6 +109,9 @@ export default new Vuex.Store({
         },
     },
     actions: {
+        switch_bind_key_dialog(context) {
+            context.commit('switch_bind_key_dialog')
+        },
         switch_creat_user_dialog(context) {
             context.commit('switch_creat_user_dialog')
         },

@@ -6,7 +6,7 @@
                 <el-select v-model="permissionForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="item in permissionAdminList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}</span>
                     </el-option>
                 </el-select>
                 <span v-if="isUserNameShow" class="contract-code-done" @click="$store.dispatch('switch_creat_user_dialog')">
@@ -17,7 +17,7 @@
                 <el-select v-model.trim="permissionForm.otherRivateKey" :placeholder="$t('system.inputUser')" filterable>
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}</span>
                     </el-option>
                 </el-select>
             </el-form-item>

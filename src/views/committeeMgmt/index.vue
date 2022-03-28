@@ -10,7 +10,7 @@
         <el-button type="primary" :disabled="disabled" @click="$store.dispatch('switch_import_private_key_dialog')">{{this.$t('govCommittee.importUserprivateKey')}}</el-button>
       </div>
       <div>
-        <el-table :data="chainCommitteeList" tooltip-effect="dark" v-loading="loading">
+        <el-table :data="produceCommittee" tooltip-effect="dark" v-loading="loading">
           <el-table-column v-for="head in chainCommitteeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
             <template slot-scope="scope">
               <template v-if="head.enName!='operate'">
@@ -38,7 +38,7 @@
                 <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
                   <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                     <span>{{item.userName}}</span>
-                    <span>{{item.governorAddress | splitString}}...</span>
+                    <span>{{item.governorAddress | splitString}}</span>
                   </el-option>
                 </el-select>
               </template>
@@ -46,7 +46,7 @@
                 <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
                   <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                     <span>{{item.userName}}</span>
-                    <span class="font-12">{{item.address | splitString}}...</span>
+                    <span class="font-12">{{item.address | splitString}}</span>
                   </el-option>
                 </el-select>
               </template>
@@ -58,7 +58,7 @@
               <el-select v-model="governForm.address" :placeholder="$t('text.select')" style="width:300px;">
                 <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                   <span>{{item.userName}}</span>
-                  <span>{{item.address | splitString}}...</span>
+                  <span>{{item.address | splitString}}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -78,7 +78,7 @@
               <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" style="width:300px;">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}...</span>
+                  <span>{{item.governorAddress | splitString}}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -86,7 +86,7 @@
               <el-select v-model="governForm.address" :placeholder="$t('text.select')">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
-                  <span class="font-12">{{item.governorAddress | splitString}}...</span>
+                  <span class="font-12">{{item.governorAddress | splitString}}</span>
                 </el-option>
               </el-select>
             </el-form-item> -->
@@ -103,7 +103,7 @@
               <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" style="width:300px">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}...</span>
+                  <span>{{item.governorAddress | splitString}}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -131,7 +131,7 @@
               <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
-                  <span class="font-12">{{item.governorAddress | splitString}}...</span>
+                  <span class="font-12">{{item.governorAddress | splitString}}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -231,7 +231,7 @@
               <el-select v-model="govCommittee.fromAddress" :placeholder="$t('text.select')" style="width:300px">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}...</span>
+                  <span>{{item.governorAddress | splitString}}</span>
                 </el-option>
               </el-select>
             </template>
@@ -254,7 +254,7 @@
               <el-select v-model="revokeVote.fromAddress" :placeholder="$t('text.select')" style="width:300px">
                 <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                   <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}...</span>
+                  <span>{{item.governorAddress | splitString}}</span>
                 </el-option>
               </el-select>
             </template>
@@ -498,11 +498,13 @@ export default {
       let committeeList = this.chainCommitteeList;
       // whether find committee in local private key list
       let flagFind = false;
+      let committeeLists=[]
       privateKeyList.forEach((item) => {
         committeeList.forEach((it) => {
           if (item.address == it.governorAddress) {
             it.userName = item.userName;
             flagFind = true;
+            committeeLists.push(it)
           }
         });
       });
@@ -515,7 +517,7 @@ export default {
           // 如果本地没有committee私钥，则不选默认值
         }
       }
-      return committeeList;
+      return committeeLists;
     },
   },
 

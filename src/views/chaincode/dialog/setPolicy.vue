@@ -35,7 +35,7 @@
       <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
         <el-autocomplete v-model.trim="policyData.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
           <template slot-scope="{ item }">
-            <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
+            <div class="name"> {{item.userName}} / {{ item.address | splitString}}</div>
           </template>
         </el-autocomplete>
       </el-form-item>

@@ -40,13 +40,16 @@
                     </div>
                     <div class="item">
                         <span class="label">
-                            <el-tooltip class="item" effect="dark" content="部署合约，to字段为空。" placement="top-start">
+                            <!-- <el-tooltip class="item" effect="dark" content="部署合约，to字段为空。" placement="top-start">
                                 <i class="el-icon-info"></i>
-                            </el-tooltip>
+                            </el-tooltip> -->
                             <span>To:</span>
                         </span>
                         <span>{{transactionData.to || 'null'}}</span>
                         <span v-if="transactionData.to">{{transactionData.to | contractSource}}</span>
+                         <el-tooltip v-if="transactionData.to==''||transactionData.to=='0x0000000000000000000000000000000000000000'" class="tip" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
+                                <i class="el-icon-info"></i> 
+                            </el-tooltip>
                     </div>
                     <div class="item">
                         <span class="label">nonce:</span>
@@ -186,7 +189,16 @@
                             <p class="base-p" :style="{'color': txStatusColor(txInfoReceiptMap[item])}">{{txInfoReceiptMap[item]}}</p>
                         </template>
                          <template v-else-if="item == 'to'">
-                            <p class="base-p">{{txInfoReceiptMap[item]}} <span v-if="txInfoReceiptMap[item]">{{txInfoReceiptMap[item] | contractSource}}</span></p>
+                            <span class="base-p">{{txInfoReceiptMap[item]}}</span> <span v-if="txInfoReceiptMap[item]">{{txInfoReceiptMap[item] | contractSource}}</span>
+                                <el-tooltip v-if="txInfoReceiptMap[item]==''||txInfoReceiptMap[item]=='0x0000000000000000000000000000000000000000'" class="tip" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
+                                <i class="el-icon-info"></i> 
+                            </el-tooltip>
+                        </template>
+                        <template v-else-if="item == 'contractAddress'">
+                            <span class="base-p">{{txInfoReceiptMap[item]}}</span> <span v-if="txInfoReceiptMap[item]">{{txInfoReceiptMap[item] | contractSource}}</span>
+                                <el-tooltip v-if="txInfoReceiptMap[item]==''||txInfoReceiptMap[item]=='0x0000000000000000000000000000000000000000'" class="tips" effect="dark" :content="$t('contracts.contractAddressTip')" placement="top-start">
+                          <i class="el-icon-info"></i> 
+                            </el-tooltip>
                         </template>
                         <template v-else>
                             <p class="base-p">{{txInfoReceiptMap[item]}}</p>
@@ -275,7 +287,8 @@ export default {
             transOutputData: "",
             outputType: null,
             importVisibility: false,
-            exportContrctShow: false
+            exportContrctShow: false,
+            topTipShow:false
         };
     },
     mounted: function () {
@@ -871,6 +884,10 @@ export default {
     word-break: break-all;
     word-wrap: break-word;
 }
+.tip{
+    margin-left: 10px;
+}
+
 </style>
 
 

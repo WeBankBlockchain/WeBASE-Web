@@ -76,8 +76,8 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
-                            <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button> -->
-                             <!-- <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button> -->
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

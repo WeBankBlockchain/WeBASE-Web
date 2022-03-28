@@ -5,7 +5,7 @@
         <el-select v-model="resetForm.fromAddress" :placeholder="$t('text.select')" style="width:300px">
           <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
             <span>{{item.userName}}</span>
-            <span>{{item.governorAddress| splitString}}...</span>
+            <span>{{item.governorAddress| splitString}}</span>
           </el-option>
         </el-select>
       </el-form-item>
@@ -32,7 +32,7 @@
         </el-select> -->
         <el-autocomplete v-model.trim="resetForm.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
           <template slot-scope="{ item }">
-            <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
+            <div class="name"> {{item.userName}} / {{ item.address | splitString}}</div>
           </template>
         </el-autocomplete>
       </el-form-item>
@@ -140,11 +140,13 @@ export default {
       let committeeList = this.chainCommitteeList;
       // whether find committee in local private key list
       let flagFind = false;
+      let committeeLists=[]
       privateKeyList.forEach((item) => {
         committeeList.forEach((it) => {
           if (item.address == it.governorAddress) {
             it.userName = item.userName;
             flagFind = true;
+            committeeLists.push(it)
           }
         });
       });
@@ -157,7 +159,7 @@ export default {
           // 如果本地没有committee私钥，则不选默认值
         }
       }
-      return committeeList;
+      return committeeLists;
     },
   },
 
@@ -255,9 +257,9 @@ export default {
           if (res.data.code === 0) {
             this.adminRivateKeyList = [];
             res.data.data.forEach((value) => {
-              // if (value.hasPk === 1) {
+               if (value.hasPk === 1) {
               this.adminRivateKeyList.push(value);
-              // }
+               }
             });
             if (this.adminRivateKeyList.length === 0) {
               this.isShowPrivate = true;

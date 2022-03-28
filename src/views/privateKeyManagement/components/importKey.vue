@@ -12,7 +12,7 @@
             <el-form-item :label="$t('privateKey.password')" prop="password" style="width: 546px;" v-if="keyForm.fileType==='.p12'">
                 <el-input type="password" v-model="keyForm.password" :placeholder="$t('privateKey.placeholderPassword')"></el-input>
             </el-form-item>
-            <el-form-item :label="$t('table.fileName')" prop="radio" style="width: 546px;" v-if="keyForm.fileType==='string'">
+            <el-form-item :label="$t('table.baseSystem')" prop="radio" style="width: 546px;" v-if="keyForm.fileType==='string'">
                 <el-radio-group v-model="keyForm.radio" @change="changeJzType">
                     <el-radio :label="16">{{$t('text.hexType')}}</el-radio>
                     <el-radio :label="10">{{$t('text.decimalType')}}</el-radio>

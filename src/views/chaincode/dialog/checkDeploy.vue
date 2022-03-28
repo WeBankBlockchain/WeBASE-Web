@@ -2,7 +2,12 @@
   <div>
     <el-form :model="checkDeployForm" :rules="rules" ref="checkDeployForm" label-width="130px" class="demo-ruleForm">
       <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
-        <el-input v-model="checkDeployForm.userAddress" style="width:300px" class="form-item-input" :placeholder="$t('rule.userAddress')"></el-input>
+        <!-- <el-input v-model="checkDeployForm.userAddress" style="width:300px" class="form-item-input" :placeholder="$t('rule.userAddress')"></el-input> -->
+         <el-autocomplete v-model.trim="checkDeployForm.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
+          <template slot-scope="{ item }">
+            <div class="name"> {{item.userName}} / {{ item.address | splitString}}</div>
+          </template>
+        </el-autocomplete>
       </el-form-item>
     </el-form>
     <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
@@ -83,7 +88,7 @@ export default {
           {
             required: true,
             message: this.$t("rule.userAddress"),
-            trigger: "blur",
+            trigger: "change",
           },
         ],
         contractName: [
@@ -142,6 +147,27 @@ export default {
   },
 
   methods: {
+     createFilter(queryString) {
+      return (adminRivateKeyList) => {
+        return (
+          adminRivateKeyList.address
+            .toLowerCase()
+            .indexOf(queryString.toLowerCase()) === 0
+        );
+      };
+    },
+    selectAddress(item) {
+      console.log(item);
+      this.checkDeployForm.userAddress = item.address;
+    },
+    querySearch(queryString, cb) {
+      var adminRivateKeyList = this.adminRivateKeyList;
+      var results = queryString
+        ? adminRivateKeyList.filter(this.createFilter(queryString))
+        : adminRivateKeyList;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
     suerCheckDeploy() {
       this.$refs["checkDeployForm"].validate((valid) => {
         if (valid) {
