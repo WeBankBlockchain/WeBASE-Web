@@ -26,7 +26,10 @@
           <template v-if="key=='status'">
             <span class="transation-title">{{key}}:</span>
             <span :style="{'color': txStatusColor(val)}">{{val}}</span>
-            <span style="margin-left:10px" class="string-color">({{txStatusMessage(val)}})</span>
+            <!-- <span style="margin-left:10px" class="string-color">({{txStatusMessage(val)}})</span> -->
+            <el-tooltip class="tip" effect="dark" :content="txStatusMessage(val)" placement="top-start">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
           </template>
           <template v-else>
             <span class="transation-title">{{key}}:</span>

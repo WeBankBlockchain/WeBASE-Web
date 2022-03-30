@@ -419,7 +419,9 @@ export default {
         contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string',
         proposalId:'Please enter proposalId',
         weightRules:"value 0~100",
-        routeParam:"Please enter routeParam"
+        routeParam:"Please enter routeParam",
+        contractAddressLiquidLong: 'The length of the contract address cannot exceed 64 bits',
+        contractAddressHexLiquid: 'Contract address starts with / and contains alphanumeric underscores',
 
     },
     head: {
@@ -610,7 +612,9 @@ export default {
     },
     contracts: {
         toTip: "The to field in the transaction calling the contract is the contract address",
+         toTip1: "The to field in the transaction of deploying the contract is empty or all 0",
          contractAddressTip: "The contractAddress field in the transaction that deploys the contract is the contract address",
+         contractAddressTip1: "The field contractAddress in the transaction calling the contract is empty or all 0",
         openAdmin:'Open Admin',
         closeAdmin:'Close Admin',
         set:'set',
@@ -717,12 +721,12 @@ export default {
         TIP3: "3) LS: List all files or directories under the current path;",
     },
     editor:{
-        None: 'normal',
+        None: 'Success',
         Unknown: 'Unknown exception',
         BadRLP: 'Invalid RLP exception',
         InvalidFormat: 'Invalid format exception',
         OutOfGasIntrinsic: 'The length of the deployed contract exceeds the gas limit/the interface parameter of the calling contract exceeds the gas limit',
-        InvalidSignature: 'Invalid signature exception',
+        InvalidSignature: 'Invalid signature exception, please check whether the private key or national secret of the signature corresponds to the encryption type of non-national secret',
         InvalidNonce: 'Invalid nonce exception',
         NotEnoughCash: 'Cash insufficient exception',
         OutOfGasBase: 'The parameter of the calling contract is too long (RC version)',
@@ -739,7 +743,7 @@ export default {
         NoCallPermission: 'Illegal call contract exception',
         NoTxPermission: 'Illegal transaction exception',
         PrecompiledError: 'precompiled error exception',
-        RevertInstruction: 'revert instruction exception',
+        RevertInstruction: 'The revert command is abnormal, please check the called contract logic or transaction content',
         InvalidZeroSignatureFormat: 'Invalid signature format exception',
         AddressAlreadyUsed: 'Address occupation is abnormal',
         PermissionDenied: 'No permission exception',
@@ -760,6 +764,10 @@ export default {
     privateKey: {
         addUser: "Add Users",
         importPrivateKey: "Import Private Key",
+        importPrivateKeyTip: "After adding the private key successfully, you can view it in the private key list.",
+        importPrivateKeyAccount:"Import the initial governance account private key",
+        importPrivateKeyAccountTip: "In the permission governance mode, it is used to add the private key of the initial governance committee account",
+        modifyThresholdTip: "Voting pass conditions 1) Satisfy the participation rate 2) Satisfy the threshold (participation voting weight/total weight)",
         addUserTips: "The account number of the transaction sent in the group needs to be added to the private key management, otherwise it will be judged as an abnormal user.",
         searchUser: "Please enter user name or public key address",
         copyPublicKey: "Copy Public Key",

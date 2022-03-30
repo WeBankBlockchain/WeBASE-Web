@@ -31,6 +31,7 @@
             </el-form-item>
 
         </el-form>
+        <p style="padding-left: 50px">{{$t('privateKey.importPrivateKeyTip')}}</p>
         <div class="dialog-footer">
             <el-button class="footer-button" @click="modelClose">{{this.$t('text.cancel')}}</el-button>
             <el-button style="margin-left: 10px;" type="primary" @click="submitUploadList">{{this.$t('text.confirm')}}</el-button>

@@ -151,8 +151,11 @@
     </el-dialog>
     <el-dialog :visible.sync="addContractAddressVisible" :title="$t('dialog.addContractAddress')" width="400px" class="dialog-wrapper" center v-if="addContractAddressVisible">
       <el-form ref="contractForm" :rules="rules" :model="contractForm">
-        <el-form-item label="" prop="contractAddress">
+        <el-form-item label="" prop="contractAddress" v-if="!liquidCheck">   
           <el-input v-model="contractForm.contractAddress" :placeholder="$t('contracts.contractAddressInput')"></el-input>
+        </el-form-item>
+        <el-form-item label="" prop="contractAddressLiquid" v-else>
+          <el-input v-model="contractForm.contractAddressLiquid" :placeholder="$t('contracts.contractAddressInput')"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="text-right">
@@ -214,6 +217,18 @@ export default {
     mgmtCns,
   },
   data: function () {
+    var paramRule = (rule, value, callback) => {
+      let val = value.trim().replace(/\s+/g, " ");
+      let valArr = val.split("/");
+      let valArr2 = val.substr(1).split("/");
+      if (!/^[/][0-9a-zA-Z_/.]{0,}$/.test(val)) {
+        callback(new Error(this.$t("rule.contractAddressHexLiquid")));
+      } else if (valArr2.includes("")) {
+        callback(new Error(this.$t("rule.contractAddressHexLiquid")));
+      } else {
+        callback();
+      }
+    };
     return {
       liquidCheck: this.liquidChecks,
       frontId: this.frontIds,
@@ -292,11 +307,30 @@ export default {
             trigger: "blur",
           },
         ],
+        contractAddressLiquid: [
+          {
+            required: true,
+            message: this.$t("rule.contractAddress"),
+            trigger: "blur",
+          },
+          {
+            required: true,
+            validator: paramRule,
+            trigger: "blur",
+          },
+          {
+            min: 2,
+            max: 64,
+            message: this.$t("rule.contractAddressLiquidLong"),
+            trigger: "blur",
+          },
+        ],
       },
       dialogHeight: "",
       contractType: true,
       contractForm: {
         contractAddress: "",
+        contractAddressLiquid:""
       },
       contractType: true,
       liquidCheckTimer: null,
@@ -764,6 +798,8 @@ export default {
           .then((res) => {
             if (res.data.code === 0 && res.data.data.status == 1) {
             _this.loading = true;
+          Bus.$emit("compileLiquid");
+          
               this.compileCheck()
               // _this.$message({
               //   message: _this.$t("text.compiling"),
@@ -859,10 +895,11 @@ export default {
       }, 5000);
     },
     compile(callback) {
+      this.loading = true;
       this.loadingText = this.$t("text.contractCompiling");
       let version = this.$store.state.versionData;
       if (this.liquidCheck) {
-        this.loading = true;
+       Bus.$emit("compileLiquid");
         let reqData = {
           groupId: localStorage.getItem("groupId"),
           contractName: this.contractName,

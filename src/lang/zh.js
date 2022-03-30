@@ -420,7 +420,10 @@ export default {
         contractAddressLong: '合约地址长度应该为42',
         contractAddressHex: '合约地址以0x或0X开头且为十六进制',
         weightRules:"值需要0~100",
-        routeParam:"请输入路径参数"
+        routeParam:"请输入路径参数",
+        contractAddressLiquidLong: '合约地址长度不能超过64位',
+        contractAddressHexLiquid: '合约地址以/开头，包含字母数字下划线',
+
     },
     head: {
         helpText: "帮助文档",
@@ -612,8 +615,10 @@ export default {
         addContract: "导入合约",
     },
     contracts: {
-        toTip:"调用合约的交易中to字段为合约地址",
-        contractAddressTip:"部署合约的交易中contractAddress字段为合约地址",
+        toTip1:"调用合约的交易中to字段为合约地址",
+        toTip:"部署合约的交易中to字段为空或全0",
+        contractAddressTip1:"部署合约的交易中contractAddress字段为合约地址",
+        contractAddressTip:"调用合约的交易中字段contractAddress为空或全0",
         openAdmin:'开启权限',
         closeAdmin:'关闭权限',
         contractAdmin:"合约管理员",
@@ -703,12 +708,12 @@ export default {
         checkNodeActive: "检测"
     },
     editor:{
-        None:'正常', 
+        None:'成功', 
         Unknown:'未知异常', 
         BadRLP:'无效RLP异常', 
         InvalidFormat:'无效格式异常', 
         OutOfGasIntrinsic:'部署的合约长度超过gas限制/调用合约接口参数超过gas限制', 
-        InvalidSignature:'无效的签名异常', 
+        InvalidSignature:'无效的签名异常，请检查签名的私钥或国密与非国密加密类型是否对应', 
         InvalidNonce:'无效nonce异常', 
         NotEnoughCash:'cash不足异常', 
         OutOfGasBase:'调用合约的参数过长 (RC版本)', 
@@ -725,7 +730,7 @@ export default {
         NoCallPermission:'非法call合约异常', 
         NoTxPermission:'非法交易异常', 
         PrecompiledError:'precompiled错误异常', 
-        RevertInstruction:'revert指令异常', 
+        RevertInstruction:'revert指令异常，请检查所调用合约逻辑或交易内容', 
         InvalidZeroSignatureFormat:'无效签名格式异常', 
         AddressAlreadyUsed:'地址占用异常', 
         PermissionDenied:'无权限异常', 
@@ -765,6 +770,10 @@ export default {
     privateKey: {
         addUser: "新增用户",
         importPrivateKey: "导入私钥",
+        importPrivateKeyTip: "添加私钥成功后，可在私钥列表查看。",
+        importPrivateKeyAccount:"导入初始治理账户私钥",
+        importPrivateKeyAccountTip:"在启用权限治理模式下，用来添加初始治理委员账户私钥。",
+        modifyThresholdTip:"投票通过条件 1)满足参与率 2)满足阈值(参与投票权重/总权重)",
         addUserTips: "群组内发送交易的账号都需要在私钥管理里添加，否则会判断为异常用户。",
         searchUser: "请输入用户名或公钥地址",
         copyPublicKey: "复制公钥",

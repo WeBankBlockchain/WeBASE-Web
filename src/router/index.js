@@ -243,7 +243,7 @@ const routes = [
         menuShow: true  ,
         iconCls: 'wbs-icon-dingyue sidebar-icon',
         children: [
-            { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: false, meta: { requireAuth: true } },
+            { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: true, meta: { requireAuth: true } },
             { path: '/contractEvent', component: contractEvent, name: '合约Event事件', nameKey: "contractEvent", menuShow: true, meta: { requireAuth: true } },
 
         ]

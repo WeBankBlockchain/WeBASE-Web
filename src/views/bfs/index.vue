@@ -3,6 +3,12 @@
     <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.bfs')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head>
     <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
       <span class="cns-title">{{$t('contracts.bfsTitle')}}</span>
+       <div class="tip">
+          <span>提示:</span>
+          <span>{{$t('bfs.Tip1')}}</span>
+          <span>{{$t('bfs.Tip2')}}</span>
+          <span>{{$t('bfs.Tip3')}}</span>
+        </div>
       <el-form :model="bfsForm" :rules="rules" ref="bfsForm" class="demo-ruleForm">
         <el-form-item :label="$t('bfs.pwdRoute')" class="item-form">
           <el-input readonly v-model.trim="bfsForm.pwdRoute" class="select-31" style="width: 200px;"></el-input>
@@ -32,12 +38,6 @@
       </el-form>
       <div class="contents">
         <json-viewer :value="bfsData" :expand-depth='5' copyable class='jsonViewer'></json-viewer>
-        <div class="tip">
-          <span>Tips:</span>
-          <p>*{{$t('bfs.Tip1')}}</p>
-          <p>*{{$t('bfs.Tip2')}}</p>
-          <p>*{{$t('bfs.Tip3')}}</p>
-        </div>
       </div>
     </div>
   </div>
@@ -77,23 +77,25 @@ export default {
         console.log(2);
         callback(new Error(this.$t("bfs.tip2")));
       } else if (valArr.includes("") && val.substr(0, 1) != "/") {
+        console.log(3);
         callback(new Error(this.$t("bfs.tip2")));
-      } else if (valArr2.includes("") && val.substr(0, 2) != "./") {
+      } else if (valArr2.includes("") && val.substr(0, 2) != "./"&&valArr2.length>1) {
+        console.log(4);
         callback(new Error(this.$t("bfs.tip2")));
-      } else if (
-        this.bfsForm.operate == "mkdir" &&
-        valArr[0] != "apps" &&
-        valArr[0] != "tables" &&
-        val.substr(0, 1) != "/"
-      ) {
-        callback(new Error(this.$t("bfs.tip3")));
-      } else if (
-        this.bfsForm.operate == "mkdir" &&
-        valArr2[0] != "apps" &&
-        valArr2[0] != "tables" &&
-        val.substr(0, 1) == "/"
-      ) {
-        callback(new Error(this.$t("bfs.tip3")));
+      // } else if (
+      //   this.bfsForm.operate == "mkdir" &&
+      //   valArr[0] != "apps" &&
+      //   valArr[0] != "tables" &&
+      //   val.substr(0, 1) != "/"
+      // ) {
+      //   callback(new Error(this.$t("bfs.tip3")));
+      // } else if (
+      //   this.bfsForm.operate == "mkdir" &&
+      //   valArr2[0] != "apps" &&
+      //   valArr2[0] != "tables" &&
+      //   val.substr(0, 1) == "/"
+      // ) {
+      //   callback(new Error(this.$t("bfs.tip3")));
       } else {
         callback();
       }
@@ -624,17 +626,11 @@ export default {
   height: 500px;
 }
 .tip {
-  position: absolute;
-  left: 600px;
-  top: 0;
-  width: 50%;
-  height: 50%;
-}
-.tip span {
-  font-size: 18px;
+    font-size: 14px;
+    margin-bottom: 15px;
+    color: #42b983;
 }
 .tip p {
-  font-size: 16px;
   padding-left: 35px;
 }
 </style>

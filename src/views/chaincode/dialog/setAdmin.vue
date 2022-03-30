@@ -14,13 +14,13 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+      <!-- <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
         <el-autocomplete v-model.trim="adminData.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
           <template slot-scope="{ item }">
             <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
           </template>
         </el-autocomplete>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item :label="$t('contracts.set')" prop="set">
         <el-radio v-model="adminData.isOpen" :label=true>{{this.$t('contracts.openAdmin')}}</el-radio>
         <el-radio v-model="adminData.isOpen" :label=false>{{this.$t('contracts.closeAdmin')}}</el-radio>
@@ -280,7 +280,6 @@ export default {
             fromAddress: this.adminData.contractAdmin,
             func: this.adminData.eventName,
             signUserId: "",
-            userAddress: this.adminData.userAddress,
           };
           setAdmin(reqData)
             .then((res) => {

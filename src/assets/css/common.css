@@ -393,7 +393,7 @@ body { overflow-y: scroll;overflow: auto !important; }
     left:50%;
     transform:translate(-50%,-50%);
     /*height:600px;*/
-    max-height:calc(100% - 40px);
+    /* max-height:calc(100% - 40px); */
  
 }
 

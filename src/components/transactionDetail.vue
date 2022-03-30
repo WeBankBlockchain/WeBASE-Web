@@ -43,11 +43,17 @@
                             <!-- <el-tooltip class="item" effect="dark" content="部署合约，to字段为空。" placement="top-start">
                                 <i class="el-icon-info"></i>
                             </el-tooltip> -->
-                            <span>To:</span>
+                            <span>To</span>
+                            <el-tooltip v-if="transactionData.to==''" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
+                                <i class="el-icon-info"></i> 
+                            </el-tooltip>:
                         </span>
                         <span>{{transactionData.to || 'null'}}</span>
                         <span v-if="transactionData.to">{{transactionData.to | contractSource}}</span>
-                         <el-tooltip v-if="transactionData.to==''||transactionData.to=='0x0000000000000000000000000000000000000000'" class="tip" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
+                         <el-tooltip v-if="transactionData.to=='0x0000000000000000000000000000000000000000'" class="tip" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
+                                <i class="el-icon-info"></i> 
+                            </el-tooltip>
+                                 <el-tooltip v-else-if="txInfoReceiptMap[item]!=''" class="tip" effect="dark" :content="$t('contracts.toTip1')" placement="top-start">
                                 <i class="el-icon-info"></i> 
                             </el-tooltip>
                     </div>
@@ -111,7 +117,10 @@
             <el-tab-pane :label="$t('table.transactionReceipt')" name="txReceiptInfo">
                 <el-row v-for="item in txReceiptInfoList" :key="item">
                     <el-col :xs='24' :sm="24" :md="6" :lg="4" :xl="2">
-                        <span class="receipt-field">{{item}}：</span>
+                        <span class="receipt-field">{{item}}</span>
+                             <el-tooltip v-if="(item=='contractAddress'||item=='to')&&txInfoReceiptMap[item]==''" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
+                                <i class="el-icon-info"></i> 
+                            </el-tooltip>：
                     </el-col>
                     <el-col :xs='24' :sm="24" :md="18" :lg="20" :xl="22">
                         <template class="item" style="font-size: 0" v-if="item == 'output'">
@@ -193,11 +202,17 @@
                                 <el-tooltip v-if="txInfoReceiptMap[item]==''||txInfoReceiptMap[item]=='0x0000000000000000000000000000000000000000'" class="tip" effect="dark" :content="$t('contracts.toTip')" placement="top-start">
                                 <i class="el-icon-info"></i> 
                             </el-tooltip>
+                             <el-tooltip v-else-if="txInfoReceiptMap[item]!=''" class="tip" effect="dark" :content="$t('contracts.toTip1')" placement="top-start">
+                                <i class="el-icon-info"></i> 
+                            </el-tooltip>
                         </template>
                         <template v-else-if="item == 'contractAddress'">
                             <span class="base-p">{{txInfoReceiptMap[item]}}</span> <span v-if="txInfoReceiptMap[item]">{{txInfoReceiptMap[item] | contractSource}}</span>
-                                <el-tooltip v-if="txInfoReceiptMap[item]==''||txInfoReceiptMap[item]=='0x0000000000000000000000000000000000000000'" class="tips" effect="dark" :content="$t('contracts.contractAddressTip')" placement="top-start">
+                                <el-tooltip v-if="txInfoReceiptMap[item]=='0x0000000000000000000000000000000000000000'" class="tips" effect="dark" :content="$t('contracts.contractAddressTip')" placement="top-start">
                           <i class="el-icon-info"></i> 
+                            </el-tooltip>
+                            <el-tooltip v-else-if="txInfoReceiptMap[item]!=''" class="tip" effect="dark" :content="$t('contracts.contractAddressTip1')" placement="top-start">
+                                <i class="el-icon-info"></i> 
                             </el-tooltip>
                         </template>
                         <template v-else>

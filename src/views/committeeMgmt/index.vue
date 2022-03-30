@@ -135,14 +135,14 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
-              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" style="width:300px;"></el-input>
-            </el-form-item>
             <el-form-item :label="$t('govCommittee.participatesRate')" prop="participatesRate">
               <el-input v-model="governForm.participatesRate" @input="e => (governForm.participatesRate = isnumber(e))" style="width:300px;"></el-input>
             </el-form-item>
+            <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
+              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" style="width:300px;"></el-input>
+            </el-form-item>
           </el-form>
-          <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+          <p style="padding-left: 50px">{{$t('privateKey.modifyThresholdTip')}}</p>
           <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="closeModifyThreshold">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>
@@ -271,7 +271,7 @@
     <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
       <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
     </el-dialog>
-    <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
+    <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKeyAccount')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
       <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
     </el-dialog>
   </div>
@@ -430,18 +430,18 @@ export default {
         },
       ],
       voteList: [
-        {
-          againstVoters: "",
-          agreeVoters: [],
-          blockNumberInterval: 0,
-          proposalType: 0,
-          proposalTypeString: "",
-          proposer: "0xbb3cc188fb76e129ae18b0829803f741288c1a92",
-          resourceId: "",
-          requestId: "",
-          status: 2,
-          statusString: "",
-        },
+        // {
+        //   againstVoters: "",
+        //   agreeVoters: null,
+        //   blockNumberInterval: '',
+        //   proposalType: 0,
+        //   proposalTypeString: "",
+        //   proposer: "",
+        //   resourceId: "",
+        //   requestId: "",
+        //   status: '',
+        //   statusString: "",
+        // },
       ],
       isShowPrivate: false,
     };
@@ -541,6 +541,12 @@ export default {
   },
 
   methods: {
+     importPrivateKeySuccess() {
+     this.queryCommitteeList();
+      this.queryVoteRecordList();
+      this.getUserData();
+      this.queryVoteRecordListCount();
+    },
     airJudg(val) {
       return typeof val == "undefined" || val == null || val == "" ? "-" : val;
     },
@@ -929,6 +935,7 @@ export default {
                 this.closeDeleteCommittee();
                 this.queryCommitteeList();
                 this.queryVoteRecordList();
+      this.queryVoteRecordListCount();
               } else {
                 this.$message({
                   message: this.$chooseLang(res.data.code),

@@ -20,9 +20,9 @@
                 <div class="search-part-left" style="padding-top: 20px;">
                     <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
                     <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="checkDeploy">{{$t('title.checkDeploy')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" @click="checkMethod">{{$t('title.checkMethod')}}</el-button>
+                    <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
+                    <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="checkDeploy">{{$t('title.checkDeploy')}}</el-button>
+                    <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="checkMethod">{{$t('title.checkMethod')}}</el-button>
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
@@ -73,11 +73,11 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
+                            <el-button v-if="liquidCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
+                            <el-button v-if="liquidCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
-                             <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
+                             <el-button v-if="liquidCheck" :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -260,9 +260,9 @@ export default {
             this.disabled = true
         }
         if (localStorage.getItem("groupId")) {
+            this.getfrontList()
             this.getContracts()
         }
-        this.getfrontList()
     },
     methods: {
       getfrontList() {
@@ -299,7 +299,7 @@ export default {
       checkIsWasm(this.frontId,groupId)
         .then((res) => {
           if (res.data.data == true) {
-            this.liquidCheck = true;
+            this.liquidCheck = false;
           } 
         })
         .catch((err) => {
