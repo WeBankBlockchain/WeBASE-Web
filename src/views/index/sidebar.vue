@@ -271,6 +271,7 @@ export default {
           if (res.data.data == true) {
             this.liquidCheck = true;
             Bus.$emit("liquidCheck", true);
+            this.$store.dispatch("switch_liquidCheck",true);
           } else {
           }
         })
@@ -444,10 +445,13 @@ export default {
               if (it.nameKey == "contractEvent" && this.liquidCheck) {
                 it.menuShow = false;
               }
+               if (it.nameKey == "hostMonitor") {
+                it.menuShow = false;
+              }
 
-              // if ((localStorage.getItem("deployType") == 0||localStorage.getItem("deployType") == null) && it.nameKey == 'hostMgrTitle') {
-              //     it.menuShow = false;
-              // }
+              if ((localStorage.getItem("deployType") == 0||localStorage.getItem("deployType") == null) && it.nameKey == 'hostMgrTitle') {
+                  it.menuShow = false;
+              }
             });
           }
           if (list[i].nameKey == "guide") {

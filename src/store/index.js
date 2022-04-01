@@ -17,6 +17,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getLanguage } from '@/lang/index'
 import Cookies from 'js-cookie'
+import { debug } from 'request'
 
 Vue.use(Vuex)
 
@@ -39,6 +40,7 @@ const state = {
     selectedContracts: {},
     selectedContractInfo: {},
     bindKey:false,
+    liquidCheck:false
 }
 export default new Vuex.Store({
     state,
@@ -107,8 +109,14 @@ export default new Vuex.Store({
         set_selected_contracts_info(state, data) {
             state.selectedContractInfo = data
         },
+        set_liquidCheck(state, data) {
+            state.liquidCheck = data
+        },
     },
     actions: {
+        switch_liquidCheck(context,data){
+            context.commit('set_liquidCheck',data)
+        },
         switch_bind_key_dialog(context) {
             context.commit('switch_bind_key_dialog')
         },

@@ -293,7 +293,6 @@ export default {
         getConfigType: function () {
             getDeployType()
                 .then((res) => {
-                    debugger
                     if (res.data.code == 0) {
                         localStorage.setItem("deployType", res.data.data);
                         router.push("/main");

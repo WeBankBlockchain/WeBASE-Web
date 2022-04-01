@@ -32,19 +32,19 @@
         </el-select>
 
       </el-form-item>
-      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+      <!-- <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
         <el-autocomplete v-model.trim="policyData.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
           <template slot-scope="{ item }">
             <div class="name"> {{item.userName}} / {{ item.address | splitString}}</div>
           </template>
         </el-autocomplete>
-      </el-form-item>
-      <el-form-item :label="$t('contracts.set')" prop="set">
+      </el-form-item> -->
+      <el-form-item :label="$t('contracts.canCall')" prop="set">
         <el-radio v-model="policyData.authType" :label=1>{{this.$t('contracts.WhiteList')}}</el-radio>
         <el-radio v-model="policyData.authType" :label=2>{{this.$t('contracts.blackList')}}</el-radio>
       </el-form-item>
     </el-form>
-    <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+    <p style="padding-left: 50px">{{$t('govCommittee.setPolicy')}}</p>
     <div class="text-right sure-btn" style="margin-top:10px">
       <el-button @click="closeSetPolicy">{{this.$t('text.cancel')}}</el-button>
       <el-button type="primary" @click="sureSetPolicy" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
@@ -298,7 +298,6 @@ export default {
             fromAddress: this.policyData.contractAdmin,
             func: this.policyData.eventName,
             signUserId: "",
-            userAddress: this.policyData.userAddress,
           };
           setPolicy(reqData)
             .then((res) => {

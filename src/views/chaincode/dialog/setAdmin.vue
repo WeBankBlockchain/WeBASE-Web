@@ -14,19 +14,19 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
+      <el-form-item :label="$t('contracts.userAddress')" prop="userAddress">
         <el-autocomplete v-model.trim="adminData.userAddress" :fetch-suggestions="querySearch" @select="selectAddress" style="width: 300px;" clearable>
           <template slot-scope="{ item }">
             <div class="name"> {{item.userName}} / {{ item.address | splitString}}...</div>
           </template>
         </el-autocomplete>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item :label="$t('contracts.set')" prop="set">
         <el-radio v-model="adminData.isOpen" :label=true>{{this.$t('contracts.openAdmin')}}</el-radio>
         <el-radio v-model="adminData.isOpen" :label=false>{{this.$t('contracts.closeAdmin')}}</el-radio>
       </el-form-item>
     </el-form>
-    <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+    <p style="padding-left: 50px">{{$t('govCommittee.setAdmin')}}</p>
     <div class="text-right sure-btn" style="margin-top:10px">
       <el-button @click="closeSetPolicy">{{this.$t('text.cancel')}}</el-button>
       <el-button type="primary" @click="sureSetPolicy" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
@@ -279,6 +279,7 @@ export default {
             contractAddr: this.adminData.contractAddress,
             fromAddress: this.adminData.contractAdmin,
             func: this.adminData.eventName,
+            userAddress: this.adminData.userAddress,
             signUserId: "",
           };
           setAdmin(reqData)

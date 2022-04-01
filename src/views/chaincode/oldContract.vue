@@ -20,7 +20,7 @@
                 <div class="search-part-left" style="padding-top: 20px;">
                     <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
                     <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
-                    <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
+                    <el-button v-show="liquidCheck" type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
                     <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="checkDeploy">{{$t('title.checkDeploy')}}</el-button>
                     <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="checkMethod">{{$t('title.checkMethod')}}</el-button>
                 </div>
@@ -261,7 +261,8 @@ export default {
         }
         if (localStorage.getItem("groupId")) {
             this.getfrontList()
-            this.getContracts()
+            this.getContracts() 
+            
         }
     },
     methods: {
@@ -300,7 +301,9 @@ export default {
         .then((res) => {
           if (res.data.data == true) {
             this.liquidCheck = false;
-          } 
+          } else{
+            this.liquidCheck = true;
+          }
         })
         .catch((err) => {
           this.$message({
@@ -678,7 +681,10 @@ export default {
             this.abiData = null
         },
         search: function () {
-            if (this.contractData && this.contractData.length && this.contractData.length < 20) {
+            if (this.contractData && this.contractData.length && this.contractData.substring(0,1)=='/') {
+                this.contractAddress = this.contractData;
+                this.contractName = ""
+            } else if (this.contractData && this.contractData.length && this.contractData.length < 20) {
                 this.contractName = this.contractData;
                 this.contractAddress = ""
             } else if (this.contractData && this.contractData.length && (this.contractData.length > 20 || this.contractData.length == 20)) {

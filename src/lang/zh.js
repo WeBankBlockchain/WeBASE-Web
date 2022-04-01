@@ -55,6 +55,7 @@ export default {
         createSuccessMsg: "新建成功",
         save: "保存",
         compile: "编译",
+        compileError: "编译失败",
         deploy: "部署",
         send: "发交易",
         selectSuccess: "查询成功！",
@@ -368,6 +369,7 @@ export default {
         contractAdmin:"请输入合约管理员",
         contractAddress: "请输入合约地址",
         userAddress: "请输入用户地址",
+        userAddressCorrect: "请输入正确的用户地址",
         fromAddress: "请选择链委员",
         contractAbi: "请输入合约ABI",
         contractLong: "长度在 1 到 32 个字符",
@@ -402,7 +404,7 @@ export default {
         eventName: '请选择事件名',
         fromBlock: "请输入起始区块",
         toBlock: "请输入末区块",
-        blockNumber: "值需要大于0",
+        blockNumber: "值需要大于0，-1代表当前块高",
         weightNumber:'值需要大于0,小于2147483647',
         inputIsNumber: '输入不是数字',
         inputIsAddress: '输入不是Address',
@@ -615,6 +617,7 @@ export default {
         addContract: "导入合约",
     },
     contracts: {
+        canCall:"能否调用",
         toTip1:"调用合约的交易中to字段为合约地址",
         toTip:"部署合约的交易中to字段为空或全0",
         contractAddressTip1:"部署合约的交易中contractAddress字段为合约地址",
@@ -624,8 +627,8 @@ export default {
         contractAdmin:"合约管理员",
         set:'设置',
         setSucess:"设置成功",
-        WhiteList:'白名单',
-        blackList:'黑名单',
+        WhiteList:'可调用',
+        blackList:'不可调用',
         setPolicy:"设置合约方法策略",
         setAdmin:"设置合约方法权限",
         createFile: "新建文件",
@@ -747,6 +750,10 @@ export default {
         RequestNotBelongToTheGroup:'请求不属于群组异常', 
         MalformedTx:'交易格式错误', 
         OverGroupMemoryLimit:'超出群组内存限制异常', 
+        WASMValidationFailure:'使用了与链不匹配的国密或非国密的加密类型',
+        WASMArgumentOutOfRange:'部署Liquid合约时传入参数过多',
+        WASMUnreachableInstruction:' Liquid中使用了非法的opcode或者Liquid编译版本太低',
+
     },
     bfs:{
         pwdRoute:'pwd当前路径:',
@@ -881,6 +888,7 @@ export default {
         updataEmail: "修改邮箱",
     },
     transaction: {
+        blockTips:"-1代表当前块高",
         time: "时长",
         interface: "接口",
         week: "最近一周",
@@ -1152,7 +1160,9 @@ export default {
         toCommittee: '待修改委员',
         revokeCommittee: '待撤销委员',
         committeeAndDeploy: '链委员和部署者',
-        dialogTips: '外部私钥用户可以通过导入公钥或私钥进行设置。'
+        dialogTips: '外部私钥用户可以通过导入公钥或私钥进行设置。',
+        setAdmin:"设置用户对某合约方法的调用权限",
+        setPolicy:"设置某合约某方法（具有写权限）的策略"
     },
     devOpsMgmt: {
         addDeveloper: '新增部署管理员',

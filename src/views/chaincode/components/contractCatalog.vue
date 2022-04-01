@@ -209,10 +209,9 @@ export default {
       });
     }
     Bus.$on("compileLiquid", (data) => {
-      this.compileLiquid();
+      this.compileLiquid(data);
     });
     Bus.$on("compile", (data) => {
-      this.liquidLoad=false
       this.saveContract(data, this.$t("contracts.contractCompileSuccess"));
     });
     Bus.$on("save", (data) => {
@@ -260,8 +259,8 @@ export default {
     },
   },
   methods: {
-    compileLiquid:function(){
-      this.liquidLoad=true
+    compileLiquid:function(val){
+      this.liquidLoad= !this.liquidLoad
     },
     /**
      * @method 点击任意处清除右键弹窗

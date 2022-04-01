@@ -37,7 +37,7 @@
         </el-form-item>
       </el-form>
       <div class="contents">
-        <json-viewer :value="bfsData" :expand-depth='5' copyable class='jsonViewer'></json-viewer>
+        <json-viewer :value="bfsData" :expand-depth='5' class='jsonViewer'></json-viewer>
       </div>
     </div>
   </div>
