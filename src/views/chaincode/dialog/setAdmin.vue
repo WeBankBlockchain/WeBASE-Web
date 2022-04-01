@@ -26,7 +26,7 @@
         <el-radio v-model="adminData.isOpen" :label=false>{{this.$t('contracts.closeAdmin')}}</el-radio>
       </el-form-item>
     </el-form>
-    <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+    <p style="padding-left: 50px">{{$t('govCommittee.setAdmin')}}</p>
     <div class="text-right sure-btn" style="margin-top:10px">
       <el-button @click="closeSetPolicy">{{this.$t('text.cancel')}}</el-button>
       <el-button type="primary" @click="sureSetPolicy" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
@@ -279,8 +279,8 @@ export default {
             contractAddr: this.adminData.contractAddress,
             fromAddress: this.adminData.contractAdmin,
             func: this.adminData.eventName,
-            signUserId: "",
             userAddress: this.adminData.userAddress,
+            signUserId: "",
           };
           setAdmin(reqData)
             .then((res) => {

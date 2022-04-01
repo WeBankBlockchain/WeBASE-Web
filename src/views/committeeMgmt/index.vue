@@ -15,6 +15,7 @@
             <template slot-scope="scope">
               <template v-if="head.enName!='operate'">
                 <span v-if="head.enName =='userId'">{{userName(scope.row['governorAddress'])}}</span>
+                <span v-if="head.enName =='weightRate'">{{weightRate(scope.row['weight'])}}</span>
                 <span v-else-if="head.enName =='governorAddress'">
                   <i class="wbs-icon-copy font-12 copy-public-key" v-show="scope.row[head.enName]" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
                   {{scope.row[head.enName]}}
@@ -35,7 +36,7 @@
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
               <template v-if="chainCommitteeList.length > 0">
-                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
+                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:250px;">
                   <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
                     <span>{{item.userName}}</span>
                     <span>{{item.governorAddress | splitString}}</span>
@@ -43,7 +44,7 @@
                 </el-select>
               </template>
               <template v-else>
-                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
+                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:250px;">
                   <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                     <span>{{item.userName}}</span>
                     <span class="font-12">{{item.address | splitString}}</span>
@@ -55,15 +56,11 @@
               </span>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.user')" prop="address">
-              <el-select v-model="governForm.address" :placeholder="$t('text.select')" style="width:300px;">
-                <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-                  <span>{{item.userName}}</span>
-                  <span>{{item.address | splitString}}</span>
-                </el-option>
-              </el-select>
+               
+              <el-input v-model="governForm.address" style="width:250px;" :placeholder="$t('transaction.inputUserAddress')" ></el-input>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:300px;"></el-input>
+              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:250px;"></el-input>
             </el-form-item>
           </el-form>
           <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p>
@@ -135,14 +132,14 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
-              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" style="width:300px;"></el-input>
-            </el-form-item>
             <el-form-item :label="$t('govCommittee.participatesRate')" prop="participatesRate">
               <el-input v-model="governForm.participatesRate" @input="e => (governForm.participatesRate = isnumber(e))" style="width:300px;"></el-input>
             </el-form-item>
+            <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
+              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" style="width:300px;"></el-input>
+            </el-form-item>
           </el-form>
-          <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+          <p style="padding-left: 50px">{{$t('privateKey.modifyThresholdTip')}}</p>
           <div class="text-right sure-btn" style="margin-top:10px">
             <el-button @click="closeModifyThreshold">{{this.$t('text.cancel')}}</el-button>
             <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>
@@ -271,7 +268,7 @@
     <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
       <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
     </el-dialog>
-    <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKey')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
+    <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKeyAccount')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
       <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
     </el-dialog>
   </div>
@@ -430,20 +427,21 @@ export default {
         },
       ],
       voteList: [
-        {
-          againstVoters: "",
-          agreeVoters: [],
-          blockNumberInterval: 0,
-          proposalType: 0,
-          proposalTypeString: "",
-          proposer: "0xbb3cc188fb76e129ae18b0829803f741288c1a92",
-          resourceId: "",
-          requestId: "",
-          status: 2,
-          statusString: "",
-        },
+        // {
+        //   againstVoters: "",
+        //   agreeVoters: null,
+        //   blockNumberInterval: '',
+        //   proposalType: 0,
+        //   proposalTypeString: "",
+        //   proposer: "",
+        //   resourceId: "",
+        //   requestId: "",
+        //   status: '',
+        //   statusString: "",
+        // },
       ],
       isShowPrivate: false,
+      totalWeight: 0,
     };
   },
 
@@ -460,9 +458,14 @@ export default {
         address: [
           {
             required: true,
-            message: this.$t("rule.userRule"),
-            trigger: "change",
+            message: this.$t("transaction.inputUserAddress"),
+            trigger: "blur",
           },
+          // {
+          //   pattern: /^0[xX][0-9a-fA-F]{40}$/,
+          //   message: "必须是十六进制的数字或字母,长度是42",
+          //   trigger: "blur",
+          // },
         ],
         threshold: [
           {
@@ -496,15 +499,17 @@ export default {
     produceCommittee() {
       let privateKeyList = this.adminRivateKeyList;
       let committeeList = this.chainCommitteeList;
+      let totalWeight = 0;
       // whether find committee in local private key list
       let flagFind = false;
-      let committeeLists=[]
+      let committeeLists = [];
       privateKeyList.forEach((item) => {
         committeeList.forEach((it) => {
           if (item.address == it.governorAddress) {
             it.userName = item.userName;
             flagFind = true;
-            committeeLists.push(it)
+            committeeLists.push(it);
+            totalWeight += it.weight;
           }
         });
       });
@@ -517,6 +522,7 @@ export default {
           // 如果本地没有committee私钥，则不选默认值
         }
       }
+      this.totalWeight = totalWeight;
       return committeeLists;
     },
   },
@@ -541,6 +547,12 @@ export default {
   },
 
   methods: {
+    importPrivateKeySuccess() {
+      this.queryCommitteeList();
+      this.queryVoteRecordList();
+      this.getUserData();
+      this.queryVoteRecordListCount();
+    },
     airJudg(val) {
       return typeof val == "undefined" || val == null || val == "" ? "-" : val;
     },
@@ -929,6 +941,7 @@ export default {
                 this.closeDeleteCommittee();
                 this.queryCommitteeList();
                 this.queryVoteRecordList();
+                this.queryVoteRecordListCount();
               } else {
                 this.$message({
                   message: this.$chooseLang(res.data.code),
@@ -1099,6 +1112,9 @@ export default {
         }
       });
       return name;
+    },
+    weightRate(val) {
+      return ((val / this.totalWeight) * 100).toString().substring(0, 5);
     },
     changValueZh(val) {
       if (!val) return;

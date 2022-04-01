@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-  <el-dialog v-dialogDrag :title="$t('contracts.transactionReceipt')" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh">
+  <el-dialog v-dialogDrag :title="$t('contracts.transactionReceipt')" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh" z-index='1000'>
     <div v-if='!transationData'>{{$t('text.noData')}}</div>
     <div v-if='transationData && !transationData.logEntries' slot :style="{'height':editorHeight + 'px'}" style="overflow-y:auto">
       <json-viewer :value="transationData" :expand-depth='5' copyable></json-viewer>
@@ -26,7 +26,10 @@
           <template v-if="key=='status'">
             <span class="transation-title">{{key}}:</span>
             <span :style="{'color': txStatusColor(val)}">{{val}}</span>
-            <span style="margin-left:10px" class="string-color">({{txStatusMessage(val)}})</span>
+            <!-- <span style="margin-left:10px" class="string-color">({{txStatusMessage(val)}})</span> -->
+            <el-tooltip class="tip" effect="dark" :content="txStatusMessage(val)" placement="top-start">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
           </template>
           <template v-else>
             <span class="transation-title">{{key}}:</span>
@@ -89,7 +92,7 @@
           <div class="item">
             <!-- <div class="item" v-show="inputButtonShow"> -->
             <span class="label"></span>
-            <el-button @click="decodeInputCheck" type="primary" :disabled='ifLiquid'>{{inputTitle}}</el-button>
+            <el-button @click="decodeInputCheck" type="primary" v-if='!ifLiquid'>{{inputTitle}}</el-button>
           </div>
         </div>
         <div v-if='key == "logEntries"'>
@@ -638,6 +641,12 @@ export default {
           return this.$t("editor.ContractFrozen");
         case 31:
           return this.$t("editor.AccountFrozen");
+          case 32:
+          return this.$t("editor.WASMValidationFailure");
+          case 33:
+          return this.$t("editor.WASMArgumentOutOfRange");
+          case 34:
+          return this.$t("editor.WASMUnreachableInstruction");
         case 10000:
           return this.$t("editor.AlreadyKnown");
         case 10001:

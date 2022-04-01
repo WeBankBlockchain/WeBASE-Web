@@ -434,7 +434,9 @@ export default {
                 ? this.$t("govCommittee.haveMethodAdmin")
                 : this.$t("govCommittee.noMethodAdmin"),
             });
+            if(res.data.data){
             this.$emit("checkMethodSuccess");
+            }
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),

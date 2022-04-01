@@ -55,6 +55,7 @@ export default {
         save: "Save",
         compile: "Compile",
         deploy: "Deploy",
+        compileError: "Compile Error",
         send: "Send",
         selectSuccess: "Succeeded",
         transactionSuccess: "Successful Transaction!",
@@ -340,6 +341,7 @@ export default {
         nodeNotActive:'Node not active',
     },
     rule: {
+        userAddressCorrect: "Please enter the correct user address",
         eventName:'please enter the event name',
         textLong: "1 to 32 characters in length",
         textLong1_12: "1 to 12 digits in length",
@@ -399,7 +401,7 @@ export default {
         eventName: 'Please enter event name',
         fromBlock: "Please enter from block",
         toBlock: "Please enter to block",
-        blockNumber: "Greater than 0",
+        blockNumber: "Greater than 0,-1 represents the current block height",
         weightNumber:'Greater than 0,less than 2147483647',
         inputIsNumber: 'Input is not a number',
         inputIsAddress: 'Input is not address',
@@ -419,7 +421,9 @@ export default {
         contractAddressHex: 'contract address supposed to start with 0x/0X and all hex string',
         proposalId:'Please enter proposalId',
         weightRules:"value 0~100",
-        routeParam:"Please enter routeParam"
+        routeParam:"Please enter routeParam",
+        contractAddressLiquidLong: 'The length of the contract address cannot exceed 64 bits',
+        contractAddressHexLiquid: 'Contract address starts with / and contains alphanumeric underscores',
 
     },
     head: {
@@ -609,13 +613,16 @@ export default {
         addContract: "Import Contract"
     },
     contracts: {
+        cancall:"Can be called",
         toTip: "The to field in the transaction calling the contract is the contract address",
+         toTip1: "The to field in the transaction of deploying the contract is empty or all 0",
          contractAddressTip: "The contractAddress field in the transaction that deploys the contract is the contract address",
+         contractAddressTip1: "The field contractAddress in the transaction calling the contract is empty or all 0",
         openAdmin:'Open Admin',
         closeAdmin:'Close Admin',
         set:'set',
-        WhiteList:'White List',
-        blackList:'black List',
+        WhiteList:'Can be called',
+        blackList:'Can not be called',
         setPolicy:"Set contract method policy",
         setAdmin:"Set contract method permissions",
         createFile: "Create File",
@@ -717,12 +724,12 @@ export default {
         TIP3: "3) LS: List all files or directories under the current path;",
     },
     editor:{
-        None: 'normal',
+        None: 'Success',
         Unknown: 'Unknown exception',
         BadRLP: 'Invalid RLP exception',
         InvalidFormat: 'Invalid format exception',
         OutOfGasIntrinsic: 'The length of the deployed contract exceeds the gas limit/the interface parameter of the calling contract exceeds the gas limit',
-        InvalidSignature: 'Invalid signature exception',
+        InvalidSignature: 'Invalid signature exception, please check whether the private key or national secret of the signature corresponds to the encryption type of non-national secret',
         InvalidNonce: 'Invalid nonce exception',
         NotEnoughCash: 'Cash insufficient exception',
         OutOfGasBase: 'The parameter of the calling contract is too long (RC version)',
@@ -739,7 +746,7 @@ export default {
         NoCallPermission: 'Illegal call contract exception',
         NoTxPermission: 'Illegal transaction exception',
         PrecompiledError: 'precompiled error exception',
-        RevertInstruction: 'revert instruction exception',
+        RevertInstruction: 'The revert command is abnormal, please check the called contract logic or transaction content',
         InvalidZeroSignatureFormat: 'Invalid signature format exception',
         AddressAlreadyUsed: 'Address occupation is abnormal',
         PermissionDenied: 'No permission exception',
@@ -756,10 +763,17 @@ export default {
         RequestNotBelongToTheGroup: 'The request does not belong to the group exception',
         MalformedTx: 'Transaction format error',
         OverGroupMemoryLimit: 'Exceeded group memory limit exception',
+        WASMValidationFailure: 'A national or non-national encryption encryption type that does not match the chain is used',
+         WASMArgumentOutOfRange: 'Too many parameters were passed in when deploying the Liquid contract',
+         WASMUnreachableInstruction: 'Illegal opcode is used in Liquid or the compiled version of Liquid is too low',
     },
     privateKey: {
         addUser: "Add Users",
         importPrivateKey: "Import Private Key",
+        importPrivateKeyTip: "After adding the private key successfully, you can view it in the private key list.",
+        importPrivateKeyAccount:"Import the initial governance account private key",
+        importPrivateKeyAccountTip: "In the permission governance mode, it is used to add the private key of the initial governance committee account",
+        modifyThresholdTip: "Voting pass conditions 1) Satisfy the participation rate 2) Satisfy the threshold (participation voting weight/total weight)",
         addUserTips: "The account number of the transaction sent in the group needs to be added to the private key management, otherwise it will be judged as an abnormal user.",
         searchUser: "Please enter user name or public key address",
         copyPublicKey: "Copy Public Key",
@@ -867,6 +881,7 @@ export default {
         emailTypeError: "E-mail format is incorrect"
     },
     transaction: {
+        blockTips:"-1 represents the current block height",
         time: "Duration",
         interface: "Interface",
         week: "Last Week",
@@ -1125,7 +1140,9 @@ export default {
         toCommittee: 'To Committee',
         revokeCommittee: 'Revoke Committee',
         committeeAndDeploy: 'Committee&&Deployer',
-        dialogTips: 'External private key users can set by importing public key or private key.'
+        dialogTips: 'External private key users can set by importing public key or private key.',
+        setAdmin: "Set the user's call permission to a contract method",
+         setPolicy: "Set the policy for a method of a contract (with write permission)"
     },
     devOpsMgmt: {
         addDeveloper: 'Add Developer',

@@ -105,6 +105,7 @@
         </li>
       </ul>
     </div>
+    <div class="el-loading-mask" v-show="liquidLoad"><div class="el-loading-spinner"></div></div>
     <add-folder v-if="foldershow" :foldershow="foldershow" @close="folderClose" @success="folderSuccess"></add-folder>
     <add-file v-if="fileshow" :data="selectFolderData" :fileshow="fileshow" @close="fileClose" @success="fileSucccess($event)" :id="folderId"></add-file>
     <select-catalog v-if="cataLogShow" :show="cataLogShow" @success="catalogSuccess($event)" @close="catalogClose"></select-catalog>
@@ -173,6 +174,7 @@ export default {
           value: false,
           label: 'rust'
         }],
+      liquidLoad:false
     };
   },
   beforeDestroy: function () {
@@ -180,8 +182,9 @@ export default {
     Bus.$off("deploy");
     Bus.$off("open");
     Bus.$off("save");
+    Bus.$off("compileLiquid");
   },
-    watch: {
+  watch: {
     liquidChecks: function (val) {
       this.liquidCheck = val;
     }
@@ -205,6 +208,9 @@ export default {
         this.getContractPaths();
       });
     }
+    Bus.$on("compileLiquid", (data) => {
+      this.compileLiquid(data);
+    });
     Bus.$on("compile", (data) => {
       this.saveContract(data, this.$t("contracts.contractCompileSuccess"));
     });
@@ -253,6 +259,9 @@ export default {
     },
   },
   methods: {
+    compileLiquid:function(val){
+      this.liquidLoad= !this.liquidLoad
+    },
     /**
      * @method 点击任意处清除右键弹窗
      */
@@ -1478,6 +1487,18 @@ export default {
 .langChoose{
     width: 110px;
     padding-left: 7px;
+}
+.el-loading-mask{
+  position: absolute;
+    z-index: 2000;
+    background-color: rgba(255,255,255,.9);
+    margin: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    -webkit-transition: opacity .3s;
+    transition: opacity .3s;
 }
 </style>
 

@@ -299,7 +299,7 @@ export default {
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
-                            type: "error",
+                            // type: "error",
                             duration: 2000,
                         });
                     }

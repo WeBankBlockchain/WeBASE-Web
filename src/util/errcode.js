@@ -1751,6 +1751,34 @@ let errCode = {
         en: "The proposal is not exist",
         zh: "提案不存在"
     },
+    "201634": {
+        en: "Liquid environment not configured in the host of webase-front",
+        zh: "webbase-front主机中未配置Liquid环境"
+    },
+    "201635": {
+        en: "Create new liquid project failed, please check 'liquid' directory in webase-front",
+        zh: "创建新的Liquid项目失败，请检查webbase-front中的“liquid”目录"
+    },
+    "201636": {
+        en: "Create new liquid project and set gitee url failed",
+        zh: "创建新的Liquid项目并设置gitee url 失败"
+    },
+    "201637": {
+        en: "Write liquid contract source into lib.rs file failed",
+        zh: "将Liquid合约资源写入lib.rs文件失败"
+    },
+    "201638": {
+        en: "Compile liquid contract failed, please check contract source",
+        zh: "编译Liquid合约失败，请查看合约资源"
+    },
+    "201639": {
+        en: "Liquid compile target file not exist, please check 'liquid' directory in webase-front",
+        zh: "Liquid编译目标文件不存在，请检查webbase-front中的'liquid'目录"
+    },
+    "201640": {
+        en: "Read liquid contract's abi and bin file failed, please check 'liquid' directory in webase-front",
+        zh: "读取Liquid合约的abi和bin文件失败，请检查webbase-front中的'liquid'目录"
+    },
     "-53001": {
         en: "Path of file not exist",
         zh: "文件路径不存在"

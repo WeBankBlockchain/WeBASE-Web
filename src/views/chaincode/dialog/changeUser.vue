@@ -130,11 +130,12 @@ export default {
   data: function () {
     var paramRule = (rule, value, callback) => {
       let val = value.trim().replace(/\s+/g, " ");
-      console.log(val);
-      if (val.substr(0, 1) != "/") {
-        callback(new Error("合约地址必须以/开头"));
-      } else if (val.length > 64) {
-        callback(new Error("合约地址长度不能超过64位"));
+      let valArr = val.split("/");
+      let valArr2 = val.substr(1).split("/");
+      if (!/^[/][0-9a-zA-Z_/.]{0,}$/.test(val)) {
+        callback(new Error(this.$t("rule.contractAddressHexLiquid")));
+      } else if (valArr2.includes("")) {
+        callback(new Error(this.$t("rule.contractAddressHexLiquid")));
       } else {
         callback();
       }
@@ -165,12 +166,18 @@ export default {
         contractAddress: [
           {
             required: true,
-            message: this.$t("dialog.contractAddress"),
+            message: this.$t("rule.contractAddress"),
             trigger: "blur",
           },
           {
             required: true,
             validator: paramRule,
+            trigger: "blur",
+          },
+          {
+            min: 2,
+            max: 64,
+            message: this.$t("rule.contractAddressLiquidLong"),
             trigger: "blur",
           },
         ],
@@ -373,7 +380,7 @@ export default {
 .demo-ruleForm >>> .el-form-item__error {
   padding-top: 0px;
   transform: scale(0.9);
-  top: 86%;
+  /* top: 86%; */
 }
 .text-td {
   white-space: nowrap;
