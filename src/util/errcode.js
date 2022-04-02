@@ -1751,6 +1751,10 @@ let errCode = {
         en: "The proposal is not exist",
         zh: "提案不存在"
     },
+    "201626": {
+        en: "Only newly created proposal can be revoked",
+        zh: "只能撤销新创建的提案"
+    },
     "201634": {
         en: "Liquid environment not configured in the host of webase-front",
         zh: "webbase-front主机中未配置Liquid环境"

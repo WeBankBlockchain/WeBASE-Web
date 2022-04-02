@@ -176,7 +176,7 @@ export default {
                 // pageSize: this.pageSize,
             }
             if (this.cnsForm.contractVersion) {
-                reqData.contractNameAndVersion = `${this.cnsForm.contractVersion}`;
+                reqData.version = `${this.cnsForm.contractVersion}`;
                 reqData.contractName = `${this.cnsForm.contractName}`
                 queryCnsListByNameVersion(reqData)
                 .then(res => {

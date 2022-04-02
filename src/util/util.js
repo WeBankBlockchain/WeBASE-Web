@@ -269,14 +269,19 @@ export function isJson(str) {
 export function dataType(type, value) {
     switch (type) {
         case 'bool':
-            if ((value === 'true' || value === 'false')) return eval(value.toLowerCase())
+            if ((value === 'true' || value === 'false')){
+                return eval(value.toLowerCase())
+            } 
+            else{
+                return value
+            }
             break;
         case 'uint[]':
             try {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'uint8[]':
@@ -284,7 +289,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'uint32[]':
@@ -292,7 +297,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'uint128[]':
@@ -300,7 +305,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'uint256[]':
@@ -308,7 +313,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'uint8[]':
@@ -316,7 +321,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'bytes32[]':
@@ -325,7 +330,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         case 'address[]':
@@ -334,7 +339,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
         default:
@@ -343,7 +348,7 @@ export function dataType(type, value) {
                 return JSON.parse(value)
             } catch (error) {
                 console.log('error：' + value + '!!!' + error);
-                return
+                return value
             }
             break;
             break;

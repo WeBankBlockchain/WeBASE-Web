@@ -365,7 +365,7 @@ export default {
       for (let i = 0; i < this.transationData.logEntries.length; i++) {
         let data = {
           groupId: localStorage.getItem("groupId"),
-          data: this.transationData.logEntries[i].topic[0],
+          data: this.transationData.logEntries[i].topics[0],
         };
         getFunctionAbi(data)
           .then((res) => {
