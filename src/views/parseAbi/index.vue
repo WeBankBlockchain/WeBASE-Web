@@ -314,8 +314,9 @@ export default {
                     type: item.type,
                     name: item.name
                 })
+                if(item.type=='string'||item.type=='address'){ inputsVal.push(item.argumentValue)}else{
                 inputsVal.push(dataType(item.type, item.argumentValue))
-
+                }
             })
             if (!inputs.length) {
                 this.textarea = '';
@@ -340,6 +341,7 @@ export default {
                         inputs: inputs
                     }, inputsVal)
                 }
+                //console.log(inputsVal)
             } catch (error) {
                 this.textarea = error
             }

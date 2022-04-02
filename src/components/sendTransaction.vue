@@ -186,7 +186,7 @@ export default {
       },
       ruleForms: [],
       rules: {
-        int: [
+         int: [
           {
             required: true,
             message: this.$t("text.sendInput"),
@@ -194,7 +194,59 @@ export default {
           },
           {
             pattern: /^-?[1-9]\d*$/,
-            message: "可以是负数",
+            message: "必须是数字，可以是负数",
+            trigger: "blur",
+          },
+        ],
+        string: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "change",
+          },
+        ],
+        int256: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+          {
+            pattern: /^-?[1-9]\d*$/,
+            message: "必须是数字，可以是负数",
+            trigger: "blur",
+          },
+        ],
+          uint256: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+          {
+            pattern: /^[1-9]\d*$/,
+            message: "必须是数字，不可以是负数",
+            trigger: "blur",
+          },
+        ],
+        bool: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+        ],
+        bytes: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+        ],
+        tuple: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
             trigger: "blur",
           },
         ],
@@ -206,7 +258,7 @@ export default {
           },
           {
             pattern: /^[1-9]\d*$/,
-            message: "不可以是负数",
+            message: "必须是数字，不可以是负数",
             trigger: "blur",
           },
         ],

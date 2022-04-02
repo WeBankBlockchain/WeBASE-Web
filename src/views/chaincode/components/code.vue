@@ -103,8 +103,8 @@
             </span>
             <span style="display:inline-block;width:calc(100% - 120px);word-wrap:break-word">
               {{contractAddress}}
-              <!-- <span v-if="reqVersion" style="margin-left: 10px;">(CNS: {{cnsName}} {{reqVersion}})</span>
-                            <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span> -->
+              <span v-if="reqVersion" style="margin-left: 10px;">(CNS: {{cnsName}} {{reqVersion}})</span>
+                            <span v-else style="color:#1f83e7;cursor: pointer;margin-left: 10px;" @click="handleRegisterCns">{{$t('text.register')}}</span>
             </span>
           </div>
           <div v-else v-show="abiFile" class="contract-info-list">
@@ -1021,6 +1021,7 @@ export default {
             that.errorMessage = output.errors;
             that.errorInfo = that.$t("contracts.contractCompileFail");
             that.loading = false;
+            Bus.$emit("compileLiquid", 1);
           }
         } else {
           console.log(ev.data);
@@ -1032,6 +1033,7 @@ export default {
         that.errorMessage = ev;
         that.compileShow = true;
         that.loading = false;
+        Bus.$emit("compileLiquid", 1);
       });
       console.log("wwww:", w);
     },
@@ -1079,6 +1081,7 @@ export default {
         this.errorMessage = error;
         this.compileShow = true;
         this.loading = false;
+        Bus.$emit("compileLiquid", 1);
       }
       setTimeout(() => {
         if (output && JSON.stringify(output.contracts) != "{}") {
@@ -1090,11 +1093,11 @@ export default {
           this.errorMessage = output.errors;
           this.errorInfo = this.$t("contracts.contractCompileFail");
           this.loading = false;
+          Bus.$emit("compileLiquid", 1);
         }
       }, 500);
     },
     changeOutput: function (obj) {
-        Bus.$emit("compileLiquid", 5);
       if (JSON.stringify(obj) !== "{}") {
         if (obj.hasOwnProperty(this.contractName)) {
           let compiledMap = obj[this.contractName];
@@ -1112,6 +1115,7 @@ export default {
           this.data.contractSource = Base64.encode(this.content);
           this.$set(this.data, "bytecodeBin", this.bytecodeBin);
           this.loading = false;
+          Bus.$emit("compileLiquid", 1);
           Bus.$emit("compile", this.data);
           this.setMethod();
           localStorage.setItem("isFinishCompile", "yes");
@@ -1123,11 +1127,13 @@ export default {
           this.errorInfo = this.$t("contracts.contractCompileFail");
           this.compileShow = true;
           this.loading = false;
+          Bus.$emit("compileLiquid", 1);
         }
       } else {
         this.errorInfo = this.$t("contracts.contractCompileFail");
         this.compileShow = true;
         this.loading = false;
+        Bus.$emit("compileLiquid", 1);
       }
     },
     // 导出java项目
@@ -1342,7 +1348,7 @@ export default {
       }
       getDeployStatus(reqData)
         .then((res) => {
-        Bus.$emit("compileLiquid", 1);
+          Bus.$emit("compileLiquid", 1);
           this.loading = false;
           if (res.data.code === 0) {
             this.abiFileShow = true;
@@ -1374,7 +1380,8 @@ export default {
           }
         })
         .catch((err) => {
-        Bus.$emit("compileLiquid", 1);
+          deugger
+          Bus.$emit("compileLiquid", 1);
           this.status = 3;
           this.loading = false;
           this.$message({

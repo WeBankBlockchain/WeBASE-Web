@@ -209,16 +209,16 @@
               </span>
             </template>
             <template v-else>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
                 {{$t('govCommittee.Committee')}}
               </el-button>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
                 {{$t('govCommittee.revokeVote')}}</el-button>
             </template>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" layout=" sizes, prev, pager, next, jumper"
+      <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" layout=" total,sizes, prev, pager, next, jumper"
         :total="voteTotal">
       </el-pagination>
       <el-dialog :title="$t('govCommittee.Committee')" :visible.sync="CommitteeVisible" width="500px" v-if="CommitteeVisible" center @close="closeCommittee">

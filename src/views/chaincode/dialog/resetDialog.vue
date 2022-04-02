@@ -37,7 +37,7 @@
         </el-autocomplete>
       </el-form-item>
     </el-form>
-    <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
+    <p style="padding-left: 50px">{{$t('govCommittee.resetTips')}}</p>
     <div class="text-right sure-btn" style="margin-top:10px">
       <el-button @click="closeReset">{{this.$t('text.cancel')}}</el-button>
       <el-button type="primary" @click="sureReset" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
