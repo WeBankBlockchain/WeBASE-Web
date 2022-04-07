@@ -260,7 +260,7 @@ export default {
   },
   methods: {
     compileLiquid:function(val){
-      this.liquidLoad= !this.liquidLoad
+      this.liquidLoad= val
     },
     /**
      * @method 点击任意处清除右键弹窗

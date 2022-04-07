@@ -262,6 +262,9 @@ export default {
       this.changeRouter();
       this.version = this.$store.state.mgrVersion;
     });
+    Bus.on('changGroup',function(){
+      console.log(1)
+    })
   },
   methods: {
     liquidCheckMethod() {

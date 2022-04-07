@@ -558,10 +558,12 @@ export default {
     },
     changGroup() {
       this.adminRivateKeyList = [];
-      this.queryGetThreshold();
+      //this.queryGetThreshold();
       this.getUserData();
       this.queryCommitteeList();
       this.queryVoteRecordList();
+      this.queryVoteRecordListCount();
+      
     },
     initGovernForm() {
       // this.governForm.fromAddress = ""

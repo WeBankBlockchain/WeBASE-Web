@@ -193,7 +193,7 @@ export default {
             trigger: "blur",
           },
           {
-            pattern: /^-?[1-9]\d*$/,
+            pattern: /^-?[0-9]\d*$/,
             message: "必须是数字，可以是负数",
             trigger: "blur",
           },
@@ -212,7 +212,7 @@ export default {
             trigger: "blur",
           },
           {
-            pattern: /^-?[1-9]\d*$/,
+            pattern: /^-?[0-9]\d*$/,
             message: "必须是数字，可以是负数",
             trigger: "blur",
           },
@@ -224,7 +224,7 @@ export default {
             trigger: "blur",
           },
           {
-            pattern: /^[1-9]\d*$/,
+            pattern: /^[0-9]\d*$/,
             message: "必须是数字，不可以是负数",
             trigger: "blur",
           },
@@ -257,7 +257,7 @@ export default {
             trigger: "blur",
           },
           {
-            pattern: /^[1-9]\d*$/,
+            pattern: /^[0-9]\d*$/,
             message: "必须是数字，不可以是负数",
             trigger: "blur",
           },

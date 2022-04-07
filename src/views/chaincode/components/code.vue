@@ -345,9 +345,9 @@ export default {
       this.liquidCheck = val;
       if (this.liquidCheck == true) {
         this.aceEditor.session.setMode("ace/mode/rust");
-        if (this.contractName && this.firstCall && this.liquidCheck) {
-          this.compileCheckEnter();
-        }
+        // if (this.contractName && this.firstCall && this.liquidCheck) {
+        //   this.compileCheckEnter();
+        // }
       } else {
         this.aceEditor.session.setMode("ace/mode/solidity");
       }
@@ -370,11 +370,11 @@ export default {
         this.infoHeight = 0;
       }
     },
-    // contractName: function (val) {
-    //     if (this.contractName && this.firstCall && this.liquidCheck) {
-    //     this.compileCheckEnter();
-    //   }
-    // },
+    contractName: function (val) {
+        if (this.contractName && this.firstCall) {
+        this.compileCheckEnter();
+      }
+    },
     dialogHeight: function (val) {
       console.log(val);
     },
@@ -383,8 +383,12 @@ export default {
     Bus.$off("select");
     Bus.$off("noData");
     Bus.$off("javaProjectComplie");
+    if(this.liquidCheckTimer){
+      
     clearInterval(this.liquidCheckTimer);
+    }
   },
+
   beforeMount() {},
   mounted: function () {
     if (
@@ -450,6 +454,9 @@ export default {
       if (this.data.contractAddress) {
         this.queryFindCnsInfo();
       }
+      //  if (this.contractName && this.firstCall && this.liquidCheck) {
+      //     this.compileCheckEnter();
+      //   }
     });
     Bus.$on("noData", (data) => {
       this.codeShow = false;
@@ -796,7 +803,7 @@ export default {
         .then((res) => {
           if (res.data.code === 0 && res.data.data.status == 1) {
             _this.loading = true;
-            Bus.$emit("compileLiquid");
+            Bus.$emit("compileLiquid",true);
             this.compileCheck();
             // _this.$message({
             //   message: _this.$t("text.compiling"),
@@ -854,7 +861,7 @@ export default {
                 // this.$emit("compile", false)
                 Bus.$emit("compile", _this.data);
                 clearInterval(_this.liquidCheckTimer);
-                Bus.$emit("compileLiquid");
+                Bus.$emit("compileLiquid",false);
               }
             } else if (
               (res.data.code === 0 && res.data.data.status == 3) ||
@@ -862,7 +869,7 @@ export default {
             ) {
               _this.loading = false;
               clearInterval(_this.liquidCheckTimer);
-              Bus.$emit("compileLiquid");
+              Bus.$emit("compileLiquid",false);
               _this.$message({
                 message: _this.$t("text.compileError"),
                 type: "error",
@@ -876,7 +883,7 @@ export default {
               //   duration: 2000,
               // });
             } else {
-              Bus.$emit("compileLiquid");
+              Bus.$emit("compileLiquid",false);
               clearInterval(_this.liquidCheckTimer);
               _this.loading = false;
               _this.$message({
@@ -887,7 +894,7 @@ export default {
             }
           })
           .catch((err) => {
-            Bus.$emit("compileLiquid");
+            Bus.$emit("compileLiquid",false);
             clearInterval(_this.liquidCheckTimer);
             _this.loading = false;
             _this.$message({
@@ -900,7 +907,7 @@ export default {
     },
     compile(callback) {
       this.loading = true;
-      Bus.$emit("compileLiquid", 1);
+      Bus.$emit("compileLiquid", true);
       this.loadingText = this.$t("text.contractCompiling");
       let version = this.$store.state.versionData;
       if (this.liquidCheck) {
@@ -939,14 +946,14 @@ export default {
                 this.$set(this.data, "bytecodeBin", this.bytecodeBin);
                 // this.$emit("compile", false)
                 Bus.$emit("compile", this.data);
-                Bus.$emit("compileLiquid", 2);
+                Bus.$emit("compileLiquid", false);
                 this.setMethod();
               }
             } else if (res.data.code === 0 && res.data.data.status == 1) {
               this.loading = true;
               this.compileCheck();
             } else {
-              Bus.$emit("compileLiquid", 3);
+              Bus.$emit("compileLiquid", false);
               this.loading = false;
               this.$message({
                 message: this.$t("text.compileError"),
@@ -956,7 +963,7 @@ export default {
             }
           })
           .catch((err) => {
-            Bus.$emit("compileLiquid", 4);
+            Bus.$emit("compileLiquid", false);
             this.loading = false;
             this.$message({
               message: err.data || this.$t("text.systemError"),
@@ -1021,7 +1028,7 @@ export default {
             that.errorMessage = output.errors;
             that.errorInfo = that.$t("contracts.contractCompileFail");
             that.loading = false;
-            Bus.$emit("compileLiquid", 1);
+            Bus.$emit("compileLiquid", false);
           }
         } else {
           console.log(ev.data);
@@ -1033,7 +1040,7 @@ export default {
         that.errorMessage = ev;
         that.compileShow = true;
         that.loading = false;
-        Bus.$emit("compileLiquid", 1);
+        Bus.$emit("compileLiquid", false);
       });
       console.log("wwww:", w);
     },
@@ -1081,7 +1088,7 @@ export default {
         this.errorMessage = error;
         this.compileShow = true;
         this.loading = false;
-        Bus.$emit("compileLiquid", 1);
+        Bus.$emit("compileLiquid", false);
       }
       setTimeout(() => {
         if (output && JSON.stringify(output.contracts) != "{}") {
@@ -1093,7 +1100,7 @@ export default {
           this.errorMessage = output.errors;
           this.errorInfo = this.$t("contracts.contractCompileFail");
           this.loading = false;
-          Bus.$emit("compileLiquid", 1);
+          Bus.$emit("compileLiquid", false);
         }
       }, 500);
     },
@@ -1115,7 +1122,7 @@ export default {
           this.data.contractSource = Base64.encode(this.content);
           this.$set(this.data, "bytecodeBin", this.bytecodeBin);
           this.loading = false;
-          Bus.$emit("compileLiquid", 1);
+          Bus.$emit("compileLiquid", false);
           Bus.$emit("compile", this.data);
           this.setMethod();
           localStorage.setItem("isFinishCompile", "yes");
@@ -1127,13 +1134,13 @@ export default {
           this.errorInfo = this.$t("contracts.contractCompileFail");
           this.compileShow = true;
           this.loading = false;
-          Bus.$emit("compileLiquid", 1);
+          Bus.$emit("compileLiquid", false);
         }
       } else {
         this.errorInfo = this.$t("contracts.contractCompileFail");
         this.compileShow = true;
         this.loading = false;
-        Bus.$emit("compileLiquid", 1);
+        Bus.$emit("compileLiquid", false);
       }
     },
     // 导出java项目
@@ -1151,18 +1158,8 @@ export default {
     sureContractAddress(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (
-            this.contractForm.contractAddress == "" ||
-            this.contractForm.contractAddress == null
-          ) {
-            this.$message({
-              type: "error",
-              message: this.$t("contracts.contractAddressInput"),
-            });
-          } else {
             this.addContractAddressVisible = false;
             this.addContract();
-          }
         } else {
           return false;
         }
@@ -1180,10 +1177,14 @@ export default {
         contractAbi: this.data.contractAbi,
         contractBin: this.data.contractBin,
         bytecodeBin: this.data.bytecodeBin,
-        contractAddress: this.contractForm.contractAddress,
       };
       if (this.data.contractId) {
         reqData.contractId = this.data.contractId;
+      }
+      if(this.liquidCheck){
+          reqData.contractAddress = this.contractForm.contractAddressLiquid;
+      }else{
+          reqData.contractAddress = this.contractForm.contractAddress;
       }
       Bus.$emit("save", reqData);
     },
@@ -1318,7 +1319,7 @@ export default {
         router.push("/privateKeyManagement");
         return;
       }
-      Bus.$emit("compileLiquid", 1);
+      Bus.$emit("compileLiquid", true);
       this.loading = true;
       let reqData = {
         groupId: localStorage.getItem("groupId"),
@@ -1348,7 +1349,7 @@ export default {
       }
       getDeployStatus(reqData)
         .then((res) => {
-          Bus.$emit("compileLiquid", 1);
+          Bus.$emit("compileLiquid", false);
           this.loading = false;
           if (res.data.code === 0) {
             this.abiFileShow = true;
@@ -1380,8 +1381,7 @@ export default {
           }
         })
         .catch((err) => {
-          deugger
-          Bus.$emit("compileLiquid", 1);
+          Bus.$emit("compileLiquid", false);
           this.status = 3;
           this.loading = false;
           this.$message({
