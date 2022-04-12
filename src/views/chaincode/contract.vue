@@ -180,6 +180,7 @@ export default {
             this.liquidList();
             this.liquidCheck = true;
           } else {
+            this.liquidCheck = false;
             this.initWorker();
             this.getEncryption(this.querySolcList);
           }
@@ -390,10 +391,11 @@ export default {
         });
     },
     changGroup: function () {
-      this.initVersion();
-      this.versionList = [];
-      this.getEncryption(this.querySolcList);
-      this.$refs.menu.getContractPaths();
+       this.initVersion();
+       this.versionList = [];
+      // this.getEncryption(this.querySolcList);
+       this.$refs.menu.getContractPaths();
+        this.getfrontList()
     },
     dragDetailWeight: function (e) {
       let startX = e.clientX,

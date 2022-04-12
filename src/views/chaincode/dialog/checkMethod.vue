@@ -134,7 +134,7 @@ export default {
           callback();
         } else {
           if (!Web3Utils.isAddress(value) && value != "") {
-            callback(new Error(this.$t("rule.inputIsAddress")));
+            callback(new Error(this.$t("rule.contractAddressCorrect")));
           } else {
             callback();
           }
@@ -181,10 +181,16 @@ export default {
             message: this.$t("rule.contractAddress"),
             trigger: "change",
           },
-          {
-            validator: validateAddress,
+          // {
+          //   validator: validateAddress,
+          //   trigger: "blur",
+          // },
+           {
+            pattern: `^0[xX][0-9a-fA-F]{40}$`,
+            message: this.$t("rule.contractAddressCorrect"),
             trigger: "blur",
           },
+
         ],
         fromBlock: [
           {

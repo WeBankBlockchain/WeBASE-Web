@@ -558,10 +558,12 @@ export default {
     },
     changGroup() {
       this.adminRivateKeyList = [];
-      this.queryGetThreshold();
+      //this.queryGetThreshold();
       this.getUserData();
       this.queryCommitteeList();
       this.queryVoteRecordList();
+      this.queryVoteRecordListCount();
+      
     },
     initGovernForm() {
       // this.governForm.fromAddress = ""
@@ -894,7 +896,10 @@ export default {
             //     })
             // })
             //this.total = res.data.totalCount;
+            this.disabled=false
           } else {
+            this.disabled=true
+             this.chainCommitteeList=[]
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",
@@ -998,10 +1003,13 @@ export default {
       voteRecord(reqData)
         .then((res) => {
           if (res.data.code === 0) {
+            this.disabled=false
             this.voteList = res.data.data;
             //this.voteTotal = res.data.totalCount;
             // this.getNetworkDetails()
           } else {
+            this.disabled=true
+            this.voteList=[]
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",

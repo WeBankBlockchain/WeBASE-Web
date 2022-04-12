@@ -1791,9 +1791,16 @@ let errCode = {
         en: "File already existed",
         zh: "文件已存在"
     },
+     "201670": {
+        en: "exec env is wasm, don't support",
+        zh: "Wasm环境，不支持"
+    },
 }
 export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')
+    if(!lang ) {
+        lang='zh'
+    }
     let message = errCode[code][lang];
     if (value) {
         let oldMessage

@@ -908,10 +908,10 @@ export function consensusNodeId(data) {
 }
 // consensus node id list 
 export function getConsensusNodeId(data) {
-    return get({
-        url: `${url.ORG_LIST}/precompiled/consensus/list`,
-        method: 'get',
-        params: data,
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/consensus/list`,
+        method: 'post',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }

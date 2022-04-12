@@ -368,6 +368,7 @@ export default {
         contractName: "请输入合约名称",
         contractAdmin:"请输入合约管理员",
         contractAddress: "请输入合约地址",
+        contractAddressCorrect: "请输入正确的合约地址",
         userAddress: "请输入用户地址",
         userAddressCorrect: "请输入正确的用户地址",
         fromAddress: "请选择链委员",
