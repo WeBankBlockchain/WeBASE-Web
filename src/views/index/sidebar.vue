@@ -262,9 +262,11 @@ export default {
       this.changeRouter();
       this.version = this.$store.state.mgrVersion;
     });
-    Bus.on('changGroup',function(){
-      console.log(1)
-    })
+    Bus.$on("changGroup", () => {
+      this.getfrontList();
+      this.getFrontTable();
+      this.changeRouter();
+    });
   },
   methods: {
     liquidCheckMethod() {
@@ -274,8 +276,11 @@ export default {
           if (res.data.data == true) {
             this.liquidCheck = true;
             Bus.$emit("liquidCheck", true);
-            this.$store.dispatch("switch_liquidCheck",true);
+            this.$store.dispatch("switch_liquidCheck", true);
           } else {
+            this.liquidCheck = false;
+            Bus.$emit("liquidCheck", false);
+            this.$store.dispatch("switch_liquidCheck", false);
           }
         })
         .catch((err) => {
@@ -420,7 +425,6 @@ export default {
             }
           }
         }
-
         for (let i = 0; i < list.length; i++) {
           if (list[i].name == "帐号管理") {
             list[i].menuShow = true;
@@ -448,12 +452,24 @@ export default {
               if (it.nameKey == "contractEvent" && this.liquidCheck) {
                 it.menuShow = false;
               }
-               if (it.nameKey == "hostMonitor") {
+              if (it.nameKey == "checkEvent" && !this.liquidCheck) {
+                console.log(it.menuShow);
+                it.menuShow = true;
+              }
+              if (it.nameKey == "contractEvent" && !this.liquidCheck) {
+                console.log(it.menuShow);
+                it.menuShow = true;
+              }
+              if (it.nameKey == "hostMonitor") {
                 it.menuShow = false;
               }
 
-              if ((localStorage.getItem("deployType") == 0||localStorage.getItem("deployType") == null) && it.nameKey == 'hostMgrTitle') {
-                  it.menuShow = false;
+              if (
+                (localStorage.getItem("deployType") == 0 ||
+                  localStorage.getItem("deployType") == null) &&
+                it.nameKey == "hostMgrTitle"
+              ) {
+                it.menuShow = false;
               }
             });
           }

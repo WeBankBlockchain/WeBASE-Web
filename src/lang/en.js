@@ -424,6 +424,7 @@ export default {
         routeParam:"Please enter routeParam",
         contractAddressLiquidLong: 'The length of the contract address cannot exceed 64 bits',
         contractAddressHexLiquid: 'Contract address starts with / and contains alphanumeric underscores',
+        contractAddressCorrect: "Please enter the correct contract address",
 
     },
     head: {
