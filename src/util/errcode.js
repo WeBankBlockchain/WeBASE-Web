@@ -1795,6 +1795,10 @@ let errCode = {
         en: "exec env is wasm, don't support",
         zh: "Wasm环境，不支持"
     },
+    "201627": {
+        en: "Current proposal not end",
+        zh: "当前提案未结束"
+    },
 }
 export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')

@@ -14,7 +14,7 @@
           <el-input readonly v-model.trim="bfsForm.pwdRoute" class="select-31" style="width: 200px;"></el-input>
         </el-form-item>
         <el-form-item :label="$t('bfs.operate')" class="item-form">
-          <el-select v-model="bfsForm.operate" style="width: 100PX;">
+          <el-select v-model="bfsForm.operate" style="width: 100PX;" @change="removeValite">
             <el-option :label="item.operate" :value="item.operate" :key="item.operate" v-for='item in operateList'>
               <span>{{item.operate}}</span>
             </el-option>
@@ -68,6 +68,9 @@ export default {
       let valArr = val.split("/");
       let valArr2 = val.substr(1).split("/");
       if (this.bfsForm.operate != "mkdir" && val == "/") {
+        callback();
+      }
+       if (this.bfsForm.operate == "ls" && val == "") {
         callback();
       }
       if (!/^[0-9a-zA-Z_/.]{0,}$/.test(val)) {
@@ -131,11 +134,11 @@ export default {
           },
         ],
         routeParam: [
-          {
-            required: true,
-            message: this.$t("rule.routeParam"),
-            trigger: "blur",
-          },
+          // {
+          //   required: true,
+          //   message: this.$t("rule.routeParam"),
+          //   trigger: "blur",
+          // },
           {
             required: true,
             validator: paramRule,
@@ -224,6 +227,9 @@ export default {
   },
 
   methods: {
+    removeValite(){
+      this.$refs["bfsForm"].clearValidate()
+    },
     implement() {
       let val = this.bfsForm.routeParam.trim().replace(/\s+/g, " ");
       this.routeParamValue = val;
@@ -246,7 +252,11 @@ export default {
           this.handleValue = this.bfsForm.pwdRoute + this.routeParamValue;
         }
       }
-      this.$refs["bfsForm"].validate((val) => {
+      if(this.bfsForm.routeParam.trim() == ""&&this.bfsForm.operate == "ls"){
+         this.handleValue=this.bfsForm.pwdRoute;
+         this.ls();
+      }else{
+       this.$refs["bfsForm"].validate((val) => {
         if (val) {
           if (this.bfsForm.operate == "cd") {
             this.cd();
@@ -258,7 +268,8 @@ export default {
         } else {
           //alert("error");
         }
-      });
+      }); 
+      } 
     },
     routeParamChange() {
       if (this.bfsForm.routeParam == "") {

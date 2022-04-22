@@ -344,6 +344,7 @@ export default {
         addContractAddress: '绑定'
     },
     rule: {
+        chainCommite:"链委员已存在",
         eventName:'请输入Event名',
         textLong: "长度在 1 到 32 个字符",
         textLong1_12: "长度在 1 到 12 位",
@@ -1150,6 +1151,8 @@ export default {
         updatetime: '发起时间',
         threshold: '阈值%',
         participatesRate:"参与率",
+        thresholdNow: '当前阈值%',
+        participatesRateNow:"当前参与率",
         isDelete: '是否确认发起删除投票?',
         operate: '操作',
         agree: '同意',
