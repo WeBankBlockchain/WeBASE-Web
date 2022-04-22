@@ -123,6 +123,10 @@
           </div>
         </el-dialog>
         <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="500px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
+            <div style="text-align:center">
+        <span>{{$t('govCommittee.thresholdNow')}}:{{winRateNow}}</span>
+        <span>{{$t('govCommittee.participatesRateNow')}}:{{participatesRateNow}}</span>
+            </div>
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
               <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
@@ -209,10 +213,10 @@
               </span>
             </template>
             <template v-else>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
                 {{$t('govCommittee.Committee')}}
               </el-button>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
                 {{$t('govCommittee.revokeVote')}}</el-button>
             </template>
           </template>
@@ -362,6 +366,8 @@ export default {
         //     width: ''
         // }
       ],
+      winRateNow:'',
+      participatesRateNow:'',
       governForm: {
         fromAddress: "",
         governorAddress: "",
@@ -447,6 +453,19 @@ export default {
 
   computed: {
     rules() {
+        let _this=this;
+    var paramRule = (rule, value, callback) => {
+      let val = value.trim();
+     let chainCommittes=[]
+      _this.produceCommittee.map((item)=>{
+     chainCommittes.push(item.governorAddress)
+     })
+      if (chainCommittes.includes(val)) {
+        callback(new Error(this.$t("rule.chainCommite")));
+      } else {
+        callback();
+      }
+    };
       let data = {
         fromAddress: [
           {
@@ -461,11 +480,16 @@ export default {
             message: this.$t("transaction.inputUserAddress"),
             trigger: "blur",
           },
-          // {
-          //   pattern: /^0[xX][0-9a-fA-F]{40}$/,
-          //   message: "必须是十六进制的数字或字母,长度是42",
-          //   trigger: "blur",
-          // },
+          {
+            required: true,
+            validator: paramRule,
+            trigger: "blur",
+          },
+          {
+            pattern: /^0[xX][0-9a-fA-F]{40}$/,
+            message: "必须是十六进制的数字或字母,长度是42",
+            trigger: "blur",
+          },
         ],
         threshold: [
           {
@@ -666,6 +690,7 @@ export default {
             this.closeCommittee();
             this.queryCommitteeList();
             this.queryVoteRecordList();
+            this.queryVoteRecordListCount();
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -709,6 +734,7 @@ export default {
             this.closerevokeVote();
             this.queryCommitteeList();
             this.queryVoteRecordList();
+            this.queryVoteRecordListCount();
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -784,6 +810,8 @@ export default {
       });
     },
     closeModifyThreshold() {
+        this.governForm.threshold='';
+        this.governForm.participatesRate='';
       this.initGovernForm();
       this.modifyThresholdVisible = false;
     },
@@ -887,8 +915,8 @@ export default {
           if (res.data.code === 0) {
             let data = res.data.data;
             this.chainCommitteeList = data[0]["governorList"];
-            this.governForm.threshold = data[0]["winRate"];
-            this.governForm.participatesRate = data[0]["participatesRate"];
+            this.winRateNow = data[0]["winRate"];
+            this.participatesRateNow = data[0]["participatesRate"];
             this.chainRivateKeyList = [];
             // data.forEach(item=>{
             //     this.chainRivateKeyList.push({

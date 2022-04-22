@@ -341,6 +341,7 @@ export default {
         nodeNotActive:'Node not active',
     },
     rule: {
+        chainCommite:"Chain committee already exists",
         userAddressCorrect: "Please enter the correct user address",
         eventName:'please enter the event name',
         textLong: "1 to 32 characters in length",
@@ -1130,6 +1131,8 @@ export default {
         voteStatus: 'Vote Status',
         updatetime: 'Update Time',
         threshold: 'Threshold%',
+        thresholdNow: 'Current Threshold%',
+        participatesRateNow:"Current participatesRate",
         isDelete: 'Are you sure to initiate deletion voting?',
         operate: 'Operate',
         agree: 'Agree',
