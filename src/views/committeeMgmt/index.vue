@@ -779,6 +779,7 @@ export default {
             this.closeAddCommittee();
             this.queryCommitteeList();
             this.queryVoteRecordList();
+            this.queryVoteRecordListCount();
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -876,6 +877,7 @@ export default {
                 this.closeModifyWeight();
                 this.queryCommitteeList();
                 this.queryVoteRecordList();
+                this.queryVoteRecordListCount();
               } else {
                 this.$message({
                   message: this.$chooseLang(res.data.code),

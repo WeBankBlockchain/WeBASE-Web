@@ -105,7 +105,9 @@
         </li>
       </ul>
     </div>
-    <div class="el-loading-mask" v-show="liquidLoad"><div class="el-loading-spinner"></div></div>
+    <div class="el-loading-mask" v-show="liquidLoad">
+      <div class="el-loading-spinner"></div>
+    </div>
     <add-folder v-if="foldershow" :foldershow="foldershow" @close="folderClose" @success="folderSuccess"></add-folder>
     <add-file v-if="fileshow" :data="selectFolderData" :fileshow="fileshow" @close="fileClose" @success="fileSucccess($event)" :id="folderId"></add-file>
     <select-catalog v-if="cataLogShow" :show="cataLogShow" @success="catalogSuccess($event)" @close="catalogClose"></select-catalog>
@@ -139,7 +141,7 @@ export default {
     "select-catalog": selectCatalog,
     exportProject,
   },
-   props: ["liquidChecks"],
+  props: ["liquidChecks"],
   data: function () {
     return {
       liquidCheck: this.liquidChecks,
@@ -166,15 +168,18 @@ export default {
       selectFolderData: null,
       folderData: null,
       loading: false,
-      Highlight:true,
-      Language:[{
+      Highlight: true,
+      Language: [
+        {
           value: true,
-          label: 'javascript'
-        }, {
+          label: "javascript",
+        },
+        {
           value: false,
-          label: 'rust'
-        }],
-      liquidLoad:false
+          label: "rust",
+        },
+      ],
+      liquidLoad: false,
     };
   },
   beforeDestroy: function () {
@@ -187,12 +192,12 @@ export default {
   watch: {
     liquidChecks: function (val) {
       this.liquidCheck = val;
-    }
     },
+  },
   mounted: function () {
     if (
-      (localStorage.getItem("root") === "admin" ||
-        localStorage.getItem("root") === "developer") ||
+      localStorage.getItem("root") === "admin" ||
+      localStorage.getItem("root") === "developer" ||
       localStorage.getItem("groupId")
     ) {
       this.disabled = false;
@@ -201,8 +206,8 @@ export default {
     }
     if (
       localStorage.getItem("groupId") ||
-      (localStorage.getItem("configData") == 3 ||
-        localStorage.getItem("deployType") == 0)
+      localStorage.getItem("configData") == 3 ||
+      localStorage.getItem("deployType") == 0
     ) {
       this.$nextTick(function () {
         this.getContractPaths();
@@ -259,8 +264,8 @@ export default {
     },
   },
   methods: {
-    compileLiquid:function(val){
-      this.liquidLoad= val
+    compileLiquid: function (val) {
+      this.liquidLoad = val;
     },
     /**
      * @method 点击任意处清除右键弹窗
@@ -773,7 +778,7 @@ export default {
       if (data.contractId) {
         reqData.contractId = data.contractId;
       }
-        if (this.liquidCheck) {
+      if (this.liquidCheck) {
         reqData.isWasm = true;
       }
       if (data.contractAddress) {
@@ -1150,7 +1155,7 @@ export default {
       this.folderData = null;
       if (!type) {
         localStorage.setItem("selectData", JSON.stringify(val));
-        Bus.$emit("select", val,this.Highlight);
+        Bus.$emit("select", val, this.Highlight);
       }
     },
     /**
@@ -1287,6 +1292,7 @@ export default {
     },
     sureExportSol(val) {
       const zip = new JSZip();
+      debugger;
       let contractSource = Base64.decode(val.contractSource);
       let contractAbi = val.contractAbi;
       let contractBin = val.contractBin;
@@ -1299,7 +1305,15 @@ export default {
       var blobContractBin = new Blob([contractBin], {
         type: "text;charset=utf-8",
       });
-      zip.file(`${val.contractName}.sol`, blobContractSource, { binary: true });
+      if (this.liquidCheck) {
+        zip.file(`${val.contractName}.rs`, blobContractSource, {
+          binary: true,
+        });
+      } else {
+        zip.file(`${val.contractName}.sol`, blobContractSource, {
+          binary: true,
+        });
+      }
       zip.file(`${val.contractName}.abi`, blobContractAbi, { binary: true });
       zip.file(`${val.contractName}.bin`, blobContractBin, { binary: true });
       zip.generateAsync({ type: "blob" }).then((content) => {
@@ -1336,9 +1350,15 @@ export default {
               var blobContractBin = new Blob([item.contractBin], {
                 type: "text;charset=utf-8",
               });
-              zip.file(`${item.contractName}.sol`, blobContractSource, {
-                binary: true,
-              });
+              if (this.liquidCheck) {
+                zip.file(`${val.contractName}.rs`, blobContractSource, {
+                  binary: true,
+                });
+              } else {
+                zip.file(`${val.contractName}.sol`, blobContractSource, {
+                  binary: true,
+                });
+              }
               zip.file(`${item.contractName}.abi`, blobContractAbi, {
                 binary: true,
               });
@@ -1484,21 +1504,21 @@ export default {
 .contract-menu-handle-list:hover {
   color: rgb(55, 238, 242);
 }
-.langChoose{
-    width: 110px;
-    padding-left: 7px;
+.langChoose {
+  width: 110px;
+  padding-left: 7px;
 }
-.el-loading-mask{
+.el-loading-mask {
   position: absolute;
-    z-index: 2000;
-    background-color: rgba(255,255,255,.9);
-    margin: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    -webkit-transition: opacity .3s;
-    transition: opacity .3s;
+  z-index: 2000;
+  background-color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 </style>
 
