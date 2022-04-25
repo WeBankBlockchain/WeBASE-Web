@@ -1292,7 +1292,6 @@ export default {
     },
     sureExportSol(val) {
       const zip = new JSZip();
-      debugger;
       let contractSource = Base64.decode(val.contractSource);
       let contractAbi = val.contractAbi;
       let contractBin = val.contractBin;
