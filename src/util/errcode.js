@@ -105,7 +105,7 @@ let errCode = {
     },
     "201014": {
         en: "contract deploy error",
-        zh: '合约部署错误'
+        zh: '合约部署失败，请检查部署入参、检查部署权限'
     },
     "201015": {
         en: "user's privateKey is null",
@@ -1731,10 +1731,10 @@ let errCode = {
         en: "This liquid contract already compiling, please wait...",
         zh: "liquid合约编译中，请稍候..."
     },
-    "201014": {
-        en: "ContractAddress Already Used",
-        zh: "合约地址已被使用"
-    },
+    // "201014": {
+    //     en: "ContractAddress Already Used",
+    //     zh: "合约地址已被使用"
+    // },
     "201622": {
         en: "Proposal is voting, the previous vote need to be finished",
         zh: "提案正在投票，需要完成上一次投票"
@@ -1798,6 +1798,14 @@ let errCode = {
     "201627": {
         en: "Current proposal not end",
         zh: "当前提案未结束"
+    },
+    "201672": {
+        en: "the account must be the proposer of proposal",
+        zh: "该帐户必须是提案的提议者"
+    },
+    "201680": {
+        en: "the PATH is invalid",
+        zh: "路径无效"
     },
 }
 export function chooseLang(code, value) {

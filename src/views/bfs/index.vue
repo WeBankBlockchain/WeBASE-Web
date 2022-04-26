@@ -140,7 +140,7 @@ export default {
           //   trigger: "blur",
           // },
           {
-            required: true,
+            // required: true,
             validator: paramRule,
             trigger: "blur",
           },
