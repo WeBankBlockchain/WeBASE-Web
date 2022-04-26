@@ -1731,10 +1731,10 @@ let errCode = {
         en: "This liquid contract already compiling, please wait...",
         zh: "liquid合约编译中，请稍候..."
     },
-    "201014": {
-        en: "ContractAddress Already Used",
-        zh: "合约地址已被使用"
-    },
+    // "201014": {
+    //     en: "ContractAddress Already Used",
+    //     zh: "合约地址已被使用"
+    // },
     "201622": {
         en: "Proposal is voting, the previous vote need to be finished",
         zh: "提案正在投票，需要完成上一次投票"
