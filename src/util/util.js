@@ -101,7 +101,7 @@ export function reviseParam(necessary, query) {
 export function resizeParam(necessary, query) {
     let params = arguments[0],
         querys = arguments[1],
-        param =params.groupId+'/'+params.data.substring(0,10)
+        param =params.groupId+'/'+params.data
     return param
 }
 

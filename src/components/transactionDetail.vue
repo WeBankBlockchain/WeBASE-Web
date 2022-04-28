@@ -151,7 +151,7 @@
                   </div>
 
                 </div>
-                <div class="item" v-if="txInfoReceiptMap.status == '0x0' && showOutDecode && inputButtonShow">
+                <div class="item" v-if="txInfoReceiptMap.status == '0x0' && showOutDecode && inputButtonShow&&!liquidCheck">
                   <el-button @click="decodeOutput" type="primary">{{buttonOutTitle}}</el-button>
                 </div>
               </div>
@@ -188,7 +188,7 @@
                     </el-table>
                   </div>
                 </div>
-                <div class="item" v-show='item.eventButtonShow'>
+                <div class="item" v-show='item.eventButtonShow' v-if="!liquidCheck">
                   <span class="label"></span>
                   <el-button @click="decodeButtonEvent(num)" type="primary">{{item.eventTitle}}</el-button>
                 </div>
