@@ -89,7 +89,7 @@
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
             <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send"  :liquidChecks='!liquidCheck' :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput'  :liquidChecks='!liquidCheck' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
             <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
         </el-dialog>
@@ -142,6 +142,7 @@ import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, g
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
+import Bus from "@/bus";
 export default {
     name: "registeredContract",
     components: {
@@ -264,6 +265,10 @@ export default {
             this.getContracts() 
             
         }
+         Bus.$on("changGroup", (data) => {
+            this.getfrontList()
+            this.getContracts()
+    });
     },
     methods: {
       getfrontList() {

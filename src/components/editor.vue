@@ -64,7 +64,7 @@
           <!-- <div class="item" v-show="inputButtonShow"> -->
           <div class="item" v-show="inputButtonShow">
             <span class="label"></span>
-            <el-button @click="decodeOutput" type="primary" :disabled='ifLiquid'>{{buttonTitle}}</el-button>
+            <el-button @click="decodeOutput" type="primary" v-if='!ifLiquid'>{{buttonTitle}}</el-button>
           </div>
         </div>
         <div v-else-if='key == "input"'>
@@ -160,7 +160,7 @@
                   </div>
                   <div class="item">
                     <span class="label"></span>
-                    <el-button @click="decode(item)" type="primary" :disabled='ifLiquid'>{{eventTitle}}</el-button>
+                    <el-button @click="decode(item)" type="primary" v-if='!ifLiquid'>{{eventTitle}}</el-button>
                   </div>
                 </div>
                 <!-- <div>
@@ -519,7 +519,7 @@ export default {
       let eventResult = web3.eth.abi.decodeLog(
         eventData.abiInfo.inputs,
         list.data,
-        list.topic.slice(1)
+        list.topics.slice(1)
       );
       list.outData = {};
       list.eventLgData = [];

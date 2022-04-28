@@ -898,7 +898,7 @@ export function getPermissionFull(data) {
 // consensus node id
 export function consensusNodeId(data) {
     return post({
-        url: `${url.ORG_LIST}/precompiled/consensus`,
+        url: `${url.ORG_LIST}/precntauth/precompiled/consensus/manage`,
         method: 'post',
         data: data,
         headers: {

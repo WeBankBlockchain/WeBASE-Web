@@ -45,12 +45,14 @@
 
 <script>
 import contentHead from "@/components/contentHead";
+import Bus from "@/bus";
 import {
   getPwdRoute,
   modfiyPwdRoute,
   queryBfsPath,
   createBfsPath,
   getUserList,
+  queryCnsListByName 
 } from "@/util/api";
 export default {
   name: "ConfigManagement",
@@ -224,6 +226,7 @@ export default {
 
     this.queryPwdPath();
     this.getUserListMethod();
+      
   },
 
   methods: {
@@ -436,8 +439,8 @@ export default {
         });
     },
     changGroup() {
-      this.getCnsList();
-      //this.queryLocalCns()
+       this.queryPwdPath();
+    this.getUserListMethod();
     },
     searchCns(formName) {
       this.$refs[formName].validate((valid) => {
