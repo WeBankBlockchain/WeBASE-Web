@@ -160,7 +160,7 @@
                   </div>
                   <div class="item">
                     <span class="label"></span>
-                    <el-button @click="decode(item)" type="primary" v-if='!ifLiquid'>{{eventTitle}}</el-button>
+                    <el-button @click="decode(item,index)" type="primary" v-if='!ifLiquid'>{{eventTitle[index]}}</el-button>
                   </div>
                 </div>
                 <!-- <div>
@@ -170,10 +170,10 @@
                                     <span v-else class="transation-content">{{item.type}}</span>
                                 </div> -->
                 <div>
-                  <span class="transation-title">topic:</span>
-                  <span v-if='typeof(item.topic) == "string"' class="transation-content string-color">{{item.topic}}</span>
-                  <span v-else-if='item.topic === null' class="transation-content null-color">{{item.topic}}null</span>
-                  <span v-else class="transation-content">{{item.topic}}</span>
+                  <span class="transation-title">topics:</span>
+                  <span v-if='typeof(item.topics) == "string"' class="transation-content string-color">{{item.topics}}</span>
+                  <span v-else-if='item.topics === null' class="transation-content null-color">{{item.topics}}null</span>
+                  <span v-else class="transation-content">{{item.topics[0]}}</span>
                 </div>
                 <!-- <div>
                                     <span class="transation-title">logIndexRaw:</span>
@@ -215,7 +215,7 @@ export default {
       editorDialog: this.show || false,
       eventSHow: false,
       outputButtonShow: false,
-      eventTitle: this.$t("transaction.reduction"),
+      eventTitle: [this.$t("transaction.reduction")],
       inputTitle: this.$t("transaction.reduction"),
       funcData: "",
       methodId: "",
@@ -363,6 +363,7 @@ export default {
     },
     decodeEvent: function () {
       for (let i = 0; i < this.transationData.logEntries.length; i++) {
+        this.eventTitle[i]=this.$t("transaction.reduction")
         let data = {
           groupId: localStorage.getItem("groupId"),
           data: this.transationData.logEntries[i].topics[0],
@@ -474,7 +475,7 @@ export default {
       let abi = "";
       eventData.abiInfo = JSON.parse(eventData.abiInfo);
       let list = data;
-      list.eventTitle = this.$t("transaction.reduction");
+      list.eventTitle = [this.$t("transaction.reduction")];
       list.eventDataShow = true;
       list.eventButtonShow = true;
       list.eventName = eventData.abiInfo.name + "(";
@@ -566,13 +567,13 @@ export default {
     modelClose: function () {
       this.$emit("close");
     },
-    decode: function (val) {
+    decode: function (val,index) {
       if (val.eventDataShow) {
         this.$set(val, "eventDataShow", false);
-        this.eventTitle = this.$t("transaction.decode");
+        this.$set(this.eventTitle, index, this.$t("transaction.decode"));
       } else {
         this.$set(val, "eventDataShow", true);
-        this.eventTitle = this.$t("transaction.reduction");
+        this.$set(this.eventTitle, index, this.$t("transaction.reduction"));
       }
     },
     txStatusMessage(val) {
