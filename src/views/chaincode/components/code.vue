@@ -1242,13 +1242,13 @@ export default {
                 name: value.name,
                 type: value.type,
                 inputs: value.inputs,
-              });
+              })
             } else {
               methodId = Web3EthAbi.encodeFunctionSignature({
                 name: value.name,
                 type: value.type,
                 inputs: value.inputs,
-              });
+              })
             }
             data.methodId = methodId;
             data.abiInfo = JSON.stringify(value);
