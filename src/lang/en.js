@@ -522,6 +522,7 @@ export default {
         createTime: "Create Time"
     },
     nodes: {
+        description:"describe",
         nodeIp: "Node Ip",
         nodeFront: "Front Node",
         addFront: "Add",

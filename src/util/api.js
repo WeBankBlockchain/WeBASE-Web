@@ -811,6 +811,16 @@ export function deleteFront(data) {
         }
     })
 }
+export function changeDescription(data) {
+    return put({
+        url: `${url.ORG_LIST}/group/description `,
+        method: 'put',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 export function addFunctionAbi(data) {
     return post({

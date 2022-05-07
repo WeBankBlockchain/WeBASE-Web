@@ -31,7 +31,7 @@
         <div class="move" @mousedown="dragDetailWeight($event)"></div>
       </div>
       <div :class="[!menuHide ?  'code-detail-wrapper' : 'code-detail-reset-wrapper']" :style="{width: contentWidth}">
-        <v-code :changeStyle="changeWidth" :frontIds='frontId' :liquidChecks='liquidCheck' :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)" @deploy="deploy($event)"></v-code>
+        <v-code ref="codes" :changeStyle="changeWidth" :frontIds='frontId' :liquidChecks='liquidCheck' :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)" @deploy="deploy($event)"></v-code>
       </div>
     </div>
   </div>
