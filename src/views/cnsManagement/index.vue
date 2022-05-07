@@ -170,6 +170,7 @@ export default {
         },
         getCnsList(handleType) {
             this.loading = true;
+            this.cnsList=[]
             let reqData = {
                 groupId: localStorage.getItem("groupId"),
                 // pageNumber: this.currentPage,
@@ -183,7 +184,7 @@ export default {
                     this.loading = false;
                     this.loading1 = false;
                     if (res.data.code === 0) {
-                        this.cnsList = JSON.parse(res.data.data);
+                        this.cnsList.push(Object.assign(JSON.parse(res.data.data),{'name':reqData.contractName,'version':reqData.version}));
                         this.total = res.data.totalCount
                         if (handleType == 'handleSearch') {
                             this.$message({
