@@ -3,12 +3,12 @@
     <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.bfs')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head>
     <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
       <span class="cns-title">{{$t('contracts.bfsTitle')}}</span>
-       <div class="tip">
-          <span>提示:</span>
-          <span>{{$t('bfs.Tip1')}}</span>
-          <span>{{$t('bfs.Tip2')}}</span>
-          <span>{{$t('bfs.Tip3')}}</span>
-        </div>
+      <div class="tip">
+        <span>提示:</span>
+        <span>{{$t('bfs.Tip1')}}</span>
+        <span>{{$t('bfs.Tip2')}}</span>
+        <span>{{$t('bfs.Tip3')}}</span>
+      </div>
       <el-form :model="bfsForm" :rules="rules" ref="bfsForm" class="demo-ruleForm">
         <el-form-item :label="$t('bfs.pwdRoute')" class="item-form">
           <el-input readonly v-model.trim="bfsForm.pwdRoute" class="select-31" style="width: 200px;"></el-input>
@@ -37,7 +37,12 @@
         </el-form-item>
       </el-form>
       <div class="contents">
+        <div class="tip">
+          <span>提示:</span>
+          <span>{{$t('bfs.Tip4')}}</span>
+        </div>
         <json-viewer :value="bfsData" :expand-depth='5' class='jsonViewer'></json-viewer>
+
       </div>
     </div>
   </div>
@@ -52,7 +57,7 @@ import {
   queryBfsPath,
   createBfsPath,
   getUserList,
-  queryCnsListByName 
+  queryCnsListByName,
 } from "@/util/api";
 export default {
   name: "ConfigManagement",
@@ -72,7 +77,7 @@ export default {
       if (this.bfsForm.operate != "mkdir" && val == "/") {
         callback();
       }
-       if (this.bfsForm.operate == "ls" && val == "") {
+      if (this.bfsForm.operate == "ls" && val == "") {
         callback();
       }
       if (!/^[0-9a-zA-Z_/.]{0,}$/.test(val)) {
@@ -84,23 +89,27 @@ export default {
       } else if (valArr.includes("") && val.substr(0, 1) != "/") {
         console.log(3);
         callback(new Error(this.$t("bfs.tip2")));
-      } else if (valArr2.includes("") && val.substr(0, 2) != "./"&&valArr2.length>1) {
+      } else if (
+        valArr2.includes("") &&
+        val.substr(0, 2) != "./" &&
+        valArr2.length > 1
+      ) {
         console.log(4);
         callback(new Error(this.$t("bfs.tip2")));
-      // } else if (
-      //   this.bfsForm.operate == "mkdir" &&
-      //   valArr[0] != "apps" &&
-      //   valArr[0] != "tables" &&
-      //   val.substr(0, 1) != "/"
-      // ) {
-      //   callback(new Error(this.$t("bfs.tip3")));
-      // } else if (
-      //   this.bfsForm.operate == "mkdir" &&
-      //   valArr2[0] != "apps" &&
-      //   valArr2[0] != "tables" &&
-      //   val.substr(0, 1) == "/"
-      // ) {
-      //   callback(new Error(this.$t("bfs.tip3")));
+        // } else if (
+        //   this.bfsForm.operate == "mkdir" &&
+        //   valArr[0] != "apps" &&
+        //   valArr[0] != "tables" &&
+        //   val.substr(0, 1) != "/"
+        // ) {
+        //   callback(new Error(this.$t("bfs.tip3")));
+        // } else if (
+        //   this.bfsForm.operate == "mkdir" &&
+        //   valArr2[0] != "apps" &&
+        //   valArr2[0] != "tables" &&
+        //   val.substr(0, 1) == "/"
+        // ) {
+        //   callback(new Error(this.$t("bfs.tip3")));
       } else {
         callback();
       }
@@ -148,7 +157,8 @@ export default {
           },
         ],
       },
-      bfsData: "",
+      bfsData: [],
+      bfsData1: [],
       routeParamCommond: "",
       routeParamValue: "",
       handleValue: "",
@@ -226,12 +236,11 @@ export default {
 
     this.queryPwdPath();
     this.getUserListMethod();
-      
   },
 
   methods: {
-    removeValite(){
-      this.$refs["bfsForm"].clearValidate()
+    removeValite() {
+      this.$refs["bfsForm"].clearValidate();
     },
     implement() {
       let val = this.bfsForm.routeParam.trim().replace(/\s+/g, " ");
@@ -255,24 +264,27 @@ export default {
           this.handleValue = this.bfsForm.pwdRoute + this.routeParamValue;
         }
       }
-      if(this.bfsForm.routeParam.trim() == ""&&this.bfsForm.operate == "ls"){
-         this.handleValue=this.bfsForm.pwdRoute;
-         this.ls();
-      }else{
-       this.$refs["bfsForm"].validate((val) => {
-        if (val) {
-          if (this.bfsForm.operate == "cd") {
-            this.cd();
-          } else if (this.bfsForm.operate == "ls") {
-            this.ls();
-          } else if (this.bfsForm.operate == "mkdir") {
-            this.mkdir();
+      if (
+        this.bfsForm.routeParam.trim() == "" &&
+        this.bfsForm.operate == "ls"
+      ) {
+        this.handleValue = this.bfsForm.pwdRoute;
+        this.ls();
+      } else {
+        this.$refs["bfsForm"].validate((val) => {
+          if (val) {
+            if (this.bfsForm.operate == "cd") {
+              this.cd();
+            } else if (this.bfsForm.operate == "ls") {
+              this.ls();
+            } else if (this.bfsForm.operate == "mkdir") {
+              this.mkdir();
+            }
+          } else {
+            //alert("error");
           }
-        } else {
-          //alert("error");
-        }
-      }); 
-      } 
+        });
+      }
     },
     routeParamChange() {
       if (this.bfsForm.routeParam == "") {
@@ -357,7 +369,11 @@ export default {
         .then((res) => {
           //this.loadingLocal = false;
           if (res.data.code === 0) {
-            this.bfsData = res.data.data;
+            this.bfsData = [];
+            res.data.data.forEach((item) => {
+              this.bfsData.push({ name: item.name, type: item.type });
+            });
+
             this.$message({
               type: "success",
               message: this.$t("bfs.lsSucess"),
@@ -388,7 +404,11 @@ export default {
         .then((res) => {
           //this.loadingLocal = false;
           if (res.data.code === 0) {
-            this.bfsData = res.data.data;
+            this.bfsData = [];
+            res.data.data.forEach((item) => {
+              this.bfsData.push({ name: item.name, type: item.type });
+            });
+
             this.bfsForm.pwdRoute = this.handleValue;
             this.$message({
               type: "success",
@@ -420,7 +440,10 @@ export default {
         .then((res) => {
           //this.loadingLocal = false;
           if (res.data.code === 0) {
-            this.bfsData = res.data.data;
+            this.bfsData = [];
+            res.data.data.forEach((item) => {
+              this.bfsData.push({ name: item.name, type: item.type });
+            });
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -439,8 +462,10 @@ export default {
         });
     },
     changGroup() {
-       this.queryPwdPath();
-    this.getUserListMethod();
+      this.bfsForm.routeParam = "";
+      this.bfsForm.pwdRoute = "/";
+      this.queryPwdPath();
+      this.getUserListMethod();
     },
     searchCns(formName) {
       this.$refs[formName].validate((valid) => {
@@ -632,17 +657,17 @@ export default {
 }
 .contents {
   width: 100%;
-  height: 500px;
   position: relative;
+  overflow-y: scroll;
+  max-height: 700px;
 }
 .jsonViewer {
   width: 600px;
-  height: 500px;
 }
 .tip {
-    font-size: 14px;
-    margin-bottom: 15px;
-    color: #42b983;
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #42b983;
 }
 .tip p {
   padding-left: 35px;

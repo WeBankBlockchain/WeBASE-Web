@@ -86,6 +86,10 @@
         <td style="width: 100px;text-align: right"></td>
         <td><span>{{$t('dialog.liquidTip')}}</span></td>
       </tr>
+      <tr v-if='ifLiquid'>
+        <td style="width: 100px;text-align: right"></td>
+        <td><span style="color:#ed5454">{{$t('dialog.liquidTip1')}}</span></td>
+      </tr>
       <tr v-if='inputs.length'>
         <td style="vertical-align: top;text-align: right;">{{this.$t('contracts.params')}}：</td>
         <td>

@@ -89,10 +89,10 @@
               </el-table>
             </div>
           </div>
-          <div class="item">
+          <div class="item" v-if='inputButtonShow&&!ifLiquid'>
             <!-- <div class="item" v-show="inputButtonShow"> -->
             <span class="label"></span>
-            <el-button @click="decodeInputCheck" type="primary" v-if='!ifLiquid'>{{inputTitle}}</el-button>
+            <el-button @click="decodeInputCheck" type="primary">{{inputTitle}}</el-button>
           </div>
         </div>
         <div v-if='key == "logEntries"'>

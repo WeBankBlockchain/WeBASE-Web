@@ -775,6 +775,7 @@ export default {
         Tip1:"1）MKDIR：只能在apps和tables下创建目录；",
         Tip2:"2）CD：切换当前路径至指定路径；",
         Tip3:"3）LS：列出当前路径下所有文件或目录；",
+        Tip4:"name为BFS中的文件名，type代表该文件是contract合约或directory目录",
     },
     privateKey: {
         addUser: "新增用户",
@@ -1182,6 +1183,7 @@ export default {
     },
     dialog: {
         liquidTip:"liquid合约的地址格式为/开头，由数字字母下划线组成",
+        liquidTip1:"Liquid合约需要手动指定合约地址，且地址唯一",
         cnsVersion: '请输入CNS版本',
         cnsVersionPattern: "数字字母和英文字母'.'组成",
         cnsName: '请输入CNS名称',
