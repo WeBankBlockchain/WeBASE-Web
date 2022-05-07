@@ -525,6 +525,7 @@ export default {
         createTime: "创建时间",
     },
     nodes: {
+        description:"描述",
         nodeIp: "节点ip",
         nodeFront: "节点前置",
         addFront: "新增节点前置",
