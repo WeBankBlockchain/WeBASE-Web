@@ -5,7 +5,7 @@
                 <el-select v-model="addDevForm.fromAddress" :placeholder="$t('text.select')">
                     <el-option v-for="item in permissionAdminList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}</span>
                     </el-option>
                 </el-select>
                 <span v-if="isPermissionAdminShow" class="contract-code-done"   @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;margin-right:40px">
@@ -16,7 +16,7 @@
                 <el-select v-model="addDevForm.address" :placeholder="$t('text.select')">
                     <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}</span>
                     </el-option> 
                 </el-select> 
             </el-form-item>

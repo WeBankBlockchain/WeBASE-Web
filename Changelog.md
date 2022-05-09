@@ -1,3 +1,21 @@
+### lab-rc2(2022-05-07)
+
+**Add**
+- 合约IDE支持Liquid合约的编译、部署、调用
+- 支持BFS、CNS、权限管理、Event查看与事件订阅等功能
+- 支持数据大屏、移动端展示
+
+**Fix**
+- 优化交易回执中status状态码的提示
+
+**兼容性**
+- 支持FISCO-BCOS v3.0.0-rc2 及以上版本
+- WeBASE-Node-Manager lab-rc2
+- WeBASE-Front lab-rc2
+- WeBASE-Sign lab-rc1
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
+
 ### lab-rc1(2021-12-09)
 
 **Add**

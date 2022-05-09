@@ -5,7 +5,7 @@
                 <el-select v-model="modifyForm.adminRivateKey" :placeholder="$t('text.select')">
                     <el-option v-for="(item,index) in adminRivateKeyList" :key="index" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}</span>
                     </el-option>
                 </el-select>
             </el-form-item>

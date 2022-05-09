@@ -105,7 +105,7 @@ let errCode = {
     },
     "201014": {
         en: "contract deploy error",
-        zh: '合约部署错误'
+        zh: '合约部署失败，请检查部署入参、检查部署权限'
     },
     "201015": {
         en: "user's privateKey is null",
@@ -551,12 +551,12 @@ let errCode = {
         zh: '签名服务并返回异常'
     },
     "201510": {
-        en: "transaction receipt status return error",
-        zh: '交易回执状态码非0x0，交易执行失败'
+        en: "transaction receipt of this hash not exist",
+        zh: '此哈希的交易回执不存在'
     },
     "201511": {
-        en: "contract abi parse json error",
-        zh: '合约ABI转JSON失败'
+        en: "block of this hash not exist",
+        zh: '此哈希块不存在'
     },
     "201512": {
         en: "call contract error for io exception",
@@ -1538,6 +1538,51 @@ let errCode = {
         en: "Table name already exist",
         zh: "表名已经存在"
     },
+    // "-50002": {
+    //     en: "The table name length exceeds the limit 50",
+    //     zh: "表名已经存在"
+    // },
+    "-50003": {
+        en: "The table field name exceeds the limit 64",
+        zh: "表名长度超过限制 64"
+    },
+    "-50004": {
+        en: "The length of all the fields name exceeds the limit 1024",
+        zh: "所有字段名称长度超过限制 1024"
+    },
+    "-50005": {
+        en: "The value exceeds the limit, key max length is 255, field value max length is 1024",
+        zh: "值超过限制，key最大长度为255，字段值最大长度为1024"
+    },
+    "-50006": {
+        en: "The field value exceeds the limit 1024",
+        zh: "字段值超过限制 1024"
+    },
+    "-50007": {
+        en: "The table contains duplicated field",
+        zh: "该表包含重复的字段"
+    },
+    "-50008": {
+        en: "Invalid table name or field name",
+        zh: "无效的表名或字段名"
+    },
+    "-53006": {
+        en: "Invalid file type",
+        zh: "文件类型无效"
+    },
+    "-53005": {
+        en: "Invalid path",
+        zh: "路径无效"
+    },
+    "-53003": {
+        en: "Make directory failed",
+        zh: "创建目录失败"
+    },
+   
+    "-50002": {
+        en: "File already existed",
+        zh: "文件已存在"
+    },
     "-50100": {
         en: "Table does not exist",
         zh: "表不存在"
@@ -1558,9 +1603,33 @@ let errCode = {
         en: "Table name and address does not exist",
         zh: "该地址不属于管理员，无法删除"
     },
+    "-51002": {
+        en: "The contract method auth type not set, please set method auth type first",
+        zh: "合约方法鉴权类型未设置，请先设置方法鉴权类型"
+    },
     "-51100": {
         en: "Invalid node ID",
         zh: "无效的节点ID"
+    },
+    "-50105": {
+        en: "Open table error",
+        zh: "开表错误"
+    },
+    "-50104": {
+        en: "Create table error",
+        zh: "创建表错误"
+    },
+    "-50103": {
+        en: "Table set row error",
+        zh: "表设置行错误"
+    },
+    "-51004": {
+        en: "Auth map decode error",
+        zh: "授权地图解码错误"
+    },
+    "-51003": {
+        en: "Error auth type input",
+        zh: "错误身份验证类型输入"
     },
     "-51101": {
         en: "The last sealer cannot be removed",
@@ -1609,6 +1678,10 @@ let errCode = {
     "-51503": {
         en: "Please provide field 'in field list",
         zh: "请在字段列表中提供字段。"
+    },
+    "-51202": {
+        en: "The version string or address is error",
+        zh: "版本字符串或地址错误"
     },
     "-51900": {
         en: "contract frozen",
@@ -1698,10 +1771,141 @@ let errCode = {
     "500": {
         en: "system exception",
         zh: '系统异常'
-    }
+    },
+    "201631": {
+        en: "Java Command exec timeout",
+        zh: "Liquid命令执行超时"
+    },
+    "201632": {
+        en: "Java Command return error",
+        zh: "Liquid命令返回错误，请检查日志"
+    },
+    "201633": {
+        en: "When deploying liquid, contract address must not be empty",
+        zh: "部署liquid时，合约地址不得为空"
+    },
+    "202550": {
+        en: "Liquid compile error",
+        zh: "liquid编译错误"
+    },
+    "202551": {
+        en: "When deploying liquid, contract address must not be empty",
+        zh: "部署liquid时，合约地址不得为空"
+    },
+    "201610": {
+        en: "Contract compile task not exist",
+        zh: "合约编译任务不存在"
+    },
+    "201608": {
+        en: "Deploying contract not match with the group(solidity/liquid)",
+        zh: "部署合约与群组不匹配(solidity/liquid)"
+    },
+     "201609": {
+        en: "This liquid contract already compiling, please wait...",
+        zh: "liquid合约编译中，请稍候..."
+    },
+    // "201014": {
+    //     en: "ContractAddress Already Used",
+    //     zh: "合约地址已被使用"
+    // },
+    "201622": {
+        en: "Proposal is voting, the previous vote need to be finished",
+        zh: "提案正在投票，需要完成上一次投票"
+    },
+    "201623": {
+        en: "The proposal is not votable , please ensure the proposal",
+        zh: "提案不可投票，请确保提案有效"
+    },
+    "201624": {
+        en: "The account address has already voted the proposal",
+        zh: "账户地址已对提案进行投票"
+    },
+    "201625": {
+        en: "The proposal is not exist",
+        zh: "提案不存在"
+    },
+    "201626": {
+        en: "Only newly created proposal can be revoked",
+        zh: "只能撤销新创建的提案"
+    },
+    "201634": {
+        en: "Liquid environment not configured in the host of webase-front",
+        zh: "webbase-front主机中未配置Liquid环境"
+    },
+    "201635": {
+        en: "Create new liquid project failed, please check 'liquid' directory in webase-front",
+        zh: "创建新的Liquid项目失败，请检查webbase-front中的“liquid”目录"
+    },
+    "201636": {
+        en: "Create new liquid project and set gitee url failed",
+        zh: "创建新的Liquid项目并设置gitee url 失败"
+    },
+    "201637": {
+        en: "Write liquid contract source into lib.rs file failed",
+        zh: "将Liquid合约资源写入lib.rs文件失败"
+    },
+    "201638": {
+        en: "Compile liquid contract failed, please check contract source",
+        zh: "编译Liquid合约失败，请查看合约资源"
+    },
+    "201639": {
+        en: "Liquid compile target file not exist, please check 'liquid' directory in webase-front",
+        zh: "Liquid编译目标文件不存在，请检查webbase-front中的'liquid'目录"
+    },
+    "201640": {
+        en: "Read liquid contract's abi and bin file failed, please check 'liquid' directory in webase-front",
+        zh: "读取Liquid合约的abi和bin文件失败，请检查webbase-front中的'liquid'目录"
+    },
+    "-53001": {
+        en: "File not exist",
+        zh: "文件不存在"
+    },
+    "-51507": {
+        en: "Key not exist in table, use insert method",
+        zh: "表中不存在键，使用插入方法"
+    },
+    "-51506": {
+        en: "Don't insert the key already existed",
+        zh: "不要插入已经存在的密钥"
+    },
+    "-51505": {
+        en: "Add specific table key EQ syntax in condition",
+        zh: "在条件中添加特定的表键 EQ 语法"
+    },
+    "-51504": {
+        en: "Add specific table key in entry",
+        zh: "在条目中添加特定的表键"
+    },
+    "-51504": {
+        en: "Add specific table key in entry",
+        zh: "在条目中添加特定的表键"
+    },
+    "-53002": {
+        en: "File already existed",
+        zh: "文件已存在"
+    },
+     "201670": {
+        en: "exec env is wasm, don't support",
+        zh: "Wasm环境，不支持"
+    },
+    "201627": {
+        en: "Current proposal not end",
+        zh: "当前提案未结束"
+    },
+    "201672": {
+        en: "the account must be the proposer of proposal",
+        zh: "该帐户必须是提案的提议者"
+    },
+    "201680": {
+        en: "the PATH is invalid",
+        zh: "路径无效"
+    },
 }
 export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')
+    if(!lang ) {
+        lang='zh'
+    }
     let message = errCode[code][lang];
     if (value) {
         let oldMessage

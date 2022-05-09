@@ -16,13 +16,7 @@
             @click="addHadGroup"
             >{{ this.$t("nodes.addHadGroup") }}</el-button
           > -->
-          <el-button
-            type="text"
-            icon="el-icon-refresh"
-            @click="queryUpdateGroup"
-            v-preventReClick
-            :title="$t('alarm.refresh')"
-          >{{ this.$t('alarm.refresh') }}
+          <el-button type="text" icon="el-icon-refresh" @click="queryUpdateGroup" v-preventReClick :title="$t('alarm.refresh')">{{ this.$t('alarm.refresh') }}
           </el-button>
         </div>
         <div class="">
@@ -52,20 +46,8 @@
                   >{{ $t("text.update") }}</el-button
                 > -->
                 <el-button type="text" size="small" :loading="dropLoading && dropIndex === scope.row.groupId" @click="queryDeleteGroupData(scope.row)">{{ $t("text.dropGroupData") }}</el-button>
-                <!-- <el-button
-                  type="text"
-                  size="small"
-                  v-if="scope.row.groupType !== 1"
-                  :disabled="scope.row.groupType === 1 ? true : false"
-                  @click="exportFile(scope.row)"
-                  >{{ $t("system.export") }}</el-button
-                >
-                <el-button
-                  type="text"
-                  size="small"
-                  @click="remarks(scope.row)"
-                  >{{ $t("text.remarks") }}</el-button
-                > -->
+                <el-button type="text" size="small" v-if="scope.row.groupType !== 1" :disabled="scope.row.groupType === 1 ? true : false" @click="exportFile(scope.row)">{{ $t("system.export") }}</el-button>
+                <el-button type="text" size="small" @click="remarks(scope.row)">{{ $t("text.remarks") }}</el-button>
                 <el-tooltip effect="light" :content="$t('text.noExportGroup')" placement="bottom-end">
                   <i v-if="scope.row.groupType !== 1" class="el-icon-warning"></i>
                 </el-tooltip>
@@ -118,6 +100,7 @@ import {
   getUpdateGroup,
   getGroupsInvalidIncluded,
   deleteGroupData,
+  changeDescription,
 } from "@/util/api";
 const FileSaver = require("file-saver");
 export default {
@@ -151,6 +134,10 @@ export default {
       modifyGroupId: "",
       joinGroupTipsVisibility: false,
       descriptionShow: false,
+      nodes: {
+        description: "",
+        groupId: "",
+      },
     };
   },
 
@@ -371,6 +358,11 @@ export default {
           break;
       }
     },
+    remarks(val) {
+      this.descriptionShow = true;
+      this.nodes.description = val.description;
+      this.nodes.groupId = val.groupId;
+    },
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
@@ -397,6 +389,34 @@ export default {
           break;
       }
     },
+    changeDescriptions() {
+      let reqData = {
+        groupId: this.nodes.groupId,
+        description: this.nodes.description,
+      };
+      changeDescription(reqData)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.$message({
+              type: "success",
+              message: "修改成功",
+            });
+            this.descriptionShow = false;
+            this.queryGroupTable();
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            type: "error",
+            message: err.data || this.$t("text.systemError"),
+          });
+          this.descriptionShow = false;
+        });
+    },
+     closeThis(){
+          this.descriptionShow = false;
+    },
   },
 };
 </script>
@@ -404,5 +424,12 @@ export default {
 <style scoped>
 .search-part-left-btn {
   border-radius: 20px;
+}
+.descr {
+  width: 50%;
+  margin: 0 auto;
+}
+.btn {
+  margin: 0 auto;
 }
 </style>

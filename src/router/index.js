@@ -19,6 +19,7 @@ import { getCookie } from '@/util/util'
 const main = resolve => require(['@/views/index/index'], resolve);
 const home = resolve => require(['@/views/home/home'], resolve);
 const blockInfo = resolve => require(['@/views/blockInfo/blockInfo'], resolve);
+const bfs = resolve => require(['@/views/bfs/index'], resolve);
 const transactionInfo = resolve => require(['@/views/transactionInfo/transactionInfo'], resolve);
 const front = resolve => require(['@/views/front/index'], resolve);
 const host = resolve => require(['@/views/front/host'], resolve);
@@ -152,9 +153,10 @@ const routes = [
             { path: '/contractWarehouse', component: contractWarehouse, name: '合约仓库', nameKey: 'contractWarehouse', menuShow: true, meta: { requireAuth: false } },
             // { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
             { path: '/parseAbi', component: parseAbi, name: '解析Abi', nameKey: "parseAbi", menuShow: false, meta: { requireAuth: true } },
-            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: false, meta: { requireAuth: true } },
+            { path: '/cnsManagement', component: cnsManagement, name: 'CNS查询', nameKey: "CNSmanager", menuShow: true, meta: { requireAuth: true } },
             { path: '/CRUDServiceManagement', component: CRUDServiceManagement, name: 'CRUD', nameKey: "CRUDServiceManagement", menuShow: false, meta: { requireAuth: true } },
-            { path: '/eventCheck', component: eventCheck, name: 'Event 查看', nameKey: "checkEvent", menuShow: false, meta: { requireAuth: false } },
+            { path: '/eventCheck', component: eventCheck, name: 'Event查看', nameKey: "checkEvent", menuShow: true, meta: { requireAuth: false } },
+            { path: '/BFS', component: bfs, name: 'BFS', nameKey: "BFS", menuShow: true, meta: { requireAuth: false } },
             // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } }, 
             { path: '/toolsContract', component: toolsContract, name: '工具合约', nameKey: 'toolsContract', menuShow: false, meta: { requireAuth: false } }, 
         ]
@@ -180,7 +182,7 @@ const routes = [
         menuShow: false,
         iconCls: 'wbs-icon-xitongguanli sidebar-icon',
         children: [
-            { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: false, meta: { requireAuth: true } },
+            { path: '/newPermission', component: newPermission, name: '权限管理', nameKey: "newPermission", menuShow: true, meta: { requireAuth: true } },
             // { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
             { path: '/configManagement', component: configManagement, name: '配置管理', nameKey: "configManager", menuShow: true, meta: { requireAuth: true } },
             { path: '/certificate', component: certificate, name: '证书管理', nameKey: "certificate", menuShow: true, meta: { requireAuth: true } },
@@ -238,7 +240,7 @@ const routes = [
         name: '订阅事件',
         nameKey: "subscribeEvent",
         leaf: false,
-        menuShow: false,
+        menuShow: true  ,
         iconCls: 'wbs-icon-dingyue sidebar-icon',
         children: [
             { path: '/blockEvent', component: blockEvent, name: '出块事件', nameKey: "blockEvent", menuShow: true, meta: { requireAuth: true } },

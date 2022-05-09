@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-  <el-dialog v-dialogDrag :title="$t('contracts.transactionReceipt')" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh">
+  <el-dialog v-dialogDrag :title="$t('contracts.transactionReceipt')" :visible.sync="editorDialog" @close="modelClose" width="650px" top="10vh" z-index='1000'>
     <div v-if='!transationData'>{{$t('text.noData')}}</div>
     <div v-if='transationData && !transationData.logEntries' slot :style="{'height':editorHeight + 'px'}" style="overflow-y:auto">
       <json-viewer :value="transationData" :expand-depth='5' copyable></json-viewer>
@@ -26,6 +26,10 @@
           <template v-if="key=='status'">
             <span class="transation-title">{{key}}:</span>
             <span :style="{'color': txStatusColor(val)}">{{val}}</span>
+            <!-- <span style="margin-left:10px" class="string-color">({{txStatusMessage(val)}})</span> -->
+            <el-tooltip class="tip" effect="dark" :content="txStatusMessage(val)" placement="top-start">
+              <i class="el-icon-info"></i>
+            </el-tooltip>
           </template>
           <template v-else>
             <span class="transation-title">{{key}}:</span>
@@ -57,10 +61,10 @@
               </el-table>
             </div>
           </div>
-            <!-- <div class="item" v-show="inputButtonShow"> -->
-                 <div class="item" v-show="inputButtonShow">
+          <!-- <div class="item" v-show="inputButtonShow"> -->
+          <div class="item" v-show="inputButtonShow">
             <span class="label"></span>
-            <el-button @click="decodeOutput" type="primary">{{buttonTitle}}</el-button>
+            <el-button @click="decodeOutput" type="primary" v-if='!ifLiquid'>{{buttonTitle}}</el-button>
           </div>
         </div>
         <div v-else-if='key == "input"'>
@@ -85,7 +89,7 @@
               </el-table>
             </div>
           </div>
-          <div class="item">
+          <div class="item" v-if='inputButtonShow&&!ifLiquid'>
             <!-- <div class="item" v-show="inputButtonShow"> -->
             <span class="label"></span>
             <el-button @click="decodeInputCheck" type="primary">{{inputTitle}}</el-button>
@@ -156,7 +160,7 @@
                   </div>
                   <div class="item">
                     <span class="label"></span>
-                    <el-button @click="decode(item)" type="primary">{{eventTitle}}</el-button>
+                    <el-button @click="decode(item,index)" type="primary" v-if='!ifLiquid'>{{eventTitle[index]}}</el-button>
                   </div>
                 </div>
                 <!-- <div>
@@ -166,10 +170,10 @@
                                     <span v-else class="transation-content">{{item.type}}</span>
                                 </div> -->
                 <div>
-                  <span class="transation-title">topic:</span>
-                  <span v-if='typeof(item.topic) == "string"' class="transation-content string-color">{{item.topic}}</span>
-                  <span v-else-if='item.topic === null' class="transation-content null-color">{{item.topic}}null</span>
-                  <span v-else class="transation-content">{{item.topic}}</span>
+                  <span class="transation-title">topics:</span>
+                  <span v-if='typeof(item.topics) == "string"' class="transation-content string-color">{{item.topics}}</span>
+                  <span v-else-if='item.topics === null' class="transation-content null-color">{{item.topics}}null</span>
+                  <span v-else class="transation-content">{{item.topics[0]}}</span>
                 </div>
                 <!-- <div>
                                     <span class="transation-title">logIndexRaw:</span>
@@ -193,17 +197,25 @@ import { getFunctionAbi } from "@/util/api";
 import { toContractName } from "@/util/util";
 export default {
   name: "editor",
-  props: ["data", "show", "input", "editorOutput", "sendConstant"],
+  props: [
+    "data",
+    "show",
+    "input",
+    "editorOutput",
+    "sendConstant",
+    "liquidChecks",
+  ],
   data: function () {
     return {
+      ifLiquid: this.liquidChecks,
       editorShow: true,
       aceEditor: null,
       transationData: this.data || null,
       modePath: "ace/mode/solidity",
       editorDialog: this.show || false,
       eventSHow: false,
-      outputButtonShow:false,
-      eventTitle: this.$t("transaction.reduction"),
+      outputButtonShow: false,
+      eventTitle: [this.$t("transaction.reduction")],
       inputTitle: this.$t("transaction.reduction"),
       funcData: "",
       methodId: "",
@@ -219,6 +231,7 @@ export default {
       inputButtonShow: true,
       editorHeight: "",
       outputType: null,
+      statusMessage: this.$t("editor.None"),
     };
   },
   mounted: function () {
@@ -228,7 +241,7 @@ export default {
     } else {
       this.inputButtonShow = true;
     }
-    this.decodeInputApi(this.transationData.input);
+    //this.decodeInputApi(this.transationData.input);
     if (this.transationData && this.transationData.logEntries) {
       this.decodeEvent();
     }
@@ -247,10 +260,12 @@ export default {
     }
   },
   methods: {
-     abc(arr) {
-          if(!Array.isArray(arr)){return arr}
-          return '['+arr.toString()+']'
-     },
+    abc(arr) {
+      if (!Array.isArray(arr)) {
+        return arr;
+      }
+      return "[" + arr.toString() + "]";
+    },
     decodeOutput: function () {
       if (this.showDecode) {
         this.showDecode = false;
@@ -348,9 +363,10 @@ export default {
     },
     decodeEvent: function () {
       for (let i = 0; i < this.transationData.logEntries.length; i++) {
+        this.eventTitle[i]=this.$t("transaction.reduction")
         let data = {
           groupId: localStorage.getItem("groupId"),
-          data: this.transationData.logEntries[i].topic[0],
+          data: this.transationData.logEntries[i].topics[0],
         };
         getFunctionAbi(data)
           .then((res) => {
@@ -362,6 +378,9 @@ export default {
               setTimeout(() => {
                 this.eventSHow = true;
               }, 200);
+              if (!this.ifLiquid) {
+                this.decodeInputApi(this.transationData.input);
+              }
             } else if (res.data.code !== 0) {
               this.$message({
                 type: "error",
@@ -385,7 +404,6 @@ export default {
       };
       getFunctionAbi(data)
         .then((res) => {
-
           if (res.data.code == 0 && res.data.data) {
             this.decodeInput(param, res.data.data);
           } else if (res.data.code !== 0) {
@@ -457,7 +475,7 @@ export default {
       let abi = "";
       eventData.abiInfo = JSON.parse(eventData.abiInfo);
       let list = data;
-      list.eventTitle = this.$t("transaction.reduction");
+      list.eventTitle = [this.$t("transaction.reduction")];
       list.eventDataShow = true;
       list.eventButtonShow = true;
       list.eventName = eventData.abiInfo.name + "(";
@@ -502,7 +520,7 @@ export default {
       let eventResult = web3.eth.abi.decodeLog(
         eventData.abiInfo.inputs,
         list.data,
-        list.topic.slice(1)
+        list.topics.slice(1)
       );
       list.outData = {};
       list.eventLgData = [];
@@ -549,17 +567,107 @@ export default {
     modelClose: function () {
       this.$emit("close");
     },
-    decode: function (val) {
+    decode: function (val,index) {
       if (val.eventDataShow) {
         this.$set(val, "eventDataShow", false);
-        this.eventTitle = this.$t("transaction.decode");
+        this.$set(this.eventTitle, index, this.$t("transaction.decode"));
       } else {
         this.$set(val, "eventDataShow", true);
-        this.eventTitle = this.$t("transaction.reduction");
+        this.$set(this.eventTitle, index, this.$t("transaction.reduction"));
+      }
+    },
+    txStatusMessage(val) {
+      switch (val) {
+        case 0:
+          return this.$t("editor.None");
+        case 1:
+          return this.$t("editor.Unknown");
+        case 2:
+          return this.$t("editor.BadRLP");
+        case 3:
+          return this.$t("editor.InvalidFormat");
+        case 4:
+          return this.$t("editor.OutOfGasIntrinsic");
+        case 5:
+          return this.$t("editor.InvalidSignature");
+        case 6:
+          return this.$t("editor.InvalidNonce");
+        case 7:
+          return this.$t("editor.NotEnoughCash");
+        case 8:
+          return this.$t("editor.OutOfGasBase");
+        case 9:
+          return this.$t("editor.BlockGasLimitReached");
+        case 10:
+          return this.$t("editor.BadInstruction");
+        case 11:
+          return this.$t("editor.BadJumpDestination");
+        case 12:
+          return this.$t("editor.OutOfGas");
+        case 13:
+          return this.$t("editor.OutOfStack");
+        case 14:
+          return this.$t("editor.StackUnderflow");
+        case 15:
+          return this.$t("editor.NonceCheckFail");
+        case 16:
+          return this.$t("editor.BlockLimitCheckFail");
+        case 17:
+          return this.$t("editor.FilterCheckFail");
+        case 18:
+          return this.$t("editor.NoDeployPermission");
+        case 19:
+          return this.$t("editor.NoCallPermission");
+        case 20:
+          return this.$t("editor.NoTxPermission");
+        case 21:
+          return this.$t("editor.PrecompiledError");
+        case 22:
+          return this.$t("editor.RevertInstruction");
+        case 23:
+          return this.$t("editor.InvalidZeroSignatureFormat");
+        case 24:
+          return this.$t("editor.AddressAlreadyUsed");
+        case 25:
+          return this.$t("editor.PermissionDenied");
+        case 26:
+          return this.$t("editor.CallAddressError");
+        case 27:
+          return this.$t("editor.GasOverflow");
+        case 28:
+          return this.$t("editor.TxPoolIsFull");
+        case 29:
+          return this.$t("editor.TransactionRefused");
+        case 30:
+          return this.$t("editor.ContractFrozen");
+        case 31:
+          return this.$t("editor.AccountFrozen");
+          case 32:
+          return this.$t("editor.WASMValidationFailure");
+          case 33:
+          return this.$t("editor.WASMArgumentOutOfRange");
+          case 34:
+          return this.$t("editor.WASMUnreachableInstruction");
+        case 10000:
+          return this.$t("editor.AlreadyKnown");
+        case 10001:
+          return this.$t("editor.AlreadyInChain");
+        case 10002:
+          return this.$t("editor.InvalidChainId");
+        case 10003:
+          return this.$t("editor.InvalidGroupId");
+        case 10004:
+          return this.$t("editor.RequestNotBelongToTheGroup");
+        case 10005:
+          return this.$t("editor.MalformedTx");
+        case 10006:
+          return this.$t("editor.OverGroupMemoryLimit");
+        default:
+          return this.$t("editor.None");
       }
     },
     txStatusColor(val) {
-      if (val == "0x0") {
+      if (val == "0") {
         return "#67C23A";
       } else {
         return "#F56C6C";

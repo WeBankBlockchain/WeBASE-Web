@@ -17,6 +17,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { getLanguage } from '@/lang/index'
 import Cookies from 'js-cookie'
+import { debug } from 'request'
 
 Vue.use(Vuex)
 
@@ -37,7 +38,9 @@ const state = {
     exportRivateKey: false,
     exportProjectShow: false,
     selectedContracts: {},
-    selectedContractInfo: {}
+    selectedContractInfo: {},
+    bindKey:false,
+    liquidCheck:false
 }
 export default new Vuex.Store({
     state,
@@ -53,6 +56,9 @@ export default new Vuex.Store({
         },
         switch_import_private_key_dialog(state) {
             state.importPrivateKey = !state.importPrivateKey
+        },
+        switch_bind_key_dialog(state) {
+            state.bindKey = !state.bindKey
         },
         switch_export_rivate_key_dialog(state) {
             state.exportRivateKey = !state.exportRivateKey
@@ -103,8 +109,17 @@ export default new Vuex.Store({
         set_selected_contracts_info(state, data) {
             state.selectedContractInfo = data
         },
+        set_liquidCheck(state, data) {
+            state.liquidCheck = data
+        },
     },
     actions: {
+        switch_liquidCheck(context,data){
+            context.commit('set_liquidCheck',data)
+        },
+        switch_bind_key_dialog(context) {
+            context.commit('switch_bind_key_dialog')
+        },
         switch_creat_user_dialog(context) {
             context.commit('switch_creat_user_dialog')
         },

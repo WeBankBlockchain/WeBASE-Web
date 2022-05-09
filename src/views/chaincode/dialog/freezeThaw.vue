@@ -5,7 +5,7 @@
                 <el-select v-model="freezeThawFrom.fromAddress" :placeholder="$t('text.select')">
                     <el-option v-for="item in committeeAndDeploy" :key="item.address" :label="item.userName" :value="item.address">
                         <span>{{item.userName}}</span>
-                        <span class="font-12">{{item.address | splitString}}...</span>
+                        <span class="font-12">{{item.address | splitString}}</span>
                     </el-option>
                 </el-select>
                 <i class="el-icon-info" :title="$t('contracts.freezeDes')"></i>

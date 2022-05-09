@@ -75,24 +75,17 @@
           <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
         </el-select>
       </div>
-      <el-form class="send-item" v-show="pramasData.length" style="line-height: 25px"   ref="sendTransation">
+      <el-form class="send-item" v-show="pramasData.length" style="line-height: 25px" :model="ruleForm" ref="sendTransation">
         <span class="send-item-title" style="position: relative; top: 5px">{{ this.$t("contracts.params") }}:</span>
-        <el-form-item style="position: relative; top: -25px" v-for="(item, index) in pramasData"  :key="item.name">
+        <el-form-item style="position: relative; top: -25px" v-for="(item, index) in ruleForm.ruleForms" :prop="'ruleForms.' + index + '.value'" :rules="rules[item.type]" :key="item.key">
           <span class="send-item-title"></span>
-          <template v-if="item.type == 'string'">
-            <el-input v-model="ruleForm[index]" style="width: 400px" :placeholder="item.type">
-              <template slot="prepend">
-                <span class="">{{ item.name }}</span>
-              </template>
-            </el-input>
-          </template>
-          <template v-else>
-            <el-input v-model="ruleForm[index]" style="width: 400px" :placeholder="placeholderText(item.type)">
-              <template slot="prepend">
-                <span class="">{{ item.name }}</span>
-              </template>
-            </el-input>
-          </template>
+
+          <el-input v-model="item.value" style="width: 400px" :placeholder="placeholderText(item.type)">
+            <template slot="prepend">
+              <span class="">{{ item.name }}</span>
+            </template>
+          </el-input>
+
         </el-form-item>
         <div style="padding: 5px 0 0 28px; color: 'gray'">
           <i class="el-icon-info" style="padding-right: 4px"></i>{{ this.$t("contracts.paramsInfo") }}
@@ -115,7 +108,7 @@ export default {
     "v-creatUser": creatUser,
   },
   name: "sendTransation",
-  props: ["data", "dialogClose", "abi", "version", "address"],
+  props: ["data", "dialogClose", "abi", "version", "address", "liquidChecks"],
   data: function () {
     let intEight = (rule, value, callback) => {
       console.log(value);
@@ -188,17 +181,72 @@ export default {
       cnsVersion: "",
       cnsName: "",
       isUserNameShow: false,
-      ruleForm: [],
+      ruleForm: {
+        ruleForms: [{ value: "", type: "" }],
+      },
+      ruleForms: [],
       rules: {
-        int: [
+         int: [
           {
             required: true,
             message: this.$t("text.sendInput"),
             trigger: "blur",
           },
           {
-            pattern: /^-?[1-9]\d*$/,
-            message: "可以是负数",
+            pattern: /^-?[0-9]\d*$/,
+            message: "必须是数字，可以是负数",
+            trigger: "blur",
+          },
+        ],
+        string: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "change",
+          },
+        ],
+        int256: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+          {
+            pattern: /^-?[0-9]\d*$/,
+            message: "必须是数字，可以是负数",
+            trigger: "blur",
+          },
+        ],
+          uint256: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+          {
+            pattern: /^[0-9]\d*$/,
+            message: "必须是数字，不可以是负数",
+            trigger: "blur",
+          },
+        ],
+        bool: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+        ],
+        bytes: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
+            trigger: "blur",
+          },
+        ],
+        tuple: [
+          {
+            required: true,
+            message: this.$t("text.sendInput"),
             trigger: "blur",
           },
         ],
@@ -209,8 +257,8 @@ export default {
             trigger: "blur",
           },
           {
-            pattern: /^[1-9]\d*$/,
-            message: "不可以是负数",
+            pattern: /^[0-9]\d*$/,
+            message: "必须是数字，不可以是负数",
             trigger: "blur",
           },
         ],
@@ -260,6 +308,7 @@ export default {
         ],
         ...obj,
       },
+      isWasm: this.liquidChecks,
     };
   },
   computed: {
@@ -305,8 +354,9 @@ export default {
         type.substring(0, 5) == "bytes" &&
         type.substring(type.length, type.length - 2) != "[]"
       ) {
-        
-        return type +"(十六进制，长度是" +type.substring(5, type.length)*2+")";
+        return (
+          type + "(十六进制，长度是" + type.substring(5, type.length) * 2 + ")"
+        );
       }
       switch (type) {
         case "string":
@@ -327,14 +377,14 @@ export default {
       }
     },
     submit: function (formName) {
-            this.send()
-      // this.$refs.sendTransation.validate((valid) => {
-      //   if (valid) {
-      //     this.send();
-      //   } else {
-      //     return false;
-      //   }
-      // });
+      //this.send()
+      this.$refs.sendTransation.validate((valid) => {
+        if (valid) {
+          this.send();
+        } else {
+          return false;
+        }
+      });
     },
     close: function (formName) {
       this.$emit("close", false);
@@ -380,6 +430,7 @@ export default {
       this.funcList.forEach((value) => {
         if (value.funcId === this.transation.funcName) {
           this.pramasData = value.inputs;
+          this.ruleForm.ruleForms = value.inputs;
           this.constant = value.constant;
           this.pramasObj = value;
           this.stateMutability = value.stateMutability;
@@ -445,8 +496,8 @@ export default {
         this.transation.funcName = this.data.contractName;
       }
 
-      for (let i in this.ruleForm) {
-        let data = this.ruleForm[i];
+      for (let i in this.ruleForm.ruleForms) {
+        let data = this.ruleForm.ruleForms[i].value;
         if (data && isJson(data)) {
           try {
             this.transation.reqVal[i] = JSON.parse(data);
@@ -459,26 +510,24 @@ export default {
           this.transation.reqVal[i] = data;
         }
       }
-      this.ruleForm.map((item,index)=>{
-        if(item=="true"||item=="false"){
-          this.ruleForm[index]=eval(item.toLowerCase());
+      this.ruleForm.ruleForms.map((item, index) => {
+        if (item.value == "true" || item.value == "false") {
+          this.ruleForm.ruleForms[index] = eval(item.value.toLowerCase());
+        } else if (
+          item.value.hasOwnProperty("substring") &&
+          item.value.substring(0, 1) == "["
+        ) {
+          this.ruleForm.ruleForms[index] = eval(item.value.toLowerCase());
         }
-        if(item.substring(0,1)=='['){
-          
-          this.ruleForm[index]=eval(item.toLowerCase());
-        }
-      })
+      });
       let rules = [];
       //  if(this.pramasData>1){
       for (var i in this.pramasData) {
-        for (var key in this.ruleForm) {
-          if (this.pramasData[i].type == key)
-            rules.push(this.transation.reqVal[key]);
+        for (var val of this.ruleForm.ruleForms) {
+          if (this.pramasData[i].type == val.type)
+            rules.push(this.transation.reqVal[i]);
         }
       }
-      //   }else{
-      //   rules= this.ruleForm[0]
-      //   }
 
       let functionName = "";
       this.funcList.forEach((value) => {
@@ -496,7 +545,7 @@ export default {
             : this.transation.userName,
         contractName: this.data.contractName,
         funcName: functionName || "",
-        funcParam: this.ruleForm,
+        funcParam: this.transation.reqVal,
         contractId: this.data.contractId,
         contractAbi: [this.pramasObj],
         useCns: this.isCNS,
@@ -505,6 +554,9 @@ export default {
       };
       if (this.contractAddress) {
         data.contractAddress = this.contractAddress;
+      }
+      if (this.isWasm) {
+        data.isWasm = true;
       }
       sendTransation(data)
         .then((res) => {
@@ -605,6 +657,7 @@ export default {
 
 <style scoped>
 .send-wrapper {
+  height: 100%;
 }
 .send-item {
   line-height: 30px;
@@ -624,8 +677,7 @@ export default {
 }
 .send-body {
   overflow-y: scroll;
-  max-height: 400px;
-  min-height: 200px;
+  max-height: 795px;
 }
 .send-btn {
   margin-bottom: 24px;

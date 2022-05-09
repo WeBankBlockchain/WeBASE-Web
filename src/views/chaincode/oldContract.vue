@@ -20,6 +20,9 @@
                 <div class="search-part-left" style="padding-top: 20px;">
                     <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
                     <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
+                    <el-button v-show="liquidCheck" type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
+                    <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="checkDeploy">{{$t('title.checkDeploy')}}</el-button>
+                    <el-button v-if="liquidCheck" type="primary" class="search-part-left-btn" @click="checkMethod">{{$t('title.checkMethod')}}</el-button>
                 </div>
                 <div class="search-part-right">
                     <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
@@ -70,9 +73,11 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
+                            <el-button v-if="liquidCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
+                            <el-button v-if="liquidCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
                             <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
-                            <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button> -->
-                             <!-- <el-button :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button> -->
+                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
+                             <el-button v-if="liquidCheck" :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -82,9 +87,9 @@
         </div>
         <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
         <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-            <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :data="data" :abi='abiData' :version='version'></send-transation>
+            <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send"  :liquidChecks='!liquidCheck' :data="data" :abi='abiData' :version='version'></send-transation>
         </el-dialog>
-        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
+        <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput'  :liquidChecks='!liquidCheck' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
         <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
             <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
         </el-dialog>
@@ -100,6 +105,21 @@
         <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
             <import-abi @importSuccess="importSuccess" @closeImport="closeImport"></import-abi>
         </el-dialog>
+        <el-dialog :title="$t('title.resetContractUser')" :visible.sync="resetVisibility" width="500px" v-if="resetVisibility" center class="send-dialog">
+            <reset-dialog @resetSuccess="resetSuccess" @closeReset="closeReset"></reset-dialog>
+        </el-dialog>
+        <el-dialog :title="$t('title.checkDeploy')" :visible.sync="checkVisibility" width="500px" v-if="checkVisibility" center class="send-dialog">
+            <check-deploy @checkSuccess="checkSuccess" @closeCheck="closeCheck"></check-deploy>
+        </el-dialog>
+         <el-dialog :title="$t('contracts.setPolicy')" :visible.sync="setPolicyVisibility" width="500px" v-if="setPolicyVisibility" center class="send-dialog">
+            <set-policy @setPolicySuccess="setPolicySuccess" @closeSetPolicy="closeSetPolicy" :setPolicyItem='setPolicyItem'></set-policy>
+        </el-dialog>
+        <el-dialog :title="$t('contracts.setAdmin')" :visible.sync="setAdminVisibility" width="500px" v-if="setAdminVisibility" center class="send-dialog">
+            <set-admin @setAdminSuccess="setAdminSuccess" @closeSetAdmin="closeSetAdmin" :setPolicyItem='setPolicyItem'></set-admin>
+        </el-dialog>
+        <el-dialog :title="$t('title.checkMethod')" :visible.sync="checkMethodVisibility" width="500px" v-if="checkMethodVisibility" center class="send-dialog">
+            <check-method @checkMethodSuccess="checkMethodSuccess" @closeCheckMethod="closeCheckMethod"></check-method>
+        </el-dialog>
         <el-dialog :title="$t('nodes.updateAbi')" :visible.sync="updateVisibility" width="500px" v-if="updateVisibility" center class="send-dialog">
             <update-abi @updateSuccess="updateSuccess" @closeUpdate="closeUpdate" :updateItem="updateItem"></update-abi>
         </el-dialog>
@@ -109,14 +129,20 @@
 import sendTransation from "@/components/sendTransaction";
 import editor from "@/components/editor"
 import abiDialog from "./dialog/abiDialog"
+import resetDialog from "./dialog/resetDialog.vue"
+import checkDeploy from "./dialog/checkDeploy.vue"
+import checkMethod from "./dialog/checkMethod.vue"
+import setPolicy from "./dialog/setPolicy.vue"
+import setAdmin from "./dialog/setAdmin.vue"
 import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
 import mgmtCns from "./dialog/mgmtCns"
-import { getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode } from "@/util/api"
+import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode,checkIsWasm } from "@/util/api"
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
+import Bus from "@/bus";
 export default {
     name: "registeredContract",
     components: {
@@ -128,7 +154,12 @@ export default {
         checkEventResult,
         mgmtCns,
         importAbi,
-        updateAbi
+        updateAbi,
+        resetDialog,
+        checkDeploy,
+        checkMethod,
+        setPolicy,
+        setAdmin
     },
     data: function () {
         return {
@@ -207,7 +238,15 @@ export default {
             mgmtCnsItem: {},
             importVisibility: false,
             updateVisibility: false,
-            updateItem: null
+            resetVisibility: false,
+            checkVisibility:false,
+            checkMethodVisibility:false,
+            setPolicyVisibility:false,
+            setAdminVisibility:false,
+            checkMethodVisibility:false,
+            updateItem: null,
+            setPolicyItem:null,
+            liquidCheck: false,
         }
     },
     created() {
@@ -222,10 +261,62 @@ export default {
             this.disabled = true
         }
         if (localStorage.getItem("groupId")) {
-            this.getContracts()
+            this.getfrontList()
+            this.getContracts() 
+            
         }
+         Bus.$on("changGroup", (data) => {
+            this.getfrontList()
+            this.getContracts()
+    });
     },
     methods: {
+      getfrontList() {
+      let reqData = {
+        frontId: this.frontId,
+      };
+      getFronts(reqData)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.frontList = res.data.data || [];
+            this.frontId = this.frontList[0].frontId;
+            this.loading = false;
+            this.liquidCheckMethod();
+          } else {
+            this.loading = false;
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
+    liquidCheckMethod() {
+      let groupId = localStorage.getItem("groupId");
+      checkIsWasm(this.frontId,groupId)
+        .then((res) => {
+          if (res.data.data == true) {
+            this.liquidCheck = false;
+          } else{
+            this.liquidCheck = true;
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: err.data || this.$t("text.systemError"),
+          });
+        });
+    },
         formatterPath: function(row) {
             let str = row ? row : "-"
             return str
@@ -412,12 +503,59 @@ export default {
             this.updateItem = val;
             this.updateVisibility = true;
         },
+        setPolicy(val){
+            this.setPolicyItem=val;
+           this.setPolicyVisibility=true
+        },
+        setAdmin(val){
+            this.setPolicyItem=val;
+           this.setAdminVisibility=true   
+        },
         updateSuccess() {
             this.updateVisibility = false;
             this.getContracts()
         },
         routeAbi() {
             this.$router.push("/parseAbi")
+        },
+        resetSuccess(){
+           this.resetVisibility=false
+        },
+        checkSuccess(){
+           this.checkVisibility=false
+        },
+        setPolicySuccess(){
+           this.setPolicyVisibility=false
+        },
+        setAdminSuccess(){
+           this.setAdminVisibility=false
+        },
+        checkMethodSuccess(){
+           this.checkMethodVisibility=false
+        },
+        closeCheckMethod(){
+           this.checkMethodVisibility=false
+        },
+        closeCheck(){
+           this.checkVisibility=false
+        },
+        closeSetPolicy(){
+           this.setPolicyVisibility=false
+        },
+        closeSetAdmin(){
+           this.setAdminVisibility=false
+        },
+         closeReset(){
+           this.resetVisibility=false
+        },
+        resetContractUser(){
+           this.resetVisibility=true
+        },
+        checkDeploy(){
+           this.checkVisibility=true
+        },
+        checkMethod(){
+           this.checkMethodVisibility=true
         },
         deleteAbi(val) {
             this.$confirm(this.$t('text.confirmDelete'))
@@ -548,7 +686,10 @@ export default {
             this.abiData = null
         },
         search: function () {
-            if (this.contractData && this.contractData.length && this.contractData.length < 20) {
+            if (this.contractData && this.contractData.length && this.contractData.substring(0,1)=='/') {
+                this.contractAddress = this.contractData;
+                this.contractName = ""
+            } else if (this.contractData && this.contractData.length && this.contractData.length < 20) {
                 this.contractName = this.contractData;
                 this.contractAddress = ""
             } else if (this.contractData && this.contractData.length && (this.contractData.length > 20 || this.contractData.length == 20)) {

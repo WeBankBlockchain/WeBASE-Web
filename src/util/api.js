@@ -159,6 +159,29 @@ export function getContractList(data) {
         }
     })
 }
+/**Contract check */
+export function checkIsWasm(frontId,groupId) {
+    return get({
+        url: `${url.ORG_LIST}/front/isWasm/${frontId}/${groupId}`,
+        method: 'get',
+       // params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+/**Contract check */
+export function liquidCompile(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/liquid/compile`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
 
 // search contract list for contract path
 export function searchContract(data) {
@@ -282,6 +305,26 @@ export function getUserList(data, list) {
         }
     })
 }
+/**get nodeInfo */
+export function getNodeInfo(groupId,nodeId) {
+    return get({
+        url: `${url.ORG_LIST}/node/nodeInfo/${groupId}/${nodeId}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })                                                                             
+}
+/** nodeCity query node*/
+export function getCityList(data) {
+    return get({
+        url: `${url.ORG_LIST}/node/city/list`,
+        method: 'get',      
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 /**add users */
 export function getAddUser(data) {
     return post({
@@ -361,6 +404,38 @@ export function exportTxtPrivateKey(data) {
         method: 'post',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+        }
+    })
+}
+/**Modify user description */
+export function bindPrivateKey(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/bind/privateKey`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function bindPrivateKeyPm(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/bind/privateKey/pem`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function bindPrivateKeyP12(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/bind/privateKey/p12`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
+            'Content-Type': "multipart/form-data"
         }
     })
 }
@@ -698,6 +773,26 @@ export function getFronts(data) {
         }
     })
 }
+export function liquidCheckMethod(data) {
+    return get({
+        url: `${url.ORG_LIST}/contract/liquid/check/${data}`,
+        method: 'get',
+        //params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function liquidCompileCheck(data) {
+    return post({
+        url: `${url.ORG_LIST}/contract/liquid/compile/check`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 export function getDetail(data) {
     return get({
         url: `${url.ORG_LIST}/front/groupInfo?frontId=${data.frontId}&groupId=${data.groupId}`,
@@ -711,6 +806,16 @@ export function deleteFront(data) {
     return deleted({
         url: `${url.ORG_LIST}/front/${data}`,
         method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function changeDescription(data) {
+    return put({
+        url: `${url.ORG_LIST}/group/description `,
+        method: 'put',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -803,7 +908,7 @@ export function getPermissionFull(data) {
 // consensus node id
 export function consensusNodeId(data) {
     return post({
-        url: `${url.ORG_LIST}/precompiled/consensus`,
+        url: `${url.ORG_LIST}/precntauth/precompiled/consensus/manage`,
         method: 'post',
         data: data,
         headers: {
@@ -813,10 +918,10 @@ export function consensusNodeId(data) {
 }
 // consensus node id list 
 export function getConsensusNodeId(data) {
-    return get({
-        url: `${url.ORG_LIST}/precompiled/consensus/list`,
-        method: 'get',
-        params: data,
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/consensus/list`,
+        method: 'post',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -825,7 +930,7 @@ export function getConsensusNodeId(data) {
 // sys config 
 export function querySysConfig(data) {
     return post({
-        url: `${url.ORG_LIST}/sys/config`,
+        url: `${url.ORG_LIST}/precntauth/precompiled/sys/config`,
         method: 'post',
         data: data,
         headers: {
@@ -836,7 +941,7 @@ export function querySysConfig(data) {
 // sys config list
 export function querySysConfigList(data) {
     return get({
-        url: `${url.ORG_LIST}/sys/config/list`,
+        url: `${url.ORG_LIST}/precntauth/precompiled/sys/config/list`,
         method: 'get',
         params: data,
         headers: {
@@ -844,12 +949,23 @@ export function querySysConfigList(data) {
         }
     })
 }
-// cns list
-export function queryCnsList(data) {
-    return get({
-        url: `${url.ORG_LIST}/precompiled/cns/list`,
-        method: 'get',
-        params: data,
+// cns list by name
+export function queryCnsListByName(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/cns/queryCnsByName`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+// cns list by name version
+export function queryCnsListByNameVersion(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/cns/queryCnsByNameVersion`,
+        method: 'post',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -887,6 +1003,54 @@ export function postPermissionSorted(data) {
         url: `${url.ORG_LIST}/permission/sorted`,
         method: 'post',
         data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//获取pwd路径
+export function getPwdRoute(data) {
+    return post({
+        url: `${url.ORG_LIST}/`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//修改pwd路径
+export function modfiyPwdRoute(data) {
+    return post({
+        url: `${url.ORG_LIST}/`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//查询当前路径下的内容
+export function queryBfsPath(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/bfs/query`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//创建目录
+export function createBfsPath(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/precompiled/bfs/create`,
+        method: 'post',
+        data: data,
+        // responseType: 'blob/json',
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -1384,7 +1548,17 @@ export function getHostList() {
 //治理委员会list
 export function committeeList(data) {
     return get({
-        url: `${url.ORG_LIST}/governance/committee/list/sorted`,
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
+        method: "get",
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function getCount(data) {
+    return get({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/proposalInfoCount`,
         method: "get",
         params: data,
         headers: {
@@ -1396,7 +1570,107 @@ export function committeeList(data) {
 //增加链治理委员
 export function addCommittee(data) {
     return post({
-        url: `${url.ORG_LIST}/governance/committee`,
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/governor`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+//委员投票
+export function voteCommittee(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/vote`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//撤销提案
+export function voteRevoke(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/revoke`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//修改阈值
+export function modifyRate(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/rate`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//重置合约管理员
+export function resetAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/contract/admin`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//查询合约管理员
+export function queryAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/admin`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//设置合约方法策略
+export function setPolicy(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/admin/method/auth/type`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//设置合约方法权限
+export function setAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/admin/method/auth/set`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//检查合约管理权限
+export function checkDeploy(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/usr/deploy`,
+        method: "post",
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+//检查方法调用权限
+export function checkMethod(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/method/auth`,
         method: "post",
         data: data,
         headers: {
@@ -1463,10 +1737,10 @@ export function putCommitteeWeight(data) {
 }
 //  投票  
 export function voteRecord(data) {
-    return get({
-        url: `${url.ORG_LIST}/vote/record/list`,
-        method: "get",
-        params: data,
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/proposalInfoList`,
+        method: "post",
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
@@ -2195,6 +2469,17 @@ export function queryChannelIP(data) {
     return get({
         url: `${url.ORG_LIST}/scaffold/check?nodeIp=`+data.nodeIp+'&channelPort='+data.channelPort,
         method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function putCityIpAengcy(data) {
+    return put({
+        url: `${url.ORG_LIST}/node/description`,
+        method: 'put',
+        data: data,
         headers: {
             AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
