@@ -247,6 +247,7 @@ export default {
                         localStorage.setItem("versionId", null)
                         //this.getConfigType();
                         localStorage.setItem("deployType", 0);
+                        console.log("5/12")
                         router.push("/main");
                     } else {
                         this.changeCode();
