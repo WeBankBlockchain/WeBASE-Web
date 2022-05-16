@@ -1340,7 +1340,7 @@ export default {
         frontId: this.frontId,
       };
       this.version = val.version;
-      if (liquid.isWasm) {
+      if (liquid.ifLiquid) {
         reqData.isWasm = true;
       } else {
         reqData.isWasm = false;
