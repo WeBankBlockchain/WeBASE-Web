@@ -351,6 +351,7 @@ export default {
       } else {
         this.aceEditor.session.setMode("ace/mode/solidity");
       }
+    this.getfrontList();
     },
     frontIds: function (val) {
       this.frontId = val;
@@ -522,7 +523,9 @@ export default {
             this.frontList = res.data.data || [];
             this.frontId = this.frontList[0].frontId;
             this.loading = false;
+            if(this.liquidCheck){
             this.complieCheck();
+            }
           } else {
             this.loading = false;
             this.$message({
