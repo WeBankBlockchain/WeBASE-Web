@@ -110,7 +110,7 @@ export default new Vuex.Store({
             state.selectedContractInfo = data
         },
         set_liquidCheck(state, data) {
-            state.liquidCheck = data
+                state.liquidCheck = data
         },
     },
     actions: {

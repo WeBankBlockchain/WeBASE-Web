@@ -20,7 +20,7 @@
         <img :src="maxLog" alt="" style="width:120px">
         <span class="sidebar-contract-icon">
           <i class="el-icon-caret-left font-color-aeb1b5" @click="hideMune(true)" style="font-size: 18px;"></i>
-        </span>
+        </span>.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
         <span v-if="version" class="font-12 text-center version">({{version}})</span>
       </div>
 
