@@ -964,11 +964,17 @@ export default {
         if (ev.data.cmd == "compiled") {
           that.loading = false;
           output = JSON.parse(ev.data.data);
-          console.log("次数");
+           let error=false
+          output.errors.forEach((item,index)=>{
+          if(item.severity=='error'){
+            error=true
+          }
+          })
           if (
             output &&
             output.contracts &&
-            JSON.stringify(output.contracts) != "{}"
+            JSON.stringify(output.contracts) != "{}"&&
+            !error
           ) {
             that.status = 1;
             if (output.contracts[that.contractName + ".sol"]) {
