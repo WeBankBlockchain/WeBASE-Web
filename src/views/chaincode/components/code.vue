@@ -965,11 +965,13 @@ export default {
           that.loading = false;
           output = JSON.parse(ev.data.data);
            let error=false
-          output.errors.forEach((item,index)=>{
+           if(output.errors){
+            output.errors.forEach((item,index)=>{
           if(item.severity=='error'){
             error=true
           }
-          })
+          }) 
+           }
           if (
             output &&
             output.contracts &&
