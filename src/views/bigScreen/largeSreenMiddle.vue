@@ -264,10 +264,10 @@ export default {
               order = 5;
               break;
             case 4:
-              order = 0;
+              order = 2;
               break;
             case 5:
-              order = 2;
+              order = 0;
               break;
             default:
           }
@@ -298,7 +298,8 @@ export default {
           return item.transCount;
         });
         let todayVal = {
-          number: [xData[6]],
+          number: [
+            debug[6]],
           textAlign: "left",
           style: {
             fill: "#FFFFFF",
