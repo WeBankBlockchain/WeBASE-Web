@@ -24,7 +24,7 @@ let axiosIns = Axios.create({
        'X-Requested-With': 'XMLHttpRequest'
     }
 });
- axiosIns.defaults.baseURL = 'http://127.0.0.1:3006';
+ axiosIns.defaults.baseURL = 'http://localhost:3006';
 axiosIns.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest';
 // axiosIns.defaults.headers.get['X-Requested-With'] = 'XMLHttpRequest';
 axiosIns.defaults.responseType = 'json';
