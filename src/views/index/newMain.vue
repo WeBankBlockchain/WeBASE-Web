@@ -196,7 +196,6 @@ export default {
             }
         },
         change: function (val) {
-            debugger
             console.log(!val)
             this.menuShow = !val;
             this.menuHide = val;

@@ -58,7 +58,7 @@ function findImports (path,list,contractPath) {
                     num++;
                 }
             }
-            if (num) {.0
+            if (num) {
                 return { error: "File not found" };
             }
         } else {
