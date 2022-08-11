@@ -196,6 +196,7 @@ export default {
             }
         },
         change: function (val) {
+            console.log(!val)
             this.menuShow = !val;
             this.menuHide = val;
         },

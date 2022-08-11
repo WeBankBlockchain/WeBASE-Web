@@ -44,7 +44,7 @@ axiosIns.interceptors.response.use(
         return response;
     },
     error => {
-        if (error.message.includes('timeout')) {
+        if (error.message.includes('timeout')) {    
             if (localStorage.getItem('lang') === "en") {
                 error.data = 'Timeout'
             } else {
