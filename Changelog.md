@@ -8,7 +8,7 @@
 - 支持FISCO-BCOS v3.0.0 及以上版本
 - WeBASE-Node-Manager v3.0.0
 - WeBASE-Front v3.0.0
-- WeBASE-Sign lab-rc1
+- WeBASE-Sign v3.0.0
 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
 
