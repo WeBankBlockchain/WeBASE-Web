@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
 <template>
   <div class="contract-code" :class="{changeActive:changeWidth }" v-loading="loading" :element-loading-text="loadingText">
     <div class="contract-code-head">
@@ -66,7 +65,9 @@
         <div class="contract-info-title" @mouseover="mouseHover=!mouseHover" @mouseout="mouseHover=!mouseHover" v-show="abiFile||contractAddress">
           <i :class="[showCompileText?'el-icon-caret-bottom':'el-icon-caret-top']" @click="collapse">
 
+
           </i>
+
 
         </div>
         <div>
@@ -93,6 +94,7 @@
                   </span>
                 </span>
               </el-collapse-item>
+
 
             </el-collapse>
           </div>
@@ -165,6 +167,7 @@
     </el-dialog>
   </div>
 </template>
+
 
 <script>
 import ace from "ace-builds";
@@ -372,7 +375,7 @@ export default {
       }
     },
     contractName: function (val) {
-        if (this.contractName && this.firstCall) {
+        if (this.contractName && this.firstCall&&this.liquidChecks) {
         this.compileCheckEnter();
       }
     },

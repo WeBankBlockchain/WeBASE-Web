@@ -19,7 +19,7 @@
     <div style="height: calc(100% - 56px)">
       <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
         <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide" :liquidChecks='liquidCheck'>
-          <template #footer>
+          <template slot="footer">
             <div class="version-selector">
               <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion" >
                 <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
