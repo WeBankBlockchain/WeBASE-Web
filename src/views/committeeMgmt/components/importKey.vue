@@ -265,7 +265,7 @@ export default {
                             type: "error",
                             message: this.$chooseLang(res.data.code)
                         });
-                    }
+                    } 
                 })
                 .catch(err => {
                     this.$message({

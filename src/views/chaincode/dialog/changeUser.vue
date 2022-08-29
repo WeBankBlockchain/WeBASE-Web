@@ -114,6 +114,7 @@
       <el-button type="primary" @click="submit">{{this.$t("text.sure")}}</el-button>
     </div>
 
+
     <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" center>
       <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
     </el-dialog>
@@ -390,4 +391,3 @@ export default {
   white-space: nowrap;
 }
 </style>
-

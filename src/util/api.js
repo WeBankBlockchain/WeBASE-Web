@@ -2486,3 +2486,56 @@ export function putCityIpAengcy(data) {
     })
 }
 
+export function getPermissionManagementStatus(groupId) {
+    return get({
+        url: `${url.ORG_LIST}/auth/base/available?groupId=${groupId}`,
+        method: 'get',
+        // data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function setContractStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/status`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function setContractAdminInfo(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/admin/contract/status/set`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getContractIsfreezeStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/status/list`,
+        method: 'post',
+        data: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getAuthManagerList(data) {
+    return get({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
+        method: 'get',
+        params: data,
+        headers: {
+            Authorization: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}

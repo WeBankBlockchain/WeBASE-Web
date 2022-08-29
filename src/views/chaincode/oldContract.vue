@@ -138,7 +138,7 @@ import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
 import mgmtCns from "./dialog/mgmtCns"
-import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode,checkIsWasm } from "@/util/api"
+import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode,checkIsWasm,getConfigAuth } from "@/util/api"
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
@@ -271,6 +271,18 @@ export default {
     });
     },
     methods: {
+    checkAuth(){
+      getConfigAuth()
+      .then((res) => {
+        if (res.data.data == false) {
+        this.liquidCheck=false
+        } else {
+        this.liquidCheck=true
+        }
+      })
+      .catch((err) => {
+      });
+       },
       getfrontList() {
       let reqData = {
         frontId: this.frontId,
@@ -309,6 +321,7 @@ export default {
           } else{
             this.liquidCheck = true;
           }
+          this.checkAuth()
         })
         .catch((err) => {
           this.$message({
@@ -862,5 +875,6 @@ export default {
     max-width: 80%;
 }
 </style>
+
 
 
