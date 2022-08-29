@@ -75,7 +75,7 @@
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
                             <el-button v-if="liquidCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
                             <el-button v-if="liquidCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
-                            <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button>
+                            <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
                             <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
                              <el-button v-if="liquidCheck" :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">{{$t('title.checkEvent')}}</el-button>
                         </template>
@@ -138,7 +138,7 @@ import freezeThaw from "./dialog/freezeThaw"
 import checkEventDialog from "./dialog/checkEventDialog"
 import checkEventResult from "./dialog/checkEventResult"
 import mgmtCns from "./dialog/mgmtCns"
-import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode,checkIsWasm,getPermissionManagementStatus,getContractIsfreezeStatus } from "@/util/api"
+import {getFronts, getContractList, getAllContractStatus, deleteHandleHistory, getAllAbiList, deleteImportAbi, deleteCode,checkIsWasm,getConfigAuth } from "@/util/api"
 import importAbi from "../abiList/components/importAbi"
 import updateAbi from "../abiList/components/updateAbi"
 import router from '@/router'
@@ -247,8 +247,6 @@ export default {
             updateItem: null,
             setPolicyItem:null,
             liquidCheck: false,
-            PMstatus:null
-
         }
     },
     created() {
@@ -265,56 +263,26 @@ export default {
         if (localStorage.getItem("groupId")) {
             this.getfrontList()
             this.getContracts() 
+            
         }
          Bus.$on("changGroup", (data) => {
-           this.getfrontList()
-           this.getContracts() 
+            this.getfrontList()
+            this.getContracts()
     });
     },
     methods: {
-       getStatus(){
-             getPermissionManagementStatus(this.groupId).then(res => {
-                if (res.data.code == 0) {
-                   this.PMstatus=res.data.data;
-                   this.getfrontList()
-                   this.getContracts() 
-                } else {
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error",
-                        duration: 2000
-                    });
-                }
-            })
-            .catch(err => {
-                    this.$message.error(this.$t('text.systemError'));
-                });
-        },  
-        getStatusList(contractAddressList, dataArray){
-             let requestData={
-                 groupId:this.groupId,
-                 contractAddressList:contractAddressList
-             }
-             getContractIsfreezeStatus(requestData).then(res => {
-                if (res.data.code == 0) {
-                   dataArray.forEach((item,index)=>{
-                       dataArray[index].status=res.data.data.find(some=>{
-                           some.address=item.contractAddress
-                       })
-                       this.contractList = dataArray;
-                   })
-                } else {
-                    this.$message({
-                        message: this.$chooseLang(res.data.code),
-                        type: "error",
-                        duration: 2000
-                    });
-                }
-            })
-            .catch(err => {
-                    this.$message.error(this.$t('text.systemError'));
-                });
-        },
+    checkAuth(){
+      getConfigAuth()
+      .then((res) => {
+        if (res.data.data == false) {
+        this.liquidCheck=false
+        } else {
+        this.liquidCheck=true
+        }
+      })
+      .catch((err) => {
+      });
+       },
       getfrontList() {
       let reqData = {
         frontId: this.frontId,
@@ -353,6 +321,7 @@ export default {
           } else{
             this.liquidCheck = true;
           }
+          this.checkAuth()
         })
         .catch((err) => {
           this.$message({
@@ -409,15 +378,9 @@ export default {
                             }
                         }
                     });
-                    this.contractList = dataArray ;
+                   this.contractList = dataArray ;
                      console.log(dataArray);
                    // this.queryAllContractStatus(contractAddressList, dataArray)
-
-                //    if(this.PMstatus){
-                //      this.getStatusList(contractAddressList, dataArray)
-                //      }else{
-                //      this.contractList = dataArray;
-                //      }
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -912,5 +875,6 @@ export default {
     max-width: 80%;
 }
 </style>
+
 
 
