@@ -580,6 +580,7 @@ export default {
             this.getUserData();
             this.queryVoteRecordListCount();
           } else {
+            this.disabled = false;
           }
         })
         .catch((err) => {});
