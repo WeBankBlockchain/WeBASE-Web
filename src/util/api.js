@@ -2492,7 +2492,7 @@ export function getPermissionManagementStatus(groupId) {
         method: 'get',
         // data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -2502,7 +2502,7 @@ export function setContractStatus(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -2513,7 +2513,7 @@ export function setContractAdminInfo(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -2524,7 +2524,7 @@ export function getContractIsfreezeStatus(data) {
         method: 'post',
         data: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }
@@ -2535,7 +2535,7 @@ export function getAuthManagerList(data) {
         method: 'get',
         params: data,
         headers: {
-            Authorization: "Token " + localStorage.getItem("token") || ""
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
         }
     })
 }

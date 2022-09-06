@@ -1294,7 +1294,7 @@ export default {
       const zip = new JSZip();
       let contractSource = Base64.decode(val.contractSource);
       let contractAbi = val.contractAbi;
-      let contractBin = val.contractBin;
+      let contractBin = val.bytecodeBin;
       var blobContractSource = new Blob([contractSource], {
         type: "text;charset=utf-8",
       });
@@ -1346,7 +1346,7 @@ export default {
               var blobContractAbi = new Blob([item.contractAbi], {
                 type: "text;charset=utf-8",
               });
-              var blobContractBin = new Blob([item.contractBin], {
+              var blobContractBin = new Blob([item.bytecodeBin], {
                 type: "text;charset=utf-8",
               });
               if (this.liquidCheck) {
