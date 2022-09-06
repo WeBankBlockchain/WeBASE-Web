@@ -557,6 +557,8 @@ export default {
       }
       if (this.isWasm) {
         data.isWasm = true;
+      }else{
+        data.isWasm = false;
       }
       sendTransation(data)
         .then((res) => {
