@@ -52,6 +52,7 @@ export default {
         tips: "Tips",
         updateSuccessMsg: "Update Success",
         createSuccessMsg: "Create Success",
+        cancelSuccessMsg: "Cancel Success",
         save: "Save",
         compile: "Compile",
         deploy: "Deploy",
@@ -432,9 +433,11 @@ export default {
         helpText: "Document",
         group: "Groups",
         changePassword: "Change Password",
+        changeMessage: "Change Message",
         exit: "Exit",
         versionInfo: "Version",
-        dataBigScreen:"Large data screen"
+        dataBigScreen:"Large data screen",
+        deleteSelf:'Delete Account'
     },
     title: {
         Contractcompiling: "contract compilation, please wait...",
@@ -880,7 +883,7 @@ export default {
         updataAccount: "Modify Account",
         email: "Email",
         inputEmail: "Please enter Email",
-        updataEmail: "Modify Email",
+        updataEmail: "Modify Message",
         emailTypeError: "E-mail format is incorrect"
     },
     transaction: {

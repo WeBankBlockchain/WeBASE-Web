@@ -2539,3 +2539,123 @@ export function getAuthManagerList(data) {
         }
     })
 }
+
+export function updateAccountInfo(data) {
+    return put({
+        url: `${url.ORG_LIST}/account/accountInfo`,
+        method: 'put',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function accountCancel(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/account/cancel`,
+        method: 'delete',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function deleteAccount(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/account/cancel`,
+        method: 'delete',
+        data:data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function accountFreeze(data) {
+    return patch({
+        url: `${url.ORG_LIST}/account/freeze`,
+        method: 'patch',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function accountUnfreeze(data) {
+    return patch({
+        url: `${url.ORG_LIST}/account/unFreeze`,
+        method: 'patch',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function sendCheckCodeMail(data) {
+    return post({
+        url: `${url.ORG_LIST}/account/mail`,
+        method: 'post',
+        data: data,
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}
+
+export function ifEnableMailCheckCode(data) {
+    return get({    
+        url: `${url.ORG_LIST}/account/mail/enable`,
+        method: 'get',
+        params: data,
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}
+
+export function registerAccount(data,code,token) {
+    return post({    
+        url: `${url.ORG_LIST}/account/register?checkCode=${code}`,
+        method: 'post',
+        data,
+        headers: {
+            // 'Content-Type': "application/x-www-form-urlencoded",
+            'token': token
+        }
+    })
+}
+
+export function getAccountDetail() {
+    return get({    
+        url: `${url.ORG_LIST}/account/accountInfo`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+export function deleteUserPrivateKey(groupId,address) {
+    return deleted({
+        url: `${url.ORG_LIST}/user/${groupId}/${address}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getPrivacy() {
+    return get({    
+        url: `${url.ORG_LIST}/account/privacy`,
+        method: 'get',
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}

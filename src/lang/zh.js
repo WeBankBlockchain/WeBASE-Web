@@ -52,6 +52,7 @@ export default {
         select: "请选择",
         tips: "提示",
         updateSuccessMsg: "修改成功",
+        cancelSuccessMsg: "注销成功",
         createSuccessMsg: "新建成功",
         save: "保存",
         compile: "编译",
@@ -433,9 +434,11 @@ export default {
         helpText: "帮助文档",
         group: "群组",
         changePassword: "修改密码",
+        changeMessage: "修改信息",
         exit: "退出",
         versionInfo: "版本信息",
-        dataBigScreen:"数据大屏"
+        dataBigScreen:"数据大屏",
+        deleteSelf:'撤销本账户'
     },
     title: {
         bfs:"BFS",
@@ -889,7 +892,7 @@ export default {
         email: "邮箱",
         inputEmail: "请输入邮箱",
         emailTypeError: "邮箱格式不正确",
-        updataEmail: "修改邮箱",
+        updataEmail: "修改信息",
     },
     transaction: {
         blockTips:"-1代表当前块高",
