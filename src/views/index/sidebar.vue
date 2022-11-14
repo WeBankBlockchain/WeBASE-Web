@@ -482,6 +482,9 @@ export default {
           if (list[i].nameKey == "appManagement") {
             list[i].menuShow = false;
           }
+          if (list[i].nameKey == "register") {
+            list[i].menuShow = false;
+          }
         }
         list.forEach((item) => {
           if (this.userRole === "admin" && item.name === "帐号管理") {

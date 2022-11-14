@@ -58,6 +58,7 @@
                 <el-button v-else :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="bindPrivateKey(scope.row)">{{$t('text.addContractAddress')}}</el-button>
                 <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="modifyDescription(scope.row)">{{$t('text.update')}}</el-button>
                 <!-- <el-button :disabled="disabled" type="text" size="small" :class="{'grayColor': disabled}" @click="freezeThaw(scope.row)">{{freezeOrThawBtn(1)}}</el-button> -->
+                <el-button v-if="deleteShow"  type="text" size="small"  @click="deletePrivateKey(scope.row)">{{$t('text.delete')}}</el-button>
               </template>
             </template>
 
@@ -90,7 +91,7 @@ import contentHead from "@/components/contentHead";
 import creatUser from "./components/creatUser.vue";
 import importKey from "./components/importKey.vue";
 import ExportKey from "./components/exportKey.vue";
-import { getUserList, getUserDescription } from "@/util/api";
+import { getUserList, getUserDescription ,deleteUserPrivateKey} from "@/util/api";
 import BindKey from "./components/bindKey.vue";
 import errcode from "@/util/errcode";
 export default {
@@ -116,6 +117,7 @@ export default {
       disabled: false,
       exportInfo: {},
       bindInfo: {},
+      deleteShow:false
     };
   },
   computed: {
@@ -165,8 +167,10 @@ export default {
       localStorage.getItem("groupId")
     ) {
       this.disabled = false;
+      this.deleteShow = true;
     } else {
       this.disabled = true;
+      this.deleteShow = false;
     }
     console.log(localStorage.getItem("groupId"));
     if (
@@ -220,6 +224,43 @@ export default {
             duration: 2000,
           });
         });
+    },
+    deletePrivateKey(rows){
+      this.$confirm(this.$t("text.confirmDelete"), {
+            center: true,
+          })
+            .then(() => {
+              this.loading = true;
+              deleteUserPrivateKey(rows.groupId,rows.address)
+        .then((res) => {
+          this.loading = false;
+          if (res.data.code === 0) {
+            this.$message({
+              message: this.$t("text.resetSuccess"),
+              type: "success",
+              duration: 2000,
+            });
+            this.getUserInfoData();
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+            })
+            .catch(() => {
+              // this.modelClose();
+            });
     },
     search() {
       this.currentPage = 1;
