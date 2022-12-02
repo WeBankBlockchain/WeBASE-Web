@@ -24,7 +24,7 @@
           <i slot="suffix" style="color: #00122C;" :class="[inputType === 'password' ? 'el-icon-view': 'wbs-icon-view-hidden']" @click.stop.prevent="showPassword"></i>
         </el-input>
       </el-form-item>
-      <el-form-item v-if='accountForm.emailshow' :label="$t('account.email')" prop="email">
+      <el-form-item v-if='accountForm.emailshow||accountForm.creatShow' :label="$t('account.email')" prop="email">
         <!-- <el-input v-model="accountForm.email" :placeholder="$t('account.inputEmail')" :disabled="accountForm['disabled']"></el-input> -->
         <el-input v-model="accountForm.email" :disabled="accountForm['disabled']"></el-input>
       </el-form-item>
@@ -34,7 +34,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="使用期限" prop="useLimit" v-if='accountForm["mShow"]'>
+      <el-form-item label="使用期限" prop="useLimit" v-if='false'>
         <el-select v-model="accountForm.useLimit" placeholder="" style="width:100%">
           <el-option :key='item.label' v-for="item in limit" :label="item.name" :value="item.label"></el-option>
         </el-select>
@@ -76,7 +76,8 @@ import {
   creatAccountInfo,
   modifyAccountInfo,
   deleteAccountInfo,
-  updateAccountInfo
+  updateAccountInfo,
+  getUserAccountDetail
 } from "@/util/api";
 const sha256 = require("js-sha256").sha256;
 import utils from "@/util/sm_sha";
@@ -102,7 +103,8 @@ export default {
               dShow: true,
               mShow: true,
               email: "",
-              emailshow: true,
+              emailshow: false,
+              creatShow:true,
               useLimit: "1",
             };
             break;
@@ -111,6 +113,8 @@ export default {
               name: this.accountDialogOptions.data["account"],
               password: "",
               role: this.accountDialogOptions.data["roleId"],
+              expireTime: this.accountDialogOptions.data["expireTime"],
+              expandLimit:'1',
               disabled: true,
               mDisabled: true,
               dShow: false,
@@ -143,14 +147,16 @@ export default {
               name: this.accountDialogOptions.data["account"],
               // password:this.accountDialogOptions.data["accountPwd"],
               role: this.accountDialogOptions.data["roleId"],
-              realName: this.accountDialogOptions.data["realName"],
-              mobile: this.accountDialogOptions.data["mobile"],
-              address: this.accountDialogOptions.data["address"],
-              IDNumber: this.accountDialogOptions.data["IDNumber"],
+              realName: '',
+              mobile: '',
+              address: this.accountDialogOptions.data["contactAddress"],
+              IDNumber: '',
               useLimit: this.accountDialogOptions.data["expandTime"],
               expireTime: this.accountDialogOptions.data["expireTime"],
+              company: this.accountDialogOptions.data["companyName"],
               disabled: true,
               mDisabled: false,
+              expandLimit:'1',
               // dShow: true,
               // mShow: false,
               email: this.accountDialogOptions.data["email"],
@@ -216,11 +222,27 @@ export default {
             trigger: "blur",
           },
         ],
+        IDNumber: [
+          // { required: true, message: "请输入身份证号码", trigger: "blur" },
+          {
+            pattern: /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
+            message: "身份证号码格式不正确",
+            trigger: "blur",
+          },
+        ],
         email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+          // { required: true, message: "请输入邮箱", trigger: "blur" },
           {
             pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$$/,
             message: "邮箱格式不正确",
+            trigger: "blur",
+          },
+        ],
+        mobile: [
+          // { required: true, message: "请输入手机号码", trigger: "blur" },
+          {
+            pattern: /^1[0-9]{10}$/,
+            message: "手机号码格式不正确",
             trigger: "blur",
           },
         ],
@@ -230,8 +252,41 @@ export default {
   },
   mounted() {
     this.getRoleList();
+    if(this.accountDialogOptions.type=='email'){
+     this.getDetail()
+    }
   },
   methods: {
+    getDetail() {
+      getUserAccountDetail(this.accountDialogOptions.data.account)
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.accountForm.realName = res.data.data.realName;
+            this.accountForm.mobile = res.data.data.mobile;
+            this.accountForm.IDNumber = res.data.data.idCardNumber;
+            this.accountForm.company = res.data.data.companyName;
+            this.accountForm.address = res.data.data.contactAddress;
+            this.accountForm.account = res.data.data.account;
+            this.accountForm.useLimit = res.data.data.expandTime;
+            this.accountForm.expireTime = res.data.data.expireTime;
+            this.accountForm.email = res.data.data.email;
+            if(!this.accountForm.email){
+              this.accountForm.disabled=false
+            }
+          } else {
+            this.$message({
+              type: "error",
+              message: this.$chooseLang(res.data.code),
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: err.data || this.$t("text.systemError"),
+          });
+        });
+    },
     modelClose: function () {
       this.$emit("close", false);
     },
@@ -369,14 +424,14 @@ export default {
         account: this.accountForm.name,
         accountPwd: sha256(this.accountForm.password),
         roleId: this.accountForm.role,
-        companyName: this.accountForm.company,
-        contactAddress: this.accountForm.address,
-        description: this.accountForm.description,
+        // companyName: this.accountForm.company,
+        // contactAddress: this.accountForm.address,
+        // description: this.accountForm.description,
         email: this.accountForm.email,
-        expandTime: this.accountForm.expandTime,
-        idCardNumber: this.accountForm.IDNumber,
-        mobile: this.accountForm.mobile,
-        realName: this.accountForm.realName,
+        // expandTime: this.accountForm.expandTime,
+        // idCardNumber: this.accountForm.IDNumber,
+        // mobile: this.accountForm.mobile,
+        // realName: this.accountForm.realName,
       };
       // if(localStorage.getItem("encryptionId") == 1){
       //     reqData.accountPwd = "0x" + utils.sha4(this.accountForm.password);
@@ -479,13 +534,19 @@ export default {
         });
     },
     getDeleteAccountInfo: function () {
-      deleteAccountInfo(this.accountForm.name, {})
+      let reqData = {
+        account: this.accountForm.name,
+        // accountPwd: sha256(this.accountForm.password),
+        roleId: this.accountForm.role,
+        expandYear:this.accountForm.expandLimit
+      };
+      modifyAccountInfo(reqData, {})
         .then((res) => {
           this.loading = false;
           if (res.data.code === 0) {
             this.$message({
               type: "success",
-              message: this.$t("system.deleteSuccess"),
+              message: this.$t("text.updateSuccessMsg"),
             });
             this.modelClose();
             this.$emit("success");

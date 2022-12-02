@@ -16,6 +16,13 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        realName:"真实姓名",
+        mobile:"手机号",
+        IDNumber:"身份证号",
+        company:"公司",
+        address:"联系地址",
+        expireTime:'过期时间',
+        renewal:'续期',
         waitingTip:"合约编译中，大约需要几分钟，请稍等...",
         contractCompiling:"合约编译中，请稍等...",
         remarks:'备注',

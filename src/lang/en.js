@@ -16,6 +16,13 @@ export default {
         transactionSearch: "Search by Block / Txn Hash"
     },
     text: {
+        realName:"Real Name",
+        mobile:"mobile",
+        IDNumber:"ID Number",
+        company:"company",
+        address:"address",
+        expireTime:'expireTime',
+        renewal:'renewal',
         waitingTip:"contract compilation,it will take about a few minutes, please wait...",
         Contractcompiling: "contract compilation, please wait...",
         compilationSucceeded: 'Contract compilation succeeded',

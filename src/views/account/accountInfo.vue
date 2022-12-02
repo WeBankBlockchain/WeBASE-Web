@@ -24,19 +24,20 @@
       </div>
       <div class="search-table">
         <el-table :data="accountList" tooltip-effect="light" v-loading="loading">
-          <el-table-column v-for="head in accountHeader" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+          <el-table-column v-for="head in accountHeader" :label="head.name" :key="head.enName" show-overflow-tooltip :width="head.width" align="center" :fixed="head.fixed">
             <template slot-scope="scope">
               <template v-if="head.enName!='operate'">
                 <span v-if="head.enName === 'roleNameZh'">{{translate(scope.row['roleId'])}}</span>
+                <span v-else-if="head.enName === 'accountStatus'">{{parseStatus(scope.row['accountStatus'])}}</span>
                 <span v-else>{{scope.row[head.enName]}}</span>
               </template>
               <template v-else>
-                <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')" style="color:#ed5454">{{$t('text.delete')}}</el-button>
+                <el-button type="text" size="small" @click="deleteAccount(scope.row,'delete')">{{$t('text.renewal')}}</el-button>
                 <el-button type="text" size="small" @click="modifyAccount(scope.row,'modify')">{{$t('text.updatePassword')}}</el-button>
                 <el-button type="text" size="small" @click="modifyEmail(scope.row,'email')">{{$t('text.email')}}</el-button>
                 <el-button style="font-size:14px;" type="text" size="mini" :loading="loading&&index == scope.$index" @click="permissions(scope.row,authBtn(scope.row['accountStatus']))">{{authBtn(scope.row['accountStatus']) }}
                 </el-button>
-                <el-button  type="text" size="small"  @click="deleteUser(scope.row)">{{$t('text.delete')}}</el-button>
+                <el-button  style="color:red" type="text" size="small"  @click="deleteUser(scope.row)">{{$t('text.delete')}}</el-button>
               </template>
             </template>
 
@@ -86,19 +87,75 @@ export default {
         {
           enName: "account",
           name: this.$t("account.user"),
+          width:100
         },
         {
           enName: "roleNameZh",
           name: this.$t("account.roleNameZh"),
+          width:100
+
         },
         {
           enName: "email",
           name: this.$t("account.email"),
+          width:200
+
+        },
+        {
+          enName: "accountStatus",
+          name: this.$t("alarm.status"),
+          width:100
+
+        },
+        {
+          enName: "expireTime",
+          name: this.$t("text.expireTime"),
+          width:200
+
+        },
+        {
+          enName: "description",
+          name: this.$t("nodes.description"),
+          width:200
+
+        },
+        {
+          enName: "realName",
+          name: this.$t("text.realName"),
+          width:150
+
+        },
+        {
+          enName: "mobile",
+          name: this.$t("text.mobile"),
+          width:200
+
+        },
+        {
+          enName: "idCardNumber",
+          name: this.$t("text.IDNumber"),
+          width:200
+
+        },
+        {
+          enName: "companyName",
+          name: this.$t("text.company"),
+          width:200
+
+        },
+        {
+          enName: "contactAddress",
+          name: this.$t("text.address"),
+          width:200
+
         },
         {
           enName: "operate",
           name: this.$t("nodes.operation"),
+          width:300,
+          fixed:"right"
         },
+        
       ];
       return data;
     },
@@ -113,7 +170,7 @@ export default {
           })
             .then(() => {
               this.loading = true;
-              deleteAccount(rows.account)
+              deleteAccount({account:rows.account})
         .then((res) => {
           this.loading = false;
           if (res.data.code === 0) {
@@ -337,6 +394,22 @@ export default {
           break;
       }
     },
+    parseStatus(val){
+      switch (val) {
+        case 4:
+          return "已注销";
+          break;
+        case 1:
+          return "未改密码";
+          break;
+        case 2:
+          return "正常";
+          break;
+          case 3:
+          return "冻结";
+          break;
+      }
+    }
   },
 };
 </script>

@@ -16,6 +16,19 @@
 <template>
   <div>
     <el-form :model="messageForm" status-icon :rules="rules" ref="ruleMessageForm" label-width="135px" class="demo-ruleForm">
+      <el-form-item label="用户名" prop="account" class="spanLeft">
+        <span>{{messageForm.account}}</span>
+      </el-form-item>
+      <el-form-item label="用户状态" prop="accountStatus" class="spanLeft">
+        <span>{{messageForm.accountStatus}}</span>
+      </el-form-item>
+      <el-form-item label="过期时间" prop="expireTime" class="spanLeft">
+        <span>{{messageForm.expireTime}}</span>
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email" class="spanLeft">
+        <span v-if="emailShow">{{messageForm.email}}</span>
+        <el-input v-else v-model="messageForm.email"></el-input>
+      </el-form-item>
       <el-form-item label="真实姓名" prop="realName">
         <el-input v-model="messageForm.realName"></el-input>
       </el-form-item>
@@ -49,6 +62,7 @@
 <script>
 const sha256 = require("js-sha256").sha256;
 import { updateAccountInfo, getAccountDetail } from "@/util/api";
+import { debug } from "console";
 export default {
   name: "changeMessageDialog",
   props: {},
@@ -83,7 +97,10 @@ export default {
         IDNumber: "",
         company: "",
         account: "",
+        accountStatus:'',
+        expireTime:''
       },
+      emailShow:true,
       rules: {
         account: [
           // { required: true, message: "请输入用户名称", trigger: "blur" },
@@ -122,7 +139,7 @@ export default {
         IDNumber: [
           // { required: true, message: "请输入身份证号码", trigger: "blur" },
           {
-            pattern: /^[0-9]{18}$/,
+            pattern: /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
             message: "身份证号码格式不正确",
             trigger: "blur",
           },
@@ -136,7 +153,7 @@ export default {
           },
         ],
         email: [
-          { required: true, message: "请输入邮箱", trigger: "blur" },
+          // { required: true, message: "请输入邮箱", trigger: "blur" },
           {
             pattern: /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$$/,
             message: "邮箱格式不正确",
@@ -209,6 +226,14 @@ export default {
             this.messageForm.company = res.data.data.companyName;
             this.messageForm.address = res.data.data.contactAddress;
             this.messageForm.account = res.data.data.account;
+            this.messageForm.expireTime = res.data.data.expireTime;
+            this.messageForm.accountStatus = res.data.data.accountStatus;
+            this.messageForm.email = res.data.data.email;
+            if(this.messageForm.email){
+              this.emailShow=true
+            }else{
+              this.emailShow=false
+            }
           } else {
             this.$message({
               type: "error",
@@ -243,6 +268,7 @@ export default {
         idCardNumber: this.messageForm.IDNumber,
         companyName: this.messageForm.company,
         contactAddress: this.messageForm.address,
+        email: this.messageForm.email,
       };
       updateAccountInfo(reqData, {})
         .then((res) => {
@@ -272,4 +298,7 @@ export default {
 </script>
 
 <style>
+.spanLeft{
+  text-align: left;
+}
 </style>

@@ -32,7 +32,7 @@
           </el-form-item>
           <el-form-item label="验证码" prop="vercode" v-if="needMail">
             <el-input v-model="registerForm.vercode" style="width:240px;"></el-input>
-            <button class="codeUrlImg" :disabled="btnDisable" @click="changeCode()">发送邮箱验证码{{times}}</button>
+            <el-button type="primary" class="codeUrlImg" :disabled="btnDisable" @click="changeCode">发送邮箱验证码{{times}}</el-button>
           </el-form-item>
           <el-form-item label="真实姓名" prop="realName">
             <el-input v-model="registerForm.realName" style="width:366px;"></el-input>
@@ -54,7 +54,7 @@
           </el-form-item>
         </el-form>
         <div class="form-button">
-          <el-button type="primary" size="small" :loading='loading' style="width: 366px" @click="submitForm('registerForm')">注册</el-button>
+          <el-button type="button" size="small" :loading='loading' style="width: 366px" @click="submitForm('registerForm')" :disabled="allowRegister">注册</el-button>
         </div>
       </div>
     </div>
@@ -74,6 +74,7 @@ import {
   getPrivacy,
 } from "@/util/api";
 let Base64 = require("js-base64").Base64;
+const sha256 = require("js-sha256").sha256;
 import contentHead from "@/components/registerHead";
 export default {
   name: "register",
@@ -102,6 +103,7 @@ export default {
     };
     return {
       countryList: constant.country,
+      allowRegister:true,
       registerForm: {
         account: "",
         password: "",
@@ -113,8 +115,8 @@ export default {
         email: "",
         vercode: "",
         IDNumber: "",
-        roleId: "100001",
-        description: "",
+        roleId: 100001,
+        description: ""
       },
       limit: [
         { name: "一年", label: "1" },
@@ -122,8 +124,8 @@ export default {
         { name: "五年", label: "5" },
       ],
       role: [
-        { name: "普通用户", label: "100001" },
-        { name: "开发者", label: "100002" },
+        { name: "普通用户", label: 100001 },
+        { name: "开发者", label: 100002 },
       ],
       loading: false,
       codeUrl: "",
@@ -140,17 +142,13 @@ export default {
               "6-16个字符，至少1个大写字母，1个小写字母和1个数字，其他可以是任意字符",
             trigger: "blur",
           },
-          {
-            required: true,
-            validator: validatePass2,
-            trigger: "blur",
-          },
+        
         ],
         confirmPassword: [
           { required: true, message: "请再次输入密码", trigger: "blur" },
           {
             required: true,
-            validator: validatePass,
+            validator: validatePass2,
             trigger: "blur",
           },
         ],
@@ -172,7 +170,7 @@ export default {
           },
         ],
         mobile: [
-          // { required: true, message: "请输入手机号码", trigger: "blur" },
+          { required: true, message: "请输入手机号码", trigger: "blur" },
           {
             pattern: /^1[0-9]{10}$/,
             message: "手机号码格式不正确",
@@ -264,7 +262,7 @@ export default {
       clearInterval(this.timer);
       let reqData = {
         account: this.registerForm.account,
-        accountPwd: Base64.encode(this.registerForm.password),
+        accountPwd: sha256(this.registerForm.password),
         idCardNumber: this.registerForm.IDNumber,
         mobile: this.registerForm.mobile,
         realName: this.registerForm.realName,
@@ -278,11 +276,11 @@ export default {
         .then((res) => {
           if (res.data.code === 0) {
             this.$message({
-              message: "注册成功",
+              message: "管理员审核注册账号后，即可登录使用",
               type: "success",
               duration: 2000,
             });
-            router.push("/login");
+            // router.push("/login");
           } else {
             this.registerForm.vercode = "";
             this.$message({
@@ -299,6 +297,7 @@ export default {
             duration: 2000,
           });
         });
+      this.allowRegister=true
     },
     changeCode: function () {
       let pattern = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$$/;
@@ -308,14 +307,14 @@ export default {
           type: "error",
           duration: 2000,
         });
-        return;
+        return false;
       } else if (!pattern.test(this.registerForm.email)) {
         this.$message({
           message: "邮箱格式不正确",
           type: "error",
           duration: 2000,
         });
-        return;
+        return false;
       }
       this.btnDisable = true;
       this.times = 60;
@@ -324,7 +323,7 @@ export default {
           this.times = "";
           this.btnDisable = false;
           clearInterval(this.timer);
-          return;
+          return false;
         }
         this.times--;
       }, 1000);
@@ -335,6 +334,7 @@ export default {
         .then((res) => {
           if (res.data.code === 0) {
             this.authToken = res.data.data.token;
+            this.allowRegister=false
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -426,12 +426,10 @@ export default {
   display: inline-block;
   height: 36px;
   width: 120px;
-  line-height: 34px;
-  border: 1px solid #dddddd;
-  border-radius: 0px;
-  /* vertical-align: middle; */
+  vertical-align: bottom;
   cursor: pointer;
   text-align: center;
+  padding:0
 }
 .fontColor {
   color: blue;

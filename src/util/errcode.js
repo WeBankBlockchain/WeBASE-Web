@@ -1900,6 +1900,34 @@ let errCode = {
         en: "the PATH is invalid",
         zh: "路径无效"
     },
+    "202560": {
+        en: "Only support developer or visitor register",
+        zh: "只支持开发者或访问者注册"
+    },
+    "202561": {
+        en: "Only admin or self could update account status",
+        zh: "只有管理员或自己可以更新帐户状态"
+    },
+    "202562": {
+        en: "Account is invalid, please check if frozen or canceld or beyond expiredTime",
+        zh: "帐户无效，请检查是否被冻结或取消或超过过期时间"
+    },
+    "202563": {
+        en: "Loading privacy doc of template failed",
+        zh: "模板的隐私文档加载失败"
+    },
+    "202564": {
+        en: "Send mail failed, please check receiver address or check mail server config",
+        zh: "发送邮件失败，请检查收件人地址或检查邮件服务器配置"
+    },
+    "202565": {
+        en: "Account's mobile is empty",
+        zh: "用户的手机号为空"
+    },
+    "202566": {
+        en: "Account's mobile already exist!",
+        zh: "用户的手机号已存在"
+    },
 }
 export function chooseLang(code, value) {
     let lang = localStorage.getItem('lang')
