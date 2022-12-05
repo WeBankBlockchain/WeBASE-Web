@@ -81,7 +81,7 @@
         </a>
       </el-popover>
     </div>
-    <el-dialog :title="$t('head.changeMessage')" :visible.sync="changeMessageDialogVisible" width="600px" style="text-align: center;">
+    <el-dialog :title="$t('head.changeMessage')" v-if="changeMessageDialogVisible" :visible.sync="changeMessageDialogVisible" width="600px" style="text-align: center;">
       <change-message-dialog @success="changeMessageSuccess"></change-message-dialog>
     </el-dialog>
     <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="500px" style="text-align: center;">

@@ -2638,6 +2638,15 @@ export function getAccountDetail() {
         }
     })
 }
+export function getUserAccountDetail(account) {
+    return get({    
+        url: `${url.ORG_LIST}/account/accountInfo?account=${account}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
 
 
 export function deleteUserPrivateKey(groupId,address) {
