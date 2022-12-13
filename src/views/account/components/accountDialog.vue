@@ -380,7 +380,7 @@ export default {
         contactAddress: this.accountForm.address,
         description: this.accountForm.description,
         email: this.accountForm.email,
-        expandTime: this.accountForm.expandTime,
+        expandYear: this.accountForm.expandLimit,
         idCardNumber: this.accountForm.IDNumber,
         mobile: this.accountForm.mobile,
         realName: this.accountForm.realName,

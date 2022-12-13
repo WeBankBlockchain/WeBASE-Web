@@ -227,6 +227,7 @@ export default {
         .then((res) => {
           if (res.data.data == false) {
             this.needMail = false;
+            this.allowRegister = false;
           } else {
             this.needMail = true;
           }
