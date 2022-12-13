@@ -381,16 +381,16 @@ export default {
     authBtn(val) {
       switch (val) {
         case 4:
-          return "解锁";
+          return "解冻";
           break;
         case 1:
-          return "锁定";
+          return "冻结";
           break;
         case 2:
-          return "锁定";
+          return "冻结";
           break;
           case 3:
-          return "解锁";
+          return "解冻";
           break;
       }
     },
@@ -406,7 +406,7 @@ export default {
           return "正常";
           break;
           case 3:
-          return "锁定";
+          return "冻结";
           break;
       }
     }
