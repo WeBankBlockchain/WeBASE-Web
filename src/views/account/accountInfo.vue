@@ -273,7 +273,7 @@ export default {
         data: val,
       };
       this.accountDialogVisible = true;
-      this.accountDialogTitle = this.$t("account.deleteAccount");
+      this.accountDialogTitle = this.$t("text.renewal");
     },
     modifyAccount(val, type) {
       this.accountDialogOptions = {

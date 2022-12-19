@@ -6,9 +6,9 @@
     </div> -->
     <div class="module">
       <div class="module-content">
-        <p class="from-title">注册帐号</p>
+        <p class="from-title">注册帐户</p>
         <el-form :model="registerForm" :rules="rules" ref="registerForm" label-width="85px" class="demo-ruleForm" size="medium">
-          <el-form-item label="用户名称" prop="account">
+          <el-form-item label="账户" prop="account">
             <el-input v-model="registerForm.account" style="width:366px;"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
@@ -22,7 +22,7 @@
               <el-option :key='item.label' v-for="item in limit" :label="item.name" :value="item.label"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="用户类型" prop="roleId">
+          <el-form-item label="账户类型" prop="roleId">
             <el-select v-model="registerForm.roleId" placeholder="" style="width:366px;">
               <el-option :key='item.label' v-for="item in role" :label="item.name" :value="item.label"></el-option>
             </el-select>
