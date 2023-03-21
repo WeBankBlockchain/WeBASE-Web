@@ -324,7 +324,7 @@
     color: #fff;
     background-color: #20D4D9 !important;
     border-color: #20D4D9 !important;
-    border-radius: 20px;
+    /* border-radius: 20px; */
 }
 
 .el-button--primary.is-active, .el-button--primary:active, .el-button--primary:focus, .el-button--primary:hover {

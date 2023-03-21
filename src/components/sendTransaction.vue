@@ -161,11 +161,11 @@ export default {
           message: this.$t("text.sendInput"),
           trigger: "blur",
         },
-        {
-          pattern: `^0[xX][0-9a-fA-F]{${i * 2}}$`,
-          message: "必须是十六进制的数字或字母，长度是" + 2 * i,
-          trigger: "blur",
-        },
+        // {
+        //   pattern: `^0[xX][0-9a-fA-F]{${i * 2}}$`,
+        //   message: "必须是十六进制的数字或字母，长度是" + 2 * i,
+        //   trigger: "blur",
+        // },
       ];
     }
     return {
@@ -517,18 +517,20 @@ export default {
       let rules = [];
       for (let item in this.form.pramasData) {
         let data = this.form.pramasData[item].value;
-        if (data && isJson(data)) {
-          try {
-             rules.push(JSON.parse(data))
-          } catch (error) {
-            console.log(error);
-          }
-        } else if (data === "true" || data === "false") {
-             rules.push(eval(data.toLowerCase()))
-        }
-         else {
-          rules.push(data)
-        }
+        rules.push(data)
+
+        // if (data && isJson(data)) {
+        //   try {
+        //      rules.push(JSON.parse(data))
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // } else if (data === "true" || data === "false") {
+        //      rules.push(eval(data.toLowerCase()))
+        // }
+        //  else {
+        //   rules.push(data)
+        // }
       } 
       let functionName = "";
       this.funcList.forEach((value) => {
@@ -607,6 +609,14 @@ export default {
               type: "error",
               duration: 2000,
             });
+            if (res.data.code === 201151||res.data.code === 201014) {
+              setTimeout(() => {
+                this.$notify({
+                  title: "提示",
+                  message: res.data.message,
+                });
+              }, 2000);
+            }
           }
         })
         .catch((err) => {
