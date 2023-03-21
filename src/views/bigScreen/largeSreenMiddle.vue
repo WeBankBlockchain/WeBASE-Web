@@ -2,11 +2,7 @@
   <div id="largeSreenMiddle" class="middle">
     <section class="middleOne">
       <div class="column1">
-        <div
-          :class="'items item' + index"
-          v-for="(item, index) in dataV_item"
-          :key="item.title"
-        >
+        <div :class="'items item' + index" v-for="(item, index) in dataV_item" :key="item.title">
           <p class="ml-3 colorBlue fw-b">{{ item.title }}</p>
           <dv-digital-flop :config="item.number" class="numData" />
         </div>
@@ -44,7 +40,12 @@
 
 <script>
 import to from "await-to-js";
-import { getNetworkStatistics, getChartData, getNodeList } from "@/util/api";
+import {
+  getNetworkStatistics,
+  getChartData,
+  getNodeList,
+  getAllUserList,
+} from "@/util/api";
 import { changWeek, getDay } from "@/util/util";
 import { creatBall } from "@/util/largeScreen";
 export default {
@@ -60,12 +61,13 @@ export default {
       balls: [],
       nodeVar: null,
       groupMiddle: localStorage.getItem("groupName"),
-      renderOne:null
+      renderOne: null,
     };
   },
   mounted() {
     this.oneInit();
     this.oneReqUpdate();
+    this.getTotalAccount();
     this.twoInit();
     this.threeInit();
     this.threeReqUpdate();
@@ -75,7 +77,7 @@ export default {
   },
   destroyed() {
     window.removeEventListener("resize", this.threeAdapter);
-    clearInterval(this.renderOne)
+    clearInterval(this.renderOne);
   },
   methods: {
     formatter(number) {
@@ -221,6 +223,41 @@ export default {
       this.tradeVar.setOption(option);
       this.tradeVar.resize();
     },
+    async getTotalAccount() {
+      let reqData = {
+          groupId: this.groupId,
+          pageNumber: 1,
+          pageSize: 10,
+        },
+        reqQuery = {};
+      reqQuery = {
+        type: 1,
+      };
+      if (this.contractData) {
+        reqQuery["commParam"] = this.contractData;
+      }
+      let [err, res] = await to(getAllUserList(reqData, reqQuery));
+      if (err) {
+        console.log("oneReqError");
+        return;
+      } else {
+        if (res.status != 200) {
+          console.log(res.data.message);
+          return;
+        }
+        let todayVal = {
+          number: [res.data.totalCount],
+          textAlign: "left",
+          style: {
+            fill: "#FFFFFF",
+            fontFamily: "Helvetica Neue",
+            fontSize: 30,
+          },
+          formatter: this.formatter,
+        };
+        this.$set(this.dataV_item[4], "number", todayVal);
+      }
+    },
     async oneReqUpdate() {
       let groupId = this.groupId;
       let [err, res] = await to(getNetworkStatistics(groupId));
@@ -233,46 +270,64 @@ export default {
           console.log(res.data.message);
           return;
         }
-        let allData = Object.values(res.data.data);
-        console.log(allData);
-        let replaceData = allData.map((item, index) => {
+        let allData = Object.entries(res.data.data);
+        let template = () => {
           return {
-            number: [item],
+            number: [item[1]],
             textAlign: "left",
             style: {
               fill: "#FFFFFF",
               fontFamily: "Helvetica Neue",
               fontSize: 30,
             },
-            formatter: this.formatter,
           };
-        });
-        console.log(replaceData);
-        replaceData.forEach((item, index) => {
-          let order = 0;
-          switch (index) {
-            case 0:
-              order = 4;
+        };
+        allData.forEach((item, index) => {
+          switch (item[0]) {
+            case "contractCount":
+              this.$set(this.dataV_item[5], "number", {
+                number: [item[1]],
+                textAlign: "left",
+                style: {
+                  fill: "#FFFFFF",
+                  fontFamily: "Helvetica Neue",
+                  fontSize: 30,
+                },
+              });
               break;
-            case 1:
-              order = 3;
+            case "latestBlock":
+              this.$set(this.dataV_item[0], "number", {
+                number: [item[1]],
+                textAlign: "left",
+                style: {
+                  fill: "#FFFFFF",
+                  fontFamily: "Helvetica Neue",
+                  fontSize: 30,
+                },
+              });
               break;
-            case 2:
-              order = 1;
+            case "nodeCount":
+              this.$set(this.dataV_item[1], "number", {
+                number: [item[1]],
+                textAlign: "left",
+                style: {
+                  fill: "#FFFFFF",
+                  fontFamily: "Helvetica Neue",
+                  fontSize: 30,
+                },
+              });
               break;
-            case 3:
-              order = 5;
+            case "transactionCount":
+              this.$set(this.dataV_item[2], "number", {
+                number: [item[1]],
+                textAlign: "left",
+                style: {
+                  fill: "#FFFFFF",
+                  fontFamily: "Helvetica Neue",
+                  fontSize: 30,
+                },
+              });
               break;
-            case 4:
-              order = 0;
-              break;
-            case 5:
-              order = 2;
-              break;
-            default:
-          }
-          if (order != 3) {
-            this.$set(this.dataV_item[order], "number", item);
           }
         });
       }
@@ -367,8 +422,8 @@ export default {
         }
         let resData = res.data.data.map((item, index) => {
           return {
-            agency: item.agency?item.agency:'-',
-            nodeIp: item.nodeIp?item.nodeIp:'-',
+            agency: item.agency ? item.agency : "-",
+            nodeIp: item.nodeIp ? item.nodeIp : "-",
           };
         });
         console.log(resData);
@@ -504,7 +559,7 @@ export default {
           case 2:
             return [
               Math.random() * 20 + 110 * index + 40,
-              Math.random() * 100 + 30 ,
+              Math.random() * 100 + 30,
               item.agency,
               item.nodeIp,
             ];
@@ -566,20 +621,20 @@ export default {
       this.nodeVar = this.$echarts.init(this.$refs.groupCanvas);
       let option = {
         grid: {
-          x: '5%',
-          y: '10%',
-          x2: '5%',
-          y2: '5%',
+          x: "5%",
+          y: "10%",
+          x2: "5%",
+          y2: "5%",
           show: false,
         },
         xAxis: {
           show: false,
-        //data:[0,100,200,300,400,500,600]
+          //data:[0,100,200,300,400,500,600]
         },
         yAxis: {
           show: false,
           //type: 'value',
-         // data:[0,100,200,300]
+          // data:[0,100,200,300]
         },
         tooltip: {
           trigger: "item",
@@ -675,7 +730,7 @@ export default {
     },
     reRender() {
       let _this = this;
-     this.renderOne = setInterval(function () {
+      this.renderOne = setInterval(function () {
         //_this.oneInit();
         _this.oneReqUpdate();
         _this.twoInit();
@@ -810,7 +865,7 @@ export default {
   background-size: 100% 100%;
   width: 7.075rem;
   height: 3.525rem;
-  margin: .125rem 0.45rem;
+  margin: 0.125rem 0.45rem;
 }
 #groupCanvas {
   width: 100%;

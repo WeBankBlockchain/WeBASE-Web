@@ -281,6 +281,7 @@ export default {
   mounted: function () {
     this.getHashTransactionInfo();
     this.getUser();
+    this.decodeAbi()
   },
   destroyed: function () {
     localStorage.setItem("transaction", "");
