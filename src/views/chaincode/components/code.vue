@@ -1381,6 +1381,14 @@ export default {
               type: "error",
               duration: 2000,
             });
+            if (res.data.code === 201151||res.data.code === 201014) {
+              setTimeout(() => {
+                this.$notify({
+                  title: "提示",
+                  message: res.data.message,
+                });
+              }, 2000);
+            }
           }
         })
         .catch((err) => {

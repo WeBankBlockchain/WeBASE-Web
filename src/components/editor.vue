@@ -378,7 +378,7 @@ export default {
               setTimeout(() => {
                 this.eventSHow = true;
               }, 200);
-              if (!this.ifLiquid) {
+              if (!this.ifLiquid&&this.transationData.input) {
                 this.decodeInputApi(this.transationData.input);
               }
             } else if (res.data.code !== 0) {
