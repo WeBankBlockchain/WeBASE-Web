@@ -725,6 +725,7 @@ export default {
             this.abiType[index] = val;
           }
         });
+        //delete abiData.abiInfo.inputs[0].components
         console.log(this.abiType);
         if (abiData.abiInfo.outputs && abiData.abiInfo.outputs.length) {
           let outputType = [];

@@ -371,7 +371,7 @@ export default {
           if (res.data.code === 0) {
             this.bfsData = [];
             res.data.data.forEach((item) => {
-              this.bfsData.push({ name: item.name, type: item.type });
+              this.bfsData.push({ name: item.fileName, type: item.fileType });
             });
 
             this.$message({
@@ -406,7 +406,7 @@ export default {
           if (res.data.code === 0) {
             this.bfsData = [];
             res.data.data.forEach((item) => {
-              this.bfsData.push({ name: item.name, type: item.type });
+              this.bfsData.push({ name: item.fileName, type: item.fileType });
             });
 
             this.bfsForm.pwdRoute = this.handleValue;
@@ -442,7 +442,7 @@ export default {
           if (res.data.code === 0) {
             this.bfsData = [];
             res.data.data.forEach((item) => {
-              this.bfsData.push({ name: item.name, type: item.type });
+              this.bfsData.push({ name: item.fileName, type: item.fileType });
             });
           } else {
             this.$message({

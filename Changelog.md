@@ -1,3 +1,17 @@
+### v3.0.1(2022-12-14)
+
+**Add**
+- 新增登录账户注册、冻结、有效期与删除等功能
+- 应用管理适配FISCO BCOS 3.0, 可使用webase-app-sdk进行应用管理
+
+**兼容性**
+- 支持FISCO-BCOS v3.0.0 及以上版本
+- WeBASE-Node-Manager v3.0.1
+- WeBASE-Front v3.0.0
+- WeBASE-Sign v3.0.0
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
+
 ### v3.0.0(2022-08-24)
 
 **Add**
@@ -8,7 +22,7 @@
 - 支持FISCO-BCOS v3.0.0 及以上版本
 - WeBASE-Node-Manager v3.0.0
 - WeBASE-Front v3.0.0
-- WeBASE-Sign lab-rc1
+- WeBASE-Sign v3.0.0
 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
 

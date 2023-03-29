@@ -56,8 +56,8 @@
               </span>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.user')" prop="address">
-               
-              <el-input v-model="governForm.address" style="width:250px;" :placeholder="$t('transaction.inputUserAddress')" ></el-input>
+
+              <el-input v-model="governForm.address" style="width:250px;" :placeholder="$t('transaction.inputUserAddress')"></el-input>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
               <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:250px;"></el-input>
@@ -123,10 +123,10 @@
           </div>
         </el-dialog>
         <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="500px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
-            <div style="text-align:center">
-        <span>{{$t('govCommittee.thresholdNow')}}:{{winRateNow}}</span>
-        <span>{{$t('govCommittee.participatesRateNow')}}:{{participatesRateNow}}</span>
-            </div>
+          <div style="text-align:center">
+            <span>{{$t('govCommittee.thresholdNow')}}:{{winRateNow}}</span>
+            <span>{{$t('govCommittee.participatesRateNow')}}:{{participatesRateNow}}</span>
+          </div>
           <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
             <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
               <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
@@ -213,10 +213,12 @@
               </span>
             </template>
             <template v-else>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small"
+                :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
                 {{$t('govCommittee.Committee')}}
               </el-button>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
+              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small"
+                :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
                 {{$t('govCommittee.revokeVote')}}</el-button>
             </template>
           </template>
@@ -298,6 +300,7 @@ import {
   voteRevoke,
   modifyRate,
   getCount,
+  getPermissionManagementStatus,
 } from "@/util/api";
 export default {
   name: "committeeMgmt",
@@ -366,8 +369,8 @@ export default {
         //     width: ''
         // }
       ],
-      winRateNow:'',
-      participatesRateNow:'',
+      winRateNow: "",
+      participatesRateNow: "",
       governForm: {
         fromAddress: "",
         governorAddress: "",
@@ -453,19 +456,19 @@ export default {
 
   computed: {
     rules() {
-        let _this=this;
-    var paramRule = (rule, value, callback) => {
-      let val = value.trim();
-     let chainCommittes=[]
-      _this.produceCommittee.map((item)=>{
-     chainCommittes.push(item.governorAddress)
-     })
-      if (chainCommittes.includes(val)) {
-        callback(new Error(this.$t("rule.chainCommite")));
-      } else {
-        callback();
-      }
-    };
+      let _this = this;
+      var paramRule = (rule, value, callback) => {
+        let val = value.trim();
+        let chainCommittes = [];
+        _this.produceCommittee.map((item) => {
+          chainCommittes.push(item.governorAddress);
+        });
+        if (chainCommittes.includes(val)) {
+          callback(new Error(this.$t("rule.chainCommite")));
+        } else {
+          callback();
+        }
+      };
       let data = {
         fromAddress: [
           {
@@ -563,14 +566,25 @@ export default {
     }
     if (localStorage.getItem("groupId")) {
       //this.queryGetThreshold()
-      this.queryCommitteeList();
-      this.queryVoteRecordList();
-      this.getUserData();
-      this.queryVoteRecordListCount();
+      this.checkAuth();
     }
   },
 
   methods: {
+    checkAuth() {
+      getPermissionManagementStatus(localStorage.getItem("groupId"))
+        .then((res) => {
+          if (res.data.data == true) {
+            this.queryCommitteeList();
+            this.queryVoteRecordList();
+            this.getUserData();
+            this.queryVoteRecordListCount();
+          } else {
+            this.disabled = true;
+          }
+        })
+        .catch((err) => {});
+    },
     importPrivateKeySuccess() {
       this.queryCommitteeList();
       this.queryVoteRecordList();
@@ -587,7 +601,6 @@ export default {
       this.queryCommitteeList();
       this.queryVoteRecordList();
       this.queryVoteRecordListCount();
-      
     },
     initGovernForm() {
       // this.governForm.fromAddress = ""
@@ -811,8 +824,8 @@ export default {
       });
     },
     closeModifyThreshold() {
-        this.governForm.threshold='';
-        this.governForm.participatesRate='';
+      this.governForm.threshold = "";
+      this.governForm.participatesRate = "";
       this.initGovernForm();
       this.modifyThresholdVisible = false;
     },
@@ -926,10 +939,10 @@ export default {
             //     })
             // })
             //this.total = res.data.totalCount;
-            this.disabled=false
+            this.disabled = false;
           } else {
-            this.disabled=true
-             this.chainCommitteeList=[]
+            this.disabled = true;
+            this.chainCommitteeList = [];
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",
@@ -1033,13 +1046,13 @@ export default {
       voteRecord(reqData)
         .then((res) => {
           if (res.data.code === 0) {
-            this.disabled=false
+            this.disabled = false;
             this.voteList = res.data.data;
             //this.voteTotal = res.data.totalCount;
             // this.getNetworkDetails()
           } else {
-            this.disabled=true
-            this.voteList=[]
+            this.disabled = true;
+            this.voteList = [];
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",

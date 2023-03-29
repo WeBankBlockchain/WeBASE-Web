@@ -2486,3 +2486,185 @@ export function putCityIpAengcy(data) {
     })
 }
 
+export function getPermissionManagementStatus(groupId) {
+    return get({
+        url: `${url.ORG_LIST}/auth/base/available?groupId=${groupId}`,
+        method: 'get',
+        // data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function setContractStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/status`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function setContractAdminInfo(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/admin/contract/status/set`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getContractIsfreezeStatus(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/status/list`,
+        method: 'post',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getAuthManagerList(data) {
+    return get({
+        url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
+        method: 'get',
+        params: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function updateAccountInfo(data) {
+    return put({
+        url: `${url.ORG_LIST}/account/accountInfo`,
+        method: 'put',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function accountCancel(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/account/cancel`,
+        method: 'delete',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function deleteAccount(data) {
+    return deleted({
+        url: `${url.ORG_LIST}/account/cancel`,
+        method: 'delete',
+        data:data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function accountFreeze(data) {
+    return patch({
+        url: `${url.ORG_LIST}/account/freeze`,
+        method: 'patch',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function accountUnfreeze(data) {
+    return patch({
+        url: `${url.ORG_LIST}/account/unFreeze`,
+        method: 'patch',
+        data: data,
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function sendCheckCodeMail(data) {
+    return post({
+        url: `${url.ORG_LIST}/account/mail`,
+        method: 'post',
+        data: data,
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}
+
+export function ifEnableMailCheckCode(data) {
+    return get({    
+        url: `${url.ORG_LIST}/account/mail/enable`,
+        method: 'get',
+        params: data,
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}
+
+export function registerAccount(data,code,token) {
+    return post({    
+        url: `${url.ORG_LIST}/account/register?checkCode=${code}`,
+        method: 'post',
+        data,
+        headers: {
+            // 'Content-Type': "application/x-www-form-urlencoded",
+            'token': token
+        }
+    })
+}
+
+export function getAccountDetail() {
+    return get({    
+        url: `${url.ORG_LIST}/account/accountInfo`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+export function getUserAccountDetail(account) {
+    return get({    
+        url: `${url.ORG_LIST}/account/accountInfo?account=${account}`,
+        method: 'get',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+
+export function deleteUserPrivateKey(groupId,address) {
+    return deleted({
+        url: `${url.ORG_LIST}/user/${groupId}/${address}`,
+        method: 'delete',
+        headers: {
+            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        }
+    })
+}
+
+export function getPrivacy() {
+    return get({    
+        url: `${url.ORG_LIST}/account/privacy`,
+        method: 'get',
+        // headers: {
+        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
+        // }
+    })
+}

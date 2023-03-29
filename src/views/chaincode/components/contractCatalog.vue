@@ -24,7 +24,7 @@
           <i class="wbs-icon-Addfolder icon contract-icon" @click="addFolder"></i>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" :content="$t('contracts.upLoadFile')" v-if="!disabled" placement="top-start">
-          <i class="wbs-icon-shangchuan contract-icon" style="position: relative">
+          <i class="wbs-icon-shangchuan contract-icon" style="position: relative" @click="uploading">
             <input multiple title="" type="file" id="file" ref="file" name="chaincodes" class="uploads" @change="upload($event)" />
           </i>
         </el-tooltip>
@@ -1294,7 +1294,7 @@ export default {
       const zip = new JSZip();
       let contractSource = Base64.decode(val.contractSource);
       let contractAbi = val.contractAbi;
-      let contractBin = val.contractBin;
+      let contractBin = val.bytecodeBin;
       var blobContractSource = new Blob([contractSource], {
         type: "text;charset=utf-8",
       });
@@ -1346,7 +1346,7 @@ export default {
               var blobContractAbi = new Blob([item.contractAbi], {
                 type: "text;charset=utf-8",
               });
-              var blobContractBin = new Blob([item.contractBin], {
+              var blobContractBin = new Blob([item.bytecodeBin], {
                 type: "text;charset=utf-8",
               });
               if (this.liquidCheck) {
@@ -1388,6 +1388,9 @@ export default {
     javaProjectComplie(val) {
       Bus.$emit("javaProjectComplie", val);
     },
+     uploading(){
+     this.$refs.file.click()   
+    }
   },
 };
 </script>
@@ -1440,8 +1443,8 @@ export default {
 }
 .uploads {
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: 0px;
+  height: 0px;
   left: 10px;
   top: 0;
   opacity: 0;
