@@ -915,7 +915,7 @@ export default {
         case 15:
           return this.$t("editor.NonceCheckFail");
         case 16:
-          return this.$t("editor.BlockLimitCheckFail");
+          return this.$t("editor.BlockLimitCheckFail"); 
         case 17:
           return this.$t("editor.FilterCheckFail");
         case 18:

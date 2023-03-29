@@ -103,10 +103,10 @@ let errCode = {
         en: "get abi from chain error",
         zh: '从链上获取abi失败'
     },
-    "201014": {
-        en: "contract deploy error",
-        zh: '合约部署失败，请检查部署入参、检查部署权限'
-    },
+    // "201014": {
+    //     en: "contract deploy error",
+    //     zh: '合约部署失败，请检查部署入参、检查部署权限'
+    // },
     "201015": {
         en: "user's privateKey is null",
         zh: '用户私钥为空'
@@ -359,7 +359,7 @@ let errCode = {
     },
     "201151": {
         en: "Unsupported contract param type to encoded",
-        zh: '不支持合约参数类型编码'
+        zh: '合约交易入参错误，请检查入参个数与入参值是否与ABI匹配'
     },
     "201152": {
         en: "Unsupported contract param type to decoded",
@@ -1804,10 +1804,10 @@ let errCode = {
         en: "This liquid contract already compiling, please wait...",
         zh: "liquid合约编译中，请稍候..."
     },
-    // "201014": {
-    //     en: "ContractAddress Already Used",
-    //     zh: "合约地址已被使用"
-    // },
+    "201014": {
+        en: "ContractAddress Already Used",
+        zh: "合约地址已被使用"
+    },
     "201622": {
         en: "Proposal is voting, the previous vote need to be finished",
         zh: "提案正在投票，需要完成上一次投票"
