@@ -69,8 +69,10 @@
       <span style="padding-right:10px"></span>
       <el-popover placement="bottom" width="0" min-width="50px" trigger="click">
         <div class="sign-out-wrapper">
+          <span class="change-password" @click="changeMessage">{{this.$t("head.changeMessage")}}</span><br>
           <span class="change-password" @click="changePassword">{{this.$t("head.changePassword")}}</span><br>
           <span class="change-password" @click="lookVersion">{{this.$t("head.versionInfo")}}</span><br>
+          <span class="sign-out" @click="deleteSelf">{{this.$t("head.deleteSelf")}}</span><br>
           <span class="sign-out" @click="signOut">{{this.$t("head.exit")}}</span>
         </div>
         <a class="browse-user" slot="reference">
@@ -79,6 +81,9 @@
         </a>
       </el-popover>
     </div>
+    <el-dialog :title="$t('head.changeMessage')" v-if="changeMessageDialogVisible" :visible.sync="changeMessageDialogVisible" width="600px" style="text-align: center;">
+      <change-message-dialog @success="changeMessageSuccess"></change-message-dialog>
+    </el-dialog>
     <el-dialog :title="$t('head.changePassword')" :visible.sync="changePasswordDialogVisible" width="500px" style="text-align: center;">
       <change-password-dialog @success="success"></change-password-dialog>
     </el-dialog>
@@ -105,12 +110,14 @@
 
 <script>
 import changePasswordDialog from "./changePasswordDialog";
+import changeMessageDialog from "./changeMessageDialog";
 import router from "@/router";
 import {
   loginOut,
   groupStatus4,
   getGroupsInvalidIncluded,
   deleteChain,
+  deleteAccount
 } from "@/util/api";
 import { delCookie } from "@/util/util";
 import Bus from "@/bus";
@@ -144,6 +151,7 @@ export default {
   },
   components: {
     changePasswordDialog,
+    changeMessageDialog
   },
   watch: {
     headTitle: function (val) {
@@ -168,6 +176,7 @@ export default {
       root: localStorage.getItem("root"),
       groupVisible: false,
       versionInfoVisible: false,
+      changeMessageDialogVisible: false,
     };
   },
   beforeDestroy: function () {
@@ -196,6 +205,42 @@ export default {
     this.queryGroupStatus4();
   },
   methods: {
+    deleteSelf(){
+      this.$confirm(this.$t("text.confirmDelete"), {
+            center: true,
+          })
+            .then(() => {
+              deleteAccount({account:this.accountName})
+        .then((res) => {
+          this.loading = false;
+          if (res.data.code === 0) {
+            this.$message({
+              message: this.$t("text.cancelSuccessMsg"),
+              type: "success",
+              duration: 2000,
+            });
+            router.push("/login");
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.loading = false;
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+            })
+            .catch(() => {
+              // this.modelClose();
+            });
+    },
     getGroupList: function (type) {
       getGroupsInvalidIncluded()
         .then((res) => {
@@ -295,11 +340,17 @@ export default {
     changePassword: function () {
       this.changePasswordDialogVisible = true;
     },
+    changeMessage: function () {
+      this.changeMessageDialogVisible = true;
+    },
     lookVersion: function () {
       this.versionInfoVisible = true;
     },
     success: function (val) {
       this.changePasswordDialogVisible = false;
+    },
+    changeMessageSuccess: function (val) {
+      this.changeMessageDialogVisible = false;
     },
     goGroupMgmt() {
       this.$router.push("groupManagement");

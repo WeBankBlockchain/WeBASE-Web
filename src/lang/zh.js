@@ -16,6 +16,13 @@ export default {
         transactionSearch: "请输入交易哈希或块高"
     },
     text: {
+        realName:"真实姓名",
+        mobile:"手机号",
+        IDNumber:"身份证号",
+        company:"公司",
+        address:"联系地址",
+        expireTime:'过期时间',
+        renewal:'续期',
         waitingTip:"合约编译中，大约需要几分钟，请稍等...",
         contractCompiling:"合约编译中，请稍等...",
         remarks:'备注',
@@ -52,6 +59,7 @@ export default {
         select: "请选择",
         tips: "提示",
         updateSuccessMsg: "修改成功",
+        cancelSuccessMsg: "注销成功",
         createSuccessMsg: "新建成功",
         save: "保存",
         compile: "编译",
@@ -433,9 +441,11 @@ export default {
         helpText: "帮助文档",
         group: "群组",
         changePassword: "修改密码",
+        changeMessage: "修改信息",
         exit: "退出",
         versionInfo: "版本信息",
-        dataBigScreen:"数据大屏"
+        dataBigScreen:"数据大屏",
+        deleteSelf:'撤销本账户'
     },
     title: {
         bfs:"BFS",
@@ -891,7 +901,7 @@ export default {
         email: "邮箱",
         inputEmail: "请输入邮箱",
         emailTypeError: "邮箱格式不正确",
-        updataEmail: "修改邮箱",
+        updataEmail: "修改信息",
     },
     transaction: {
         blockTips:"-1代表当前块高",

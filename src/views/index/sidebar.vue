@@ -480,6 +480,9 @@ export default {
             list[i].menuShow = false;
           }
           if (list[i].nameKey == "appManagement") {
+            list[i].menuShow = true;
+          }
+          if (list[i].nameKey == "register") {
             list[i].menuShow = false;
           }
         }
