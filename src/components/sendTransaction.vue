@@ -74,29 +74,29 @@
           <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
         </el-select>
       </div>
-       <div v-show="form.pramasData.length" class="send-item">
+      <div v-show="form.pramasData.length" class="send-item">
         <el-form class="send-item" v-show="form.pramasData.length" style="line-height: 25px" :rules="rules" :model="form" ref="sendTransation">
           <span class="send-item-title" style="position: relative; top: 5px">{{ this.$t("contracts.params") }}:</span>
           <div v-for="(item, index) in form.pramasData" :key='index'>
-            <el-form-item style="position: relative; top: -25px"  :prop="'pramasData.'+index+'.value'"  :rules='rules[item.type]'>
-            <span class="send-item-title"></span>
-            <template v-if="item.type == 'string'">
-              <el-input v-model="item.value" style="width: 400px" :placeholder="item.type">
-                <template slot="prepend">
-                  <span class="">{{ item.name }}</span>
-                </template>
-              </el-input>
-            </template>
-            <template v-else>
-              <el-input v-model="item.value" style="width: 400px" :placeholder="placeholderText(item.type)">
-                <template slot="prepend">
-                  <span class="">{{ item.name }}</span>
-                </template>
-              </el-input>
-            </template>
-          </el-form-item>
+            <el-form-item style="position: relative; top: -25px" :prop="'pramasData.'+index+'.value'" :rules='rules[item.type]'>
+              <span class="send-item-title"></span>
+              <template v-if="item.type == 'string'">
+                <el-input v-model="item.value" style="width: 400px" :placeholder="item.type">
+                  <template slot="prepend">
+                    <span class="">{{ item.name }}</span>
+                  </template>
+                </el-input>
+              </template>
+              <template v-else>
+                <el-input v-model="item.value" style="width: 400px" :placeholder="placeholderText(item.type)">
+                  <template slot="prepend">
+                    <span class="">{{ item.name }}</span>
+                  </template>
+                </el-input>
+              </template>
+            </el-form-item>
           </div>
-      
+
           <div style="padding: 5px 0 0 28px; color: 'gray'">
             <i class="el-icon-info" style="padding-right: 4px"></i>{{ this.$t("contracts.paramsInfo") }}
           </div>
@@ -226,7 +226,7 @@ export default {
             trigger: "blur",
           },
         ],
-          uint256: [
+        uint256: [
           {
             required: true,
             message: this.$t("text.sendInput"),
@@ -450,7 +450,15 @@ export default {
       this.funcList.forEach((value) => {
         if (value.funcId === this.transation.funcName) {
           this.form.pramasData = value.inputs;
-          this.constant = value.constant;
+          if (
+            value.stateMutability == "view" ||
+            value.stateMutability == "pure" ||
+            value.stateMutability == "constant"
+          ) {
+            this.constant = true;
+          } else {
+            this.constant = false;
+          }
           this.pramasObj = value;
           this.stateMutability = value.stateMutability;
           this.arrayLimit();
@@ -517,7 +525,7 @@ export default {
       let rules = [];
       for (let item in this.form.pramasData) {
         let data = this.form.pramasData[item].value;
-        rules.push(data)
+        rules.push(data);
 
         // if (data && isJson(data)) {
         //   try {
@@ -531,7 +539,7 @@ export default {
         //  else {
         //   rules.push(data)
         // }
-      } 
+      }
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {
@@ -609,7 +617,7 @@ export default {
               type: "error",
               duration: 2000,
             });
-            if (res.data.code === 201151||res.data.code === 201014) {
+            if (res.data.code === 201151 || res.data.code === 201014) {
               setTimeout(() => {
                 this.$notify({
                   title: "提示",
