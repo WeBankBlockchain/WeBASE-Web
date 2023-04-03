@@ -71,8 +71,10 @@
         <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width: 100px">
           <el-option label="function" :value="'function'"></el-option>
         </el-select>
-        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px">
-          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
+        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px" popper-class="func-name">
+          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList">
+              <span :class=" {'func-color': checkFunction(item)}">{{item.name}}</span>
+          </el-option>
         </el-select>
       </div>
       <el-form class="send-item" v-show="pramasData.length" style="line-height: 25px" :model="ruleForm" ref="sendTransation">
@@ -668,6 +670,9 @@ export default {
     creatUserClose() {
       this.getUserData();
     },
+    checkFunction(item) {
+      return (item.stateMutability==='view'||item.stateMutability==='cosntant'||item.stateMutability==='pure') ? false : true;
+    },
   },
 };
 </script>
@@ -715,5 +720,12 @@ export default {
 }
 .ifselectUser {
   width: 360px !important;
+}
+.func-color {
+  color: #409eff;
+}
+.func-name .el-select-dropdown__list .el-select-dropdown__item.selected {
+  color: #606266;
+  font-weight: 700;
 }
 </style>
