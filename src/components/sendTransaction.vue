@@ -71,8 +71,10 @@
         <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width: 100px">
           <el-option label="function" :value="'function'"></el-option>
         </el-select>
-        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px">
-          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
+        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px" popper-class="func-name">
+          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList">
+              <span :class=" {'func-color': checkFunction(item)}">{{item.name}}</span>
+          </el-option>
         </el-select>
       </div>
       <el-form class="send-item" v-show="pramasData.length" style="line-height: 25px" :model="ruleForm" ref="sendTransation">
@@ -431,7 +433,12 @@ export default {
         if (value.funcId === this.transation.funcName) {
           this.pramasData = value.inputs;
           this.ruleForm.ruleForms = value.inputs;
-          this.constant = value.constant;
+          console.log(value.stateMutability)
+          if(value.stateMutability=='view'||value.stateMutability=='pure'||value.stateMutability=='constant'){
+            this.constant = true;
+          }else{
+            this.constant = false;
+          }
           this.pramasObj = value;
           this.stateMutability = value.stateMutability;
           this.arrayLimit();
@@ -521,12 +528,13 @@ export default {
         }
       });
       let rules = [];
-      //  if(this.pramasData>1){
       for (var i in this.pramasData) {
-        for (var val of this.ruleForm.ruleForms) {
-          if (this.pramasData[i].type == val.type)
-            rules.push(this.transation.reqVal[i]);
-        }
+        // for (var val of this.ruleForm.ruleForms) {
+        //   if (this.pramasData[i].type == val.type)
+        //     rules.push(this.transation.reqVal[i]);
+        // }
+        let data = this.pramasData[i].value;
+        rules.push(data)
       }
 
       let functionName = "";
@@ -546,6 +554,7 @@ export default {
         contractName: this.data.contractName,
         funcName: functionName || "",
         funcParam: this.transation.reqVal,
+        funcParam: rules,
         contractId: this.data.contractId,
         contractAbi: [this.pramasObj],
         useCns: this.isCNS,
@@ -611,6 +620,14 @@ export default {
               type: "error",
               duration: 2000,
             });
+            if (res.data.code === 201151||res.data.code === 201014) {
+              setTimeout(() => {
+                this.$notify({
+                  title: "提示",
+                  message: res.data.message,
+                });
+              }, 2000);
+            }
           }
         })
         .catch((err) => {
@@ -652,6 +669,9 @@ export default {
     },
     creatUserClose() {
       this.getUserData();
+    },
+    checkFunction(item) {
+      return (item.stateMutability==='view'||item.stateMutability==='cosntant'||item.stateMutability==='pure') ? false : true;
     },
   },
 };
@@ -700,5 +720,12 @@ export default {
 }
 .ifselectUser {
   width: 360px !important;
+}
+.func-color {
+  color: #409eff;
+}
+.func-name .el-select-dropdown__list .el-select-dropdown__item.selected {
+  color: #606266;
+  font-weight: 700;
 }
 </style>
