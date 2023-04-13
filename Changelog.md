@@ -1,3 +1,17 @@
+### v3.0.2(2023-03-31)
+
+**Fix**
+- 优化合约IDE交易的参数编码失败问题、支持复杂的合约参数
+- 发起交易与部署合约的参数`funcParam`从`List<Object>`改为`List<String>`
+- 优化错误提示，增加指示性错误提示
+
+**兼容性**
+- 支持FISCO-BCOS v3.0.0 及以上版本
+- WeBASE-Node-Manager v3.0.2
+- WeBASE-Front v3.0.2
+
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
+
 ### v3.0.1(2022-12-14)
 
 **Add**
