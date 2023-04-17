@@ -73,7 +73,7 @@
         </el-select>
         <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px" popper-class="func-name">
           <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList">
-              <span :class=" {'func-color': checkFunction(item)}">{{item.name}}</span>
+            <span :class=" {'func-color': checkFunction(item)}">{{item.name}}</span>
           </el-option>
         </el-select>
       </div>
@@ -188,7 +188,7 @@ export default {
       },
       ruleForms: [],
       rules: {
-         int: [
+        int: [
           {
             required: true,
             message: this.$t("text.sendInput"),
@@ -219,7 +219,7 @@ export default {
             trigger: "blur",
           },
         ],
-          uint256: [
+        uint256: [
           {
             required: true,
             message: this.$t("text.sendInput"),
@@ -433,10 +433,14 @@ export default {
         if (value.funcId === this.transation.funcName) {
           this.pramasData = value.inputs;
           this.ruleForm.ruleForms = value.inputs;
-          console.log(value.stateMutability)
-          if(value.stateMutability=='view'||value.stateMutability=='pure'||value.stateMutability=='constant'){
+          console.log(value.stateMutability);
+          if (
+            value.stateMutability == "view" ||
+            value.stateMutability == "pure" ||
+            value.stateMutability == "constant"
+          ) {
             this.constant = true;
-          }else{
+          } else {
             this.constant = false;
           }
           this.pramasObj = value;
@@ -502,7 +506,6 @@ export default {
       if (this.transation.funcType === "constructor") {
         this.transation.funcName = this.data.contractName;
       }
-
       for (let i in this.ruleForm.ruleForms) {
         let data = this.ruleForm.ruleForms[i].value;
         if (data && isJson(data)) {
@@ -511,16 +514,19 @@ export default {
           } catch (error) {
             console.log(error);
           }
-        } else if (data === "true" || data === "false") {
-          this.transation.reqVal[i] = eval(data.toLowerCase());
-        } else {
+        }
+        //  else if (data === "true" || data === "false") {
+        //   this.transation.reqVal[i] = eval(data.toLowerCase());
+        // }
+        else {
           this.transation.reqVal[i] = data;
         }
       }
       this.ruleForm.ruleForms.map((item, index) => {
-        if (item.value == "true" || item.value == "false") {
-          this.ruleForm.ruleForms[index] = eval(item.value.toLowerCase());
-        } else if (
+        // if (item.value == "true" || item.value == "false") {
+        //   this.ruleForm.ruleForms[index] = eval(item.value.toLowerCase());
+        // } else
+        if (
           item.value.hasOwnProperty("substring") &&
           item.value.substring(0, 1) == "["
         ) {
@@ -534,7 +540,7 @@ export default {
         //     rules.push(this.transation.reqVal[i]);
         // }
         let data = this.pramasData[i].value;
-        rules.push(data)
+        rules.push(data);
       }
 
       let functionName = "";
@@ -566,7 +572,7 @@ export default {
       }
       if (this.isWasm) {
         data.isWasm = true;
-      }else{
+      } else {
         data.isWasm = false;
       }
       sendTransation(data)
@@ -620,7 +626,7 @@ export default {
               type: "error",
               duration: 2000,
             });
-            if (res.data.code === 201151||res.data.code === 201014) {
+            if (res.data.code === 201151 || res.data.code === 201014) {
               setTimeout(() => {
                 this.$notify({
                   title: "提示",
@@ -671,7 +677,11 @@ export default {
       this.getUserData();
     },
     checkFunction(item) {
-      return (item.stateMutability==='view'||item.stateMutability==='cosntant'||item.stateMutability==='pure') ? false : true;
+      return item.stateMutability === "view" ||
+        item.stateMutability === "cosntant" ||
+        item.stateMutability === "pure"
+        ? false
+        : true;
     },
   },
 };
