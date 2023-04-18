@@ -70,33 +70,37 @@
         <el-select v-model="transation.funcType" :placeholder="$t('contracts.methodType')" @change="changeType($event)" style="width: 100px">
           <el-option label="function" :value="'function'"></el-option>
         </el-select>
-        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px">
-          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList"></el-option>
+        <el-select v-model="transation.funcName" :placeholder="$t('contracts.methodName')" filterable v-show="funcList.length > 0" @change="changeFunc" style="width: 300px" popper-class="func-name">
+          <el-option :label="item.name" :key="item.funcId" :value="item.funcId" v-for="item in funcList">
+            <span :class="{ 'func-color':  checkFunction(item) }">{{
+              item.name
+            }}</span>
+          </el-option>
         </el-select>
       </div>
-       <div v-show="form.pramasData.length" class="send-item">
+      <div v-show="form.pramasData.length" class="send-item">
         <el-form class="send-item" v-show="form.pramasData.length" style="line-height: 25px" :rules="rules" :model="form" ref="sendTransation">
           <span class="send-item-title" style="position: relative; top: 5px">{{ this.$t("contracts.params") }}:</span>
           <div v-for="(item, index) in form.pramasData" :key='index'>
-            <el-form-item style="position: relative; top: -25px"  :prop="'pramasData.'+index+'.value'"  :rules='rules[item.type]'>
-            <span class="send-item-title"></span>
-            <template v-if="item.type == 'string'">
-              <el-input v-model="item.value" style="width: 400px" :placeholder="item.type">
-                <template slot="prepend">
-                  <span class="">{{ item.name }}</span>
-                </template>
-              </el-input>
-            </template>
-            <template v-else>
-              <el-input v-model="item.value" style="width: 400px" :placeholder="placeholderText(item.type)">
-                <template slot="prepend">
-                  <span class="">{{ item.name }}</span>
-                </template>
-              </el-input>
-            </template>
-          </el-form-item>
+            <el-form-item style="position: relative; top: -25px" :prop="'pramasData.'+index+'.value'" :rules='rules[item.type]'>
+              <span class="send-item-title"></span>
+              <template v-if="item.type == 'string'">
+                <el-input v-model="item.value" style="width: 400px" :placeholder="item.type">
+                  <template slot="prepend">
+                    <span class="">{{ item.name }}</span>
+                  </template>
+                </el-input>
+              </template>
+              <template v-else>
+                <el-input v-model="item.value" style="width: 400px" :placeholder="placeholderText(item.type)">
+                  <template slot="prepend">
+                    <span class="">{{ item.name }}</span>
+                  </template>
+                </el-input>
+              </template>
+            </el-form-item>
           </div>
-      
+
           <div style="padding: 5px 0 0 28px; color: 'gray'">
             <i class="el-icon-info" style="padding-right: 4px"></i>{{ this.$t("contracts.paramsInfo") }}
           </div>
@@ -161,11 +165,11 @@ export default {
           message: this.$t("text.sendInput"),
           trigger: "blur",
         },
-        {
-          pattern: `^0[xX][0-9a-fA-F]{${i * 2}}$`,
-          message: "必须是十六进制的数字或字母，长度是" + 2 * i,
-          trigger: "blur",
-        },
+        // {
+        //   pattern: `^0[xX][0-9a-fA-F]{${i * 2}}$`,
+        //   message: "必须是十六进制的数字或字母，长度是" + 2 * i,
+        //   trigger: "blur",
+        // },
       ];
     }
     return {
@@ -226,7 +230,7 @@ export default {
             trigger: "blur",
           },
         ],
-          uint256: [
+        uint256: [
           {
             required: true,
             message: this.$t("text.sendInput"),
@@ -450,7 +454,15 @@ export default {
       this.funcList.forEach((value) => {
         if (value.funcId === this.transation.funcName) {
           this.form.pramasData = value.inputs;
-          this.constant = value.constant;
+          if (
+            value.stateMutability == "view" ||
+            value.stateMutability == "pure" ||
+            value.stateMutability == "constant"
+          ) {
+            this.constant = true;
+          } else {
+            this.constant = false;
+          }
           this.pramasObj = value;
           this.stateMutability = value.stateMutability;
           this.arrayLimit();
@@ -517,19 +529,21 @@ export default {
       let rules = [];
       for (let item in this.form.pramasData) {
         let data = this.form.pramasData[item].value;
-        if (data && isJson(data)) {
-          try {
-             rules.push(JSON.parse(data))
-          } catch (error) {
-            console.log(error);
-          }
-        } else if (data === "true" || data === "false") {
-             rules.push(eval(data.toLowerCase()))
-        }
-         else {
-          rules.push(data)
-        }
-      } 
+        rules.push(data);
+
+        // if (data && isJson(data)) {
+        //   try {
+        //      rules.push(JSON.parse(data))
+        //   } catch (error) {
+        //     console.log(error);
+        //   }
+        // } else if (data === "true" || data === "false") {
+        //      rules.push(eval(data.toLowerCase()))
+        // }
+        //  else {
+        //   rules.push(data)
+        // }
+      }
       let functionName = "";
       this.funcList.forEach((value) => {
         if (value.funcId == this.transation.funcName) {
@@ -607,6 +621,14 @@ export default {
               type: "error",
               duration: 2000,
             });
+            if (res.data.code === 201151 || res.data.code === 201014) {
+              setTimeout(() => {
+                this.$notify({
+                  title: "提示",
+                  message: res.data.message,
+                });
+              }, 2000);
+            }
           }
         })
         .catch((err) => {
@@ -648,6 +670,13 @@ export default {
     },
     creatUserClose() {
       this.getUserData();
+    },
+    checkFunction(item) {
+      return item.stateMutability === "view" ||
+        item.stateMutability === "cosntant" ||
+        item.stateMutability === "pure"
+        ? false
+        : true;
     },
   },
 };
@@ -693,5 +722,12 @@ export default {
 .send-item >>> .el-form-item {
   line-height: 30px;
   margin-bottom: 24px;
+}
+.func-color {
+  color: #409eff;
+}
+.func-name .el-select-dropdown__list .el-select-dropdown__item.selected {
+  color: #606266;
+  font-weight: 700;
 }
 </style>
