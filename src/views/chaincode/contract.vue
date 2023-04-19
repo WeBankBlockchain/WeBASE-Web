@@ -19,9 +19,9 @@
     <div style="height: calc(100% - 56px)">
       <div class="code-menu-wrapper" :style="{width: menuWidth+'px'}">
         <v-menu @change="changeCode($event)" ref="menu" v-show="menuHide" :liquidChecks='liquidCheck'>
-          <template slot="footer"   >
+          <template slot="footer">
             <div class="version-selector">
-              <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion" >
+              <el-select v-model="version" placeholder="请选择" @change="onchangeLoadVersion">
                 <el-option v-for="item in versionList" :key="item.versionId" :label="item.solcName" :value="item.solcName">
                 </el-option>
               </el-select>
@@ -31,7 +31,8 @@
         <div class="move" @mousedown="dragDetailWeight($event)"></div>
       </div>
       <div :class="[!menuHide ?  'code-detail-wrapper' : 'code-detail-reset-wrapper']" :style="{width: contentWidth}">
-        <v-code ref="codes" :changeStyle="changeWidth" :frontIds='frontId' :liquidChecks='liquidCheck' :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)" @deploy="deploy($event)"></v-code>
+        <v-code ref="codes" :changeStyle="changeWidth" :frontIds='frontId' :liquidChecks='liquidCheck' :data="contractData" :show="showCode" @add="add($event)" @compile="compile($event)"
+          @deploy="deploy($event)"></v-code>
       </div>
     </div>
   </div>
@@ -163,32 +164,18 @@ export default {
         encryptType: 1,
         net: 1,
       },
-      {
-        solcName: "v0.8.11",
-        versionId: 6,
-        url: `http://${this.host}/static/js/v0.8.11.js`,
-        encryptType: 0,
-        net: 1,
-      },
-      {
-        solcName: "v0.8.11-gm",
-        versionId: 7,
-        url: `http://${this.host}/static/js/v0.8.11-gm.js`,
-        encryptType: 1,
-        net: 1,
-      },
     ];
-    // this.initWorker()
-    // this.getEncryption(this.querySolcList);
+    this.initWorker();
+    this.getEncryption(this.querySolcList);
     // this.liquidList();
     // this.liquidCheck = true;
-    this.getfrontList()
+    // this.getfrontList()
     //this.liquidCheckMethod()
   },
   methods: {
     liquidCheckMethod() {
       let groupId = localStorage.getItem("groupId");
-      checkIsWasm(this.frontId,groupId)
+      checkIsWasm(this.frontId, groupId)
         .then((res) => {
           if (res.data.data == true) {
             this.liquidList();
@@ -405,11 +392,11 @@ export default {
         });
     },
     changGroup: function () {
-       this.initVersion();
-       this.versionList = [];
+      this.initVersion();
+      this.versionList = [];
       // this.getEncryption(this.querySolcList);
-       this.$refs.menu.getContractPaths();
-        this.getfrontList()
+      this.$refs.menu.getContractPaths();
+      this.getfrontList();
     },
     dragDetailWeight: function (e) {
       let startX = e.clientX,
