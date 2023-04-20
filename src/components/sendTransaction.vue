@@ -673,7 +673,7 @@ export default {
     },
     checkFunction(item) {
       return item.stateMutability === "view" ||
-        item.stateMutability === "cosntant" ||
+        item.stateMutability === "constant" ||
         item.stateMutability === "pure"
         ? false
         : true;
