@@ -12,7 +12,7 @@
 - WeBASE-Node-Manager v3.1.0及以上版本
 - WeBASE-Front v3.1.0及以上版本
 - WeBASE-Sign v3.0.0
-- 
+ 
 详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
 
 ### v3.0.1(2022-12-14)
