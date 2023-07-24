@@ -1,3 +1,20 @@
+### v3.1.0(2023-07-20)
+
+**Add**
+- 支持合约IDE的Java项目导出功能，并支持struct格式参数
+
+**Fix**
+- 修复合约IDE使用solidity v0.6.10-gm时版本判断问题
+- 修复一些已知的bug如合约参数判断问题等
+
+**兼容性**
+- 支持FISCO-BCOS v3.0.0 及以上版本
+- WeBASE-Node-Manager v3.1.0及以上版本
+- WeBASE-Front v3.1.0及以上版本
+- WeBASE-Sign v3.0.0
+- 
+详细了解,请阅读[**技术文档**](https://webasedoc.readthedocs.io/zh_CN/lab/)。
+
 ### v3.0.1(2022-12-14)
 
 **Add**
