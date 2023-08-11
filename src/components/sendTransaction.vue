@@ -89,6 +89,7 @@
                   <template slot="prepend">
                     <span class="">{{ item.name }}</span>
                   </template>
+                  <el-checkbox slot="suffix" @change="checked => checkedNullString(checked, index)" label="勾选传递空字符串"></el-checkbox>
                 </el-input>
               </template>
               <template v-else>
@@ -386,6 +387,13 @@ export default {
         default:
           return type;
           break;
+      }
+    },
+    checkedNullString: function(checked, index) {
+      if(checked) {
+        this.form.pramasData[index].value = "";
+      }else{
+        this.form.pramasData[index].value = null
       }
     },
     submit: function (formName) {
