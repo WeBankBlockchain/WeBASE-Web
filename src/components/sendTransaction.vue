@@ -392,8 +392,6 @@ export default {
     checkedNullString: function(checked, index) {
       if(checked) {
         this.form.pramasData[index].value = "";
-      }else{
-        this.form.pramasData[index].value = null
       }
     },
     submit: function (formName) {
