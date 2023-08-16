@@ -82,14 +82,16 @@
         <el-form class="send-item" v-show="form.pramasData.length" style="line-height: 25px" :rules="rules" :model="form" ref="sendTransation">
           <span class="send-item-title" style="position: relative; top: 5px">{{ this.$t("contracts.params") }}:</span>
           <div v-for="(item, index) in form.pramasData" :key='index'>
-            <el-form-item style="position: relative; top: -25px" :prop="'pramasData.'+index+'.value'" :rules='rules[item.type]'>
+            <el-form-item style="position: relative; top: -25px" :prop="'pramasData.'+index+'.value'" :rules='!item.isNullFlag ? rules[item.type] : changeRules(item, index)'>
               <span class="send-item-title"></span>
-              <template v-if="item.type == 'string'">
+              <template v-if="item.type == 'string' || item.type == 'bytes'">
                 <el-input v-model="item.value" style="width: 400px" :placeholder="item.type">
                   <template slot="prepend">
                     <span class="">{{ item.name }}</span>
                   </template>
-                  <el-checkbox slot="suffix" @change="checked => checkedNullString(checked, index)" label="勾选传递空字符串"></el-checkbox>
+                  <template slot="suffix">
+                    <el-checkbox style="position: relative; top: 5px;" size="mini" @change="item.isNullFlag = !item.isNullFlag" label="勾选传递空值"></el-checkbox>
+                  </template>
                 </el-input>
               </template>
               <template v-else>
@@ -389,11 +391,6 @@ export default {
           break;
       }
     },
-    checkedNullString: function(checked, index) {
-      if(checked) {
-        this.form.pramasData[index].value = "";
-      }
-    },
     submit: function (formName) {
       //   if (this.isCNS) {
       //     if (!this.cnsName || !this.cnsVersion) {
@@ -455,10 +452,24 @@ export default {
         this.changeType();
       }
     },
+    changeRules: function(item, index) {
+      if(item.type == "string") {
+        this.$set(this.form.pramasData[index], "value", "");
+        return [];
+      }else if(item.type == "bytes") {
+        this.$set(this.form.pramasData[index], "value", "0x");
+        return [];
+      }
+    }, 
     changeFunc: function () {
       this.constant = false;
       this.funcList.forEach((value) => {
         if (value.funcId === this.transation.funcName) {
+          value.inputs.forEach((item) => {
+            if(item.type === "string" || item.type === "bytes") {
+              this.$set(item, 'isNullFlag',false);
+            }
+          });
           this.form.pramasData = value.inputs;
           if (
             value.stateMutability == "view" ||
