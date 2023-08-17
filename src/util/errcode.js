@@ -1006,7 +1006,7 @@ let errCode = {
   },
   "202002": {
     en: "not found any front for this group",
-    zh: "组织已经存在"
+    zh: "所有前置无法连上当前群组"
   },
   "202003": {
     en: "organization not exists",
