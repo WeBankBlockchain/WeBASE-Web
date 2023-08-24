@@ -677,8 +677,8 @@ let errCode = {
     zh: "设置参数错误的系统配置值失败或权限被拒绝"
   },
   "201211": {
-    en: "Query system config value list fail",
-    zh: "查询系统配置列表失败"
+    en: "Auth check status already is 1(enabled), cannot disabled now",
+    zh: "权限校验已开启，暂不支持关闭校验"
   },
   "201213": {
     en: "address is invalid",

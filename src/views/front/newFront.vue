@@ -276,7 +276,7 @@ export default {
         if (localStorage.getItem("root") === "admin") {
             this.disabled = false
         } else {
-            this.disabled = true
+            this.disabled = false
         }
         this.getFrontTable();
         this.getNodeTable();

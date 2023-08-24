@@ -117,7 +117,8 @@ import {
   groupStatus4,
   getGroupsInvalidIncluded,
   deleteChain,
-  deleteAccount
+  deleteAccount,
+  getPermissionManagementStatus
 } from "@/util/api";
 import { delCookie } from "@/util/util";
 import Bus from "@/bus";
@@ -151,7 +152,7 @@ export default {
   },
   components: {
     changePasswordDialog,
-    changeMessageDialog
+    changeMessageDialog,
   },
   watch: {
     headTitle: function (val) {
@@ -205,41 +206,53 @@ export default {
     this.queryGroupStatus4();
   },
   methods: {
-    deleteSelf(){
-      this.$confirm(this.$t("text.confirmDelete"), {
-            center: true,
-          })
-            .then(() => {
-              deleteAccount({account:this.accountName})
-        .then((res) => {
-          this.loading = false;
-          if (res.data.code === 0) {
-            this.$message({
-              message: this.$t("text.cancelSuccessMsg"),
-              type: "success",
-              duration: 2000,
-            });
-            router.push("/login");
+    //根据群组判断是否已启用了权限
+    checkAuth() {
+      getPermissionManagementStatus(localStorage.getItem("groupId")).then(
+        (res) => {
+          if (res.data.data == true) {
+            localStorage.setItem("isAuth", true);
           } else {
-            this.$message({
-              message: this.$chooseLang(res.data.code),
-              type: "error",
-              duration: 2000,
-            });
+            localStorage.setItem("isAuth", false);
           }
-        })
-        .catch((err) => {
-          this.loading = false;
-          this.$message({
-            message: err.data || this.$t("text.systemError"),
-            type: "error",
-            duration: 2000,
-          });
-        });
+        }
+      );
+    },
+    deleteSelf() {
+      this.$confirm(this.$t("text.confirmDelete"), {
+        center: true,
+      })
+        .then(() => {
+          deleteAccount({ account: this.accountName })
+            .then((res) => {
+              this.loading = false;
+              if (res.data.code === 0) {
+                this.$message({
+                  message: this.$t("text.cancelSuccessMsg"),
+                  type: "success",
+                  duration: 2000,
+                });
+                router.push("/login");
+              } else {
+                this.$message({
+                  message: this.$chooseLang(res.data.code),
+                  type: "error",
+                  duration: 2000,
+                });
+              }
             })
-            .catch(() => {
-              // this.modelClose();
+            .catch((err) => {
+              this.loading = false;
+              this.$message({
+                message: err.data || this.$t("text.systemError"),
+                type: "error",
+                duration: 2000,
+              });
             });
+        })
+        .catch(() => {
+          // this.modelClose();
+        });
     },
     getGroupList: function (type) {
       getGroupsInvalidIncluded()
@@ -252,6 +265,7 @@ export default {
                   this.groupName = res.data.data[0].groupName;
                   localStorage.setItem("groupName", res.data.data[0].groupName);
                   localStorage.setItem("groupId", res.data.data[0].groupId);
+                  this.checkAuth()
                 });
               }
             } else {
@@ -263,6 +277,7 @@ export default {
               this.groupName = res.data.data[0].groupName;
               localStorage.setItem("groupName", res.data.data[0].groupName);
               localStorage.setItem("groupId", res.data.data[0].groupId);
+              this.checkAuth()
             } else if (
               res.data.data &&
               res.data.data.length &&
@@ -271,12 +286,14 @@ export default {
               this.groupName = res.data.data[0].groupName;
               localStorage.setItem("groupName", res.data.data[0].groupName);
               localStorage.setItem("groupId", res.data.data[0].groupId);
+              this.checkAuth()
             } else if (
               res.data.data &&
               res.data.data.length &&
               localStorage.getItem("groupName")
             ) {
               this.groupName = localStorage.getItem("groupName");
+              this.checkAuth()
             }
           } else {
             this.groupList = [];
@@ -315,7 +332,7 @@ export default {
       localStorage.setItem("groupId", val.groupId);
       this.$emit("changGroup", val.groupId);
       Bus.$emit("changGroup", val.groupId);
-
+      this.checkAuth()
       // this.dialogShow = true;
     },
     skip: function () {
