@@ -52,7 +52,7 @@ body { overflow-y: scroll;overflow: auto !important; }
 
 .module-wrapper {
     min-width: 540px;
-    margin: 15px 15px 0 15px;
+    margin: 15px 15px 15px 15px;
     background-color: #fff;
     box-shadow: 0 4px 12px 0 #dfe2e9;
     border-radius: 10px;
@@ -394,7 +394,7 @@ body { overflow-y: scroll;overflow: auto !important; }
     transform:translate(-50%,-50%);
     /*height:600px;*/
     /* max-height:calc(100% - 40px); */
- 
+
 }
 
 .el-dialog__header {

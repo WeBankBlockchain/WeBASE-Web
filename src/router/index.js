@@ -159,7 +159,7 @@ const routes = [
     iconCls: "wbs-icon-group sidebar-icon",
     children: [
       {
-        path: "/host",
+        path: "/chain/host",
         component: host,
         name: "主机管理",
         nameKey: "hostMgrTitle",
@@ -167,7 +167,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/front",
+        path: "/chain/front",
         component: front,
         name: "节点管理",
         nameKey: "nodeTitle",
@@ -230,7 +230,7 @@ const routes = [
     iconCls: "wbs-icon-heyueguanli sidebar-icon",
     children: [
       {
-        path: "/contract",
+        path: "/contract/ide",
         component: contract,
         name: "合约IDE",
         nameKey: "contractIDE",
@@ -238,7 +238,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/contractList",
+        path: "/contract/List",
         component: oldContract,
         name: "合约列表",
         nameKey: "contractList",
@@ -246,7 +246,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/contractWarehouse",
+        path: "/contract/Warehouse",
         component: contractWarehouse,
         name: "合约仓库",
         nameKey: "contractWarehouse",
@@ -255,7 +255,7 @@ const routes = [
       },
       // { path: '/abiList', component: abiList, name: 'Abi列表', nameKey: "abiList", menuShow: false, meta: { requireAuth: true } },
       {
-        path: "/parseAbi",
+        path: "/contract/parseAbi",
         component: parseAbi,
         name: "解析Abi",
         nameKey: "parseAbi",
@@ -263,7 +263,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/cnsManagement",
+        path: "/contract/cnsManagement",
         component: cnsManagement,
         name: "CNS查询",
         nameKey: "CNSmanager",
@@ -271,7 +271,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/CRUDServiceManagement",
+        path: "/contract/CRUDServiceManagement",
         component: CRUDServiceManagement,
         name: "CRUD",
         nameKey: "CRUDServiceManagement",
@@ -279,7 +279,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/eventCheck",
+        path: "/contract/eventCheck",
         component: eventCheck,
         name: "Event查看",
         nameKey: "checkEvent",
@@ -287,7 +287,7 @@ const routes = [
         meta: { requireAuth: false }
       },
       {
-        path: "/BFS",
+        path: "/contract/BFS",
         component: bfs,
         name: "BFS",
         nameKey: "BFS",
@@ -296,7 +296,7 @@ const routes = [
       },
       // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } },
       {
-        path: "/toolsContract",
+        path: "/contract/toolsContract",
         component: toolsContract,
         name: "工具合约",
         nameKey: "toolsContract",
@@ -324,6 +324,7 @@ const routes = [
       }
     ]
   },
+
   {
     path: "/",
     component: main,
@@ -334,7 +335,7 @@ const routes = [
     iconCls: "wbs-icon-xitongguanli sidebar-icon",
     children: [
       {
-        path: "/newPermission",
+        path: "/sys/newPermission",
         component: newPermission,
         name: "权限管理",
         nameKey: "newPermission",
@@ -343,7 +344,7 @@ const routes = [
       },
       // { path: '/permission', component: permission, name: '权限管理', nameKey: "permission", menuShow: true, meta: { requireAuth: true } },
       {
-        path: "/configManagement",
+        path: "/sys/configManagement",
         component: configManagement,
         name: "配置管理",
         nameKey: "configManager",
@@ -351,7 +352,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/certificate",
+        path: "/sys/certificate",
         component: certificate,
         name: "证书管理",
         nameKey: "certificate",
@@ -391,7 +392,7 @@ const routes = [
     iconCls: "wbs-icon-monitor sidebar-icon",
     children: [
       {
-        path: "/nodesMetric",
+        path: "/monitor/nodesMetric",
         component: nodesMetric,
         name: "节点监控",
         nameKey: "nodesMonitor",
@@ -399,7 +400,7 @@ const routes = [
         meta: { requireAuth: false }
       },
       {
-        path: "/hostMetric",
+        path: "/monitor/hostMetric",
         component: hostMetric,
         name: "主机监控",
         nameKey: "hostMonitor",
@@ -407,7 +408,7 @@ const routes = [
         meta: { requireAuth: false }
       },
       {
-        path: "/emailAlarm",
+        path: "/monitor/emailAlarm",
         component: emailAlarm,
         name: "邮件告警配置",
         nameKey: "emailAlarm",
@@ -415,7 +416,7 @@ const routes = [
         meta: { requireAuth: false }
       },
       {
-        path: "/emailAlarmType",
+        path: "/monitor/emailAlarmType",
         component: emailAlarmType,
         name: "告警类型配置",
         nameKey: "emailAlarmType",
@@ -434,7 +435,7 @@ const routes = [
     iconCls: "wbs-icon-regulatory sidebar-icon",
     children: [
       {
-        path: "/transactionCharts",
+        path: "/audit/transactionCharts",
         component: transactionCharts,
         name: "用户交易",
         nameKey: "userTransaction",
@@ -442,7 +443,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/unusualUser",
+        path: "/audit/unusualUser",
         component: unusualUser,
         name: "异常用户",
         nameKey: "unusualUser",
@@ -450,7 +451,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/unusualContract",
+        path: "/audit/unusualContract",
         component: unusualContract,
         name: "异常合约",
         nameKey: "unusualContract",
@@ -471,7 +472,7 @@ const routes = [
     iconCls: "wbs-icon-dingyue sidebar-icon",
     children: [
       {
-        path: "/blockEvent",
+        path: "/subscribe/blockEvent",
         component: blockEvent,
         name: "出块事件",
         nameKey: "blockEvent",
@@ -479,7 +480,7 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
-        path: "/contractEvent",
+        path: "/subscribe/contractEvent",
         component: contractEvent,
         name: "合约Event事件",
         nameKey: "contractEvent",
@@ -509,8 +510,11 @@ const routes = [
   }
 ];
 const router = new Router({
+  base: window.__POWERED_BY_QIANKUN__ ? '/bcos3' : '/',
+  mode: 'history',
   routes
 });
+
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject)

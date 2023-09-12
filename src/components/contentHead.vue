@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-  <div class="content-head-wrapper">
+  <div v-if='!isMicroApp' class="content-head-wrapper">
     <div class="content-head-title">
       <span class="content-head-icon" v-if="icon" @click="skip">
         <i class="wbs-icon-back"></i>
@@ -163,6 +163,7 @@ export default {
   },
   data: function () {
     return {
+      isMicroApp: window.__POWERED_BY_QIANKUN__ ? true : false,
       title: this.headTitle,
       groupName: "-",
       accountName: "-",

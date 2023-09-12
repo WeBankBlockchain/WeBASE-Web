@@ -36,10 +36,10 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
+        <div v-if='!isMicroApp' class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
             <v-menu @sidebarChange="change($event)" :minMenu="show" ref='menu'></v-menu>
         </div>
-        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
+        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide, 'micro-app': isMicroApp}">
             <router-view class="bg-f7f7f7" @versionChange='versionChange'></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
@@ -65,6 +65,7 @@ export default {
     },
     data: function () {
         return {
+            isMicroApp: window.__POWERED_BY_QIANKUN__ ? true : false,
             version: "",
             guideShow: false,
             frontShow: false,
@@ -486,5 +487,9 @@ export default {
 }
 .demo-ruleForm {
     padding-right: 25px;
+}
+.micro-app {
+  width: 100%;
+  padding-left: 0px;
 }
 </style>

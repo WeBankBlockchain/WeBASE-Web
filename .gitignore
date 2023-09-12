@@ -13,4 +13,4 @@ package-lock.json
 *.sln
 v0.*.*.js
 v0.*.*.js.gz
-dist/ace/
+dist/

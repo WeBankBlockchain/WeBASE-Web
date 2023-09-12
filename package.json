@@ -1,7 +1,7 @@
 {
-  "name": "WeBASE-Web",
+  "name": "WeBASE-Web3",
   "version": "1.0.0",
-  "description": "A Vue.js project",  
+  "description": "A Vue.js project",
   "author": "",
   "private": true,
   "scripts": {
@@ -41,8 +41,8 @@
     "vue-loading-template": "^1.3.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.1.0",
-    "web3-eth-abi": "^1.3.0",
-    "web3-utils": "^1.3.0",
+    "web3-eth-abi": "1.10.0",
+    "web3-utils": "1.10.0",
     "webworkify-webpack": "^2.1.5"
   },
   "devDependencies": {
