@@ -549,7 +549,7 @@ export default {
       this.getContracts();
     },
     routeAbi() {
-      this.$router.push("/parseAbi");
+      this.$router.push("/contract/parseAbi");
     },
     resetSuccess() {
       this.resetVisibility = false;

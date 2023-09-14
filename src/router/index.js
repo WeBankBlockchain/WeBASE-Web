@@ -509,12 +509,22 @@ const routes = [
     ]
   }
 ];
+
+const base = window.__POWERED_BY_QIANKUN__ ? '/bcos3' : '/'
 const router = new Router({
-  base: window.__POWERED_BY_QIANKUN__ ? '/bcos3' : '/',
+  base,
   mode: 'history',
   routes
 });
-
+/*
+router.afterEach((to, from, next) => {
+  const state = {
+    ...history.state,
+    current: base + to.fullPath
+  }
+  history.replaceState(state, '', window.location.href)
+})
+*/
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location, onResolve, onReject) {
   if (onResolve || onReject)
