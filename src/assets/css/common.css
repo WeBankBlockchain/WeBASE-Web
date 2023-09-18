@@ -331,12 +331,15 @@ body { overflow-y: scroll;overflow: auto !important; }
     border-color: #20D4D9;
     color: #fff;
 }
-
+/*
 .el-button--default {
     border-color: #9da2ab;
     color: #9da2ab;
 }
-
+*/
+.el-button {
+  padding: 8px 15px;
+}
 .el-message-box .el-button--small {
     padding: 11px 20px;
 }
@@ -594,4 +597,15 @@ th {
 
 .el-pager li.active {
     color: #00c1d4
+}
+
+.el-menu {
+  background-color: var(--el-menu-bg-color);
+}
+.el-menu-item {
+  color: var(--el-menu-text-color);
+}
+
+.el-pagination {
+  display: block;
 }
