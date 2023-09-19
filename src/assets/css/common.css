@@ -609,3 +609,6 @@ th {
 .el-pagination {
   display: block;
 }
+.el-button--small {
+    height: 36px;
+}

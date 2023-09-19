@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div class="main-wrapper">
+    <div class="main-wrapper" :class="{'content2': isMicroApp}">
         <div id="shade" v-if="accountStatus === '1'"></div>
         <div id="reset-password" v-if="accountStatus === '1'">
             <div class="reset-password-title">
@@ -36,10 +36,10 @@
                 </el-form-item>
             </el-form>
         </div>
-        <div class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
+        <div v-if='!isMicroApp' class="menu-wrapper header" :class="{'menu-show': menuShow,'menu-hide': menuHide}">
             <v-menu @sidebarChange="change($event)" :minMenu="show" ref='menu'></v-menu>
         </div>
-        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide}">
+        <div class="view-wrapper" :class="{'view-show': menuShow,'view-hide': menuHide, 'micro-app': isMicroApp}">
             <router-view class="bg-f7f7f7"></router-view>
         </div>
         <set-front :show='frontShow' v-if='frontShow' @close='closeFront'></set-front>
@@ -68,6 +68,7 @@ export default {
     },
     data: function () {
         return {
+            isMicroApp: window.__POWERED_BY_QIANKUN__ ? true : false,
             guideShow: false,
             frontShow: false,
             menuShow: true,
@@ -563,5 +564,13 @@ export default {
 }
 .demo-ruleForm {
     padding-right: 25px;
+}
+ .content2 {
+   height: calc(100vh - 1px);
+   padding-top: 0px;
+ }
+.micro-app {
+  width: 100%;
+  padding-left: 0px;
 }
 </style>

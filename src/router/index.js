@@ -296,7 +296,7 @@ const routes = [
       },
       // { path: '/onlineTools', component: onlineTools, name: '在线工具', enName: 'onlineTools', menuShow: true, meta: { requireAuth: false } },
       {
-        path: "/contract/toolsContract",
+        path: "/toolsContract",
         component: toolsContract,
         name: "工具合约",
         nameKey: "toolsContract",

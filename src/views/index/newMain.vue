@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-    <div class="main-wrapper">
+    <div class="main-wrapper" :class="{'content2': isMicroApp}">
         <div id="shade" v-if="accountStatus === '1'"></div>
         <div id="reset-password" v-if="accountStatus === '1'">
             <div class="reset-password-title">
@@ -488,6 +488,10 @@ export default {
 .demo-ruleForm {
     padding-right: 25px;
 }
+ .content2 {
+   height: calc(100vh - 1px);
+   padding-top: 0px;
+ }
 .micro-app {
   width: 100%;
   padding-left: 0px;
