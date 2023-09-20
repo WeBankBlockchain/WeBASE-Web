@@ -612,3 +612,16 @@ th {
 .el-button--small {
     height: 36px;
 }
+.el-dropdown-menu {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: var(--el-dropdown-menu-index);
+    padding: 5px 0;
+    margin: 0;
+    background-color: var(--el-bg-color-overlay);
+    border: none;
+    border-radius: var(--el-border-radius-base);
+    box-shadow: none;
+    list-style: none;
+  }
