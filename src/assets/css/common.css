@@ -598,7 +598,7 @@ th {
 .el-pager li.active {
     color: #00c1d4
 }
-
+/**
 .el-menu {
   background-color: var(--el-menu-bg-color);
 }
@@ -625,3 +625,8 @@ th {
     box-shadow: none;
     list-style: none;
   }
+  */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
