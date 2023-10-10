@@ -2237,11 +2237,7 @@ export function getPrivacy() {
 }
 
 function getAuthHeaders() {
-    // return {
-    //     Authorization: "Bearer " +  getCookie("Admin-Token")
-    // };
-
     return {
-        Authorization: "Bearer " +  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJaUGQ4MmdKSGNWOXpzRThVQ2FVOGN0d1YwaWQxc2F1TSIsInVzZXJJZCI6MX0.UL0yHr9c0GIb6-1f9SMVuHc8of1T1ZI83_3FgmVxF2U"
+        Authorization: "Bearer " +  getCookie("Admin-Token")
     };
 }
