@@ -310,9 +310,9 @@ export default {
         },
         getHostList() {
             getHosts().then(res => {
-                if (res.data.code === 0) {
-                    this.hostList = res.data.data
-                    if (res.data.data.length === 0 || !res.data.data) {
+                if (res.data.code === 0 || res.data.code === 200) {
+                    this.hostList = res.data.rows
+                    if (res.data.rows.length === 0 || !res.data.rows) {
                         this.$message({
                             type: "info",
                             message: this.$t("text.goHostInfo")

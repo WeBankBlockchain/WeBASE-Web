@@ -15,7 +15,7 @@
  */
 import url from './url'
 import { post, get, patch, put, deleted } from './http'
-import { reviseParam,resizeParam } from './util'
+import { reviseParam,resizeParam, getCookie } from './util'
 import qs from 'qs'
 
 //login
@@ -36,9 +36,7 @@ export function loginOut() {
     return get({
         url: `${url.ORG_LIST}/account/logout`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //
@@ -46,18 +44,14 @@ export function encryption(groupId) {
     return get({
         url: `${url.ORG_LIST}/group/encrypt/${groupId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function updateSDK(data) {
     return post({
         url: `${url.ORG_LIST}/config/bcosSDK`,
         method: 'post',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        },
+        headers: getAuthHeaders(),
         data: data
     })
 }
@@ -67,9 +61,7 @@ export function resetPassword(data) {
         url: `${url.ORG_LIST}/account/passwordUpdate`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -78,9 +70,7 @@ export function getChartData(data) {
     return get({
         url: `${url.ORG_LIST}/group/transDaily/${data}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Chain overview */
@@ -88,9 +78,7 @@ export function getNetworkStatistics(data) {
     return get({
         url: `${url.ORG_LIST}/group/general/${data}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //鉴权是否启用接口，无需登录就可以访问
@@ -108,9 +96,7 @@ export function getBlockPage(data, list) {
         url: `${url.ORG_LIST}/block/blockList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Node list */
@@ -120,9 +106,7 @@ export function getNodeList(data, list) {
         url: `${url.ORG_LIST}/node/nodeList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Error log query node*/
@@ -130,9 +114,7 @@ export function getErrorNodeList(data) {
     return get({
         url: `${url.ORG_LIST}/node/nodeList/${data}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -143,9 +125,7 @@ export function getOrgList(data, list) {
         url: `${url.ORG_LIST}/organization/organizationList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Contract list */
@@ -154,9 +134,7 @@ export function getContractList(data) {
         url: `${url.ORG_LIST}/contract/contractList`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Contract check */
@@ -165,9 +143,7 @@ export function checkIsWasm(frontId,groupId) {
         url: `${url.ORG_LIST}/front/isWasm/${frontId}/${groupId}`,
         method: 'get',
        // params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Contract check */
@@ -176,9 +152,7 @@ export function liquidCompile(data) {
         url: `${url.ORG_LIST}/contract/liquid/compile`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -189,9 +163,7 @@ export function searchContract(data) {
         url: `${url.ORG_LIST}/contract/contractList/multiPath`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -201,9 +173,7 @@ export function addnodes(data) {
         url: `${url.ORG_LIST}/node/nodeInfo`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Increase organization */
@@ -212,9 +182,7 @@ export function addgroup(data) {
         url: `${url.ORG_LIST}/organization/organizationInfo`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**add contract */
@@ -223,9 +191,7 @@ export function saveChaincode(data) {
         url: `${url.ORG_LIST}/contract/save`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Compile contract */
@@ -234,9 +200,7 @@ export function setCompile(data) {
         url: `${url.ORG_LIST}/contract/compile`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /* Background compilation*/
@@ -245,9 +209,7 @@ export function backgroundCompile(data) {
         url: `${url.ORG_LIST}/contract/comtractCompile `,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Deployment contract */
@@ -256,9 +218,7 @@ export function getDeployStatus(data) {
         url: `${url.ORG_LIST}/contract/deploy`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Delete contract */
@@ -267,9 +227,7 @@ export function deleteCode(data, list) {
     return deleted({
         url: `${url.ORG_LIST}/contract/${params.str}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Blockchain list */
@@ -277,9 +235,7 @@ export function networkList() {
     return get({
         url: `${url.ORG_LIST}/network/all`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Modify contract */
@@ -288,9 +244,7 @@ export function editChain(data) {
         url: `${url.ORG_LIST}/contract/contractInfo`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Public key or private key user list */
@@ -300,9 +254,7 @@ export function getUserList(data, list) {
         url: `${url.ORG_LIST}/user/userList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**get nodeInfo */
@@ -310,9 +262,7 @@ export function getNodeInfo(groupId,nodeId) {
     return get({
         url: `${url.ORG_LIST}/node/nodeInfo/${groupId}/${nodeId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })                                                                             
 }
 /** nodeCity query node*/
@@ -320,9 +270,7 @@ export function getCityList(data) {
     return get({
         url: `${url.ORG_LIST}/node/city/list`,
         method: 'get',      
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**add users */
@@ -331,9 +279,7 @@ export function getAddUser(data) {
         url: `${url.ORG_LIST}/user/userInfo`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //import privateKey 
@@ -342,9 +288,7 @@ export function queryImportPrivateKey(data) {
         url: `${url.ORG_LIST}/user/import`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //import pem privateKey 
@@ -353,21 +297,18 @@ export function ImportPemPrivateKey(data) {
         url: `${url.ORG_LIST}/user/importPem`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //import p12 privateKey 
 export function ImportP12PrivateKey(data) {
+    let authHeaders = getAuthHeaders();
+    authHeaders['Content-Type'] = "multipart/form-data";
     return post({
         url: `${url.ORG_LIST}/user/importP12`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-            'Content-Type': "multipart/form-data"
-        }
+        headers: authHeaders
 
     })
 }
@@ -378,9 +319,7 @@ export function exportPemPrivateKey(data) {
         method: 'post',
         data: data,
         responseType: 'blob/application/json',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -391,9 +330,7 @@ export function exportP12PrivateKey(data) {
         method: 'post',
         data: data,
         responseType: 'blob',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 // /user/export / { userId }
@@ -402,9 +339,7 @@ export function exportTxtPrivateKey(data) {
     return post({
         url: `${url.ORG_LIST}/user/export/${data}`,
         method: 'post',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Modify user description */
@@ -413,9 +348,7 @@ export function bindPrivateKey(data) {
         url: `${url.ORG_LIST}/user/bind/privateKey`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function bindPrivateKeyPm(data) {
@@ -423,20 +356,17 @@ export function bindPrivateKeyPm(data) {
         url: `${url.ORG_LIST}/user/bind/privateKey/pem`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function bindPrivateKeyP12(data) {
+    let authHeaders = getAuthHeaders();
+    authHeaders['Content-Type'] = "multipart/form-data";
     return post({
         url: `${url.ORG_LIST}/user/bind/privateKey/p12`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-            'Content-Type': "multipart/form-data"
-        }
+        headers: authHeaders
     })
 }
 /**Modify user description */
@@ -445,9 +375,7 @@ export function getUserDescription(data) {
         url: `${url.ORG_LIST}/user/userInfo`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Send transaction */
@@ -456,9 +384,7 @@ export function sendTransation(data) {
         url: `${url.ORG_LIST}/contract/transaction`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Transaction receipt based on transaction hash*/
@@ -468,9 +394,7 @@ export function getTransactionReceipt(data, list) {
         url: `${url.ORG_LIST}/transaction/transactionReceipt/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Get transaction information based on transaction hash*/
@@ -480,9 +404,7 @@ export function hashTransactionInfo(data, list) {
         url: `${url.ORG_LIST}/transaction/transInfo/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -492,9 +414,7 @@ export function creatAccountInfo(data) {
         url: `${url.ORG_LIST}/account/accountInfo`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**Change account information*/
@@ -503,9 +423,7 @@ export function modifyAccountInfo(data) {
         url: `${url.ORG_LIST}/account/accountInfo`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** deleteAccount*/
@@ -513,9 +431,7 @@ export function deleteAccountInfo(data) {
     return deleted({
         url: `${url.ORG_LIST}/account/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Query role list*/
@@ -525,9 +441,7 @@ export function roleList(data, list) {
         url: `${url.ORG_LIST}/role/roleList${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -538,9 +452,7 @@ export function accountList(data, list) {
         url: `${url.ORG_LIST}/account/accountList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Query error log list*/
@@ -550,9 +462,7 @@ export function errorLogList(data, list) {
         url: `${url.ORG_LIST}/nodeLog/nodeLogList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Bind user*/
@@ -561,9 +471,7 @@ export function bindUser(data) {
         url: `${url.ORG_LIST}/user/bind`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -574,9 +482,7 @@ export function monitorTransactionInfo(data, list) {
         url: `${url.ORG_LIST}/monitor/transList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -587,9 +493,7 @@ export function getTransactionList(data, list) {
         url: `${url.ORG_LIST}/transaction/transList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Supervised user list*/
@@ -599,9 +503,7 @@ export function monitorUserList(data, list) {
         url: `${url.ORG_LIST}/monitor/userList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -615,9 +517,7 @@ export function monitorUserInterfaceList(data, list) {
         url: `${url.ORG_LIST}/monitor/interfaceList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -633,9 +533,7 @@ export function unusualUserList(data, list) {
         url: `${url.ORG_LIST}/monitor/unusualUserList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Regulatory abnormal contract information*/
@@ -645,9 +543,7 @@ export function unusualContractList(data, list) {
         url: `${url.ORG_LIST}/monitor/unusualContractList/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** bytecode*/
@@ -657,9 +553,7 @@ export function getByteCode(data, list) {
         url: `${url.ORG_LIST}/web3/code/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -670,9 +564,7 @@ export function getBlockDetail(data, list) {
         url: `${url.ORG_LIST}/block/blockByNumber/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -681,9 +573,7 @@ export function deleteNodes(data) {
     return deleted({
         url: `${url.ORG_LIST}/node/nodeInfo/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**  Collection node metric*/
@@ -693,9 +583,7 @@ export function metricInfo(data, list) {
         url: `${url.ORG_LIST}/performance/ratio/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /** Machine configuration information*/
@@ -704,9 +592,7 @@ export function nodesHostInfo(data, list) {
     return get({
         url: `${url.ORG_LIST}/performance/config/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -716,9 +602,7 @@ export function nodesHealth(data, list) {
         url: `${url.ORG_LIST}/chain/monitorInfo/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -728,9 +612,7 @@ export function fetchNodeMonitor(data, list) {
         url: `${url.ORG_LIST}/stat`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -740,9 +622,7 @@ export function addFront(data) {
             url: `${url.ORG_LIST}/front/new`,
             method: 'post',
             data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // export function addFront(frontIp,frontPort) {
@@ -758,9 +638,7 @@ export function getGroups() {
     return get({
         url: `${url.ORG_LIST}/group/all`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function getFronts(data) {
@@ -768,9 +646,7 @@ export function getFronts(data) {
         url: `${url.ORG_LIST}/front/find`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function liquidCheckMethod(data) {
@@ -778,9 +654,7 @@ export function liquidCheckMethod(data) {
         url: `${url.ORG_LIST}/contract/liquid/check/${data}`,
         method: 'get',
         //params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function liquidCompileCheck(data) {
@@ -788,27 +662,21 @@ export function liquidCompileCheck(data) {
         url: `${url.ORG_LIST}/contract/liquid/compile/check`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function getDetail(data) {
     return get({
         url: `${url.ORG_LIST}/front/groupInfo?frontId=${data.frontId}&groupId=${data.groupId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function deleteFront(data) {
     return deleted({
         url: `${url.ORG_LIST}/front/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function changeDescription(data) {
@@ -816,9 +684,7 @@ export function changeDescription(data) {
         url: `${url.ORG_LIST}/group/description `,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -827,9 +693,7 @@ export function addFunctionAbi(data) {
         url: `${url.ORG_LIST}/method/add`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function getFunctionAbi(data, list) {
@@ -837,9 +701,7 @@ export function getFunctionAbi(data, list) {
     return get({
         url: `${url.ORG_LIST}/method/findById/${params}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function getAbi(data) {
@@ -848,16 +710,15 @@ export function getAbi(data) {
         url: `${url.ORG_LIST}/contract/findByPartOfBytecodeBin`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
 export function getPictureCheckCode() {
     return get({
         url: `${url.ORG_LIST}/account/pictureCheckCode`,
-        method: 'get'
+        method: 'get',
+        headers: getAuthHeaders()
     })
 }
 
@@ -867,9 +728,7 @@ export function postPermission(data) {
         url: `${url.ORG_LIST}/permission`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // permission delete
@@ -878,9 +737,7 @@ export function deletePermission(data) {
         url: `${url.ORG_LIST}/permission`,
         method: 'delete',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // permission get
@@ -889,9 +746,7 @@ export function getPermission(data) {
         url: `${url.ORG_LIST}/permission`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // permission  full get
@@ -900,9 +755,7 @@ export function getPermissionFull(data) {
         url: `${url.ORG_LIST}/permission/full`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // consensus node id
@@ -911,9 +764,7 @@ export function consensusNodeId(data) {
         url: `${url.ORG_LIST}/precntauth/precompiled/consensus/manage`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // consensus node id list 
@@ -922,9 +773,7 @@ export function getConsensusNodeId(data) {
         url: `${url.ORG_LIST}/precntauth/precompiled/consensus/list`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // sys config 
@@ -933,9 +782,7 @@ export function querySysConfig(data) {
         url: `${url.ORG_LIST}/precntauth/precompiled/sys/config`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // sys config list
@@ -944,9 +791,7 @@ export function querySysConfigList(data) {
         url: `${url.ORG_LIST}/precntauth/precompiled/sys/config/list`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // cns list by name
@@ -955,9 +800,7 @@ export function queryCnsListByName(data) {
         url: `${url.ORG_LIST}/precntauth/precompiled/cns/queryCnsByName`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // cns list by name version
@@ -966,9 +809,7 @@ export function queryCnsListByNameVersion(data) {
         url: `${url.ORG_LIST}/precntauth/precompiled/cns/queryCnsByNameVersion`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -978,9 +819,7 @@ export function queryCrudService(data) {
         url: `${url.ORG_LIST}/precompiled/crud`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -990,9 +829,7 @@ export function getPermissionSorted(list) {
         url: `${url.ORG_LIST}/permission/sorted`,
         method: 'get',
         params: list,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1003,9 +840,7 @@ export function postPermissionSorted(data) {
         url: `${url.ORG_LIST}/permission/sorted`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //获取pwd路径
@@ -1015,9 +850,7 @@ export function getPwdRoute(data) {
         method: 'post',
         data: data,
         // responseType: 'blob/json',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //修改pwd路径
@@ -1027,9 +860,7 @@ export function modfiyPwdRoute(data) {
         method: 'post',
         data: data,
         // responseType: 'blob/json',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //查询当前路径下的内容
@@ -1039,9 +870,7 @@ export function queryBfsPath(data) {
         method: 'post',
         data: data,
         // responseType: 'blob/json',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //创建目录
@@ -1051,9 +880,7 @@ export function createBfsPath(data) {
         method: 'post',
         data: data,
         // responseType: 'blob/json',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //上传证书文件 post：/cert
@@ -1063,9 +890,7 @@ export function importCert(data) {
         method: 'post',
         data: data,
         // responseType: 'blob/json',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // 导出证书文件list get: /cert
@@ -1074,9 +899,7 @@ export function exportCert(list) {
         url: `${url.ORG_LIST}/cert`,
         method: 'get',
         params: list,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // get证书文件list get: /cert/list
@@ -1085,9 +908,7 @@ export function certList(list) {
         url: `${url.ORG_LIST}/cert/list`,
         method: 'get',
         params: list,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // delete 证书 /cert 
@@ -1096,9 +917,7 @@ export function deleteCert(data) {
         url: `${url.ORG_LIST}/cert`,
         method: 'delete',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // put 告警邮箱 配置 
@@ -1107,9 +926,7 @@ export function changeEmailConfig(data) {
         url: `${url.ORG_LIST}/mailServer/config`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // get 告警邮箱 配置 
@@ -1118,9 +935,7 @@ export function getEmailList() {
         url: `${url.ORG_LIST}/mailServer/config/list`,
         method: 'get',
         // data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // get all 告警 配置 
@@ -1129,9 +944,7 @@ export function getAlarmList() {
         url: `${url.ORG_LIST}/alert/list`,
         method: 'get',
         // data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // get 单个 告警 配置 
@@ -1139,9 +952,7 @@ export function getAlarm(id) {
     return get({
         url: `${url.ORG_LIST}/alert/${id}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1151,9 +962,7 @@ export function changeAlarm(data) {
         url: `${url.ORG_LIST}/alert`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1163,9 +972,7 @@ export function startAlarm(data) {
         url: `${url.ORG_LIST}/alert/toggle`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //test 邮箱 
@@ -1174,9 +981,7 @@ export function testEmail(list, data) {
         url: `${url.ORG_LIST}/alert/mail/test/${list}`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1186,9 +991,7 @@ export function getAlarmLogs(data, list) {
     return get({
         url: `${url.ORG_LIST}/log/list/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //put  alarm log 
@@ -1197,9 +1000,7 @@ export function changeAlarmLog(data) {
         url: `${url.ORG_LIST}/log`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1209,9 +1010,7 @@ export function blockEventList(data, list) {
     return get({
         url: `${url.ORG_LIST}/event/newBlockEvent/list/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1221,9 +1020,7 @@ export function contractEventList(data, list) {
     return get({
         url: `${url.ORG_LIST}/event/contractEvent/list/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1233,9 +1030,7 @@ export function createGroup(data, nodeId) {
         url: `${url.ORG_LIST}/group/generate/${nodeId}`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // 批量启动group
@@ -1244,9 +1039,7 @@ export function batchStartGroup(data) {
         url: `${url.ORG_LIST}/group/batchStart`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //刷新动态添加的群组
@@ -1254,9 +1047,7 @@ export function getUpdateGroup() {
     return get({
         url: `${url.ORG_LIST}/group/update`,
         method: 'GET',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //增删改查群组
@@ -1265,9 +1056,7 @@ export function crudGroup(data, nodeId) {
         url: `${url.ORG_LIST}/group/operate/${nodeId}`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //all group
@@ -1276,9 +1065,7 @@ export function getGroupsInvalidIncluded(data, list) {
     return get({
         url: `${url.ORG_LIST}/group/all/invalidIncluded/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //单个节点获取所有群组状态
@@ -1287,18 +1074,14 @@ export function groupStatus(data) {
         url: `${url.ORG_LIST}/group/queryGroupStatus/list`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function deleteGroupData(groupId) {
     return deleted({
         url: `${url.ORG_LIST}/group/${groupId}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1309,9 +1092,7 @@ export function getAbiList(data, list) {
         url: `${url.ORG_LIST}/abi/list/${params.str}`,
         method: 'GET',
         params: list,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1320,9 +1101,7 @@ export function getAbiInfo(abiId) {
     return get({
         url: `${url.ORG_LIST}/abi/${abiId}`,
         method: 'GET',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1331,9 +1110,7 @@ export function importAbi(data) {
         url: `${url.ORG_LIST}/abi`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1343,9 +1120,7 @@ export function updateImportAbi(data) {
         url: `${url.ORG_LIST}/abi`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1353,9 +1128,7 @@ export function deleteImportAbi(data) {
     return deleted({
         url: `${url.ORG_LIST}/abi/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //p2p连接的节点 
@@ -1363,9 +1136,7 @@ export function p2pNodeList(groupId) {
     return get({
         url: `${url.ORG_LIST}/node/nodeIdList/${groupId}`,
         method: 'GET',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1375,9 +1146,7 @@ export function groupStatus4(groupStatus) {
     return get({
         url: `${url.ORG_LIST}/group/all/${groupStatus}`,
         method: 'GET',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1387,9 +1156,7 @@ export function getConfigList(data) {
         url: `${url.ORG_LIST}/config/list`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1399,9 +1166,7 @@ export function deployConfig(data) {
         url: `${url.ORG_LIST}/deploy/init`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1411,9 +1176,7 @@ export function newNode(data) {
         url: `${url.ORG_LIST}/node/add`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1423,9 +1186,7 @@ export function addNode(data) {
         url: `${url.ORG_LIST}/deploy/node/add`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1436,9 +1197,7 @@ export function upgradeNode(data) {
         method: "post",
         data: data,
 
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1447,9 +1206,7 @@ export function deleteChain() {
     return deleted({
         url: `${url.ORG_LIST}/deploy/delete`,
         method: "delete",
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1459,9 +1216,7 @@ export function deleteNode(data) {
         url: `${url.ORG_LIST}/deploy/node/delete`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1471,9 +1226,7 @@ export function stopNode(data) {
         url: `${url.ORG_LIST}/deploy/node/stop`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1483,9 +1236,7 @@ export function startNode(data) {
         url: `${url.ORG_LIST}/deploy/node/start`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1494,9 +1245,7 @@ export function getChainInfo() {
     return get({
         url: `${url.ORG_LIST}/deploy/chain/info`,
         method: "get",
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1505,9 +1254,7 @@ export function getProgress() {
     return get({
         url: `${url.ORG_LIST}/deploy/progress`,
         method: "get",
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1516,9 +1263,7 @@ export function getDeployType() {
     return get({
         url: `${url.ORG_LIST}/deploy/type`,
         method: "get",
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1528,9 +1273,7 @@ export function getVersion() {
         url: `${url.ORG_LIST}/config/version`,
         method: "get",
         responseType: "text",
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1539,9 +1282,7 @@ export function getHostList() {
     return get({
         url: `${url.ORG_LIST}/deploy/host/list`,
         method: "get",
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1551,9 +1292,7 @@ export function committeeList(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function getCount(data) {
@@ -1561,9 +1300,7 @@ export function getCount(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/proposalInfoCount`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1573,9 +1310,7 @@ export function addCommittee(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/committee/governor`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1585,9 +1320,7 @@ export function voteCommittee(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/vote`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //撤销提案
@@ -1596,9 +1329,7 @@ export function voteRevoke(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/revoke`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //修改阈值
@@ -1607,9 +1338,7 @@ export function modifyRate(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/committee/rate`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //重置合约管理员
@@ -1618,9 +1347,7 @@ export function resetAdmin(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/committee/contract/admin`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //查询合约管理员
@@ -1629,9 +1356,7 @@ export function queryAdmin(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/admin`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //设置合约方法策略
@@ -1640,9 +1365,7 @@ export function setPolicy(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/admin/method/auth/type`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //设置合约方法权限
@@ -1651,9 +1374,7 @@ export function setAdmin(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/admin/method/auth/set`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //检查合约管理权限
@@ -1662,9 +1383,7 @@ export function checkDeploy(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/usr/deploy`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //检查方法调用权限
@@ -1673,9 +1392,7 @@ export function checkMethod(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/method/auth`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //删除链管理委员 
@@ -1684,9 +1401,7 @@ export function deleteCommittee(data) {
         url: `${url.ORG_LIST}/governance/committee`,
         method: 'delete',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //查询阈值
@@ -1695,9 +1410,7 @@ export function getThreshold(data) {
         url: `${url.ORG_LIST}/governance/threshold`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //修改阈值
@@ -1706,9 +1419,7 @@ export function changeThreshold(data) {
         url: `${url.ORG_LIST}/governance/threshold`,
         method: "put",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //获取链委员权重
@@ -1717,9 +1428,7 @@ export function getCommitteeWeight(data) {
         url: `${url.ORG_LIST}/governance/committee/weight`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1730,9 +1439,7 @@ export function putCommitteeWeight(data) {
         url: `${url.ORG_LIST}/governance/committee/weight`,
         method: "put",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //  投票  
@@ -1741,9 +1448,7 @@ export function voteRecord(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/proposalInfoList`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //删除投票纪录
@@ -1751,9 +1456,7 @@ export function deleteVoteRecord(data) {
     return deleted({
         url: `${url.ORG_LIST}/vote/record/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1763,9 +1466,7 @@ export function operatorList(data) {
         url: `${url.ORG_LIST}/governance/operator/list`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1775,9 +1476,7 @@ export function addDevOps(data) {
         url: `${url.ORG_LIST}/governance/operator`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //删除运维
@@ -1786,9 +1485,7 @@ export function deleteDevOps(data) {
         url: `${url.ORG_LIST}/governance/operator`,
         method: 'delete',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //合约状态管理
@@ -1797,9 +1494,7 @@ export function getContractStatus(data) {
         url: `${url.ORG_LIST}/precompiled/contract/status`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // 批量查询合约状态
@@ -1808,9 +1503,7 @@ export function getAllContractStatus(data) {
         url: `${url.ORG_LIST}/precompiled/contract/status/list`,
         method: "post",
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //冻结/解冻合约历史记录
@@ -1819,9 +1512,7 @@ export function contractHistoryStatus(data) {
         url: `${url.ORG_LIST}/contract/status/record/list`,
         method: "get",
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1829,9 +1520,7 @@ export function deleteHandleHistory(data) {
     return deleted({
         url: `${url.ORG_LIST}/contract/status/record/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // contract path list
@@ -1839,9 +1528,7 @@ export function getContractPathList(data) {
     return post({
         url: `${url.ORG_LIST}/contract/contractPath/list/${data}`,
         method: 'post',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //add contract path
@@ -1850,9 +1537,7 @@ export function addContractPath(data) {
         url: `${url.ORG_LIST}/contract/contractPath`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1862,9 +1547,7 @@ export function deletePath(data) {
         url: `${url.ORG_LIST}/contract/batch/path`,
         method: 'delete',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1874,9 +1557,7 @@ export function checkEvent(data) {
         url: `${url.ORG_LIST}/event/eventLogs/list`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1884,9 +1565,7 @@ export function contractFindOne(contractId) {
     return get({
         url: `${url.ORG_LIST}/contract/findOne/${contractId}`,
         method: 'GET',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1895,9 +1574,7 @@ export function contractListAll(data) {
         url: `${url.ORG_LIST}/contract/contractList/all/light`,
         method: 'GET',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // 
@@ -1905,9 +1582,7 @@ export function listAddress(groupId) {
     return get({
         url: `${url.ORG_LIST}/event/listAddress/${groupId}`,
         method: 'GET',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1916,9 +1591,7 @@ export function contractInfo(data, list) {
     return get({
         url: `${url.ORG_LIST}/event/contractInfo/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function eventContractInfo(data, list) {
@@ -1926,9 +1599,7 @@ export function eventContractInfo(data, list) {
     return get({
         url: `${url.ORG_LIST}/event/contractInfo/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1937,9 +1608,7 @@ export function getContractStore() {
     return get({
         url: `${url.ORG_LIST}/warehouse/list`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1947,9 +1616,7 @@ export function getContractStoreById(storeId) {
     return get({
         url: `${url.ORG_LIST}/contractStore/getContractStoreById/${storeId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //
@@ -1957,9 +1624,7 @@ export function getContractItemById(contractId) {
     return get({
         url: `${url.ORG_LIST}/warehouse/${contractId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -1967,9 +1632,7 @@ export function getContractFolderById(contractFolderId) {
     return get({
         url: `${url.ORG_LIST}/warehouse/folder/list/${contractFolderId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 // 通过文件ID获取文件下的合约
@@ -1978,9 +1641,7 @@ export function getContractItemByFolderId(data) {
         url: `${url.ORG_LIST}/warehouse/item/list`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //获取合约仓库目录
@@ -1989,9 +1650,7 @@ export function getFolderItemListByStoreId(data) {
         url: `${url.ORG_LIST}/warehouse/folder/list`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //在线工具
@@ -2001,9 +1660,7 @@ export function signHash(data) {
         url: `${url.ORG_LIST}/transaction/signMessageHash`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2012,9 +1669,7 @@ export function batchSaveContract(data) {
         url: `${url.ORG_LIST}/contract/copy`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2024,9 +1679,7 @@ export function registerCns(data) {
         url: `${url.ORG_LIST}/contract/registerCns`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2037,9 +1690,7 @@ export function findCnsInfo(data) {
         url: `${url.ORG_LIST}/contract/findCns`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 //localCns查询
@@ -2049,22 +1700,30 @@ export function findCnsInfoList(data) {
         url: `${url.ORG_LIST}/contract/findCnsList`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
+// /**
+//  * @method 查询主机列表
+//  * @param none
+//  */
+// export function getHosts() {
+//     return get({
+//         url: `${url.ORG_LIST}/host/list`,
+//         method: 'get',
+//         headers: getAuthHeaders()
+//     })
+// }
+
 /**
  * @method 查询主机列表
  * @param none
  */
 export function getHosts() {
     return get({
-        url: `${url.ORG_LIST}/host/list`,
+        url: `${url.HOST_URL}/host/list`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2077,9 +1736,7 @@ export function addHost(data) {
         url: `${url.ORG_LIST}/host/add`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2092,9 +1749,7 @@ export function checkHost(data) {
         url: `${url.ORG_LIST}/host/check`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2105,9 +1760,7 @@ export function getAnsible() {
     return post({
         url: `${url.ORG_LIST}/host/ansible`,
         method: 'post',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2120,9 +1773,7 @@ export function initChainData(data) {
         url: `${url.ORG_LIST}/deploy/init`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -2134,9 +1785,7 @@ export function deployChainData(data) {
         url: `${url.ORG_LIST}/deploy/config`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2149,9 +1798,7 @@ export function checkPort(data) {
         url: `${url.ORG_LIST}/deploy/checkPort`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2164,9 +1811,7 @@ export function startChainData(data) {
         url: `${url.ORG_LIST}/deploy/chain/start`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2179,9 +1824,7 @@ export function pingHostData(data) {
         url: `${url.ORG_LIST}/host/ping`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2193,9 +1836,7 @@ export function addChainNodeData(data) {
         url: `${url.ORG_LIST}/deploy/node/add`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2206,9 +1847,7 @@ export function deleteHost(data) {
     return deleted({
         url: `${url.ORG_LIST}/host/${data}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2219,9 +1858,7 @@ export function refreshFront() {
     return get({
         url: `${url.ORG_LIST}/front/refresh`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -2232,9 +1869,7 @@ export function initCheck(data) {
         url: `${url.ORG_LIST}/deploy/initCheck`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2245,9 +1880,7 @@ export function getFrontStatus() {
     return get({
         url: `${url.ORG_LIST}/front/refresh/status`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2259,9 +1892,7 @@ export function restartNode(data) {
         url: `${url.ORG_LIST}/deploy/node/stopForce`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2275,9 +1906,7 @@ export function externalAccountList(data) {
     return post({
         url: `${url.ORG_LIST}/external/account/list/${params.str}`,
         method: 'get',
-       headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+       headers: getAuthHeaders()
     })
 }
 
@@ -2288,9 +1917,7 @@ export function exportCertSdk(frontId) {
         url: `${url.ORG_LIST}/cert/sdk/zip/${frontId}`,
         method: 'get',
         responseType: 'blob',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2300,9 +1927,7 @@ export function getGroupName(groupId) {
     return get({
         url: `${url.ORG_LIST}/group/detail/${groupId}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2316,9 +1941,7 @@ export function externalContractList(data) {
     return post({
         url: `${url.ORG_LIST}/external/contract/list/${params.str}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2331,9 +1954,7 @@ export function fetchSaveApp(data) {
         url: `${url.ORG_LIST}/app/save`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2348,9 +1969,7 @@ export function getAllAbiList(data,list) {
         url: `${url.ORG_LIST}/abi/list/all/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -2360,9 +1979,7 @@ export function fetchDeleteApp(id) {
     return deleted({
         url: `${url.ORG_LIST}/app/${id}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2374,9 +1991,7 @@ export function fetchAppList(data) {
         url: `${url.ORG_LIST}/app/list`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2390,9 +2005,7 @@ export function getAllContractList(data,list) {
         url: `${url.ORG_LIST}/external/contract/list/all/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -2403,9 +2016,7 @@ export function fetchAppServerInfo(data) {
         url: `${url.ORG_LIST}/config/ipPort`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2419,9 +2030,7 @@ export function getAllUserList(data,list) {
         url: `${url.ORG_LIST}/external/account/list/all/${params.str}`,
         method: 'get',
         params: params.querys,
-        headers: {
-      AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-  }
+        headers: getAuthHeaders()
 })
 }
 /**
@@ -2431,9 +2040,7 @@ export function fetchIsDeployedModifyEnable() {
     return get({
         url: `${url.ORG_LIST}/config/isDeployedModifyEnable`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -2444,9 +2051,7 @@ export function exportJavaProject(data) {
         url: `${url.ORG_LIST}/scaffold/export`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 /**
@@ -2457,9 +2062,7 @@ export function fetchChannelPort(data) {
         url: `${url.ORG_LIST}/front/nodeConfig`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || "",
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2469,9 +2072,7 @@ export function queryChannelIP(data) {
     return get({
         url: `${url.ORG_LIST}/scaffold/check?nodeIp=`+data.nodeIp+'&channelPort='+data.channelPort,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2480,9 +2081,7 @@ export function putCityIpAengcy(data) {
         url: `${url.ORG_LIST}/node/description`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2491,9 +2090,7 @@ export function getPermissionManagementStatus(groupId) {
         url: `${url.ORG_LIST}/auth/base/available?groupId=${groupId}`,
         method: 'get',
         // data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function setContractStatus(data) {
@@ -2501,9 +2098,7 @@ export function setContractStatus(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/status`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2512,9 +2107,7 @@ export function setContractAdminInfo(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/admin/contract/status/set`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2523,9 +2116,7 @@ export function getContractIsfreezeStatus(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/contract/status/list`,
         method: 'post',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2534,9 +2125,7 @@ export function getAuthManagerList(data) {
         url: `${url.ORG_LIST}/precntauth/authmanager/everyone/cmtInfo`,
         method: 'get',
         params: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2545,9 +2134,7 @@ export function updateAccountInfo(data) {
         url: `${url.ORG_LIST}/account/accountInfo`,
         method: 'put',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2556,9 +2143,7 @@ export function accountCancel(data) {
         url: `${url.ORG_LIST}/account/cancel`,
         method: 'delete',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2567,9 +2152,7 @@ export function deleteAccount(data) {
         url: `${url.ORG_LIST}/account/cancel`,
         method: 'delete',
         data:data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2578,9 +2161,7 @@ export function accountFreeze(data) {
         url: `${url.ORG_LIST}/account/freeze`,
         method: 'patch',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2589,9 +2170,7 @@ export function accountUnfreeze(data) {
         url: `${url.ORG_LIST}/account/unFreeze`,
         method: 'patch',
         data: data,
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2600,9 +2179,7 @@ export function sendCheckCodeMail(data) {
         url: `${url.ORG_LIST}/account/mail`,
         method: 'post',
         data: data,
-        // headers: {
-        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        // }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2611,9 +2188,7 @@ export function ifEnableMailCheckCode(data) {
         url: `${url.ORG_LIST}/account/mail/enable`,
         method: 'get',
         params: data,
-        // headers: {
-        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        // }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2633,18 +2208,14 @@ export function getAccountDetail() {
     return get({    
         url: `${url.ORG_LIST}/account/accountInfo`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 export function getUserAccountDetail(account) {
     return get({    
         url: `${url.ORG_LIST}/account/accountInfo?account=${account}`,
         method: 'get',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2653,9 +2224,7 @@ export function deleteUserPrivateKey(groupId,address) {
     return deleted({
         url: `${url.ORG_LIST}/user/${groupId}/${address}`,
         method: 'delete',
-        headers: {
-            AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        }
+        headers: getAuthHeaders()
     })
 }
 
@@ -2663,8 +2232,16 @@ export function getPrivacy() {
     return get({    
         url: `${url.ORG_LIST}/account/privacy`,
         method: 'get',
-        // headers: {
-        //     AuthorizationToken: "Token " + localStorage.getItem("token") || ""
-        // }
+        headers: getAuthHeaders()
     })
+}
+
+function getAuthHeaders() {
+    // return {
+    //     Authorization: "Bearer " +  getCookie("Admin-Token")
+    // };
+
+    return {
+        Authorization: "Bearer " +  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJaUGQ4MmdKSGNWOXpzRThVQ2FVOGN0d1YwaWQxc2F1TSIsInVzZXJJZCI6MX0.UL0yHr9c0GIb6-1f9SMVuHc8of1T1ZI83_3FgmVxF2U"
+    };
 }

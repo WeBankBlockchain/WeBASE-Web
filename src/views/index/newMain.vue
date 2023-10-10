@@ -278,7 +278,7 @@ export default {
                         type: "error",
                         duration: 2000
                     });
-                    router.push("/login");
+                    // router.push("/login");
                 }
             }).catch(err => {
                 this.$message({
@@ -286,7 +286,7 @@ export default {
                     type: "error",
                     duration: 2000
                 });
-                router.push("/login");
+                // router.push("/login");
             })
         },
         getFrontTable() {

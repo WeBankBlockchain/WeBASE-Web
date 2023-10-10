@@ -165,8 +165,8 @@ export default {
             this.loading = true
             getHosts().then(res => {
                 this.loading = false
-                if (res.data.code === 0) {
-                    this.hostList = res.data.data
+                if (res.data.code === 0 || res.data.code === 200) {
+                    this.hostList = res.data.rows
                 } else {
                     this.$message({
                         type: "error",

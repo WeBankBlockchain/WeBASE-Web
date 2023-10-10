@@ -136,6 +136,7 @@ import contentHead from "@/components/contentHead";
 import addChainNode from "./dialog/addChainNode"
 import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
 import { format, dynamicPoint } from "@/util/util"
+import constant from "@/util/constant";
 export default {
     components: {
         "v-content-head": contentHead,
@@ -482,7 +483,7 @@ export default {
         checkone(val) {
             this.loading3 = true
             let data = {
-                chainName: "default_chain",
+                chainName: constant.DEFAULT_CHAIN_NAME,
                 imageTag: this.chainFrom.chainVersion,
                 encryptType: this.chainFrom.encryptType,
                 agencyName: "agency1",
@@ -535,7 +536,7 @@ export default {
                 deployNodeInfoList[i].rpcPort = this.nodeList[i].rpcPort;
             }
             let data = {
-                chainName: "default_chain",
+                chainName: constant.DEFAULT_CHAIN_NAME,
                 ipconf: ipconf,
                 imageTag: this.chainFrom.chainVersion,
                 encryptType: this.chainFrom.encryptType,
@@ -547,7 +548,7 @@ export default {
                 data.encryptType = this.chainFrom.encryptType
             }
             let data1 = {
-                chainName: "default_chain",
+                chainName: constant.DEFAULT_CHAIN_NAME,
                 imageTag: this.chainFrom.chainVersion,
                 dockerImageType: this.chainFrom.dockerImageType,
                 hostIdList: hostIdList
@@ -811,8 +812,8 @@ export default {
         },
         getHostList() {
             getHosts().then(res => {
-                if (res.data.code === 0) {
-                    this.hostList = res.data.data;
+                if (res.data.code === 0|| res.data.code === 200) {
+                    this.hostList = res.data.rows;
                     this.changeHostStatus()
                 } else {
                     this.$message({

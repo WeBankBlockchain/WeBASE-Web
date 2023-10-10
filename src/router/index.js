@@ -75,14 +75,14 @@ const routes = [
   {
     path: "/",
     nameKey: "main",
-    redirect: "/login"
+    redirect: "/main"
   },
-  {
-    path: "/login",
-    nameKey: "login",
-    name: "login",
-    component: resolve => require(["@/views/login/login"], resolve)
-  },
+  // {
+  //   path: "/login",
+  //   nameKey: "login",
+  //   name: "login",
+  //   component: resolve => require(["@/views/login/login"], resolve)
+  // },
   {
     path: "/register",
     name: "register",

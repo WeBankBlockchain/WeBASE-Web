@@ -302,11 +302,13 @@ export default {
                             }
                         } else {
                             this.accountStatus = sessionStorage.getItem("accountStatus");
-                            router.push("/host");
+                            // router.push("/host");
+                            router.push("/home");
                         }
 
                     } else {
-                        router.push("/host");
+                        // router.push("/host");
+                        router.push("/home");
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
