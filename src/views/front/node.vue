@@ -21,9 +21,9 @@
                         <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                     </el-form-item> -->
                     <el-form-item :label='$t("text.imageMode")' prop='dockerImageType'>
-                        <el-radio v-model="chainFrom.dockerImageType" :label="2">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                        <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio>
-                        <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                        <el-radio v-model="chainFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio>
                         <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio> -->
@@ -63,9 +63,9 @@
                         </el-col>
                         <el-col :span="24">
                             <el-form-item :label='$t("text.imageMode") + "："' prop='dockerImageType'>
-                                <el-radio v-model="chainFrom.dockerImageType" :label="2">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                                <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                                 </el-radio>
-                                <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                                <el-radio v-model="chainFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                                 </el-radio>
                                 <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                                 </el-radio> -->
@@ -147,7 +147,7 @@ export default {
             chainFrom: {
                 encryptType: localStorage.getItem("encryptionId"),
                 chainVersion: null,
-                dockerImageType: 2
+                dockerImageType: 1
             },
             loading: false,   // 检测按钮loading
             loading1: false,  // 初始化按钮loading
@@ -238,7 +238,7 @@ export default {
                 if (res.data.code === 0) {
                     this.chainFrom = res.data.data;
                     // this.chainFrom.dockerImageType = 2
-                    this.$set(this.chainFrom, "dockerImageType", 2)
+                    // this.$set(this.chainFrom, "dockerImageType", 2)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),

@@ -18,7 +18,7 @@
                         <el-form-item :label="$t('text.imageMode')" prop='dockerImageType'>
                             <el-radio v-model="nodeFrom.dockerImageType" :label="0">{{$t("text.manual")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo2')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                             </el-radio>
-                            <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo1')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                            <el-radio v-model="nodeFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                             </el-radio>
                         </el-form-item>
                         <!-- <el-form-item :label='$t("nodes.nodeCount")'>
