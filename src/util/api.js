@@ -41,8 +41,13 @@ export function loginOut() {
 }
 //
 export function encryption(groupId) {
+    // return get({
+    //     url: `${url.ORG_LIST}/group/encrypt/${groupId}`,
+    //     method: 'get',
+    //     headers: getAuthHeaders()
+    // })
     return get({
-        url: `${url.ORG_LIST}/group/encrypt/${groupId}`,
+        url: `${url.ORG_LIST}/config/encrypt`,
         method: 'get',
         headers: getAuthHeaders()
     })
