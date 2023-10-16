@@ -18,9 +18,9 @@
                 <el-form-item :label='"P2P" + $t("alarm.port")' prop='p2pPort'>
                     <el-input v-model="nodeFrom.p2pPort" :placeholder="$t('text.input') + 'P2P' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
                 </el-form-item>
-                <el-form-item :label='"Channel" + $t("alarm.port")' prop='channelPort'>
+                <!-- <el-form-item :label='"Channel" + $t("alarm.port")' prop='channelPort'>
                     <el-input v-model="nodeFrom.channelPort" :placeholder="$t('text.input') + 'Channel' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item :label='"RPC" + $t("alarm.port")' prop='rpcPort'>
                     <el-input v-model="nodeFrom.rpcPort" :placeholder="$t('text.input') + 'RPC' + $t('alarm.port')" type="number" style="width: 240px;" maxlength="16"></el-input>
                 </el-form-item>
@@ -338,7 +338,7 @@ export default {
                 hostId: this.nodeData.hostId,
                 frontPort: this.nodeData.frontPort,
                 p2pPort: this.nodeData.p2pPort,
-                channelPort: this.nodeData.channelPort,
+                // channelPort: this.nodeData.channelPort,
                 rpcPort: this.nodeData.rpcPort,
                 id: this.nodeData.id,
                 state: this.nodeData.state

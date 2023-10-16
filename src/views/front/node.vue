@@ -81,7 +81,7 @@
                         <el-table-column :label='$t("nodes.ip")' prop="frontIp" show-overflow-tooltip></el-table-column>
                         <el-table-column :label='$t("nodes.frontPort")' prop="frontPort" show-overflow-tooltip></el-table-column>
                         <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
+                        <!-- <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column> -->
                         <el-table-column :label="'RPC' + $t('alarm.port')" prop="jsonrpcPort" show-overflow-tooltip></el-table-column>
                     </el-table>
                 </div>
@@ -95,7 +95,7 @@
                         <el-table-column :label="$t('text.hostTitle')" prop="ip" show-overflow-tooltip></el-table-column>
                         <el-table-column :label="'Front' + $t('alarm.port')" prop="frontPort" show-overflow-tooltip></el-table-column>
                         <el-table-column :label="'P2P' + $t('alarm.port')" prop="p2pPort" show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column>
+                        <!-- <el-table-column :label="'Channel' + $t('alarm.port')" prop="channelPort" show-overflow-tooltip></el-table-column> -->
                         <el-table-column :label="'RPC' + $t('alarm.port')" prop="rpcPort" show-overflow-tooltip></el-table-column>
                         <el-table-column :label="$t('contracts.status')" prop="status" show-overflow-tooltip>
                             <template slot-scope="scope">
@@ -532,7 +532,7 @@ export default {
                 deployNodeInfoList[i].ip = this.nodeList[i].ip;
                 deployNodeInfoList[i].frontPort = this.nodeList[i].frontPort;
                 deployNodeInfoList[i].p2pPort = this.nodeList[i].p2pPort;
-                deployNodeInfoList[i].channelPort = this.nodeList[i].channelPort;
+                // deployNodeInfoList[i].channelPort = this.nodeList[i].channelPort;
                 deployNodeInfoList[i].rpcPort = this.nodeList[i].rpcPort;
             }
             let data = {
