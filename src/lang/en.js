@@ -329,9 +329,9 @@ export default {
     appListTile: "App List",
     appTitleAdmin: "Application configuration (administrator)",
     appStep11:
-      "Get registration information through service registration, and register service with webase through API",
+      "Get registration information through service registration, and register service with baas through API",
     appStep12:
-      "Connect with webase through the basic capability API provided by webase",
+      "Connect with webase through the basic capability API provided by baas",
     appStep21: "Add app",
     appStep22: "Start application plug in",
     appStepTag1: "Account on the chain",
@@ -339,7 +339,7 @@ export default {
     appStepTag3: "Mgt account",
     appStepTag4: "Contract",
     appDescContent:
-      "Application management function is a kind of application management plug-in access function provided by webase management desk. Webase provides application management function menu and access general specification. Each application can register to the webase management console according to the access specification, so as to realize the connection between webase and each application from the user, blockchain account, basic configuration, contract and other aspects.",
+      "Application management function is a kind of application management plug-in access function provided by baas management desk. Baas provides application management function menu and access general specification. Each application can register to the baas management console according to the access specification, so as to realize the connection between baas and each application from the user, blockchain account, basic configuration, contract and other aspects.",
     copyInfo: "Copy",
     imgSize:
       "Only one picture can be uploaded at a time, with the size of 80 * 80px. PNG and JPG formats are supported, and the size cannot exceed 200KB",

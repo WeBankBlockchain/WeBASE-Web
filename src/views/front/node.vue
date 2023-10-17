@@ -237,8 +237,8 @@ export default {
             getChainInfo().then(res => {
                 if (res.data.code === 0) {
                     this.chainFrom = res.data.data;
-                    // this.chainFrom.dockerImageType = 2
-                    // this.$set(this.chainFrom, "dockerImageType", 2)
+                    this.chainFrom.dockerImageType = 1
+                    this.$set(this.chainFrom, "dockerImageType", 1)
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
