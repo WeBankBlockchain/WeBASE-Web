@@ -349,7 +349,11 @@ export default {
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         nodeActive:'节点存活',
         nodeNotActive:'节点未存活',
-        addContractAddress: '绑定'
+        addContractAddress: '绑定',
+        enableAuth: '启用权限控制',
+        enable: '启用',
+        disable: '关闭',
+        adminAddr: 'admin账号'
     },
     rule: {
         chainCommite:"链委员已存在",

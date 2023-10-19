@@ -28,12 +28,20 @@
                         <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio> -->
                     </el-form-item>
-                    <el-form-item :label='$t("text.chainVersion")' prop='chainVersion'>
+                    <el-form-item :label='$t("text.enableAuth")' prop='enableAuth'>
+                        <el-radio v-model="chainFrom.enableAuth" :label="0">{{$t("text.disable")}}
+                        </el-radio>
+                        <el-radio v-model="chainFrom.enableAuth" :label="1">{{$t("text.enable")}}
+                        </el-radio>
+                        <!-- <el-radio v-model="chainFrom.dockerImageType" :label="3">dockerhub<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
+                        </el-radio> -->
+                    </el-form-item>
+                    <!-- <el-form-item :label='$t("text.chainVersion")' prop='chainVersion'>
                         <el-select v-model="chainFrom.chainVersion" :placeholder="$t('text.select')">
                             <el-option v-for="item in configList" :key="item.id" :label="item.configValue" :value="item.configValue">
                             </el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-form>
             </div>
             <div class="search-part" v-if='type == "node"'>
@@ -134,7 +142,7 @@
 <script>
 import contentHead from "@/components/contentHead";
 import addChainNode from "./dialog/addChainNode"
-import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
+import { getUserList, getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
 import { format, dynamicPoint } from "@/util/util"
 import constant from "@/util/constant";
 export default {
@@ -147,7 +155,8 @@ export default {
             chainFrom: {
                 encryptType: localStorage.getItem("encryptionId"),
                 chainVersion: null,
-                dockerImageType: 1
+                dockerImageType: 1,
+                enableAuth: 0
             },
             loading: false,   // 检测按钮loading
             loading1: false,  // 初始化按钮loading
@@ -170,7 +179,7 @@ export default {
             laodingText: "加载中",  //loading文案
             progressTimer: null,    //progress定时器,
             statusNumber: 0,   /// progess 值
-            frontList: []
+            frontList: [],
         }
     },
     computed: {
@@ -179,10 +188,13 @@ export default {
                 encryptType: [
                     { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
                 ],
-                chainVersion: [
-                    { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
-                ],
+                // chainVersion: [
+                //     { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
+                // ],
                 dockerImageType: [
+                    { required: true, message: this.$t('text.notNull'), trigger: 'blur' }
+                ],
+                enableAuth: [
                     { required: true, message: this.$t('text.notNull'), trigger: 'blur' }
                 ]
             }
@@ -304,6 +316,7 @@ export default {
                     this.configList = [];
                     this.configList = res.data.data
                     console.log(this.chainFrom)
+                    this.chainFrom.chainVersion = this.configList[0].configValue
                 } else {
                     this.$message({
                         message: this.$chooseLang(res.data.code),
@@ -541,7 +554,8 @@ export default {
                 imageTag: this.chainFrom.chainVersion,
                 encryptType: this.chainFrom.encryptType,
                 deployNodeInfoList: deployNodeInfoList,
-                agencyName: "agency1"
+                agencyName: "agency1",
+                enableAuth: this.chainFrom.enableAuth
             }
             if (this.type == "node") {
                 data.imageTag = this.chainFrom.version;
@@ -707,7 +721,7 @@ export default {
                     this.nodeList = []
                     sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
                     this.$store.dispatch('set_node_list_action', this.nodeList)
-                    this.$router.push("/newNode")
+                    this.$router.push({path: "/newNode", query: {enableAuth: this.chainFrom.enableAuth}})
                 } else {
                     this.getHostList()
                     this.initShow = false
@@ -1052,7 +1066,7 @@ export default {
                     break;
             }
             return colorString;
-        }
+        },
     },
     beforeRouteLeave: function (to, from, next) {
         if ((to.path !== "/guide" && to.path !== "/login" && to.path !== "/newNode") && (!this.deployOpt && this.nodeList.length !== 0)) {

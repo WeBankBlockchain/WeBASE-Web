@@ -140,7 +140,7 @@ import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
     getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
-    getFrontStatus, restartNode
+    getFrontStatus, restartNode, initAuthAdmin
 } from "@/util/api";
 import { format, unique, dynamicPoint } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -214,7 +214,8 @@ export default {
             optShow: false,
             groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
             sdkDialogVisible: false,
-            sdkParam:{}
+            sdkParam:{},
+            enableAuth: this.$route.query.enableAuth,
         };
     },
     computed: {
@@ -430,6 +431,13 @@ export default {
                         if ((res.data.data.chainStatus == 3 || res.data.data.chainStatus == 2) && !this.optShow) {
                             clearInterval(this.progressInterval)
                             this.loadingNodes = false;
+
+                            // 如果链启动成功了，并且是启用了权限治理模式，则需要调用接口，导入自动生成的私钥
+                            console.log("!!!!!enableAuth:", this.enableAuth);
+                            if (this.enableAuth == "1") {
+                                this.initImportAdmin();
+                                this.enableAuth = "0";
+                            }
                         } else {
                             this.getProgresses(this.$t("text.loadingInfo"))
                         }
@@ -1091,8 +1099,29 @@ export default {
                     break;
             }
             return colorString;
-        }
+        },
 
+        initImportAdmin() {
+            let reqQuery = {
+                chainName: this.chainList.chainName,
+                encryptType: this.chainList.encryptType,
+                userName: "admin_auth",
+                groupId: localStorage.getItem("groupId"),
+                description: "初始治理账户",
+                account: localStorage.getItem("user")
+            };
+            initAuthAdmin(reqQuery)
+                .then(res => {
+                    const { data, status } = res;
+                    console.log("initAuthAdmin, res data:", data);
+                })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError'),
+                    });
+                });
+        },
     }
 };
 </script>

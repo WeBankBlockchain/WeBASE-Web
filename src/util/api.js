@@ -305,6 +305,15 @@ export function ImportPemPrivateKey(data) {
         headers: getAuthHeaders()
     })
 }
+//init auth admin
+export function initAuthAdmin(data) {
+    return post({
+        url: `${url.ORG_LIST}/user/initImportAuthAdmin`,
+        method: 'post',
+        data: data,
+        headers: getAuthHeaders()
+    })
+}
 //import p12 privateKey 
 export function ImportP12PrivateKey(data) {
     let authHeaders = getAuthHeaders();

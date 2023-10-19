@@ -394,7 +394,11 @@ export default {
     importContractTip:
       "Decoding transaction output requires compiling contract in IDE or import abi of contract",
     nodeActive: "Node active",
-    nodeNotActive: "Node not active"
+    nodeNotActive: "Node not active",
+    enableAuth: 'Enabel auth',
+    enable: 'Enable',
+    disable: 'Disable',
+    adminAddr: 'The account of admin'
   },
   rule: {
     chainCommite: "Chain committee already exists",
