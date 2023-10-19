@@ -777,11 +777,11 @@ export default {
 }
 
 .block {
-  height:500px
+  max-height:500px
 }
 
 .trans {
-  height:250px;
+  max-height:250px;
 }
 
 .block-miner {
