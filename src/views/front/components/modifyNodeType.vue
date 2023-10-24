@@ -154,8 +154,8 @@ export default {
                     // 不允许从游离节点直接修改为共识节点
                     if (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer') {
                         this.$message({
-                            message: err.data || this.$t('nodes.modifySealerWarn'),
-                            type: "error",
+                            message: this.$t('nodes.modifySealerWarn'),
+                            type: "warning",
                             duration: 2000
                         });
                         return;
