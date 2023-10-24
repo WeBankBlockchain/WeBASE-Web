@@ -151,6 +151,15 @@ export default {
         submit(formName) {
             this.$refs[formName].validate(valid => {
                 if (valid) {
+                    // 不允许从游离节点直接修改为共识节点
+                    if (this.modifyNode.nodeType === 'remove' && this.modifyForm.nodeType === 'sealer') {
+                        this.$message({
+                            message: err.data || this.$t('nodes.modifySealerWarn'),
+                            type: "error",
+                            duration: 2000
+                        });
+                        return;
+                    }
                     if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'observer') {
                         this.$confirm(this.$t("nodes.observerText"), this.$t("text.tips"), {
                             confirmButtonText: this.$t("text.sure"),

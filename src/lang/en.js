@@ -697,7 +697,8 @@ export default {
     starting: "starting",
     notice:
       "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported.",
-    addContract: "Import Contract"
+    addContract: "Import Contract",
+    modifySealerWarn: "Only observer can be set in sealer",
   },
   contracts: {
     cancall: "Can be called",

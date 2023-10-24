@@ -632,6 +632,7 @@ export default {
         starting: "启动中",
         notice: "注意：确保群组至少有两个共识节点，如果少于2个，将会报错。",
         addContract: "导入合约",
+        modifySealerWarn: "只有观察节点才可以被设置为共识节点",
     },
     contracts: {
         canCall:"能否调用",
