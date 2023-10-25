@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { getUserList, consensusNodeId } from "@/util/api";
+import { getUserList, consensusNodeId, nodeMgrProposal } from "@/util/api";
 export default {
     name: 'ModifyNodeType',
 
@@ -139,6 +139,7 @@ export default {
         }
         this.modifyNode.nodeType === 'sealer'?this.weightShow=true:this.weightShow=false
         this.getUserData();
+        console.log("!!@#!@modifyNode:", this.modifyNode);
     },
 
     methods: {
@@ -209,7 +210,40 @@ export default {
                 fromAddress: this.modifyForm.adminRivateKey,
                 weight:this.modifyForm.weight,
             }
-            consensusNodeId(reqData)
+
+            if (this.modifyNode.isAuthEnable) {
+                // 如果当前节点为共识节点，并且也是修改为共识节点，则本次操作为修改节点的权重
+                if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'sealer') {
+                    reqData.nodeType = 'weight';
+                }
+                nodeMgrProposal(reqData)
+                .then(res => {
+                    this.loading = false;
+                    console.log(res);
+                    if (res.data.code === 0) {
+                        this.$message({
+                            type: 'success',
+                            message: this.$t("text.proposalSuccessMsg")
+                        })
+                        this.$emit('nodeModifySuccess')
+                    } else {
+                        this.$message({
+                            message: this.$chooseLang(res.data.code),
+                            type: "error",
+                            duration: 2000
+                        });
+                    }
+                })
+                .catch(err => {
+                    this.loading = false;
+                    this.$message({
+                        message: err.data || this.$t('text.systemError'),
+                        type: "error",
+                        duration: 2000
+                    });
+                });
+            } else {
+                consensusNodeId(reqData)
                 .then(res => {
                     this.loading = false;
                     if (res.data.code === 0) {
@@ -234,6 +268,7 @@ export default {
                         duration: 2000
                     });
                 });
+            }
         },
         changeRivateKey(val) {
             this.adminRivateKey = val

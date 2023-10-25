@@ -140,7 +140,7 @@ import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
     getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
-    getFrontStatus, restartNode, initAuthAdmin
+    getFrontStatus, restartNode, initAuthAdmin, getPermissionManagementStatus
 } from "@/util/api";
 import { format, unique, dynamicPoint } from "@/util/util";
 import errcode from "@/util/errcode";
@@ -216,6 +216,7 @@ export default {
             sdkDialogVisible: false,
             sdkParam:{},
             enableAuth: this.$route.query.enableAuth,
+            isAuthEnable: false
         };
     },
     computed: {
@@ -314,6 +315,11 @@ export default {
         Bus.$on("changeConfig", data => {
             this.getData();
         })
+        if (this.enableAuth == "1") {
+            this.isAuthEnable = true;
+        } else {
+            this.checkAuth();
+        }
         this.getConfigList();
         this.getData();
     },
@@ -1030,6 +1036,7 @@ export default {
         },
         modifyNodeType(param) {
             this.modifyNode = param;
+            this.modifyNode.isAuthEnable = this.isAuthEnable;
             this.modifyDialogVisible = true;
         },
         copyNodeIdKey(val) {
@@ -1121,6 +1128,18 @@ export default {
                         message: err.data || this.$t('text.systemError'),
                     });
                 });
+        },
+
+        checkAuth() {
+            getPermissionManagementStatus(localStorage.getItem("groupId"))
+                .then((res) => {
+                    if (res.data.data == true) {
+                        this.isAuthEnable = true;
+                    } else {
+                        this.isAuthEnable = false;
+                    }
+                })
+                .catch((err) => { });
         },
     }
 };

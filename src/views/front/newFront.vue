@@ -135,13 +135,10 @@ import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import detailPage from "./components/detailPage";
 import updateSDK from "./components/updateSDK";
-import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk } from "@/util/api";
+import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk, getPermissionManagementStatus } from "@/util/api";
 import { date, unique } from "@/util/util";
-import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import Bus from "@/bus"
-import JSZip from 'jszip'
-import FileSaver from 'file-saver'
 export default {
     name: "newFront",
     components: {
@@ -187,6 +184,7 @@ export default {
             sdkParam:{},
             detailParam:{},
             remarkDialogVisible: false,
+            isAuthEnable: false
         };
     },
     computed: {
@@ -280,6 +278,7 @@ export default {
         }
         this.getFrontTable();
         this.getNodeTable();
+        this.checkAuth();
     },
     methods: {
          remarks(param) {
@@ -592,6 +591,7 @@ export default {
         },
         modifyNodeType(param) {
             this.modifyNode = param;
+            this.modifyNode.enAbleAuth = this.enAbleAuth;
             this.modifyDialogVisible = true;
         },
         copyNodeIdKey(val) {
@@ -636,6 +636,18 @@ export default {
     },
     nodeRemarkClose() {
       this.remarkDialogVisible = false;
+    },
+
+    checkAuth() {
+      getPermissionManagementStatus(localStorage.getItem("groupId"))
+        .then((res) => {
+          if (res.data.data == true) {
+            this.isAuthEnable = true;
+          } else {
+            this.isAuthEnable = false;
+          }
+        })
+        .catch((err) => {});
     },
     }
 };

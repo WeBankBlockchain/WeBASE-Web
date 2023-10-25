@@ -59,6 +59,7 @@ export default {
         select: "请选择",
         tips: "提示",
         updateSuccessMsg: "修改成功",
+        proposalSuccessMsg: "修改节点提案成功，如果提案需要多个委员投票，请前往权限管理页面进行投票",
         cancelSuccessMsg: "注销成功",
         createSuccessMsg: "新建成功",
         save: "保存",

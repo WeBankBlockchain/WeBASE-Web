@@ -1328,6 +1328,16 @@ export function addCommittee(data) {
     })
 }
 
+//更改节点状态投票
+export function nodeMgrProposal(data) {
+    return post({
+        url: `${url.ORG_LIST}/precntauth/authmanager/committee/proposal/consensus`,
+        method: "post",
+        data: data,
+        headers: getAuthHeaders()
+    })
+}
+
 //委员投票
 export function voteCommittee(data) {
     return post({

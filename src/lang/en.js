@@ -63,6 +63,7 @@ export default {
     select: "Please select",
     tips: "Tips",
     updateSuccessMsg: "Update Success",
+    proposalSuccessMsg: "The proposal for modifying the node sucess. If the proposal requires multiple members to vote, please go to the permission management page to vote",
     createSuccessMsg: "Create Success",
     cancelSuccessMsg: "Cancel Success",
     save: "Save",
