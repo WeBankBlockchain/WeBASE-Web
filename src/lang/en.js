@@ -503,7 +503,8 @@ export default {
     exit: "Exit",
     versionInfo: "Version",
     dataBigScreen: "Large data screen",
-    deleteSelf: "Delete Account"
+    deleteSelf: "Delete Account",
+    chain: "Chain",
   },
   title: {
     Contractcompiling: "contract compilation, please wait...",

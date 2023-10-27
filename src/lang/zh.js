@@ -450,7 +450,8 @@ export default {
         exit: "退出",
         versionInfo: "版本信息",
         dataBigScreen:"数据大屏",
-        deleteSelf:'撤销本账户'
+        deleteSelf:'撤销本账户',
+        chain: "链",
     },
     title: {
         bfs:"BFS",

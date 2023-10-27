@@ -256,6 +256,8 @@ export default {
                     if (res.data.data && res.data.data.length) {
                         if (!localStorage.getItem("groupId")) {
                             localStorage.setItem("groupId", res.data.data[0].groupId)
+                            localStorage.setItem("chainId", res.data.data[0].chainId)
+                            localStorage.setItem("chainName", res.data.data[0].chainName)
                         }
                         if (!localStorage.getItem("groupName")) {
                             localStorage.setItem("groupName", res.data.data[0].groupName);

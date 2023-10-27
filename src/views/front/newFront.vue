@@ -15,7 +15,8 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')"></nav-menu>
         <div class="module-wrapper">
             <h3 style="padding: 20px 0 0 40px;">{{this.$t("nodes.nodeFront")}}</h3>
             <div class="search-part" style="padding-top: 20px;">
@@ -131,7 +132,7 @@
 
 <script>
 import remarkNode from "./components/remarkNode";
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import detailPage from "./components/detailPage";
 import updateSDK from "./components/updateSDK";
@@ -139,15 +140,17 @@ import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getV
 import { date, unique } from "@/util/util";
 import setFront from "../index/dialog/setFront.vue"
 import Bus from "@/bus"
+import navMenu from '@/components/navs/navMenu'
 export default {
     name: "newFront",
     components: {
-        "v-content-head": contentHead,
+        // "v-content-head": contentHead,
         "v-setFront": setFront,
         modifyNodeType,
         'update-sdk':updateSDK,
         detailPage,
-            remarkNode,
+        remarkNode,
+        'nav-menu': navMenu
     },
     watch: {
         $route() {

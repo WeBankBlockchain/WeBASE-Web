@@ -19,13 +19,13 @@
 
 <script>
 import { blockEventList } from "@/util/api";
-import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import Bus from "@/bus"
 export default {
     name: 'blockEvent',
 
     components: {
-        "v-content-head": contentHead
+        'nav-menu':NavMenu,
     },
 
     props: {

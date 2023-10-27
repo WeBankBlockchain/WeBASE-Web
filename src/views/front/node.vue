@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')"></nav-menu>
         <div class="module-wrapper" style="padding-bottom: 20px">
             <p class="wrapper-title" v-if='type != "node"'>{{$t("text.addChain")}}</p>
             <!-- <p class="wrapper-title" v-if='type == "node"'>新增节点</p> -->
@@ -143,15 +144,16 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '@/components/navs/navMenu'
 import addChainNode from "./dialog/addChainNode"
 import { getUserList, getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
 import { format, dynamicPoint } from "@/util/util"
-import constant from "@/util/constant";
 export default {
     components: {
-        "v-content-head": contentHead,
-        addChainNode
+        // "v-content-head": contentHead,
+        addChainNode,
+        'nav-menu': NavMenu
     },
     data() {
         return {

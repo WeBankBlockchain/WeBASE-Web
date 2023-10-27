@@ -15,7 +15,8 @@
  */
 <template>
     <div class="front-module">
-        <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head> -->
+        <nav-menu :headTitle="$t('title.nodeTitle')"></nav-menu>
         <!-- <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
@@ -30,7 +31,7 @@
                 <div class="search-part-left">
                     <!-- <el-button v-if='deployShow' type="primary" class="search-part-left-btn" @click="deployChain">{{$t('text.deploy')}}</el-button> -->
                     <el-button type="primary" class="search-part-left-btn" :disabled="!(configData && configData.chainStatus == 3)" @click="createFront">{{$t('text.addNode')}}</el-button>
-                    <el-button type="primary" class="search-part-left-btn" :disabled='!(configData && (configData.chainStatus == 3 || configData.chainStatus == 2))' @click="reset">{{$t('text.reset')}}</el-button>
+                    <!-- <el-button type="primary" class="search-part-left-btn" :disabled='!(configData && (configData.chainStatus == 3 || configData.chainStatus == 2))' @click="reset">{{$t('text.reset')}}</el-button> -->
                 </div>
             </div>
             <div class="search-table">
@@ -135,7 +136,7 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
@@ -143,7 +144,6 @@ import {
     getFrontStatus, restartNode, initAuthAdmin, getPermissionManagementStatus
 } from "@/util/api";
 import { format, unique, dynamicPoint } from "@/util/util";
-import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import setConfig from "../index/dialog/setConfig"
 import addNode from "./dialog/addNode"
@@ -152,17 +152,19 @@ import updateNode from "./dialog/updateNode"
 import Bus from "@/bus"
 import guideImg from "@/../static/image/guide.69e4d090.png"
 import hostInfo from "./dialog/hostInfo"
+import navMenu from "@/components/navs/navMenu";
 export default {
     name: "node",
     components: {
-        "v-content-head": contentHead,
+        // "v-content-head": contentHead,
         "v-setFront": setFront,
         modifyNodeType,
         "add-node": addNode,
         'new-node': newNode,
         'update-node': updateNode,
         'set-config': setConfig,
-        "host-info": hostInfo
+        "host-info": hostInfo,
+        "nav-menu": navMenu,
     },
     watch: {
         $route() {
@@ -843,6 +845,8 @@ export default {
                         if (res.data.data && res.data.data.length) {
                             if (!localStorage.getItem("groupId")) {
                                 localStorage.setItem("groupId", res.data.data[0].groupId)
+                                localStorage.setItem("chainId", res.data.data[0].chainId)
+                                localStorage.setItem("chainName", res.data.data[0].chainName)
                             }
                             if (!localStorage.getItem("groupName")) {
                                 localStorage.setItem("groupName", res.data.data[0].groupName);

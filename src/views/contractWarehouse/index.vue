@@ -1,6 +1,7 @@
 <template>
     <div>
-        <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractWarehouse')"></content-head>
+        <!-- <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractWarehouse')"></content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.contractWarehouse')"></nav-menu>
         <div class="module-wrapper" style="padding: 20px;" v-loading="loading">
             <div class="contract-introduction">
                 <!-- <p>{{$t('text.appIntroduction')}}</p> -->
@@ -53,7 +54,8 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import Bus from "@/bus"
 import { getContractStore, getContractItemByFolderId, batchSaveContract, getFolderItemListByStoreId } from "@/util/api"
 import Folder from "@/components/Folder";
@@ -61,8 +63,9 @@ export default {
     name: 'contractWarehouse',
 
     components: {
-        contentHead,
-        Folder
+        // contentHead,
+        Folder,
+        'nav-menu': NavMenu,
     },
 
     props: {

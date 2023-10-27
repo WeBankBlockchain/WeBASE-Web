@@ -289,10 +289,9 @@ import {
   getUserList,
   committeeList,
   deleteCommittee,
-  putCommitteeWeight,
+
   voteRecord,
   deleteVoteRecord,
-  changeThreshold,
   getThreshold,
   getNetworkStatistics,
   getCommitteeWeight,

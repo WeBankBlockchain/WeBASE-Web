@@ -1,7 +1,20 @@
+<!--
+ * @Author: yyzhangyang zy871029@126.com
+ * @Date: 2023-10-24 14:13:57
+ * @LastEditors: yyzhangyang zy871029@126.com
+ * @LastEditTime: 2023-10-27 11:01:33
+ * @FilePath: /WeBASE-Web/src/views/permission/newPermission.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
     <div>
-        <contents  @changGroup="changGroup" :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')" :headHref="headHref">
-        </contents>
+        <!-- <contents  @changGroup="changGroup" :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.permission')"  :headTooltip="$t('title.permissionTips')" :headHref="headHref">
+        </contents> -->
+        <nav-menu
+          :headTitle="$t('title.systemManager')"
+          :headSubTitle="$t('title.permission')"
+          :headTooltip="$t('title.permissionTips')"
+        ></nav-menu>
         <!-- <div  v-if="nodeVersionChange == 1" class="module-wrapper" style="padding: 30px 29px 0 29px;"> -->
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-tabs @tab-click="handleClick" v-model="activeName">
@@ -20,7 +33,8 @@
 </template>
 
 <script>
-import contents from "@/components/contentHead";
+// import contents from "@/components/contentHead";
+import NavMenu from "../../components/navs/navMenu.vue";
 import committeeMgmt from "@/views/committeeMgmt/index";
 import developerMgmt from "@/views/developerMgmt/index";
 import permission from "@/views/permission/index";
@@ -28,10 +42,11 @@ import {getFronts} from "@/util/api";
 export default {
     name: 'newPermission',
     components: {
-         contents,
+        //  contents,
         committeeMgmt,
         developerMgmt,
-        permission
+        permission,
+        "nav-menu": NavMenu,
     },
     data() {
         return {

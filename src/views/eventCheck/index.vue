@@ -1,6 +1,7 @@
 <template>
   <div class="rivate-key-management-wrapper">
-    <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head>
+    <!-- <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head> -->
+    <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')"></nav-menu>
     <div class="module-wrapper">
       <div class="search-part ">
         <el-form :model="contractEventForm" :rules="rules" ref="contractEventForm" class="demo-ruleForm" label-width="110px">
@@ -69,11 +70,9 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
 import decodeLog from "@/components/decodeLog";
 import {
-  contractFindOne,
-  contractListAll,
   checkEvent,
   getNetworkStatistics,
   listAddress,
@@ -82,13 +81,14 @@ import {
 import { validateEvent } from "@/util/validate";
 import { isJson } from "@/util/util";
 const Web3Utils = require("web3-utils");
-import Bus from "@/bus";
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
   name: "eventCheck",
 
   components: {
-    contentHead,
+    // contentHead,
     decodeLog,
+    'nav-menu':NavMenu
   },
 
   props: {},

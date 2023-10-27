@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
             <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
                 <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
@@ -39,14 +40,14 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import systemConfig from "./components/systemConfig";
 import { getUserList, querySysConfig, querySysConfigList } from "@/util/api";
 export default {
     name: 'ConfigManagement',
 
     components: {
-        "v-content-head": contentHead,
+        'nav-menu': NavMenu,
         systemConfig
     },
 

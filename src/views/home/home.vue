@@ -15,7 +15,8 @@
  */
 <template>
   <div class="over-view-wrapper">
-    <v-content-head :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></v-content-head>
+    <!-- <v-content-head :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></v-content-head> -->
+    <nav-menu :headTitle="$t('title.dataOverview')"></nav-menu>
     <div style="margin: 5px;">
       <div style="margin:10px 10px 6px 10px;">
         <el-row type="flex">
@@ -143,7 +144,8 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import charts from "./components/chart";
 import {
   getChartData,
@@ -163,7 +165,8 @@ import { toContractName } from "@/util/util"
 export default {
   name: "home",
   components: {
-    "v-content-head": contentHead,
+    // "v-content-head": contentHead,
+    'nav-menu': NavMenu,
     "v-chart": charts
   },
   computed: {

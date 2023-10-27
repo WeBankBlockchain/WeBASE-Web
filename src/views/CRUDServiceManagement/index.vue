@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.adminUser')" prop="adminRivateKey" class="item-form">
@@ -74,15 +75,17 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-chrome";
 import "ace-builds/src-noconflict/mode-sql";
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
 import { getUserList, queryCrudService } from "@/util/api";
 import creatUser from "@/views/privateKeyManagement/components/creatUser";
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     name: 'ConfigManagement',
 
     components: {
-        "v-content-head": contentHead,
+        // "v-content-head": contentHead,
          "v-creatUser": creatUser,
+         'nav-menu': NavMenu
     },
 
     props: {

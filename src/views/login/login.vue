@@ -239,6 +239,8 @@ export default {
           if (res.data.code === 0) {
             localStorage.setItem("groupName", "");
             localStorage.setItem("groupId", "");
+            localStorage.setItem("chainId", "")
+            localStorage.setItem("chainName", "")
             localStorage.setItem("folderList", "");
             localStorage.setItem("user", res.data.data.account);
             localStorage.setItem("root", res.data.data.roleName);

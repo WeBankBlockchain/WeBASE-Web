@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.contractEvent')" @changeGroup="changeGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.contractEvent')" @changeGroup="changeGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.contractEvent')" @changeGroup="changeGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-table">
                 <el-table :data="eventList" v-loading="loading">
@@ -19,13 +20,13 @@
 
 <script>
 import { contractEventList } from "@/util/api";
-import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import Bus from "@/bus"
 export default {
     name: 'contractEvent',
 
     components: {
-        "v-content-head": contentHead
+        'nav-menu': NavMenu,
     },
 
     props: {

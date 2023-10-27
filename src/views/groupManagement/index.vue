@@ -1,6 +1,7 @@
 <template>
   <div>
-    <content-head :headTitle="$t('title.groupManagement')" :icon="true" @changGroup="changGroup" :updateGroup="updateGroup" :updateGroupType="updateGroupType"></content-head>
+    <!-- <content-head :headTitle="$t('title.groupManagement')" :icon="true" @changGroup="changGroup" :updateGroup="updateGroup" :updateGroupType="updateGroupType"></content-head> -->
+    <nav-menu :headTitle="$t('title.groupManagement')"></nav-menu>
     <div class="module-wrapper">
       <div class="search-part" style="padding-top: 20px">
         <div class="search-part-right">
@@ -91,7 +92,8 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import generateGroup from "./components/generateGroup";
 import modifyGroup from "./components/modifyGroup";
 import joinGroupTips from "./components/joinGroupTips";
@@ -111,6 +113,7 @@ export default {
     generateGroup,
     modifyGroup,
     joinGroupTips,
+    'nav-menu': NavMenu,
   },
 
   props: {},

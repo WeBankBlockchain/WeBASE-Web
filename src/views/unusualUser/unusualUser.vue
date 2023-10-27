@@ -15,7 +15,8 @@
  */
 <template>
     <div style="height:100%">
-        <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualUser')" @changGroup="changGroup"></content-head>
+        <!-- <content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualUser')" @changGroup="changGroup"></content-head> -->
+        <nav-menu :headTitle="$t('title.transactionAudit')" :headSubTitle="$t('title.unusualUser')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper" style="position: relative;">
             <div class="search-part">
                 <div class="search-part-left">
@@ -85,15 +86,17 @@
 
 <script>
 import { unusualUserList, getAllUserList } from "@/util/api";
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
 import transactionDetail from "@/components/transactionDetail";
 import creatUser from "../privateKeyManagement/components/creatUser.vue";
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     name: "unusualUser",
     components: {
         contentHead,
         transactionDetail,
         "v-creatUser": creatUser,
+        'nav-menu': NavMenu,
     },
     data() {
         return {

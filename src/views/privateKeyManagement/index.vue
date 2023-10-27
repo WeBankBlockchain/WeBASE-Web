@@ -1,7 +1,7 @@
 <template>
     <div class="rivate-key-management-wrapper">
-        <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead>
-
+        <!-- <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead> -->
+        <nav-menu :headTitle="$t('title.PrivateKey')"></nav-menu>
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="已登记" name="registered">
                 <privateKey ref='registered' v-if='activeName === "registered"'></privateKey>
@@ -16,13 +16,15 @@
 <script>
 import privateKey from './privateKeyManagement'
 import totalPrivateKey from './totalPrivateKey'
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     name: "privateKeyManagement",
     components: {
         privateKey,
         totalPrivateKey,
-        "v-contentHead": contentHead,
+        // "v-contentHead": contentHead,
+        'nav-menu': NavMenu,
     },
     data() {
         return {
