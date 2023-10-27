@@ -1216,10 +1216,11 @@ export function upgradeNode(data) {
 }
 
 //删除链
-export function deleteChain() {
+export function deleteChain(data) {
     return deleted({
         url: `${url.ORG_LIST}/deploy/delete`,
         method: "delete",
+        params: data,
         headers: getAuthHeaders()
     })
 }
@@ -1258,6 +1259,15 @@ export function startNode(data) {
 export function getChainInfo() {
     return get({
         url: `${url.ORG_LIST}/deploy/chain/info`,
+        method: "get",
+        headers: getAuthHeaders()
+    })
+}
+
+//链列表
+export function getChainList() {
+    return get({
+        url: `${url.ORG_LIST}/deploy/chain/list`,
         method: "get",
         headers: getAuthHeaders()
     })
@@ -2261,7 +2271,11 @@ export function getPrivacy() {
 }
 
 function getAuthHeaders() {
+    // return {
+    //     Authorization: "Bearer " +  getCookie("Admin-Token")
+    // };
+
     return {
-        Authorization: "Bearer " +  getCookie("Admin-Token")
+        Authorization: "Bearer " +  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJLd2JoWE5POHR2akJlaEI5YTRWb2JneDZNYkRWUGV2cSIsInVzZXJJZCI6MX0.vQ4aGDsbwWtrDWc9IfPOQXhgoq8BV-QDC5kJvGtjjxY"
     };
 }

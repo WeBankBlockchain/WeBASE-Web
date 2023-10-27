@@ -23,6 +23,7 @@ const bfs = resolve => require(["@/views/bfs/index"], resolve);
 const transactionInfo = resolve =>
   require(["@/views/transactionInfo/transactionInfo"], resolve);
 const front = resolve => require(["@/views/front/index"], resolve);
+const chain = resolve => require(["@/views/front/chain"], resolve);
 const host = resolve => require(["@/views/front/host"], resolve);
 const node = resolve => require(["@/views/front/node"], resolve);
 const newFront = resolve => require(["@/views/front/front"], resolve);
@@ -198,7 +199,15 @@ const routes = [
         leaf: false,
         menuShow: false,
         meta: { requireAuth: true }
-      }
+      },
+      {
+        path: "/chain",
+        component: chain,
+        name: "链管理",
+        nameKey: "chainTitle",
+        menuShow: true,
+        meta: { requireAuth: true }
+      },
     ]
   },
   {

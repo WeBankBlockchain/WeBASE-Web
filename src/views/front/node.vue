@@ -20,6 +20,9 @@
                         <span v-if='chainFrom.encryptType == 0'>{{$t("text.sha256")}}</span>
                         <span v-if='chainFrom.encryptType == 1'>{{$t("text.sm3")}}</span>
                     </el-form-item> -->
+                    <el-form-item :label='$t("text.chainName")' prop='chainName'>
+                        <el-input v-model="chainFrom.chainName" style="width: 300px;"></el-input>
+                    </el-form-item>
                     <el-form-item :label='$t("text.imageMode")' prop='dockerImageType'>
                         <el-radio v-model="chainFrom.dockerImageType" :label="1">{{$t("text.automatic")}}<el-tooltip class="item" effect="dark" :content="$t('text.imageModeInfo3')" placement="top-start"><i class="el-icon-info" style="display: inline-block;padding-left: 10px;"></i></el-tooltip>
                         </el-radio>
@@ -153,6 +156,7 @@ export default {
     data() {
         return {
             chainFrom: {
+                chainName: null,
                 encryptType: localStorage.getItem("encryptionId"),
                 chainVersion: null,
                 dockerImageType: 1,
@@ -185,6 +189,9 @@ export default {
     computed: {
         rules() {
             let data = {
+                chainName: [
+                    { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
+                ],
                 encryptType: [
                     { required: true, message: this.$t('text.notNull'), trigger: 'blur' },
                 ],
@@ -496,7 +503,7 @@ export default {
         checkone(val) {
             this.loading3 = true
             let data = {
-                chainName: constant.DEFAULT_CHAIN_NAME,
+                chainName: this.chainFrom.chainName,
                 imageTag: this.chainFrom.chainVersion,
                 encryptType: this.chainFrom.encryptType,
                 agencyName: "agency1",
@@ -549,7 +556,7 @@ export default {
                 deployNodeInfoList[i].rpcPort = this.nodeList[i].rpcPort;
             }
             let data = {
-                chainName: constant.DEFAULT_CHAIN_NAME,
+                chainName: this.chainFrom.chainName,
                 ipconf: ipconf,
                 imageTag: this.chainFrom.chainVersion,
                 encryptType: this.chainFrom.encryptType,
@@ -562,7 +569,7 @@ export default {
                 data.encryptType = this.chainFrom.encryptType
             }
             let data1 = {
-                chainName: constant.DEFAULT_CHAIN_NAME,
+                chainName: this.chainFrom.chainName,
                 imageTag: this.chainFrom.chainVersion,
                 dockerImageType: this.chainFrom.dockerImageType,
                 hostIdList: hostIdList
@@ -1117,4 +1124,5 @@ export default {
 .clear-right {
     float: right;
 }
+
 </style>
