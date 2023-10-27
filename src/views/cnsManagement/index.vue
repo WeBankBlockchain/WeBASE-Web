@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup" :headTooltip="$t('title.CNSTips')"></v-content-head> -->
-    <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')"></nav-menu>
+    <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.CNSmanager')" @changGroup="changGroup"></nav-menu>
     <div class="module-wrapper" style="padding: 20px 29px 0 29px;">
       <span class="cns-title">{{$t('contracts.cnsTitle')}}</span>
       <el-form :model="cnsForm" :rules="rules" ref="cnsForm" class="demo-ruleForm">

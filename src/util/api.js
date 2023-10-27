@@ -1256,11 +1256,12 @@ export function startNode(data) {
 }
 
 //链信息
-export function getChainInfo() {
+export function getChainInfo(data) {
     return get({
         url: `${url.ORG_LIST}/deploy/chain/info`,
         method: "get",
-        headers: getAuthHeaders()
+        headers: getAuthHeaders(),
+        params: data
     })
 }
 
@@ -1836,18 +1837,18 @@ export function checkPort(data) {
     })
 }
 
-/**
- * @method  config
- *
- */
-export function startChainData(data) {
-    return get({
-        url: `${url.ORG_LIST}/deploy/chain/start`,
-        method: 'get',
-        params: data,
-        headers: getAuthHeaders()
-    })
-}
+// /**
+//  * @method  config
+//  *
+//  */
+// export function startChainData(data) {
+//     return get({
+//         url: `${url.ORG_LIST}/deploy/chain/start`,
+//         method: 'get',
+//         params: data,
+//         headers: getAuthHeaders()
+//     })
+// }
 
 /**
  * @method ping主机
@@ -1910,11 +1911,12 @@ export function initCheck(data) {
 /**
  * @method  更新front状态
  */
-export function getFrontStatus() {
+export function getFrontStatus(data) {
     return get({
         url: `${url.ORG_LIST}/front/refresh/status`,
         method: 'get',
-        headers: getAuthHeaders()
+        headers: getAuthHeaders(),
+        params: data
     })
 }
 
@@ -2271,11 +2273,11 @@ export function getPrivacy() {
 }
 
 function getAuthHeaders() {
-    // return {
-    //     Authorization: "Bearer " +  getCookie("Admin-Token")
-    // };
-
     return {
-        Authorization: "Bearer " +  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJLd2JoWE5POHR2akJlaEI5YTRWb2JneDZNYkRWUGV2cSIsInVzZXJJZCI6MX0.vQ4aGDsbwWtrDWc9IfPOQXhgoq8BV-QDC5kJvGtjjxY"
+        Authorization: "Bearer " +  getCookie("Admin-Token")
     };
+
+    // return {
+    //     Authorization: "Bearer " +  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJGYllucVhaWXdac1U2VVRwaU1nZkF1QTFZNlhxWGNueCIsInVzZXJJZCI6MX0.5JH1qtkMkwxV0bhOlydmhcx7kIUIU3hetFfrluE7IuQ"
+    // };
 }

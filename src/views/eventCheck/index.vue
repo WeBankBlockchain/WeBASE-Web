@@ -1,7 +1,7 @@
 <template>
   <div class="rivate-key-management-wrapper">
     <!-- <content-head :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></content-head> -->
-    <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')"></nav-menu>
+    <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="$t('title.checkEvent')" @changGroup="changGroup"></nav-menu>
     <div class="module-wrapper">
       <div class="search-part ">
         <el-form :model="contractEventForm" :rules="rules" ref="contractEventForm" class="demo-ruleForm" label-width="110px">

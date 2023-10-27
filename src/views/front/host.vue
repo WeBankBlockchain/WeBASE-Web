@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changeGroup="changeGroup"></v-content-head> -->
-        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')"></nav-menu>
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changGroup="changeGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part">
                 <!-- <div class="search-part-left" v-if='!disabled'>

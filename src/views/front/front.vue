@@ -16,7 +16,7 @@
 <template>
     <div class="front-module">
         <!-- <v-content-head :headTitle="$t('title.nodeTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup" ref='heads'></v-content-head> -->
-        <nav-menu :headTitle="$t('title.nodeTitle')"></nav-menu>
+        <nav-menu :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></nav-menu>
         <!-- <div class="module-wrapper" >
             <div class="search-part" style="padding-top: 20px;" v-if='deployShow || (configData && (configData.chainStatus == 3 || configData.chainStatus == 4)) '>
                     <div class="search-part-left" v-if='!disabled'>
@@ -140,7 +140,7 @@
 import modifyNodeType from "./components/modifyNodeType";
 import {
     getFronts, addnodes, deleteFront, getNodeList,
-    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, startChainData, deleteNode,
+    getConsensusNodeId, getGroupsInvalidIncluded, startNode, stopNode, getChainInfo, getProgress, deleteChain, encryption, getVersion, deleteNode,
     getFrontStatus, restartNode, initAuthAdmin, getPermissionManagementStatus
 } from "@/util/api";
 import { format, unique, dynamicPoint } from "@/util/util";
@@ -215,6 +215,7 @@ export default {
             loadingTxt: this.$t('text.loading'),
             optShow: false,
             groupId:localStorage.getItem('groupId') ? localStorage.getItem('groupId') : '',
+            chainName: localStorage.getItem('chainName'),
             sdkDialogVisible: false,
             sdkParam:{},
             enableAuth: this.$route.query.enableAuth,
@@ -424,12 +425,18 @@ export default {
         },
         // 更新front状态  定时器中需要最先执行
         getFrontStatus() {
-            getFrontStatus().then(() => {
+            let reqData = {
+                chainName: localStorage.getItem("chainName")
+            }
+            getFrontStatus(reqData).then(() => {
                 this.getConfigList()
             })
         },
         getConfigList: function () {
-            getChainInfo().then(res => {
+            let reqData = {
+                chainName: this.chainName
+            }
+            getChainInfo(reqData).then(res => {
                 if (res.data.code === 0) {
                     // clearInterval(this.frontInterval)
                     this.configData = res.data.data;
@@ -742,6 +749,7 @@ export default {
         getFrontTable() {
             let reqData = {
                 frontId: this.frontId,
+                groupId: localStorage.getItem("groupId"),
             }
             getFronts(reqData)
                 .then(res => {

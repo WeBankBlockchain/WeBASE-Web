@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { getChainInfo } from "@/util/api"
+import { getChainList } from "@/util/api"
 import contentHead from "@/components/contentHead";
 export default {
     name: "deployFront",
@@ -17,7 +17,6 @@ export default {
     },
     data() {
         return {
-            chainInfo: null,
             show: 0,
             loading: true
         }
@@ -27,10 +26,9 @@ export default {
     },
     methods: {
         getChainData() {
-            getChainInfo().then(res => {
+            getChainList().then(res => {
                 if (res.data.code === 0) {
-                    this.chainInfo = res.data.data
-                    if (this.chainInfo) {
+                    if (res.data.data && res.data.data.length > 0) {
                         this.$router.push("/newNode")
                     } else {
                         this.$router.push({

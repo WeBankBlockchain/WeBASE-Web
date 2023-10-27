@@ -92,9 +92,7 @@ export default {
             this.loading = true;
             getChainList().then(res => {
                 if (res.data.code === 0) {
-                    console.log("111")
                     if (res.data.data) {
-                        console.log("2222")
                         this.chainList = res.data.data
                     } else {
                         this.chainList = []
@@ -202,6 +200,9 @@ export default {
         onClickAddChain() {
             this.$router.push({
                 path: "/node/chain",
+                query: {
+                    chainCount: this.chainList.length
+                }
             })
         }
     }

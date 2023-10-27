@@ -16,7 +16,7 @@
 <template>
   <div class="over-view-wrapper">
     <!-- <v-content-head :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></v-content-head> -->
-    <nav-menu :headTitle="$t('title.dataOverview')"></nav-menu>
+    <nav-menu :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></nav-menu>
     <div style="margin: 5px;">
       <div style="margin:10px 10px 6px 10px;">
         <el-row type="flex">

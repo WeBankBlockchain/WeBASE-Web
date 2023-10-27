@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head> -->
-        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')"></nav-menu>
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changeGroup"></nav-menu>
         <div class="module-wrapper" style="padding-bottom: 20px">
             <p class="wrapper-title" v-if='type != "node"'>{{$t("text.addChain")}}</p>
             <!-- <p class="wrapper-title" v-if='type == "node"'>新增节点</p> -->
@@ -186,6 +186,7 @@ export default {
             progressTimer: null,    //progress定时器,
             statusNumber: 0,   /// progess 值
             frontList: [],
+            chainCount: this.$route.query ? this.$route.query.chainCount : 0,
         }
     },
     computed: {
@@ -255,7 +256,11 @@ export default {
             this.$store.dispatch('set_node_list_action', this.nodeList)
         },
         getChainDetail() {
-            getChainInfo().then(res => {
+            const chainName = localStorage.getItem('chainName');
+            let reqData = {
+                chainName: chainName
+            }
+            getChainInfo(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.chainFrom = res.data.data;
                     this.chainFrom.dockerImageType = 1
@@ -546,8 +551,17 @@ export default {
             let ipconf = [],
                 deployNodeInfoList = [],
                 hostIdList = []
+            // groupid需要动态的（如果是添加节点，那么就是已有的groupid）
+            let groupId = this.chainFrom.groupId;
+
+            // 如果是新增链，则以链数量为基准，id为当前数量+1
+            if  (this.type != "node") {
+                groupId = parseInt(this.chainCount) + 1;
+            }
+
+            let agency = 'agency' + groupId;
             for (let i = 0; i < this.nodeList.length; i++) {
-                ipconf[i] = `${this.nodeList[i].ip}:1 agency1 1 ${this.nodeList[i].p2pPort},${this.nodeList[i].channelPort},${this.nodeList[i].rpcPort}`;
+                ipconf[i] = `${this.nodeList[i].ip}:1 ${agency} ${groupId} ${this.nodeList[i].p2pPort},${this.nodeList[i].channelPort},${this.nodeList[i].rpcPort}`;
                 hostIdList.push(this.nodeList[i].hostId)
                 deployNodeInfoList[i] = {};
                 deployNodeInfoList[i].hostId = this.nodeList[i].hostId;

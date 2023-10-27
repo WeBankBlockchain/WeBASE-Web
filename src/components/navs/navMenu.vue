@@ -106,7 +106,6 @@ export default {
     Bus.$off("changeHeadGroup")
   },
   mounted(){
-    console.log("!!!!!!@#2131");
     let that = this;
     this.currentRoute=this.$route.path;
     let pre=this.currentRoute.substring(1)

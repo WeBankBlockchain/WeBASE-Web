@@ -168,7 +168,11 @@ export default {
     },
     methods: {
         getConfigList: function () {
-            getChainInfo().then(res => {
+            const chainName = localStorage.getItem('chainName');
+            let reqData = {
+                chainName: chainName
+            }
+            getChainInfo(reqData).then(res => {
                 if (res.data.code === 0) {
                     if (res.data.data) {
                         localStorage.setItem("configData", res.data.data.chainStatus);

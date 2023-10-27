@@ -1,7 +1,7 @@
 <template>
     <div class="rivate-key-management-wrapper">
         <!-- <v-contentHead :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></v-contentHead> -->
-        <nav-menu :headTitle="$t('title.PrivateKey')"></nav-menu>
+        <nav-menu :headTitle="$t('title.PrivateKey')" @changGroup="changGroup"></nav-menu>
         <el-tabs class="search-part" v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="已登记" name="registered">
                 <privateKey ref='registered' v-if='activeName === "registered"'></privateKey>

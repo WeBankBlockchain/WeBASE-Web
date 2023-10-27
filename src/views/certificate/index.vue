@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></v-content-head> -->
-        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')"></nav-menu>
+        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.certificate')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part" style="display: flex;">
                 <div class="search-part-left">

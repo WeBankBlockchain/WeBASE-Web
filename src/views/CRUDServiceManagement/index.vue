@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <v-content-head :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup" :headTooltip="$t('title.CRUDTips')"></v-content-head> -->
-        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'"></nav-menu>
+        <nav-menu :headTitle="$t('title.contractTitle')" :headSubTitle="'CRUD'" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper" style="padding: 30px 29px 20px 29px;">
             <el-form :model="sqlForm" :rules="rules" ref="sqlForm" class="demo-ruleForm">
                 <el-form-item :label="$t('contracts.adminUser')" prop="adminRivateKey" class="item-form">

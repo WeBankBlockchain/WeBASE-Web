@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <content-head :headTitle="$t('title.appManagement')" @changGroup="changGroup"></content-head> -->
-        <nav-menu :headTitle="$t('title.appManagement')" ></nav-menu>
+        <nav-menu :headTitle="$t('title.appManagement')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="desc-wrapper">
                 <p class="desc-content">
