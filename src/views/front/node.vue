@@ -814,7 +814,7 @@ export default {
             const reqData = {
                 chainName: data.chainName,
                 deployNodeInfoList: data.deployNodeInfoList,
-                groupId: 1,
+                groupId: localStorage.getItem("groupId"),
                 agencyName: data.agencyName,
                 encryptType: data.encryptType
             }
