@@ -485,7 +485,7 @@ export default {
           router.push({ path: "front", query: { from: "home" } });
           break;
         case "contractCount":
-          router.push({ path: "contractList", query: { from: "home", tab: 'total' } });
+          router.push({ path: "contract/List", query: { from: "home", tab: 'total' } });
           break;
       }
     },
