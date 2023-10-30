@@ -33,6 +33,9 @@ export default {
                     } else {
                         this.$router.push({
                             path: "/node/chain",
+                            query: {
+                              chainCount: 0,
+                            },
                         })
                     }
                 } else {

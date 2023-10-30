@@ -190,7 +190,7 @@ export default {
   methods: {
     liquidCheckMethod() {
       let groupId = localStorage.getItem("groupId");
-      checkIsWasm(this.frontId,groupId)
+      checkIsWasm(this.frontId, groupId)
         .then((res) => {
           if (res.data.data == true) {
             this.liquidList();
@@ -221,7 +221,8 @@ export default {
     },
     getfrontList() {
       let reqData = {
-        frontId: this.frontId,
+        // frontId: this.frontId,
+        groupId: localStorage.getItem("groupId")
       };
       getFronts(reqData)
         .then((res) => {

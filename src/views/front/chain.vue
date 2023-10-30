@@ -102,6 +102,7 @@ import addNode from "./dialog/addNode";
 import newNode from "./dialog/newNode";
 import updateNode from "./dialog/updateNode";
 import hostInfo from "./dialog/hostInfo";
+import Bus from "@/bus";
 export default {
   name: "node",
   components: {
@@ -189,17 +190,13 @@ export default {
                   duration: 2000,
                 });
 
-                console.log("!!!!!del cur chain");
-
                 // 如果本地存储中保存的链数据是当前链，则需要重新获取群组列表，设置正确的链、群组
-                if (localStorage.getItem("chainId") == row.chainId) {
-                    console.log("!!!!!del cur chain");
+                if (localStorage.getItem("chainId") == row.id) {
                     localStorage.setItem("groupName", "");
                     localStorage.setItem("groupId", "");
                     localStorage.setItem("chainId", "");
                     localStorage.setItem("chainName", "");
                 }
-                console.log("!!!e3mit");
                 Bus.$emit("changeHeadGroup");
                 this.getChainTable();
               } else {
@@ -212,6 +209,7 @@ export default {
               this.loading = false;
             })
             .catch((err) => {
+                console.log("!!!!delechain err:", err);
               this.$message({
                 message: err.data || this.$t("text.systemError"),
                 type: "error",

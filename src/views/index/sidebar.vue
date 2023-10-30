@@ -292,7 +292,8 @@ export default {
     },
     getfrontList() {
       let reqData = {
-        frontId: this.frontId,
+        // frontId: this.frontId,
+        groupId: localStorage.getItem("groupId")
       };
       getFronts(reqData)
         .then((res) => {
