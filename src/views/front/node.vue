@@ -913,7 +913,10 @@ export default {
 
         // 查询已部署的节点列表
         getFrontList() {
-            getFronts({}).then(res => {
+            let reqData = {
+                groupId: localStorage.getItem("groupId")
+            }
+            getFronts(reqData).then(res => {
                 if (res.data.code === 0) {
                     this.frontList = res.data.data
                 } else {
