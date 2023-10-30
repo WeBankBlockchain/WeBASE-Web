@@ -147,7 +147,7 @@
 // import contentHead from "@/components/contentHead";
 import NavMenu from '@/components/navs/navMenu'
 import addChainNode from "./dialog/addChainNode"
-import { getUserList, getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts } from "@/util/api"
+import { getHosts, getConfigList, initChainData, checkPort, checkHost, deployChainData, getChainInfo, addChainNodeData, initCheck, getProgress, getFronts, getGroupName } from "@/util/api"
 import { format, dynamicPoint } from "@/util/util"
 export default {
     components: {
@@ -559,6 +559,8 @@ export default {
                 groupId = parseInt(this.chainCount) + 1;
             }
 
+            this.chainFrom.groupId = groupId;
+
             let agency = 'agency' + groupId;
             for (let i = 0; i < this.nodeList.length; i++) {
                 ipconf[i] = `${this.nodeList[i].ip}:1 ${agency} ${groupId} ${this.nodeList[i].p2pPort},${this.nodeList[i].channelPort},${this.nodeList[i].rpcPort}`;
@@ -742,9 +744,28 @@ export default {
                         message: this.$t('text.chainConfigSuccess'),
                     })
                     this.nodeList = []
+
                     sessionStorage.setItem('nodeList', JSON.stringify(this.nodeList))
-                    this.$store.dispatch('set_node_list_action', this.nodeList)
-                    this.$router.push({path: "/newNode", query: {enableAuth: this.chainFrom.enableAuth}})
+
+                    // 部署成功后获取当前的链对应群组的详细信息，更新切换为当前链、群组
+                    getGroupName(this.chainFrom.groupId).then(res => {
+                        if (res.data.code == 0) {
+                            const resGroup = res.data.data;
+                            localStorage.setItem("groupId", resGroup.groupId);
+                            localStorage.setItem("groupName", resGroup.groupName);
+                            localStorage.setItem("chainId", resGroup.chainId);
+                            localStorage.setItem("chainName", resGroup.chainName);
+                        }
+                        this.$store.dispatch('set_node_list_action', this.nodeList)
+                        this.$router.push({path: "/newNode", query: {enableAuth: this.chainFrom.enableAuth}})
+                    }).catch(err => {
+                        this.$message({
+                            type: "error",
+                            message: err.data || this.$t('text.systemError')
+                        });
+                        this.$store.dispatch('set_node_list_action', this.nodeList)
+                        this.$router.push({path: "/newNode", query: {enableAuth: this.chainFrom.enableAuth}})
+                    });
                 } else {
                     this.getHostList()
                     this.initShow = false

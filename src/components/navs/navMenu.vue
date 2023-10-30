@@ -82,7 +82,6 @@ export default {
       this.title = val;
     },
     updateGroup: function (val) {
-      console.log("@###udpdate")
       this.getGroupList();
     },
   },
