@@ -93,7 +93,7 @@ import NavMenu from '../../components/navs/navMenu.vue';
 export default {
     name: "unusualUser",
     components: {
-        contentHead,
+        // contentHead,
         transactionDetail,
         "v-creatUser": creatUser,
         'nav-menu': NavMenu,

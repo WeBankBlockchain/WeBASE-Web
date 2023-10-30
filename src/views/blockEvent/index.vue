@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.blockEvent')" @changeGroup="changeGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.blockEvent')" @changeGroup="changeGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.subscribeEvent')" :headSubTitle="$t('title.blockEvent')" @changeGroup="changeGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-table">
                 <el-table :data="eventList" v-loading="loading">

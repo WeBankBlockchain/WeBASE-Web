@@ -297,15 +297,15 @@ export default {
       };
       getFronts(reqData)
         .then((res) => {
-          if (res.data.code === 0) {
+          if (res.data.code === 0 && res.data.data.length > 0) {
             this.frontId = res.data.data[0].frontId;
             this.liquidCheckMethod();
           } else {
-            this.$message({
-              message: this.$chooseLang(res.data.code),
-              type: "error",
-              duration: 2000,
-            });
+            // this.$message({
+            //   message: this.$chooseLang(res.data.code),
+            //   type: "error",
+            //   duration: 2000,
+            // });
           }
         })
         .catch((err) => {

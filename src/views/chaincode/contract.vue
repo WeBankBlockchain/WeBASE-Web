@@ -184,7 +184,9 @@ export default {
     // this.getEncryption(this.querySolcList);
     // this.liquidList();
     // this.liquidCheck = true;
-    this.getfrontList()
+    if (localStorage.getItem("groupId") && localStorage.getItem("groupId").length > 0) {
+      this.getfrontList()
+    }
     //this.liquidCheckMethod()
   },
   methods: {

@@ -741,6 +741,7 @@ export default {
         changGroup() {
             this.getFrontTable();
             this.getData();
+            this.checkAuth();
         },
         search() {
             this.currentPage = 1
@@ -1150,6 +1151,7 @@ export default {
                     } else {
                         this.isAuthEnable = false;
                     }
+                    console.log("!!!getPermissionManagementStatus,this.isAuthEnable:", this.isAuthEnable);
                 })
                 .catch((err) => { });
         },

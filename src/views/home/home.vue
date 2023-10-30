@@ -258,7 +258,7 @@ export default {
   },
   mounted: function () {
     this.groupId = localStorage.getItem("groupId");
-    if (this.groupId || (localStorage.getItem("configData") == 3 || localStorage.getItem("deployType") == 0)) {
+    if (this.groupId || localStorage.getItem("deployType") == 0) {
       this.getNetworkDetails();
       this.getNodeTable();
       this.getBlockList();
