@@ -1,81 +1,227 @@
 <template>
   <div>
     <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.committeeMgmt')" @changGroup="changGroup"></v-content-head> -->
-    <div style="padding: 10px 20px 0 20px;">
+    <div style="padding: 10px 20px 0 20px">
       <div class="">
-        <el-button type="primary" :disabled="disabled" @click="addCommittee">{{this.$t('govCommittee.addCommittee')}}</el-button>
+        <el-button
+          type="primary"
+          :disabled="disabled"
+          @click="addCommittee"
+          v-hasPermi="['bcos3:sys:grantCommittee']"
+          >{{ this.$t("govCommittee.addCommittee") }}</el-button
+        >
         <!-- <el-button type="primary" :disabled="disabled" @click="deleteCommittee">{{this.$t('govCommittee.deleteCommittee')}}</el-button>
         <el-button type="primary" :disabled="disabled" @click="modifyWeight">{{this.$t('govCommittee.modifyWeight')}}</el-button> -->
-        <el-button type="primary" :disabled="disabled" @click="modifyThreshold">{{this.$t('govCommittee.modifyThreshold')}}</el-button>
-        <el-button type="primary" :disabled="disabled" @click="$store.dispatch('switch_import_private_key_dialog')">{{this.$t('govCommittee.importUserprivateKey')}}</el-button>
+        <el-button
+          type="primary"
+          :disabled="disabled"
+          @click="modifyThreshold"
+          v-hasPermi="['bcos3:sys:updateThreshold']"
+          >{{ this.$t("govCommittee.modifyThreshold") }}</el-button
+        >
+        <el-button
+          type="primary"
+          :disabled="disabled"
+          @click="$store.dispatch('switch_import_private_key_dialog')"
+          >{{ this.$t("govCommittee.importUserprivateKey") }}</el-button
+        >
       </div>
       <div>
-        <el-table :data="produceCommittee" tooltip-effect="dark" v-loading="loading">
-          <el-table-column v-for="head in chainCommitteeHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+        <el-table
+          :data="produceCommittee"
+          tooltip-effect="dark"
+          v-loading="loading"
+        >
+          <el-table-column
+            v-for="head in chainCommitteeHead"
+            :label="head.name"
+            :key="head.enName"
+            show-overflow-tooltip
+            align="center"
+          >
             <template slot-scope="scope">
-              <template v-if="head.enName!='operate'">
-                <span v-if="head.enName =='userId'">{{userName(scope.row['governorAddress'])}}</span>
-                <span v-if="head.enName =='weightRate'">{{weightRate(scope.row['weight'])}}</span>
-                <span v-else-if="head.enName =='governorAddress'">
-                  <i class="wbs-icon-copy font-12 copy-public-key" v-show="scope.row[head.enName]" @click="copyPubilcKey(scope.row[head.enName])" :title="$t('privateKey.copy')"></i>
-                  {{scope.row[head.enName]}}
+              <template v-if="head.enName != 'operate'">
+                <span v-if="head.enName == 'userId'">{{
+                  userName(scope.row["governorAddress"])
+                }}</span>
+                <span v-if="head.enName == 'weightRate'">{{
+                  weightRate(scope.row["weight"])
+                }}</span>
+                <span v-else-if="head.enName == 'governorAddress'">
+                  <i
+                    class="wbs-icon-copy font-12 copy-public-key"
+                    v-show="scope.row[head.enName]"
+                    @click="copyPubilcKey(scope.row[head.enName])"
+                    :title="$t('privateKey.copy')"
+                  ></i>
+                  {{ scope.row[head.enName] }}
                 </span>
-                <span v-else>{{scope.row[head.enName]}}</span>
+                <span v-else>{{ scope.row[head.enName] }}</span>
               </template>
               <template v-else>
-                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyWeight(scope.row)">{{$t('govCommittee.modifyWeight')}}</el-button>
-                <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="deleteCommittee(scope.row)">{{$t('govCommittee.deleteCommittee')}}</el-button>
+                <el-button
+                  :disabled="disabled"
+                  type="text"
+                  size="small"
+                  :style="{ color: disabled ? '#666' : '' }"
+                  @click="modifyWeight(scope.row)"
+                  v-hasPermi="['bcos3:sys:updateCommitteeWeight']"
+                  >{{ $t("govCommittee.modifyWeight") }}</el-button
+                >
+                <el-button
+                  :disabled="disabled"
+                  type="text"
+                  size="small"
+                  :style="{ color: disabled ? '#666' : '' }"
+                  @click="deleteCommittee(scope.row)"
+                  v-hasPermi="['bcos3:sys:revokeCommittee']"
+                  >{{ $t("govCommittee.deleteCommittee") }}</el-button
+                >
               </template>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize"
-          layout=" sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination
+          v-if="total > 10"
+          class="page"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pageSize"
+          layout=" sizes, prev, pager, next, jumper"
+          :total="total"
+        >
         </el-pagination>
-        <el-dialog :title="$t('govCommittee.addCommittee')" :visible.sync="addCommitteeVisible" width="500px" v-if="addCommitteeVisible" center @close="closeAddCommittee">
-          <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
-            <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
+        <el-dialog
+          :title="$t('govCommittee.addCommittee')"
+          :visible.sync="addCommitteeVisible"
+          width="500px"
+          v-if="addCommitteeVisible"
+          center
+          @close="closeAddCommittee"
+        >
+          <el-form
+            :model="governForm"
+            :rules="rules"
+            ref="governForm"
+            label-width="130px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              :label="$t('govCommittee.fromUser')"
+              prop="fromAddress"
+            >
               <template v-if="chainCommitteeList.length > 0">
-                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:250px;">
-                  <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                    <span>{{item.userName}}</span>
-                    <span>{{item.governorAddress | splitString}}</span>
+                <el-select
+                  v-model="governForm.fromAddress"
+                  :placeholder="$t('text.select')"
+                  style="width: 250px"
+                >
+                  <el-option
+                    v-for="item in produceCommittee"
+                    :key="item.governorAddress"
+                    :label="item.userName"
+                    :value="item.governorAddress"
+                  >
+                    <span>{{ item.userName }}</span>
+                    <span>{{ item.governorAddress | splitString }}</span>
                   </el-option>
                 </el-select>
               </template>
               <template v-else>
-                <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:250px;">
-                  <el-option v-for="item in adminRivateKeyList" :key="item.address" :label="item.userName" :value="item.address">
-                    <span>{{item.userName}}</span>
-                    <span class="font-12">{{item.address | splitString}}</span>
+                <el-select
+                  v-model="governForm.fromAddress"
+                  :placeholder="$t('text.select')"
+                  style="width: 250px"
+                >
+                  <el-option
+                    v-for="item in adminRivateKeyList"
+                    :key="item.address"
+                    :label="item.userName"
+                    :value="item.address"
+                  >
+                    <span>{{ item.userName }}</span>
+                    <span class="font-12">{{
+                      item.address | splitString
+                    }}</span>
                   </el-option>
                 </el-select>
               </template>
-              <span v-if="isShowPrivate" class="contract-code-done" @click="$store.dispatch('switch_creat_user_dialog')" style="float:right;">
-                <span target="_blank" style="cursor:pointer;font-size:12px;text-decoration:underline;">{{this.$t("privateKey.addUser")}}</span>
+              <span
+                v-if="isShowPrivate"
+                class="contract-code-done"
+                @click="$store.dispatch('switch_creat_user_dialog')"
+                style="float: right"
+              >
+                <span
+                  target="_blank"
+                  style="
+                    cursor: pointer;
+                    font-size: 12px;
+                    text-decoration: underline;
+                  "
+                  >{{ this.$t("privateKey.addUser") }}</span
+                >
               </span>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.user')" prop="address">
-
-              <el-input v-model="governForm.address" style="width:250px;" :placeholder="$t('transaction.inputUserAddress')"></el-input>
+              <el-input
+                v-model="governForm.address"
+                style="width: 250px"
+                :placeholder="$t('transaction.inputUserAddress')"
+              ></el-input>
             </el-form-item>
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:250px;"></el-input>
+              <el-input
+                v-model="governForm.weight"
+                @input="(e) => (governForm.weight = isnumber(e))"
+                style="width: 250px"
+              ></el-input>
             </el-form-item>
           </el-form>
-          <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p>
-          <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="closeAddCommittee">{{this.$t('text.cancel')}}</el-button>
-            <el-button type="primary" @click="sureAddCommittee">{{this.$t('text.sure')}}</el-button>
+          <p style="padding-left: 50px">{{ $t("govCommittee.dialogTips") }}</p>
+          <div class="text-right sure-btn" style="margin-top: 10px">
+            <el-button @click="closeAddCommittee">{{
+              this.$t("text.cancel")
+            }}</el-button>
+            <el-button type="primary" @click="sureAddCommittee">{{
+              this.$t("text.sure")
+            }}</el-button>
           </div>
         </el-dialog>
-        <el-dialog :title="$t('govCommittee.deleteCommittee')" :visible.sync="deleteCommitteeVisible" width="500px" v-if="deleteCommitteeVisible" center @close="closeDeleteCommittee">
-          <el-form :model="governForm" :rules="rules" ref="governForm" label-width="144px" class="demo-ruleForm">
-            <el-form-item :label="$t('govCommittee.fromUser')" prop="governorAddress">
-              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" style="width:300px;">
-                <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}</span>
+        <el-dialog
+          :title="$t('govCommittee.deleteCommittee')"
+          :visible.sync="deleteCommitteeVisible"
+          width="500px"
+          v-if="deleteCommitteeVisible"
+          center
+          @close="closeDeleteCommittee"
+        >
+          <el-form
+            :model="governForm"
+            :rules="rules"
+            ref="governForm"
+            label-width="144px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              :label="$t('govCommittee.fromUser')"
+              prop="governorAddress"
+            >
+              <el-select
+                v-model="governForm.governorAddress"
+                :placeholder="$t('text.select')"
+                style="width: 300px"
+              >
+                <el-option
+                  v-for="item in produceCommittee"
+                  :key="item.governorAddress"
+                  :label="item.userName"
+                  :value="item.governorAddress"
+                >
+                  <span>{{ item.userName }}</span>
+                  <span>{{ item.governorAddress | splitString }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -88,19 +234,51 @@
               </el-select>
             </el-form-item> -->
           </el-form>
-          <p style="padding-left: 50px">*{{$t('govCommittee.dialogTips')}}</p>
-          <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="closeDeleteCommittee">{{this.$t('text.cancel')}}</el-button>
-            <el-button type="primary" @click="sureDeleteCommittee" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
+          <p style="padding-left: 50px">*{{ $t("govCommittee.dialogTips") }}</p>
+          <div class="text-right sure-btn" style="margin-top: 10px">
+            <el-button @click="closeDeleteCommittee">{{
+              this.$t("text.cancel")
+            }}</el-button>
+            <el-button
+              type="primary"
+              @click="sureDeleteCommittee"
+              :loading="btnLoading"
+              >{{ this.$t("text.sure") }}</el-button
+            >
           </div>
         </el-dialog>
-        <el-dialog :title="$t('govCommittee.modifyWeight')" :visible.sync="modifyWeightVisible" width="500px" v-if="modifyWeightVisible" center @close="closeModifyWeight">
-          <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
-            <el-form-item :label="$t('govCommittee.fromUser')" prop="governorAddress">
-              <el-select v-model="governForm.governorAddress" :placeholder="$t('text.select')" style="width:300px">
-                <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}</span>
+        <el-dialog
+          :title="$t('govCommittee.modifyWeight')"
+          :visible.sync="modifyWeightVisible"
+          width="500px"
+          v-if="modifyWeightVisible"
+          center
+          @close="closeModifyWeight"
+        >
+          <el-form
+            :model="governForm"
+            :rules="rules"
+            ref="governForm"
+            label-width="130px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              :label="$t('govCommittee.fromUser')"
+              prop="governorAddress"
+            >
+              <el-select
+                v-model="governForm.governorAddress"
+                :placeholder="$t('text.select')"
+                style="width: 300px"
+              >
+                <el-option
+                  v-for="item in produceCommittee"
+                  :key="item.governorAddress"
+                  :label="item.userName"
+                  :value="item.governorAddress"
+                >
+                  <span>{{ item.userName }}</span>
+                  <span>{{ item.governorAddress | splitString }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
@@ -113,169 +291,345 @@
               </el-select>
             </el-form-item> -->
             <el-form-item :label="$t('govCommittee.weight')" prop="weight">
-              <el-input v-model="governForm.weight" @input="e => (governForm.weight = isnumber(e))" style="width:300px"></el-input>
+              <el-input
+                v-model="governForm.weight"
+                @input="(e) => (governForm.weight = isnumber(e))"
+                style="width: 300px"
+              ></el-input>
             </el-form-item>
           </el-form>
           <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
-          <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="closeModifyWeight">{{this.$t('text.cancel')}}</el-button>
-            <el-button type="primary" @click="sureModifyweight" :loading="btnLoading">{{this.$t('text.sure')}}</el-button>
+          <div class="text-right sure-btn" style="margin-top: 10px">
+            <el-button @click="closeModifyWeight">{{
+              this.$t("text.cancel")
+            }}</el-button>
+            <el-button
+              type="primary"
+              @click="sureModifyweight"
+              :loading="btnLoading"
+              >{{ this.$t("text.sure") }}</el-button
+            >
           </div>
         </el-dialog>
-        <el-dialog :title="$t('govCommittee.modifyThreshold')" :visible.sync="modifyThresholdVisible" width="500px" v-if="modifyThresholdVisible" center @close="closeModifyThreshold">
-          <div style="text-align:center">
-            <span>{{$t('govCommittee.thresholdNow')}}:{{winRateNow}}</span>
-            <span>{{$t('govCommittee.participatesRateNow')}}:{{participatesRateNow}}</span>
+        <el-dialog
+          :title="$t('govCommittee.modifyThreshold')"
+          :visible.sync="modifyThresholdVisible"
+          width="500px"
+          v-if="modifyThresholdVisible"
+          center
+          @close="closeModifyThreshold"
+        >
+          <div style="text-align: center">
+            <span>{{ $t("govCommittee.thresholdNow") }}:{{ winRateNow }}</span>
+            <span
+              >{{ $t("govCommittee.participatesRateNow") }}:{{
+                participatesRateNow
+              }}</span
+            >
           </div>
-          <el-form :model="governForm" :rules="rules" ref="governForm" label-width="130px" class="demo-ruleForm">
-            <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
-              <el-select v-model="governForm.fromAddress" :placeholder="$t('text.select')" style="width:300px;">
-                <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.userName}}</span>
-                  <span class="font-12">{{item.governorAddress | splitString}}</span>
+          <el-form
+            :model="governForm"
+            :rules="rules"
+            ref="governForm"
+            label-width="130px"
+            class="demo-ruleForm"
+          >
+            <el-form-item
+              :label="$t('govCommittee.fromUser')"
+              prop="fromAddress"
+            >
+              <el-select
+                v-model="governForm.fromAddress"
+                :placeholder="$t('text.select')"
+                style="width: 300px"
+              >
+                <el-option
+                  v-for="item in produceCommittee"
+                  :key="item.governorAddress"
+                  :label="item.userName"
+                  :value="item.governorAddress"
+                >
+                  <span>{{ item.userName }}</span>
+                  <span class="font-12">{{
+                    item.governorAddress | splitString
+                  }}</span>
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="$t('govCommittee.participatesRate')" prop="participatesRate">
-              <el-input v-model="governForm.participatesRate" @input="e => (governForm.participatesRate = isnumber(e))" style="width:300px;"></el-input>
+            <el-form-item
+              :label="$t('govCommittee.participatesRate')"
+              prop="participatesRate"
+            >
+              <el-input
+                v-model="governForm.participatesRate"
+                @input="(e) => (governForm.participatesRate = isnumber(e))"
+                style="width: 300px"
+              ></el-input>
             </el-form-item>
-            <el-form-item :label="$t('govCommittee.threshold')" prop="threshold">
-              <el-input v-model="governForm.threshold" @input="e => (governForm.threshold = isnumber(e))" style="width:300px;"></el-input>
+            <el-form-item
+              :label="$t('govCommittee.threshold')"
+              prop="threshold"
+            >
+              <el-input
+                v-model="governForm.threshold"
+                @input="(e) => (governForm.threshold = isnumber(e))"
+                style="width: 300px"
+              ></el-input>
             </el-form-item>
           </el-form>
-          <p style="padding-left: 50px">{{$t('privateKey.modifyThresholdTip')}}</p>
-          <div class="text-right sure-btn" style="margin-top:10px">
-            <el-button @click="closeModifyThreshold">{{this.$t('text.cancel')}}</el-button>
-            <el-button type="primary" @click="sureModifyThreshold">{{this.$t('text.sure')}}</el-button>
+          <p style="padding-left: 50px">
+            {{ $t("privateKey.modifyThresholdTip") }}
+          </p>
+          <div class="text-right sure-btn" style="margin-top: 10px">
+            <el-button @click="closeModifyThreshold">{{
+              this.$t("text.cancel")
+            }}</el-button>
+            <el-button type="primary" @click="sureModifyThreshold">{{
+              this.$t("text.sure")
+            }}</el-button>
           </div>
         </el-dialog>
       </div>
-
     </div>
-    <div style="padding: 60px 20px 0 20px;">
+    <div style="padding: 60px 20px 0 20px">
       <p>
-        <span style="font-weight: bold">{{this.$t('govCommittee.votingList')}}</span>
+        <span style="font-weight: bold">{{
+          this.$t("govCommittee.votingList")
+        }}</span>
         <!-- <span style="float: right">({{this.$t('govCommittee.blockNum')}}：<span style="color: #e6a23c">{{currentBlock}}</span>)</span> -->
       </p>
       <el-table :data="voteList" tooltip-effect="dark" v-loading="loading">
-        <el-table-column v-for="head in voteHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+        <el-table-column
+          v-for="head in voteHead"
+          :label="head.name"
+          :key="head.enName"
+          show-overflow-tooltip
+          align="center"
+        >
           <template slot-scope="scope">
-            <template v-if="head.enName!='operate'">
-              <span v-if="head.enName=='againstVoters'">{{airJudg(scope.row[head.enName])}}</span>
-              <span v-else-if="head.enName=='agreeVoters'">
+            <template v-if="head.enName != 'operate'">
+              <span v-if="head.enName == 'againstVoters'">{{
+                airJudg(scope.row[head.enName])
+              }}</span>
+              <span v-else-if="head.enName == 'agreeVoters'">
                 <span v-if="scope.row['agreeVoters']">
-                  {{(scope.row[head.enName])}}
+                  {{ scope.row[head.enName] }}
                 </span>
-                <span v-else>
-                  -
-                </span>
+                <span v-else> - </span>
               </span>
-              <span v-else-if="head.enName=='toAddress1'">
-                <i class="wbs-icon-copy font-12 copy-public-key" v-show="scope.row['toAddress']" @click="copyPubilcKey(scope.row['toAddress'])" :title="$t('privateKey.copy')"></i>
+              <span v-else-if="head.enName == 'toAddress1'">
+                <i
+                  class="wbs-icon-copy font-12 copy-public-key"
+                  v-show="scope.row['toAddress']"
+                  @click="copyPubilcKey(scope.row['toAddress'])"
+                  :title="$t('privateKey.copy')"
+                ></i>
                 <span v-if="scope.row['toAddress']">
-                  {{scope.row['toAddress']}}
+                  {{ scope.row["toAddress"] }}
                 </span>
-                <span v-else>
-                  -
-                </span>
+                <span v-else> - </span>
               </span>
-              <span v-else-if="head.enName=='type'">
+              <span v-else-if="head.enName == 'type'">
                 <span v-if="scope.row[head.enName]">
-                  {{scope.row[head.enName] | voteType}}
+                  {{ scope.row[head.enName] | voteType }}
+                </span>
+                <span v-else> - </span>
+              </span>
+              <span v-else-if="head.enName == 'status'">
+                <span
+                  v-if="scope.row['status'] == 'notEnoughVotes'"
+                  style="color: #f56c6c"
+                >
+                  {{ scope.row["status"] }}
                 </span>
                 <span v-else>
-                  -
+                  {{ scope.row["status"] }}
                 </span>
               </span>
-              <span v-else-if="head.enName=='status'">
-                <span v-if="scope.row['status']=='notEnoughVotes'" style="color:#f56c6c">
-                  {{(scope.row['status'])}}
-                </span>
-                <span v-else>
-                  {{(scope.row['status'])}}
-                </span>
-              </span>
-              <span v-else-if="head.enName=='timeLimit'">
+              <span v-else-if="head.enName == 'timeLimit'">
                 <span v-if="scope.row[head.enName]">
-                  {{voteTimeZh(scope.row['timeLimit'])}}
+                  {{ voteTimeZh(scope.row["timeLimit"]) }}
                 </span>
-                <span v-else>
-                  -
-                </span>
+                <span v-else> - </span>
               </span>
               <span v-else>
                 <span v-if="scope.row[head.enName]">
-                  {{scope.row[head.enName]}}
+                  {{ scope.row[head.enName] }}
                 </span>
-                <span v-else>
-                  -
-                </span>
+                <span v-else> - </span>
               </span>
             </template>
             <template v-else>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small"
-                :style="{'color': disabled?'#666':''}" @click="Committee(scope.row)">
-                {{$t('govCommittee.Committee')}}
+              <el-button
+                :loading="btnLoading && btnIndex === scope.row.id"
+                :disabled="
+                  scope.row['status'] == 'finished' ||
+                  scope.row['status'] == 'failed' ||
+                  scope.row['status'] == 'revoke'
+                "
+                type="text"
+                size="small"
+                :style="{ color: disabled ? '#666' : '' }"
+                @click="Committee(scope.row)"
+              >
+                {{ $t("govCommittee.Committee") }}
               </el-button>
-              <el-button :loading="btnLoading&&btnIndex===scope.row.id" :disabled="scope.row['status']=='finished'||scope.row['status']=='failed'||scope.row['status']=='revoke'" type="text" size="small"
-                :style="{'color': disabled?'#666':''}" @click="revokeVotee(scope.row)">
-                {{$t('govCommittee.revokeVote')}}</el-button>
+              <el-button
+                :loading="btnLoading && btnIndex === scope.row.id"
+                :disabled="
+                  scope.row['status'] == 'finished' ||
+                  scope.row['status'] == 'failed' ||
+                  scope.row['status'] == 'revoke'
+                "
+                type="text"
+                size="small"
+                :style="{ color: disabled ? '#666' : '' }"
+                @click="revokeVotee(scope.row)"
+              >
+                {{ $t("govCommittee.revokeVote") }}</el-button
+              >
             </template>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination class="page" @size-change="voteSizeChange" @current-change="voteCurrentChange" :current-page="voteCurrentPage" :page-sizes="[10, 20, 30, 50]" layout=" total,sizes, prev, pager, next, jumper"
-        :total="voteTotal">
+      <el-pagination
+        class="page"
+        @size-change="voteSizeChange"
+        @current-change="voteCurrentChange"
+        :current-page="voteCurrentPage"
+        :page-sizes="[10, 20, 30, 50]"
+        layout=" total,sizes, prev, pager, next, jumper"
+        :total="voteTotal"
+      >
       </el-pagination>
-      <el-dialog :title="$t('govCommittee.Committee')" :visible.sync="CommitteeVisible" width="500px" v-if="CommitteeVisible" center @close="closeCommittee">
-        <el-form :model="govCommittee" :rules="rules" ref="govCommittee" label-width="130px" class="demo-ruleForm">
+      <el-dialog
+        :title="$t('govCommittee.Committee')"
+        :visible.sync="CommitteeVisible"
+        width="500px"
+        v-if="CommitteeVisible"
+        center
+        @close="closeCommittee"
+      >
+        <el-form
+          :model="govCommittee"
+          :rules="rules"
+          ref="govCommittee"
+          label-width="130px"
+          class="demo-ruleForm"
+        >
           <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
             <template v-if="chainCommitteeList.length > 0">
-              <el-select v-model="govCommittee.fromAddress" :placeholder="$t('text.select')" style="width:300px">
-                <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}</span>
+              <el-select
+                v-model="govCommittee.fromAddress"
+                :placeholder="$t('text.select')"
+                style="width: 300px"
+              >
+                <el-option
+                  v-for="item in produceCommittee"
+                  :key="item.governorAddress"
+                  :label="item.userName"
+                  :value="item.governorAddress"
+                >
+                  <span>{{ item.userName }}</span>
+                  <span>{{ item.governorAddress | splitString }}</span>
                 </el-option>
               </el-select>
             </template>
           </el-form-item>
           <el-form-item :label="$t('govCommittee.operate')" prop="operate">
-            <el-radio v-model="govCommittee.operate" :label='true'>{{this.$t('govCommittee.agree')}}</el-radio>
-            <el-radio v-model="govCommittee.operate" :label='false'>{{this.$t('govCommittee.refuse')}}</el-radio>
+            <el-radio v-model="govCommittee.operate" :label="true">{{
+              this.$t("govCommittee.agree")
+            }}</el-radio>
+            <el-radio v-model="govCommittee.operate" :label="false">{{
+              this.$t("govCommittee.refuse")
+            }}</el-radio>
           </el-form-item>
         </el-form>
         <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
-        <div class="text-right sure-btn" style="margin-top:10px">
-          <el-button @click="closeCommittee">{{this.$t('text.cancel')}}</el-button>
-          <el-button type="primary" @click="sureCommittee">{{this.$t('text.sure')}}</el-button>
+        <div class="text-right sure-btn" style="margin-top: 10px">
+          <el-button @click="closeCommittee">{{
+            this.$t("text.cancel")
+          }}</el-button>
+          <el-button type="primary" @click="sureCommittee">{{
+            this.$t("text.sure")
+          }}</el-button>
         </div>
       </el-dialog>
-      <el-dialog :title="$t('govCommittee.revokeVote')" :visible.sync="revokeVoteVisible" width="500px" v-if="revokeVoteVisible" center @close="closerevokeVote">
-        <el-form :model="revokeVote" :rules="rules" ref="revokeVote" label-width="130px" class="demo-ruleForm">
+      <el-dialog
+        :title="$t('govCommittee.revokeVote')"
+        :visible.sync="revokeVoteVisible"
+        width="500px"
+        v-if="revokeVoteVisible"
+        center
+        @close="closerevokeVote"
+      >
+        <el-form
+          :model="revokeVote"
+          :rules="rules"
+          ref="revokeVote"
+          label-width="130px"
+          class="demo-ruleForm"
+        >
           <el-form-item :label="$t('govCommittee.fromUser')" prop="fromAddress">
             <template v-if="chainCommitteeList.length > 0">
-              <el-select v-model="revokeVote.fromAddress" :placeholder="$t('text.select')" style="width:300px">
-                <el-option v-for="item in produceCommittee" :key="item.governorAddress" :label="item.userName" :value="item.governorAddress">
-                  <span>{{item.userName}}</span>
-                  <span>{{item.governorAddress | splitString}}</span>
+              <el-select
+                v-model="revokeVote.fromAddress"
+                :placeholder="$t('text.select')"
+                style="width: 300px"
+              >
+                <el-option
+                  v-for="item in produceCommittee"
+                  :key="item.governorAddress"
+                  :label="item.userName"
+                  :value="item.governorAddress"
+                >
+                  <span>{{ item.userName }}</span>
+                  <span>{{ item.governorAddress | splitString }}</span>
                 </el-option>
               </el-select>
             </template>
           </el-form-item>
         </el-form>
         <!-- <p style="padding-left: 50px">{{$t('govCommittee.dialogTips')}}</p> -->
-        <p style="padding-left: 50px">*{{$t('govCommittee.dialogTips')}}</p>
-        <div class="text-right sure-btn" style="margin-top:10px">
-          <el-button @click="closerevokeVote">{{this.$t('text.cancel')}}</el-button>
-          <el-button type="primary" @click="sureRevokeVote">{{this.$t('text.sure')}}</el-button>
+        <p style="padding-left: 50px">*{{ $t("govCommittee.dialogTips") }}</p>
+        <div class="text-right sure-btn" style="margin-top: 10px">
+          <el-button @click="closerevokeVote">{{
+            this.$t("text.cancel")
+          }}</el-button>
+          <el-button type="primary" @click="sureRevokeVote">{{
+            this.$t("text.sure")
+          }}</el-button>
         </div>
       </el-dialog>
     </div>
-    <el-dialog :visible.sync="$store.state.creatUserVisible" :title="$t('privateKey.createUser')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.creatUserVisible' center>
-      <v-creatUser @creatUserClose="creatUserClose" :disablePub='true' ref="creatUser"></v-creatUser>
+    <el-dialog
+      :visible.sync="$store.state.creatUserVisible"
+      :title="$t('privateKey.createUser')"
+      width="640px"
+      :append-to-body="true"
+      class="dialog-wrapper"
+      v-if="$store.state.creatUserVisible"
+      center
+    >
+      <v-creatUser
+        @creatUserClose="creatUserClose"
+        :disablePub="true"
+        ref="creatUser"
+      ></v-creatUser>
     </el-dialog>
-    <el-dialog :visible.sync="$store.state.importPrivateKey" :title="$t('privateKey.importPrivateKeyAccount')" width="640px" :append-to-body="true" class="dialog-wrapper" v-if='$store.state.importPrivateKey' center>
-      <v-importKey @importPrivateKeySuccess="importPrivateKeySuccess" ref="importKey"></v-importKey>
+    <el-dialog
+      :visible.sync="$store.state.importPrivateKey"
+      :title="$t('privateKey.importPrivateKeyAccount')"
+      width="640px"
+      :append-to-body="true"
+      class="dialog-wrapper"
+      v-if="$store.state.importPrivateKey"
+      center
+    >
+      <v-importKey
+        @importPrivateKeySuccess="importPrivateKeySuccess"
+        ref="importKey"
+      ></v-importKey>
     </el-dialog>
   </div>
 </template>
@@ -289,7 +643,6 @@ import {
   getUserList,
   committeeList,
   deleteCommittee,
-
   voteRecord,
   deleteVoteRecord,
   getThreshold,

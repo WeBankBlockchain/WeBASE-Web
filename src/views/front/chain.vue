@@ -13,6 +13,7 @@
             class="search-part-left-btn"
             :disabled="disabled"
             @click="onClickAddChain"
+            v-hasPermi="['bcos3:chains:add']"
             >{{ $t("text.addChain") }}</el-button
           >
           <!-- <el-button type="primary" class="search-part-left-btn" :disabled='!(configData && (configData.chainStatus == 3 || configData.chainStatus == 2))' @click="reset">{{$t('text.reset')}}</el-button> -->
@@ -78,6 +79,7 @@
                 size="small"
                 :style="{ color: disabled ? '#666' : '' }"
                 @click="reset(scope.row)"
+                v-hasPermi="['bcos3:chains:delete']"
                 >{{ $t("dialog.delete") }}</el-button
               >
             </template>
@@ -182,7 +184,7 @@ export default {
           this.loading = true;
           deleteChain(reqData)
             .then((res) => {
-                console.log("!!delete chain res:", res);
+              console.log("!!delete chain res:", res);
               if (res.data.code === 0) {
                 this.$message({
                   type: "success",
@@ -192,10 +194,10 @@ export default {
 
                 // 如果本地存储中保存的链数据是当前链，则需要重新获取群组列表，设置正确的链、群组
                 if (localStorage.getItem("chainId") == row.id) {
-                    localStorage.setItem("groupName", "");
-                    localStorage.setItem("groupId", "");
-                    localStorage.setItem("chainId", "");
-                    localStorage.setItem("chainName", "");
+                  localStorage.setItem("groupName", "");
+                  localStorage.setItem("groupId", "");
+                  localStorage.setItem("chainId", "");
+                  localStorage.setItem("chainName", "");
                 }
                 Bus.$emit("changeHeadGroup");
                 this.getChainTable();
@@ -209,7 +211,7 @@ export default {
               this.loading = false;
             })
             .catch((err) => {
-                console.log("!!!!delechain err:", err);
+              console.log("!!!!delechain err:", err);
               this.$message({
                 message: err.data || this.$t("text.systemError"),
                 type: "error",
