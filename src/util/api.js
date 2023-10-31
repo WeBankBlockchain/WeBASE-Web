@@ -2276,8 +2276,4 @@ function getAuthHeaders() {
     return {
         Authorization: "Bearer " +  getCookie("Admin-Token")
     };
-
-    // return {
-    //     Authorization: "Bearer " +  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJsb2dpblR5cGUiOiJsb2dpbiIsImxvZ2luSWQiOiJzeXNfdXNlcjoxIiwicm5TdHIiOiJGYllucVhaWXdac1U2VVRwaU1nZkF1QTFZNlhxWGNueCIsInVzZXJJZCI6MX0.5JH1qtkMkwxV0bhOlydmhcx7kIUIU3hetFfrluE7IuQ"
-    // };
 }
