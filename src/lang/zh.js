@@ -296,7 +296,7 @@ export default {
         appListTile: '应用列表',
         appTitleAdmin: '应用配置（管理员）',
         appStep11: '通过服务注册获得注册信息，并通过API向BAAS注册服务',
-        appStep12: '通过WeBASE提供的基础能力API和BAAS连通',
+        appStep12: '通过BAAS提供的基础能力API和BAAS连通',
         appStep21: '添加应用',
         appStep22: '启动应用插件',
         appStepTag1: '链上账号信息',

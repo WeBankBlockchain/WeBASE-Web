@@ -1,7 +1,7 @@
 <template>
   <div class="navMenu">
-    <!-- <div v-if='isMicroApp && noShow' class="content-head-network"> -->
-    <div class="content-head-network">
+    <div v-if='isMicroApp && noShow' class="content-head-network">
+    <!-- <div class="content-head-network"> -->
       <span v-if="abnormalList.length>0">
         <el-tooltip class="item" effect="dark" placement="bottom-end">
           <div slot="content">

@@ -332,7 +332,7 @@ export default {
     appStep11:
       "Get registration information through service registration, and register service with baas through API",
     appStep12:
-      "Connect with webase through the basic capability API provided by baas",
+      "Connect with baas through the basic capability API provided by baas",
     appStep21: "Add app",
     appStep22: "Start application plug in",
     appStepTag1: "Account on the chain",
