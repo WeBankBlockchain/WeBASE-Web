@@ -1125,7 +1125,7 @@ export default {
             let reqQuery = {
                 chainName: this.chainList.chainName,
                 encryptType: this.chainList.encryptType,
-                userName: "admin_auth",
+                userName: "admin_auth" + localStorage.getItem("groupId"),
                 groupId: localStorage.getItem("groupId"),
                 description: "初始治理账户",
                 account: localStorage.getItem("user")
