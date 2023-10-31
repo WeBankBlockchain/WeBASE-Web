@@ -1319,27 +1319,27 @@ export default {
       return colorString;
     },
 
-    initImportAdmin() {
-      let reqQuery = {
-        chainName: this.chainList.chainName,
-        encryptType: this.chainList.encryptType,
-        userName: "admin_auth",
-        groupId: localStorage.getItem("groupId"),
-        description: "初始治理账户",
-        account: localStorage.getItem("user"),
-      };
-      initAuthAdmin(reqQuery)
-        .then((res) => {
-          const { data, status } = res;
-          console.log("initAuthAdmin, res data:", data);
-        })
-        .catch((err) => {
-          this.$message({
-            type: "error",
-            message: err.data || this.$t("text.systemError"),
-          });
-        });
-    },
+        initImportAdmin() {
+            let reqQuery = {
+                chainName: this.chainList.chainName,
+                encryptType: this.chainList.encryptType,
+                userName: "admin_auth" + localStorage.getItem("groupId"),
+                groupId: localStorage.getItem("groupId"),
+                description: "初始治理账户",
+                account: localStorage.getItem("user")
+            };
+            initAuthAdmin(reqQuery)
+                .then(res => {
+                    const { data, status } = res;
+                    console.log("initAuthAdmin, res data:", data);
+                })
+                .catch(err => {
+                    this.$message({
+                        type: "error",
+                        message: err.data || this.$t('text.systemError'),
+                    });
+                });
+        },
 
     checkAuth() {
       getPermissionManagementStatus(localStorage.getItem("groupId"))
