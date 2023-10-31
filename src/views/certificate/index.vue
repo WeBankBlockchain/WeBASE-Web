@@ -164,21 +164,22 @@ export default {
 
     methods: {
         changGroup() {
-
+            this.queryFronts();
         },
         importCert() {
 
         },
         queryFronts() {
-            getFronts({})
+            let reqData = {
+                groupId: localStorage.getItem("groupId")
+            };
+            getFronts(reqData)
                 .then(res => {
                     if (res.data.code === 0) {
                         const { data } = res.data
                         if (data.length) {
-
                             this.frontId = data[0]['frontId']
                         }
-
                     } else {
                         this.$message({
                             message: this.$chooseLang(res.data.code),
