@@ -1,30 +1,41 @@
-/*
- * Copyright 2014-2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* * Copyright 2014-2020 the original author or authors. * * Licensed under the
+Apache License, Version 2.0 (the "License"); * you may not use this file except
+in compliance with the License. * You may obtain a copy of the License at * *
+http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by applicable law
+or agreed to in writing, software * distributed under the License is distributed
+on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+express or implied. * See the License for the specific language governing
+permissions and * limitations under the License. */
 <template>
   <div class="over-view-wrapper">
     <!-- <v-content-head :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></v-content-head> -->
-    <nav-menu :headTitle="$t('title.dataOverview')" @changGroup="changGroup"></nav-menu>
-    <div style="margin: 5px;">
-      <div style="margin:10px 10px 6px 10px;">
+    <nav-menu
+      :headTitle="$t('title.dataOverview')"
+      @changGroup="changGroup"
+    ></nav-menu>
+    <div style="margin: 5px">
+      <div style="margin: 10px 10px 6px 10px">
         <el-row type="flex">
-          <el-col :xs='24' :sm="24" :md="11" :lg="10" :xl="8" v-loading="loadingNumber" class="overview-info">
-            <div class="overview-item" v-for="(item, index) in detailsList" :key='item.label'
-              @click="goDetailRouter(item)">
+          <el-col
+            :xs="24"
+            :sm="24"
+            :md="11"
+            :lg="10"
+            :xl="8"
+            v-loading="loadingNumber"
+            class="overview-info"
+          >
+            <div
+              class="overview-item"
+              v-for="(item, index) in detailsList"
+              :key="item.label"
+              @click="goDetailRouter(item)"
+            >
               <div class="overview-item-img" :class="item.bg">
-                <img :class="['img-icon', `icon${index}`]" :src="require('../../assets/image/' + item.icon)" />
+                <img
+                  :class="['img-icon', `icon${index}`]"
+                  :src="require('../../assets/image/' + item.icon)"
+                />
               </div>
               <div class="overview-item-content">
                 <div class="overview-item-number">{{ item.value }}</div>
@@ -32,35 +43,65 @@
               </div>
             </div>
           </el-col>
-          <el-col :xs='24' :sm="24" :md="13" :lg="14" :xl="16">
-            <div style="margin: 8px 0px 0 0px;" class="module-box-shadow bg-fff">
+          <el-col :xs="24" :sm="24" :md="13" :lg="14" :xl="16">
+            <div style="margin: 8px 0px 0 0px" class="module-box-shadow bg-fff">
               <div class="part2-title">
-                <span class="part2-title-left">{{ this.$t('home.chartTitle') }}</span>
-                <span class="part2-title-right">{{ this.$t('home.chartExplain') }}</span>
+                <span class="part2-title-left">{{
+                  this.$t("home.chartTitle")
+                }}</span>
+                <span class="part2-title-right">{{
+                  this.$t("home.chartExplain")
+                }}</span>
               </div>
               <div class="chart" ref="chart">
-                <v-chart ref="linechart" :id="'homeId'" v-if="chartStatistics.show" :data="chartStatistics.date"
-                  :transactionDataArr="chartStatistics.dataArr" :size="chartStatistics.chartSize"
-                  v-loading="loadingCharts"></v-chart>
+                <v-chart
+                  ref="linechart"
+                  :id="'homeId'"
+                  v-if="chartStatistics.show"
+                  :data="chartStatistics.date"
+                  :transactionDataArr="chartStatistics.dataArr"
+                  :size="chartStatistics.chartSize"
+                  v-loading="loadingCharts"
+                ></v-chart>
               </div>
             </div>
           </el-col>
         </el-row>
       </div>
       <el-row :gutter="24">
-        <el-col :xs='24' :sm="24" :md="14" :lg="14" :xl="14">
-          <div class="module-wrapper-small" style="padding: 30px 31px 26px 32px;">
-            <el-table :data="nodeData" class="search-table-content" v-loading="loadingNodes">
-              <el-table-column v-for="head in nodeHead" :label="head.name" :key="head.enName" show-overflow-tooltip
-                align="" :width='head.width'>
+        <el-col :xs="24" :sm="24" :md="14" :lg="14" :xl="14">
+          <div
+            class="module-wrapper-small"
+            style="padding: 30px 31px 26px 32px"
+          >
+            <el-table
+              :data="nodeData"
+              class="search-table-content"
+              v-loading="loadingNodes"
+            >
+              <el-table-column
+                v-for="head in nodeHead"
+                :label="head.name"
+                :key="head.enName"
+                show-overflow-tooltip
+                align=""
+                :width="head.width"
+              >
                 <template slot-scope="scope">
                   <template>
                     <span v-if="head.enName === 'nodeActive'">
-                      <i :style="{ 'color': textColor(scope.row[head.enName]) }" class="wbs-icon-radio font-6"></i>
+                      <i
+                        :style="{ color: textColor(scope.row[head.enName]) }"
+                        class="wbs-icon-radio font-6"
+                      ></i>
                       {{ nodesStatus(scope.row[head.enName]) }}
                     </span>
                     <span v-else-if="head.enName === 'nodeId'">
-                      <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(scope.row[head.enName])" title="复制"></i>
+                      <i
+                        class="wbs-icon-copy font-12"
+                        @click="copyNodeIdKey(scope.row[head.enName])"
+                        title="复制"
+                      ></i>
                       {{ scope.row[head.enName] }}
                     </span>
                     <span v-else>{{ scope.row[head.enName] }}</span>
@@ -71,50 +112,95 @@
           </div>
           <div class="overview-wrapper">
             <p>
-              <span class="overview-title">{{ this.$t("home.transaction") }}</span>
-              <span class="overview-more cursor-pointer" @click="goRouter('transactions')">{{ this.$t("home.more") }}</span>
+              <span class="overview-title">{{
+                this.$t("home.transaction")
+              }}</span>
+              <span
+                class="overview-more cursor-pointer"
+                @click="goRouter('transactions')"
+                >{{ this.$t("home.more") }}</span
+              >
             </p>
-            <div class="overview-item-base trans" v-loading="loadingTransaction">
-              <div class="block-item font-color-2e384d" v-for="item in transactionList" :key='item.transHash'>
-                <div class="block-amount">
+            <div
+              class="overview-item-base trans"
+              v-loading="loadingTransaction"
+            >
+              <el-row
+                class="block-item font-color-2e384d"
+                v-for="item in transactionList"
+                :key="item.transHash"
+              >
+                <el-col class="block-amount" :md="16" :xl="18">
                   <p class="trans-hash" :title="`${item.transHash}`">
-                    <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transHash)" :title="$t('text.copy')"></i>
-                    <router-link :to="{ 'path': 'transactionInfo', 'query': { blockNumber: item.transHash } }"
-                      class="node-ip">
+                    <i
+                      class="wbs-icon-copy font-12"
+                      @click="copyNodeIdKey(item.transHash)"
+                      :title="$t('text.copy')"
+                    ></i>
+                    <router-link
+                      :to="{
+                        path: 'transactionInfo',
+                        query: { blockNumber: item.transHash },
+                      }"
+                      class="node-ip"
+                    >
                       {{ item.transHash }}
                     </router-link>
                   </p>
                   <p class="trans-address color-8798AD">
                     <span>
-                      <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transFrom)"
-                        :title="$t('text.copy')"></i>
+                      <i
+                        class="wbs-icon-copy font-12"
+                        @click="copyNodeIdKey(item.transFrom)"
+                        :title="$t('text.copy')"
+                      ></i>
                       {{ splitAddress(item.transFrom) }}
                     </span>
-                    <img :src="sRight" :alt="$t('text.arrow')">
+                    <img :src="sRight" :alt="$t('text.arrow')" />
                     <span>
-                      <i class="wbs-icon-copy font-12" @click="copyNodeIdKey(item.transTo)" :title="$t('text.copy')"></i>
+                      <i
+                        class="wbs-icon-copy font-12"
+                        @click="copyNodeIdKey(item.transTo)"
+                        :title="$t('text.copy')"
+                      ></i>
                       {{ splitAddress(item.transTo) }}
                     </span>
                   </p>
-
-                </div>
-                <p class="color-8798AD text-right">{{ item.blockTimestamp }}</p>
-              </div>
+                </el-col>
+                <el-col class="color-8798AD text-right" :md="8" :xl="6">{{
+                  item.blockTimestamp
+                }}</el-col>
+              </el-row>
             </div>
           </div>
         </el-col>
-        <el-col :xs='24' :sm="24" :md="10" :lg="10" :xl="10">
+        <el-col :xs="24" :sm="24" :md="10" :lg="10" :xl="10">
           <div class="overview-wrapper">
             <p>
               <span class="overview-title">{{ this.$t("home.block") }}</span>
-              <span class="overview-more cursor-pointer" @click="goRouter('blocks')">{{ this.$t("home.more") }}</span>
+              <span
+                class="overview-more cursor-pointer"
+                @click="goRouter('blocks')"
+                >{{ this.$t("home.more") }}</span
+              >
             </p>
             <div class="overview-item-base block" v-loading="loadingBlock">
-              <div class="block-item font-color-2e384d" v-for="item in blockData" :key='item.blockNumber'>
-                <div class="block-amount" style="padding-bottom: 7px;">
+              <div
+                class="block-item font-color-2e384d"
+                v-for="item in blockData"
+                :key="item.blockNumber"
+              >
+                <div class="block-amount" style="padding-bottom: 7px">
                   <span>
-                    <router-link :to="{ 'path': 'blockInfo', 'query': { blockNumber: item.blockNumber } }" class="node-ip">
-                      <span>{{ $t("home.blockHeight") }}</span> {{ item.blockNumber }}
+                    <router-link
+                      :to="{
+                        path: 'blockInfo',
+                        query: { blockNumber: item.blockNumber },
+                      }"
+                      class="node-ip"
+                    >
+                      <span>{{ $t("home.blockHeight") }}</span>
+                      {{ item.blockNumber }}
                     </router-link>
                   </span>
                   <span class="color-8798AD">{{ item.blockTimestamp }}</span>
@@ -125,13 +211,15 @@
                     <p :title="`${item.sealer}`">{{ item.sealer }}</p>
                   </div>
                   <div class="text-right">
-                    <span class="block-trans" @click="linkRouter(item.blockNumber)">
+                    <span
+                      class="block-trans"
+                      @click="linkRouter(item.blockNumber)"
+                    >
                       <!-- <router-link :to="{'path': 'blockInfo', 'query': {blockNumber: item.blockNumber}}" class="node-ip"> -->
                       <span>{{ item.transCount }}</span>
                       <span>txns</span>
                       <!-- </router-link> -->
                     </span>
-
                   </div>
                 </div>
               </div>
@@ -145,7 +233,7 @@
 
 <script>
 // import contentHead from "@/components/contentHead";
-import NavMenu from '../../components/navs/navMenu.vue';
+import NavMenu from "../../components/navs/navMenu.vue";
 import charts from "./components/chart";
 import {
   getChartData,
@@ -153,7 +241,7 @@ import {
   getNodeList,
   getBlockPage,
   getTransactionList,
-  getConsensusNodeId
+  getConsensusNodeId,
 } from "@/util/api";
 import { changWeek, numberFormat, unique } from "@/util/util";
 import router from "@/router";
@@ -161,13 +249,13 @@ import errcode from "@/util/errcode";
 import sRight from "@/../static/image/s-right.png";
 import artboard from "@/../static/image/artboard.png";
 import constant from "@/util/constant";
-import { toContractName } from "@/util/util"
+import { toContractName } from "@/util/util";
 export default {
   name: "home",
   components: {
     // "v-content-head": contentHead,
-    'nav-menu': NavMenu,
-    "v-chart": charts
+    "nav-menu": NavMenu,
+    "v-chart": charts,
   },
   computed: {
     detailsList() {
@@ -177,43 +265,48 @@ export default {
           name: "nodeCount",
           value: 0,
           icon: "node-icon.png",
-          bg: 'node-bg'
+          bg: "node-bg",
         },
         {
           label: this.$t("home.contracts"),
           name: "contractCount",
           value: 0,
           icon: "contract-icon.png",
-          bg: 'contract-bg'
+          bg: "contract-bg",
         },
         {
           label: this.$t("home.blocks"),
           name: "latestBlock",
           value: 0,
           icon: "block-icon.png",
-          bg: "block-bg"
+          bg: "block-bg",
         },
         {
           label: this.$t("home.transactions"),
           name: "transactionCount",
           value: 0,
           icon: "trans-icon.png",
-          bg: 'transation-bg'
-        }
-      ]
-      return data
+          bg: "transation-bg",
+        },
+      ];
+      return data;
     },
     nodeHead() {
       let data = [
         {
           enName: "nodeId",
           name: this.$t("home.nodeId"),
-          width: ""
+          width: "",
+        },
+        {
+          enName: "nodeIp",
+          name: this.$t("home.nodeIp"),
+          width: "150",
         },
         {
           enName: "blockNumber",
-          name: this.$t('home.blockHeight'),
-          width: 80
+          name: this.$t("home.blockHeight"),
+          width: 80,
         },
         // {
         //     enName: "pbftView",
@@ -223,11 +316,11 @@ export default {
         {
           enName: "nodeActive",
           name: this.$t("home.status"),
-          width: 150
-        }
-      ]
-      return data
-    }
+          width: 150,
+        },
+      ];
+      return data;
+    },
   },
   data: function () {
     return {
@@ -246,14 +339,14 @@ export default {
         dataArr: [],
         chartSize: {
           width: 0,
-          height: 0
-        }
+          height: 0,
+        },
       },
       reloadNumber: true,
       groupId: localStorage.getItem("groupId"),
       nodeData: [],
       blockData: [],
-      transactionList: []
+      transactionList: [],
     };
   },
   mounted: function () {
@@ -270,10 +363,10 @@ export default {
       });
     }
   },
-  destroyed() { },
+  destroyed() {},
   methods: {
     changGroup(val) {
-      this.groupId = val
+      this.groupId = val;
       this.getNetworkDetails();
       this.getNodeTable();
       this.getBlockList();
@@ -288,15 +381,15 @@ export default {
       router.push({
         path: "/blockInfo",
         query: {
-          blockNumber: val
-        }
-      })
+          blockNumber: val,
+        },
+      });
     },
     getNetworkDetails: function () {
       this.loadingNumber = true;
       let groupId = this.groupId;
       getNetworkStatistics(groupId)
-        .then(res => {
+        .then((res) => {
           this.loadingNumber = false;
           if (res.data.code === 0) {
             this.detailsList.forEach(function (value, index) {
@@ -310,17 +403,16 @@ export default {
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",
-              duration: 2000
+              duration: 2000,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message({
-            message: err.data || this.$t('text.systemError'),
+            message: err.data || this.$t("text.systemError"),
             type: "error",
-            duration: 2000
+            duration: 2000,
           });
-
         });
     },
     getChart: function () {
@@ -330,128 +422,123 @@ export default {
       this.chartStatistics.dataArr = [];
       let groupId = localStorage.getItem("groupId");
       getChartData(groupId)
-        .then(res => {
+        .then((res) => {
           this.loadingCharts = false;
           if (res.data.code === 0) {
             let resData = changWeek(res.data.data);
             for (let i = 0; i < resData.length; i++) {
               this.chartStatistics.date.push(resData[i].day);
-              this.chartStatistics.dataArr.push(
-                resData[i].transCount
-              );
+              this.chartStatistics.dataArr.push(resData[i].transCount);
             }
             this.$set(this.chartStatistics, "show", true);
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",
-              duration: 2000
+              duration: 2000,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message({
-            message: err.data || this.$t('text.systemError'),
+            message: err.data || this.$t("text.systemError"),
             type: "error",
-            duration: 2000
+            duration: 2000,
           });
-
         });
     },
     getNodeTable: function () {
       this.loadingNodes = true;
       let groupId = localStorage.getItem("groupId");
       let reqData = {
-        groupId: groupId,
-        pageNumber: 1,
-        pageSize: 100
-      },
+          groupId: groupId,
+          pageNumber: 1,
+          pageSize: 100,
+        },
         reqQuery = {},
-
         reqParam = {
           groupId: groupId,
           pageNumber: 1,
-          pageSize: 100
+          pageSize: 100,
         };
-      this.$axios.all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
-        .then(this.$axios.spread((acct, perms) => {
-          this.loadingNodes = false;
-          if (acct.data.code === 0 && perms.data.code === 0) {
-            var nodesStatusList = acct.data.data, nodesAuthorList = perms.data.data;
-            var nodesStatusIdList = nodesStatusList.map(item => {
-              return item.nodeId
-            })
-            this.nodeData = [];
-            nodesAuthorList.forEach((item, index) => {
-              if (item.nodeType != 'remove') {
-                nodesStatusList.forEach(it => {
-                  if (nodesStatusIdList.includes(item.nodeId)) {
-                    if (item.nodeId === it.nodeId) {
-                      this.nodeData.push(Object.assign({}, item, it))
+      this.$axios
+        .all([getNodeList(reqData, reqQuery), getConsensusNodeId(reqParam)])
+        .then(
+          this.$axios.spread((acct, perms) => {
+            this.loadingNodes = false;
+            if (acct.data.code === 0 && perms.data.code === 0) {
+              var nodesStatusList = acct.data.data,
+                nodesAuthorList = perms.data.data;
+              var nodesStatusIdList = nodesStatusList.map((item) => {
+                return item.nodeId;
+              });
+              this.nodeData = [];
+              nodesAuthorList.forEach((item, index) => {
+                if (item.nodeType != "remove") {
+                  nodesStatusList.forEach((it) => {
+                    if (nodesStatusIdList.includes(item.nodeId)) {
+                      if (item.nodeId === it.nodeId) {
+                        this.nodeData.push(Object.assign({}, item, it));
+                      }
+                    } else {
+                      this.nodeData.push(item);
                     }
-                  } else {
-                    this.nodeData.push(item)
-                  }
-                })
-              }
-
-            })
-            this.nodeData.forEach(item => {
-              if (item.nodeType === "observer") {
-                item.pbftView = '--';
-              }
-            });
-            this.nodeData = unique(this.nodeData, 'nodeId')
-          } else {
-            this.nodeData = [];
-          }
-
-
-        }))
+                  });
+                }
+              });
+              this.nodeData.forEach((item) => {
+                if (item.nodeType === "observer") {
+                  item.pbftView = "--";
+                }
+              });
+              this.nodeData = unique(this.nodeData, "nodeId");
+            } else {
+              this.nodeData = [];
+            }
+          })
+        );
     },
     getBlockList: function () {
       this.loadingBlock = true;
       let groupId = localStorage.getItem("groupId");
       let reqData = {
-        groupId: groupId,
-        pageNumber: 1,
-        pageSize: 6
-      },
+          groupId: groupId,
+          pageNumber: 1,
+          pageSize: 6,
+        },
         reqQuery = {};
       getBlockPage(reqData, reqQuery)
-        .then(res => {
+        .then((res) => {
           this.loadingBlock = false;
           if (res.data.code === 0) {
-            this.blockData = res.data.data;
+            this.blockData = res.data.data.slice(0, 10);
           } else {
-
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",
-              duration: 2000
+              duration: 2000,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message({
-            message: err.data || this.$t('text.systemError'),
+            message: err.data || this.$t("text.systemError"),
             type: "error",
-            duration: 2000
+            duration: 2000,
           });
-
         });
     },
     getTransaction: function () {
       this.loadingTransaction = true;
       let groupId = localStorage.getItem("groupId");
       let reqData = {
-        groupId: groupId,
-        pageNumber: 1,
-        pageSize: 6
-      },
+          groupId: groupId,
+          pageNumber: 1,
+          pageSize: 6,
+        },
         reqQuery = {};
       getTransactionList(reqData, reqQuery)
-        .then(res => {
+        .then((res) => {
           this.loadingTransaction = false;
           if (res.data.code === 0) {
             this.transactionList = res.data.data;
@@ -459,17 +546,16 @@ export default {
             this.$message({
               message: this.$chooseLang(res.data.code),
               type: "error",
-              duration: 2000
+              duration: 2000,
             });
           }
         })
-        .catch(err => {
+        .catch((err) => {
           this.$message({
-            message: err.data || this.$t('text.systemError'),
+            message: err.data || this.$t("text.systemError"),
             type: "error",
-            duration: 2000
+            duration: 2000,
           });
-
         });
     },
     goDetailRouter(item) {
@@ -485,7 +571,10 @@ export default {
           router.push({ path: "front", query: { from: "home" } });
           break;
         case "contractCount":
-          router.push({ path: "contract/List", query: { from: "home", tab: 'total' } });
+          router.push({
+            path: "contract/List",
+            query: { from: "home", tab: "total" },
+          });
           break;
       }
     },
@@ -564,15 +653,15 @@ export default {
           type: "fail",
           showClose: true,
           message: this.$t("text.copyErrorMsg"),
-          duration: 2000
+          duration: 2000,
         });
       } else {
-        this.$copyText(val).then(e => {
+        this.$copyText(val).then((e) => {
           this.$message({
             type: "success",
             showClose: true,
             message: this.$t("text.copySuccessMsg"),
-            duration: 2000
+            duration: 2000,
           });
         });
       }
@@ -580,38 +669,39 @@ export default {
     splitAddress(val) {
       if (!val) return;
       if (constant.SYSTEMCONTRACT.includes(val)) {
-        return toContractName(val)
+        return toContractName(val);
       } else {
-        var startStr = '', endStr = '', str = '';
+        var startStr = "",
+          endStr = "",
+          str = "";
         startStr = val.substring(0, 8);
         endStr = val.substring(val.length - 4);
         str = `${startStr}...${endStr}`;
         return str;
       }
-
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
 .node-bg {
   /* background: linear-gradient(102.87deg, #4ccbf3 0%, #94eefb 100%); */
-  background: url('../../assets/image/node.png') no-repeat;
+  background: url("../../assets/image/node.png") no-repeat;
 }
 
 .contract-bg {
   /* background: linear-gradient(102.87deg, #4886ff 0%, #62b0f8 100%); */
-  background: url('../../assets/image/contract.png') no-repeat;
+  background: url("../../assets/image/contract.png") no-repeat;
 }
 
 .block-bg {
   /* background: linear-gradient(102.87deg, #7280ff 0%, #98afff 100%); */
-  background: url('../../assets/image/block.png') no-repeat;
+  background: url("../../assets/image/block.png") no-repeat;
 }
 
 .transation-bg {
   /* background: linear-gradient(102.87deg, #ff9472 0%, #ffc1ad 100%); */
-  background: url('../../assets/image/trans.png') no-repeat;
+  background: url("../../assets/image/trans.png") no-repeat;
 }
 
 .over-view-wrapper {
@@ -703,8 +793,8 @@ export default {
   font-size: 12px;
 }
 
-.part3-table-content>>>th,
-.part3-table-content>>>td {
+.part3-table-content >>> th,
+.part3-table-content >>> td {
   padding: 8px 0;
 }
 
@@ -724,13 +814,13 @@ export default {
   width: 100%;
 }
 
-.search-table-content>>>th {
+.search-table-content >>> th {
   background: #fafafa;
   color: #2e384d;
 }
 
-.search-table-content>>>th,
-.search-table-content>>>td {
+.search-table-content >>> th,
+.search-table-content >>> td {
   font-size: 14px;
 }
 
@@ -739,10 +829,10 @@ export default {
   font-size: 15px;
   box-shadow: 0 4px 12px 0 #dfe2e9;
   border-radius: 2px;
-  margin:0px 8px 0 9px;
+  margin: 0px 8px 0 9px;
 }
 
-.overview-wrapper>p {
+.overview-wrapper > p {
   padding: 26px 18px 0px 22px;
   border-bottom: 1px solid #f2f2f2;
   display: flex;
@@ -780,11 +870,11 @@ export default {
 }
 
 .block {
-  max-height:500px
+  /* max-height: 500px; */
 }
 
 .trans {
-  max-height:250px;
+  /* max-height: 250px; */
 }
 
 .block-miner {
@@ -792,7 +882,7 @@ export default {
   flex-flow: row wrap;
 }
 
-.block-miner>p {
+.block-miner > p {
   max-width: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -800,7 +890,7 @@ export default {
 }
 
 .trans-hash {
-  max-width: 300px;
+  /* max-width: 300px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -876,7 +966,7 @@ export default {
 
 .overview-item-number {
   font-size: 30px;
-  color: #1B2337;
+  color: #1b2337;
   font-weight: bold;
 }
 
@@ -885,4 +975,5 @@ export default {
   color: #000;
   font-size: 14px;
   min-width: 113px;
-}</style>
+}
+</style>

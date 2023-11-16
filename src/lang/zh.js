@@ -451,7 +451,7 @@ export default {
         versionInfo: "版本信息",
         dataBigScreen:"数据大屏",
         deleteSelf:'撤销本账户',
-        chain: "链",
+        chain: "选择链",
     },
     title: {
         bfs:"BFS",
@@ -521,10 +521,11 @@ export default {
     },
     home: {
         nodes: "节点个数",
-        contracts: "已部署的智能合约",
+        contracts: "智能合约",
         blocks: "区块数量",
         transactions: "交易数量",
         nodeId: "节点Id",
+        nodeIp: "节点Ip",
         blockHeight: "块高",
         pbftView: "pbftView",
         status: "状态",

@@ -108,7 +108,7 @@ export default {
     let that = this;
     this.currentRoute=this.$route.path;
     let pre=this.currentRoute.substring(1)
-    if(pre=='groupManagement'){
+    if(pre=='groupManagement' || pre=== 'node/chain'){
       this.noShow=false
     }
     if (localStorage.getItem("chainName")) {
