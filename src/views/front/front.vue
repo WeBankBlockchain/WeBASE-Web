@@ -350,7 +350,6 @@ export default {
       total: 0,
       nodetotal: 0,
       loading: false,
-      nodesLoading: false,
       nodesDialogVisible: false,
       nodesDialogTitle: "",
       nodesDialogOptions: {},
@@ -638,6 +637,7 @@ export default {
               localStorage.setItem("configData", 0);
             }
             this.getFrontTable();
+            this.getNodeTable();
           } else {
             clearInterval(this.progressInterval);
             clearInterval(this.frontInterval);
@@ -1242,6 +1242,8 @@ export default {
             } else {
               this.nodeData = [];
             }
+
+            this.loadingNodes = false;
           })
         );
     },
