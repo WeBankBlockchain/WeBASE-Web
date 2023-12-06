@@ -332,6 +332,7 @@ import {
   getProgress,
   getFronts,
   getGroupName,
+  getChainCount,
 } from "@/util/api";
 import { format, dynamicPoint } from "@/util/util";
 export default {
@@ -371,7 +372,7 @@ export default {
       progressTimer: null, //progress定时器,
       statusNumber: 0, /// progess 值
       frontList: [],
-      chainCount: this.$route.query ? this.$route.query.chainCount : 0,
+      chainCount: 0,
     };
   },
   computed: {
@@ -407,6 +408,7 @@ export default {
   },
   mounted() {
     console.log(this.type);
+    this.getChainCount();
     if (this.type === "node") {
       this.getChainDetail();
       this.getFrontList();
@@ -450,6 +452,27 @@ export default {
             this.chainFrom = res.data.data;
             this.chainFrom.dockerImageType = 1;
             this.$set(this.chainFrom, "dockerImageType", 1);
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
+    getChainCount() {
+      getChainCount()
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.chainCount = res.data.data;
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
