@@ -211,11 +211,12 @@ export default {
                 weight:this.modifyForm.weight,
             }
 
+            // 如果当前节点为共识节点，并且也是修改为共识节点，则本次操作为修改节点的权重
+            if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'sealer') {
+                reqData.nodeType = 'weight';
+            }
+
             if (this.modifyNode.isAuthEnable) {
-                // 如果当前节点为共识节点，并且也是修改为共识节点，则本次操作为修改节点的权重
-                if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'sealer') {
-                    reqData.nodeType = 'weight';
-                }
                 nodeMgrProposal(reqData)
                 .then(res => {
                     this.loading = false;
