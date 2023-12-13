@@ -35,6 +35,7 @@ export default {
                             path: "/node/chain",
                             query: {
                               chainCount: 0,
+                              id: "chain"
                             },
                         })
                     }

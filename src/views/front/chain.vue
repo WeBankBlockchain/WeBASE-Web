@@ -270,7 +270,8 @@ export default {
     },
     onClickAddChain() {
       this.$router.push({
-        path: "/node/chain"
+        path: "/node/chain",
+        query: { id: "chain"}
       });
     },
   },

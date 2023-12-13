@@ -3,7 +3,7 @@
     <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head> -->
     <nav-menu
       :headTitle="$t('text.chainTitle')"
-      :headSubTitle="$t('title.nodeTitle')"
+      :headSubTitle="type =='node' ? $t('title.nodeTitle') : $t('text.chainTitle')"
       @changGroup="changeGroup"
     ></nav-menu>
     <div class="module-wrapper" style="padding-bottom: 20px">
@@ -363,7 +363,7 @@ export default {
       hostList: [],
       configValue: "",
       addChainNodeData: null,
-      type: this.$route.params.id,
+      type: this.$route.query.id,
       chainInfo: null,
       remarkList: [], // 节点日志数组
       timer: null, // 定时器

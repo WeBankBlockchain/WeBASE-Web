@@ -824,6 +824,7 @@ export default {
                 });
                 this.$router.push({
                   path: "/node/chain",
+                  query: { id: "chain"}
                 });
                 this.$store.dispatch("set_contract_dataList_action", []);
                 localStorage.setItem("contractList", JSON.stringify([]));
@@ -1168,6 +1169,7 @@ export default {
     createFront() {
       this.$router.push({
         path: `/node/node`,
+        query: { id: "node"}
       });
     },
     deleteNodes(val, type) {
