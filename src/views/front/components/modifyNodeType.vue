@@ -41,6 +41,9 @@ export default {
     props: {
         modifyNode: {
             type: Object
+        },
+        sealerNodeCount: {
+            type: Number
         }
     },
 
@@ -139,7 +142,8 @@ export default {
         }
         this.modifyNode.nodeType === 'sealer'?this.weightShow=true:this.weightShow=false
         this.getUserData();
-        console.log("!!@#!@modifyNode:", this.modifyNode);
+
+        console.log("!!@#!@#, this.sealerNodeCount:", this.sealerNodeCount);
     },
 
     methods: {
@@ -159,6 +163,15 @@ export default {
                             type: "warning",
                             duration: 2000
                         });
+                        return;
+                    }
+
+                    // 现在共识节点的数量小于等于2个，不允许再修改共识节点为观察或者游离节点
+                    if (this.sealerNodeCount <= 2 && this.modifyNode.nodeType == 'sealer' && this.modifyForm.nodeType != 'sealer') {
+                        this.$message({
+                            type: 'warning',
+                            message: this.$t("nodes.selearCountWarn")
+                        })
                         return;
                     }
                     if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'observer') {
