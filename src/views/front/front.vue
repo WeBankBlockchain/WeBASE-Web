@@ -1258,8 +1258,6 @@ export default {
         );
     },
     modifyNodeType(param) {
-      console.log("!!!!:", param);
-      console.log("!!!!cou:", this.sealerNodeCount);
       this.modifyNode = param;
       this.modifyNode.isAuthEnable = this.isAuthEnable;
       this.modifyDialogVisible = true;

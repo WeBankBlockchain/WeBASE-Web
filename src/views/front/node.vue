@@ -122,9 +122,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item
-                :label="$t('text.imageMode') + '：'"
-                prop="dockerImageType"
-              >
+                :label="$t('text.imageMode') + '：'" prop="dockerImageType">
                 <el-radio v-model="chainFrom.dockerImageType" :label="1"
                   >{{ $t("text.automatic")
                   }}<el-tooltip
@@ -450,7 +448,6 @@ export default {
         .then((res) => {
           if (res.data.code === 0) {
             this.chainFrom = res.data.data;
-            this.chainFrom.dockerImageType = 1;
             this.$set(this.chainFrom, "dockerImageType", 1);
           } else {
             this.$message({
@@ -540,7 +537,6 @@ export default {
             }
             this.configList = [];
             this.configList = res.data.data;
-            console.log(this.chainFrom);
             this.chainFrom.chainVersion = this.configList[0].configValue;
           } else {
             this.$message({
@@ -620,7 +616,6 @@ export default {
     },
     check(val) {
       this.deployOpt = false;
-      console.log(val);
       this.loading3 = true;
       this.loading = true;
       let data = this.formatParam();
@@ -803,7 +798,6 @@ export default {
         dockerImageType: this.chainFrom.dockerImageType,
         hostIdList: hostIdList,
       };
-      console.log(this.chainFrom);
       if (this.type == "node") {
         data1.imageTag = this.chainFrom.version;
       }

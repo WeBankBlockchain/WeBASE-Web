@@ -587,7 +587,7 @@ export default {
                                 item.blockNumber = '--';
                                 item.nodeActive = 1;
                             }
-                            if (nodeType == "sealer") {
+                            if (item.nodeType == "sealer") {
                                 this.sealerNodeCount += 1
                             }
                         });
