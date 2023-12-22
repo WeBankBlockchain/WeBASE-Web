@@ -41,6 +41,9 @@ export default {
     props: {
         modifyNode: {
             type: Object
+        },
+        sealerNodeCount: {
+            type: Number
         }
     },
 
@@ -139,7 +142,8 @@ export default {
         }
         this.modifyNode.nodeType === 'sealer'?this.weightShow=true:this.weightShow=false
         this.getUserData();
-        console.log("!!@#!@modifyNode:", this.modifyNode);
+
+        console.log("!!@#!@#, this.sealerNodeCount:", this.sealerNodeCount);
     },
 
     methods: {
@@ -159,6 +163,15 @@ export default {
                             type: "warning",
                             duration: 2000
                         });
+                        return;
+                    }
+
+                    // 现在共识节点的数量小于等于2个，不允许再修改共识节点为观察或者游离节点
+                    if (this.sealerNodeCount <= 2 && this.modifyNode.nodeType == 'sealer' && this.modifyForm.nodeType != 'sealer') {
+                        this.$message({
+                            type: 'warning',
+                            message: this.$t("nodes.selearCountWarn")
+                        })
                         return;
                     }
                     if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'observer') {
@@ -211,11 +224,12 @@ export default {
                 weight:this.modifyForm.weight,
             }
 
+            // 如果当前节点为共识节点，并且也是修改为共识节点，则本次操作为修改节点的权重
+            if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'sealer') {
+                reqData.nodeType = 'weight';
+            }
+
             if (this.modifyNode.isAuthEnable) {
-                // 如果当前节点为共识节点，并且也是修改为共识节点，则本次操作为修改节点的权重
-                if (this.modifyNode.nodeType === 'sealer' && this.modifyForm.nodeType === 'sealer') {
-                    reqData.nodeType = 'weight';
-                }
                 nodeMgrProposal(reqData)
                 .then(res => {
                     this.loading = false;

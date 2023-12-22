@@ -1277,6 +1277,15 @@ export function getChainList() {
   });
 }
 
+// 链总数(包括不是自己创建的)
+export function getChainCount() {
+  return get({
+    url: `${url.ORG_LIST}/deploy/chain/count`,
+    method: "get",
+    headers: getAuthHeaders(),
+  });
+}
+
 //获取链的部署进度
 export function getProgress() {
   return get({

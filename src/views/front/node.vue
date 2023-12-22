@@ -3,7 +3,7 @@
     <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head> -->
     <nav-menu
       :headTitle="$t('text.chainTitle')"
-      :headSubTitle="$t('title.nodeTitle')"
+      :headSubTitle="type =='node' ? $t('title.nodeTitle') : $t('text.chainTitle')"
       @changGroup="changeGroup"
     ></nav-menu>
     <div class="module-wrapper" style="padding-bottom: 20px">
@@ -122,9 +122,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item
-                :label="$t('text.imageMode') + '：'"
-                prop="dockerImageType"
-              >
+                :label="$t('text.imageMode') + '：'" prop="dockerImageType">
                 <el-radio v-model="chainFrom.dockerImageType" :label="1"
                   >{{ $t("text.automatic")
                   }}<el-tooltip
@@ -332,6 +330,7 @@ import {
   getProgress,
   getFronts,
   getGroupName,
+  getChainCount,
 } from "@/util/api";
 import { format, dynamicPoint } from "@/util/util";
 export default {
@@ -362,7 +361,7 @@ export default {
       hostList: [],
       configValue: "",
       addChainNodeData: null,
-      type: this.$route.params.id,
+      type: this.$route.query.id,
       chainInfo: null,
       remarkList: [], // 节点日志数组
       timer: null, // 定时器
@@ -371,7 +370,7 @@ export default {
       progressTimer: null, //progress定时器,
       statusNumber: 0, /// progess 值
       frontList: [],
-      chainCount: this.$route.query ? this.$route.query.chainCount : 0,
+      chainCount: 0,
     };
   },
   computed: {
@@ -407,6 +406,7 @@ export default {
   },
   mounted() {
     console.log(this.type);
+    this.getChainCount();
     if (this.type === "node") {
       this.getChainDetail();
       this.getFrontList();
@@ -448,8 +448,28 @@ export default {
         .then((res) => {
           if (res.data.code === 0) {
             this.chainFrom = res.data.data;
-            this.chainFrom.dockerImageType = 1;
             this.$set(this.chainFrom, "dockerImageType", 1);
+          } else {
+            this.$message({
+              message: this.$chooseLang(res.data.code),
+              type: "error",
+              duration: 2000,
+            });
+          }
+        })
+        .catch((err) => {
+          this.$message({
+            message: err.data || this.$t("text.systemError"),
+            type: "error",
+            duration: 2000,
+          });
+        });
+    },
+    getChainCount() {
+      getChainCount()
+        .then((res) => {
+          if (res.data.code === 0) {
+            this.chainCount = res.data.data;
           } else {
             this.$message({
               message: this.$chooseLang(res.data.code),
@@ -517,7 +537,6 @@ export default {
             }
             this.configList = [];
             this.configList = res.data.data;
-            console.log(this.chainFrom);
             this.chainFrom.chainVersion = this.configList[0].configValue;
           } else {
             this.$message({
@@ -597,7 +616,6 @@ export default {
     },
     check(val) {
       this.deployOpt = false;
-      console.log(val);
       this.loading3 = true;
       this.loading = true;
       let data = this.formatParam();
@@ -780,7 +798,6 @@ export default {
         dockerImageType: this.chainFrom.dockerImageType,
         hostIdList: hostIdList,
       };
-      console.log(this.chainFrom);
       if (this.type == "node") {
         data1.imageTag = this.chainFrom.version;
       }

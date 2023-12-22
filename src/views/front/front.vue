@@ -250,6 +250,7 @@ permissions and * limitations under the License. */
             @nodeModifyClose="nodeModifyClose"
             @nodeModifySuccess="nodeModifySuccess"
             :modifyNode="modifyNode"
+            :sealerNodeCount="sealerNodeCount"
           ></modify-node-type>
         </el-dialog>
         <add-node
@@ -350,7 +351,6 @@ export default {
       total: 0,
       nodetotal: 0,
       loading: false,
-      nodesLoading: false,
       nodesDialogVisible: false,
       nodesDialogTitle: "",
       nodesDialogOptions: {},
@@ -388,6 +388,7 @@ export default {
       sdkParam: {},
       enableAuth: this.$route.query.enableAuth,
       isAuthEnable: false,
+      sealerNodeCount: 0
     };
   },
   computed: {
@@ -638,6 +639,7 @@ export default {
               localStorage.setItem("configData", 0);
             }
             this.getFrontTable();
+            this.getNodeTable();
           } else {
             clearInterval(this.progressInterval);
             clearInterval(this.frontInterval);
@@ -824,6 +826,7 @@ export default {
                 });
                 this.$router.push({
                   path: "/node/chain",
+                  query: { id: "chain"}
                 });
                 this.$store.dispatch("set_contract_dataList_action", []);
                 localStorage.setItem("contractList", JSON.stringify([]));
@@ -1009,15 +1012,21 @@ export default {
         .then((res) => {
           if (res.data.code === 0) {
             if (res.data.data) {
+              this.sealerNodeCount = 0;
               for (let i = 0; i < this.frontData.length; i++) {
                 // this.frontData[i].nodeType = "";
                 for (let index = 0; index < res.data.data.length; index++) {
                   if (this.frontData[i].nodeId == res.data.data[index].nodeId) {
+                    let nodeType =  res.data.data[index].nodeType;
                     this.$set(
                       this.frontData[i],
                       "nodeType",
-                      res.data.data[index].nodeType
+                      nodeType
                     );
+
+                    if (nodeType == "sealer") {
+                      this.sealerNodeCount += 1
+                    }
                   }
                 }
               }
@@ -1168,6 +1177,7 @@ export default {
     createFront() {
       this.$router.push({
         path: `/node/node`,
+        query: { id: "node"}
       });
     },
     deleteNodes(val, type) {
@@ -1242,6 +1252,8 @@ export default {
             } else {
               this.nodeData = [];
             }
+
+            this.loadingNodes = false;
           })
         );
     },

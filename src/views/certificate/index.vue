@@ -22,7 +22,6 @@
             <el-button
               size="small"
               type="primary"
-              :disabled="disabled"
               v-hasPermi="['bcos3:sys:addCert']"
               >{{ this.$t("system.addCertificate") }}</el-button
             >
@@ -32,7 +31,6 @@
         <div style="margin-left: 20px">
           <el-button
             type="primary"
-            :disabled="disabled"
             @click="exportSdk()"
             size="small"
             v-hasPermi="['bcos3:sys:downloadSdkCert']"
@@ -60,10 +58,8 @@
                 <template v-if="scope.row[head.enName]">
                   <el-button
                     v-if="head.enName === 'certName'"
-                    :disabled="disabled"
                     type="text"
                     size="small"
-                    :style="{ color: disabled ? '#666' : '' }"
                     title="导出"
                     @click="sureExportCert(scope.row)"
                     >{{ scope.row[head.enName] }}</el-button
@@ -115,10 +111,8 @@
               </template>
               <template v-else>
                 <el-button
-                  :disabled="disabled"
                   type="text"
                   size="small"
-                  :style="{ color: disabled ? '#666' : '' }"
                   @click="deteleCert(scope.row)"
                   v-hasPermi="['bcos3:sys:deleteCert']"
                   >{{ $t("text.delete") }}</el-button
@@ -169,7 +163,6 @@ export default {
 
   data() {
     return {
-      disabled: false,
       loading: false,
       currentPage: 1,
       pageSize: 100,
@@ -235,11 +228,6 @@ export default {
   created() {},
 
   mounted() {
-    if (localStorage.getItem("root") === "admin") {
-      this.disabled = false;
-    } else {
-      this.disabled = true;
-    }
     if (
       localStorage.getItem("groupId") &&
       (localStorage.getItem("configData") == 3 ||

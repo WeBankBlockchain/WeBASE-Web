@@ -271,9 +271,7 @@ export default {
     onClickAddChain() {
       this.$router.push({
         path: "/node/chain",
-        query: {
-          chainCount: this.chainList.length,
-        },
+        query: { id: "chain"}
       });
     },
   },

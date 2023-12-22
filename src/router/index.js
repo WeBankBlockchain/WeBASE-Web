@@ -170,6 +170,22 @@ const routes = [
         meta: { requireAuth: true },
       },
       {
+        path: "/chain",
+        component: chain,
+        name: "链管理",
+        nameKey: "chainTitle",
+        menuShow: true,
+        meta: { requireAuth: true },
+      },
+      {
+        path: "/node/chain",
+        component: node,
+        name: "链管理",
+        nameKey: "chainTitle",
+        menuShow: false,
+        meta: { requireAuth: true },
+      },
+      {
         path: "/front",
         component: front,
         name: "节点管理",
@@ -178,7 +194,7 @@ const routes = [
         meta: { requireAuth: true },
       },
       {
-        path: "/node/:id",
+        path: "/node/node",
         component: node,
         name: "节点管理",
         nameKey: "nodeTitle",
@@ -201,15 +217,7 @@ const routes = [
         leaf: false,
         menuShow: false,
         meta: { requireAuth: true },
-      },
-      {
-        path: "/chain",
-        component: chain,
-        name: "链管理",
-        nameKey: "chainTitle",
-        menuShow: true,
-        meta: { requireAuth: true },
-      },
+      }
     ],
   },
   {

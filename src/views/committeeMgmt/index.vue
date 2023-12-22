@@ -911,11 +911,11 @@ export default {
   created() {},
 
   mounted() {
-    if (localStorage.getItem("root") === "admin") {
-      this.disabled = false;
-    } else {
-      this.disabled = true;
-    }
+    // if (localStorage.getItem("root") === "admin") {
+    //   this.disabled = false;
+    // } else {
+    //   this.disabled = true;
+    // }
     if (localStorage.getItem("groupId")) {
       //this.queryGetThreshold()
       this.checkAuth();

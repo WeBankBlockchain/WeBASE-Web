@@ -95,7 +95,6 @@
           <div style="margin-top: 24px">
             <el-button
               type="primary"
-              :disabled="disabled"
               @click="creatApp()"
               size="small"
               v-hasPermi="['bcos3:appManagement:newApp']"
@@ -128,7 +127,6 @@
                         <el-button
                           type="text"
                           class="font-color-2956a3 font-12 cursor-pointer"
-                          :disabled="disabled"
                           @click="modifyApp(item)"
                           v-hasPermi="['bcos3:appManagement:updateApp']"
                           >{{ $t("text.modify") }}</el-button
@@ -136,7 +134,6 @@
                         <el-button
                           type="text"
                           class="font-color-2956a3 font-12 cursor-pointer"
-                          :disabled="disabled"
                           @click="deleteApp(item)"
                           v-hasPermi="['bcos3:appManagement:deleteApp']"
                           >{{ $t("text.delete") }}</el-button
@@ -243,7 +240,6 @@ export default {
   },
   data() {
     return {
-      disabled: false,
       loading: false,
       appList: [],
       appDialogTitle: this.$t("text.creatApp"),
@@ -262,11 +258,6 @@ export default {
     clearInterval(this.timer);
   },
   mounted() {
-    if (localStorage.getItem("root") === "admin") {
-      this.disabled = false;
-    } else {
-      this.disabled = true;
-    }
     this.queryAppList();
     this.queryAppServerInfo();
     this.timer = setInterval(() => {
