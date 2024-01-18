@@ -181,7 +181,7 @@
                       <el-table-column prop="name" width="150" label="name" align="left"></el-table-column>
                       <el-table-column prop="data" label="data" align="left" :show-overflow-tooltip="true">
                         <template slot-scope="scope">
-                          <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
+                          <i class="el-icon-documen font-12 copy-public-key" @click="copyPubilcKey(scope.row.data)" title="复制"></i>
                           <span>{{scope.row.data}}</span>
                         </template>
                       </el-table-column>

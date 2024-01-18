@@ -349,7 +349,10 @@ export default {
         importContractTip: '交易解析功能需要在合约IDE中编译交易对应合约或导入ABI',
         nodeActive:'节点存活',
         nodeNotActive:'节点未存活',
-        addContractAddress: '绑定'
+        addContractAddress: '绑定',
+        updateSUcessIsAuth1:'当前群组已启用权限控制，修改操作将发起提案，需要其他链委员到',
+        updateSUcessIsAuth2:'”系统管理-权限管理“',
+        updateSUcessIsAuth3:'的提案记录列表中进行投票，以完成修改操作'
     },
     rule: {
         chainCommite:"链委员已存在",
@@ -870,6 +873,7 @@ export default {
         configContent1: "不建议随意修改tx_count_limit和tx_gas_limit，如下情况可修改这些参数",
         configContent2: "机器网络或CPU等硬件性能有限：调小tx_count_limit，或降低业务压力",
         configContent3: "业务逻辑太复杂，执行区块时gas不足：调大tx_gas_limit。",
+        checkStatus:'3.3.0后的FISCO BCOS需要设置auth_check_status为1，则视为启动权限控制。启动后将无法关闭',
         updateConfig: "修改配置值",
         configKey: "配置名称",
         configValue: "配置值",

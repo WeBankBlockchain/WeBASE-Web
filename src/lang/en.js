@@ -394,7 +394,12 @@ export default {
     importContractTip:
       "Decoding transaction output requires compiling contract in IDE or import abi of contract",
     nodeActive: "Node active",
-    nodeNotActive: "Node not active"
+    nodeNotActive: "Node not active",
+    updateSUcessIsAuth1:
+      " Permission control is enabled for the current group, the modification action will initiate a proposal, require other chain members to join ",
+    updateSUcessIsAuth2: ' "System Administration-Rights Management" ',
+    updateSUcessIsAuth3:
+      " Vote in the proposal record list to complete the modification operation "
   },
   rule: {
     chainCommite: "Chain committee already exists",
@@ -959,6 +964,8 @@ export default {
       "Limited hardware performance such as machine network or CPU: decrease tx_count_limit, or reduce business pressure.",
     configContent3:
       "The business logic is too complicated. When the block is executed, there is not enough gas: increase the tx_gas_limit.",
+    checkStatus:
+      "If FISCO BCOS after 3.3.0 needs to set auth_check_status to 1, it is regarded as startup permission control. After startup will not be able to close ",
     updateConfig: "Modify Configuration Values",
     configKey: "Name",
     configValue: "Value",
