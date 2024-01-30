@@ -75,7 +75,7 @@ let errCode = {
   },
   "-51003": {
     en: "Error auth type input",
-    zh: "错误鉴权输入，请检查节点日志进行排查"
+    zh: "设置权限参数错误，请检查当前权限设置，或结合节点日志进行排查"
   },
   "-51004": {
     en: "Auth map decode error",
