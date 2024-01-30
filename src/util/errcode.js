@@ -998,6 +998,10 @@ let errCode = {
     en: "the account must be the proposer of proposal",
     zh: "该帐户必须是提案的提议者"
   },
+  "201676": {
+    en: "you cannot remove yourself",
+    zh: "链委员不能撤销自己的委员身份"
+  }, 
   "201680": {
     en: "the PATH is invalid",
     zh: "路径PATH无效"
