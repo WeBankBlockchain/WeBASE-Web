@@ -90,11 +90,11 @@ let errCode = {
   },
   "-51003": {
     en: "Error auth type input",
-    zh: "错误鉴权输入，请检查节点日志进行排查"
+    zh: "设置权限参数错误，请检查当前权限设置，或结合节点日志进行排查"
   },
   "-51004": {
     en: "Auth map decode error",
-    zh: "鉴权解码错误，请检查节点日志进行排查"
+    zh: "权限返回值解码错误，请检查节点日志进行排查"
   },
   "-51100": {
     en: "Invalid node ID",
@@ -178,7 +178,7 @@ let errCode = {
   },
   "-51902": {
     en: "CONTRACT_REPEAT_AUTHORIZATIO",
-    zh: "重复权限"
+    zh: "合约权限重复或权限已存在"
   },
   "-51903": {
     en: "INVALID_CONTRACT_ADDRESS",
@@ -190,11 +190,11 @@ let errCode = {
   },
   "-51905": {
     en: "NO_AUTHORIZED",
-    zh: "链上没有权限"
+    zh: "链上鉴权未通过，请检查权限设置"
   },
   "-52000": {
     en: "COMMITTEE_MEMBER_EXIST",
-    zh: "链委员已存在"
+    zh: "该链委员已存在"
   },
   "-52001": {
     en: "COMMITTEE_MEMBER_NOT_EXIST",
@@ -206,23 +206,23 @@ let errCode = {
   },
   "-52003": {
     en: "INVALID_THRESHOLD",
-    zh: "无效阈值"
+    zh: "投票阈值错误，请检查入参"
   },
   "-52004": {
     en: "OPERATOR_CANNOT_BE_COMMITTEE_MEMBER",
-    zh: "运维不能同时成为链委员"
+    zh: "运维委员不能同时成为链委员"
   },
   "-52005": {
     en: "COMMITTEE_MEMBER_CANNOT_BE_OPERATOR",
-    zh: "链委员不能同时成为运维"
+    zh: "链委员不能同时成为运维委员"
   },
   "-52006": {
     en: "OPERATOR_EXIST",
-    zh: "运维员已存在"
+    zh: "运维委员已存在"
   },
   "-52007": {
     en: "OPERATOR_NOT_EXIST",
-    zh: "无效运维员"
+    zh: "运维委员不存在"
   },
   "-52008": {
     en: "ACCOUNT_NOT_EXIST",
@@ -238,7 +238,7 @@ let errCode = {
   },
   "-52011": {
     en: "ACCOUNT_FROZEN",
-    zh: "账户冻结"
+    zh: "账户已冻结"
   },
   "-52012": {
     en: "CURRENT_VALUE_IS_EXPECTED_VALUE",
