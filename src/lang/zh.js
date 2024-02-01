@@ -50,6 +50,7 @@ export default {
         delete: "删除",
         update: "修改",
         confirmDelete: "确认删除？",
+        confirmCancel: "确认撤销？",
         confirmDorp: "先停止群组,再删除本地群组数据,确认？",
         confirmDorp2: "删除群组数据将删除本地数据库对应的节点数据、区块与交易数据、合约数据等（不影响链上数据）是否确认删除群组数据？",
         confirmStop: "请确保当前选中节点所属群组数大于1个，否则停止该节点的群组将导致节点共识异常",
