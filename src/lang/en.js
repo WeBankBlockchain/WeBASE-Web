@@ -51,6 +51,7 @@ export default {
     delete: "Delete",
     update: "Change",
     confirmDelete: "Are you sure to delete?",
+    confirmCancel: "Are you sure to revocation?",
     confirmDorp:
       "Make sure stop the group first, then drop local group data. Are you sure ?",
     confirmDorp2:
