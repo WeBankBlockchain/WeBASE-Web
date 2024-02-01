@@ -122,7 +122,7 @@ export default {
     if (localStorage.getItem("root") === "admin") {
       this.disabled = false;
     } else {
-      this.disabled = false;
+      this.disabled = true;
     }
     if (
       localStorage.getItem("groupId") &&
