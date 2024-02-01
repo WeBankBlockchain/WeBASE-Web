@@ -62,7 +62,6 @@
 <script>
 const sha256 = require("js-sha256").sha256;
 import { updateAccountInfo, getAccountDetail } from "@/util/api";
-import { debug } from "console";
 export default {
   name: "changeMessageDialog",
   props: {},
