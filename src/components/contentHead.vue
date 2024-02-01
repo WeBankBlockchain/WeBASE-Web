@@ -219,7 +219,7 @@ export default {
       );
     },
     deleteSelf() {
-      this.$confirm(this.$t("text.confirmDelete"), {
+      this.$confirm(this.$t("text.confirmCancel"), {
         center: true,
       })
         .then(() => {

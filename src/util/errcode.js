@@ -90,11 +90,11 @@ let errCode = {
   },
   "-51003": {
     en: "Error auth type input",
-    zh: "错误鉴权输入，请检查节点日志进行排查"
+    zh: "设置权限参数错误，请检查当前权限设置，或结合节点日志进行排查"
   },
   "-51004": {
     en: "Auth map decode error",
-    zh: "鉴权解码错误，请检查节点日志进行排查"
+    zh: "权限返回值解码错误，请检查节点日志进行排查"
   },
   "-51100": {
     en: "Invalid node ID",
@@ -178,7 +178,7 @@ let errCode = {
   },
   "-51902": {
     en: "CONTRACT_REPEAT_AUTHORIZATIO",
-    zh: "重复权限"
+    zh: "合约权限重复或权限已存在"
   },
   "-51903": {
     en: "INVALID_CONTRACT_ADDRESS",
@@ -190,11 +190,11 @@ let errCode = {
   },
   "-51905": {
     en: "NO_AUTHORIZED",
-    zh: "链上没有权限"
+    zh: "链上鉴权未通过，请检查权限设置"
   },
   "-52000": {
     en: "COMMITTEE_MEMBER_EXIST",
-    zh: "链委员已存在"
+    zh: "该链委员已存在"
   },
   "-52001": {
     en: "COMMITTEE_MEMBER_NOT_EXIST",
@@ -206,23 +206,23 @@ let errCode = {
   },
   "-52003": {
     en: "INVALID_THRESHOLD",
-    zh: "无效阈值"
+    zh: "投票阈值错误，请检查入参"
   },
   "-52004": {
     en: "OPERATOR_CANNOT_BE_COMMITTEE_MEMBER",
-    zh: "运维不能同时成为链委员"
+    zh: "运维委员不能同时成为链委员"
   },
   "-52005": {
     en: "COMMITTEE_MEMBER_CANNOT_BE_OPERATOR",
-    zh: "链委员不能同时成为运维"
+    zh: "链委员不能同时成为运维委员"
   },
   "-52006": {
     en: "OPERATOR_EXIST",
-    zh: "运维员已存在"
+    zh: "运维委员已存在"
   },
   "-52007": {
     en: "OPERATOR_NOT_EXIST",
-    zh: "无效运维员"
+    zh: "运维委员不存在"
   },
   "-52008": {
     en: "ACCOUNT_NOT_EXIST",
@@ -238,7 +238,7 @@ let errCode = {
   },
   "-52011": {
     en: "ACCOUNT_FROZEN",
-    zh: "账户冻结"
+    zh: "账户已冻结"
   },
   "-52012": {
     en: "CURRENT_VALUE_IS_EXPECTED_VALUE",
@@ -310,6 +310,12 @@ let errCode = {
       "When webase is v1.3.2 above(inclusive),fisco-bcos node must be v2.4.1 above(inclusive)",
     zh:
       "当webase为v1.3.2以上版本（含）时，fisco bcos节点必须为v2.4.1以上版本（含）"
+  },
+  "102004": {
+    en:
+      "Create check code fail, please check the log of WeBASE-Node-Manager for details",
+    zh:
+      "创建校验码失败，请查看WeBASE-Node-Manager日志"
   },
   "103001": {
     en: "WeBASE-Sign system exception",
@@ -1007,13 +1013,17 @@ let errCode = {
     en: "the account must be the proposer of proposal",
     zh: "该帐户必须是提案的提议者"
   },
+  "201676": {
+    en: "you cannot remove yourself",
+    zh: "链委员不能撤销自己的委员身份"
+  },
   "201680": {
     en: "the PATH is invalid",
     zh: "路径PATH无效"
   },
   "202000": {
-    en: "invalid node info",
-    zh: "错误的节点信息"
+    en: "invalid front id",
+    zh: "无效前置id"
   },
   "202001": {
     en: "database exception",
@@ -1021,51 +1031,51 @@ let errCode = {
   },
   "202002": {
     en: "not found any front for this group",
-    zh: "组织已经存在"
+    zh: "所有前置无法连上当前群组"
   },
   "202003": {
-    en: "organization not exists",
-    zh: "组织信息不存在"
+    en: "not support this ip",
+    zh: "不支持此IP"
   },
   "202004": {
-    en: "node already exists",
-    zh: "节点已经存在"
+    en: "front already exists",
+    zh: "前置已存在"
   },
   "202005": {
-    en: "network id cannot be empty",
-    zh: "网络编号不能为空"
+    en: "group id cannot be empty",
+    zh: "群组id不能为空"
   },
   "202006": {
-    en: "invalid network id",
-    zh: "无效的网络编号"
+    en: "invalid group id",
+    zh: "无效群组id"
   },
   "202007": {
-    en: "organization id cannot be empty",
-    zh: "组织编号不能为空"
+    en: "checkCode is null",
+    zh: "校验码为空"
   },
   "202008": {
-    en: "invalid organization id",
-    zh: "无效的组织编号"
+    en: "invalid checkCode",
+    zh: "无效校验码"
   },
   "202009": {
-    en: "network_organization_mapping already exists",
-    zh: "已有该网络和组织的关联"
+    en: "save front fail",
+    zh: "保存前置失败"
   },
   "202010": {
-    en: "network_organization_mapping not exist",
-    zh: "没有该组织和网络的关联信息"
+    en: "request front fail",
+    zh: "请求前置失败"
   },
   "202011": {
-    en: "did not find the current organization",
-    zh: "未找到本组织信息"
+    en: "abiInfo cannot be empty",
+    zh: "abiInfo不能为空"
   },
   "202012": {
     en: "user id cannot be empty",
     zh: "用户编号不能为空"
   },
   "202013": {
-    en: "invalid user id",
-    zh: "无效的用户编号"
+    en: "invalid user(NOT EXIST)",
+    zh: "无效用户(不存在)"
   },
   "202014": {
     en: "user already exists",
@@ -1088,12 +1098,12 @@ let errCode = {
     zh: "无效的入参信息"
   },
   "202019": {
-    en: "did not find node info",
-    zh: "未找到节点信息"
+    en: "contract name cannot be repeated",
+    zh: "合同名称不能重复"
   },
   "202020": {
-    en: "current organization already exist",
-    zh: "已存在本组织信息"
+    en: "deployed contract cannot be modified",
+    zh: "已部署的合约不能被修改"
   },
   "202021": {
     en: "invalid organization type",
@@ -1104,9 +1114,10 @@ let errCode = {
     zh: "不能删除已部署的合约"
   },
   "202023": {
-    en: "node ip cannot be empty",
-    zh: "节点编号不能为空"
+    en: "contract has not deploy",
+    zh: "合约尚未部署"
   },
+
   "202024": {
     en: "node p2p port cannot be empty",
     zh: "节点p2p端口不能为空"
@@ -1120,7 +1131,7 @@ let errCode = {
     zh: "该帐号已经存在"
   },
   "202027": {
-    en: "ccount info not exists",
+    en: "account info not exists",
     zh: "该帐号不存在"
   },
   "202028": {
@@ -1132,8 +1143,8 @@ let errCode = {
     zh: "无效的账号名称"
   },
   "202030": {
-    en: "password error",
-    zh: "密码错误"
+    en: "account name or password error",
+    zh: "账户名或密码错误"
   },
   "202031": {
     en: "role id cannot be empty",
@@ -1144,8 +1155,8 @@ let errCode = {
     zh: "无效的角色编号"
   },
   "202033": {
-    en: "invalid attr",
-    zh: "无效的attr值"
+    en: "invalid contract address",
+    zh: "无效合约地址"
   },
   "202034": {
     en: "login fail",
@@ -1160,8 +1171,8 @@ let errCode = {
     zh: "公钥不能为空"
   },
   "202037": {
-    en: "user does not exist",
-    zh: "用户信息不存在"
+    en: "associated account cannot be empty",
+    zh: "关联帐号不能为空"
   },
   "202038": {
     en: "interface does not exist",
@@ -1216,20 +1227,20 @@ let errCode = {
     zh: "公钥长度为130，公钥地址长度为42"
   },
   "202051": {
-    en: "invalid node ip",
-    zh: "IP或者端口错误"
+    en: "wrong host ip or wrong port: connect failed",
+    zh: "主机IP或端口错误:连接失败"
   },
   "202052": {
-    en: "did not find current node info",
-    zh: "找不到当前节点信息"
+    en: "invalid token",
+    zh: "无效token"
   },
   "202053": {
-    en: "system user has not been initialized yet",
-    zh: "系统用户尚未初始化"
+    en: "token expire",
+    zh: "token已过期"
   },
   "202054": {
-    en: "contract had not deploy",
-    zh: "合约尚未部署"
+    en: "Available front url is empty, check front status",
+    zh: "可用的前置url为空，请检查前置状态"
   },
   "202055": {
     en: "invalid contract",
@@ -1352,6 +1363,18 @@ let errCode = {
     en: "p12 file content error",
     zh: "P12文件内容错误"
   },
+  "202216": {
+    en: "node id is invalid",
+    zh: "节点id无效"
+  },
+  "202217": {
+    en: "invalid node type: sealer, observer, remove",
+    zh: "无效节点类型"
+  },
+  "202218": {
+    en: "set node consensus type fail, check permission or node's group config file",
+    zh: "设置节点共识类型失败，检查权限或节点组配置文件"
+  },
   "202300": {
     en: "Group id already exists",
     zh: "群组id已存在"
@@ -1413,7 +1436,7 @@ let errCode = {
     zh: "链已存在，部署失败。请等待上次部署操作完成后再进行下一步"
   },
   "202408": {
-    en: "Save chain data to DB error.",
+    en: "Insert new chain failed.",
     zh: "插入链信息到数据库失败"
   },
   "202409": {
@@ -1421,11 +1444,11 @@ let errCode = {
     zh: "链的根目录default_chain_nodes已存在，请移除脏数据文件"
   },
   "202410": {
-    en: "Execute build_chain.sh script error.",
+    en: "Exec build chain script failed.",
     zh: "执行 build_chain.sh 链生成脚本失败，请重试或查看后台日志进行排查"
   },
   "202411": {
-    en: "Host, agency, group configuration error.",
+    en: "ipconf line error.",
     zh: "主机，机构，群组配置信息错误，请重试或查看后台日志进行排查"
   },
   "202412": {
@@ -1433,39 +1456,39 @@ let errCode = {
     zh: "主机 IP，节点数量配置错误"
   },
   "202413": {
-    en: "Agency name invalid, only [a-zA-Z0-9_] is valid.",
-    zh: "机构名称格式错误，只能包含大小写字母，数字，下划线"
+    en: "Agency name config error.",
+    zh: "机构名称配置错误"
   },
   "202414": {
-    en: "Group id error, only positive integer is valid.",
-    zh: "群组编号格式错误，必须为正整数"
+    en: "Groups config error.",
+    zh: "群组配置错误"
   },
   "202415": {
-    en: "Login to host /ip/ through SSH error. Please check SSH configuration.",
+    en: "Connect to host error.",
     zh: "SSH登录主机/ip/失败，请检查 SSH 配置或查看网络是否互通"
   },
   "202416": {
-    en: "Save agency data into DB error.",
+    en: "Insert new agency failed.",
     zh: "插入新机构信息到数据库失败"
   },
   "202417": {
-    en: "Save group data into DB error.",
+    en: "Insert new group failed.",
     zh: "插入新群组信息到数据库失败"
   },
   "202418": {
-    en: "Save host data into DB error.",
+    en: "Insert new host failed.",
     zh: "插入主机信息到数据库失败"
   },
   "202419": {
-    en: "Save front data into DB error.",
+    en: "Insert new front failed.",
     zh: "插入前置信息到数据库失败"
   },
   "202420": {
-    en: "Save node data into DB error.",
+    en: "Insert new node failed.",
     zh: "插入节点信息到数据库失败"
   },
   "202421": {
-    en: "Save node and front mapping data into DB error.",
+    en: "Insert new front node group failed.",
     zh: "插入前置和群组映射关系到数据库失败"
   },
   "202422": {
@@ -1473,7 +1496,7 @@ let errCode = {
     zh: "从目录获取节点序号失败"
   },
   "202423": {
-    en: "A single host IP only belongs to one agency.",
+    en: "A host only belongs to one agency.",
     zh: "一个 IP 主机，只能属于一个机构"
   },
   "202424": {
@@ -1481,7 +1504,7 @@ let errCode = {
     zh: "部署时发生未知错误，请重试或查看后台日志进行排查"
   },
   "202425": {
-    en: "SSH login through username and password is unsupported yet.",
+    en: "SSH password login not supported yet.",
     zh: "不支持使用 SSH 密码登录主机，请配置ssh免密登录"
   },
   "202426": {
@@ -1501,31 +1524,31 @@ let errCode = {
     zh: "主机 IP 是新 IP 时，机构名称不能为空"
   },
   "202430": {
-    en: "Agency name already exists.",
-    zh: "存在同名机构"
+    en: "gency name exists when host ip is new.",
+    zh: "主机 IP 是新 IP 时，存在同名机构"
   },
   "202431": {
-    en: "Add new node error.",
+    en: "Unexpected exception occurred when add new node.",
     zh: "新增节点错误，请重试或查看后台日志进行排查"
   },
   "202432": {
-    en: "No valid chain certification.",
-    zh: "链证书无效"
+    en: "Chain cert directory not exists.",
+    zh: "链证书目录不存在"
   },
   "202433": {
-    en: "Generate agency private key and crt file error.",
+    en: "Exec generate agency script failed.",
     zh: "生成机构私钥和证书失败，请重试或查看后台日志进行排查"
   },
   "202434": {
-    en: "Host without agency error.",
+    en: "Host's agency is null.",
     zh: "主机所属机构为空"
   },
   "202435": {
-    en: "Node num should be positive integer, and less then 10.",
-    zh: "主机数量格式错误，正整数，并且小于 10"
+    en: "Num should be positive integer and less then 4.",
+    zh: "主机数量格式错误，正整数，并且小于 4"
   },
   "202436": {
-    en: "Generate sdk ",
+    en: "Exec generate node script to generate sdk dir failed. ",
     zh: "生成主机 SDK 私钥和证书失败，请重试或查看后台日志进行排查"
   },
   "202437": {
@@ -1537,67 +1560,63 @@ let errCode = {
     zh: "拷贝 SDK 证书和私钥失败，请重试或查看后台日志进行排查"
   },
   "202439": {
-    en: "Upload SDK files error.",
+    en: "Send sdk config files error.",
     zh: "上传 SDK 证书和私钥失败，请重试或查看后台日志进行排查"
   },
   "202440": {
-    en: "Upload node config files error.",
+    en: "Send node config files error.",
     zh: "上传节点证书和私钥失败，请重试或查看后台日志进行排查"
   },
   "202441": {
-    en: "Copy group config files from original node error.",
+    en: "Copy original group config files error.",
     zh: "从旧节点复制群组配置文件失败，请重试或查看后台日志进行排查"
   },
   "202442": {
-    en: "Delete tmp directory of agency error.",
+    en: "Delete old agency config files error.",
     zh: "删除机构临时目录失败，请重试或查看后台日志进行排查"
   },
   "202443": {
-    en: "Delete tmp directory of SDK error.",
+    en: "Delete old sdk of host config files error.",
     zh: "删除 SDK 临时目录失败，请重试或查看后台日志进行排查"
   },
   "202444": {
-    en: "Delete tmp directory of node error.",
+    en: "Delete old node config files error.",
     zh: "删除节点临时目录失败，请重试或查看后台日志进行排查"
   },
   "202445": {
-    en: "Unknown nodeid.",
+    en: "Nodeid not exists.",
     zh: "无法识别的的节点编号（nodeid），请重试或查看后台日志进行排查"
   },
   "202446": {
-    en: "Stop node error.",
+    en: "Stop node failed.",
     zh: "停止节点失败（停止容器），请重试或查看后台日志进行排查"
   },
   "202447": {
-    en: "Start node error.",
+    en: "Start node failed.",
     zh: "启动节点失败（启动容器），请重试或查看后台日志进行排查"
   },
   "202448": {
-    en: "Both new image tag and old are the same.",
+    en: "New image tag and current are the same.",
     zh: "链升级的新版本和链的现有版本相同"
   },
   "202449": {
-    en: "Upgrade chain to new image tag error.",
+    en: "Update chain version error.",
     zh: "链升级失败，请重试或查看后台日志进行排查"
   },
-  "202450": {
-    en: "Delete node failed, node is still in group.",
-    zh: "节点仍属于群组，删除失败。请先将节点移出群组再操作"
-  },
   "202451": {
-    en: "Parse node's config files error.",
+    en: "Read node config error.",
     zh: "读取节点配置文件失败，请重试或查看后台日志进行排查"
   },
   "202452": {
-    en: "Delete node's config error.",
+    en: "Delete node config files error.",
     zh: "删除节点配置文件失败，请重试或查看后台日志进行排查"
   },
   "202453": {
-    en: "Stop node before deleting.",
+    en: "Node is running.",
     zh: "节点正在运行，删除失败，请先停止节点"
   },
   "202454": {
-    en: "Update p2p part of related nodes error.",
+    en: "Update related nodes error.",
     zh: "更新关联节点 P2P 配置失败，请重试或查看后台日志进行排查"
   },
   "202455": {
@@ -1605,23 +1624,23 @@ let errCode = {
     zh: "删除链失败，请重试或查看后台日志进行排查"
   },
   "202456": {
-    en: "Node is still a sealer or observer, delete failed.",
+    en: "Node is sealer or observer, remove from group first.",
     zh: "节点处于观察或共识状态，删除失败。请先将节点移出群组再操作"
   },
   "202457": {
-    en: "Fetch node list from host's configuration files.",
+    en: "List node dirs of host error.",
     zh: "从主机配置文件获取节点列表失败，请重试或查看后台日志进行排查"
   },
   "202458": {
-    en: "Generate application.yml for front error.",
+    en: "Generate front application.yml file failed.",
     zh: "生成前置 application.yml 配置文件失败，请重试或查看后台日志进行排查"
   },
   "202459": {
-    en: "Init host with shell script error.",
+    en: "Exec host init script failed.",
     zh: "通过脚本初始化主机失败，请重试或查看后台日志进行排查"
   },
   "202460": {
-    en: "Sync files error.",
+    en: "Transfer files error.",
     zh: "传输文件失败，请重试、检查网络状态或查看后台日志进行排查"
   },
   "202461": {
@@ -1647,7 +1666,7 @@ let errCode = {
       "配置项application.yml文件中webaseSign的地址不能是127.0.0.1或localhost，请修改后台配置"
   },
   "202466": {
-    en: "Please pull the Docker image manually in host /ip/",
+    en: "Image not exists on host.",
     zh: "主机上的节点镜像不存在，请检查/ip/！"
   },
   "202467": {
@@ -1767,6 +1786,10 @@ let errCode = {
     en: "Host not exist or already been deleted.",
     zh: "主机不存在或已被删除，请重试或查看后台日志进行排查。"
   },
+  "202498": {
+    en: "Host's rootDir must be absolute path",
+    zh: "主机的rootDir必须是绝对路径。"
+  },
   "202501": {
     en: "Contract path is exists.",
     zh: "目录已存在。"
@@ -1812,8 +1835,48 @@ let errCode = {
     zh: "应用编号不存在"
   },
   "202519": {
-    en: "link format invalid",
+    en: "link format invalid, example:[http://{ip}:{port}/index.html]",
     zh: "链接格式错误"
+  },
+  "202520": {
+    en: "contract source not exist",
+    zh: "合约资源不存在"
+  },
+  "202521": {
+    en: "timestamp cannot be empty",
+    zh: "时间戳不存在"
+  },
+  "202522": {
+    en: "app key cannot be empty",
+    zh: "应用密钥不能为空"
+  },
+  "202523": {
+    en: "signature cannot be empty",
+    zh: "签名不存在"
+  },
+  "202524": {
+    en: "timestamp timeout",
+    zh: "时间戳已超时"
+  },
+  "202525": {
+    en: "app key not exists",
+    zh: "应用密钥不存在"
+  },
+  "202526": {
+    en: "signature not match",
+    zh: "签名不匹配"
+  },
+  "202527": {
+    en: "request encrypt fail",
+    zh: "请求加密失败"
+  },
+  "202528": {
+    en: "request decrypt fail",
+    zh: "请求解密失败"
+  },
+  "202529": {
+    en: "isTransferEncrypt config not match",
+    zh: "isTransferEncrypt配置不匹配"
   },
   "202531": {
     en: "Generate project failed in scaffold",
@@ -1823,9 +1886,33 @@ let errCode = {
     en: "Get sdk cert/key content map failed",
     zh: "获取SDK证书私钥失败"
   },
+  "202533": {
+    en: "Only support letter and digit, please check your params",
+    zh: "只有支持字母和数字，请检查您的参数"
+  },
   "202534": {
     en: "contract path not exists.",
     zh: "合约路径不存在"
+  },
+  "202540": {
+    en: "It is not your private key",
+    zh: "它不是您的私钥"
+  },
+  "202541": {
+    en: "Developer account cannot modify data of other account",
+    zh: "开发者账号不能修改其他账号的数据"
+  },
+  "202542": {
+    en: "No private key of contract manager address in webase",
+    zh: "webase中没有合约管理者地址的私钥"
+  },
+  "202543": {
+    en: "Binding private key not match this user's address",
+    zh: "绑定私钥与此用户的地址不匹配"
+  },
+  "202544": {
+    en: "This user already contain private key",
+    zh: "该用户已包含私钥"
   },
   "202550": {
     en: "Liquid compile error",
@@ -1864,6 +1951,18 @@ let errCode = {
   "202566": {
     en: "Account's mobile already exist!",
     zh: "用户的手机号已存在"
+  },
+  "202621": {
+    en: "Sealer's weight cannot be null",
+    zh: "权重不能为空"
+  },
+  "202670": {
+    en: "exec env is wasm, don't support",
+    zh: "wasm，不支持"
+  },
+  "202671": {
+    en: "auth of the chain not enable",
+    zh: "链的认证未启用"
   },
   "203003": {
     en: "Param exception",
