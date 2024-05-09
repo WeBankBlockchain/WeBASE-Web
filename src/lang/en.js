@@ -5,7 +5,7 @@ export default {
     verificationCode: "Verification Code",
     login: "Login",
     guomi: "GM",
-    hash: "Normal"
+    hash: "Normal",
   },
   inputText: {
     user: "Please enter User",
@@ -13,7 +13,7 @@ export default {
     verificationCode: "Verification Code",
     blockInput: "Search by Block / Txn Hash",
     contractSearch: "Please enter the contract name or address",
-    transactionSearch: "Search by Block / Txn Hash"
+    transactionSearch: "Search by Block / Txn Hash",
   },
   text: {
     realName: "Real Name",
@@ -29,6 +29,7 @@ export default {
     compilationSucceeded: "Contract compilation succeeded",
     remarks: "remarks",
     updatePassword: "Change Password",
+    updateSetting: "Config",
     email: "Change",
     versionInfo:
       'Please view according to the "details" button in the front list ',
@@ -63,7 +64,8 @@ export default {
     select: "Please select",
     tips: "Tips",
     updateSuccessMsg: "Update Success",
-    proposalSuccessMsg: "The proposal for modifying the node sucess. If the proposal requires multiple members to vote, please go to the permission management page to vote",
+    proposalSuccessMsg:
+      "The proposal for modifying the node sucess. If the proposal requires multiple members to vote, please go to the permission management page to vote",
     createSuccessMsg: "Create Success",
     cancelSuccessMsg: "Cancel Success",
     save: "Save",
@@ -396,10 +398,12 @@ export default {
       "Decoding transaction output requires compiling contract in IDE or import abi of contract",
     nodeActive: "Node active",
     nodeNotActive: "Node not active",
-    enableAuth: 'Enabel auth',
-    enable: 'Enable',
-    disable: 'Disable',
-    adminAddr: 'The account of admin'
+    enableAuth: "Enabel auth",
+    enable: "Enable",
+    disable: "Disable",
+    adminAddr: "The account of admin",
+    configSuccess:
+      "Config Success. Please restart the node to apply the configuration.",
   },
   rule: {
     chainCommite: "Chain committee already exists",
@@ -486,6 +490,8 @@ export default {
     contractAddressLong: "contract address' length supposed to be 42",
     contractAddressHex:
       "contract address supposed to start with 0x/0X and all hex string",
+    inputCPU: "Please enter CPU cores",
+    inputMemory: "Please enter memory size(GB)",
     proposalId: "Please enter proposalId",
     weightRules: "value 0~100",
     routeParam: "Please enter routeParam",
@@ -493,7 +499,7 @@ export default {
       "The length of the contract address cannot exceed 64 bits",
     contractAddressHexLiquid:
       "Contract address starts with / and contains alphanumeric underscores",
-    contractAddressCorrect: "Please enter the correct contract address"
+    contractAddressCorrect: "Please enter the correct contract address",
   },
   head: {
     helpText: "Document",
@@ -573,7 +579,7 @@ export default {
     toolsContract: "Tools Contract",
     selectDirectory: "Select Directory",
     registered: "Registered",
-    all: "All"
+    all: "All",
   },
   home: {
     nodes: "Nodes",
@@ -594,7 +600,7 @@ export default {
     chartExplain: "Transaction in last 7 days",
     chartTransactions: "Transactions",
     blockHash: "Block Hash",
-    createTime: "Create Time"
+    createTime: "Create Time",
   },
   nodes: {
     description: "describe",
@@ -616,6 +622,7 @@ export default {
     nodeDescription:
       "Node management Description: node types can be set through node management. Including: 1. Set the corresponding node as a consensus node according to the node node ID. 2. Set the corresponding node as the observation node according to the node nodeid. 3. Set the corresponding node as free node according to node nodeid.",
     updateNodesType: "Update Nodes Type",
+    updateNodesSetting: "Update Nodes Resource",
     frontConfig: "Front Configure",
     addFrontSuccessMsg: "Add Front Success",
     addFrontErrMsg: "add Front Fail",
@@ -701,7 +708,9 @@ export default {
       "Note: Make sure the group has at least two consensus nodes. If there are less than two, an error will be reported.",
     addContract: "Import Contract",
     modifySealerWarn: "Only observer can be set in sealer",
-    selearCountWarn: "Groups require at least two consensus nodes"
+    selearCountWarn: "Groups require at least two consensus nodes",
+    cpus: "CPU(Cores)",
+    memory: "Mems(GB)",
   },
   contracts: {
     cancall: "Can be called",
@@ -803,7 +812,7 @@ export default {
     cnsTitle: "On chain CNS query",
     bfsTitle: "BFS contract resource addressing function",
     localCnsTitle: "Local CNS",
-    checkNodeActive: "check"
+    checkNodeActive: "check",
   },
   bfs: {
     pwdRoute: "Pwd Route:",
@@ -820,10 +829,9 @@ export default {
     cdSucess: "Contract resource jump succeeded",
     lsSucess: "Contract resource query succeeded",
     operate: "Operation command",
-    Tip1:
-      '1) MKDIR: Directories can only be created under "apps" and "tables";',
+    Tip1: '1) MKDIR: Directories can only be created under "apps" and "tables";',
     Tip2: "2) CD: Switch the current path to the specified path;",
-    TIP3: "3) LS: List all files or directories under the current path;"
+    TIP3: "3) LS: List all files or directories under the current path;",
   },
   editor: {
     None: " Success ",
@@ -879,7 +887,7 @@ export default {
     ContractAddressAlreadyUsed: "deployment contract address already exists",
     AccountAbolished: " The account has been abolished ",
     ContractAbolished: " The contract has been annulled ",
-    WASMTrap: "WASM execution failed "
+    WASMTrap: "WASM execution failed ",
   },
   privateKey: {
     addUser: "Add Users",
@@ -938,7 +946,7 @@ export default {
     validatorPrivateKey10: "Please enter decimal",
     importType: "Import Type",
     importFileValidator: "Please upload the file",
-    bindPrivateKey: "Bind PrivateKey"
+    bindPrivateKey: "Bind PrivateKey",
   },
   system: {
     chainManager: "Chain Management Permission",
@@ -991,7 +999,7 @@ export default {
     to: "to",
     updateSuccess: "Successfully updated",
     agency: "Please enter agency",
-    city: "Please enter address"
+    city: "Please enter address",
   },
   account: {
     addAccount: "Add Account",
@@ -1003,7 +1011,7 @@ export default {
     email: "Email",
     inputEmail: "Please enter Email",
     updataEmail: "Modify Message",
-    emailTypeError: "E-mail format is incorrect"
+    emailTypeError: "E-mail format is incorrect",
   },
   transaction: {
     blockTips: "-1 represents the current block height",
@@ -1032,7 +1040,7 @@ export default {
     unresolved: "Unresolved",
     reduction: "Encode",
     searchTransactionFail: "Unable to query transaction information",
-    decode: "Decode"
+    decode: "Decode",
   },
   monitor: {
     node: "Node",
@@ -1067,7 +1075,7 @@ export default {
     selectDate: "Please select display date and time",
     blockSize: "Block Size AVG",
     blockCycle: "Block Cycle AVG",
-    tps: "TPS AVG"
+    tps: "TPS AVG",
   },
   alarm: {
     alarmCofig: "System Metrics",
@@ -1161,7 +1169,7 @@ export default {
       "This user does not have a mailbox, please add a mailbox in account management!",
     updateAlarmSuccess: "Modify alarm configuration successfully!",
     groupTips: "Data of invalid group will be deleted regularly",
-    refresh: "Refresh"
+    refresh: "Refresh",
   },
   guide: {
     guidePage: "Guide pages",
@@ -1181,7 +1189,7 @@ export default {
     createContractTip1:
       "After you create a user, you can add or upload contracts, and then compile, deploy, and send transactions. Click Contract Management, and the contract IDE enters.",
     createContractTip2:
-      "Click Contract Management, click Contract IDE, click the button to write or upload a contract, and then compile, deploy, and send transactions."
+      "Click Contract Management, click Contract IDE, click the button to write or upload a contract, and then compile, deploy, and send transactions.",
   },
   main: {
     changePassword: "Change Password",
@@ -1198,7 +1206,7 @@ export default {
     passwordPattern:
       "Letters, numbers, and at least one uppercase letter and one lowercase letter",
     updatePsdSuccess: "Password reset complete!",
-    updatePsdError: "Password change failed!"
+    updatePsdError: "Password change failed!",
   },
   placeholder: {
     contractListSearch: "Search by Name / Address",
@@ -1208,7 +1216,7 @@ export default {
     input1_200: "Please enter the details within 200 characters",
     input1_32: "Please enter the profile within 32 characters",
     input1_300: "Please enter the details within 300 characters",
-    input1_62: "Please enter the profile within 62 characters"
+    input1_62: "Please enter the profile within 62 characters",
   },
   table: {
     contractAddress: "Address",
@@ -1234,7 +1242,7 @@ export default {
     fileType: "Import Type",
     exportType: "Export Type",
     fileName: "PrivateKey Name",
-    baseSystem: "baseSystem"
+    baseSystem: "baseSystem",
   },
   govCommittee: {
     Havedeployadmin: "The User Has Deployment Permission",
@@ -1291,7 +1299,7 @@ export default {
     setPolicy:
       "Set the policy for a method of a contract (with write permission)",
     resetTips:
-      "The reset contract administrator will initiate a proposal, and a corresponding vote is required. "
+      "The reset contract administrator will initiate a proposal, and a corresponding vote is required. ",
   },
   devOpsMgmt: {
     addDeveloper: "Add Developer",
@@ -1302,7 +1310,7 @@ export default {
     enableNum: "Enable Num",
     operate: "Operate",
     fromUser: "Chain Committee",
-    devAddress: "Developer Address"
+    devAddress: "Developer Address",
   },
   dialog: {
     liquidTip:
@@ -1346,7 +1354,7 @@ export default {
     cnsVersionPattern: "It can only be numbers, letters and '.'",
     cnsName: "Please enter CNS name",
     length1_10: "The length is between 1 and 10 character",
-    addContractAddress: "Bind contract address"
+    addContractAddress: "Bind contract address",
   },
   onlineTools: {
     onlineHashCalculator: "Hash Calculator",
@@ -1358,7 +1366,7 @@ export default {
     file: "File",
     drag: "Drag the file here, Or",
     upload: " click upload",
-    uploadNumLimit: "Only one file can be uploaded"
+    uploadNumLimit: "Only one file can be uploaded",
   },
   progress: {
     0: "Waiting to start",
@@ -1370,6 +1378,6 @@ export default {
     6: "Generating chain certificates and config files",
     7: "Initializing db data of chain and front",
     8: "SCP config files to host",
-    9: "Configure complete, starting..."
-  }
+    9: "Configure complete, starting...",
+  },
 };

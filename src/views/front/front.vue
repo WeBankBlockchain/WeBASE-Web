@@ -213,6 +213,13 @@ permissions and * limitations under the License. */
                   >{{ $t("text.update") }}</el-button
                 >
                 <el-button
+                  type="text"
+                  size="small"
+                  @click="modifySetting(scope.row)"
+                  v-hasPermi="['bcos:chain:updateNodeDesc']"
+                  >{{ $t("text.updateSetting") }}</el-button
+                >
+                <el-button
                   v-if="
                     scope.row.status == 1 &&
                     configData &&
@@ -253,6 +260,19 @@ permissions and * limitations under the License. */
             :sealerNodeCount="sealerNodeCount"
           ></modify-node-type>
         </el-dialog>
+        <el-dialog
+          :title="$t('nodes.updateNodesSetting')"
+          :visible.sync="modifySettingDialogVisible"
+          width="387px"
+          v-if="modifySettingDialogVisible"
+          center
+        >
+          <modify-node-setting
+            @nodeModifyClose="settingModifySuccess"
+            @nodeModifySuccess="settingModifySuccess"
+            :modifyNodeSetting="modifyNodeSetting"
+          ></modify-node-setting>
+        </el-dialog>
         <add-node
           v-if="addNodeShow"
           :show="addNodeShow"
@@ -290,6 +310,7 @@ permissions and * limitations under the License. */
 <script>
 // import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
+import modifyNodeSetting from "./components/modifyNodeSetting";
 import {
   getFronts,
   addnodes,
@@ -326,6 +347,7 @@ export default {
     // "v-content-head": contentHead,
     "v-setFront": setFront,
     modifyNodeType,
+    modifyNodeSetting,
     "add-node": addNode,
     "new-node": newNode,
     "update-node": updateNode,
@@ -361,6 +383,8 @@ export default {
       disabled: false,
       modifyNode: {},
       modifyDialogVisible: false,
+      modifyNodeSetting: {},
+      modifySettingDialogVisible: false,
       addNodeShow: false,
       frontInterval: null,
       newNodeShow: false,
@@ -388,7 +412,7 @@ export default {
       sdkParam: {},
       enableAuth: this.$route.query.enableAuth,
       isAuthEnable: false,
-      sealerNodeCount: 0
+      sealerNodeCount: 0,
     };
   },
   computed: {
@@ -428,6 +452,16 @@ export default {
           enName: "nodeType",
           name: this.$t("nodes.nodeStyle"),
           width: 100,
+        },
+        {
+          enName: "cpus",
+          name: this.$t("nodes.cpus"),
+          width: 80,
+        },
+        {
+          enName: "memory",
+          name: this.$t("nodes.memory"),
+          width: 80,
         },
         {
           enName: "operate",
@@ -826,7 +860,7 @@ export default {
                 });
                 this.$router.push({
                   path: "/node/chain",
-                  query: { id: "chain"}
+                  query: { id: "chain" },
                 });
                 this.$store.dispatch("set_contract_dataList_action", []);
                 localStorage.setItem("contractList", JSON.stringify([]));
@@ -1017,15 +1051,11 @@ export default {
                 // this.frontData[i].nodeType = "";
                 for (let index = 0; index < res.data.data.length; index++) {
                   if (this.frontData[i].nodeId == res.data.data[index].nodeId) {
-                    let nodeType =  res.data.data[index].nodeType;
-                    this.$set(
-                      this.frontData[i],
-                      "nodeType",
-                      nodeType
-                    );
+                    let nodeType = res.data.data[index].nodeType;
+                    this.$set(this.frontData[i], "nodeType", nodeType);
 
                     if (nodeType == "sealer") {
-                      this.sealerNodeCount += 1
+                      this.sealerNodeCount += 1;
                     }
                   }
                 }
@@ -1177,7 +1207,7 @@ export default {
     createFront() {
       this.$router.push({
         path: `/node/node`,
-        query: { id: "node"}
+        query: { id: "node" },
       });
     },
     deleteNodes(val, type) {
@@ -1262,6 +1292,10 @@ export default {
       this.modifyNode.isAuthEnable = this.isAuthEnable;
       this.modifyDialogVisible = true;
     },
+    modifySetting(param) {
+      this.modifyNodeSetting = param;
+      this.modifySettingDialogVisible = true;
+    },
     copyNodeIdKey(val) {
       if (!val) {
         this.$message({
@@ -1287,6 +1321,13 @@ export default {
     },
     nodeModifyClose() {
       this.modifyDialogVisible = false;
+    },
+    settingModifySuccess() {
+      this.modifySettingDialogVisible = false;
+      this.getNodeTable();
+    },
+    settingModifyClose() {
+      this.modifySettingDialogVisible = false;
     },
     Status(val) {
       switch (val) {
@@ -1331,27 +1372,27 @@ export default {
       return colorString;
     },
 
-        initImportAdmin() {
-            let reqQuery = {
-                chainName: this.chainList.chainName,
-                encryptType: this.chainList.encryptType,
-                userName: "admin_auth" + localStorage.getItem("groupId"),
-                groupId: localStorage.getItem("groupId"),
-                description: "初始治理账户",
-                account: localStorage.getItem("user")
-            };
-            initAuthAdmin(reqQuery)
-                .then(res => {
-                    const { data, status } = res;
-                    console.log("initAuthAdmin, res data:", data);
-                })
-                .catch(err => {
-                    this.$message({
-                        type: "error",
-                        message: err.data || this.$t('text.systemError'),
-                    });
-                });
-        },
+    initImportAdmin() {
+      let reqQuery = {
+        chainName: this.chainList.chainName,
+        encryptType: this.chainList.encryptType,
+        userName: "admin_auth" + localStorage.getItem("groupId"),
+        groupId: localStorage.getItem("groupId"),
+        description: "初始治理账户",
+        account: localStorage.getItem("user"),
+      };
+      initAuthAdmin(reqQuery)
+        .then((res) => {
+          const { data, status } = res;
+          console.log("initAuthAdmin, res data:", data);
+        })
+        .catch((err) => {
+          this.$message({
+            type: "error",
+            message: err.data || this.$t("text.systemError"),
+          });
+        });
+    },
 
     checkAuth() {
       getPermissionManagementStatus(localStorage.getItem("groupId"))

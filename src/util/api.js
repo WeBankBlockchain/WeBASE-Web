@@ -470,7 +470,7 @@ export function roleList(data, list) {
 export function accountList(data, list) {
   const params = reviseParam(data, list);
   return get({
-    url: `${url.ORG_LIST}/account/accountList/${params.str}`,
+    url: `/prod-api/system/user/list`,
     method: "get",
     params: params.querys,
     headers: getAuthHeaders(),
@@ -1896,6 +1896,16 @@ export function deleteHost(data) {
     method: "delete",
     headers: getAuthHeaders(),
   });
+}
+
+//修改资源配置
+export function setResource(data) {
+    return get({
+      url: `${url.ORG_LIST}/front/setResource`,
+      method: "post",
+      data: data,
+      headers: getAuthHeaders(),
+    });
 }
 
 /**

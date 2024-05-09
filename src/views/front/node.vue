@@ -3,7 +3,9 @@
     <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changeGroup="changeGroup"></v-content-head> -->
     <nav-menu
       :headTitle="$t('text.chainTitle')"
-      :headSubTitle="type =='node' ? $t('title.nodeTitle') : $t('text.chainTitle')"
+      :headSubTitle="
+        type == 'node' ? $t('title.nodeTitle') : $t('text.chainTitle')
+      "
       @changGroup="changeGroup"
     ></nav-menu>
     <div class="module-wrapper" style="padding-bottom: 20px">
@@ -122,7 +124,9 @@
             </el-col>
             <el-col :span="24">
               <el-form-item
-                :label="$t('text.imageMode') + '：'" prop="dockerImageType">
+                :label="$t('text.imageMode') + '：'"
+                prop="dockerImageType"
+              >
                 <el-radio v-model="chainFrom.dockerImageType" :label="1"
                   >{{ $t("text.automatic")
                   }}<el-tooltip
@@ -778,6 +782,8 @@ export default {
         deployNodeInfoList[i].p2pPort = this.nodeList[i].p2pPort;
         // deployNodeInfoList[i].channelPort = this.nodeList[i].channelPort;
         deployNodeInfoList[i].rpcPort = this.nodeList[i].rpcPort;
+        deployNodeInfoList[i].cpus = this.nodeList[i].cpus;
+        deployNodeInfoList[i].memory = this.nodeList[i].memory;
       }
       let data = {
         chainName: this.chainFrom.chainName,
