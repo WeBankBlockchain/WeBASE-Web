@@ -210,7 +210,9 @@ export default {
             })
         },
         versionChange: function () {
-            this.$refs.menu.changeRouter();
+            if (this.$refs.menu) {
+                this.$refs.menu.changeRouter();
+            }
         },
         change: function (val) {
             this.menuShow = !val;
@@ -307,12 +309,12 @@ export default {
                         } else {
                             this.accountStatus = sessionStorage.getItem("accountStatus");
                             // router.push("/host");
-                            router.push("/home");
+                            //router.push("/home");
                         }
 
                     } else {
                         // router.push("/host");
-                        router.push("/home");
+                        //router.push("/home");
                         this.$message({
                             message: this.$chooseLang(res.data.code),
                             type: "error",
