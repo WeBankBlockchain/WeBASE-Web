@@ -234,8 +234,10 @@ export default {
     //     this.queryLocalCns();
     // }
 
-    this.queryPwdPath();
-    this.getUserListMethod();
+    if (localStorage.getItem("groupId")) {
+      this.queryPwdPath();
+      this.getUserListMethod();
+    }
   },
 
   methods: {

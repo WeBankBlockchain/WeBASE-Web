@@ -210,7 +210,9 @@ export default {
       localStorage.getItem("deployType") == 0
     ) {
       this.$nextTick(function () {
-        this.getContractPaths();
+        if (localStorage.getItem("groupId")) {
+          this.getContractPaths();
+        }
       });
     }
     Bus.$on("compileLiquid", (data) => {

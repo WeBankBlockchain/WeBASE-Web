@@ -1,6 +1,7 @@
 <template>
     <div>
-        <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changeGroup="changeGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changeGroup="changeGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('text.hostMgrTitle')" @changGroup="changeGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="search-part">
                 <!-- <div class="search-part-left" v-if='!disabled'>
@@ -36,7 +37,8 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import addHost from "./dialog/addHost"
 import { getHosts, checkHost, getAnsible, pingHostData, deleteHost } from "@/util/api"
 export default {
@@ -55,8 +57,9 @@ export default {
         }
     },
     components: {
-        "v-content-head": contentHead,
-        "add-host": addHost
+        // "v-content-head": contentHead,
+        "add-host": addHost,
+        'nav-menu': NavMenu
     },
     mounted() {
         this.checkAnsible()
@@ -165,8 +168,8 @@ export default {
             this.loading = true
             getHosts().then(res => {
                 this.loading = false
-                if (res.data.code === 0) {
-                    this.hostList = res.data.data
+                if (res.data.code === 0 || res.data.code === 200) {
+                    this.hostList = res.data.rows
                 } else {
                     this.$message({
                         type: "error",

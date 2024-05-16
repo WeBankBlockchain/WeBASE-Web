@@ -15,7 +15,8 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.transactionAudit')" :headSubTitle="headSubTitle" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <div class="more-search-table search-min-width">
                 <div class="text-left">
@@ -55,7 +56,8 @@
 
 <script>
 import charts from "./components/chart";
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import { format, completionDateData } from "@/util/util";
 import {
     monitorUserList,
@@ -65,8 +67,9 @@ import {
 export default {
     name: "transactionCharts",
     components: {
-        "v-content-head": contentHead,
-        "v-chart": charts
+        // "v-content-head": contentHead,
+        "v-chart": charts,
+        'nav-menu': NavMenu
     },
     data() {
         return {

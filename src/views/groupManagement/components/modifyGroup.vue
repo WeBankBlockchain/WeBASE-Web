@@ -77,7 +77,7 @@ export default {
                 {
                     enName: "frontId",
                     name: this.$t("nodes.frontId"),
-                    width: ''
+                    width: '80'
                 },
                 {
                     enName: "nodeId",
@@ -87,27 +87,27 @@ export default {
                 {
                     enName: "frontIp",
                     name: this.$t("nodes.frontIp"),
-                    width: ''
+                    width: '100'
                 },
                 {
                     enName: "frontPort",
                     name: this.$t("nodes.frontPort"),
-                    width: ''
+                    width: '80'
                 },
                 {
                     enName: "groupId",
                     name: this.$t("nodes.groupId"),
-                    width: ''
+                    width: '80'
                 },
                 {
                     enName: "agency",
                     name: this.$t("nodes.agency"),
-                    width: ''
+                    width: '80'
                 },
                 {
                     enName: "status",
                     name: this.$t("nodes.status"),
-                    width: ''
+                    width: '80'
                 },
             ];
             return data

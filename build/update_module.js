@@ -27,6 +27,14 @@ const solcBinList = [
     {
         name: 'v0.6.10-gm.js',
         url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.6.10-gm.js`,
+    },
+    {
+      name: 'v0.8.11.js',
+      url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.8.11.js`,
+    },
+    {
+      name: 'v0.8.11-gm.js',
+      url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.8.11-gm.js`,
     }
 ];
 const folderName = path.join('./static/js')
@@ -37,7 +45,7 @@ const folderName = path.join('./static/js')
 */
 const downloadFile = async (uri,filename,callback) =>{
   var stream = fs.createWriteStream(path.resolve(folderName,filename),{flags: 'w'});
-  await request(uri).pipe(stream).on('close', callback); 
+  await request(uri).pipe(stream).on('close', callback);
 }
 
 /**

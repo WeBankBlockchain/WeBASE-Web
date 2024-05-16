@@ -15,7 +15,8 @@
  */
 <template>
   <div class="account-wrapper">
-    <content-head :headTitle="$t('title.accountManagement')"></content-head>
+    <!-- <content-head :headTitle="$t('title.accountManagement')"></content-head> -->
+    <nav-menu :headTitle="$t('title.accountManagement')"></nav-menu>
     <div class="module-wrapper">
       <div class="search-part">
         <div class="search-part-left">
@@ -58,13 +59,13 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import { accountList, modifyAccountInfo,accountFreeze,accountUnfreeze,deleteAccount} from "@/util/api";
 import accountDialog from "./components/accountDialog";
 export default {
   name: "accountList",
   components: {
-    contentHead,
+    'nav-menu':NavMenu,
     accountDialog,
   },
   data() {

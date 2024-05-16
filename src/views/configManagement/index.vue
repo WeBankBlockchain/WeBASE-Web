@@ -1,36 +1,41 @@
 <template>
-  <div>
-    <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head>
-    <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
-      <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
-        <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
-          <template slot-scope="scope">
-            <template v-if="head.enName!='operate'">
-              <template v-if="head.enName==='configKey'">
-                <span>{{scope.row[head.enName]}}</span>
-                <el-tooltip effect="dark" :content="scope.row['tips']" placement="top-start">
-                  <i class="el-icon-info contract-icon font-12"></i>
-                </el-tooltip>
-              </template>
-              <template v-else>
-                <span>{{scope.row[head.enName]}}</span>
-              </template>
-            </template>
-            <template v-else>
-              <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">{{$t('text.update')}}</el-button>
-              <el-tooltip effect="dark" placement="top-start">
-                <span slot="content">
-                  {{$t('system.configContent1')}}：<br>
-                  {{$t('system.configContent2')}}
-                  <br>
-                  {{$t('system.configContent3')}}
-                </span>
-                <i class="el-icon-info contract-icon font-12"></i>
-              </el-tooltip>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
+    <div>
+        <!-- <v-content-head :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></v-content-head> -->
+        <nav-menu :headTitle="$t('title.systemManager')" :headSubTitle="$t('title.configManager')" @changGroup="changGroup" :headTooltip="$t('title.configManagerTips')"></nav-menu>
+        <div class="module-wrapper" style="padding: 30px 29px 0 29px;">
+            <el-table :data="configList" tooltip-effect="dark" v-loading="loading" class="search-table-content" style="padding-bottom: 20px;">
+                <el-table-column v-for="head in configHead" :label="head.name" :key="head.enName" show-overflow-tooltip align="center">
+                    <template slot-scope="scope">
+                        <template v-if="head.enName!='operate'">
+                            <template v-if="head.enName==='configKey'">
+                                <span>{{scope.row[head.enName]}}</span>
+                                <el-tooltip effect="dark" :content="scope.row['tips']" placement="top-start">
+                                    <i class="el-icon-info contract-icon font-12"></i>
+                                </el-tooltip>
+                            </template>
+                            <template v-else>
+                                <span>{{scope.row[head.enName]}}</span>
+                            </template>
+                        </template>
+                        <template v-else>
+                            <el-button :disabled="disabled" type="text" size="small" :style="{'color': disabled?'#666':''}" @click="modifyItemConfig(scope.row)">{{$t('text.update')}}</el-button>
+                            <el-tooltip effect="dark" placement="top-start">
+                                <span slot="content">
+                                    {{$t('system.configContent1')}}：<br>
+                                    {{$t('system.configContent2')}}
+                                    <br>
+                                    {{$t('system.configContent3')}}
+                                </span>
+                                <i class="el-icon-info contract-icon font-12"></i>
+                            </el-tooltip>
+                        </template>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+        <el-dialog :title="$t('system.updateConfig')" :visible.sync="modifyDialogVisible" width="450px" v-if="modifyDialogVisible" center>
+            <system-config @close="close" @modifySuccess="modifySuccess" :configKey="configkey"></system-config>
+        </el-dialog>
     </div>
     <el-dialog :title="$t('system.updateConfig')" :visible.sync="modifyDialogVisible" width="450px" v-if="modifyDialogVisible" center>
       <system-config @close="close" @modifySuccess="modifySuccess" :configKey="configkey"></system-config>
@@ -39,56 +44,14 @@
 </template>
 
 <script>
-import contentHead from "@/components/contentHead";
+import NavMenu from '../../components/navs/navMenu.vue';
 import systemConfig from "./components/systemConfig";
 import { getUserList, querySysConfig, querySysConfigList } from "@/util/api";
 export default {
   name: "ConfigManagement",
-
-  components: {
-    "v-content-head": contentHead,
-    systemConfig,
-  },
-
-  props: {},
-
-  data() {
-    return {
-      currentPage: 1,
-      pageSize: 10,
-      total: 0,
-      disabled: false,
-      loading: false,
-      modifyDialogVisible: false,
-      configForm: {
-        adminRivateKey: "",
-        configKey: "",
-        configValue: "",
-      },
-      configkey: "",
-      adminRivateKeyList: [],
-      configList: [],
-      configKeyList: [],
-    };
-  },
-
-  computed: {
-    configHead() {
-      let data = [
-        {
-          enName: "configKey",
-          name: this.$t("system.configKey"),
-        },
-        {
-          enName: "configValue",
-          name: this.$t("system.configValue"),
-        },
-        {
-          enName: "operate",
-          name: this.$t("nodes.operation"),
-        },
-      ];
-      return data;
+    components: {
+        'nav-menu': NavMenu,
+        systemConfig
     },
     rules() {
       let data = {

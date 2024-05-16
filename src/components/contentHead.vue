@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 <template>
-  <div class="content-head-wrapper">
+  <div v-if='!isMicroApp' class="content-head-wrapper">
     <div class="content-head-title">
       <span class="content-head-icon" v-if="icon" @click="skip">
         <i class="wbs-icon-back"></i>
@@ -164,6 +164,7 @@ export default {
   },
   data: function () {
     return {
+      isMicroApp: window.__POWERED_BY_QIANKUN__ ? true : false,
       title: this.headTitle,
       groupName: "-",
       accountName: "-",
@@ -265,19 +266,24 @@ export default {
                   this.groupName = res.data.data[0].groupName;
                   localStorage.setItem("groupName", res.data.data[0].groupName);
                   localStorage.setItem("groupId", res.data.data[0].groupId);
-                  this.checkAuth()
+                  localStorage.setItem("chainId", res.data.data[0].chainId)
+                  localStorage.setItem("chainName", res.data.data[0].chainName)
                 });
               }
             } else {
               this.groupList = [];
               localStorage.setItem("groupName", "");
               localStorage.setItem("groupId", "");
+              localStorage.setItem("chainId", "")
+              localStorage.setItem("chainName", "")
             }
             if (type && res.data.data && res.data.data.length) {
               this.groupName = res.data.data[0].groupName;
               localStorage.setItem("groupName", res.data.data[0].groupName);
               localStorage.setItem("groupId", res.data.data[0].groupId);
               this.checkAuth()
+              localStorage.setItem("chainId", res.data.data[0].chainId)
+              localStorage.setItem("chainName", res.data.data[0].chainName)
             } else if (
               res.data.data &&
               res.data.data.length &&
@@ -287,6 +293,8 @@ export default {
               localStorage.setItem("groupName", res.data.data[0].groupName);
               localStorage.setItem("groupId", res.data.data[0].groupId);
               this.checkAuth()
+              localStorage.setItem("chainId", res.data.data[0].chainId)
+              localStorage.setItem("chainName", res.data.data[0].chainName)
             } else if (
               res.data.data &&
               res.data.data.length &&
@@ -304,12 +312,16 @@ export default {
             });
             localStorage.setItem("groupName", "");
             localStorage.setItem("groupId", "");
+            localStorage.setItem("chainId", "")
+            localStorage.setItem("chainName", "")
           }
         })
         .catch((err) => {
           this.groupList = [];
           localStorage.setItem("groupName", "");
           localStorage.setItem("groupId", "");
+          localStorage.setItem("chainId", "")
+          localStorage.setItem("chainName", "")
           this.$message({
             message: err.data || this.$t("text.systemError"),
             type: "error",
@@ -330,6 +342,8 @@ export default {
       this.groupName = val.groupName;
       localStorage.setItem("groupName", val.groupName);
       localStorage.setItem("groupId", val.groupId);
+      localStorage.setItem("chainId", val.chainId)
+      localStorage.setItem("chainName", val.chainName)
       this.$emit("changGroup", val.groupId);
       Bus.$emit("changGroup", val.groupId);
       this.checkAuth()

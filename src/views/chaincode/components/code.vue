@@ -522,7 +522,7 @@ export default {
       };
       getFronts(reqData)
         .then((res) => {
-          if (res.data.code === 0) {
+          if (res.data.code === 0 && res.data.data.length > 0) {
             this.frontList = res.data.data || [];
             this.frontId = this.frontList[0].frontId;
             this.loading = false;
@@ -531,11 +531,11 @@ export default {
             }
           } else {
             this.loading = false;
-            this.$message({
-              message: this.$chooseLang(res.data.code),
-              type: "error",
-              duration: 2000,
-            });
+            // this.$message({
+            //   message: this.$chooseLang(res.data.code),
+            //   type: "error",
+            //   duration: 2000,
+            // });
           }
         })
         .catch((err) => {
