@@ -31,6 +31,7 @@
     "lib-flexible": "^0.3.2",
     "lodash": "^4.17.15",
     "mavon-editor": "^2.9.1",
+    "qs": "^6.12.1",
     "solc": "^0.6.10",
     "underscore": "^1.13.1",
     "vue": "^2.5.2",
