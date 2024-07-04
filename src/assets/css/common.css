@@ -52,7 +52,7 @@ body { overflow-y: scroll;overflow: auto !important; }
 
 .module-wrapper {
     min-width: 540px;
-    margin: 15px 15px 0 15px;
+    margin: 15px 15px 15px 15px;
     background-color: #fff;
     box-shadow: 0 4px 12px 0 #dfe2e9;
     border-radius: 10px;
@@ -331,12 +331,15 @@ body { overflow-y: scroll;overflow: auto !important; }
     border-color: #20D4D9;
     color: #fff;
 }
-
+/*
 .el-button--default {
     border-color: #9da2ab;
     color: #9da2ab;
 }
-
+*/
+/* .el-button {
+  padding: 8px 15px;
+} */
 .el-message-box .el-button--small {
     padding: 11px 20px;
 }
@@ -394,7 +397,7 @@ body { overflow-y: scroll;overflow: auto !important; }
     transform:translate(-50%,-50%);
     /*height:600px;*/
     /* max-height:calc(100% - 40px); */
- 
+
 }
 
 .el-dialog__header {
@@ -594,4 +597,36 @@ th {
 
 .el-pager li.active {
     color: #00c1d4
+}
+/**
+.el-menu {
+  background-color: var(--el-menu-bg-color);
+}
+.el-menu-item {
+  color: var(--el-menu-text-color);
+}
+
+.el-pagination {
+  display: block;
+}
+.el-button--small {
+    height: 36px;
+}
+.el-dropdown-menu {
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: var(--el-dropdown-menu-index);
+    padding: 5px 0;
+    margin: 0;
+    background-color: var(--el-bg-color-overlay);
+    border: none;
+    border-radius: var(--el-border-radius-base);
+    box-shadow: none;
+    list-style: none;
+  }
+  */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
 }

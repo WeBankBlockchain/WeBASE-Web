@@ -89,6 +89,8 @@ export default {
       versionData: null,
       loading: false,
       host: location.host,
+      protocol: location.protocol,
+      subPath: window.__POWERED_BY_QIANKUN__ ? '/child/bcos3' : '',
       groupId: localStorage.getItem("groupId")
         ? localStorage.getItem("groupId")
         : "",
@@ -124,20 +126,20 @@ export default {
       {
         solcName: "v0.4.25",
         versionId: 0,
-        url: `http://${this.host}/static/js/v0.4.25.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.4.25.js`,
         encryptType: 0,
         net: 1,
       },
       {
         solcName: "v0.4.25-gm",
         versionId: 1,
-        url: `http://${this.host}/static/js/v0.4.25-gm.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.4.25-gm.js`,
         encryptType: 1,
         net: 1,
       },
       {
         solcName: "v0.5.2",
-        url: `http://${this.host}/static/js/v0.5.2.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.5.2.js`,
         versionId: 2,
         encryptType: 0,
         net: 1,
@@ -145,35 +147,35 @@ export default {
       {
         solcName: "v0.5.2-gm",
         versionId: 3,
-        url: `http://${this.host}/static/js/v0.5.2-gm.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.5.2-gm.js`,
         encryptType: 1,
         net: 1,
       },
       {
         solcName: "v0.6.10",
         versionId: 4,
-        url: `http://${this.host}/static/js/v0.6.10.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.6.10.js`,
         encryptType: 0,
         net: 1,
       },
       {
         solcName: "v0.6.10-gm",
         versionId: 5,
-        url: `http://${this.host}/static/js/v0.6.10-gm.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.6.10-gm.js`,
         encryptType: 1,
         net: 1,
       },
       {
         solcName: "v0.8.11",
         versionId: 6,
-        url: `http://${this.host}/static/js/v0.8.11.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.8.11.js`,
         encryptType: 0,
         net: 1,
       },
       {
         solcName: "v0.8.11-gm",
         versionId: 7,
-        url: `http://${this.host}/static/js/v0.8.11-gm.js`,
+        url: `${this.protocol}//${this.host}${this.subPath}/static/js/v0.8.11-gm.js`,
         encryptType: 1,
         net: 1,
       },
@@ -182,13 +184,15 @@ export default {
     // this.getEncryption(this.querySolcList);
     // this.liquidList();
     // this.liquidCheck = true;
-    this.getfrontList()
+    if (localStorage.getItem("groupId") && localStorage.getItem("groupId").length > 0) {
+      this.getfrontList()
+    }
     //this.liquidCheckMethod()
   },
   methods: {
     liquidCheckMethod() {
       let groupId = localStorage.getItem("groupId");
-      checkIsWasm(this.frontId,groupId)
+      checkIsWasm(this.frontId, groupId)
         .then((res) => {
           if (res.data.data == true) {
             this.liquidList();
@@ -219,7 +223,8 @@ export default {
     },
     getfrontList() {
       let reqData = {
-        frontId: this.frontId,
+        // frontId: this.frontId,
+        groupId: localStorage.getItem("groupId")
       };
       getFronts(reqData)
         .then((res) => {

@@ -1,53 +1,123 @@
-/*
- * Copyright 2014-2020 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+/* * Copyright 2014-2020 the original author or authors. * * Licensed under the
+Apache License, Version 2.0 (the "License"); * you may not use this file except
+in compliance with the License. * You may obtain a copy of the License at * *
+http://www.apache.org/licenses/LICENSE-2.0 * * Unless required by applicable law
+or agreed to in writing, software * distributed under the License is distributed
+on an "AS IS" BASIS, * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+express or implied. * See the License for the specific language governing
+permissions and * limitations under the License. */
 <template>
   <div>
     <div class="module-wrapper">
       <div class="search-part">
-        <div class="search-part-left" style="padding-top: 20px;">
-          <el-button type="primary" class="search-part-left-btn" @click="generateAbi">{{this.$t("nodes.addAbi")}}</el-button>
-          <el-button type="primary" class="search-part-left-btn" @click="routeAbi">{{$t('title.parseAbi')}}</el-button>
-          <el-button v-show="liquidAuthCheck" type="primary" class="search-part-left-btn" @click="resetContractUser">{{$t('title.resetContractUser')}}</el-button>
-          <el-button v-if="liquidAuthCheck" type="primary" class="search-part-left-btn" @click="checkDeploy">{{$t('title.checkDeploy')}}</el-button>
-          <el-button v-if="liquidAuthCheck" type="primary" class="search-part-left-btn" @click="checkMethod">{{$t('title.checkMethod')}}</el-button>
+        <div class="search-part-left" style="padding-top: 20px">
+          <el-button
+            type="primary"
+            class="search-part-left-btn"
+            @click="generateAbi"
+            v-hasPermi="['bcos3:contract:addAbi']"
+            >{{ this.$t("nodes.addAbi") }}</el-button
+          >
+          <el-button
+            type="primary"
+            class="search-part-left-btn"
+            @click="routeAbi"
+            >{{ $t("title.parseAbi") }}</el-button
+          >
+          <el-button
+            v-show="liquidAuthCheck"
+            type="primary"
+            class="search-part-left-btn"
+            @click="resetContractUser"
+            >{{ $t("title.resetContractUser") }}</el-button
+          >
+          <el-button
+            v-if="liquidAuthCheck"
+            type="primary"
+            class="search-part-left-btn"
+            @click="checkDeploy"
+            >{{ $t("title.checkDeploy") }}</el-button
+          >
+          <el-button
+            v-if="liquidAuthCheck"
+            type="primary"
+            class="search-part-left-btn"
+            @click="checkMethod"
+            v-hasPermi="['bcos3:contract:getMethod']"
+            >{{ $t("title.checkMethod") }}</el-button
+          >
         </div>
         <div class="search-part-right">
-          <el-input :placeholder="$t('placeholder.contractListSearch')" v-model="contractData" class="input-with-select" clearable @clear="clearInput">
-            <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+          <el-input
+            :placeholder="$t('placeholder.contractListSearch')"
+            v-model="contractData"
+            class="input-with-select"
+            clearable
+            @clear="clearInput"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="search"
+            ></el-button>
           </el-input>
         </div>
       </div>
       <div class="search-table">
-        <el-table :data="contractList" tooltip-effect="dark" v-loading="loading">
-          <el-table-column prop="contractAddress" :label="$t('contracts.contractAddress')" show-overflow-tooltip align="center">
+        <el-table
+          :data="contractList"
+          tooltip-effect="dark"
+          v-loading="loading"
+        >
+          <el-table-column
+            prop="contractAddress"
+            :label="$t('contracts.contractAddress')"
+            show-overflow-tooltip
+            align="center"
+          >
             <template slot-scope="scope">
-              <i class="wbs-icon-copy font-12 copy-public-key" @click="copyPubilcKey(scope.row.contractAddress)" :title="$t('contracts.copyContractAddress')"></i>
-              <span>{{scope.row.contractAddress}}</span>
+              <i
+                class="wbs-icon-copy font-12 copy-public-key"
+                @click="copyPubilcKey(scope.row.contractAddress)"
+                :title="$t('contracts.copyContractAddress')"
+              ></i>
+              <span>{{ scope.row.contractAddress }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="contractName" :label="$t('contracts.contractName')" show-overflow-tooltip width="120" align="center">
+          <el-table-column
+            prop="contractName"
+            :label="$t('contracts.contractName')"
+            show-overflow-tooltip
+            width="120"
+            align="center"
+          >
             <template slot-scope="scope">
-              <span class="link" @click='open(scope.row)' v-if='scope.row.contractId'>{{scope.row.contractName}}</span>
-              <span v-if='!scope.row.contractId'>{{scope.row.contractName}}</span>
+              <span
+                class="link"
+                @click="open(scope.row)"
+                v-if="scope.row.contractId"
+                >{{ scope.row.contractName }}</span
+              >
+              <span v-if="!scope.row.contractId">{{
+                scope.row.contractName
+              }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="contractPath" :label="$t('contracts.contractCatalogue')" show-overflow-tooltip width="135" align="center">
+          <el-table-column
+            prop="contractPath"
+            :label="$t('contracts.contractCatalogue')"
+            show-overflow-tooltip
+            width="135"
+            align="center"
+          >
             <template slot-scope="scope">
-              <span class="link" @click='openPath(scope.row)' v-if='scope.row.contractPath'>{{scope.row.contractPath}}</span>
-              <span v-if='!scope.row.contractPath'>-</span>
+              <span
+                class="link"
+                @click="openPath(scope.row)"
+                v-if="scope.row.contractPath"
+                >{{ scope.row.contractPath }}</span
+              >
+              <span v-if="!scope.row.contractPath">-</span>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="contractStatus" :label="$t('contracts.contractStatus')" show-overflow-tooltip width="135" align="center">
@@ -55,75 +125,321 @@
                             <span>{{contractStatusZh(scope.row.contractStatus) }}</span>
                         </template>
                     </el-table-column> -->
-          <el-table-column prop="contractAbi" :label="$t('contracts.contractAbi')" show-overflow-tooltip align="center">
+          <el-table-column
+            prop="contractAbi"
+            :label="$t('contracts.contractAbi')"
+            show-overflow-tooltip
+            align="center"
+          >
             <template slot-scope="scope">
-              <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractAbi' @click="copyPubilcKey(scope.row.contractAbi)" :title="$t('contracts.copyContractAbi')"></i>
-              <span class="link" @click='openAbi(scope.row)'>{{scope.row.contractAbi}}</span>
+              <i
+                class="wbs-icon-copy font-12 copy-public-key"
+                v-if="scope.row.contractAbi"
+                @click="copyPubilcKey(scope.row.contractAbi)"
+                :title="$t('contracts.copyContractAbi')"
+              ></i>
+              <span class="link" @click="openAbi(scope.row)">{{
+                scope.row.contractAbi
+              }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="contractBin" :label="$t('contracts.contractBin')" show-overflow-tooltip align="center">
+          <el-table-column
+            prop="contractBin"
+            :label="$t('contracts.contractBin')"
+            show-overflow-tooltip
+            align="center"
+          >
             <template slot-scope="scope">
-              <i class="wbs-icon-copy font-12 copy-public-key" v-if='scope.row.contractBin' @click="copyPubilcKey(scope.row.contractBin)" :title="$t('contracts.copyContractBin')"></i>
-              <span>{{scope.row.contractBin}}</span>
+              <i
+                class="wbs-icon-copy font-12 copy-public-key"
+                v-if="scope.row.contractBin"
+                @click="copyPubilcKey(scope.row.contractBin)"
+                :title="$t('contracts.copyContractBin')"
+              ></i>
+              <span>{{ scope.row.contractBin }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" :label="$t('home.createTime')" show-overflow-tooltip width="150" align="center"></el-table-column>
-          <el-table-column fixed="right" :label="$t('nodes.operation')" width="300">
+          <el-table-column
+            prop="createTime"
+            :label="$t('home.createTime')"
+            show-overflow-tooltip
+            width="150"
+            align="center"
+          ></el-table-column>
+          <el-table-column
+            fixed="right"
+            :label="$t('nodes.operation')"
+            width="300"
+          >
             <template slot-scope="scope">
-              <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="send(scope.row)" type="text" size="small">{{$t('contracts.sendTransaction')}}</el-button>
-              <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="updateAbi(scope.row)" type="text" size="small">{{$t('contracts.updateAbi')}}</el-button>
-              <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="deleteAbi(scope.row)" type="text" size="small">{{$t('contracts.deleteAbi')}}</el-button>
-              <el-button v-if="liquidAuthCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setPolicy(scope.row)" type="text" size="small">{{$t('contracts.setPolicy')}}</el-button>
-              <el-button v-if="liquidAuthCheck" :disabled="disabled" :class="{'grayColor': disabled}" @click="setAdmin(scope.row)" type="text" size="small">{{$t('contracts.setAdmin')}}</el-button>
+              <el-button
+                :disabled="disabled"
+                :class="{ grayColor: disabled }"
+                @click="send(scope.row)"
+                type="text"
+                size="small"
+                v-hasPermi="['bcos3:contract:addMethod']"
+                >{{ $t("contracts.sendTransaction") }}</el-button
+              >
+              <el-button
+                :disabled="disabled"
+                :class="{ grayColor: disabled }"
+                @click="updateAbi(scope.row)"
+                type="text"
+                size="small"
+                v-hasPermi="['bcos3:contract:updateAbi']"
+                >{{ $t("contracts.updateAbi") }}</el-button
+              >
+              <el-button
+                :disabled="disabled"
+                :class="{ grayColor: disabled }"
+                @click="deleteAbi(scope.row)"
+                type="text"
+                size="small"
+                v-hasPermi="['bcos3:contract:deleteAbi']"
+                >{{ $t("contracts.deleteAbi") }}</el-button
+              >
+              <el-button
+                v-if="liquidAuthCheck"
+                :disabled="disabled"
+                :class="{ grayColor: disabled }"
+                @click="setPolicy(scope.row)"
+                type="text"
+                size="small"
+                v-hasPermi="['bcos3:contract:addMethod']"
+                >{{ $t("contracts.setPolicy") }}</el-button
+              >
+              <el-button
+                v-if="liquidAuthCheck"
+                :disabled="disabled"
+                :class="{ grayColor: disabled }"
+                @click="setAdmin(scope.row)"
+                type="text"
+                size="small"
+                v-hasPermi="['bcos3:contract:addMethod']"
+                >{{ $t("contracts.setAdmin") }}</el-button
+              >
               <!-- <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleStatusBtn(scope.row)" type="text" size="small">{{freezeThawBtn(scope.row)}}</el-button> -->
-              <el-button :disabled="disabled" :class="{'grayColor': disabled}" @click="handleMgmtCns(scope.row)" type="text" size="small">{{$t('text.cns')}}</el-button>
-              <el-button v-if="liquidCheck" :disabled="!scope.row.contractAddress || !scope.row.haveEvent" :class="{'grayColor': !scope.row.contractAddress}" @click="checkEvent(scope.row)" type="text" size="small">
-                {{$t('title.checkEvent')}}</el-button>
+              <el-button
+                :disabled="disabled"
+                :class="{ grayColor: disabled }"
+                @click="handleMgmtCns(scope.row)"
+                type="text"
+                size="small"
+                >{{ $t("text.cns") }}</el-button
+              >
+              <el-button
+                v-if="liquidCheck"
+                :disabled="!scope.row.contractAddress || !scope.row.haveEvent"
+                :class="{ grayColor: !scope.row.contractAddress }"
+                @click="checkEvent(scope.row)"
+                type="text"
+                size="small"
+              >
+                {{ $t("title.checkEvent") }}</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination v-if="total > 10" class="page" @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 50]" :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination
+          v-if="total > 10"
+          class="page"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[10, 20, 30, 50]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+        >
         </el-pagination>
       </div>
     </div>
-    <abi-dialog :show="abiDialogShow" v-if="abiDialogShow" :data='abiData' @close="abiClose"></abi-dialog>
-    <el-dialog :title="$t('contracts.sendTransaction')" :visible.sync="dialogVisible" width="580px" :before-close="sendClose" v-if="dialogVisible" center class="send-dialog">
-      <send-transation @success="sendSuccess($event)" @close="handleClose" ref="send" :liquidChecks='!liquidCheck' :data="data" :abi='abiData' :version='version'></send-transation>
+    <abi-dialog
+      :show="abiDialogShow"
+      v-if="abiDialogShow"
+      :data="abiData"
+      @close="abiClose"
+    ></abi-dialog>
+    <el-dialog
+      :title="$t('contracts.sendTransaction')"
+      :visible.sync="dialogVisible"
+      width="580px"
+      :before-close="sendClose"
+      v-if="dialogVisible"
+      center
+      class="send-dialog"
+    >
+      <send-transation
+        @success="sendSuccess($event)"
+        @close="handleClose"
+        ref="send"
+        :liquidChecks="!liquidCheck"
+        :data="data"
+        :abi="abiData"
+        :version="version"
+      ></send-transation>
     </el-dialog>
-    <v-editor v-if='editorShow' :show='editorShow' :data='editorData' :input='editorInput' :liquidChecks='!liquidCheck' :editorOutput="editorOutput" :sendConstant="sendConstant" @close='editorClose'></v-editor>
-    <el-dialog title="" :visible.sync="freezeThawVisible" width="500px" v-if="freezeThawVisible" center>
-      <freeze-thaw @freezeThawSuccess="freezeThawSuccess" @freezeThawClose="freezeThawClose" :contractInfo="contractInfo" :handleFreezeThawType="handleFreezeThawType"></freeze-thaw>
+    <v-editor
+      v-if="editorShow"
+      :show="editorShow"
+      :data="editorData"
+      :input="editorInput"
+      :liquidChecks="!liquidCheck"
+      :editorOutput="editorOutput"
+      :sendConstant="sendConstant"
+      @close="editorClose"
+    ></v-editor>
+    <el-dialog
+      title=""
+      :visible.sync="freezeThawVisible"
+      width="500px"
+      v-if="freezeThawVisible"
+      center
+    >
+      <freeze-thaw
+        @freezeThawSuccess="freezeThawSuccess"
+        @freezeThawClose="freezeThawClose"
+        :contractInfo="contractInfo"
+        :handleFreezeThawType="handleFreezeThawType"
+      ></freeze-thaw>
     </el-dialog>
-    <el-dialog v-if="checkEventVisible" :title="$t('table.checkEvent')" :visible.sync="checkEventVisible" width="470px" center class="send-dialog">
-      <check-event-dialog @checkEventSuccess="checkEventSuccess($event)" @checkEventClose="checkEventClose" :contractInfo="contractInfo"></check-event-dialog>
+    <el-dialog
+      v-if="checkEventVisible"
+      :title="$t('table.checkEvent')"
+      :visible.sync="checkEventVisible"
+      width="470px"
+      center
+      class="send-dialog"
+    >
+      <check-event-dialog
+        @checkEventSuccess="checkEventSuccess($event)"
+        @checkEventClose="checkEventClose"
+        :contractInfo="contractInfo"
+      ></check-event-dialog>
     </el-dialog>
-    <el-dialog v-if="checkEventResultVisible" :title="$t('table.checkEventResult')" :visible.sync="checkEventResultVisible" width="670px" center class="send-dialog">
-      <check-event-result @checkEventResultSuccess="checkEventResultSuccess($event)" @checkEventResultClose="checkEventResultClose" :checkEventResult="checkEventResult"></check-event-result>
+    <el-dialog
+      v-if="checkEventResultVisible"
+      :title="$t('table.checkEventResult')"
+      :visible.sync="checkEventResultVisible"
+      width="670px"
+      center
+      class="send-dialog"
+    >
+      <check-event-result
+        @checkEventResultSuccess="checkEventResultSuccess($event)"
+        @checkEventResultClose="checkEventResultClose"
+        :checkEventResult="checkEventResult"
+      ></check-event-result>
     </el-dialog>
-    <el-dialog v-if="mgmtCnsVisible" :title="$t('text.cns')" :visible.sync="mgmtCnsVisible" width="470px" center class="send-dialog">
-      <mgmt-cns :mgmtCnsItem="mgmtCnsItem" :contractName="contractName" @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)" @mgmtCnsResultClose="mgmtCnsResultClose"></mgmt-cns>
+    <el-dialog
+      v-if="mgmtCnsVisible"
+      :title="$t('text.cns')"
+      :visible.sync="mgmtCnsVisible"
+      width="470px"
+      center
+      class="send-dialog"
+    >
+      <mgmt-cns
+        :mgmtCnsItem="mgmtCnsItem"
+        :contractName="contractName"
+        @mgmtCnsResultSuccess="mgmtCnsResultSuccess($event)"
+        @mgmtCnsResultClose="mgmtCnsResultClose"
+      ></mgmt-cns>
     </el-dialog>
-    <el-dialog :title="$t('nodes.addAbi')" :visible.sync="importVisibility" width="500px" v-if="importVisibility" center class="send-dialog">
-      <import-abi @importSuccess="importSuccess" @closeImport="closeImport"></import-abi>
+    <el-dialog
+      :title="$t('nodes.addAbi')"
+      :visible.sync="importVisibility"
+      width="500px"
+      v-if="importVisibility"
+      center
+      class="send-dialog"
+    >
+      <import-abi
+        @importSuccess="importSuccess"
+        @closeImport="closeImport"
+      ></import-abi>
     </el-dialog>
-    <el-dialog :title="$t('title.resetContractUser')" :visible.sync="resetVisibility" width="500px" v-if="resetVisibility" center class="send-dialog">
-      <reset-dialog @resetSuccess="resetSuccess" @closeReset="closeReset"></reset-dialog>
+    <el-dialog
+      :title="$t('title.resetContractUser')"
+      :visible.sync="resetVisibility"
+      width="500px"
+      v-if="resetVisibility"
+      center
+      class="send-dialog"
+    >
+      <reset-dialog
+        @resetSuccess="resetSuccess"
+        @closeReset="closeReset"
+      ></reset-dialog>
     </el-dialog>
-    <el-dialog :title="$t('title.checkDeploy')" :visible.sync="checkVisibility" width="500px" v-if="checkVisibility" center class="send-dialog">
-      <check-deploy @checkSuccess="checkSuccess" @closeCheck="closeCheck"></check-deploy>
+    <el-dialog
+      :title="$t('title.checkDeploy')"
+      :visible.sync="checkVisibility"
+      width="500px"
+      v-if="checkVisibility"
+      center
+      class="send-dialog"
+    >
+      <check-deploy
+        @checkSuccess="checkSuccess"
+        @closeCheck="closeCheck"
+      ></check-deploy>
     </el-dialog>
-    <el-dialog :title="$t('contracts.setPolicy')" :visible.sync="setPolicyVisibility" width="500px" v-if="setPolicyVisibility" center class="send-dialog">
-      <set-policy @setPolicySuccess="setPolicySuccess" @closeSetPolicy="closeSetPolicy" :setPolicyItem='setPolicyItem'></set-policy>
+    <el-dialog
+      :title="$t('contracts.setPolicy')"
+      :visible.sync="setPolicyVisibility"
+      width="500px"
+      v-if="setPolicyVisibility"
+      center
+      class="send-dialog"
+    >
+      <set-policy
+        @setPolicySuccess="setPolicySuccess"
+        @closeSetPolicy="closeSetPolicy"
+        :setPolicyItem="setPolicyItem"
+      ></set-policy>
     </el-dialog>
-    <el-dialog :title="$t('contracts.setAdmin')" :visible.sync="setAdminVisibility" width="500px" v-if="setAdminVisibility" center class="send-dialog">
-      <set-admin @setAdminSuccess="setAdminSuccess" @closeSetAdmin="closeSetAdmin" :setPolicyItem='setPolicyItem'></set-admin>
+    <el-dialog
+      :title="$t('contracts.setAdmin')"
+      :visible.sync="setAdminVisibility"
+      width="500px"
+      v-if="setAdminVisibility"
+      center
+      class="send-dialog"
+    >
+      <set-admin
+        @setAdminSuccess="setAdminSuccess"
+        @closeSetAdmin="closeSetAdmin"
+        :setPolicyItem="setPolicyItem"
+      ></set-admin>
     </el-dialog>
-    <el-dialog :title="$t('title.checkMethod')" :visible.sync="checkMethodVisibility" width="500px" v-if="checkMethodVisibility" center class="send-dialog">
-      <check-method @checkMethodSuccess="checkMethodSuccess" @closeCheckMethod="closeCheckMethod"></check-method>
+    <el-dialog
+      :title="$t('title.checkMethod')"
+      :visible.sync="checkMethodVisibility"
+      width="500px"
+      v-if="checkMethodVisibility"
+      center
+      class="send-dialog"
+    >
+      <check-method
+        @checkMethodSuccess="checkMethodSuccess"
+        @closeCheckMethod="closeCheckMethod"
+      ></check-method>
     </el-dialog>
-    <el-dialog :title="$t('nodes.updateAbi')" :visible.sync="updateVisibility" width="500px" v-if="updateVisibility" center class="send-dialog">
-      <update-abi @updateSuccess="updateSuccess" @closeUpdate="closeUpdate" :updateItem="updateItem"></update-abi>
+    <el-dialog
+      :title="$t('nodes.updateAbi')"
+      :visible.sync="updateVisibility"
+      width="500px"
+      v-if="updateVisibility"
+      center
+      class="send-dialog"
+    >
+      <update-abi
+        @updateSuccess="updateSuccess"
+        @closeUpdate="closeUpdate"
+        :updateItem="updateItem"
+      ></update-abi>
     </el-dialog>
   </div>
 </template>
@@ -261,8 +577,8 @@ export default {
       updateItem: null,
       setPolicyItem: null,
       liquidCheck: false,
-      eventShow:true,
-      liquidAuthCheck:false
+      eventShow: true,
+      liquidAuthCheck: false,
     };
   },
   created() {
@@ -292,7 +608,8 @@ export default {
   methods: {
     getfrontList() {
       let reqData = {
-        frontId: this.frontId,
+        // frontId: this.frontId,
+        groupId: localStorage.getItem("groupId"),
       };
       getFronts(reqData)
         .then((res) => {
@@ -345,10 +662,10 @@ export default {
       } else {
         this.liquidAuthCheck = false;
       }
-      if(res.data.data == false){
-        this.liquidCheck=true
-      }else{
-        this.liquidCheck=false
+      if (res.data.data == false) {
+        this.liquidCheck = true;
+      } else {
+        this.liquidCheck = false;
       }
     },
     formatterPath: function (row) {
@@ -549,7 +866,7 @@ export default {
       this.getContracts();
     },
     routeAbi() {
-      this.$router.push("/parseAbi");
+      this.$router.push("/contract/parseAbi");
     },
     resetSuccess() {
       this.resetVisibility = false;
@@ -903,6 +1220,3 @@ export default {
   max-width: 80%;
 }
 </style>
-
-
-

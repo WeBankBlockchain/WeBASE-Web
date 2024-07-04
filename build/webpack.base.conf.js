@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const packageName = require('../package.json').name;
 const { VueLoaderPlugin } = require('vue-loader')
 var HappyPack = require('happypack')
 var os = require('os')
@@ -33,6 +34,9 @@ module.exports = {
         app: './src/main.js'
     },
     output: {
+        library: `${packageName}-[name]`,
+        libraryTarget: 'umd',
+        jsonpFunction: `webpackJsonp_${packageName}`,
         path: config.build.assetsRoot,
         filename: '[name].js',
         publicPath: process.env.NODE_ENV === 'production'

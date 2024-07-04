@@ -715,6 +715,10 @@ export default {
       if (abiData) {
         abiData.abiInfo = JSON.parse(abiData.abiInfo);
         abiData.abiInfo.inputs.forEach((val, index) => {
+          if (val && val.components && val.components.length == 0) {
+            // components为空时，导致解析错误
+            delete val.components;
+          }
           if (val && val.type && val.name) {
             this.abiType[index] = val.type + " " + val.name;
           } else if (val && val.name) {

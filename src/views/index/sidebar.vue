@@ -123,6 +123,9 @@ export default {
               case "nodeTitle":
                 it.name = this.$t("title.nodeTitle");
                 break;
+              case "chainTitle":
+                it.name = this.$t("text.chainTitle");
+                break;
               case "groupManagement":
                 it.name = this.$t("title.groupManagement");
                 break;
@@ -229,8 +232,10 @@ export default {
         to.path !== "/node/chain"
       ) {
         this.active = this.$route.path;
-      } else if (to.path === "/node/node" || to.path === "/node/chain") {
+      } else if (to.path === "/node/node") {
         this.active = "/front";
+      } else if (to.path === "/node/chain") {
+        this.active = "/chain";
       } else {
         if (this.$route.path === "/front" || this.$route.path === "/newNode") {
         } else {
@@ -292,19 +297,20 @@ export default {
     },
     getfrontList() {
       let reqData = {
-        frontId: this.frontId,
+        // frontId: this.frontId,
+        groupId: localStorage.getItem("groupId")
       };
       getFronts(reqData)
         .then((res) => {
-          if (res.data.code === 0) {
+          if (res.data.code === 0 && res.data.data.length > 0) {
             this.frontId = res.data.data[0].frontId;
             this.liquidCheckMethod();
           } else {
-            this.$message({
-              message: this.$chooseLang(res.data.code),
-              type: "error",
-              duration: 2000,
-            });
+            // this.$message({
+            //   message: this.$chooseLang(res.data.code),
+            //   type: "error",
+            //   duration: 2000,
+            // });
           }
         })
         .catch((err) => {

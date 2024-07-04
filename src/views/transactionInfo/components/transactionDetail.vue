@@ -352,6 +352,10 @@ export default {
                 abiData.forEach(value => {
                     if (value.encode === data) {
                         value.inputs.forEach((val, index) => {
+                            if (val && val.components && val.components.length == 0) {
+                                // components为空时，导致解析错误
+                                delete val.components;
+                            }
                             if (val && val.type && val.name) {
                                 this.abiType[index] = val.type + " " + val.name;
                             } else if (val && val.name) {

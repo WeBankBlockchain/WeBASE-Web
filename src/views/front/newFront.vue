@@ -15,7 +15,8 @@
  */
 <template>
     <div>
-        <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head>
+        <!-- <v-content-head :headTitle="$t('title.nodeTitle')" @changGroup="changGroup"></v-content-head> -->
+        <nav-menu :headTitle="$t('text.chainTitle')" :headSubTitle="$t('title.nodeTitle')" @changGroup="changGroup"></nav-menu>
         <div class="module-wrapper">
             <h3 style="padding: 20px 0 0 40px;">{{this.$t("nodes.nodeFront")}}</h3>
             <div class="search-part" style="padding-top: 20px;">
@@ -100,7 +101,7 @@
                 <v-setFront  :showClose='true' @close='close' @updateSDK='getSDK'></v-setFront>
                     </el-dialog>
                 <el-dialog :title="$t('nodes.updateNodesType')" :visible.sync="modifyDialogVisible" width="387px" v-if="modifyDialogVisible" center>
-                    <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode"></modify-node-type>
+                    <modify-node-type @nodeModifyClose="nodeModifyClose" @nodeModifySuccess="nodeModifySuccess" :modifyNode="modifyNode" :sealerNodeCount="sealerNodeCount"></modify-node-type>
                 </el-dialog>
                  <el-dialog :title="$t('nodes.modifyPRC')" :visible.sync="PrcDialogVisible" width="600px" v-if="PrcDialogVisible" center>
                     <modify-prc @prcClose="prcClose" @prcSuccess="prcSuccess" :prcParam="prcParam"></modify-prc>
@@ -131,26 +132,25 @@
 
 <script>
 import remarkNode from "./components/remarkNode";
-import contentHead from "@/components/contentHead";
+// import contentHead from "@/components/contentHead";
 import modifyNodeType from "./components/modifyNodeType";
 import detailPage from "./components/detailPage";
 import updateSDK from "./components/updateSDK";
-import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk } from "@/util/api";
+import { getFronts, addnodes, deleteFront, getNodeList, getConsensusNodeId, getVersion, exportCertSdk, getPermissionManagementStatus } from "@/util/api";
 import { date, unique } from "@/util/util";
-import errcode from "@/util/errcode";
 import setFront from "../index/dialog/setFront.vue"
 import Bus from "@/bus"
-import JSZip from 'jszip'
-import FileSaver from 'file-saver'
+import navMenu from '@/components/navs/navMenu'
 export default {
     name: "newFront",
     components: {
-        "v-content-head": contentHead,
+        // "v-content-head": contentHead,
         "v-setFront": setFront,
         modifyNodeType,
         'update-sdk':updateSDK,
         detailPage,
-            remarkNode,
+        remarkNode,
+        'nav-menu': navMenu
     },
     watch: {
         $route() {
@@ -187,6 +187,8 @@ export default {
             sdkParam:{},
             detailParam:{},
             remarkDialogVisible: false,
+            isAuthEnable: false,
+            sealerNodeCount: 0
         };
     },
     computed: {
@@ -280,6 +282,7 @@ export default {
         }
         this.getFrontTable();
         this.getNodeTable();
+        this.checkAuth();
     },
     methods: {
          remarks(param) {
@@ -564,6 +567,7 @@ export default {
                             return item.nodeId
                         })
                         this.nodeData = [];
+                        this.sealerNodeCount = 0;
                         nodesAuthorList.forEach((item, index) => {
                             nodesStatusList.forEach(it => {
                                 if (nodesStatusIdList.includes(item.nodeId)) {
@@ -583,6 +587,9 @@ export default {
                                 item.blockNumber = '--';
                                 item.nodeActive = 1;
                             }
+                            if (item.nodeType == "sealer") {
+                                this.sealerNodeCount += 1
+                            }
                         });
                         this.nodeData = unique(this.nodeData, 'nodeId')
                     } else {
@@ -592,6 +599,7 @@ export default {
         },
         modifyNodeType(param) {
             this.modifyNode = param;
+            this.modifyNode.enAbleAuth = this.enAbleAuth;
             this.modifyDialogVisible = true;
         },
         copyNodeIdKey(val) {
@@ -636,6 +644,18 @@ export default {
     },
     nodeRemarkClose() {
       this.remarkDialogVisible = false;
+    },
+
+    checkAuth() {
+      getPermissionManagementStatus(localStorage.getItem("groupId"))
+        .then((res) => {
+          if (res.data.data == true) {
+            this.isAuthEnable = true;
+          } else {
+            this.isAuthEnable = false;
+          }
+        })
+        .catch((err) => {});
     },
     }
 };

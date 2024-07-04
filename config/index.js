@@ -6,16 +6,15 @@ const path = require('path')
 
 module.exports = {
     dev: {
-
         // Paths
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
-            '/mgr': {
-                target: 'http://127.0.0.1', 
+            '/mgr3': {
+                target: 'http://192.168.12.180:8080/',
                 changeOrigin: true,
-                pathRewrite: { 
-                    '^/mgr': ''
+                pathRewrite: {
+                    '^/mgr3': ''
                 }
             },
         },
@@ -53,7 +52,7 @@ module.exports = {
         // Paths
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
-        assetsPublicPath: './',
+        assetsPublicPath: '/child/bcos3/',
 
         /**
          * Source Maps
@@ -67,7 +66,7 @@ module.exports = {
         // Surge or Netlify already gzip all static assets for you.
         // Before setting to `true`, make sure to:
         // npm install --save-dev compression-webpack-plugin
-        productionGzip: true,
+        productionGzip: false,
         productionGzipExtensions: ['js', 'css'],
 
         // Run the build command with an extra argument to
