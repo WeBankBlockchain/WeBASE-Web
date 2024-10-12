@@ -6,27 +6,35 @@ const request = require('request');
 const solcBinList = [
     {
         name: 'v0.4.25.js',
-        url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.4.25.js`,
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.4.25.js`,
     },
     {
         name: 'v0.4.25-gm.js',
-        url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.4.25-gm.js`,
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.4.25-gm.js`,
     },
     {
         name: 'v0.5.2.js',
-        url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.5.2.js`,
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.5.2.js`,
     },
     {
         name: 'v0.5.2-gm.js',
-        url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.5.2-gm.js`,
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.5.2-gm.js`,
     },
     {
         name: 'v0.6.10.js',
-        url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.6.10.js`,
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.6.10.js`,
     },
     {
         name: 'v0.6.10-gm.js',
-        url: `https://osp-1257653870.cos.ap-guangzhou.myqcloud.com/WeBASE/download/solidity/wasm/v0.6.10-gm.js`,
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.6.10-gm.js`,
+    },
+    {
+        name: 'v0.8.10.js',
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.8.10.js`,
+    },
+    {
+        name: 'v0.8.10-gm.js',
+        url: `https://github.com/WeBankBlockchain/WeBASELargeFiles/releases/download/v3.0.0//v0.8.10-gm.js`,
     }
 ];
 const folderName = path.join('./static/js')
