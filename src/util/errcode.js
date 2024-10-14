@@ -75,7 +75,7 @@ let errCode = {
   },
   "-51003": {
     en: "Error auth type input",
-    zh: "错误鉴权输入，请检查节点日志进行排查"
+    zh: "设置权限参数错误，请检查当前权限设置，或结合节点日志进行排查"
   },
   "-51004": {
     en: "Auth map decode error",
@@ -998,6 +998,10 @@ let errCode = {
     en: "the account must be the proposer of proposal",
     zh: "该帐户必须是提案的提议者"
   },
+  "201676": {
+    en: "you cannot remove yourself",
+    zh: "链委员不能撤销自己的委员身份"
+  }, 
   "201680": {
     en: "the PATH is invalid",
     zh: "路径PATH无效"
